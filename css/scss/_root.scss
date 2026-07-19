@@ -7,6 +7,13 @@
    ZMIENNE CSS (CSS Custom Properties)
    ========================================= */
 :root {
+  /* Deklaracja schematu kolorów dla przeglądarki. Bez niej kolory
+     systemowe (CanvasText itd.) są ZAWSZE jasnoschematowe - np. natywny
+     <dialog> dostaje od UA color: CanvasText (czarny) i w dark mode
+     nagłówki (color: inherit) robią się czarne na ciemnej karcie.
+     Deklaracja naprawia też natywne scrollbary i kontrolki formularzy. */
+  color-scheme: light;
+
   /* Fonty z systemowym fallbackiem */
   --font-family-base: 'FontBody', system-ui, -apple-system, sans-serif;
   --font-family-heading: 'FontHeading', system-ui, -apple-system, sans-serif;
@@ -159,6 +166,10 @@
    KOLORY - PALETA DARK MODE
    ========================================= */
 [data-theme="dark"] {
+  /* Kolory systemowe przeglądarki (CanvasText, scrollbary, natywne
+     kontrolki, kalendarz date-pickera) podążają za ciemnym motywem */
+  color-scheme: dark;
+
   /* 1. Kolory strukturalne (Odwrócenie) */
   --bg-body: #0F172A; /* Bardzo ciemny granat/szary (nie czysty czarny!) */
   --bg-surface: #1E293B; /* Nieco jaśniejszy od body (tworzy głębię kart) */
