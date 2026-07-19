@@ -6071,23 +6071,29 @@ a.list-group-item:hover, button.list-group-item:hover {
 /* =========================================
    2. TYPOGRAFIA (Narzędzia tekstowe)
    ========================================= */
-.text-xs { font-size: var(--text-xs) !important; }
-.text-sm { font-size: var(--text-sm) !important; }
+/* Mikrocopy - CELOWO mniejsze niż tokeny --text-sm/--text-xs (13/12px),
+   których używają komponenty. Klasy narzędziowe .text-sm/.text-xs to
+   najmniejsze rozmiary w systemie (podpisy, prawne dopiski) i leżą
+   PONIŻEJ .text-1. Nie podpinaj ich pod var(--text-sm)/var(--text-xs). */
+.text-xs { font-size: 0.625rem !important; }   /* 10px */
+.text-sm { font-size: 0.6875rem !important; }  /* 11px */
 .text-base { font-size: var(--text-base-size) !important; }
 
-.text-1 { font-size: var(--h6-size) !important; }
-.text-2 { font-size: var(--h5-size) !important; }
-.text-3 { font-size: var(--h4-size) !important; }
-.text-4 { font-size: var(--h3-size) !important; }
-.text-5 { font-size: var(--h2-size) !important; }
-.text-6 { font-size: var(--h1-size) !important; }
+/* Skala numeryczna - ROŚNIE, a tekst bazowy to .text-3 (jak akapity).
+   .text-1/.text-2 leżą poniżej bazy (metadane, daty w timeline). */
+.text-1 { font-size: var(--text-xs) !important; }        /* 12px */
+.text-2 { font-size: var(--text-sm) !important; }        /* 13px */
+.text-3 { font-size: var(--text-base-size) !important; } /* baza 14-15px */
+.text-4 { font-size: var(--h5-size) !important; }
+.text-5 { font-size: var(--h4-size) !important; }
+.text-6 { font-size: var(--h3-size) !important; }
+.text-7 { font-size: var(--h2-size) !important; }
+.text-8 { font-size: var(--h1-size) !important; }
 
 /* Gigantyczne rozmiary (np. do liczników, Hero) */
-.text-7 { font-size: clamp(2rem, 4vw + 1rem, 3.5rem) !important; }
-.text-8 { font-size: clamp(2.25rem, 5vw + 1rem, 4.5rem) !important; }
-.text-9 { font-size: clamp(2.5rem, 6vw + 1rem, 5.5rem) !important; }
-.text-10 { font-size: clamp(2.75rem, 7vw + 1rem, 6.5rem) !important; }
-.text-11 { font-size: clamp(3rem, 8vw + 1rem, 7.5rem) !important; }
+.text-9 { font-size: clamp(2.25rem, 5vw + 1rem, 4.5rem) !important; }
+.text-10 { font-size: clamp(2.5rem, 6vw + 1rem, 5.5rem) !important; }
+.text-11 { font-size: clamp(2.75rem, 7vw + 1rem, 6.5rem) !important; }
 .text-12 { font-size: clamp(3.5rem, 10vw + 1rem, 9rem) !important; }
 
 .text-center { text-align: center !important; }

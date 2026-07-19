@@ -10,7 +10,7 @@
     <title>Changelog - molique Framework</title>
     <meta
       name="description"
-      content="Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.5.1."
+      content="Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.6.0."
     />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0d6efd" />
@@ -336,12 +336,12 @@
     >
       <div class="container py-5">
         <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
-          <span class="badge badge-primary mb-3">Aktualna wersja: 1.5.1</span>
-          <h1 class="text-9 fw-black mb-3 text-white animate fade-in-up">
+          <span class="badge badge-primary mb-3">Aktualna wersja: 1.6.0</span>
+          <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
             Changelog
           </h1>
           <p
-            class="text-4 animate fade-in-up delay-100"
+            class="text-6 animate fade-in-up delay-100"
             style="color: rgba(255, 255, 255, 0.75)"
           >
             Historia zmian, nowości i poprawek we frameworku molique - od
@@ -361,12 +361,77 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.6.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.6.0</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3"
+                    >Zmiana łamiąca</span
+                  >
+                  Nowa skala typograficzna - tekst bazowy to .text-3
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Środek skali przesunięty:</strong> Rozmiar
+                    bazowy (akapitowy) to teraz <code>.text-3</code>, a nie
+                    <code>.text-1</code>. Poniżej bazy leżą
+                    <code>.text-1</code> (12px) i <code>.text-2</code>
+                    (13px) - do metadanych, dat w timeline i opisów.
+                    <code>.text-4</code>&ndash;<code>.text-8</code>
+                    odpowiadają nagłówkom H5&ndash;H1, a
+                    <code>.text-9</code>&ndash;<code>.text-12</code> to
+                    rozmiary hero (do 9rem).
+                  </li>
+                  <li>
+                    <strong>Mikrocopy:</strong> Klasy
+                    <code>.text-sm</code> (11px) i <code>.text-xs</code>
+                    (10px) są teraz mniejsze niż <code>.text-1</code> -
+                    do podpisów i dopisków prawnych. Tokeny
+                    <code>--text-sm</code>/<code>--text-xs</code> używane
+                    wewnątrz komponentów pozostały bez zmian (13/12px).
+                  </li>
+                  <li>
+                    <strong>Migracja istniejącego HTML:</strong> klasy
+                    przesuwają się o dwa stopnie w górę - stary
+                    <code>.text-1</code> to nowy <code>.text-3</code>,
+                    stary <code>.text-4</code> to nowy
+                    <code>.text-6</code> itd.; stary <code>.text-sm</code>
+                    &rarr; <code>.text-2</code>, stary
+                    <code>.text-xs</code> &rarr; <code>.text-1</code>.
+                    Wszystkie podstrony dokumentacji i przykładów zostały
+                    przemapowane automatycznie, więc ich wygląd się nie
+                    zmienił.
+                  </li>
+                  <li>
+                    <strong>Dokumentacja:</strong> zaktualizowany spis
+                    klas, strony Typografia (docs + przykłady) oraz
+                    słowniki <code>llms.txt</code> i
+                    <code>molique.md</code>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.5.1 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v1.5.1</div>
-              <div class="text-muted text-2">Lipiec 2026</div>
+              <div class="fw-black text-5">v1.5.1</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node node-primary"></div>
@@ -375,9 +440,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
                   Selecty i dropdowny na Popover API (Top Layer)
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -431,9 +496,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
                   Płynna zmiana motywu (View Transitions)
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -451,9 +516,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
                   Stock Bar - segmentowy poziom zapasu
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -471,9 +536,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-success mx-2 text-1"
+                  <span class="badge badge-success mx-2 text-3"
                     >Dokumentacja</span
                   >
                   Przykłady, SEO i słowniki
@@ -490,26 +555,12 @@
                     podstron (wcześniej szablonowe adresy), zaktualizowane
                     słowniki <code>llms.txt</code> i spis klas.
                   </li>
-                  <li>
-                    <strong>Skala typograficzna doprecyzowana:</strong> Spis
-                    klas błędnie opisywał <code>.text-1</code>&ndash;<code
-                      >.text-12</code
-                    >
-                    jako zakres "od 0.64rem" - sugerując, że
-                    <code>.text-1</code> to najmniejszy tekst. W
-                    rzeczywistości skala rośnie od rozmiaru bazowego
-                    (<code>.text-1</code> = 14&ndash;15px, tyle co akapity)
-                    do rozmiarów hero. Dokumentacja i słowniki wskazują
-                    teraz jawnie <code>.text-sm</code> /
-                    <code>.text-xs</code> jako jedyne klasy tekstu
-                    mniejszego niż bazowy.
-                  </li>
                 </ul>
 
                 <h3
-                  class="text-1 text-warning fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-warning text-dark mx-2 text-1"
+                  <span class="badge badge-warning text-dark mx-2 text-3"
                     >Poprawki</span
                   >
                   Bugfixes
@@ -630,8 +681,8 @@
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v1.5.0</div>
-              <div class="text-muted text-2">Lipiec 2026</div>
+              <div class="fw-black text-5">v1.5.0</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node"></div>
@@ -640,9 +691,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-danger mx-2 text-1">Rebranding</span>
+                  <span class="badge badge-danger mx-2 text-3">Rebranding</span>
                   r-style &rarr; molique
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -664,9 +715,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-danger mx-2 text-1"
+                  <span class="badge badge-danger mx-2 text-3"
                     >Architektura</span
                   >
                   Modularny Sass w warstwach @layer
@@ -705,9 +756,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
                   Rozbudowa autoloadera JS
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -730,9 +781,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-success mx-2 text-1"
+                  <span class="badge badge-success mx-2 text-3"
                     >Dokumentacja</span
                   >
                   Podział na podstrony tematyczne
@@ -756,9 +807,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-info fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-info mx-2 text-1"
+                  <span class="badge badge-info mx-2 text-3"
                     >Infrastruktura</span
                   >
                   Produkcja, SEO i wydajność
@@ -791,8 +842,8 @@
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v1.2.0</div>
-              <div class="text-muted text-2">Czerwiec 2026</div>
+              <div class="fw-black text-5">v1.2.0</div>
+              <div class="text-muted text-4">Czerwiec 2026</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node"></div>
@@ -801,9 +852,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-danger mx-2 text-1"
+                  <span class="badge badge-danger mx-2 text-3"
                     >Architektura</span
                   >
                   Inteligentny Autoloader JS
@@ -825,9 +876,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
                   Data Viz & Zaawansowane UI
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -857,9 +908,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-warning fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-warning text-dark mx-2 text-1"
+                  <span class="badge badge-warning text-dark mx-2 text-3"
                     >Poprawki</span
                   >
                   Bugfixes & UX
@@ -890,9 +941,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-success mx-2 text-1"
+                  <span class="badge badge-success mx-2 text-3"
                     >Dokumentacja</span
                   >
                   Kompletny Podręcznik
@@ -914,8 +965,8 @@
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v1.1.0</div>
-              <div class="text-muted text-2">Czerwiec 2026</div>
+              <div class="fw-black text-5">v1.1.0</div>
+              <div class="text-muted text-4">Czerwiec 2026</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node"></div>
@@ -924,9 +975,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
                   Data Viz & Wykresy
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -945,9 +996,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-success mx-2 text-1">Rozbudowa</span>
+                  <span class="badge badge-success mx-2 text-3">Rozbudowa</span>
                   Moduły i Widgety
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -971,9 +1022,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-info fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-info mx-2 text-1">Dokumentacja</span>
+                  <span class="badge badge-info mx-2 text-3">Dokumentacja</span>
                   Kompletny Podręcznik
                 </h3>
                 <ul class="text-secondary m-0">
@@ -996,8 +1047,8 @@
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v1.0.0</div>
-              <div class="text-muted text-2">Maj 2026</div>
+              <div class="fw-black text-5">v1.0.0</div>
+              <div class="text-muted text-4">Maj 2026</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node node-danger"></div>
@@ -1006,9 +1057,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-danger mx-2 text-1">Rewolucja</span>
+                  <span class="badge badge-danger mx-2 text-3">Rewolucja</span>
                   Architektura molique 2026
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -1034,9 +1085,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-success mx-2 text-1">Nowość</span>
+                  <span class="badge badge-success mx-2 text-3">Nowość</span>
                   Dostępność i Wydajność
                 </h3>
                 <ul class="text-secondary m-0">
@@ -1065,8 +1116,8 @@
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v0.3.0</div>
-              <div class="text-muted text-2">Kwiecień 2026</div>
+              <div class="fw-black text-5">v0.3.0</div>
+              <div class="text-muted text-4">Kwiecień 2026</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node node-danger"></div>
@@ -1075,9 +1126,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-danger mx-2 text-1">Rewolucja</span>
+                  <span class="badge badge-danger mx-2 text-3">Rewolucja</span>
                   Nowa architektura
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -1096,9 +1147,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-success mx-2 text-1">Nowość</span>
+                  <span class="badge badge-success mx-2 text-3">Nowość</span>
                   Komponenty natywne
                 </h3>
                 <ul class="text-secondary m-0">
@@ -1119,8 +1170,8 @@
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v0.2.0</div>
-              <div class="text-muted text-2">Marzec 2026</div>
+              <div class="fw-black text-5">v0.2.0</div>
+              <div class="text-muted text-4">Marzec 2026</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node"></div>
@@ -1129,9 +1180,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-success mx-2 text-1">Dodano</span>
+                  <span class="badge badge-success mx-2 text-3">Dodano</span>
                   Nowe komponenty
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -1152,9 +1203,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-info fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-info mx-2 text-1">Zmiana</span>
+                  <span class="badge badge-info mx-2 text-3">Zmiana</span>
                   Refaktoryzacja
                 </h3>
                 <ul class="text-secondary mb-4">
@@ -1178,9 +1229,9 @@
                 </ul>
 
                 <h3
-                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-danger mx-2 text-1">Poprawka</span>
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
                   Bugfixes
                 </h3>
                 <ul class="text-secondary m-0">
@@ -1209,8 +1260,8 @@
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-3">v0.1.0</div>
-              <div class="text-muted text-2">Początek projektu</div>
+              <div class="fw-black text-5">v0.1.0</div>
+              <div class="text-muted text-4">Początek projektu</div>
             </div>
             <div class="timeline-separator">
               <div class="timeline-node"></div>
@@ -1219,9 +1270,9 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
-                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
-                  <span class="badge badge-primary mx-2 text-1"
+                  <span class="badge badge-primary mx-2 text-3"
                     >Inicjalizacja</span
                   >
                   Wersja bazowa
@@ -1336,11 +1387,11 @@
         <div
           class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-3"
         >
-          <p class="text-muted m-0 text-2">
+          <p class="text-muted m-0 text-4">
             &copy; <span id="footer-year"></span> molique. Framework CSS dla
             B2B.
           </p>
-          <p class="text-muted m-0 text-2">Wersja 1.5.1</p>
+          <p class="text-muted m-0 text-4">Wersja 1.5.1</p>
         </div>
       </div>
     </footer>
