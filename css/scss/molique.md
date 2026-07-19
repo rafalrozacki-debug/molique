@@ -37,9 +37,15 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Offsety (Grid):** `.col-start-1` do `12` LUB klasyczne `.offset-1`
   do `11` (oraz warianty `-md-`, `-lg-`). Przesuwanie elementów w siatce.
 - **Flexbox:** `.d-flex`, `.flex-column`, `.align-items-center`,
-  `.justify-content-between`, `.gap-1` do `.gap-5`.
+  `.justify-content-between`, `.gap-1` do `.gap-5`. Pojedyncze dziecko:
+  `.align-self-start/-end/-center/-stretch`.
 - **Spacing:** `.m-1` do `.m-5`, `.p-1` do `.p-5` (oraz warianty `-md-`,
-  np. `.p-md-4`).
+  np. `.p-md-4`). Wciąganie w górę (ujemny margines):
+  `.overlap-up-50/-100/-150` (np. karta na hero).
+- **Pozycjonowanie:** `.position-relative/-absolute/-fixed/-sticky`;
+  przypięcie do krawędzi `.top-0/.bottom-0/.left-0/.right-0/.inset-0`;
+  centrowanie `.top-50` + `.left-50` + `.translate-middle(-x/-y)`.
+  Sizing: `.w-25/-50/-75/-100/-auto`, `.mw-100`, `.min-vh-100`.
 - **Bento Grid:** `.bento-grid` > `.bento-col-2`, `.bento-row-2`.
 
 ## Nawigacja (Navbar)
@@ -195,6 +201,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.fw-black`.
 - **Kolory tekstu/tła:** `.text-primary`, `.bg-surface`, `.bg-body`,
   `.bg-glass` (Glassmorphism).
+- **Kolory na hover:** `.bg-hover-*`, `.text-hover-*`, `.border-hover-*`
+  (pełna paleta: primary, success, danger, warning, info, dark, light,
+  secondary, surface, body) — UWAGA: nazwa to `bg-hover-`, NIE `hover-bg-`.
+- **Listy z ikonami:** `.list-unstyled` (bez punktorów) oraz `.list-icons`
+  z wariantem ikony `.list-icons-check/-arrow/-cross` i kolorem
+  `.list-icons-success/-danger/-dark` (domyślnie primary).
 
 ## Animacje, Efekty & Utilities (GPU)
 
@@ -202,7 +214,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Scroll Reveal:** `.scroll-reveal` (wykorzystuje
   `animation-timeline: view()`).
 - **Hover:** `.hover-spring`, `.hover-gpu-shadow`, `.hover-tilt`
-  (statyczny) lub `.tilt-card` (dynamiczny JS).
+  (statyczny) lub `.tilt-card` (dynamiczny JS). Lekkie warianty:
+  `.hover-scale` (powiększenie), `.hover-shadow` (unoszenie z cieniem).
 - **Efekty Tekstowe:** `.hover-text-wipe`, `.hover-underline`,
   `.text-highlight`, `.typewriter`, `.text-gradient-animated`,
   `.text-clip-bg`.
@@ -210,9 +223,14 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Ramki (Ostre):** `.hover-border-draw-2`, `.hover-border-trace-2`.
 - **Kolor Ramek:** zmień domyślny kolor dodając
   `style="--hover-border-color: var(--danger);"`.
-- **Background Video:** `.bg-video-container` > `img.bg-video` (plakat) +
-  `video.bg-video`.
-- **Filtry Obrazów:** `.filter-grayscale`, `.filter-blur`.
+- **Background Video/Image:** `.bg-video-container` > `img.bg-video`
+  (plakat) + `video.bg-video`; wariant statyczny `.bg-image-container` >
+  `.bg-image` (także `picture.bg-image`) — oba z domyślną nakładką.
+- **Overlay (nakładka na tło):** rodzic `.has-overlay` + `.overlay` z
+  kolorem `.overlay-dark/-primary/-light` (lub `.bg-overlay` = czerń) i
+  kryciem `.overlay-10` do `.overlay-90`.
+- **Filtry Obrazów:** `.filter-grayscale`, `.filter-blur`, `.filter-none`
+  (zdejmuje filtr, np. z `.hover-filter-none` — logo koloruje się na hover).
 - **Obramowania (Borders):** `.border`, `.border-0`, `.border-top`,
   `.border-bottom`, `.border-start`, `.border-end`.
 - **Zaokrąglenia (Radius):** `.rounded-0` do `.rounded-5`,

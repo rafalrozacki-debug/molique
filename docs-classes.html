@@ -308,12 +308,17 @@
                     <span class="class-name">.w-25</span>
                     <span class="class-name">.w-50</span>
                     <span class="class-name">.w-100</span>
+                    <span class="class-name">.w-auto</span>
+                    <span class="class-name">.mw-100</span>
                     <span class="class-name">.h-100</span>
                     <span class="class-name">.vh-100</span>
+                    <span class="class-name">.min-vh-100</span>
                   </td>
                   <td class="text-muted">
                     Szybkie wymiarowanie (Sizing) w procentach lub jednostkach
-                    viewportu.
+                    viewportu. <code>.mw-100</code> = maksymalna szerokość
+                    100%, <code>.min-vh-100</code> = minimalna wysokość pełnego
+                    ekranu. Warianty responsywne <code>.w-md-*</code>.
                   </td>
                   <td>-</td>
                 </tr>
@@ -321,11 +326,14 @@
                   <td>
                     <span class="class-name">.justify-content-*</span>
                     <span class="class-name">.align-items-*</span>
+                    <span class="class-name">.align-self-*</span>
                   </td>
                   <td class="text-muted">
                     Wyrównywanie elementów we Flexboxie (np.
                     <code>center</code>, <code>space-between</code>,
-                    <code>flex-start</code>).
+                    <code>flex-start</code>). <code>.align-self-*</code>
+                    (start/end/center/stretch) wyrównuje pojedyncze dziecko
+                    niezależnie od rodzica.
                   </td>
                   <td>-</td>
                 </tr>
@@ -343,9 +351,25 @@
                   <td>
                     <span class="class-name">.position-relative</span>
                     <span class="class-name">.position-absolute</span>
+                    <span class="class-name">.position-fixed</span>
                     <span class="class-name">.position-sticky</span>
                   </td>
                   <td class="text-muted">Narzędzia pozycjonowania.</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.top-0</span>
+                    <span class="class-name">.bottom-0</span>
+                    <span class="class-name">.left-0</span>
+                    <span class="class-name">.right-0</span>
+                    <span class="class-name">.inset-0</span>
+                  </td>
+                  <td class="text-muted">
+                    Przypięcie do krawędzi rodzica. <code>.inset-0</code>
+                    rozciąga na wszystkie cztery boki (idealne pod nakładki
+                    <code>.overlay</code>).
+                  </td>
                   <td>-</td>
                 </tr>
                 <tr>
@@ -354,7 +378,11 @@
                     <span class="class-name">.left-50</span>
                     <span class="class-name">.translate-middle</span>
                   </td>
-                  <td class="text-muted">Szybkie centrowanie absolutne.</td>
+                  <td class="text-muted">
+                    Szybkie centrowanie absolutne. Warianty
+                    <code>.translate-middle-x</code> /
+                    <code>.translate-middle-y</code> centrują w jednej osi.
+                  </td>
                   <td>-</td>
                 </tr>
                 <tr>
@@ -412,6 +440,18 @@
                   </td>
                   <td class="text-muted">
                     Automatyczne marginesy (wypychanie elementów we Flexboxie).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.overlap-up-50</span>
+                    <span class="class-name">.overlap-up-100</span>
+                    <span class="class-name">.overlap-up-150</span>
+                  </td>
+                  <td class="text-muted">
+                    Wciąga element do góry o 50/100/150px (ujemny margines) -
+                    np. karta nachodząca na sekcję hero powyżej.
                   </td>
                   <td>-</td>
                 </tr>
@@ -549,6 +589,31 @@
                 </tr>
                 <tr>
                   <td>
+                    <span class="class-name">.list-unstyled</span>
+                    <span class="class-name">.list-icons</span><br />
+                    <span class="class-name">.list-icons-check</span>
+                    <span class="class-name">.list-icons-arrow</span>
+                    <span class="class-name">.list-icons-cross</span>
+                  </td>
+                  <td class="text-muted">
+                    Listy bez punktorów. <code>.list-unstyled</code> usuwa
+                    znaczniki; <code>.list-icons</code> zastępuje je ikoną SVG
+                    (wariant <code>-check</code> / <code>-arrow</code> /
+                    <code>-cross</code>). Kolor ikony:
+                    <code>.list-icons-success</code> /
+                    <code>-danger</code> / <code>-dark</code> (domyślnie
+                    primary).
+                  </td>
+                  <td>
+                    <ul
+                      class="list-icons list-icons-check list-icons-success m-0 text-3"
+                    >
+                      <li>Gotowe</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     <span class="class-name">.text-primary</span>
                     <span class="class-name">.text-secondary</span><br />
                     <span class="class-name">.text-success</span>
@@ -622,16 +687,19 @@
                 </tr>
                 <tr>
                   <td>
-                    <span class="class-name">.hover-bg-*</span>
-                    <span class="class-name">.hover-text-*</span>
-                    <span class="class-name">.hover-border-*</span>
+                    <span class="class-name">.bg-hover-*</span>
+                    <span class="class-name">.text-hover-*</span>
+                    <span class="class-name">.border-hover-*</span>
                   </td>
                   <td class="text-muted">
-                    Zmiana koloru tła, tekstu lub ramki po najechaniu myszką.
+                    Zmiana koloru tła, tekstu lub ramki po najechaniu myszką -
+                    pełna paleta (primary, success, danger, warning, info,
+                    dark, light, secondary, surface, body). Np.
+                    <code>.bg-hover-success</code>.
                   </td>
                   <td>
                     <span
-                      class="badge bg-surface hover-bg-success border cursor-pointer"
+                      class="badge bg-surface bg-hover-success border cursor-pointer"
                       >Najedź</span
                     >
                   </td>
@@ -1056,7 +1124,10 @@
                     <span class="class-name">.row-content</span>
                   </td>
                   <td class="text-muted">
-                    Kompaktowy wiersz (List Item) oparty na Flexboxie.
+                    Kompaktowy wiersz (List Item) oparty na Flexboxie. Wewnątrz
+                    <code>.row-content</code>: <code>.row-title</code> +
+                    <code>.row-details</code>; akcje po prawej w
+                    <code>.row-actions</code>.
                   </td>
                   <td>-</td>
                 </tr>
@@ -1075,9 +1146,15 @@
                   <td>
                     <span class="class-name">.tabs</span>
                     <span class="class-name">.tab-input</span>
-                    <span class="class-name">.tab-label</span>
+                    <span class="class-name">.tab-label</span><br />
+                    <span class="class-name">.tabs-header</span>
+                    <span class="class-name">.tab-pane</span>
                   </td>
-                  <td class="text-muted">Zakładki oparte na CSS Radio Hack.</td>
+                  <td class="text-muted">
+                    Zakładki oparte na CSS Radio Hack. Etykiety w
+                    <code>.tabs-header</code>, treść każdej zakładki w
+                    <code>.tab-pane</code>.
+                  </td>
                   <td>-</td>
                 </tr>
                 <tr>
@@ -1135,11 +1212,18 @@
                 <tr>
                   <td>
                     <span class="class-name">.timeline-labeled</span>
-                    <span class="class-name">.timeline-label</span>
+                    <span class="class-name">.timeline-label</span><br />
+                    <span class="class-name">.timeline-separator</span>
+                    <span class="class-name">.timeline-node</span>
+                    <span class="class-name">.timeline-line</span>
                   </td>
                   <td class="text-muted">
                     Zaawansowana oś czasu z datami po lewej stronie (oparta na
-                    Gridzie).
+                    Gridzie). Kolumna środkowa: <code>.timeline-separator</code>
+                    &gt; <code>.timeline-node</code> + <code>.timeline-line</code>;
+                    kolor węzła <code>.node-primary</code> /
+                    <code>.node-success</code> / <code>.node-danger</code>.
+                    Treść w <code>.timeline-content</code>.
                   </td>
                   <td>-</td>
                 </tr>
@@ -1286,7 +1370,11 @@
                     <span class="class-name">.chart-funnel</span>
                     <span class="class-name">.funnel-stage</span>
                   </td>
-                  <td class="text-muted">Pionowy lejek danych.</td>
+                  <td class="text-muted">
+                    Pionowy lejek danych. W każdym etapie
+                    <code>.stage-label</code> (nazwa) i
+                    <code>.stage-value</code> (liczba).
+                  </td>
                   <td>-</td>
                 </tr>
                 <tr>
@@ -1559,6 +1647,23 @@
                 </tr>
                 <tr>
                   <td>
+                    <span class="class-name">.hover-scale</span>
+                    <span class="class-name">.hover-shadow</span>
+                  </td>
+                  <td class="text-muted">
+                    Proste efekty hover: <code>.hover-scale</code> powiększa
+                    (scale 1.05), <code>.hover-shadow</code> unosi element z
+                    cieniem <code>--shadow-lg</code>. Lżejsze warianty niż
+                    <code>.hover-spring</code> / <code>.hover-gpu-shadow</code>.
+                  </td>
+                  <td>
+                    <div class="hover-scale badge bg-primary cursor-pointer">
+                      Najedź
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
                     <span class="class-name">.hover-tilt</span>
                     <span class="class-name">.tilt-card</span>
                   </td>
@@ -1661,11 +1766,36 @@
                 <tr>
                   <td>
                     <span class="class-name">.bg-video-container</span>
-                    <span class="class-name">.bg-video</span>
+                    <span class="class-name">.bg-video</span><br />
+                    <span class="class-name">.bg-image-container</span>
+                    <span class="class-name">.bg-image</span>
                   </td>
                   <td class="text-muted">
-                    Wideo w tle sekcji (z plakatem <code>img.bg-video</code>
-                    jako fallback przed załadowaniem).
+                    Wideo lub obraz w tle sekcji (z plakatem
+                    <code>img.bg-video</code> jako fallback). Wariant
+                    <code>.bg-image-container</code> &gt;
+                    <code>.bg-image</code> (także <code>picture.bg-image</code>)
+                    dla statycznego tła; oba mają domyślną przyciemniającą
+                    nakładkę.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.overlay</span>
+                    <span class="class-name">.has-overlay</span><br />
+                    <span class="class-name">.overlay-dark</span>
+                    <span class="class-name">.overlay-primary</span>
+                    <span class="class-name">.overlay-light</span>
+                  </td>
+                  <td class="text-muted">
+                    Przyciemniająca nakładka na tło sekcji/hero.
+                    <code>.overlay</code> rozciąga się na cały rodzic; dodaj
+                    <code>.has-overlay</code> na rodzicu (position:relative +
+                    przycięcie). Kolor: <code>-dark</code> / <code>-primary</code>
+                    / <code>-light</code> (lub <code>.bg-overlay</code> =
+                    czerń); krycie <code>.overlay-10</code> do
+                    <code>.overlay-90</code> (co 10%).
                   </td>
                   <td>-</td>
                 </tr>
@@ -1949,11 +2079,18 @@
                 <tr>
                   <td>
                     <span class="class-name">.modal-dialog</span>
-                    <span class="class-name">.modal-sm</span>
+                    <span class="class-name">.modal-sm</span><br />
+                    <span class="class-name">.modal-close-btn</span>
+                    <span class="class-name">.modal-divider</span>
+                    <span class="class-name">.modal-action-list</span>
                   </td>
                   <td class="text-muted">
                     Natywne okno modalne oparte na tagu
-                    <code>&lt;dialog&gt;</code>.
+                    <code>&lt;dialog&gt;</code>. Części pomocnicze:
+                    <code>.modal-close-btn</code> (przycisk X),
+                    <code>.modal-divider</code> (linia),
+                    <code>.modal-action-list</code> &gt;
+                    <code>.modal-action-btn</code> (lista akcji).
                   </td>
                   <td>-</td>
                 </tr>
@@ -2009,9 +2146,17 @@
                   <td>-</td>
                 </tr>
                 <tr>
-                  <td><span class="class-name">.toast-container</span></td>
+                  <td>
+                    <span class="class-name">.toast-container</span>
+                    <span class="class-name">.toast</span>
+                  </td>
                   <td class="text-muted">
-                    Pływające powiadomienia (Toasty) wywoływane przez JS.
+                    Pływające powiadomienia (Toasty) wywoływane przez JS
+                    (<code>MoliqueToast.show()</code>). Typy
+                    <code>.toast-success</code> / <code>-danger</code> /
+                    <code>-warning</code> / <code>-info</code>; pozycja
+                    <code>.toast-top-right</code>, <code>-bottom-center</code>
+                    itd. (6 wariantów).
                   </td>
                   <td>-</td>
                 </tr>
@@ -2021,8 +2166,10 @@
                     <span class="class-name">.status-pending</span>
                   </td>
                   <td class="text-muted">
-                    Kropki statusu. Dodaj <code>.status-ping</code> dla efektu
-                    pulsowania.
+                    Kropki statusu: <code>.status-draft</code> /
+                    <code>-pending</code> / <code>-done</code> /
+                    <code>-danger</code> (oraz <code>-success</code>). Dodaj
+                    <code>.status-ping</code> dla efektu pulsowania.
                   </td>
                   <td>
                     <span class="status-dot status-success status-ping"></span>
@@ -2118,20 +2265,31 @@
                   <td>-</td>
                 </tr>
                 <tr>
-                  <td><span class="class-name">.pricing-table</span></td>
+                  <td>
+                    <span class="class-name">.pricing-table</span>
+                    <span class="class-name">.pricing-header</span>
+                    <span class="class-name">.pricing-features</span>
+                  </td>
                   <td class="text-muted">
                     Tabela cennikowa. Dodaj <code>.is-featured</code> dla
-                    wyróżnionego pakietu.
+                    wyróżnionego pakietu. Struktura:
+                    <code>.pricing-header</code> (z <code>.pricing-title</code>
+                    i <code>.pricing-price</code>) + <code>.pricing-features</code>.
                   </td>
                   <td>-</td>
                 </tr>
                 <tr>
                   <td>
                     <span class="class-name">.stepper</span>
-                    <span class="class-name">.stepper-numbered</span>
+                    <span class="class-name">.stepper-numbered</span><br />
+                    <span class="class-name">.step</span>
+                    <span class="class-name">.step-line</span>
                   </td>
                   <td class="text-muted">
-                    Wizualizacja kroków procesu (np. w koszyku).
+                    Wizualizacja kroków procesu (np. w koszyku). Każdy krok to
+                    <code>.step</code> (dodaj <code>.is-active</code> lub
+                    <code>.is-completed</code>), połączony
+                    <code>.step-line</code>.
                   </td>
                   <td>-</td>
                 </tr>
@@ -2190,9 +2348,13 @@
                   <td>
                     <span class="class-name">.filter-grayscale</span>
                     <span class="class-name">.filter-blur</span>
+                    <span class="class-name">.filter-none</span>
                   </td>
                   <td class="text-muted">
                     Klasy narzędziowe nakładające filtry CSS na obrazy.
+                    <code>.filter-none</code> zdejmuje filtr (np. na hover
+                    razem z <code>.hover-filter-none</code> - odbarwione logo
+                    koloruje się po najechaniu).
                   </td>
                   <td>-</td>
                 </tr>
