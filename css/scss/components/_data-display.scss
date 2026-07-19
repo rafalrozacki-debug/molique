@@ -196,7 +196,9 @@
   grid-template-columns: 2fr 1fr 1fr 1fr auto;
   align-items: center;
   gap: calc(var(--spacing-unit) * 2);
-  background-color: #fff;
+  /* Kolor powierzchni zamiast literalnego #fff - w dark mode wiersz ma
+     ciemnieć razem z kartami (w light mode bez zmiany: biel). */
+  background-color: var(--bg-surface);
   padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
@@ -568,7 +570,9 @@
   
   &:hover {
     background-color: var(--primary);
-    color: #fff;
+    /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
+       ciemnieć - literal #fff tracił kontrast */
+    color: var(--btn-text-light);
     border-color: var(--primary);
   }
 }
@@ -676,7 +680,9 @@
 
 .list-group-item.is-active {
   z-index: 2;
-  color: #fff;
+  /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+     primary jaśnieje, literal #fff tracił kontrast) */
+  color: var(--btn-text-light);
   background-color: var(--primary);
   border-color: var(--primary);
 }
