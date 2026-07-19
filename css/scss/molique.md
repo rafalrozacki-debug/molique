@@ -179,7 +179,11 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 ## Typografia & Kolory
 
 - **Skala wielkości:** `.text-1` do `.text-12` (oparte na płynnym
-  `clamp()`).
+  `clamp()`). UWAGA — skala ROŚNIE: `.text-1` = tekst bazowy (14–15px,
+  ten sam co akapity), `.text-6` = rozmiar H1, `.text-7`–`.text-12` to
+  rozmiary hero. `.text-1` NIE jest najmniejszy — do tekstu mniejszego
+  niż bazowy (metadane, daty w timeline, podpisy) służą WYŁĄCZNIE
+  `.text-sm` (13px) i `.text-xs` (12px); `.text-base` wraca do bazy.
 - **Wagi:** `.fw-light`, `.fw-normal`, `.fw-medium`, `.fw-bold`,
   `.fw-black`.
 - **Kolory tekstu/tła:** `.text-primary`, `.bg-surface`, `.bg-body`,
