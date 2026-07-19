@@ -2193,6 +2193,18 @@
     .input-range::-moz-range-thumb:hover {
       transform: scale(1.15);
     }
+    /* Number: chowamy natywne strzałki (spinner) - w gęstych formularzach
+       B2B wyglądają obco i gryzą się z własnymi przyciskami krokowania.
+       Zamiennik to kontrolka .qty-input (przyciski + / -), a wartość nadal
+       można zmieniać klawiaturą (góra/dół) i scrollem. */
+    input[type=number].input {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    input[type=number].input::-webkit-outer-spin-button, input[type=number].input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
     input[type=date].input,
     input[type=time].input,
     input[type=datetime-local].input {

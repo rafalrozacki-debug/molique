@@ -119,7 +119,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Input Groups:** `.input-group` > `.input-group-text` + `.input` +
   `.btn` (automatycznie łączy elementy w gładki prostokąt).
 - **Zaawansowane Inputy:** `.input-range`, `.input-color`,
-  `input[type="date"].input`.
+  `input[type="date"].input`, `input[type="number"].input` (bez
+  natywnego spinnera — do krokowania służy `.qty-input` z przyciskami
+  `+` / `-`, klawiatura i scroll).
 - **Searchable Select (Popover API):** `.select-search` >
   `<button class="input select-search-trigger" popovertarget="ID">` +
   `.select-search-menu` z atrybutem `popover` i unikalnym `id`

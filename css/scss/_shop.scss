@@ -241,9 +241,23 @@
   cursor: pointer;
   font-weight: var(--fw-bold);
   transition: background-color var(--transition-speed);
-  
+
   &:hover { background-color: var(--border-color); }
   &:focus { outline: none; }
+}
+
+/* Ukrycie natywnych strzałek (spinnera) niezależnie od klasy inputa -
+   kontrolka ma własne przyciski + / -, więc systemowy stepper by się
+   dublował (dotąd chowała je tylko klasa .qty-val). */
+.qty-input input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .qty-val {
