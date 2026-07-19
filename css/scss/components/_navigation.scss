@@ -397,7 +397,11 @@
   gap: calc(var(--spacing-unit) * 1.5);
   padding: calc(var(--spacing-unit) * 3);
   border-radius: var(--border-radius);
-  background-image: linear-gradient(145deg, var(--dark), var(--primary));
+  /* Gradient na literałach, NIE na var(--dark)/var(--primary): karta jest
+     celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
+     odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
+     zmiennymi biały tekst lądował na jasnym tle. */
+  background-image: linear-gradient(145deg, #1E293B, #0284C7);
   color: #fff;
 }
 
