@@ -149,6 +149,72 @@
             </div>
           </section>
 
+          <!-- Stock Bar -->
+          <section class="mb-5 pb-5">
+            <h3 class="text-5 fw-bold mb-3">
+              Stock Bar (Segmentowy poziom zapasu)
+            </h3>
+            <p class="text-muted mb-4">
+              Pięciosegmentowy wskaźnik poziomu — stany magazynowe, limity,
+              quoty. Zero JS i zero dodatkowych elementów: segmenty rysuje
+              maska SVG, a liczbę wypełnionych segmentów przekazujesz z
+              backendu przez zmienną
+              <code>style="--stock-filled: 3"</code> (0–5). Puste segmenty
+              to tint koloru wariantu, więc komponent działa też w dark
+              mode. Wartość podawaj obok jako tekst (albo nadaj
+              <code>role="img"</code> + <code>aria-label</code>) — sam pasek
+              jest czysto wizualny.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface flex-column align-items-start gap-3"
+              >
+                <div class="d-flex align-items-center gap-3">
+                  <span
+                    class="stock-bar stock-bar-success"
+                    style="--stock-filled: 4"
+                  ></span>
+                  <span class="text-muted text-2">50/142 · wysoki stan</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span
+                    class="stock-bar stock-bar-warning"
+                    style="--stock-filled: 3"
+                  ></span>
+                  <span class="text-muted text-2">30/96 · średni stan</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span
+                    class="stock-bar stock-bar-danger"
+                    style="--stock-filled: 1"
+                  ></span>
+                  <span class="text-muted text-2">30/30 · niski stan</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="stock-bar" style="--stock-filled: 2"></span>
+                  <span class="text-muted text-2"
+                    >wariant neutralny (secondary)</span
+                  >
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Wypełnienie: --stock-filled od 0 do 5 --&gt;
+&lt;span class="stock-bar stock-bar-success" style="--stock-filled: 4"&gt;&lt;/span&gt;
+&lt;span class="stock-bar stock-bar-warning" style="--stock-filled: 3"&gt;&lt;/span&gt;
+&lt;span class="stock-bar stock-bar-danger"  style="--stock-filled: 1"&gt;&lt;/span&gt;
+
+&lt;!-- Neutralny (bez wariantu = kolor secondary) --&gt;
+&lt;span class="stock-bar" style="--stock-filled: 2"&gt;&lt;/span&gt;
+
+&lt;!-- Wersja dostępna dla czytników ekranu --&gt;
+&lt;span class="stock-bar stock-bar-success" style="--stock-filled: 4"
+      role="img" aria-label="Stan magazynowy: 4/5"&gt;&lt;/span&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
           <!-- Nawigacja dół -->
           <div
             class="d-flex justify-content-start align-items-center mt-5 pt-4 border-top"

@@ -4664,7 +4664,9 @@
     grid-template-columns: 2fr 1fr 1fr 1fr auto;
     align-items: center;
     gap: calc(var(--spacing-unit) * 2);
-    background-color: #fff;
+    /* Kolor powierzchni zamiast literalnego #fff - w dark mode wiersz ma
+       ciemnieć razem z kartami (w light mode bez zmiany: biel). */
+    background-color: var(--bg-surface);
     padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -5110,7 +5112,9 @@
   }
   .carousel-nav:hover {
     background-color: var(--primary);
-    color: #fff;
+    /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
+       ciemnieć - literal #fff tracił kontrast */
+    color: var(--btn-text-light);
     border-color: var(--primary);
   }
   .carousel-prev {
@@ -5216,7 +5220,9 @@
   }
   .list-group-item.is-active {
     z-index: 2;
-    color: #fff;
+    /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+       primary jaśnieje, literal #fff tracił kontrast) */
+    color: var(--btn-text-light);
     background-color: var(--primary);
     border-color: var(--primary);
   }
@@ -5585,6 +5591,47 @@
     100% {
       box-shadow: 0 0 0 0 transparent;
     }
+  }
+  /* =========================================
+     4.5. STOCK BAR (Segmentowy poziom zapasu)
+     ========================================= */
+  /* Pięciosegmentowy wskaźnik poziomu (stany magazynowe, limity, quoty).
+     Zero JS i zero dodatkowego markupu: segmenty rysuje maska SVG (5
+     zaokrąglonych prostokątów), a wypełnienie to zwykły gradient ucinany
+     na granicy segmentu. Liczba wypełnionych segmentów z backendu przez
+     zmienną CSS: style="--stock-filled: 3" (0-5). "Puste" segmenty to
+     tint koloru wariantu (rgba), więc działają też w dark mode.
+     A11y: element jest czysto wizualny - podawaj wartość obok jako tekst
+     lub nadaj role="img" + aria-label="Stan: 3/5". */
+  .stock-bar {
+    --stock-segments: 5;
+    --stock-filled: 0;
+    --stock-color: var(--secondary);
+    --stock-color-rgb: var(--secondary-rgb);
+    display: inline-block;
+    width: 60px;
+    height: 10px;
+    flex-shrink: 0;
+    vertical-align: middle;
+    background: linear-gradient(to right, var(--stock-color) 0 calc(var(--stock-filled) / var(--stock-segments) * 100%), rgba(var(--stock-color-rgb), 0.25) 0);
+    /* Maska: 5 segmentów 10x10 (rx=2) z odstępem 2.5 w siatce 60x10.
+       Granica k/5 wypełnienia zawsze wypada w przerwie między segmentami,
+       więc krawędź gradientu nigdy nie tnie segmentu w połowie. */
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+  }
+  /* Warianty kolorystyczne (semantyka jak w statusach) */
+  .stock-bar-success {
+    --stock-color: var(--success);
+    --stock-color-rgb: var(--success-rgb);
+  }
+  .stock-bar-warning {
+    --stock-color: var(--warning);
+    --stock-color-rgb: var(--warning-rgb);
+  }
+  .stock-bar-danger {
+    --stock-color: var(--danger);
+    --stock-color-rgb: var(--danger-rgb);
   }
   /* =========================================
      5. TOOLTIPS (Dymki podpowiedzi - Czysty CSS)

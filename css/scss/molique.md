@@ -139,6 +139,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `MoliqueToast.show({ message: '...', type: 'success' })`.
 - **Status Dots:** `.status-dot` + `.status-draft` / `pending` / `done` /
   `danger`. Dodaj `.status-ping` dla pulsowania.
+- **Stock Bar (segmentowy poziom zapasu):** `.stock-bar` + wariant
+  `.stock-bar-success` / `-warning` / `-danger` (bez wariantu: kolor
+  secondary). Wypełnienie z backendu przez `style="--stock-filled: 3"`
+  (0–5); segmenty rysuje maska SVG — zero JS i zero dodatkowego markupu.
+  Pasek jest czysto wizualny: wartość podawaj obok jako tekst lub nadaj
+  `role="img"` + `aria-label`.
 - **Interaktywna Ikona:** `.status-icon-toggle` (animacja Plus ->
   Checkmark). Może być użyta z `<label class="status-checkbox">`.
 - **Tooltipy:** `.tooltip-element[data-tooltip="Treść"]`.
