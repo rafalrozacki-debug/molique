@@ -481,6 +481,19 @@
                     (<code>--sidebar-text-active</code>,
                     <code>--sidebar-highlight-rgb</code>).
                   </li>
+                  <li>
+                    <strong>Przycisk "Cofnij" i zamykanie modali:</strong>
+                    W trybie drill-down wąskiego sidebara przycisk "Cofnij"
+                    (transformowane <code>&lt;summary&gt;</code>) dziedziczył
+                    kolor z <code>.is-active</code>
+                    (<code>--btn-text-light</code>), przez co w dark mode
+                    znikał na ciemnym tle - ma teraz jawny kolor z palety
+                    sidebara. Dodatkowo przycisk zamykania w nagłówku modala
+                    nie świeci już pełnym pierścieniem fokusu zaraz po
+                    otwarciu okna (<code>showModal()</code> focusuje go
+                    automatycznie) - wskaźnik klawiatury pozostał, w
+                    subtelniejszej formie.
+                  </li>
                 </ul>
               </div>
             </div>

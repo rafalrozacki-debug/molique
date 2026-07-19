@@ -166,6 +166,18 @@
   &:hover { color: var(--danger); }
 }
 
+/* Przycisk zamykania w nagłówku modala dostaje fokus automatycznie przy
+   showModal() (przeglądarka focusuje pierwszy fokusowalny element okna),
+   więc pełny pierścień fokusu świeci się od razu po otwarciu i wygląda
+   jak błąd renderowania. Zamieniamy go na subtelniejszy wskaźnik — nadal
+   widoczny przy nawigacji klawiaturą (A11y), ale nie krzyczący. */
+.modal-dialog .card-header .btn-action:focus-visible,
+.modal-dialog .card-header .modal-close-btn:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-ring-color);
+  background-color: var(--card-bg-subtle);
+}
+
 .modal-context .card-body {
   padding: calc(var(--spacing-unit) * 3);
   display: flex;

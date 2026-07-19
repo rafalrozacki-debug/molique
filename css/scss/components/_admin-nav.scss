@@ -379,12 +379,18 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           padding: 0;
           gap: 8px;
           transition: background-color var(--transition-speed);
+          /* FIX: summary bywa oznaczone .is-active (kolor --btn-text-light,
+             który w dark mode robi się ciemny). W drill-down tło to zawsze
+             ciemny --sidebar-bg, więc kolor MUSI wrócić do palety sidebara -
+             bez tego strzałka i napis "Cofnij" znikają w ciemnym motywie. */
+          color: var(--sidebar-text);
 
           /* FIX: bez tego przycisk "Cofnij" nie dawał żadnej reakcji na hover/focus
              i wyglądał jak martwy element. Przyciemniamy (nie rozjaśniamy) - na
              ciemnym tle sidebara jasne podświetlenie wygląda jak obca, źle
              dopasowana poświata. */
           &:hover {
+            color: var(--sidebar-text-active);
             background-color: rgba(0, 0, 0, 0.15);
           }
 
