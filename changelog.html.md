@@ -431,6 +431,26 @@
                 </ul>
 
                 <h3
+                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  Płynna zmiana motywu (View Transitions)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Cross-fade na GPU:</strong> Przełączenie
+                    light/dark odbywa się teraz przez
+                    <code>document.startViewTransition()</code> - przeglądarka
+                    przenika dwie migawki strony (czysta opacity), bez
+                    animowania kolorów na pojedynczych elementach. Czas
+                    przejścia steruje CSS
+                    (<code>::view-transition-old/new</code>), starsze
+                    przeglądarki i <code>prefers-reduced-motion</code>
+                    przełączają natychmiast, jak dotychczas.
+                  </li>
+                </ul>
+
+                <h3
                   class="text-1 text-success fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-success mx-2 text-1"
@@ -527,6 +547,14 @@
                     oraz <code>.scroll-to-top</code> (ikona ginęła na
                     hoverze; kolor podąża teraz za motywem jak w
                     <code>.btn-primary</code>).
+                  </li>
+                  <li>
+                    <strong>Backdrop modali (dark mode):</strong>
+                    Przyciemnienie tła pod otwartym
+                    <code>&lt;dialog&gt;</code> używało odwracanego
+                    <code>--dark-rgb</code> i w ciemnym motywie stawało się
+                    jasną mgłą. Backdrop stoi teraz na stałym, ciemnym
+                    kolorze w obu motywach.
                   </li>
                 </ul>
               </div>

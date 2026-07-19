@@ -3969,7 +3969,10 @@
       pointer-events: none !important;
     }
     .modal-dialog::backdrop {
-      background-color: rgba(var(--dark-rgb), 0.6);
+      /* Literal zamiast rgba(var(--dark-rgb)): przyciemnienie tła ma ZAWSZE
+         przyciemniać, a dark mode odwraca --dark-rgb do jasnego - backdrop
+         robił się jasną mgłą, wbrew idei ciemnego motywu. */
+      background-color: rgba(30, 41, 59, 0.6);
       backdrop-filter: blur(4px);
     }
     .modal-dialog {
@@ -8102,6 +8105,25 @@
     syntax: "<angle>";
     initial-value: 0deg;
     inherits: false;
+  }
+  /* =========================================
+     0.5. PŁYNNA ZMIANA MOTYWU (View Transitions API)
+     ========================================= */
+  /* Cross-fade wyzwalany przez document.startViewTransition() w
+     molique-script.js (przełącznik motywu). Przenikają się dwie migawki
+     całej strony na GPU (czysta opacity) - zgodnie ze złotą zasadą:
+     żadnego animowania kolorów per element. Pseudo-elementy poza @layer,
+     bo dotyczą specjalnego drzewa ::view-transition, nie komponentów. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.35s;
+    animation-timing-function: ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+    }
   }
   @layer utilities {
     /* =========================================
