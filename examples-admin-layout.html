@@ -12,7 +12,7 @@
   <body>
     <div class="admin-layout">
       <!-- PASEK BOCZNY -->
-      <aside class="admin-sidebar">
+      <aside class="admin-sidebar fade-bottom">
         <a href="index.html" class="admin-brand admin-logo-compact">
           molique<span class="text-primary">.</span>
         </a>
@@ -111,7 +111,7 @@
       </aside>
 
       <!-- GŁÓWNA TREŚĆ -->
-      <main class="admin-main">
+      <main class="admin-main fade-bottom">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Layout Admina</h1>
@@ -161,6 +161,58 @@
     &lt;!-- Główna treść panelu --&gt;
   &lt;/main&gt;
 
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Fade Bottom -->
+          <section class="mb-5 pb-5">
+            <h3 class="text-7 fw-bold mb-3">Zanikanie treści (Fade Bottom)</h3>
+            <p class="text-muted mb-4">
+              Klasa <code>.fade-bottom</code> dodaje gradient przy dolnej
+              krawędzi - przewijana treść "zanika", zamiast być ostro
+              ucięta. Efekt widać na żywo na tej stronie: zarówno sidebar,
+              jak i główna kolumna mają tę klasę. Działa też na dowolnym
+              przewijanym kontenerze (np. lista w karcie); ustaw wtedy
+              <code>--fade-color</code> na kolor tła kontenera
+              (domyślnie <code>var(--bg-surface)</code>) i opcjonalnie
+              wysokość przez <code>--fade-height</code> (domyślnie 80px).
+              W <code>.admin-sidebar</code> i <code>.admin-main</code>
+              kolor dobiera się sam, a na mobile (Bottom Nav) gradient
+              sidebara jest automatycznie wyłączany.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div
+                  class="w-100 p-4 border rounded-2 bg-body fade-bottom"
+                  style="max-height: 180px; overflow-y: auto; --fade-color: var(--bg-body);"
+                >
+                  <p class="m-0 mb-3">Przewiń tę listę - ostatni widoczny wiersz zanika:</p>
+                  <ul class="m-0">
+                    <li>Pozycja 1</li>
+                    <li>Pozycja 2</li>
+                    <li>Pozycja 3</li>
+                    <li>Pozycja 4</li>
+                    <li>Pozycja 5</li>
+                    <li>Pozycja 6</li>
+                    <li>Pozycja 7</li>
+                    <li>Pozycja 8</li>
+                    <li>Pozycja 9</li>
+                    <li>Pozycja 10</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- W panelu admina --&gt;
+&lt;aside class="admin-sidebar fade-bottom"&gt;...&lt;/aside&gt;
+&lt;main class="admin-main fade-bottom"&gt;...&lt;/main&gt;
+
+&lt;!-- Dowolny przewijany kontener --&gt;
+&lt;div class="fade-bottom" style="max-height: 200px; overflow-y: auto; --fade-color: var(--bg-body);"&gt;
+  ...długa treść...
 &lt;/div&gt;</code></pre>
               </div>
             </div>

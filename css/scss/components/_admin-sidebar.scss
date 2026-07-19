@@ -82,7 +82,18 @@
       overflow: visible; 
     }
   }
-  /* ... reszta pliku bez zmian ... */
+  /* Zanikanie treści na dole przewijanego sidebara (opt-in: klasa
+     .fade-bottom z warstwy layout). Gradient musi mieć kolor tła
+     sidebara (zawsze ciemny), nie powierzchni strony. */
+  .admin-sidebar.fade-bottom {
+    --fade-color: var(--sidebar-bg);
+
+    /* Na mobile sidebar zamienia się w poziomy dolny pasek -
+       pionowy gradient zasłaniałby pigułki nawigacji. */
+    @media (max-width: 768px) {
+      &::after { display: none; }
+    }
+  }
 
   /* Logo w sidebarze.
      Działa niezależnie od typu treści (obrazek, SVG, tekst) - zawsze

@@ -155,6 +155,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 
 - **Admin Layout:** `.admin-layout` > `.admin-sidebar` + `.admin-main`.
   Wariant `.admin-layout-floating` odsuwa treść od krawędzi.
+- **Fade Bottom:** `.fade-bottom` — zanikanie treści przy dolnej
+  krawędzi (gradient zamiast ostrego ucięcia). Działa na dowolnym
+  przewijanym kontenerze: ustaw `--fade-color` na kolor tła kontenera
+  (domyślnie `--bg-surface`), wysokość przez `--fade-height` (80px).
+  Na `.admin-sidebar` i `.admin-main` kolor dobiera się automatycznie,
+  a na mobile gradient sidebara sam się wyłącza.
 - **Admin Sidebar:** klasy szerokości: `.sidebar-md`, `.sidebar-sm`. Logo:
   `.admin-brand` (mieści dowolną treść — obrazek, SVG, tekst — w szerokości
   sidebara). Warianty responsywne, aktywne domyślnie w `.sidebar-sm`,

@@ -127,3 +127,30 @@
 .fw-bold { font-weight: var(--fw-bold); }
 .fw-normal { font-weight: var(--fw-normal); }
 .fw-light { font-weight: var(--fw-light); }
+/* =========================================
+   6. FADE BOTTOM (Zanikanie treści przy dolnej krawędzi)
+   =========================================
+   Opt-in dla dowolnego przewijanego kontenera (lub elementu, przez
+   który przewija się strona): gradient przykrywa dolną krawędź i
+   treść "zanika" zamiast być ucięta. Kolor gradientu MUSI odpowiadać
+   tłu elementu - steruj przez --fade-color (domyślnie --bg-surface).
+   Wysokość: --fade-height. Komponenty admina (.admin-sidebar,
+   .admin-main) mają własne integracje w module admin. */
+.fade-bottom {
+  --fade-height: 80px;
+  --fade-color: var(--bg-surface);
+
+  &::after {
+    content: '';
+    display: block;
+    position: sticky;
+    bottom: 0;
+    height: var(--fade-height);
+    /* Gradient nakłada się na treść, nie wydłuża przewijania */
+    margin-top: calc(var(--fade-height) * -1);
+    flex-shrink: 0;
+    background: linear-gradient(to top, var(--fade-color) 15%, transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
+}

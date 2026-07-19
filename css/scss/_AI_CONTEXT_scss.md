@@ -1,7 +1,7 @@
 # Zbiorczy kontekst projektu dla AI
 
 **Folder glowny:** `scss`
-**Liczba plikow w paczce:** 43
+**Liczba plikow w paczce:** 51
 
 ## Struktura plikow:
 - `components/_admin-nav.scss`
@@ -16,14 +16,19 @@
 - `components/_form-advanced.scss`
 - `components/_form-base.scss`
 - `components/_form-groups.scss`
+- `components/_hero.scss`
+- `components/_language-switch.scss`
 - `components/_modals.scss`
 - `components/_navigation.scss`
 - `layout/_admin-layout.scss`
 - `modules/_docs.scss`
 - `molique-style-admin.scss`
+- `molique-style-before-after.scss`
 - `molique-style-blog.scss`
 - `molique-style-docs.scss`
+- `molique-style-share.scss`
 - `molique-style-shop.scss`
+- `molique-style-speed-dial.scss`
 - `molique-style.scss`
 - `utilities/_animations.scss`
 - `utilities/_borders.scss`
@@ -34,6 +39,7 @@
 - `_a11y.scss`
 - `_admin.scss`
 - `_base.scss`
+- `_before-after.scss`
 - `_blog.scss`
 - `_buttons.scss`
 - `_components.scss`
@@ -43,18 +49,23 @@
 - `_layout.scss`
 - `_mixins.scss`
 - `_root.scss`
+- `_share.scss`
 - `_shop.scss`
+- `_speed-dial.scss`
 - `_utilities-extended.scss`
 - `_utilities.scss`
 - `_variables.scss`
-
----
 
 ## Plik: `components/_admin-nav.scss`
 
 ```scss
 @use '../variables' as *;
 @use '../mixins' as *;
+
+/* Wysokość bloku logo (.admin-brand: target-size-min + margin-bottom) -
+   drill-down submenu w -sm/-md zaczyna się PONIŻEJ tej wysokości, żeby logo
+   zostawało widoczne zamiast znikać pod panelem "Cofnij". */
+$admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4);
 
 @layer components {
   .admin-nav {
@@ -105,7 +116,7 @@
 
     &:hover {
       color: var(--sidebar-text-active);
-      background-color: rgba(var(--light-rgb), 0.05);
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
     }
 
     &.is-active {
@@ -121,6 +132,7 @@
       
       /* --- WARIANT: NARROW (Ikona na górze, tekst na dole) --- */
       .sidebar-md & {
+        /* FIX: Wymuszamy układ pionowy! */
         flex-direction: column;
         justify-content: center;
         padding: calc(var(--spacing-unit) * 1) 4px;
@@ -129,6 +141,7 @@
         width: 100%; 
 
         .nav-text {
+          /* FIX: Mały, wyśrodkowany tekst */
           font-size: 0.6rem; 
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -136,43 +149,6 @@
           word-break: break-word;
           line-height: 1.1;
           width: 100%;
-        }
-      }
-
-      .sidebar-md .admin-sidebar:hover &,
-      .sidebar-sm .admin-sidebar:hover & {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
-        gap: calc(var(--spacing-unit) * 1.5);
-        text-align: left;
-
-        /* W trybie SM ikony miały margin: 0 !important, musimy to zresetować */
-        i, svg, .sidebar-toggle-icon {
-          margin: 0 !important;
-        }
-
-        .nav-text {
-          display: block; /* W trybie SM tekst był ukryty, przywracamy go */
-          font-size: 0.875rem;
-          text-transform: none;
-          letter-spacing: normal;
-          white-space: nowrap;
-        }
-      }
-
-      /* MAGIA: Kiedy najeżdżamy na wąski sidebar, linki wracają do normalności! */
-      .sidebar-md .admin-sidebar:hover & {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
-        text-align: left;
-
-        .nav-text {
-          font-size: 0.875rem;
-          text-transform: none;
-          letter-spacing: normal;
-          white-space: nowrap;
         }
       }
 
@@ -186,6 +162,7 @@
         i, svg, .sidebar-toggle-icon { margin: 0 !important; }
         .nav-text { display: none; }
       }
+
     }
 
     /* =========================================
@@ -224,7 +201,7 @@
     display: block;
     width: 100%; 
     height: 1px;
-    background-color: rgba(var(--light-rgb), 0.1);
+    background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
     margin: 0;
     border: none;
     flex-shrink: 0;
@@ -284,7 +261,7 @@
       left: 0;
       right: 0;
       width: 100%;
-      
+
       background-color: var(--sidebar-bg);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       border-top-left-radius: var(--border-radius-lg, 24px);
@@ -293,6 +270,10 @@
       padding-bottom: calc(var(--spacing-unit) * 4);
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
       z-index: 100;
+      /* FIX: Długie listy (np. nawigacja dokumentacji) muszą się przewijać w pionie,
+         inaczej szuflada wystaje ponad górną krawędź ekranu */
+      max-height: calc(100dvh - 70px - (var(--spacing-unit) * 4));
+      overflow-y: auto;
       
       /* FIX: Zamiast display: none, ukrywamy szufladę pod ekranem! */
       visibility: hidden;
@@ -403,7 +384,7 @@
 
     &:hover {
       color: var(--sidebar-text-active);
-      background-color: rgba(var(--light-rgb), 0.05);
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
     }
 
     &.is-active {
@@ -415,134 +396,166 @@
     }
   }
 
-  /* --- WARIANTY WĄSKIE (Całkowite ukrycie drzewka) --- */
+  /* --- WARIANTY WĄSKIE (Drill-down Menu) --- */
   @include mq(md) {
     .sidebar-md .admin-nav-submenu,
     .sidebar-sm .admin-nav-submenu {
+      
+      /* Uciekamy z kontekstu pozycjonowania, żeby móc przykryć cały sidebar! */
+      position: static; 
+      
       summary::after { display: none; }
-      
-      .admin-nav-submenu-list { 
-        display: none !important; 
+      .admin-nav-submenu-list { display: none !important; }
+
+      /* =========================================
+         STAN OTWARTY (Drill-down Active)
+         ========================================= */
+      &[open] {
+
+        /* 1. Tło przykrywające resztę sidebara PONIŻEJ logo (logo zostaje widoczne) */
+        &::before {
+          content: '';
+          position: absolute;
+          top: $admin-brand-block-height;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: var(--sidebar-bg);
+          z-index: 100;
+        }
+
+        /* 2. Przycisk "Cofnij" (Transformacja tagu <summary>) - pod logo, nie w jego miejscu */
+        > summary {
+          position: absolute;
+          top: $admin-brand-block-height;
+          left: 0;
+          width: 100%;
+          height: 70px;
+          z-index: 102;
+          background-color: var(--sidebar-bg);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 0;
+          flex-direction: row;
+          justify-content: center;
+          padding: 0;
+          gap: 8px;
+          transition: background-color var(--transition-speed);
+          /* FIX: summary bywa oznaczone .is-active (kolor --btn-text-light,
+             który w dark mode robi się ciemny). W drill-down tło to zawsze
+             ciemny --sidebar-bg, więc kolor MUSI wrócić do palety sidebara -
+             bez tego strzałka i napis "Cofnij" znikają w ciemnym motywie. */
+          color: var(--sidebar-text);
+
+          /* FIX: bez tego przycisk "Cofnij" nie dawał żadnej reakcji na hover/focus
+             i wyglądał jak martwy element. Przyciemniamy (nie rozjaśniamy) - na
+             ciemnym tle sidebara jasne podświetlenie wygląda jak obca, źle
+             dopasowana poświata. */
+          &:hover {
+            color: var(--sidebar-text-active);
+            background-color: rgba(0, 0, 0, 0.15);
+          }
+
+          &:focus-visible {
+            background-color: rgba(0, 0, 0, 0.15);
+            /* FIX: nadpisuje domyślny, jasny pierścień fokusu z _base.scss
+               (oparty o --primary) - na ciemnym tle sidebara wygląda jak jasna
+               poświata zamiast dyskretnego wskaźnika fokusu */
+            outline: none;
+            box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
+          }
+
+          /* Ukrywamy oryginalną ikonę */
+          > i, > svg { display: none !important; }
+
+          /* Rysujemy ikonę strzałki w lewo (Cofnij) */
+          &::before {
+            content: '';
+            display: block;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            background-color: currentColor;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center / contain;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center / contain;
+          }
+
+          /* Zmieniamy tekst na "Cofnij" za pomocą pseudo-elementu */
+          .nav-text {
+            display: block !important;
+            /* FIX: bez tego .nav-text dziedziczył width:100% z wariantu -md
+               (ikona nad tekstem), przez co przycisk "Cofnij" wyglądał na
+               niewyśrodkowany - tekst rozpychał się na całą dostępną szerokość */
+            width: auto;
+            font-size: 0 !important; /* Ukrywa oryginalny tekst */
+            &::after {
+              content: 'Cofnij';
+              font-size: 0.875rem;
+              text-transform: none;
+              letter-spacing: normal;
+            }
+          }
+        }
+
+        /* 3. Lista linków submenu - zaczyna się pod przyciskiem Cofnij (który jest pod logo) */
+        > .admin-nav-submenu-list {
+          display: flex !important;
+          position: absolute;
+          top: calc(#{$admin-brand-block-height} + 70px);
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 101;
+          background-color: var(--sidebar-bg);
+          padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 1);
+          margin: 0;
+          overflow-y: auto;
+
+          /* Resetujemy linie drzewka */
+          &::before { display: none; }
+
+          .admin-nav-submenu-link {
+            padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
+            justify-content: center;
+            text-align: center;
+            /* FIX: długie słowa bez naturalnych miejsc łamania (spacji, myślnika)
+               wylewały się poza wąski sidebar -sm - poszerzanie -sm nie wchodzi
+               w grę, więc zamiast tego łamiemy słowo, ale TYLKO gdy faktycznie
+               nie mieści się w wierszu (overflow-wrap, nie word-break: break-word -
+               ten drugi łamie słowa nawet gdy zmieściłyby się w całości) */
+            overflow-wrap: break-word;
+            &::before { display: none; } /* Ukrywamy poziome kreseczki */
+          }
+        }
       }
     }
 
-    /* FIX: Przywracamy drzewko i strzałkę dla MD i SM! */
-    .sidebar-md .admin-sidebar:hover .admin-nav-submenu,
-    .sidebar-sm .admin-sidebar:hover .admin-nav-submenu {
-      summary::after { display: inline-block; }
-      
-      &[open] .admin-nav-submenu-list {
-        display: flex !important;
-      }
-    }
-  }
-
-  /* =========================================
-     SUBMENU (Rozwijane drzewko linków)
-     ========================================= */
-  .admin-nav-submenu {
-    position: relative;
-    
-    summary {
-      list-style: none;
-      cursor: pointer;
-      &::-webkit-details-marker { display: none; }
-      
-      &::after {
-        content: "";
-        display: inline-block;
-        margin-left: auto;
-        width: 6px;
-        height: 6px;
-        border-right: 2px solid currentColor;
-        border-bottom: 2px solid currentColor;
-        transform: rotate(45deg);
-        transition: transform var(--transition-speed);
-        opacity: 0.5;
-      }
+    /* W trybie SM (najwęższym) ukrywamy tekst "Cofnij", zostawiamy samą strzałkę */
+    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+      display: none !important;
     }
 
-    &[open] > summary::after {
-      transform: rotate(-135deg);
-    }
-  }
+    /* --- WARIANT -SM: linki na pełną szerokość z separatorem zamiast ramek ---
+       Sidebar -sm jest zbyt wąski (72px), żeby zaokrąglona ramka + padding
+       wokół każdego linku miały sens - tekst dotykał/wylewał się poza ramkę.
+       Zamiast tego: linki na pełną szerokość, oddzielone cienką linią. */
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+      padding-left: 0;
+      padding-right: 0;
 
-  /* --- WARIANT DOMYŚLNY (Szeroki Sidebar - Drzewko) --- */
-  .admin-nav-submenu-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin: 4px 0 8px 0;
-    padding-left: calc(var(--spacing-unit) * 5); 
-    position: relative;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 8px; 
-      left: calc(var(--spacing-unit) * 3); 
-      width: 1px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
+      .admin-nav-submenu-link {
+        width: 100%;
+        border-radius: 0;
+        border-width: 0 0 1px 0;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.08);
 
-  .admin-nav-submenu-link {
-    display: flex;
-    align-items: center;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    font-size: 0.8125rem;
-    font-weight: var(--fw-medium);
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    border-radius: var(--border-radius);
-    transition: all var(--transition-speed);
-    position: relative;
-    border: 1px solid transparent;
+        &:last-child {
+          border-bottom: none;
+        }
 
-    &::before {
-      content: '';
-      position: absolute;
-      left: calc(var(--spacing-unit) * -2);
-      top: 50%;
-      width: 12px;
-      height: 1px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    &:hover {
-      color: var(--sidebar-text-active);
-      background-color: rgba(var(--light-rgb), 0.05);
-    }
-
-    &.is-active {
-      color: var(--sidebar-text-active);
-      font-weight: var(--fw-bold);
-      border-color: rgba(255, 255, 255, 0.2);
-      background-color: transparent;
-      box-shadow: none !important;
-    }
-  }
-
-  /* --- WARIANTY WĄSKIE (Ukrywanie drzewka) --- */
-  @include mq(md) {
-    .sidebar-md .admin-nav-submenu,
-    .sidebar-sm .admin-nav-submenu {
-      summary::after { display: none; }
-      
-      /* Domyślnie ukrywamy listę w wąskim trybie */
-      .admin-nav-submenu-list { 
-        display: none !important; 
-      }
-    }
-
-    /* FIX: Przywracamy drzewko i strzałkę, gdy najedziemy na wąski sidebar! */
-    .sidebar-md .admin-sidebar:hover .admin-nav-submenu {
-      summary::after { display: inline-block; }
-      
-      /* Jeśli <details> jest otwarte, pokazujemy listę */
-      &[open] .admin-nav-submenu-list {
-        display: flex !important;
+        &.is-active {
+          background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+        }
       }
     }
   }
@@ -553,16 +566,42 @@
     .admin-nav-submenu summary::after { display: none; }
   }
 
-} /* ZAMKNIĘCIE @layer components */
-```
-
----
+} /* ZAMKNIĘCIE @layer components */```
 
 ## Plik: `components/_admin-sidebar.scss`
 
 ```scss
 @use '../variables' as *;
 @use '../mixins' as *;
+
+/* Wspólny wygląd kompaktowej wersji logo (plakietka z ikoną/inicjałem).
+   Współdzielony między trybami wąskimi na desktopie (-sm, -md) i mobile,
+   żeby nie duplikować reguł w trzech miejscach. */
+@mixin admin-logo-compact-style {
+  img, svg {
+    max-width: 32px;
+    max-height: 32px;
+    width: auto;
+    height: auto;
+    margin: auto; /* obrazek/SVG zawsze wyśrodkowany w plakietce, niezależnie od justify-content */
+  }
+
+  display: flex;
+  align-items: center;
+  /* flex-start (nie center): przy tekście dłuższym niż plakietka chcemy
+     obciąć koniec, a nie pokazywać losowy fragment ze środka */
+  justify-content: flex-start;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.25rem;
+  font-weight: var(--fw-black);
+  background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+  border-radius: 8px;
+  margin: 0 !important;
+}
 
 @layer components {
   .admin-sidebar {
@@ -588,25 +627,14 @@
 
     /* Elegancki scrollbar */
     scrollbar-width: thin;
-    scrollbar-color: rgba(var(--light-rgb), 0.1) transparent;
+    scrollbar-color: rgba(var(--sidebar-highlight-rgb), 0.1) transparent;
     &::-webkit-scrollbar { width: 4px; }
     &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { 
-      background: rgba(var(--light-rgb), 0.1); 
-      border-radius: var(--border-radius); 
+    &::-webkit-scrollbar-thumb {
+      background: rgba(var(--sidebar-highlight-rgb), 0.1);
+      border-radius: var(--border-radius);
     }
 
-    /* =========================================
-       MAGIA: PŁYWAJĄCE ROZWIJANIE NA HOVER
-       ========================================= */
-    @include mq(md) {
-      /* FIX: Działa zarówno dla MD jak i SM */
-      .admin-layout.sidebar-md &:hover,
-      .admin-layout.sidebar-sm &:hover {
-        width: var(--sidebar-width-lg);
-        box-shadow: 10px 0 30px rgba(0,0,0,0.15);
-      }
-    }
 
     /* Mobile Bottom Nav */
     @media (max-width: 768px) {
@@ -622,22 +650,51 @@
       align-items: center;
       padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
       border-radius: 0;
-      border-top: 1px solid rgba(var(--light-rgb), 0.1);
+      border-top: 1px solid rgba(var(--sidebar-highlight-rgb), 0.1);
       padding-bottom: env(safe-area-inset-bottom);
       overflow: visible; 
     }
   }
-  /* ... reszta pliku bez zmian ... */
+  /* Zanikanie treści na dole przewijanego sidebara (opt-in: klasa
+     .fade-bottom z warstwy layout). Gradient musi mieć kolor tła
+     sidebara (zawsze ciemny), nie powierzchni strony. */
+  .admin-sidebar.fade-bottom {
+    --fade-color: var(--sidebar-bg);
 
-  /* Logo w sidebarze */
+    /* Na mobile sidebar zamienia się w poziomy dolny pasek -
+       pionowy gradient zasłaniałby pigułki nawigacji. */
+    @media (max-width: 768px) {
+      &::after { display: none; }
+    }
+  }
+
+  /* Logo w sidebarze.
+     Działa niezależnie od typu treści (obrazek, SVG, tekst) - zawsze
+     mieści się w szerokości rodzica i nigdy nie rozsadza sidebara. */
   .admin-brand {
     display: flex;
     align-items: center;
     justify-content: center;
+    max-width: 100%;
     height: var(--target-size-min);
-    margin-bottom: calc(var(--spacing-unit) * 2);
-    
-    img { max-height: 100%; }
+    flex-shrink: 0; /* FIX: overflow:hidden nadaje elementom flex automatyczne min-height:0 -
+                        bez tego logo zgniata się do zera, gdy .admin-nav jest wyższy niż sidebar */
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--sidebar-text-active);
+    font-family: var(--font-family-heading);
+    font-weight: var(--fw-black);
+    font-size: var(--h4-size);
+
+    img, svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
   }
 
   /* =========================================
@@ -663,14 +720,6 @@
     justify-content: center;
     padding: 0 !important;
   }
-
-  /* FIX: Kiedy najeżdżamy na wąski sidebar, przycisk wraca do układu z LG */
-  .admin-layout.sidebar-md .admin-sidebar:hover #molique-sidebar-toggle,
-  .admin-layout.sidebar-sm .admin-sidebar:hover #molique-sidebar-toggle {
-    justify-content: flex-start;
-    padding: 0 calc(var(--spacing-unit) * 2) !important;
-  }
-
 
   /* 2. Baza ikony */
   .sidebar-toggle-icon {
@@ -729,10 +778,25 @@
   }
 
   /* =========================================
-     ZARZĄDZANIE LOGO NA MOBILE
+     ZARZĄDZANIE LOGO - WERSJA RESPONSYWNA
      ========================================= */
+
+  /* Tryby wąskie na desktopie (-sm, -md): logo zwija się automatycznie,
+     tak samo jak etykiety linków w .admin-nav-link (patrz _admin-nav.scss) */
+  @include mq(md) {
+    .sidebar-sm .admin-logo-hide,
+    .sidebar-md .admin-logo-hide {
+      display: none !important;
+    }
+
+    .sidebar-sm .admin-logo-compact,
+    .sidebar-md .admin-logo-compact {
+      @include admin-logo-compact-style;
+    }
+  }
+
+  /* Mobile (sidebar zwinięty do dolnego paska): te same zasady */
   @media (max-width: 768px) {
-    
     /* Opcja 1: Całkowite ukrycie logo na mobile */
     .admin-logo-hide {
       display: none !important;
@@ -740,34 +804,10 @@
 
     /* Opcja 2: Wersja kompaktowa (zmniejszona) na mobile */
     .admin-logo-compact {
-      /* Jeśli to obrazek, wymuszamy mały rozmiar */
-      img {
-        max-height: 32px;
-        width: auto;
-      }
-      
-      /* Jeśli to tekst, zmniejszamy font i ukrywamy resztę słów (zostawiamy np. pierwszą literę) */
-      font-size: 1.25rem;
-      font-weight: var(--fw-black);
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(255,255,255,0.1);
-      border-radius: 8px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: clip;
-      
-      /* Resetujemy marginesy, żeby logo ładnie siedziało na pasku */
-      margin: 0 !important;
+      @include admin-logo-compact-style;
     }
   }
-}
-```
-
----
+}```
 
 ## Plik: `components/_business.scss`
 
@@ -1363,10 +1403,7 @@
   color: var(--primary);
   font-size: 1.125rem;
   white-space: nowrap;
-}
-```
-
----
+}```
 
 ## Plik: `components/_cards.scss`
 
@@ -1535,10 +1572,7 @@
   .overlap-up-50 { margin-top: -50px; }
   .overlap-up-100 { margin-top: -100px; }
   .overlap-up-150 { margin-top: -150px; }
-}
-```
-
----
+}```
 
 ## Plik: `components/_chart-funnel.scss`
 
@@ -1722,10 +1756,7 @@
       opacity: 0.9;
     }
   }
-}
-```
-
----
+}```
 
 ## Plik: `components/_charts.scss`
 
@@ -2029,10 +2060,7 @@
   color: var(--text-muted);
   opacity: 0.5;
   margin-bottom: calc(var(--spacing-unit) * 2);
-}
-```
-
----
+}```
 
 ## Plik: `components/_dashboard.scss`
 
@@ -2122,10 +2150,7 @@
     &::before, &::after { display: none; }
   }
 }
-}
-```
-
----
+}```
 
 ## Plik: `components/_data-display.scss`
 
@@ -2328,7 +2353,9 @@
   grid-template-columns: 2fr 1fr 1fr 1fr auto;
   align-items: center;
   gap: calc(var(--spacing-unit) * 2);
-  background-color: #fff;
+  /* Kolor powierzchni zamiast literalnego #fff - w dark mode wiersz ma
+     ciemnieć razem z kartami (w light mode bez zmiany: biel). */
+  background-color: var(--bg-surface);
   padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
@@ -2557,6 +2584,61 @@
 }
 
 /* =========================================
+   4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik — Zero JS)
+   ========================================= */
+.tabs-pill {
+  /* Liczba zakładek — nadpisz per instancja: style="--tab-count: 3;" */
+  --tab-count: 2;
+
+  .tabs-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--tab-count), 1fr);
+    border-bottom: none;
+    background-color: var(--card-bg-subtle);
+    border-radius: 50rem;
+    padding: 4px;
+  }
+
+  .tab-label {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    border-bottom: none;
+    border-radius: 50rem;
+    margin-bottom: 0;
+  }
+
+  .tabs-pill-indicator {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    width: calc((100% - 8px) / var(--tab-count));
+    background-color: var(--bg-surface);
+    border-radius: 50rem;
+    box-shadow: var(--shadow-sm);
+    /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
+       wskaźnika, która = szerokości jednej kolumny grida — stąd przesunięcie
+       o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+  }
+
+  /* Dopasowanie inputa (po pozycji) do wskaźnika i koloru aktywnej etykiety */
+  @for $i from 1 through 8 {
+    &:has(.tab-input:nth-of-type(#{$i}):checked) .tabs-pill-indicator {
+      transform: translateX(calc(100% * #{$i - 1}));
+    }
+
+    .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+      color: var(--text-main);
+    }
+  }
+}
+
+/* =========================================
    5. GRID EXPAND (Płynne rozwijanie bez JS)
    ========================================= */
 .grid-expand {
@@ -2645,7 +2727,9 @@
   
   &:hover {
     background-color: var(--primary);
-    color: #fff;
+    /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
+       ciemnieć - literal #fff tracił kontrast */
+    color: var(--btn-text-light);
     border-color: var(--primary);
   }
 }
@@ -2753,7 +2837,9 @@
 
 .list-group-item.is-active {
   z-index: 2;
-  color: #fff;
+  /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+     primary jaśnieje, literal #fff tracił kontrast) */
+  color: var(--btn-text-light);
   background-color: var(--primary);
   border-color: var(--primary);
 }
@@ -2844,10 +2930,7 @@ a.list-group-item:hover, button.list-group-item:hover {
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-```
-
----
+}```
 
 ## Plik: `components/_feedback.scss`
 
@@ -3067,6 +3150,45 @@ a.list-group-item:hover, button.list-group-item:hover {
 }
 
 /* =========================================
+   4.5. STOCK BAR (Segmentowy poziom zapasu)
+   ========================================= */
+/* Pięciosegmentowy wskaźnik poziomu (stany magazynowe, limity, quoty).
+   Zero JS i zero dodatkowego markupu: segmenty rysuje maska SVG (5
+   zaokrąglonych prostokątów), a wypełnienie to zwykły gradient ucinany
+   na granicy segmentu. Liczba wypełnionych segmentów z backendu przez
+   zmienną CSS: style="--stock-filled: 3" (0-5). "Puste" segmenty to
+   tint koloru wariantu (rgba), więc działają też w dark mode.
+   A11y: element jest czysto wizualny - podawaj wartość obok jako tekst
+   lub nadaj role="img" + aria-label="Stan: 3/5". */
+.stock-bar {
+  --stock-segments: 5;
+  --stock-filled: 0;
+  --stock-color: var(--secondary);
+  --stock-color-rgb: var(--secondary-rgb);
+
+  display: inline-block;
+  width: 60px;
+  height: 10px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  background: linear-gradient(
+    to right,
+    var(--stock-color) 0 calc(var(--stock-filled) / var(--stock-segments) * 100%),
+    rgba(var(--stock-color-rgb), 0.25) 0
+  );
+  /* Maska: 5 segmentów 10x10 (rx=2) z odstępem 2.5 w siatce 60x10.
+     Granica k/5 wypełnienia zawsze wypada w przerwie między segmentami,
+     więc krawędź gradientu nigdy nie tnie segmentu w połowie. */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+/* Warianty kolorystyczne (semantyka jak w statusach) */
+.stock-bar-success { --stock-color: var(--success); --stock-color-rgb: var(--success-rgb); }
+.stock-bar-warning { --stock-color: var(--warning); --stock-color-rgb: var(--warning-rgb); }
+.stock-bar-danger  { --stock-color: var(--danger);  --stock-color-rgb: var(--danger-rgb); }
+
+/* =========================================
    5. TOOLTIPS (Dymki podpowiedzi - Czysty CSS)
    ========================================= */
 .tooltip-element {
@@ -3267,10 +3389,7 @@ a.list-group-item:hover, button.list-group-item:hover {
       outline-offset: 2px;
     }
   }
-}
-```
-
----
+}```
 
 ## Plik: `components/_form-advanced.scss`
 
@@ -3279,6 +3398,12 @@ a.list-group-item:hover, button.list-group-item:hover {
   /* =========================================
      1. CHECKBOXY I RADIO
      ========================================= */
+  .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: calc(var(--spacing-unit) * 1);
+  }
+
   .form-check-input {
     appearance: none;
     width: 1.25rem;
@@ -3372,13 +3497,11 @@ a.list-group-item:hover, button.list-group-item:hover {
     user-select: none;
   }
 
-  /* Wariant 1: Kwadratowy (Technical / B2B) */
   .form-switch-square .form-switch-input {
     border-radius: var(--border-radius);
     &::after { border-radius: calc(var(--border-radius) - 2px); }
   }
 
-  /* Wariant 2: Outline (Minimalistyczny) */
   .form-switch-outline .form-switch-input {
     background-color: transparent;
     border: 2px solid var(--border-color);
@@ -3433,6 +3556,21 @@ a.list-group-item:hover, button.list-group-item:hover {
       transition: transform var(--transition-speed);
     }
     &::-moz-range-thumb:hover { transform: scale(1.15); }
+  }
+
+  /* Number: chowamy natywne strzałki (spinner) - w gęstych formularzach
+     B2B wyglądają obco i gryzą się z własnymi przyciskami krokowania.
+     Zamiennik to kontrolka .qty-input (przyciski + / -), a wartość nadal
+     można zmieniać klawiaturą (góra/dół) i scrollem. */
+  input[type="number"].input {
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 
   input[type="date"].input,
@@ -3544,7 +3682,11 @@ a.list-group-item:hover, button.list-group-item:hover {
       animation: marchingAnts 0.6s linear infinite;
     }
 
-    input[type="file"], .file-upload-icon, h4, p, .file-upload-name {
+    /* UWAGA: input[type="file"] celowo POZA tą listą — musi zachować
+       position: absolute z bazowego .file-upload (niewidoczny overlay
+       na całej karcie, z-index: 2 ma już z bazy). Nadpisanie na relative
+       wprowadzało go do układu i spychało zawartość karty w dół. */
+    .file-upload-icon, h4, p, .file-upload-name {
       position: relative;
       z-index: 2;
     }
@@ -3558,18 +3700,38 @@ a.list-group-item:hover, button.list-group-item:hover {
   /* =========================================
      4. SEARCHABLE SELECT (Combobox)
      ========================================= */
-  .select-search { width: 100%; }
+  .select-search {
+    position: relative;
+    width: 100%;
+    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+       żeby wiele .select-search na jednej stronie nie "podpinało się" nawzajem. */
+    anchor-scope: --select-search-trigger;
+
+    /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
+       na elemencie nadrzędnym. */
+    &:has(.select-search-menu:popover-open) .select-search-trigger {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+      &::after { transform: rotate(180deg); }
+    }
+  }
 
   .select-search-trigger {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    text-align: left;
+    /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+       fontu automatycznie. */
+    font: inherit;
     cursor: pointer;
     user-select: none;
     background-color: var(--bg-surface);
-    
-    &::-webkit-details-marker { display: none; }
-    
+    /* Punkt zaczepienia dla .select-search-menu (CSS Anchor Positioning) */
+    anchor-name: --select-search-trigger;
+
     &::after {
       content: "▼";
       font-size: 0.7rem;
@@ -3578,18 +3740,46 @@ a.list-group-item:hover, button.list-group-item:hover {
     }
   }
 
-  .select-search[open] .select-search-trigger {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-    &::after { transform: rotate(180deg); }
-  }
-
   .select-search-menu {
-    width: 100%;
-    padding: calc(var(--spacing-unit) * 1);
+    /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki —
+       dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
+       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
+       na Esc i klik poza menu obsługuje natywnie light dismiss. */
+    position: absolute;
+    position-anchor: --select-search-trigger;
+    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin: 4px 0 0 0;
     max-height: 300px;
-    display: flex;
-    flex-direction: column;
+    padding: calc(var(--spacing-unit) * 1);
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+       moment otwarcia, nie z-index. */
+    z-index: var(--z-index-dropdown);
+
+    &:popover-open {
+      display: flex;
+      flex-direction: column;
+      animation: fadeInDown 0.2s ease;
+    }
+
+    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
+       menu otwiera się jako wyśrodkowany panel — nadal w top layer, więc
+       nic go nie przycina. */
+    @supports not (top: anchor(bottom)) {
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      width: min(400px, calc(100vw - 2rem));
+      height: fit-content;
+    }
   }
 
   .select-search-input {
@@ -3627,8 +3817,14 @@ a.list-group-item:hover, button.list-group-item:hover {
   .custom-select {
     position: relative;
     width: 100%;
-    
-    &[open] .custom-select-trigger {
+    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+       żeby wiele .custom-select na jednej stronie nie "podpinało się" nawzajem. */
+    anchor-scope: --custom-select-trigger;
+
+    /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
+       na elemencie nadrzędnym. */
+    &:has(.custom-select-dropdown:popover-open) .custom-select-trigger {
       border-color: var(--primary);
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
       .icon-chevron { transform: rotate(180deg); }
@@ -3642,72 +3838,108 @@ a.list-group-item:hover, button.list-group-item:hover {
     width: 100%;
     min-height: var(--target-size-min);
     padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    text-align: left;
+    /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+       fontu automatycznie. */
+    font: inherit;
+    color: var(--text-main);
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     cursor: pointer;
     transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-    
-    &::-webkit-details-marker { display: none; }
-    
+    /* Punkt zaczepienia dla .custom-select-dropdown (CSS Anchor Positioning) */
+    anchor-name: --custom-select-trigger;
+
     .icon-chevron {
       transition: transform var(--transition-speed);
       color: var(--text-muted);
     }
   }
 
-  /* Poprawione Tagi (Pills) */
   .custom-select-pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px; /* Większy odstęp */
+    gap: 6px; 
     flex: 1;
     
     .badge {
-      padding: 4px 10px; /* Większy padding */
+      padding: 4px 10px; 
       font-size: 0.75rem;
-      border-radius: 50px; /* Kształt pigułki */
+      border-radius: 50px; 
       font-weight: var(--fw-medium);
     }
   }
 
   .custom-select-dropdown {
+    /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki —
+       dzięki temu NIE jest przycinany przez overflow przodków (np. przewijany
+       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
+       na Esc i klik poza menu obsługuje natywnie light dismiss.
+       Pozycję względem przycisku ustala CSS Anchor Positioning (Chrome 125+,
+       Safari 26+). position-anchor MUSI być ustawiony — bez niego
+       anchor()/anchor-size() nie mają się do czego odnieść. */
     position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    width: 100%;
-    min-width: 320px;
+    position-anchor: --custom-select-trigger;
+    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+    inset: auto;
+    /* Przyklejamy górę popovera do dołu przycisku (anchor) */
+    top: anchor(bottom);
+    /* Wyrównujemy lewą krawędź popovera z lewą krawędzią przycisku */
+    left: anchor(left);
+    /* Szerokość taka sama jak przycisk */
+    width: anchor-size(width);
+    /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+       moment otwarcia, nie z-index (sticky nagłówki tabel z z-index:10
+       przestają być problemem). */
+    z-index: var(--z-index-dropdown);
+
+    margin: 4px 0 0 0;
+    padding: 0;
+    min-width: 180px;
+    color: var(--text-main);
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg, 12px);
     box-shadow: var(--shadow-lg);
-    z-index: var(--z-index-dropdown);
     overflow: hidden;
-    animation: fadeInDown 0.2s ease;
 
-  
-  /* FIX: Naprawa wyszukiwarki wewnątrz dropdownu (Bez input-group) */
+    &:popover-open {
+      display: flex;
+      flex-direction: column;
+      animation: fadeInDown 0.2s ease;
+    }
+
+    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
+       dropdown otwiera się jako wyśrodkowany panel — nadal w top layer,
+       więc nic go nie przycina. */
+    @supports not (top: anchor(bottom)) {
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      width: min(400px, calc(100vw - 2rem));
+      height: fit-content;
+    }
+  }
+
   .custom-select-search {
     padding: calc(var(--spacing-unit) * 1);
     border-bottom: 1px solid var(--border-color);
     position: relative;
     
-    /* Ikona lupy pozycjonowana absolutnie */
     .search-icon {
       position: absolute;
       left: calc(var(--spacing-unit) * 2.5);
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
-      pointer-events: none; /* Kliknięcie w ikonę aktywuje input */
+      pointer-events: none; 
       z-index: 2;
     }
 
     .input {
-      /* Robimy miejsce na ikonę z lewej strony */
       padding-left: calc(var(--spacing-unit) * 4.5);
       
-      /* Wyłączamy zieloną/czerwoną ramkę walidacji wewnątrz dropdownu */
       &:user-valid, &:user-invalid {
         border-color: var(--border-color) !important;
       }
@@ -3718,7 +3950,6 @@ a.list-group-item:hover, button.list-group-item:hover {
     }
   }
 
-  /* NOWOŚĆ: Nagłówki kategorii */
   .custom-select-category {
     font-size: 0.7rem;
     font-weight: var(--fw-bold);
@@ -3728,10 +3959,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
     margin-top: calc(var(--spacing-unit) * 1);
     
-    /* Pierwsza kategoria nie potrzebuje marginesu z góry */
     &:first-child { margin-top: 0; }
-  }
-
   }
 
   .custom-select-list {
@@ -3766,12 +3994,11 @@ a.list-group-item:hover, button.list-group-item:hover {
       background-color: rgba(var(--primary-rgb), 0.05);
     }
 
-    /* FIX: Wymuszamy nasz customowy wygląd checkboxa! */
     input[type="checkbox"] {
       appearance: none;
       width: 1.25rem;
       height: 1.25rem;
-      margin: 0 0 0 auto; /* Pcha na prawą stronę */
+      margin: 0 0 0 auto; 
       background-color: var(--bg-body);
       border: 2px solid var(--border-color);
       border-radius: calc(var(--border-radius) / 2);
@@ -3788,10 +4015,113 @@ a.list-group-item:hover, button.list-group-item:hover {
       }
     }
   }
-}
-```
+  /* =========================================
+     THEME SWITCH (Light / Dark Mode Toggle)
+     ========================================= */
+  .theme-switch {
+    display: inline-flex;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
 
----
+  .theme-switch-input {
+    display: none;
+  }
+
+  .theme-switch-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 64px;
+    height: 32px;
+    padding: 4px;
+    background-color: var(--card-bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+  }
+
+  /* Pływająca pastylka (Tło pod aktywną ikoną) */
+  .theme-switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background-color: var(--bg-surface);
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm), 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+  }
+
+  .theme-icon-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+
+  /* Ikony Słońca i Księżyca */
+  .theme-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+    transition: color 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+
+    &.icon-sun {
+      margin-right: 4px !important;
+    }
+    
+    &.icon-moon {
+      margin-left: 4px !important;
+    }
+  }
+
+  /* --- STAN: LIGHT MODE (Domyślny) --- */
+  .theme-switch-input:not(:checked) + .theme-switch-track {
+    .icon-sun {
+      color: var(--warning); /* Słońce świeci na żółto/pomarańczowo */
+      transform: rotate(0deg) scale(1.1);
+      opacity: 1;
+    }
+    .icon-moon {
+      transform: rotate(-30deg) scale(0.85);
+      opacity: 0.4;
+    }
+  }
+
+  /* --- STAN: DARK MODE (Zaznaczony) --- */
+  .theme-switch-input:checked + .theme-switch-track {
+    /* Opcjonalnie: zmiana tła całego przełącznika w dark mode */
+    background-color: rgba(var(--primary-rgb), 0.1);
+    border-color: rgba(var(--primary-rgb), 0.2);
+
+    .theme-switch-thumb {
+      transform: translateX(32px); /* Przesunięcie pastylki na prawą stronę */
+    }
+
+    .icon-sun {
+      transform: rotate(90deg) scale(0.85);
+      opacity: 0.4;
+    }
+    .icon-moon {
+      color: var(--primary); /* Księżyc świeci w kolorze głównym marki */
+      transform: rotate(0deg) scale(1.1);
+      opacity: 1;
+    }
+  }
+
+  /* Focus Ring dla dostępności (A11y) */
+  .theme-switch-input:focus-visible + .theme-switch-track {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
+  }
+}```
 
 ## Plik: `components/_form-base.scss`
 
@@ -3802,9 +4132,10 @@ a.list-group-item:hover, button.list-group-item:hover {
      ========================================= */
   .input {
     --input-border-width: 1px;
+    --input-padding-y: calc(var(--spacing-unit) * 1.25);
     display: block;
     width: 100%;
-    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 2);
+    padding: var(--input-padding-y) calc(var(--spacing-unit) * 2);
     font-family: var(--font-family-base);
     font-weight: var(--fw-medium);
     line-height: 1.5;
@@ -3814,6 +4145,30 @@ a.list-group-item:hover, button.list-group-item:hover {
     border: var(--input-border-width) solid var(--border-color);
     border-radius: var(--border-radius);
     transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+
+     /* --- WARIANTY WIELKOŚCI ---
+        Działają na każdym elemencie noszącym klasę .input: input, select i textarea.
+        Sam .input (bez modyfikatora) to wariant środkowy ("md"). */
+
+    /* Kompaktowy (Idealny do tabel, popoverów i małych widgetów) */
+    &.input-sm {
+      --input-padding-y: calc(var(--spacing-unit) * 0.75);
+      padding: var(--input-padding-y) calc(var(--spacing-unit) * 1.5);
+      font-size: 0.8125rem; /* Mniejszy font */
+      border-radius: calc(var(--border-radius) * 0.8);
+      /* Nadpisujemy globalne 44px dla mobile, jeśli używamy input-sm */
+      min-height: 32px !important;
+    }
+
+    /* Duży (Idealny do wyszukiwarek Hero i głównych formularzy) */
+    &.input-lg {
+      --input-padding-y: calc(var(--spacing-unit) * 1.5);
+      padding: var(--input-padding-y) calc(var(--spacing-unit) * 2.5);
+      font-size: 1.125rem; /* Większy font */
+      border-radius: calc(var(--border-radius) * 1.2);
+      min-height: 56px !important;
+    }
+
 
     &:focus {
       border-color: var(--primary);
@@ -3825,7 +4180,7 @@ a.list-group-item:hover, button.list-group-item:hover {
       color: var(--text-muted);
       opacity: 0.6;
     }
-    
+
     &:disabled, &[readonly] {
       background-color: var(--bg-body);
       opacity: 0.7;
@@ -3842,6 +4197,11 @@ a.list-group-item:hover, button.list-group-item:hover {
     background-size: 16px 12px;
     padding-right: calc(var(--spacing-unit) * 4);
     cursor: pointer;
+
+    /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) —
+       tu przywracamy miejsce po prawej na strzałkę, żeby jej nie zasłaniać. */
+    &.input-sm { padding-right: calc(var(--spacing-unit) * 3); }
+    &.input-lg { padding-right: calc(var(--spacing-unit) * 5); }
   }
 
   /* =========================================
@@ -3869,10 +4229,42 @@ a.list-group-item:hover, button.list-group-item:hover {
     display: block;
     animation: fadeIn var(--transition-speed) ease;
   }
-}
-```
 
----
+  /* =========================================
+     3. TEXTAREA: TRYB "JEDNA LINIJKA" (Auto-Expand, Zero JS)
+     ========================================= */
+  .textarea-expandable {
+    /* Do ilu wierszy pole ma się rozwinąć — nadpisywalne per instancja:
+       style="--textarea-rows-expanded: 10;" */
+    --textarea-rows-expanded: 6;
+
+    resize: none;
+    overflow-y: hidden;
+    /* Zmiana wysokości to reflow, więc zgodnie ze Złotą Zasadą GPU
+       (animujemy tylko transform/opacity) — przełącznik jest natychmiastowy. */
+    transition: none;
+    height: calc(1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+
+    /* Rozwinięte: pole aktywne LUB posiadające treść — dzięki :not(:placeholder-shown)
+       tekst nie znika z powrotem do jednej linijki po samej utracie fokusu.
+       WYMAGA atrybutu placeholder (choćby placeholder=" ") na <textarea>. */
+    &:focus,
+    &:not(:placeholder-shown) {
+      height: calc(var(--textarea-rows-expanded) * 1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+      overflow-y: auto;
+    }
+
+    /* Fallback: przeglądarki bez wsparcia jednostki `lh` (np. starsze Safari) */
+    @supports not (height: 1lh) {
+      height: calc(1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        height: calc(var(--textarea-rows-expanded) * 1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
+      }
+    }
+  }
+}```
 
 ## Plik: `components/_form-groups.scss`
 
@@ -4001,10 +4393,271 @@ a.list-group-item:hover, button.list-group-item:hover {
       padding-bottom: 0.625rem;
     }
   }
+}```
+
+## Plik: `components/_hero.scss`
+
+```scss
+/**
+ * molique - Sekcje Hero i Nakładki (Overlay)
+ * Sekcje powitalne ze zdjęciem w tle, przyciemniającą nakładką (Overlay)
+ * oraz zaawansowanym systemem wycinanych narożników (Hero Cutout).
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  /* =========================================
+     1. PAGE HEADER (Hero ze zdjęciem w tle)
+     ========================================= */
+  .page-header {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Dodaj do dowolnego kontenera z .overlay w środku — odcina wystające
+     rogi nakładki i daje jej kontekst pozycjonowania (position:relative). */
+  .has-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* =========================================
+     2. OVERLAY (Przyciemniająca nakładka)
+     ========================================= */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* --- Kolory nakładki --- */
+  /* overlay-dark na literale (jak overlay-light): nakładka ma ZAWSZE
+     przyciemniać zdjęcie pod jasnym tekstem hero, a dark mode odwraca
+     var(--dark) do prawie białego - "przyciemnienie" stawało się
+     rozjaśnieniem i biały tekst lądował na jasnym tle. */
+  .bg-overlay { background-color: #000; }
+  .overlay-dark { background-color: #1E293B; }
+  .overlay-primary { background-color: var(--primary); }
+  .overlay-light { background-color: #fff; }
+
+  /* --- Przezroczystość nakładki (skok co 10) --- */
+  .overlay-10 { opacity: 0.1; }
+  .overlay-20 { opacity: 0.2; }
+  .overlay-30 { opacity: 0.3; }
+  .overlay-40 { opacity: 0.4; }
+  .overlay-50 { opacity: 0.5; }
+  .overlay-60 { opacity: 0.6; }
+  .overlay-70 { opacity: 0.7; }
+  .overlay-80 { opacity: 0.8; }
+  .overlay-90 { opacity: 0.9; }
+
+  /* =========================================
+     3. HERO CUTOUT SYSTEM (Wklęsłe narożniki)
+     ========================================= */
+  .hero-with-cutout {
+    position: relative;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .cutout-wrapper {
+    position: relative;
+    background-color: var(--cutout-bg, var(--bg-surface));
+  }
+
+  @include mq(md) {
+    .hero-with-cutout {
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+      }
+    }
+
+    .cutout-wrapper {
+      z-index: 1;
+      /* Promień "wycięcia" w rogu stykającym się ze zdjęciem */
+      --cutout-radius: 32px;
+    }
+
+    /* Każdy wariant kotwiczy wrapper w danym rogu i wycina PRZECIWLEGŁY
+       (stykający się ze zdjęciem) róg samego wrappera łagodnym łukiem —
+       stąd "at 0 0" dla br (wycięcie w lewym-górnym rogu wrappera), itd. */
+    .cutout-wrapper.cutout-md-br {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
+    }
+
+    .cutout-wrapper.cutout-md-bl {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
+    }
+
+    .cutout-wrapper.cutout-md-tr {
+      position: absolute;
+      right: 0;
+      top: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
+    }
+
+    .cutout-wrapper.cutout-md-tl {
+      position: absolute;
+      left: 0;
+      top: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
+    }
+  }
 }
 ```
 
----
+## Plik: `components/_language-switch.scss`
+
+```scss
+/**
+ * molique - Language Switch (przełącznik języka)
+ * Trigger (pigułka z flagą + kodem języka) otwiera listę języków jako
+ * popover w top layer: <button class="language-switch-trigger"
+ * popovertarget="ID"> + .dropdown-menu.language-switch-menu[popover]#ID.
+ * Menu kotwiczy się automatycznie do przycisku (niejawny anchor) i nie
+ * jest przycinane przez overflow. Flagi: osobne mini-pliki SVG w
+ * img/flags/ wstawiane przez <img src="img/flags/pl.svg" alt="">
+ * (emoji flag NIE renderują się na Windowsie, a zewnętrzny sprite
+ * z <use> nie działa m.in. przy file://). Stary markup
+ * <details class="dropdown language-switch"> jest nadal obsługiwany
+ * (kompatybilność wstecz).
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  .language-switch-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.75);
+    height: 38px;
+    padding: 0 calc(var(--spacing-unit) * 1.5);
+    background-color: var(--card-bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill, 999px);
+    color: var(--text-main);
+    /* Trigger to <button> — nie dziedziczy rodziny fontów automatycznie */
+    font-family: inherit;
+    font-weight: var(--fw-medium);
+    font-size: 0.8125rem;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+
+    &::-webkit-details-marker { display: none; }
+
+    /* Strzałka wskaźnika — ten sam trik co .dropdown-toggle / .mega-menu-trigger */
+    &::after {
+      content: '';
+      display: inline-block;
+      margin-left: calc(var(--spacing-unit) * 0.25);
+      border-top: 4px solid;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+      color: var(--text-muted);
+      transition: transform var(--transition-speed);
+    }
+
+    &:hover, &:focus-visible {
+      background-color: rgba(var(--primary-rgb), 0.08);
+      border-color: rgba(var(--primary-rgb), 0.3);
+    }
+  }
+
+  /* Obrót strzałki: wariant popover (menu musi stać bezpośrednio za
+     przyciskiem) oraz legacy <details>. */
+  .language-switch-trigger:has(+ .language-switch-menu:popover-open)::after,
+  .language-switch[open] > .language-switch-trigger::after {
+    transform: rotate(180deg);
+  }
+
+  /* Flaga: plik SVG z img/flags/ w sztywnym pudełku 4:3.
+     Wewnętrzna ramka (::after) oddziela jasne pola flag (np. biel PL)
+     od tła — bez niej flaga "rozpływa się" na jasnej pigułce. */
+  .language-switch-flag {
+    position: relative;
+    display: inline-flex;
+    width: 20px;
+    height: 15px;
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img,
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+      pointer-events: none;
+    }
+  }
+
+  .language-switch-menu {
+    min-width: 190px;
+  }
+
+  .language-switch-item {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.25);
+  }
+
+  .language-switch-name {
+    flex: 1;
+  }
+
+  /* Checkmark aktywnego języka: ikona SVG w currentColor (font-weight
+     zostaje dla legacy markupu ze znakiem tekstowym "✓"). */
+  .language-switch-check {
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary);
+    font-weight: var(--fw-bold);
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+```
 
 ## Plik: `components/_modals.scss`
 
@@ -4017,6 +4670,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 @use '../variables' as *;
 @use '../mixins' as *;
 
+@layer components {
 /* =========================================
    1. NATYWNY MODAL (<dialog>)
    ========================================= */
@@ -4024,6 +4678,10 @@ a.list-group-item:hover, button.list-group-item:hover {
   border: none;
   padding: 0;
   background: transparent;
+  /* UA daje <dialog> color: CanvasText, co przerywa dziedziczenie
+     koloru z body - jawny kolor motywu przywraca łańcuch dziedziczenia
+     (m.in. dla nagłówków z color: inherit) niezależnie od color-scheme. */
+  color: var(--text-main);
   overflow: visible;
   
   max-width: 600px;
@@ -4044,7 +4702,10 @@ a.list-group-item:hover, button.list-group-item:hover {
   }
 
   &::backdrop {
-    background-color: rgba(var(--dark-rgb), 0.6);
+    /* Literal zamiast rgba(var(--dark-rgb)): przyciemnienie tła ma ZAWSZE
+       przyciemniać, a dark mode odwraca --dark-rgb do jasnego - backdrop
+       robił się jasną mgłą, wbrew idei ciemnego motywu. */
+    background-color: rgba(30, 41, 59, 0.6);
     backdrop-filter: blur(4px);
   }
 
@@ -4174,6 +4835,18 @@ a.list-group-item:hover, button.list-group-item:hover {
   margin-right: -12px;
 
   &:hover { color: var(--danger); }
+}
+
+/* Przycisk zamykania w nagłówku modala dostaje fokus automatycznie przy
+   showModal() (przeglądarka focusuje pierwszy fokusowalny element okna),
+   więc pełny pierścień fokusu świeci się od razu po otwarciu i wygląda
+   jak błąd renderowania. Zamieniamy go na subtelniejszy wskaźnik — nadal
+   widoczny przy nawigacji klawiaturą (A11y), ale nie krzyczący. */
+.modal-dialog .card-header .btn-action:focus-visible,
+.modal-dialog .card-header .modal-close-btn:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-ring-color);
+  background-color: var(--card-bg-subtle);
 }
 
 .modal-context .card-body {
@@ -4336,91 +5009,191 @@ a.list-group-item:hover, button.list-group-item:hover {
 }
 
 /* =========================================
-   4. ANCHORED CONTEXT MENU (CSS Anchor Positioning)
-   ========================================= */
-.popover-context {
-  /* Reset domyślnych stylów Popover API */
-  margin: 0;
-  padding: calc(var(--spacing-unit) * 1);
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  min-width: 160px;
-  
-  /* MAGIA 2026: CSS Anchor Positioning */
-  position: absolute;
-  /* Przykleja górę popovera do dołu przycisku (anchor) */
-  top: anchor(bottom);
-  /* Wyrównuje lewą krawędź popovera z lewą krawędzią przycisku */
-  left: anchor(start);
-  margin-top: 4px; /* Delikatny odstęp od przycisku */
-  
-  /* Fallback dla starszych przeglądarek (wyśrodkuje na ekranie) */
-  @supports not (top: anchor(bottom)) {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+     4. ANCHORED CONTEXT MENU (CSS Anchor Positioning)
+     ========================================= */
+  .popover-context {
+    /* Reset domyślnych stylów Popover API (UA daje [popover]
+       color: CanvasText - patrz komentarz przy .modal-dialog) */
     margin: 0;
-  }
+    padding: calc(var(--spacing-unit) * 1);
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    min-width: 160px;
+    
+    /* MAGIA 2026: CSS Anchor Positioning */
+    position: absolute;
+    top: anchor(bottom);
+    left: anchor(start);
+    margin-top: 4px; 
+    
+    /* Fallback dla starszych przeglądarek */
+    @supports not (top: anchor(bottom)) {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+    }
 
-  /* Animacja wejścia */
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+    /* Animacja wejścia */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
 
-  &:popover-open {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  @starting-style {
     &:popover-open {
-      opacity: 0;
-      transform: translateY(-10px);
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+
+    /* --- FLIP: menu blisko dolnej krawędzi ekranu (patrz js/modules/context-menu.js) --- */
+    &.is-flipped {
+      top: auto;
+      bottom: anchor(top);
+      margin-top: 0;
+      margin-bottom: 4px;
+
+      transform: translateY(10px);
+
+      &:popover-open {
+        transform: translateY(0);
+      }
+
+      @starting-style {
+        &:popover-open {
+          transform: translateY(10px);
+        }
+      }
+    }
+
+    /* --- FIX: KULOODPORNY RESET LISTY --- */
+    ul, ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* --- WSPARCIE DLA STARYCH KLAS (.popover-action-btn) --- */
+    .popover-action-btn {
+      width: 100%;
+      text-align: left;
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+      background: transparent;
+      border: none;
+      border-radius: calc(var(--border-radius) / 2);
+      color: var(--text-main);
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+      cursor: pointer;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &:hover {
+        background-color: var(--card-bg-subtle);
+        color: var(--primary);
+      }
+
+      &.text-danger:hover {
+        background-color: rgba(var(--danger-rgb), 0.1);
+        color: var(--danger);
+      }
+    }
+
+    /* =========================================
+       MOBILE: BOTTOM SHEET (Szuflada z dołu)
+       ========================================= */
+    @media (max-width: 768px) {
+      /* Resetujemy pozycjonowanie Anchor */
+      position: fixed !important;
+      top: auto !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      
+      /* Rozciągamy na całą szerokość */
+      width: 100% !important;
+      min-width: 100%;
+      margin: 0;
+      
+      /* Stylizacja szuflady */
+      border: none;
+      border-top: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+      padding-bottom: env(safe-area-inset-bottom); 
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+      
+      /* Animacja wjazdu z dołu */
+      transform: translateY(100%);
+      &:popover-open {
+        transform: translateY(0);
+      }
+      @starting-style {
+        &:popover-open { transform: translateY(100%); }
+      }
+
+      /* "Uchwyt" (pill) na górze szuflady */
+      &::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background-color: var(--border-color);
+        border-radius: 4px;
+        margin: 0 auto calc(var(--spacing-unit) * 2) auto;
+      }
+
+      /* Powiększamy przyciski dla łatwiejszego klikania palcem */
+      .popover-action-btn,
+      .btn-action {
+        width: 100%;
+        justify-content: flex-start;
+        padding: calc(var(--spacing-unit) * 2);
+        font-size: 1rem;
+        min-height: 48px !important;
+        
+        i, svg {
+          font-size: 1.25rem;
+          margin-right: calc(var(--spacing-unit) * 1);
+        }
+      }
     }
   }
-}
 
-/* Lista akcji wewnątrz popovera */
-.popover-action-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.popover-action-btn {
-  width: 100%;
-  text-align: left;
-  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-  background: transparent;
-  border: none;
-  border-radius: calc(var(--border-radius) / 2);
-  color: var(--text-main);
-  font-size: 0.875rem;
-  font-weight: var(--fw-medium);
-  cursor: pointer;
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  &:hover {
-    background-color: var(--card-bg-subtle);
-    color: var(--primary);
+  /* Tło przyciemniające (Backdrop) dla Bottom Sheet na mobile */
+  @media (max-width: 768px) {
+    .popover-context::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+    }
+    .popover-context:popover-open::backdrop {
+      opacity: 1;
+    }
+    @starting-style {
+      .popover-context:popover-open::backdrop { opacity: 0; }
+    }
   }
-
-  &.text-danger:hover {
-    background-color: rgba(var(--danger-rgb), 0.1);
-    color: var(--danger);
-  }
-}
-```
-
----
+}```
 
 ## Plik: `components/_navigation.scss`
 
@@ -4451,10 +5224,52 @@ a.list-group-item:hover, button.list-group-item:hover {
 }
 
 .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
   font-size: var(--h4-size);
   font-weight: var(--fw-bold);
   color: var(--text-main);
   text-decoration: none;
+
+  img, svg {
+    max-width: 100%;
+    max-height: var(--target-size-min);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* <picture> jest domyślnie elementem inline — jako dziecko flexa dostaje
+     własny "line box" i wyrównuje <img> do baseline zamiast do środka,
+     stąd wizualne przesunięcie logo w górę. display:contents usuwa ten box
+     z layoutu, więc <img> w środku staje się bezpośrednim elementem flexa
+     .navbar-brand, dokładnie tak jak bez opakowania w <picture>. */
+  picture {
+    display: contents;
+  }
+  /* Domyślnie ukrywamy logo dla trybu ciemnego */
+  .logo-dark {
+    display: none;
+  }
+}
+
+/* =========================================
+   ZARZĄDZANIE LOGO W DARK MODE
+   ========================================= */
+[data-theme="dark"] {
+  .navbar-brand {
+    /* Ukrywamy jasne logo */
+    .logo-light {
+      display: none;
+    }
+    /* Pokazujemy ciemne logo (przywracając display: contents, żeby nie zepsuć flexboxa!) */
+    .logo-dark {
+      display: contents;
+    }
+  }
 }
 
 /* Przycisk Hamburgera (Wymuszone 44x44px dla B2B) */
@@ -4531,9 +5346,29 @@ a.list-group-item:hover, button.list-group-item:hover {
     background-color: var(--bg-surface);
     border-bottom-color: var(--border-color);
     box-shadow: var(--shadow-sm);
-    
+
     .navbar-brand, .navbar-item { color: var(--text-main); }
     .navbar-toggle span { background-color: var(--text-main); }
+  }
+}
+
+/* --- Sticky Navbar (przyklejony do góry + auto-hide na scrollu w dół) ---
+   Klasy is-scrolled/is-hidden dostaje z JS (molique-script.js, sekcja
+   "STICKY NAVBAR & READING PROGRESS") - stąd brak tu deklaracji position
+   inline, tylko czysty stan wynikający z dodanej klasy. */
+.navbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-fixed);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+
+  &.is-scrolled {
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Chowa navbar przy scrollowaniu w dół, pokazuje z powrotem przy scrollu w górę */
+  &.is-hidden {
+    transform: translateY(-100%);
   }
 }
 
@@ -4570,11 +5405,23 @@ a.list-group-item:hover, button.list-group-item:hover {
     padding: calc(var(--spacing-unit) * 8) calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 3);
     margin: 0;
     box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-    
+
+    /* FIX: panel ma sztywną wysokość (top:0 do bottom:0), więc gdy lista
+       linków jest dłuższa niż ekran, musi się sama przewijać - inaczej
+       dolne pozycje są nieosiągalne. */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* UWAGA: .navbar-offcanvas-toggle musi być rodzeństwem (bezpośrednim,
+     tym samym rodzicem co) .navbar-menu-offcanvas, .navbar-offcanvas-backdrop
+     i .navbar-toggle — czyli wszystkie cztery elementy powinny siedzieć
+     razem wewnątrz .navbar-container. Kombinator "~" nie sięga w głąb
+     dalszych rodzeństw, więc np. checkbox umieszczony PRZED <nav>, a
+     .navbar-menu-offcanvas wewnątrz <nav>, nigdy się nie dopasują. */
   .navbar-offcanvas-toggle:checked ~ .navbar-menu-offcanvas {
     transform: translateX(0);
   }
@@ -4583,78 +5430,287 @@ a.list-group-item:hover, button.list-group-item:hover {
     display: block;
   }
 
-  .navbar-offcanvas-toggle:checked ~ .navbar-container .navbar-toggle span:nth-child(1) {
+  .navbar-offcanvas-toggle:checked ~ .navbar-toggle span:nth-child(1) {
     top: 19px; transform: rotate(135deg);
   }
-  .navbar-offcanvas-toggle:checked ~ .navbar-container .navbar-toggle span:nth-child(2) {
+  .navbar-offcanvas-toggle:checked ~ .navbar-toggle span:nth-child(2) {
     opacity: 0; left: -20px;
   }
-  .navbar-offcanvas-toggle:checked ~ .navbar-container .navbar-toggle span:nth-child(3) {
+  .navbar-offcanvas-toggle:checked ~ .navbar-toggle span:nth-child(3) {
     top: 19px; transform: rotate(-135deg);
   }
 }
 
 /* =========================================
-   3. MEGA MENU
+   3. MEGA MENU (<details> + Anchor Positioning — Zero JS, działa na mobile)
    ========================================= */
 .mega-menu {
-  position: static; 
+  /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+     żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
+     (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
+     position:relative — .mega-menu-content ma się pozycjonować względem
+     .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
+     panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
+     krawędzi navbara. */
+  anchor-scope: --mega-menu-trigger;
+}
+
+.mega-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.5);
+  min-height: var(--target-size-min);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--transition-speed);
+  /* Punkt zaczepienia dla .mega-menu-content (CSS Anchor Positioning) */
+  anchor-name: --mega-menu-trigger;
+
+  &::-webkit-details-marker { display: none; }
+
+  &::after {
+    content: '';
+    display: inline-block;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: transform var(--transition-speed);
+  }
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.mega-menu[open] > .mega-menu-trigger {
+  color: var(--primary);
+
+  &::after {
+    transform: rotate(180deg);
+  }
+
+  /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte —
+     klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
+     <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
+     powyżej — zero JS potrzebne do zamykania na klik-poza-menu). */
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-index-dropdown);
+    cursor: default;
+  }
 }
 
 .mega-menu-content {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 5);
+  margin: 0;
+  padding: calc(var(--spacing-unit) * 4);
   background-color: var(--bg-surface);
-  border-top: 2px solid var(--primary);
-  border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
-  padding: calc(var(--spacing-unit) * 4) 0;
-  z-index: var(--z-index-dropdown);
-  
-  display: block !important; 
-  visibility: hidden;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  background-image: radial-gradient(circle at 100% 0%, rgba(var(--primary-rgb), 0.06), transparent 55%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg, 16px);
+  box-shadow: var(--shadow-lg), 0 20px 40px -20px rgba(0, 0, 0, 0.25);
 
-  /* Niewidzialny most zapobiegający zamykaniu menu */
-  &::before {
-    content: '';
-    position: absolute;
-    top: -20px; 
-    left: 0;
-    width: 100%;
-    height: 20px;
-    background: transparent;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease, display 0.25s allow-discrete;
+}
+
+.mega-menu[open] > .mega-menu-content {
+  display: grid;
+  opacity: 1;
+}
+
+.mega-menu-group {
+  padding-block: calc(var(--spacing-unit) * 2.5);
+}
+
+.mega-menu-col-title {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.25);
+  margin: 0 0 calc(var(--spacing-unit) * 1.5) 0;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+}
+
+.mega-menu-col-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+
+  svg { width: 17px; height: 17px; }
+}
+
+.mega-menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1);
+  margin-inline: calc(var(--spacing-unit) * -1);
+  border-radius: var(--border-radius);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
+
+  /* Strzałka pojawiająca się na hover — czysto dekoracyjna (opacity/transform,
+     GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
+  &::after {
+    content: '\2192';
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity var(--transition-speed), transform var(--transition-speed);
+  }
+
+  &:hover, &:focus-visible {
+    background-color: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+    transform: translateX(2px);
+
+    &::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+/* Wyróżniona karta (Featured) — jedna "komórka" siatki, wizualnie
+   podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
+.mega-menu-featured {
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 3);
+  border-radius: var(--border-radius);
+  /* Gradient na literałach, NIE na var(--dark)/var(--primary): karta jest
+     celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
+     odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
+     zmiennymi biały tekst lądował na jasnym tle. */
+  background-image: linear-gradient(145deg, #1E293B, #0284C7);
+  color: #fff;
+}
+
+.mega-menu-featured-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.15);
+  font-size: 1.25rem;
+}
+
+.mega-menu-featured-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: var(--fw-bold);
+  color: #fff;
+}
+
+.mega-menu-featured-text {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.mega-menu-featured-link {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.75);
+  margin-top: auto;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.75);
+  border-radius: var(--border-radius-pill, 999px);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+
+  &:hover, &:focus-visible {
+    background-color: rgba(255, 255, 255, 0.28);
+    transform: translateX(2px);
   }
 }
 
 @include mq(md) {
-  .mega-menu:hover .mega-menu-content {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
+  .mega-menu-content {
+    position: absolute;
+    /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
+       wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
+       .navbar (position:relative, patrz sekcja 1) — dzięki temu szeroki
+       panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
+       trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
+    position-anchor: --mega-menu-trigger;
+    top: anchor(bottom);
+    left: 50%;
+    margin-top: calc(var(--spacing-unit) * 1);
+    width: min(94vw, 980px);
+    /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
+       zrobić się wyższy niż viewport — ograniczamy wysokość i włączamy
+       wewnętrzny scroll zamiast wypychania poza ekran. */
+    max-height: min(78vh, 680px);
+    overflow-y: auto;
+    z-index: calc(var(--z-index-dropdown) + 1);
+    transform: translateX(-50%) translateY(-8px);
+
+    /* Fallback dla przeglądarek bez wsparcia CSS Anchor Positioning:
+       "top" liczony od dołu całego .navbar zamiast od samego triggera. */
+    @supports not (top: anchor(bottom)) {
+      top: 100%;
+    }
+  }
+
+  .mega-menu[open] > .mega-menu-content {
+    transform: translateX(-50%) translateY(0);
+
+    @starting-style {
+      transform: translateX(-50%) translateY(-8px);
+    }
   }
 }
 
 @include mq(sm, max) {
   .mega-menu-content {
     position: static;
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 3);
+    width: 100%;
+    margin-top: calc(var(--spacing-unit) * 1);
     box-shadow: none;
     border: none;
-    padding: calc(var(--spacing-unit) * 2);
-    background-color: rgba(0,0,0,0.02);
-    
-    display: none !important; 
-    visibility: visible;
+    background-color: rgba(0, 0, 0, 0.02);
+
+    /* Na mobile pokazuje/chowa się natychmiast, bez animacji — spójnie z
+       .admin-nav-submenu, który też jest oparty na <details>. */
     opacity: 1;
     transform: none;
+    transition: none;
   }
-  
-  .mega-menu.is-active .mega-menu-content {
-    display: block !important;
+
+  .mega-menu-group {
+    padding-block: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .mega-menu-featured {
+    grid-row: auto;
   }
 }
 
@@ -4717,6 +5773,60 @@ a.list-group-item:hover, button.list-group-item:hover {
   &:hover {
     background-color: var(--card-bg-subtle);
     color: var(--primary);
+  }
+}
+
+/* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
+   lewej — niezbędne dla dropdownów siedzących blisko prawej krawędzi
+   ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
+.dropdown-menu-end {
+  left: auto;
+  right: 0;
+}
+
+/* =========================================
+   4.1. DROPDOWN JAKO POPOVER (Top Layer)
+   ========================================= */
+/* Zalecany wariant POZA navbarem (tabele, karty, modale, przewijane
+   kontenery): dowolny istniejący przycisk z [popovertarget="ID"] +
+   `.dropdown-menu` z atrybutem [popover] i tym samym `id`. Atrybut
+   [popover] przenosi menu do top layer przeglądarki — koniec przycinania
+   przez overflow przodków — a Esc i klik poza menu zamykają je natywnie
+   (light dismiss).
+
+   Pozycjonowanie: popover otwarty przez [popovertarget] dostaje swój
+   przycisk jako NIEJAWNY anchor (position-anchor: auto — wartość
+   domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
+   i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
+   buttona jedną parą atrybutów. */
+.dropdown-menu[popover] {
+  /* Reset domyślnych stylów UA popovera (position:fixed + inset:0 +
+     margin:auto centruje na ekranie) */
+  position: absolute;
+  inset: auto;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin: 4px 0 0 0;
+  color: var(--text-main);
+
+  /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
+     Firefox): menu otwiera się jako wyśrodkowany panel — nadal w top
+     layer, więc nic go nie przycina. */
+  @supports not (top: anchor(bottom)) {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(320px, calc(100vw - 2rem));
+    height: fit-content;
+  }
+}
+
+/* Wyrównanie do prawej krawędzi przycisku — tylko tam, gdzie działa
+   anchor positioning (w fallbacku menu i tak jest wyśrodkowane). */
+@supports (top: anchor(bottom)) {
+  .dropdown-menu-end[popover] {
+    left: auto;
+    right: anchor(right);
   }
 }
 
@@ -4884,7 +5994,10 @@ a.list-group-item:hover, button.list-group-item:hover {
   width: var(--target-size-min);
   height: var(--target-size-min);
   background-color: var(--primary);
-  color: #fff;
+  /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+     primary jaśnieje, więc ikona musi ciemnieć - literal #fff ginął
+     i na jasnym primary, i na hoverze z flipowanym var(--dark)) */
+  color: var(--btn-text-light);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -4938,10 +6051,7 @@ a.list-group-item:hover, button.list-group-item:hover {
   background: var(--primary);
   width: 0%;
   transition: width 0.1s ease-out;
-}
-```
-
----
+}```
 
 ## Plik: `layout/_admin-layout.scss`
 
@@ -5009,10 +6119,37 @@ a.list-group-item:hover, button.list-group-item:hover {
       box-shadow: var(--shadow-sm);
     }
   }
-}
-```
 
----
+  /* Zanikanie treści na dole głównej kolumny (opt-in: klasa .fade-bottom
+     z warstwy layout). .admin-main nie przewija się sam - przewija się
+     strona - a overflow-x:hidden czyni go scrollportem dla sticky,
+     przez co bazowy wariant nigdy by się nie "przykleił". Dlatego tu
+     gradient jest pozycjonowany fixed względem okna, wyrównany do
+     kolumny treści zmiennymi layoutu (działa też w trybie floating). */
+  .admin-main.fade-bottom {
+    --fade-color: var(--main-bg);
+
+    &::after {
+      position: fixed;
+      bottom: var(--layout-padding);
+      left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
+      right: var(--layout-padding);
+      height: var(--fade-height);
+      margin-top: 0;
+      border-radius: 0 0 var(--main-radius) var(--main-radius);
+    }
+
+    @media (max-width: 768px) {
+      &::after {
+        left: 0;
+        right: 0;
+        /* Nad mobilnym dolnym paskiem nawigacji (sidebar) */
+        bottom: calc(70px + env(safe-area-inset-bottom));
+        border-radius: 0;
+      }
+    }
+  }
+}```
 
 ## Plik: `modules/_docs.scss`
 
@@ -5022,14 +6159,33 @@ a.list-group-item:hover, button.list-group-item:hover {
  * Zawiera tylko style dla bloków prezentacyjnych (Showcase).
  */
 
+@use '../variables' as *;
+@use '../mixins' as *;
+
 @layer modules {
-  /* Ograniczenie szerokości czytania wewnątrz admin-main */
+  /* Ograniczenie szerokości i FIX paddingów na mobile */
   .docs-content-wrapper {
+    /* FIX: .admin-main jest flex-column. Przy width:auto + margin:auto
+       specyfikacja flexboxa WYŁĄCZA stretch na osi poprzecznej (auto-marginesy
+       "zjadają" wolne miejsce), więc element jest liczony na podstawie
+       max-content swojej zawartości — a nie zawijający się <pre> ma bardzo
+       szeroki max-content, co rozpychało całą kolumnę treści i ucinało tekst
+       przez overflow:hidden wyżej w drzewie. Jawne width:100% wymusza
+       wypełnienie dostępnej szerokości niezależnie od kontekstu flex/grid
+       przodka, a margin:auto nadal centruje po osiągnięciu max-width. */
+    width: 100%;
     max-width: 1000px;
     margin: 0 auto;
+    /* FIX: Gwarantowany padding boczny na mobile! */
+    padding-left: calc(var(--spacing-unit) * 2);
+    padding-right: calc(var(--spacing-unit) * 2);
+
+    @include mq(md) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
-  /* Tytuły grup w nawigacji bocznej */
   .docs-nav-title {
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -5041,20 +6197,27 @@ a.list-group-item:hover, button.list-group-item:hover {
 
   /* Bloki prezentacyjne (Showcase) */
   .component-showcase {
-    margin: calc(var(--spacing-unit) * 6) 0;
+    margin: calc(var(--spacing-unit) * 4) 0;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     overflow: hidden;
     background-color: var(--bg-body);
+    /* FIX: Zabezpieczenie przed rozsadzaniem przez zawartość */
+    max-width: 100%;
   }
 
   .component-preview {
-    padding: calc(var(--spacing-unit) * 6);
+    /* FIX: Mniejszy padding na mobile */
+    padding: calc(var(--spacing-unit) * 3);
     display: flex;
     flex-wrap: wrap;
     gap: calc(var(--spacing-unit) * 3);
     background-image: radial-gradient(var(--border-color) 1px, transparent 0);
     background-size: 20px 20px;
+    
+    @include mq(md) {
+      padding: calc(var(--spacing-unit) * 6);
+    }
   }
 
   .component-code {
@@ -5062,11 +6225,15 @@ a.list-group-item:hover, button.list-group-item:hover {
     background-color: #1e293b;
     margin: 0;
     padding: 0;
+    /* FIX: Zabezpieczenie przed rozsadzaniem przez długi kod */
+    max-width: 100%;
     
     pre {
       margin: 0;
       padding: calc(var(--spacing-unit) * 4);
+      /* FIX: Wymuszenie scrollowania w poziomie dla długich linii kodu */
       overflow-x: auto;
+      max-width: 100%;
       color: #e2e8f0;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.875rem;
@@ -5074,7 +6241,6 @@ a.list-group-item:hover, button.list-group-item:hover {
     }
   }
 
-  /* Przycisk kopiowania */
   .btn-copy {
     position: absolute;
     top: 12px;
@@ -5092,10 +6258,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     &:hover { background-color: rgba(255, 255, 255, 0.2); }
     &.is-copied { background-color: var(--success); border-color: var(--success); }
   }
-}
-```
-
----
+}```
 
 ## Plik: `molique-style-admin.scss`
 
@@ -5118,10 +6281,26 @@ a.list-group-item:hover, button.list-group-item:hover {
   @include meta.load-css("components/admin-nav");
   @include meta.load-css("components/chart-funnel"); 
   @include meta.load-css("components/dashboard"); 
+}```
+
+## Plik: `molique-style-before-after.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Widgetu Przed / Po
+ * Ten plik wygeneruje gotowy molique-style-before-after.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
+@layer modules {
+  @include meta.load-css("before-after");
 }
 ```
-
----
 
 ## Plik: `molique-style-blog.scss`
 
@@ -5137,10 +6316,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 @layer modules {
   @include meta.load-css("blog");
-}
-```
-
----
+}```
 
 ## Plik: `molique-style-docs.scss`
 
@@ -5156,10 +6332,26 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 @layer modules {
   @include meta.load-css("modules/docs");
+}```
+
+## Plik: `molique-style-share.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Widgetu Udostępniania (Share)
+ * Ten plik wygeneruje gotowy molique-style-share.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
+@layer modules {
+  @include meta.load-css("share");
 }
 ```
-
----
 
 ## Plik: `molique-style-shop.scss`
 
@@ -5177,10 +6369,26 @@ a.list-group-item:hover, button.list-group-item:hover {
 // 2. Wstrzykujemy fizyczny kod sklepu do warstwy
 @layer modules {
   @include meta.load-css("shop");
+}```
+
+## Plik: `molique-style-speed-dial.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Widgetu Speed Dial
+ * Ten plik wygeneruje gotowy molique-style-speed-dial.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
+@layer modules {
+  @include meta.load-css("speed-dial");
 }
 ```
-
----
 
 ## Plik: `molique-style.scss`
 
@@ -5222,10 +6430,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 @layer utilities {
   @include meta.load-css("utilities");
   // @use 'utilities-extended'; 
-}
-```
-
----
+}```
 
 ## Plik: `utilities/_animations.scss`
 
@@ -5247,6 +6452,27 @@ a.list-group-item:hover, button.list-group-item:hover {
 @property --t-left { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
 @property --trace-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
+/* =========================================
+   0.5. PŁYNNA ZMIANA MOTYWU (View Transitions API)
+   ========================================= */
+/* Cross-fade wyzwalany przez document.startViewTransition() w
+   molique-script.js (przełącznik motywu). Przenikają się dwie migawki
+   całej strony na GPU (czysta opacity) - zgodnie ze złotą zasadą:
+   żadnego animowania kolorów per element. Pseudo-elementy poza @layer,
+   bo dotyczą specjalnego drzewa ::view-transition, nie komponentów. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 @layer utilities {
   /* =========================================
      1. ANIMACJE WEJŚCIA (Intersection Observer)
@@ -5262,6 +6488,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     transform: translate3d(0, 0, 0) scale(1) !important;
   }
 
+  .fade-in { transform: translate3d(0, 0, 0); }
   .fade-in-up { transform: translate3d(0, 40px, 0); }
   .fade-in-down { transform: translate3d(0, -40px, 0); }
   .fade-in-left { transform: translate3d(-40px, 0, 0); }
@@ -5271,6 +6498,8 @@ a.list-group-item:hover, button.list-group-item:hover {
   .delay-100 { transition-delay: 100ms; }
   .delay-200 { transition-delay: 200ms; }
   .delay-300 { transition-delay: 300ms; }
+  .delay-400 { transition-delay: 400ms; }
+  .delay-500 { transition-delay: 500ms; }
 
   .reveal-blur {
     opacity: 0; filter: blur(10px); transform: translateY(20px);
@@ -5510,10 +6739,7 @@ a.list-group-item:hover, button.list-group-item:hover {
       transition: --t-top 0.15s linear 0s, --t-right 0.15s linear 0.15s, --t-bottom 0.15s linear 0.3s, --t-left 0.15s linear 0.45s;
     }
   }
-}
-```
-
----
+}```
 
 ## Plik: `utilities/_borders.scss`
 
@@ -5557,13 +6783,41 @@ a.list-group-item:hover, button.list-group-item:hover {
   .rounded-circle { border-radius: 50% !important; }
   .rounded-pill { border-radius: 50rem !important; }
   
+  /* Zaokrąglanie tylko konkretnych stron */
+  .rounded-top { border-top-left-radius: var(--border-radius) !important; border-top-right-radius: var(--border-radius) !important; }
+  .rounded-bottom { border-bottom-left-radius: var(--border-radius) !important; border-bottom-right-radius: var(--border-radius) !important; }
+
   /* Usuwanie zaokrągleń z konkretnych stron */
   .rounded-top-0 { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
   .rounded-bottom-0 { border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; }
-}
-```
 
----
+  /* =========================================
+     3. ROGI: OSTRE CIĘCIE (clip-path) I WKLĘSŁE WCIĘCIE (mask-image)
+     ========================================= */
+  $corner-size: 24px;
+
+  .corner-cut-tl { clip-path: polygon(#{$corner-size} 0, 100% 0, 100% 100%, 0 100%, 0 #{$corner-size}); }
+  .corner-cut-tr { clip-path: polygon(0 0, calc(100% - #{$corner-size}) 0, 100% #{$corner-size}, 100% 100%, 0 100%); }
+  .corner-cut-bl { clip-path: polygon(0 0, 100% 0, 100% 100%, #{$corner-size} 100%, 0 calc(100% - #{$corner-size})); }
+  .corner-cut-br { clip-path: polygon(0 0, 100% 0, 100% calc(100% - #{$corner-size}), calc(100% - #{$corner-size}) 100%, 0 100%); }
+
+  .corner-concave-tl {
+    mask-image: radial-gradient(circle #{$corner-size} at 0 0, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 0 0, transparent 99%, #fff 100%);
+  }
+  .corner-concave-tr {
+    mask-image: radial-gradient(circle #{$corner-size} at 100% 0, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 100% 0, transparent 99%, #fff 100%);
+  }
+  .corner-concave-bl {
+    mask-image: radial-gradient(circle #{$corner-size} at 0 100%, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 0 100%, transparent 99%, #fff 100%);
+  }
+  .corner-concave-br {
+    mask-image: radial-gradient(circle #{$corner-size} at 100% 100%, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 100% 100%, transparent 99%, #fff 100%);
+  }
+}```
 
 ## Plik: `utilities/_colors.scss`
 
@@ -5605,7 +6859,10 @@ a.list-group-item:hover, button.list-group-item:hover {
   .bg-danger { background-color: var(--danger) !important; color: var(--btn-text-light) !important; }
   .bg-warning { background-color: var(--warning) !important; color: var(--text-main) !important; }
   .bg-info { background-color: var(--info) !important; color: var(--text-main) !important; }
-  .bg-dark { background-color: var(--dark) !important; color: var(--btn-text-light) !important; }
+  /* bg-dark na literałach: sekcje "zawsze ciemne" (stopki, hero) łączone
+     w HTML z .text-white - z flipowanym var(--dark) w ciemnym motywie tło
+     robiło się jasne pod białym tekstem. */
+  .bg-dark { background-color: #1E293B !important; color: #F9F9F9 !important; }
   .bg-light { background-color: var(--light) !important; color: var(--text-main) !important; }
 
   /* --- TŁA SUBTELNE (10% krycia) --- */
@@ -5713,7 +6970,9 @@ a.list-group-item:hover, button.list-group-item:hover {
   /* Narożne gradienty (Efekt łuny) */
   .bg-gradient-corners {
     position: relative;
-    background-color: var(--dark);
+    /* Literal: łuna wymaga zawsze ciemnego tła (flipowany var(--dark)
+       w ciemnym motywie rozjaśniał sekcję pod jasną treścią) */
+    background-color: #1E293B;
     z-index: 1;
     /* Zabezpieczenie przed wylewaniem się zawartości */
     overflow: hidden; 
@@ -5746,10 +7005,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     color: transparent;
     display: inline-block;
   }
-}
-```
-
----
+}```
 
 ## Plik: `utilities/_helpers.scss`
 
@@ -5826,12 +7082,31 @@ a.list-group-item:hover, button.list-group-item:hover {
 /* =========================================
    6. FILTRY I PRZEZROCZYSTOŚĆ (Logotypy)
    ========================================= */
+.opacity-0 { opacity: 0 !important; }
+.opacity-25 { opacity: 0.25 !important; }
 .opacity-50 { opacity: 0.5 !important; }
+.opacity-75 { opacity: 0.75 !important; }
+.opacity-100 { opacity: 1 !important; }
 .hover-opacity-100 { transition: opacity var(--transition-speed) !important; }
 .hover-opacity-100:hover { opacity: 1 !important; }
 
 .hover-filter-none { transition: filter var(--transition-speed) !important; }
 .hover-filter-none:hover { filter: none !important; }
+
+/* =========================================
+   6b. CIENIE (Shadows)
+   ========================================= */
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+.shadow-none { box-shadow: none !important; }
+
+/* =========================================
+   6c. KURSOR
+   ========================================= */
+.cursor-pointer { cursor: pointer !important; }
+.cursor-default { cursor: default !important; }
+.cursor-not-allowed { cursor: not-allowed !important; }
 
 /* =========================================
    7. STACKING SECTIONS (Przyklejone sekcje)
@@ -5896,44 +7171,56 @@ a.list-group-item:hover, button.list-group-item:hover {
   mix-blend-mode: multiply; /* Biały staje się przezroczysty, czarny zostaje czarny */
 }
 
-/* =========================================
-     BACKGROUND VIDEO (Wydajne tło wideo)
+  /* =========================================
+     BACKGROUND MEDIA (Wydajne tła: Wideo i Obrazki)
      ========================================= */
-  .bg-video-container {
+  .bg-video-container,
+  .bg-image-container {
     position: relative;
     overflow: hidden;
-    /* Tworzy nowy, odizolowany kontekst renderowania (z-index nie wycieka) */
     isolation: isolate; 
 
-    /* Domyślny overlay (przyciemnienie), żeby tekst był czytelny */
+    /* Domyślny overlay (przyciemnienie) */
     &::after {
       content: '';
       position: absolute;
       inset: 0;
-      background-color: rgba(0, 0, 0, 0.4); /* Zmień krycie według potrzeb */
+      background-color: rgba(0, 0, 0, 0.4); 
       z-index: -1;
       pointer-events: none;
     }
   }
 
-  .bg-video {
+  /* Wspólne style dla wideo, obrazków i tagu <picture> w tle */
+  .bg-video,
+  .bg-image,
+  picture.bg-image {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Wideo zawsze wypełnia kontener bez zniekształceń */
     z-index: -2;
     pointer-events: none;
     
-    /* MAGIA WYDAJNOŚCI: Wymusza renderowanie wideo na dedykowanej warstwie GPU */
+    /* Jeśli to tag <picture>, musimy ostylować <img> wewnątrz niego */
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  /* Specyficzne dla wideo (Akceleracja GPU) */
+  video.bg-video {
+    object-fit: cover;
     transform: translateZ(0);
     will-change: transform;
   }
 
-  /* A11y: Szanujemy ustawienia systemu operacyjnego użytkownika */
+  /* A11y: Ukrywanie wideo dla prefers-reduced-motion */
   @media (prefers-reduced-motion: reduce) {
     .bg-video-container video.bg-video {
-      display: none; /* Ukrywamy wideo, jeśli użytkownik ma włączoną redukcję ruchu */
+      display: none; 
     }
   }
 
@@ -5941,10 +7228,7 @@ a.list-group-item:hover, button.list-group-item:hover {
   .z-index-2 { z-index: 2 !important; }
   .z-index-3 { z-index: 3 !important; }
   
-}
-```
-
----
+}```
 
 ## Plik: `utilities/_spacing.scss`
 
@@ -6052,10 +7336,7 @@ a.list-group-item:hover, button.list-group-item:hover {
       }
     }
   }
-}
-```
-
----
+}```
 
 ## Plik: `utilities/_typography.scss`
 
@@ -6119,10 +7400,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 .text-decoration-none { text-decoration: none !important; }
 .text-decoration-underline { text-decoration: underline !important; }
-.text-decoration-line-through { text-decoration: line-through !important; }
-```
-
----
+.text-decoration-line-through { text-decoration: line-through !important; }```
 
 ## Plik: `_a11y.scss`
 
@@ -6165,10 +7443,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     outline: var(--focus-ring-width) solid var(--text-main);
     outline-offset: 2px;
   }
-}
-```
-
----
+}```
 
 ## Plik: `_admin.scss`
 
@@ -6629,10 +7904,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     white-space: nowrap;
     text-overflow: clip;
   }
-}
-```
-
----
+}```
 
 ## Plik: `_base.scss`
 
@@ -6652,8 +7924,11 @@ a.list-group-item:hover, button.list-group-item:hover {
   html {
     scroll-behavior: smooth;
     scroll-padding-top: var(--scroll-padding);
-    /* Globalna tarcza anty-rozsadzeniowa */
-    overflow-x: hidden;
+    /* Globalna tarcza anty-rozsadzeniowa. UWAGA: musi być "clip", nie "hidden" —
+       "hidden" wymusza overflow-y:auto (sprzężenie osi wg specyfikacji CSS Overflow),
+       przez co html/body stają się nieoczekiwanym "scroll container" i wyłączają
+       position:sticky wszystkim elementom w dokumencie (np. .admin-sidebar). */
+    overflow-x: clip;
     width: 100%;
   }
 
@@ -6670,7 +7945,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     line-height: 1.5; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     position: relative;
   }
@@ -6806,10 +8081,103 @@ a.list-group-item:hover, button.list-group-item:hover {
     border-radius: 0;
     word-break: normal;
   }
+}```
+
+## Plik: `_before-after.scss`
+
+```scss
+/**
+ * molique - Widget Przed / Po (Before & After)
+ * Suwak porównawczy dwóch obrazów, sterowany ukrytym inputem range
+ * (--position ustawiane przez JS z js/modules/before-after.js).
+ */
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.before-after-slider {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background-color: var(--light);
+  --position: 50%;
+}
+
+.before-after-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.img-after {
+  position: relative;
+  z-index: 1;
+}
+
+.img-before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 2;
+  clip-path: polygon(0 0, var(--position) 0, var(--position) 100%, 0 100%);
+}
+
+.slider-control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  min-height: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.slider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--position);
+  z-index: 5;
+  width: 4px;
+  background: #fff;
+  transform: translateX(-50%);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+}
+
+.slider-handle {
+  position: absolute;
+  top: 50%;
+  left: var(--position);
+  z-index: 6;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--dark);
+  font-size: 1.25rem;
+  line-height: 1;
+  box-shadow: var(--shadow-md);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  &::after {
+    content: '\2194';
+    font-weight: var(--fw-bold);
+  }
 }
 ```
-
----
 
 ## Plik: `_blog.scss`
 
@@ -7059,10 +8427,7 @@ a.list-group-item:hover, button.list-group-item:hover {
   .author-name { font-size: 1.125rem; font-weight: var(--fw-bold); margin-bottom: 4px; }
   .author-role { font-size: 0.875rem; color: var(--primary); font-weight: var(--fw-medium); margin-bottom: 12px; }
   .author-bio { color: var(--text-muted); margin-bottom: 0; font-size: 0.95rem; }
-}
-```
-
----
+}```
 
 ## Plik: `_buttons.scss`
 
@@ -7432,10 +8797,45 @@ a.list-group-item:hover, button.list-group-item:hover {
     0% { background-position: 0% 50%; }
     100% { background-position: 100% 50%; }
   }
-}
-```
 
----
+  /* =========================================
+     6. WARIANTY UKŁADU (Layout Modifiers)
+     ========================================= */
+  
+  /* Przycisk pionowy (Ikona nad tekstem) - Wzorzec z aplikacji mobilnych */
+  .btn-stacked {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px !important;
+    
+    padding: calc(var(--spacing-unit) * 1);
+    min-height: 56px !important;
+    line-height: 1 !important; 
+
+    i, svg {
+      font-size: 1.2rem;
+      width: 1em !important;
+      height: 1em !important;
+      flex-shrink: 0;
+      margin: 0 !important;
+      display: block; 
+    }
+
+    span, .btn-text {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1 !important; 
+      text-align: center;
+      
+      padding: 0 !important;
+      white-space: normal;
+      word-break: break-word;
+      width: 100%;
+    }
+  }
+}```
 
 ## Plik: `_components.scss`
 
@@ -7446,15 +8846,14 @@ a.list-group-item:hover, button.list-group-item:hover {
  */
 
 @use 'components/navigation' as *;
+@use 'components/language-switch' as *;
+@use 'components/hero' as *;
 @use 'components/cards' as *;
 @use 'components/modals' as *;
 @use 'components/data-display' as *;
 @use 'components/feedback' as *;
 @use 'components/business' as *;
-@use 'components/charts' as *;
-```
-
----
+@use 'components/charts' as *;```
 
 ## Plik: `_eink.scss`
 
@@ -7495,10 +8894,7 @@ a.list-group-item:hover, button.list-group-item:hover {
   .video-bg, .skeleton-loader {
     display: none !important;
   }
-}
-```
-
----
+}```
 
 ## Plik: `_forms.scss`
 
@@ -7510,10 +8906,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 @use 'components/form-base' as *;
 @use 'components/form-groups' as *;
-@use 'components/form-advanced' as *;
-```
-
----
+@use 'components/form-advanced' as *;```
 
 ## Plik: `_grid.scss`
 
@@ -7681,10 +9074,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     .bento-grid-3 { grid-template-columns: repeat(3, 1fr); }
     .bento-grid-4 { grid-template-columns: repeat(4, 1fr); }
   }
-}
-```
-
----
+}```
 
 ## Plik: `_layout.scss`
 
@@ -7741,6 +9131,11 @@ a.list-group-item:hover, button.list-group-item:hover {
 .align-items-end { align-items: flex-end; }
 .align-items-center { align-items: center; }
 .align-items-stretch { align-items: stretch; }
+
+.align-self-start { align-self: flex-start; }
+.align-self-end { align-self: flex-end; }
+.align-self-center { align-self: center; }
+.align-self-stretch { align-self: stretch; }
 
 /* Odstępy (Gap) dla Flexboxa i Grida */
 .gap-0 { gap: 0; }
@@ -7813,9 +9208,34 @@ a.list-group-item:hover, button.list-group-item:hover {
 .fw-bold { font-weight: var(--fw-bold); }
 .fw-normal { font-weight: var(--fw-normal); }
 .fw-light { font-weight: var(--fw-light); }
-```
+/* =========================================
+   6. FADE BOTTOM (Zanikanie treści przy dolnej krawędzi)
+   =========================================
+   Opt-in dla dowolnego przewijanego kontenera (lub elementu, przez
+   który przewija się strona): gradient przykrywa dolną krawędź i
+   treść "zanika" zamiast być ucięta. Kolor gradientu MUSI odpowiadać
+   tłu elementu - steruj przez --fade-color (domyślnie --bg-surface).
+   Wysokość: --fade-height. Komponenty admina (.admin-sidebar,
+   .admin-main) mają własne integracje w module admin. */
+.fade-bottom {
+  --fade-height: 80px;
+  --fade-color: var(--bg-surface);
 
----
+  &::after {
+    content: '';
+    display: block;
+    position: sticky;
+    bottom: 0;
+    height: var(--fade-height);
+    /* Gradient nakłada się na treść, nie wydłuża przewijania */
+    margin-top: calc(var(--fade-height) * -1);
+    flex-shrink: 0;
+    background: linear-gradient(to top, var(--fade-color) 15%, transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
+}
+```
 
 ## Plik: `_mixins.scss`
 
@@ -7860,10 +9280,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     -webkit-appearance: none;
     margin: 0;
   }
-}
-```
-
----
+}```
 
 ## Plik: `_root.scss`
 
@@ -7877,6 +9294,13 @@ a.list-group-item:hover, button.list-group-item:hover {
    ZMIENNE CSS (CSS Custom Properties)
    ========================================= */
 :root {
+  /* Deklaracja schematu kolorów dla przeglądarki. Bez niej kolory
+     systemowe (CanvasText itd.) są ZAWSZE jasnoschematowe - np. natywny
+     <dialog> dostaje od UA color: CanvasText (czarny) i w dark mode
+     nagłówki (color: inherit) robią się czarne na ciemnej karcie.
+     Deklaracja naprawia też natywne scrollbary i kontrolki formularzy. */
+  color-scheme: light;
+
   /* Fonty z systemowym fallbackiem */
   --font-family-base: 'FontBody', system-ui, -apple-system, sans-serif;
   --font-family-heading: 'FontHeading', system-ui, -apple-system, sans-serif;
@@ -7905,11 +9329,19 @@ a.list-group-item:hover, button.list-group-item:hover {
   --text-muted: var(--secondary);
   --border-color: #E2E8F0;
   
-  /* ZMIENNE SIDEBARA ADMINA */
+  /* ZMIENNE SIDEBARA ADMINA.
+     UWAGA: sidebar jest ZAWSZE ciemny (--sidebar-bg nie zmienia się
+     w dark mode), więc jego jasne akcenty muszą być literalne — NIE
+     wolno tu używać var(--light) / var(--light-rgb), bo dark mode
+     odwraca te zmienne (jasny → ciemny) i tekst oraz podświetlenia
+     znikają na ciemnym tle sidebara. */
   --sidebar-bg: #102E4A;
   --sidebar-submenu-bg: #52677D;
   --sidebar-text: #94A3B8;
-  --sidebar-text-active: var(--light);
+  --sidebar-text-active: #F9F9F9;
+  /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
+     logo) — niezależne od motywu, w przeciwieństwie do --light-rgb */
+  --sidebar-highlight-rgb: 249, 249, 249;
   
   /* Rozmiary Sidebara */
   --sidebar-width-lg: 280px;
@@ -8021,40 +9453,121 @@ a.list-group-item:hover, button.list-group-item:hover {
    KOLORY - PALETA DARK MODE
    ========================================= */
 [data-theme="dark"] {
-  --primary: #3d8bfd;
-  --primary-hover: #6ea8fe;
-  --secondary: #adb5bd;
-  --secondary-hover: #c1c8d1;
-  --success: #75b798;
-  --success-hover: #a3cfbb;
-  --danger: #ea868f;
-  --danger-hover: #f1aeb5;
-  --warning: #ffda6a;
-  --warning-hover: #ffe69c;
-  --light: #212529;
-  --dark: #f8f9fa;
-  --info: #6edff6;
-  --info-hover: #9eeaf9;
+  /* Kolory systemowe przeglądarki (CanvasText, scrollbary, natywne
+     kontrolki, kalendarz date-pickera) podążają za ciemnym motywem */
+  color-scheme: dark;
 
-  --bg-body: #121212;
-  --bg-surface: #1e1e1e;
-  --text-main: #e9ecef;
-  --text-muted: #adb5bd;
-  --border-color: #333333;
-  --card-bg-subtle: rgba(var(--dark-rgb), 0.06);
+  /* 1. Kolory strukturalne (Odwrócenie) */
+  --bg-body: #0F172A; /* Bardzo ciemny granat/szary (nie czysty czarny!) */
+  --bg-surface: #1E293B; /* Nieco jaśniejszy od body (tworzy głębię kart) */
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border-color: #334155;
 
-  --primary-rgb: 61, 139, 253;
-  --secondary-rgb: 173, 181, 189;
-  --success-rgb: 117, 183, 152;
-  --danger-rgb: 234, 134, 143;
-  --dark-rgb: 248, 249, 250;
-  --info-rgb: 110, 223, 246;
-  --warning-rgb: 255, 218, 106;
-  --body-rgb: 18, 18, 18;
+  /* 2. Kolory semantyczne (Rozjaśnione i odsycone dla czytelności na ciemnym) */
+  --primary: #38BDF8;       /* Jaśniejszy niebieski */
+  --primary-hover: #7DD3FC;
+  
+  --secondary: #94A3B8;     /* Jaśniejszy szary */
+  --secondary-hover: #CBD5E1;
+  
+  --success: #34D399;       /* Pastelowy zielony */
+  --success-hover: #6EE7B7;
+  
+  --danger: #F87171;        /* Pastelowy czerwony (nie razi w oczy) */
+  --danger-hover: #FCA5A5;
+  
+  --warning: #FBBF24;       /* Jasny pomarańczowy/żółty */
+  --warning-hover: #FCD34D;
+  
+  --info: #38BDF8;
+  --info-hover: #7DD3FC;
+
+  /* Zmienne semantyczne odwrócone */
+  --light: #1E293B; /* W dark mode 'light' staje się ciemny */
+  --dark: #F8FAFC;  /* W dark mode 'dark' staje się jasny */
+
+  /* 3. Wartości RGB dla Dark Mode (Kluczowe dla klas -subtle i focus ringów!) */
+  --primary-rgb: 56, 189, 248;
+  --secondary-rgb: 148, 163, 184;
+  --success-rgb: 52, 211, 153;
+  --danger-rgb: 248, 113, 113;
+  --warning-rgb: 251, 191, 36;
+  --info-rgb: 56, 189, 248;
+  
+  --dark-rgb: 248, 250, 252; 
+  --light-rgb: 15, 23, 42;   
+  --body-rgb: 15, 23, 42;
+  --sidebar-rgb: 15, 23, 42;
+}```
+
+## Plik: `_share.scss`
+
+```scss
+/**
+ * molique - Widget Udostępniania (Share Bar)
+ * Pionowy pasek social-share przyklejony do krawędzi ekranu (poziomy
+ * i przyklejony do dołu na mobile). Kolory sieci są celowo brandowe
+ * (nie z palety molique), żeby ikony pozostały rozpoznawalne.
+ */
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.share-bar {
+  position: fixed;
+  top: 50%;
+  left: 20px;
+  z-index: var(--z-index-fixed);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.25);
+  padding: calc(var(--spacing-unit) * 1.25);
+  background: #fff;
+  border-radius: 50rem;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-50%);
+
+  @include mq(md, max) {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: row;
+    justify-content: center;
+    border-radius: 0;
+    transform: none;
+  }
+}
+
+.share-btn {
+  width: 40px;
+  height: 40px;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.125rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition-speed), filter var(--transition-speed);
+
+  &:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+  }
+
+  &[data-network='facebook'] { background-color: #1877f2; }
+  &[data-network='twitter'] { background-color: #000000; }
+  &[data-network='linkedin'] { background-color: #0a66c2; }
+  &[data-network='whatsapp'] { background-color: #25d366; }
+  &[data-network='native'] { background-color: var(--primary); }
 }
 ```
-
----
 
 ## Plik: `_shop.scss`
 
@@ -8089,7 +9602,11 @@ a.list-group-item:hover, button.list-group-item:hover {
   position: relative;
   display: block;
   overflow: hidden;
-  background-color: #fff;
+  /* Tło pod zdjęciem produktu podąża za motywem (w light mode to nadal
+     czysta biel) - literalne #fff dawało jaskrawobiały blok na ciemnej
+     karcie w dark mode, prześwitujący też pod półprzezroczystymi
+     placeholderami typu --card-bg-subtle. */
+  background-color: var(--bg-surface);
 }
 .product-image-wrapper img {
   width: 100%;
@@ -8298,9 +9815,23 @@ a.list-group-item:hover, button.list-group-item:hover {
   cursor: pointer;
   font-weight: var(--fw-bold);
   transition: background-color var(--transition-speed);
-  
+
   &:hover { background-color: var(--border-color); }
   &:focus { outline: none; }
+}
+
+/* Ukrycie natywnych strzałek (spinnera) niezależnie od klasy inputa -
+   kontrolka ma własne przyciski + / -, więc systemowy stepper by się
+   dublował (dotąd chowała je tylko klasa .qty-val). */
+.qty-input input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .qty-val {
@@ -8373,10 +9904,98 @@ a.list-group-item:hover, button.list-group-item:hover {
     border-color: var(--border-color) !important;
     box-shadow: none;
   }
+}```
+
+## Plik: `_speed-dial.scss`
+
+```scss
+/**
+ * molique - Widget Speed Dial (Floating Action Button)
+ * Pływający przycisk akcji, który po najechaniu (desktop) lub kliknięciu
+ * (dowolne urządzenie, dzięki :focus-within) rozwija dodatkowe opcje.
+ * Zero JavaScriptu.
+ */
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.speed-dial {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: var(--z-index-fixed);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+}
+
+.speed-dial-main {
+  width: 56px;
+  height: 56px;
+  min-height: 0;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  font-size: 1.75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform var(--transition-speed);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.speed-dial-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity var(--transition-speed), transform var(--transition-speed), visibility var(--transition-speed);
+}
+
+/* Rozwija się na hover CAŁEGO widgetu LUB gdy focus jest na którymkolwiek
+   jego dziecku (np. po kliknięciu .speed-dial-main) — działa więc też
+   na urządzeniach dotykowych i z klawiatury, bez ani linijki JS. */
+.speed-dial:hover .speed-dial-actions,
+.speed-dial:focus-within .speed-dial-actions {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.speed-dial-action {
+  width: 44px;
+  height: 44px;
+  min-height: 0;
+  border-radius: 50%;
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition-speed), background-color var(--transition-speed), color var(--transition-speed);
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: var(--primary);
+    color: #fff;
+  }
 }
 ```
-
----
 
 ## Plik: `_utilities-extended.scss`
 
@@ -8416,10 +10035,7 @@ $extended-breakpoints: ('sm': sm, 'lg': lg, 'xl': xl);
       }
     }
   }
-}
-```
-
----
+}```
 
 ## Plik: `_utilities.scss`
 
@@ -8434,10 +10050,7 @@ $extended-breakpoints: ('sm': sm, 'lg': lg, 'xl': xl);
 @use 'utilities/colors';
 @use 'utilities/borders';
 @use 'utilities/animations';
-@use 'utilities/helpers';
-```
-
----
+@use 'utilities/helpers';```
 
 ## Plik: `_variables.scss`
 
@@ -8466,8 +10079,4 @@ $breakpoint-xs-max: $breakpoint-sm - 1px;
 $breakpoint-sm-max: $breakpoint-md - 1px;
 $breakpoint-md-max: $breakpoint-lg - 1px;
 $breakpoint-lg-max: $breakpoint-xl - 1px;
-$breakpoint-xl-max: $breakpoint-xxl - 1px;
-```
-
----
-
+$breakpoint-xl-max: $breakpoint-xxl - 1px;```

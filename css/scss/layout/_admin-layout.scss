@@ -61,4 +61,34 @@
       box-shadow: var(--shadow-sm);
     }
   }
+
+  /* Zanikanie treści na dole głównej kolumny (opt-in: klasa .fade-bottom
+     z warstwy layout). .admin-main nie przewija się sam - przewija się
+     strona - a overflow-x:hidden czyni go scrollportem dla sticky,
+     przez co bazowy wariant nigdy by się nie "przykleił". Dlatego tu
+     gradient jest pozycjonowany fixed względem okna, wyrównany do
+     kolumny treści zmiennymi layoutu (działa też w trybie floating). */
+  .admin-main.fade-bottom {
+    --fade-color: var(--main-bg);
+
+    &::after {
+      position: fixed;
+      bottom: var(--layout-padding);
+      left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
+      right: var(--layout-padding);
+      height: var(--fade-height);
+      margin-top: 0;
+      border-radius: 0 0 var(--main-radius) var(--main-radius);
+    }
+
+    @media (max-width: 768px) {
+      &::after {
+        left: 0;
+        right: 0;
+        /* Nad mobilnym dolnym paskiem nawigacji (sidebar) */
+        bottom: calc(70px + env(safe-area-inset-bottom));
+        border-radius: 0;
+      }
+    }
+  }
 }

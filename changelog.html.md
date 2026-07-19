@@ -416,9 +416,39 @@
                   </li>
                   <li>
                     <strong>Dokumentacja:</strong> zaktualizowany spis
-                    klas, strony Typografia (docs + przykłady) oraz
-                    słowniki <code>llms.txt</code> i
-                    <code>molique.md</code>.
+                    klas (w tym brakujące dotąd offsety
+                    <code>.col-start-*</code> / <code>.offset-*</code>),
+                    strony Typografia (docs + przykłady) oraz słowniki
+                    <code>llms.txt</code> i <code>molique.md</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Fade Bottom - zanikanie treści przy dolnej krawędzi
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Klasa <code>.fade-bottom</code>:</strong>
+                    gradient przykrywający dolną krawędź przewijanego
+                    kontenera - treść "zanika" zamiast być ostro ucięta.
+                    Kolor przez <code>--fade-color</code> (domyślnie
+                    <code>--bg-surface</code>), wysokość przez
+                    <code>--fade-height</code> (80px). Efekt istniał
+                    kiedyś jako sztywny fragment nieładowanego pliku
+                    <code>_admin.scss</code> - teraz wraca jako oficjalna,
+                    opcjonalna klasa dostępna dla dowolnego elementu.
+                  </li>
+                  <li>
+                    <strong>Integracje admina:</strong> na
+                    <code>.admin-sidebar</code> gradient sam przyjmuje
+                    kolor tła sidebara i wyłącza się na mobile (Bottom
+                    Nav); na <code>.admin-main</code> działa wariant
+                    fixed wyrównany do kolumny treści zmiennymi layoutu
+                    (wspiera tryb <code>.admin-layout-floating</code>).
+                    Demo na stronie Layout Admina.
                   </li>
                 </ul>
               </div>
