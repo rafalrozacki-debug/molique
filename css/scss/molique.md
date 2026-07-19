@@ -177,8 +177,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `<details class="admin-nav-submenu">` > `<summary class="admin-nav-link">`
   + `.admin-nav-submenu-list` (z `.admin-nav-submenu-link`). Ten sam markup
   działa wszędzie dzięki natywnemu `<details>`: drzewko (szeroki sidebar),
-  pływający panel (drill-down `-sm`/`-md`) i dolna szuflada (bottom sheet) w
-  Bottom Nav na mobile.
+  a w wariantach wąskich (`-sm`/`-md`) oraz w Bottom Nav na mobile —
+  pełnoekranowy drill-down z paskiem „Cofnij". Aktywność ogarnia moduł
+  `js/modules/admin-nav.js` (auto-ładowany po `.admin-nav-submenu`):
+  podświetla aktywną pozycję z URL bez `[open]`, nie pozwala aktywnej
+  gałęzi auto-rozwinąć się na mobile i wyklucza wzajemnie otwarte submenu.
+  Aktywności NIE oznaczaj przez `open` (na mobile auto-otworzyłoby panel) —
+  moduł robi to z adresu.
 - **Admin Nav — Drop-up "Więcej" (mobile):** OSOBNY wzorzec od submenu, do
   przepełnienia paska. Checkbox Hack: `<input type="checkbox"
   class="mobile-more-toggle">` + `<label class="admin-nav-link

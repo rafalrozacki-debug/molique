@@ -67,6 +67,69 @@
    zostawało widoczne zamiast znikać pod panelem "Cofnij". */
 $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4);
 
+/* Transformacja tagu <summary> w pasek "Cofnij" (drill-down). Współdzielona
+   przez warianty wąskie na desktopie (-sm/-md) oraz mobilny drill-down w
+   Bottom Nav - mixin odpowiada TYLKO za wygląd (strzałka wstecz + napis
+   "Cofnij", kolory, hover/focus). Pozycjonowanie ustala kontekst wywołania. */
+@mixin admin-drilldown-back {
+  background-color: var(--sidebar-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  gap: 8px;
+  transition: background-color var(--transition-speed);
+  /* summary bywa oznaczone .is-active (kolor --btn-text-light, który w dark
+     mode robi się ciemny). Tło "Cofnij" to zawsze ciemny --sidebar-bg, więc
+     kolor MUSI wrócić do palety sidebara - inaczej strzałka i napis znikają
+     w ciemnym motywie. */
+  color: var(--sidebar-text);
+
+  /* Bez tego "Cofnij" nie reaguje na hover/focus. Przyciemniamy (nie
+     rozjaśniamy) - na ciemnym tle jasne podświetlenie wygląda obco. */
+  &:hover {
+    color: var(--sidebar-text-active);
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  &:focus-visible {
+    background-color: rgba(0, 0, 0, 0.15);
+    /* nadpisuje jasny pierścień fokusu z _base.scss (oparty o --primary) */
+    outline: none;
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Ukrywamy oryginalną ikonę pozycji */
+  > i, > svg { display: none !important; }
+
+  /* Rysujemy ikonę strzałki w lewo (Cofnij) */
+  &::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  /* Zmieniamy tekst pozycji na "Cofnij" */
+  .nav-text {
+    display: block !important;
+    /* bez tego .nav-text dziedziczy width:100% z wariantu -md i rozpycha się */
+    width: auto;
+    font-size: 0 !important; /* Ukrywa oryginalny tekst */
+    &::after {
+      content: 'Cofnij';
+      font-size: 0.875rem;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+  }
+}
+
 @layer components {
   .admin-nav {
     display: flex;
@@ -438,68 +501,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           width: 100%;
           height: 70px;
           z-index: 102;
-          background-color: var(--sidebar-bg);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 0;
-          flex-direction: row;
-          justify-content: center;
-          padding: 0;
-          gap: 8px;
-          transition: background-color var(--transition-speed);
-          /* FIX: summary bywa oznaczone .is-active (kolor --btn-text-light,
-             który w dark mode robi się ciemny). W drill-down tło to zawsze
-             ciemny --sidebar-bg, więc kolor MUSI wrócić do palety sidebara -
-             bez tego strzałka i napis "Cofnij" znikają w ciemnym motywie. */
-          color: var(--sidebar-text);
-
-          /* FIX: bez tego przycisk "Cofnij" nie dawał żadnej reakcji na hover/focus
-             i wyglądał jak martwy element. Przyciemniamy (nie rozjaśniamy) - na
-             ciemnym tle sidebara jasne podświetlenie wygląda jak obca, źle
-             dopasowana poświata. */
-          &:hover {
-            color: var(--sidebar-text-active);
-            background-color: rgba(0, 0, 0, 0.15);
-          }
-
-          &:focus-visible {
-            background-color: rgba(0, 0, 0, 0.15);
-            /* FIX: nadpisuje domyślny, jasny pierścień fokusu z _base.scss
-               (oparty o --primary) - na ciemnym tle sidebara wygląda jak jasna
-               poświata zamiast dyskretnego wskaźnika fokusu */
-            outline: none;
-            box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
-          }
-
-          /* Ukrywamy oryginalną ikonę */
-          > i, > svg { display: none !important; }
-
-          /* Rysujemy ikonę strzałki w lewo (Cofnij) */
-          &::before {
-            content: '';
-            display: block;
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-            background-color: currentColor;
-            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center / contain;
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center / contain;
-          }
-
-          /* Zmieniamy tekst na "Cofnij" za pomocą pseudo-elementu */
-          .nav-text {
-            display: block !important;
-            /* FIX: bez tego .nav-text dziedziczył width:100% z wariantu -md
-               (ikona nad tekstem), przez co przycisk "Cofnij" wyglądał na
-               niewyśrodkowany - tekst rozpychał się na całą dostępną szerokość */
-            width: auto;
-            font-size: 0 !important; /* Ukrywa oryginalny tekst */
-            &::after {
-              content: 'Cofnij';
-              font-size: 0.875rem;
-              text-transform: none;
-              letter-spacing: normal;
-            }
-          }
+          @include admin-drilldown-back;
         }
 
         /* 3. Lista linków submenu - zaczyna się pod przyciskiem Cofnij (który jest pod logo) */
@@ -567,17 +569,18 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 
   /* =========================================
-     MOBILE: SUBMENU JAKO DOLNA SZUFLADA (Bottom Sheet)
+     MOBILE: SUBMENU JAKO DRILL-DOWN (jak -sm/-md)
      =========================================
-     W poziomym Bottom Nav drzewko linków nie ma sensu - zamiast chować
-     submenu, otwieramy jego listę jako wysuwaną od dołu szufladę. Bazujemy
-     na natywnym stanie [open] elementu <details>, więc TEN SAM markup
-     działa wszędzie: drzewko (szeroki sidebar), drill-down (-sm/-md) oraz
-     bottom sheet (mobile) - bez JS i bez osobnego wariantu markupu. */
+     W poziomym Bottom Nav drzewko nie ma sensu. Klik w trigger podmienia
+     widok na pełnoekranowy panel: <summary> staje się paskiem "Cofnij" na
+     górze ekranu, a lista linków wypełnia resztę - identycznie jak drill-down
+     w wariantach -sm/-md, tylko jako mobilna nakładka. Natywny <details>
+     odpowiada za samo otwieranie; moduł admin-nav.js obsługuje tylko
+     aktywność z URL i wzajemne wykluczanie otwartych submenu. */
   @media (max-width: 768px) {
     .admin-nav-submenu {
       position: static;
-      /* details rozciąga swój <summary> (trigger) na cały kafelek paska */
+      /* details rozciąga swój <summary> (trigger) na kafelek paska */
       display: flex;
 
       > summary {
@@ -586,55 +589,70 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
         &::after { display: none; }
       }
 
-      /* Lista submenu: szuflada przyklejona tuż nad dolnym paskiem (70px) */
-      > .admin-nav-submenu-list {
-        display: flex !important; /* nadpisuje domyślny stan drzewka */
-        flex-direction: column;
-        gap: calc(var(--spacing-unit) * 1);
-        margin: 0;
+      &[open] {
+        /* 1. <summary> -> pasek "Cofnij" przyklejony do góry ekranu */
+        > summary {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 56px;
+          z-index: 1051; /* nad panelem i nad dolnym paskiem (1040) */
+          @include admin-drilldown-back;
+          animation: adminDrilldownBar 0.2s ease both;
+        }
 
-        position: fixed;
-        bottom: calc(70px + env(safe-area-inset-bottom));
-        left: 0;
-        right: 0;
-        width: 100%;
-        max-height: calc(100dvh - 70px - (var(--spacing-unit) * 4));
-        overflow-y: auto;
+        /* 2. Lista -> pełnoekranowy panel pod paskiem "Cofnij" */
+        > .admin-nav-submenu-list {
+          display: flex !important; /* nadpisuje domyślny stan drzewka */
+          flex-direction: column;
+          gap: calc(var(--spacing-unit) * 0.5);
+          margin: 0;
 
-        background-color: var(--sidebar-bg);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        border-top-left-radius: var(--border-radius-lg, 24px);
-        border-top-right-radius: var(--border-radius-lg, 24px);
-        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2)
-          calc(var(--spacing-unit) * 4);
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-        z-index: 100;
+          position: fixed;
+          top: 56px;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 1050;
+          background-color: var(--sidebar-bg);
+          padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2)
+            calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
+          overflow-y: auto;
+          animation: adminDrilldownPanel 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 
-        /* Domyślnie schowana pod ekranem (details zamknięty) */
-        visibility: hidden;
-        transform: translateY(100%);
-        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
-          visibility 0.3s;
-
-        /* Reset pionowej linii drzewka */
-        &::before { display: none; }
-
-        /* Linki na pełną szerokość, bez poziomych kreseczek drzewka */
-        .admin-nav-submenu-link {
-          justify-content: flex-start;
-          text-align: left;
-          padding: calc(var(--spacing-unit) * 2);
-          min-height: 48px;
-          font-size: 1rem;
+          /* Reset pionowej linii drzewka */
           &::before { display: none; }
+
+          /* Linki na pełną szerokość, bez poziomych kreseczek drzewka */
+          .admin-nav-submenu-link {
+            justify-content: flex-start;
+            text-align: left;
+            padding: calc(var(--spacing-unit) * 2);
+            min-height: 48px;
+            font-size: 1rem;
+            &::before { display: none; }
+          }
         }
       }
+    }
 
-      /* Stan otwarty (natywny <details>) - wsuwamy szufladę */
-      &[open] > .admin-nav-submenu-list {
-        visibility: visible;
-        transform: translateY(0);
-      }
+    /* Wejście drill-downu (GPU: wyłącznie opacity + transform) */
+    @keyframes adminDrilldownBar {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes adminDrilldownPanel {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  /* A11y: bez animacji dla użytkowników z prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .admin-nav-submenu[open] > summary,
+    .admin-nav-submenu[open] > .admin-nav-submenu-list {
+      animation: none;
     }
   }
 

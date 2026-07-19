@@ -495,20 +495,32 @@
                   <span class="badge badge-warning text-dark mx-2 text-3"
                     >Poprawki</span
                   >
-                  Submenu admina otwiera się na mobile (Bottom Sheet)
+                  Submenu admina jako drill-down na mobile (z „Cofnij")
                 </h3>
                 <ul class="text-secondary m-0">
                   <li>
-                    <strong>Submenu działa w Bottom Nav:</strong> dotąd
+                    <strong>Drill-down zamiast martwego submenu:</strong> dotąd
                     <code>.admin-nav-submenu</code> było na mobile całkowicie
                     ukrywane (<code>display: none</code>) - w poziomym pasku
-                    dolnym nie dało się go rozwinąć. Teraz to samo
-                    <code>&lt;details&gt;</code> otwiera swoją listę jako
-                    wysuwaną od dołu szufladę (bottom sheet) tuż nad paskiem.
-                    Jeden markup działa wszędzie: drzewko (szeroki sidebar),
-                    drill-down (<code>-sm</code>/<code>-md</code>) i bottom
-                    sheet (mobile) - bez JS, na natywnym stanie
-                    <code>[open]</code>.
+                    dolnym nie dało się go rozwinąć. Teraz klik w trigger
+                    podmienia widok na pełnoekranowy panel: <code>&lt;summary&gt;</code>
+                    staje się paskiem <strong>Cofnij</strong> na górze, a lista
+                    linków wypełnia resztę - identycznie jak drill-down w
+                    wariantach <code>-sm</code>/<code>-md</code>. Transformacja
+                    „Cofnij" wydzielona do wspólnego mixinu
+                    (<code>admin-drilldown-back</code>), więc desktop i mobile
+                    dzielą jeden kod. Ten sam markup działa wszędzie.
+                  </li>
+                  <li>
+                    <strong>Nowy moduł <code>admin-nav.js</code>:</strong>
+                    odrobina vanilla JS wokół natywnego <code>&lt;details&gt;</code>
+                    (auto-ładowany po <code>.admin-nav-submenu</code>).
+                    Podświetla aktywną pozycję z adresu URL i jej gałąź
+                    (<code>.is-active</code>) - bez potrzeby
+                    <code>[open]</code>, który na mobile auto-otwierał panel po
+                    wejściu na podstronę. Dodatkowo: wzajemne wykluczanie
+                    otwartych submenu, zamykanie na <kbd>Esc</kbd> i przy
+                    zmianie breakpointu.
                   </li>
                   <li>
                     <strong>Doprecyzowany drop-up "Więcej":</strong> słowniki i

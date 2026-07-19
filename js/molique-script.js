@@ -266,7 +266,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: '.share-btn', file: 'js/modules/share.js', init: 'initShare' },
     { selectors: '.before-after-slider', file: 'js/modules/before-after.js', init: 'initBeforeAfter' },
     { selectors: 'input[data-search-target]', file: 'js/modules/table-search.js', init: 'initTableSearch' },
-    { selectors: '.popover-context', file: 'js/modules/context-menu.js', init: 'initContextMenu' }
+    { selectors: '.popover-context', file: 'js/modules/context-menu.js', init: 'initContextMenu' },
+    { selectors: '.admin-nav-submenu', file: 'js/modules/admin-nav.js', init: 'initAdminNav' }
   ];
 
   dynamicModules.forEach(module => {
