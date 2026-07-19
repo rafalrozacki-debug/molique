@@ -1,0 +1,196 @@
+/**
+ * molique - Zmienne Root i Fonty
+ * Architektura: Płynna typografia, B2B Target Size, Dark Mode Ready
+ */
+
+/* =========================================
+   ZMIENNE CSS (CSS Custom Properties)
+   ========================================= */
+:root {
+  /* Fonty z systemowym fallbackiem */
+  --font-family-base: 'FontBody', system-ui, -apple-system, sans-serif;
+  --font-family-heading: 'FontHeading', system-ui, -apple-system, sans-serif;
+
+  /* NOWA PALETA BAZOWA (Nowoczesne B2B) */
+  --primary: #0284C7;
+  --primary-hover: #0369A1;
+  --light: #F9F9F9;
+  --dark: #1E293B;
+  
+  --secondary: #64748B;
+  --secondary-hover: #475569;
+  --success: #10B981;
+  --success-hover: #059669;
+  --danger: #EF4444;
+  --danger-hover: #DC2626;
+  --warning: #F59E0B;
+  --warning-hover: #D97706;
+  --info: #0EA5E9;
+  --info-hover: #0284C7;
+
+  /* Kolory tła i tekstu */
+  --bg-body: #F1F5F9; /* Delikatny szary podkład pod panele */
+  --bg-surface: #FFFFFF; /* Czysta biel dla kart i głównych kontenerów */
+  --text-main: var(--dark);
+  --text-muted: var(--secondary);
+  --border-color: #E2E8F0;
+  
+  /* ZMIENNE SIDEBARA ADMINA */
+  --sidebar-bg: #102E4A;
+  --sidebar-submenu-bg: #52677D;
+  --sidebar-text: #94A3B8;
+  --sidebar-text-active: var(--light);
+  
+  /* Rozmiary Sidebara */
+  --sidebar-width-lg: 280px;
+  --sidebar-width-md: 100px;
+  --sidebar-width-sm: 72px;
+
+  /* Kolory RGB do przezroczystości (Muszą odpowiadać kolorom HEX wyżej!) */
+  --primary-rgb: 2, 132, 199;     /* #0284C7 */
+  --secondary-rgb: 100, 116, 139; /* #64748B */
+  --success-rgb: 16, 185, 129;    /* #10B981 */
+  --danger-rgb: 239, 68, 68;      /* #EF4444 */
+  --warning-rgb: 245, 158, 11;    /* #F59E0B */
+  --info-rgb: 14, 165, 233;       /* #0EA5E9 */
+  
+  --dark-rgb: 30, 41, 59;         /* #1E293B */
+  --light-rgb: 249, 249, 249;     /* #F9F9F9 */
+  --body-rgb: 241, 245, 249;      /* #F1F5F9 */
+  --sidebar-rgb: 16, 46, 74;      /* #102E4A */
+
+  --btn-text-light: var(--light);
+  --btn-text-dark: var(--dark);
+  --card-bg-subtle: rgba(var(--dark-rgb), 0.03);
+
+  /* Spacing (1 jednostka = 8px) */
+  --spacing-unit: 8px;
+
+  /* Grid */
+  --grid-gap: calc(var(--spacing-unit) * 3);
+
+  /* Inne */
+  --border-radius: 8px;
+  --border-radius-lg: 16px;
+  --transition-speed: 0.2s;
+
+  /* Baza: 14px na mobile, rośnie do max 15px na desktopie. 
+     Idealne do gęstych interfejsów SaaS/CRM. */
+  --text-base-size: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  
+  /* Skala dla nagłówków (Major Third - 1.25) 
+     Przeliczona od nowej, mniejszej bazy, żeby zachować proporcje */
+  
+  /* H1: Główne tytuły stron */
+  --h1-size: clamp(2rem, 2vw + 1rem, 2.5rem);
+  
+  /* H2: Tytuły sekcji */
+  --h2-size: clamp(1.6rem, 1.5vw + 0.8rem, 2rem);
+  
+  /* H3: Tytuły dużych kart/widgetów */
+  --h3-size: clamp(1.28rem, 1vw + 0.8rem, 1.6rem);
+  
+  /* H4: Standardowe tytuły kart */
+  --h4-size: clamp(1.02rem, 0.8vw + 0.7rem, 1.28rem);
+  
+  /* H5: Wyróżniony tekst, etykiety */
+  --h5-size: clamp(0.9rem, 0.5vw + 0.7rem, 1.02rem);
+  
+  /* H6: Równe tekstowi bazowemu, ale pogrubione */
+  --h6-size: var(--text-base-size);
+
+  /* Skala dla małych tekstów (np. stopki, metadane, tagi) */
+  --text-sm: 0.8125rem; /* 13px */
+  --text-xs: 0.75rem;   /* 12px */
+
+  /* =========================================
+     B2B TARGET SIZE (WCAG 2.2 AAA)
+     ========================================= */
+  --target-size-min: 44px;
+  --hamburger-size: var(--target-size-min);
+  --hamburger-bar-width: 24px;
+  --hamburger-bar-height: 2px;
+
+  /* Rozmiary kontenerów i komponentów */
+  --container-max-width: 1200px;
+  --post-thumb-size: 60px;
+
+  /* Cienie i Poświaty */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+  --focus-ring-width: 3px;
+  --focus-ring-color: rgba(var(--primary-rgb), 0.25);
+  --focus-ring-radius: var(--border-radius);
+
+  /* Layout */
+  --scroll-padding: 80px;  
+
+  /* Z-INDEX (Architektura warstw) */
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-toast: 1070;
+  --z-index-tooltip: 1080;
+  --z-index-skip-link: 9999;
+
+  /* WAGI FONTÓW */
+  --fw-light: 300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 900;
+}
+
+/* =========================================
+   KOLORY - PALETA DARK MODE
+   ========================================= */
+[data-theme="dark"] {
+  /* 1. Kolory strukturalne (Odwrócenie) */
+  --bg-body: #0F172A; /* Bardzo ciemny granat/szary (nie czysty czarny!) */
+  --bg-surface: #1E293B; /* Nieco jaśniejszy od body (tworzy głębię kart) */
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border-color: #334155;
+
+  /* 2. Kolory semantyczne (Rozjaśnione i odsycone dla czytelności na ciemnym) */
+  --primary: #38BDF8;       /* Jaśniejszy niebieski */
+  --primary-hover: #7DD3FC;
+  
+  --secondary: #94A3B8;     /* Jaśniejszy szary */
+  --secondary-hover: #CBD5E1;
+  
+  --success: #34D399;       /* Pastelowy zielony */
+  --success-hover: #6EE7B7;
+  
+  --danger: #F87171;        /* Pastelowy czerwony (nie razi w oczy) */
+  --danger-hover: #FCA5A5;
+  
+  --warning: #FBBF24;       /* Jasny pomarańczowy/żółty */
+  --warning-hover: #FCD34D;
+  
+  --info: #38BDF8;
+  --info-hover: #7DD3FC;
+
+  /* Zmienne semantyczne odwrócone */
+  --light: #1E293B; /* W dark mode 'light' staje się ciemny */
+  --dark: #F8FAFC;  /* W dark mode 'dark' staje się jasny */
+
+  /* 3. Wartości RGB dla Dark Mode (Kluczowe dla klas -subtle i focus ringów!) */
+  --primary-rgb: 56, 189, 248;
+  --secondary-rgb: 148, 163, 184;
+  --success-rgb: 52, 211, 153;
+  --danger-rgb: 248, 113, 113;
+  --warning-rgb: 251, 191, 36;
+  --info-rgb: 56, 189, 248;
+  
+  --dark-rgb: 248, 250, 252; 
+  --light-rgb: 15, 23, 42;   
+  --body-rgb: 15, 23, 42;
+  --sidebar-rgb: 15, 23, 42;
+}

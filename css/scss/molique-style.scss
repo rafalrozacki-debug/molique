@@ -1,0 +1,38 @@
+@use "sass:meta";
+
+// Definicja kolejności warstw
+@layer reset, base, layout, components, modules, utilities;
+
+// Wstrzykiwanie kodu bezpośrednio do warstw
+@layer reset {
+  @include meta.load-css("root"); // Tylko root ma fizyczny CSS (:root)
+}
+
+@layer base {
+  @include meta.load-css("base");
+  @include meta.load-css("a11y");
+  @include meta.load-css("eink");
+}
+
+@layer layout {
+  @include meta.load-css("grid");
+  @include meta.load-css("layout");
+}
+
+@layer components {
+  @include meta.load-css("buttons");
+  @include meta.load-css("forms");
+  @include meta.load-css("components");
+}
+
+@layer modules {
+  // Moduły opcjonalne (zakomentowane, bo kompilujemy je do osobnych plików!)
+  // @include meta.load-css("shop");
+  // @include meta.load-css("blog");
+  // @include meta.load-css("admin");
+}
+
+@layer utilities {
+  @include meta.load-css("utilities");
+  // @use 'utilities-extended'; 
+}

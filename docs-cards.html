@@ -1,0 +1,610 @@
+﻿<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karty - molique Docs</title>
+
+    <link rel="stylesheet" href="css/molique-style.css" />
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <!-- PASEK BOCZNY -->
+      <aside class="admin-sidebar">
+        <a href="index.html" class="admin-brand admin-logo-compact">
+          molique<span class="text-primary">.</span>
+        </a>
+
+        <ul class="admin-nav">
+          <li class="mobile-only-nav-item">
+            <a href="docs.html" class="admin-nav-link"><span class="nav-text">Start</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-layout.html" class="admin-nav-link"><span class="nav-text">Layout</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-buttons.html" class="admin-nav-link"><span class="nav-text">Komponenty</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-charts.html" class="admin-nav-link"><span class="nav-text">Wykresy</span></a>
+          </li>
+
+          <input type="checkbox" id="docs-mobile-more" class="mobile-more-toggle" />
+          <label for="docs-mobile-more" class="admin-nav-link mobile-more-label">
+            <span class="nav-text">Więcej</span>
+          </label>
+
+          <div class="admin-nav-dropdown-menu">
+          <div class="docs-nav-title">Wprowadzenie</div>
+          <li>
+            <a href="docs.html" class="admin-nav-link">Getting Started</a>
+          </li>
+          <li>
+            <a href="docs-roadmap.html" class="admin-nav-link"
+              >Roadmapa (Plany)</a
+            >
+          </li>
+          <li>
+            <a href="docs-classes.html" class="admin-nav-link"
+              >Spis Klas (Cheat Sheet)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Layout & Podstawy</div>
+          <li>
+            <a href="docs-layout.html" class="admin-nav-link">Grid & Layout</a>
+          </li>
+          <li>
+            <a href="docs-navbar.html" class="admin-nav-link">Nawigacja & Menu</a>
+          </li>
+          <li>
+            <a href="docs-sections.html" class="admin-nav-link"
+              >Sekcje, Hero & Timeline</a
+            >
+          </li>
+          <li>
+            <a href="docs-typography.html" class="admin-nav-link"
+              >Typografia & Kolory</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Komponenty UI</div>
+          <li>
+            <a href="docs-buttons.html" class="admin-nav-link"
+              >Przyciski & Badges</a
+            >
+          </li>
+          <li>
+            <a href="docs-cards.html" class="admin-nav-link is-active"
+              >Karty & Tabele</a
+            >
+          </li>
+          <li>
+            <a href="docs-interactive.html" class="admin-nav-link"
+              >Modale, Tabs & Akordeony</a
+            >
+          </li>
+          <li>
+            <a href="docs-components-extra.html" class="admin-nav-link"
+              >Karuzele & Lightbox</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Wykresy & Dane</div>
+          <li>
+            <a href="docs-charts.html" class="admin-nav-link"
+              >Wykresy (Data Viz)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Formularze</div>
+          <li>
+            <a href="docs-forms.html" class="admin-nav-link"
+              >Inputy & Walidacja</a
+            >
+          </li>
+          <li>
+            <a href="docs-select.html" class="admin-nav-link"
+              >Searchable Select & Switche</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Efekty & Widgety</div>
+          <li>
+            <a href="docs-animations.html" class="admin-nav-link"
+              >Animacje & Mikrointerakcje</a
+            >
+          </li>
+          <li>
+            <a href="docs-widgets.html" class="admin-nav-link"
+              >Widgety (Speed Dial, Share)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Moduły zaawansowane</div>
+          <li>
+            <a href="docs-eshop.html" class="admin-nav-link"
+              >Sklep Internetowy</a
+            >
+          </li>
+          <li>
+            <a href="docs-blog.html" class="admin-nav-link">Blog & Artykuły</a>
+          </li>
+          <li>
+            <a href="docs-admin.html" class="admin-nav-link"
+              >Panel Admina (Dashboard)</a
+            >
+          </li>
+        </div>
+        </ul>
+      </aside>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-10 fw-black mb-3">Karty (Cards)</h1>
+            <p class="text-4 text-muted">
+              Karty w molique są zbudowane na Flexboxie. Oznacza to, że jeśli
+              umieścisz je w Gridzie, zawsze będą miały równą wysokość, a ich
+              stopki (footers) automatycznie wyrównają się do samego dołu.
+            </p>
+          </div>
+
+          <!-- SEKCJA 1: BAZOWA KARTA -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">1. Klasyczna Karta</h2>
+            <p class="text-muted mb-4">
+              Składa się z kontenera <code>.card</code> oraz opcjonalnych
+              elementów: <code>.card-header</code>, <code>.card-body</code> i
+              <code>.card-footer</code>.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Architektura Flexbox:</h5>
+              <p class="text-2 text-muted m-0">
+                Karty w molique są zbudowane na module Flexbox. Jeśli umieścisz
+                kilka kart wewnątrz siatki (np. <code>.grid-auto</code>), zawsze
+                będą miały równą wysokość. Dodatkowo, klasa
+                <code>.card-footer</code> posiada właściwość
+                <code>margin-top: auto</code>, dzięki czemu stopki we wszystkich
+                kartach w rzędzie automatycznie wyrównają się do samego dołu,
+                niezależnie od ilości tekstu w <code>.card-body</code>.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100 gap-4">
+                  <div class="card shadow-sm">
+                    <div class="card-header">Tytuł Karty</div>
+                    <div class="card-body">
+                      <p class="m-0">
+                        To jest standardowa karta. Flexbox wewnątrz dba o to, by
+                        treść ładnie się układała.
+                      </p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                      <button class="btn btn-primary btn-sm">Akcja</button>
+                    </div>
+                  </div>
+
+                  <div class="card shadow-sm">
+                    <div class="card-header">Karta z długim tekstem</div>
+                    <div class="card-body">
+                      <p class="m-0">
+                        Ta karta ma więcej tekstu. Zauważ, że stopka w karcie
+                        obok automatycznie zjechała w dół, aby obie karty miały
+                        identyczną wysokość w Gridzie!
+                      </p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                      <button class="btn btn-primary btn-sm">Akcja</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="card shadow-sm"&gt;
+  &lt;div class="card-header"&gt;Tytuł Karty&lt;/div&gt;
+  &lt;div class="card-body"&gt;
+    &lt;p&gt;Treść karty...&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="card-footer"&gt;
+    &lt;button class="btn btn-primary"&gt;Akcja&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 2: FEATURED BOX -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">2. Featured Box</h2>
+            <p class="text-muted mb-4">
+              Specjalny wariant karty przeznaczony do prezentacji cech produktu
+              lub usług. Posiada grubą górną ramkę i miejsce na ikonę.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Modyfikacje wizualne:</h5>
+              <p class="text-2 text-muted m-0">
+                Domyślnie górna ramka przyjmuje kolor główny (Primary). Możesz
+                to łatwo zmienić, nadpisując kolor obramowania w atrybucie
+                style:
+                <code>style="border-top-color: var(--success);"</code>.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100 gap-4">
+                  <div class="featured-box">
+                    <div class="featured-box-icon">🚀</div>
+                    <h4 class="text-5 fw-bold mb-2">Wydajność</h4>
+                    <p class="text-muted m-0">
+                      Framework jest ekstremalnie lekki, co przekłada się na
+                      błyskawiczne ładowanie stron.
+                    </p>
+                  </div>
+
+                  <div
+                    class="featured-box"
+                    style="border-top-color: var(--success)"
+                  >
+                    <div class="featured-box-icon bg-success text-white">✓</div>
+                    <h4 class="text-5 fw-bold mb-2">Skuteczność</h4>
+                    <p class="text-muted m-0">
+                      Zbudujesz interfejs 3x szybciej niż pisząc własny CSS od
+                      zera.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="featured-box"&gt;
+  &lt;div class="featured-box-icon"&gt;🚀&lt;/div&gt;
+  &lt;h4 class="fw-bold"&gt;Wydajność&lt;/h4&gt;
+  &lt;p class="text-muted"&gt;Opis cechy...&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 3: KARTY Z OBRAZEM (THUMB INFO) -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">3. Karty Obrazkowe (Thumb Info)</h2>
+            <p class="text-muted mb-4">
+              Karty z tłem obrazkowym i płynnie pojawiającą się nakładką
+              (overlay) po najechaniu myszką. Idealne do portfolio i galerii.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Dostępne warianty układu:</h5>
+              <ul
+                class="list-unstyled text-2 text-muted m-0 d-flex flex-column gap-2"
+              >
+                <li>
+                  <code>.thumb-info-center</code> — Tekst wyśrodkowany na
+                  pełnym, ciemnym tle.
+                </li>
+                <li>
+                  <code>.thumb-info-bottom</code> — Tekst wyrównany do dołu na
+                  tle gradientowym (od czerni do przezroczystości).
+                </li>
+                <li>
+                  <code>.thumb-info-light</code> — Jasna nakładka (85% bieli) z
+                  ciemnym tekstem.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100 gap-4">
+                  <!-- Wariant Center -->
+                  <a href="#" class="thumb-info thumb-info-center shadow-sm">
+                    <img
+                      src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600"
+                      alt="Projekt"
+                    />
+                    <div class="thumb-info-wrapper">
+                      <span class="text-9 mb-2">🔍</span>
+                      <h4 class="thumb-info-title text-4 fw-bold">
+                        Powiększ zdjęcie
+                      </h4>
+                    </div>
+                  </a>
+
+                  <!-- Wariant Bottom -->
+                  <a href="#" class="thumb-info thumb-info-bottom shadow-sm">
+                    <img
+                      src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600"
+                      alt="Projekt"
+                    />
+                    <div class="thumb-info-wrapper">
+                      <span class="badge badge-primary mb-2 align-self-start"
+                        >Nowość</span
+                      >
+                      <h4 class="thumb-info-title text-5 fw-bold m-0">
+                        Aplikacja Mobilna
+                      </h4>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Wariant z tekstem na środku --&gt;
+&lt;a href="#" class="thumb-info thumb-info-center"&gt;
+  &lt;img src="image.jpg" alt="Foto"&gt;
+  &lt;div class="thumb-info-wrapper"&gt;
+    &lt;h4 class="thumb-info-title"&gt;Tytuł&lt;/h4&gt;
+  &lt;/div&gt;
+&lt;/a&gt;
+
+&lt;!-- Wariant z tekstem na dole (gradient) --&gt;
+&lt;a href="#" class="thumb-info thumb-info-bottom"&gt;
+  &lt;img src="image.jpg" alt="Foto"&gt;
+  &lt;div class="thumb-info-wrapper"&gt;
+    &lt;h4 class="thumb-info-title"&gt;Tytuł&lt;/h4&gt;
+  &lt;/div&gt;
+&lt;/a&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 4: KARTY INTERAKTYWNE (GPU) -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">4. Karty Interaktywne (GPU)</h2>
+            <p class="text-muted mb-4">
+              Połącz klasę <code>.card</code> z naszymi nowymi narzędziami
+              animacji, aby uzyskać efekty Premium bez obciążania procesora.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Wymagania techniczne:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Klasy <code>.hover-spring</code> oraz
+                  <code>.hover-gpu-shadow</code> działają w 100% w CSS i mogą
+                  być łączone na jednym elemencie.
+                </li>
+                <li>
+                  Klasa <code>.tilt-card</code> wymaga załadowania skryptu
+                  <code>js/modules/tilt.js</code> oraz jego inicjalizacji.
+                  Skrypt automatycznie wyłącza efekt na urządzeniach dotykowych,
+                  aby oszczędzać baterię.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100 gap-4">
+                  <div
+                    class="card p-4 text-center hover-gpu-shadow hover-spring cursor-pointer"
+                  >
+                    <div class="text-8 mb-2">🪀</div>
+                    <h4 class="fw-bold">Spring Hover</h4>
+                    <p class="text-muted text-2 m-0">
+                      .hover-spring + .hover-gpu-shadow
+                    </p>
+                  </div>
+
+                  <div
+                    class="card p-4 text-center tilt-card cursor-pointer bg-dark text-white"
+                  >
+                    <div class="text-8 mb-2">🧊</div>
+                    <h4 class="fw-bold">3D Tilt (JS)</h4>
+                    <p class="text-white opacity-50 text-2 m-0">.tilt-card</p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Karta sprężysta z cieniem GPU --&gt;
+&lt;div class="card hover-gpu-shadow hover-spring"&gt;...&lt;/div&gt;
+
+&lt;!-- Karta z efektem wychylenia 3D (wymaga tilt.js) --&gt;
+&lt;div class="card tilt-card"&gt;...&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 5: REFERENCJE (TESTIMONIALS) -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">5. Referencje (Testimonials)</h2>
+            <p class="text-muted mb-4">
+              Gotowy komponent do prezentacji opinii klientów. Zawiera miejsce
+              na ocenę gwiazdkową, cytat oraz awatar autora.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Pro-Tip: Slider Referencji</h5>
+              <p class="text-2 text-muted m-0">
+                Pojedyncze referencje świetnie wyglądają w siatce, ale jeszcze
+                lepiej sprawdzają się jako karuzela. Wystarczy, że umieścisz
+                komponent <code>.testimonial</code> wewnątrz
+                <code>.carousel-slide</code>, a otrzymasz w pełni responsywny,
+                dotykowy slider opinii klientów!
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div
+                  class="testimonial mx-auto shadow-sm"
+                  style="max-width: 600px"
+                >
+                  <div class="testimonial-stars">★★★★★</div>
+                  <p class="testimonial-quote">
+                    "Molique całkowicie zmieniło sposób, w jaki buduję strony
+                    internetowe. Jest lżejszy od Bootstrapa i daje więcej
+                    kontroli."
+                  </p>
+                  <div class="testimonial-author">
+                    <img
+                      src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop"
+                      class="testimonial-avatar"
+                      alt="Klient"
+                    />
+                    <div class="text-start">
+                      <p class="testimonial-name">Anna Nowak</p>
+                      <p class="testimonial-role">CEO r-sample</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="testimonial"&gt;
+  &lt;div class="testimonial-stars"&gt;★★★★★&lt;/div&gt;
+  &lt;p class="testimonial-quote"&gt;"Świetny framework!"&lt;/p&gt;
+  
+  &lt;div class="testimonial-author"&gt;
+    &lt;img src="avatar.jpg" class="testimonial-avatar" alt="Autor"&gt;
+    &lt;div class="text-start"&gt;
+      &lt;p class="testimonial-name"&gt;Jan Kowalski&lt;/p&gt;
+      &lt;p class="testimonial-role"&gt;Dyrektor&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 6: TABELE CENOWE (PRICING TABLES) -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              6. Tabele Cenowe (Pricing Tables)
+            </h2>
+            <p class="text-muted mb-4">
+              Kompletny komponent do prezentacji pakietów i cenników.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Opcje komponentu:</h5>
+              <ul
+                class="list-unstyled text-2 text-muted m-0 d-flex flex-column gap-2"
+              >
+                <li>
+                  <strong>Wyróżnienie:</strong> Dodaj klasę
+                  <code>.is-featured</code> do głównego kontenera, aby
+                  powiększyć kartę i automatycznie dodać tasiemkę "Popularne".
+                </li>
+                <li>
+                  <strong>Niedostępne funkcje:</strong> Dodaj klasę
+                  <code>.is-disabled</code> do elementu
+                  <code>&lt;li&gt;</code> na liście funkcji, aby go przekreślić
+                  i wyszarzyć.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div
+                  class="grid-cols-1 grid-md-cols-3 gap-4 align-items-center w-100"
+                >
+                  <!-- Pakiet Basic -->
+                  <div class="pricing-table">
+                    <div class="pricing-header">
+                      <div class="pricing-title">Basic</div>
+                      <div class="pricing-price">49<span>zł / msc</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                      <li>1 Projekt</li>
+                      <li>5 GB Powierzchni</li>
+                      <li class="is-disabled">Wsparcie 24/7</li>
+                    </ul>
+                    <button class="btn btn-outline-primary w-100">
+                      Wybierz
+                    </button>
+                  </div>
+
+                  <!-- Pakiet Pro (Wyróżniony) -->
+                  <div class="pricing-table is-featured">
+                    <div class="pricing-header">
+                      <div class="pricing-title text-primary">Pro</div>
+                      <div class="pricing-price">99<span>zł / msc</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                      <li>Nielimitowane Projekty</li>
+                      <li>50 GB Powierzchni</li>
+                      <li>Wsparcie 24/7</li>
+                    </ul>
+                    <button class="btn btn-primary w-100 hover-spring">
+                      Wybierz Pro
+                    </button>
+                  </div>
+
+                  <!-- Pakiet Enterprise -->
+                  <div class="pricing-table">
+                    <div class="pricing-header">
+                      <div class="pricing-title">Enterprise</div>
+                      <div class="pricing-price">199<span>zł / msc</span></div>
+                    </div>
+                    <ul class="pricing-features">
+                      <li>Wszystko z Pro</li>
+                      <li>Dedykowany serwer</li>
+                      <li>SLA 99.9%</li>
+                    </ul>
+                    <button class="btn btn-outline-primary w-100">
+                      Kontakt
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Wyróżniona tabela cenowa --&gt;
+&lt;div class="pricing-table is-featured"&gt;
+  &lt;div class="pricing-header"&gt;
+    &lt;div class="pricing-title text-primary"&gt;Pro&lt;/div&gt;
+    &lt;div class="pricing-price"&gt;99&lt;span&gt;zł / msc&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;ul class="pricing-features"&gt;
+    &lt;li&gt;Nielimitowane Projekty&lt;/li&gt;
+    &lt;li class="is-disabled"&gt;Brak ukrytych opłat&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;button class="btn btn-primary w-100"&gt;Wybierz&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-buttons.html" class="btn btn-secondary"
+              >➔ Wstecz: Przyciski & Badges</a
+            >
+            <a
+              href="docs-tables.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Tabele ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+    <script src="js/molique-script-widgets.js"></script>
+    <script src="js/modules/tilt.js"></script>
+  </body>
+</html>

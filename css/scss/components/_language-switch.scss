@@ -1,0 +1,122 @@
+/**
+ * molique - Language Switch (przełącznik języka)
+ * Trigger (pigułka z flagą + kodem języka) otwiera listę języków jako
+ * popover w top layer: <button class="language-switch-trigger"
+ * popovertarget="ID"> + .dropdown-menu.language-switch-menu[popover]#ID.
+ * Menu kotwiczy się automatycznie do przycisku (niejawny anchor) i nie
+ * jest przycinane przez overflow. Flagi: osobne mini-pliki SVG w
+ * img/flags/ wstawiane przez <img src="img/flags/pl.svg" alt="">
+ * (emoji flag NIE renderują się na Windowsie, a zewnętrzny sprite
+ * z <use> nie działa m.in. przy file://). Stary markup
+ * <details class="dropdown language-switch"> jest nadal obsługiwany
+ * (kompatybilność wstecz).
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  .language-switch-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.75);
+    height: 38px;
+    padding: 0 calc(var(--spacing-unit) * 1.5);
+    background-color: var(--card-bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill, 999px);
+    color: var(--text-main);
+    /* Trigger to <button> — nie dziedziczy rodziny fontów automatycznie */
+    font-family: inherit;
+    font-weight: var(--fw-medium);
+    font-size: 0.8125rem;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+
+    &::-webkit-details-marker { display: none; }
+
+    /* Strzałka wskaźnika — ten sam trik co .dropdown-toggle / .mega-menu-trigger */
+    &::after {
+      content: '';
+      display: inline-block;
+      margin-left: calc(var(--spacing-unit) * 0.25);
+      border-top: 4px solid;
+      border-right: 4px solid transparent;
+      border-left: 4px solid transparent;
+      color: var(--text-muted);
+      transition: transform var(--transition-speed);
+    }
+
+    &:hover, &:focus-visible {
+      background-color: rgba(var(--primary-rgb), 0.08);
+      border-color: rgba(var(--primary-rgb), 0.3);
+    }
+  }
+
+  /* Obrót strzałki: wariant popover (menu musi stać bezpośrednio za
+     przyciskiem) oraz legacy <details>. */
+  .language-switch-trigger:has(+ .language-switch-menu:popover-open)::after,
+  .language-switch[open] > .language-switch-trigger::after {
+    transform: rotate(180deg);
+  }
+
+  /* Flaga: plik SVG z img/flags/ w sztywnym pudełku 4:3.
+     Wewnętrzna ramka (::after) oddziela jasne pola flag (np. biel PL)
+     od tła — bez niej flaga "rozpływa się" na jasnej pigułce. */
+  .language-switch-flag {
+    position: relative;
+    display: inline-flex;
+    width: 20px;
+    height: 15px;
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img,
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+      pointer-events: none;
+    }
+  }
+
+  .language-switch-menu {
+    min-width: 190px;
+  }
+
+  .language-switch-item {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.25);
+  }
+
+  .language-switch-name {
+    flex: 1;
+  }
+
+  /* Checkmark aktywnego języka: ikona SVG w currentColor (font-weight
+     zostaje dla legacy markupu ze znakiem tekstowym "✓"). */
+  .language-switch-check {
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary);
+    font-weight: var(--fw-bold);
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}

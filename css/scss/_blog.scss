@@ -1,0 +1,246 @@
+/**
+ * molique - Moduł Bloga
+ * Komponenty dla artykułów, list wpisów i sekcji autora.
+ */
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+/* =========================================
+   1. KARTA WPISU (Post Card - Grid View)
+   ========================================= */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.post-image-wrapper {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+/* Pływająca data na zdjęciu */
+.post-date-badge {
+  position: absolute;
+  top: calc(var(--spacing-unit) * 2);
+  left: calc(var(--spacing-unit) * 2);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+  
+  .day { display: block; font-size: 1.5rem; font-weight: var(--fw-black); line-height: 1; }
+  .month { display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--primary); margin-top: 2px; }
+}
+
+.post-content {
+  padding: calc(var(--spacing-unit) * 3);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-unit) * 2);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: var(--primary); }
+}
+
+.post-title {
+  font-size: 1.25rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+  text-decoration: none;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  line-height: 1.3;
+  
+  &:hover { color: var(--primary); }
+}
+
+/* =========================================
+   2. KLASYCZNY WPIS (List View)
+   ========================================= */
+.blog-post {
+  display: flex;
+  margin-bottom: calc(var(--spacing-unit) * 6);
+  padding-bottom: calc(var(--spacing-unit) * 4);
+  border-bottom: 1px solid var(--border-color);
+  
+  &:last-child { border-bottom: none; }
+
+  @include mq(sm, max) {
+    flex-direction: column;
+  }
+}
+
+/* Data obok wpisu */
+.post-date {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 55px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-right: calc(var(--spacing-unit) * 3);
+  
+  @include mq(sm, max) {
+    margin-bottom: calc(var(--spacing-unit) * 2);
+  }
+
+  .month {
+    background-color: var(--primary);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: var(--fw-bold);
+    padding: calc(var(--spacing-unit) * 0.5) 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .day {
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    font-size: 1.5rem;
+    font-weight: var(--fw-black);
+    padding: calc(var(--spacing-unit) * 0.75) 0;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+  }
+}
+
+.blog-post-image {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  &:hover img { transform: scale(1.05); }
+}
+
+/* =========================================
+   3. MAŁA LISTA WPISÓW (Sidebar Widget)
+   ========================================= */
+.simple-post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    padding: calc(var(--spacing-unit) * 1.5) 0;
+    border-bottom: 1px dotted var(--border-color);
+    
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  .post-image {
+    width: var(--post-thumb-size, 60px);
+    height: var(--post-thumb-size, 60px);
+    border-radius: calc(var(--border-radius) / 2);
+    object-fit: cover;
+    margin-right: calc(var(--spacing-unit) * 2);
+    flex-shrink: 0;
+  }
+
+  .post-info {
+    display: flex;
+    flex-direction: column;
+    
+    a {
+      color: var(--text-main);
+      font-weight: var(--fw-medium);
+      text-decoration: none;
+      line-height: 1.3;
+      margin-bottom: 4px;
+      transition: color var(--transition-speed);
+      
+      &:hover { color: var(--primary); }
+    }
+  }
+
+  .post-meta-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+}
+
+/* =========================================
+   4. SEKCJA AUTORA (Author Box)
+   ========================================= */
+.author-box {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 3);
+  padding: calc(var(--spacing-unit) * 4);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin: calc(var(--spacing-unit) * 5) 0;
+  
+  @include mq(sm, max) {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+.author-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.author-info {
+  flex-grow: 1;
+  
+  .author-name { font-size: 1.125rem; font-weight: var(--fw-bold); margin-bottom: 4px; }
+  .author-role { font-size: 0.875rem; color: var(--primary); font-weight: var(--fw-medium); margin-bottom: 12px; }
+  .author-bio { color: var(--text-muted); margin-bottom: 0; font-size: 0.95rem; }
+}

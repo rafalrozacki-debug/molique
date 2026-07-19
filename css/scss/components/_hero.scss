@@ -1,0 +1,128 @@
+/**
+ * molique - Sekcje Hero i Nakładki (Overlay)
+ * Sekcje powitalne ze zdjęciem w tle, przyciemniającą nakładką (Overlay)
+ * oraz zaawansowanym systemem wycinanych narożników (Hero Cutout).
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  /* =========================================
+     1. PAGE HEADER (Hero ze zdjęciem w tle)
+     ========================================= */
+  .page-header {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Dodaj do dowolnego kontenera z .overlay w środku — odcina wystające
+     rogi nakładki i daje jej kontekst pozycjonowania (position:relative). */
+  .has-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* =========================================
+     2. OVERLAY (Przyciemniająca nakładka)
+     ========================================= */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* --- Kolory nakładki --- */
+  .bg-overlay { background-color: #000; }
+  .overlay-dark { background-color: var(--dark); }
+  .overlay-primary { background-color: var(--primary); }
+  .overlay-light { background-color: #fff; }
+
+  /* --- Przezroczystość nakładki (skok co 10) --- */
+  .overlay-10 { opacity: 0.1; }
+  .overlay-20 { opacity: 0.2; }
+  .overlay-30 { opacity: 0.3; }
+  .overlay-40 { opacity: 0.4; }
+  .overlay-50 { opacity: 0.5; }
+  .overlay-60 { opacity: 0.6; }
+  .overlay-70 { opacity: 0.7; }
+  .overlay-80 { opacity: 0.8; }
+  .overlay-90 { opacity: 0.9; }
+
+  /* =========================================
+     3. HERO CUTOUT SYSTEM (Wklęsłe narożniki)
+     ========================================= */
+  .hero-with-cutout {
+    position: relative;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .cutout-wrapper {
+    position: relative;
+    background-color: var(--cutout-bg, var(--bg-surface));
+  }
+
+  @include mq(md) {
+    .hero-with-cutout {
+      overflow: hidden;
+
+      img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+      }
+    }
+
+    .cutout-wrapper {
+      z-index: 1;
+      /* Promień "wycięcia" w rogu stykającym się ze zdjęciem */
+      --cutout-radius: 32px;
+    }
+
+    /* Każdy wariant kotwiczy wrapper w danym rogu i wycina PRZECIWLEGŁY
+       (stykający się ze zdjęciem) róg samego wrappera łagodnym łukiem —
+       stąd "at 0 0" dla br (wycięcie w lewym-górnym rogu wrappera), itd. */
+    .cutout-wrapper.cutout-md-br {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
+    }
+
+    .cutout-wrapper.cutout-md-bl {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
+    }
+
+    .cutout-wrapper.cutout-md-tr {
+      position: absolute;
+      right: 0;
+      top: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
+    }
+
+    .cutout-wrapper.cutout-md-tl {
+      position: absolute;
+      left: 0;
+      top: 0;
+      mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
+      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
+    }
+  }
+}

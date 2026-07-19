@@ -1,0 +1,1208 @@
+# Plik zrodlowy: `changelog.html`
+
+```html
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Changelog - molique Framework</title>
+    <meta
+      name="description"
+      content="Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.5.1."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <link
+      rel="preload"
+      href="fonts/inter-v20-latin_latin-ext-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/inter-v20-latin_latin-ext-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/poppins-v24-latin_latin-ext-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="css/molique-style.css" />
+  </head>
+  <body>
+    <!-- ==========================================
+         NAVBAR
+         ========================================== -->
+    <nav class="navbar navbar-sticky">
+      <div class="container navbar-container">
+        <input
+          type="checkbox"
+          id="mobile-nav-toggle"
+          class="navbar-offcanvas-toggle"
+        />
+        <label
+          for="mobile-nav-toggle"
+          class="navbar-offcanvas-backdrop"
+        ></label>
+
+        <a href="index.html" class="navbar-brand">
+          <picture class="logo-light">
+            <source
+              media="(max-width: 767px)"
+              srcset="img/molique-logo-sygnet-64x64.png"
+            />
+            <img
+              src="img/molique-logo-206x44.png"
+              alt="molique"
+              width="206"
+              height="44"
+            />
+          </picture>
+          <picture class="logo-dark">
+            <source
+              media="(max-width: 767px)"
+              srcset="img/molique-logo-sygnet-64x64-light.png"
+            />
+            <img
+              src="img/molique-logo-206x44-light.png"
+              alt="molique"
+              width="206"
+              height="44"
+            />
+          </picture>
+        </a>
+
+        <label for="mobile-nav-toggle" class="navbar-toggle m-0">
+          <span></span><span></span><span></span>
+        </label>
+
+        <div class="navbar-menu navbar-menu-offcanvas">
+          <a href="index.html" class="navbar-item">Start</a>
+          <a href="blog.html" class="navbar-item">Blog</a>
+
+          <details class="mega-menu" name="nav-mega">
+            <summary class="navbar-item mega-menu-trigger">Komponenty</summary>
+            <div class="mega-menu-content">
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span>
+                  Layout & Nawigacja
+                </h6>
+                <a href="examples-layout.html" class="mega-menu-link">Grid &amp; Layout</a>
+                <a href="examples-navbar.html" class="mega-menu-link">Navbar</a>
+                <a href="examples-mega-menu.html" class="mega-menu-link">Mega Menu</a>
+                <a href="examples-pagination.html" class="mega-menu-link">Paginacja</a>
+                <a href="examples-dropdown.html" class="mega-menu-link">Dropdown</a>
+                <a href="examples-language-switch.html" class="mega-menu-link">Language Switch</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="14" y2="18"></line></svg></span>
+                  Sekcje & Typografia
+                </h6>
+                <a href="examples-hero-sections.html" class="mega-menu-link">Hero &amp; Sekcje Specjalne</a>
+                <a href="examples-timeline.html" class="mega-menu-link">Oś Czasu</a>
+                <a href="examples-background-video.html" class="mega-menu-link">Wideo w Tle</a>
+                <a href="examples-typography.html" class="mega-menu-link">Typografia &amp; Kolory</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+                  Przyciski & Karty
+                </h6>
+                <a href="examples-buttons.html" class="mega-menu-link">Przyciski</a>
+                <a href="examples-badges.html" class="mega-menu-link">Badges</a>
+                <a href="examples-alerts.html" class="mega-menu-link">Alerty</a>
+                <a href="examples-cards.html" class="mega-menu-link">Karty</a>
+                <a href="examples-testimonials.html" class="mega-menu-link">Referencje</a>
+                <a href="examples-pricing-tables.html" class="mega-menu-link">Tabele Cenowe</a>
+              </div>
+              <div class="mega-menu-featured">
+                <span class="mega-menu-featured-icon">✨</span>
+                <h6 class="mega-menu-featured-title">Nowość w bibliotece</h6>
+                <p class="mega-menu-featured-text">
+                  Dropdown i Alerty dołączyły do 57 gotowych przykładów —
+                  kopiuj i wklejaj do własnego projektu.
+                </p>
+                <a href="examples-dropdown.html" class="mega-menu-featured-link"
+                  >Zobacz co nowego →</a
+                >
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1.5"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="9" x2="9" y2="20"></line><line x1="15" y1="9" x2="15" y2="20"></line></svg></span>
+                  Tabele & Dane
+                </h6>
+                <a href="examples-tables.html" class="mega-menu-link">Tabele B2B</a>
+                <a href="examples-data-rows.html" class="mega-menu-link">Data Rows</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="4" y1="9" x2="20" y2="9"></line><circle cx="7" cy="6.5" r="0.75" fill="currentColor" stroke="none"></circle><circle cx="9.5" cy="6.5" r="0.75" fill="currentColor" stroke="none"></circle></svg></span>
+                  Okna & Nawigacja
+                </h6>
+                <a href="examples-modals.html" class="mega-menu-link">Modale</a>
+                <a href="examples-accordions.html" class="mega-menu-link">Akordeony</a>
+                <a href="examples-tabs.html" class="mega-menu-link">Zakładki</a>
+                <a href="examples-toasts.html" class="mega-menu-link">Powiadomienia</a>
+                <a href="examples-tooltips.html" class="mega-menu-link">Tooltipy</a>
+                <a href="examples-context-menu.html" class="mega-menu-link">Menu Kontekstowe</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="1.5"></circle><path d="M3 16l5-5 4 4 3-3 6 6"></path></svg></span>
+                  Media & Postęp
+                </h6>
+                <a href="examples-carousel.html" class="mega-menu-link">Karuzela</a>
+                <a href="examples-lightbox.html" class="mega-menu-link">Lightbox</a>
+                <a href="examples-portfolio-filters.html" class="mega-menu-link">Filtry Portfolio</a>
+                <a href="examples-progress-bars.html" class="mega-menu-link">Paski Postępu</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="20" y2="20"></line><rect x="6" y="12" width="3" height="8" fill="currentColor" stroke="none"></rect><rect x="11" y="8" width="3" height="12" fill="currentColor" stroke="none"></rect><rect x="16" y="4" width="3" height="16" fill="currentColor" stroke="none"></rect></svg></span>
+                  Wykresy & Dane
+                </h6>
+                <a href="examples-charts-basic.html" class="mega-menu-link">Wykresy Podstawowe</a>
+                <a href="examples-stats-cards.html" class="mega-menu-link">Karty Statystyk</a>
+                <a href="examples-empty-states.html" class="mega-menu-link">Puste Stany</a>
+                <a href="examples-funnels.html" class="mega-menu-link">Lejki</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="4" height="4" rx="1"></rect><path d="M5 7l1 1 2-2"></path><line x1="11" y1="7" x2="20" y2="7"></line><rect x="4" y="15" width="4" height="4" rx="1"></rect><line x1="11" y1="17" x2="20" y2="17"></line></svg></span>
+                  Formularze
+                </h6>
+                <a href="examples-forms-basics.html" class="mega-menu-link">Podstawy Formularzy</a>
+                <a href="examples-checkboxes-radio.html" class="mega-menu-link">Checkboxy &amp; Radio</a>
+                <a href="examples-input-groups.html" class="mega-menu-link">Input Groups</a>
+                <a href="examples-file-upload.html" class="mega-menu-link">File Upload</a>
+                <a href="examples-select.html" class="mega-menu-link">Searchable Select</a>
+                <a href="examples-switches.html" class="mega-menu-link">Przełączniki</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>
+                  Animacje
+                </h6>
+                <a href="examples-reveal-animations.html" class="mega-menu-link">Animacje Wejścia</a>
+                <a href="examples-hover-microinteractions.html" class="mega-menu-link">Mikrointerakcje Hover</a>
+                <a href="examples-text-effects.html" class="mega-menu-link">Efekty Tekstowe</a>
+                <a href="examples-status-feedback.html" class="mega-menu-link">Statusy &amp; Feedback</a>
+                <a href="examples-blobs-glassmorphism.html" class="mega-menu-link">Blobs &amp; Glassmorphism</a>
+                <a href="examples-border-effects.html" class="mega-menu-link">Animacje Ramek</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"></path><path d="M3 13l9 5 9-5"></path></svg></span>
+                  Widgety
+                </h6>
+                <a href="examples-before-after.html" class="mega-menu-link">Przed / Po</a>
+                <a href="examples-speed-dial.html" class="mega-menu-link">Speed Dial</a>
+                <a href="examples-share-widget.html" class="mega-menu-link">Udostępnianie</a>
+                <a href="examples-misc-widgets.html" class="mega-menu-link">Magnetic &amp; Scroll to Top</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
+                  E-commerce
+                </h6>
+                <a href="examples-product-cards.html" class="mega-menu-link">Karta Produktu</a>
+                <a href="examples-cart.html" class="mega-menu-link">Koszyk</a>
+                <a href="examples-selection-tiles.html" class="mega-menu-link">Kafelki Wyboru</a>
+                <a href="examples-ratings-swatches.html" class="mega-menu-link">Oceny &amp; Kolory</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"></path><path d="M15 3v4h4"></path><line x1="9" y1="12" x2="16" y2="12"></line><line x1="9" y1="16" x2="14" y2="16"></line></svg></span>
+                  Blog
+                </h6>
+                <a href="examples-blog-posts.html" class="mega-menu-link">Wpisy Blogowe</a>
+                <a href="examples-blog-sidebar.html" class="mega-menu-link">Sidebar Bloga</a>
+                <a href="examples-author-box.html" class="mega-menu-link">Sekcja Autora</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a8 8 0 1 1 16 0"></path><line x1="12" y1="15" x2="16" y2="10"></line><circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"></circle></svg></span>
+                  Panel Admina
+                </h6>
+                <a href="examples-admin-layout.html" class="mega-menu-link">Layout Admina</a>
+                <a href="examples-stepper.html" class="mega-menu-link">Stepper</a>
+                <a href="examples-status-dots.html" class="mega-menu-link">Kropki Statusu</a>
+              </div>
+            </div>
+          </details>
+
+          <a href="docs.html" class="navbar-item">Dokumentacja</a>
+          <a href="changelog.html" class="navbar-item">Changelog</a>
+          <a href="docs-roadmap.html" class="navbar-item">Roadmapa</a>
+
+          <a href="docs-classes.html" class="btn btn-primary btn-sm ml-md-2"
+            >Zacznij teraz</a
+          >
+          <button
+            class="language-switch-trigger"
+            popovertarget="lang-switch-menu"
+            title="Zmień język"
+          >
+            <span class="language-switch-flag"><img src="img/flags/pl.svg" width="20" height="15" alt="" /></span>
+            <span>PL</span>
+          </button>
+          <div
+            class="dropdown-menu dropdown-menu-end language-switch-menu"
+            popover
+            id="lang-switch-menu"
+          >
+            <a href="#" class="dropdown-item language-switch-item">
+              <span class="language-switch-flag"><img src="img/flags/pl.svg" width="20" height="15" alt="" /></span>
+              <span class="language-switch-name">Polski</span>
+              <span class="language-switch-check"><svg aria-hidden="true" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></span>
+            </a>
+            <a href="#" class="dropdown-item language-switch-item">
+              <span class="language-switch-flag"><img src="img/flags/gb.svg" width="20" height="15" alt="" /></span>
+              <span class="language-switch-name">English</span>
+            </a>
+            <a href="#" class="dropdown-item language-switch-item">
+              <span class="language-switch-flag"><img src="img/flags/de.svg" width="20" height="15" alt="" /></span>
+              <span class="language-switch-name">Deutsch</span>
+            </a>
+          </div>
+          <label class="theme-switch" title="Przełącz motyw (Light/Dark)">
+            <!-- ID musi zgadzać się z tym w JS -->
+            <input
+              type="checkbox"
+              id="theme-toggle"
+              class="theme-switch-input"
+            />
+
+            <div class="theme-switch-track">
+              <!-- Pływająca pastylka -->
+              <span class="theme-switch-thumb"></span>
+
+              <!-- Ikona Słońca (Lewa) -->
+
+              <div class="theme-icon-wrapper">
+                <svg
+                  class="theme-icon icon-sun"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                >
+                  <path
+                    d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm8,24a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"
+                  ></path>
+                </svg>
+              </div>
+
+              <!-- Ikona Księżyca (Prawa) -->
+
+              <div class="theme-icon-wrapper">
+                <svg
+                  class="theme-icon icon-moon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                >
+                  <path
+                    d="M235.54,150.21a104.84,104.84,0,0,1-37,52.91A104,104,0,0,1,32,120,103.09,103.09,0,0,1,52.88,57.48a104.84,104.84,0,0,1,52.91-37,8,8,0,0,1,10,10,88.08,88.08,0,0,0,109.8,109.8,8,8,0,0,1,10,10Z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ==========================================
+         HERO
+         ========================================== -->
+    <header
+      class="position-relative"
+      style="
+        background:
+          linear-gradient(rgba(8, 12, 24, 0.82), rgba(8, 12, 24, 0.92)),
+          url(&quot;img/futuristic-bg.webp&quot;) center/cover;
+      "
+    >
+      <div class="container py-5">
+        <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
+          <span class="badge badge-primary mb-3">Aktualna wersja: 1.5.1</span>
+          <h1 class="text-9 fw-black mb-3 text-white animate fade-in-up">
+            Changelog
+          </h1>
+          <p
+            class="text-4 animate fade-in-up delay-100"
+            style="color: rgba(255, 255, 255, 0.75)"
+          >
+            Historia zmian, nowości i poprawek we frameworku molique - od
+            pierwszego commita aż po dzisiejszą, w pełni modularną architekturę.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         TIMELINE ZMIAN
+         ========================================== -->
+    <main class="py-5 bg-body">
+      <div class="container" style="max-width: 900px">
+        <ul
+          class="timeline timeline-labeled m-0"
+          style="--timeline-label-width: 110px"
+        >
+          <!-- ============================================================ -->
+          <!-- v1.5.1 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v1.5.1</div>
+              <div class="text-muted text-2">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  Selecty i dropdowny na Popover API (Top Layer)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Koniec przycinania w modalach:</strong> Komponenty
+                    <code>.select-search</code> i <code>.custom-select</code>
+                    zostały przebudowane z <code>&lt;details&gt;</code> na
+                    natywne Popover API + CSS Anchor Positioning. Menu
+                    renderuje się w top layer przeglądarki - ponad otwartym
+                    <code>&lt;dialog&gt;</code> i poza kontenerami z
+                    <code>overflow</code>. Esc i klik poza menu zamykają je
+                    natywnie (light dismiss), bez JS.
+                  </li>
+                  <li>
+                    <strong>Nowy markup:</strong>
+                    <code>&lt;button popovertarget="ID"&gt;</code> jako trigger
+                    + menu z atrybutem <code>popover</code> i unikalnym
+                    <code>id</code>. Stary markup oparty o
+                    <code>&lt;details&gt;</code> jest nadal obsługiwany przez
+                    <code>select.js</code> (kompatybilność wstecz).
+                  </li>
+                  <li>
+                    <strong>Zwykły select:</strong> Wyszukiwarka
+                    (<code>.select-search-input</code>) jest teraz oficjalnie
+                    opcjonalna - bez niej <code>.select-search</code> działa
+                    jak klasyczny select. W dokumentacji doszło demo selecta
+                    otwieranego wewnątrz przewijanego modala.
+                  </li>
+                  <li>
+                    <strong>Dropdown Popover:</strong> Nowy wariant
+                    <code>.dropdown-menu[popover]</code> - dowolny istniejący
+                    przycisk z <code>popovertarget="ID"</code> otwiera menu w
+                    top layer, zakotwiczone automatycznie do przycisku
+                    (niejawny anchor - bez wrappera <code>.dropdown</code> i
+                    bez <code>anchor-name</code>). Klasyczny wariant na
+                    <code>&lt;details&gt;</code> pozostaje zalecany w
+                    navbarze.
+                  </li>
+                  <li>
+                    <strong>Language Switch + flagi SVG:</strong> Przełącznik
+                    języka przeniesiony na wariant popover, a flagi emoji
+                    zastąpione osobnymi plikami SVG
+                    (<code>img/flags/*.svg</code> przez
+                    <code>&lt;img&gt;</code>) - emoji flag nie renderują się
+                    na Windowsie (Chrome/Edge pokazują pary liter zamiast
+                    flag). Folder zawiera wyłącznie języki oferowane w
+                    projekcie, a każdy plik (~200 B) jest cache'owany raz
+                    dla całej witryny. Checkmark aktywnego języka to teraz
+                    ikona SVG zamiast znaku tekstowego.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-1"
+                    >Dokumentacja</span
+                  >
+                  Przykłady, SEO i słowniki
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Nowe sekcje przykładów:</strong> zwykły select bez
+                    wyszukiwarki, select otwierany w przewijanym modalu oraz
+                    Dropdown Popover doczepiany do dowolnego przycisku.
+                  </li>
+                  <li>
+                    <strong>SEO i AI:</strong>
+                    <code>sitemap.xml</code> generowany z realnej listy 81
+                    podstron (wcześniej szablonowe adresy), zaktualizowane
+                    słowniki <code>llms.txt</code> i spis klas.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-1"
+                    >Poprawki</span
+                  >
+                  Bugfixes
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>File Upload (animated):</strong> W wariancie
+                    <code>.file-upload-animated</code> niewidoczny
+                    <code>input[type="file"]</code> miał nadpisywane
+                    pozycjonowanie (<code>relative</code> zamiast
+                    <code>absolute</code> z bazy), przez co wchodził do
+                    układu strony i spychał zawartość karty w dół. Wariant
+                    bazowy <code>.file-upload</code> nie był dotknięty.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.5.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v1.5.0</div>
+              <div class="text-muted text-2">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-1">Rebranding</span>
+                  r-style &rarr; molique
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Nowa marka:</strong> Kompletna zmiana nazewnictwa
+                    frameworka, żeby przygotować go na publiczną premierę -
+                    pliki <code>r-style.css</code> /
+                    <code>r-script.js</code> oraz ich warianty modułowe (blog,
+                    sklep, kontakt, speed dial, share, before/after) zastąpiono
+                    spójną rodziną <code>molique-style*.css</code> i
+                    <code>molique-script.js</code>.
+                  </li>
+                  <li>
+                    <strong>Porządki w repozytorium:</strong> Usunięto
+                    zdezaktualizowaną paczkę dystrybucyjną oraz osierocone pliki
+                    bazujące na starej marce, które nie były już importowane
+                    przez żadną podstronę.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-1"
+                    >Architektura</span
+                  >
+                  Modularny Sass w warstwach @layer
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Jawna kolejność warstw:</strong> Główny plik
+                    <code>molique-style.scss</code> definiuje teraz jawną
+                    kolejność
+                    <code
+                      >@layer reset, base, layout, components, modules,
+                      utilities</code
+                    >
+                    i wciąga poszczególne partiale przez
+                    <code>sass:meta.load-css()</code> - zero przypadkowych
+                    konfliktów specyficzności.
+                  </li>
+                  <li>
+                    <strong>Podział na foldery tematyczne:</strong> Komponenty
+                    rozbito na <code>components/</code> (karty, nawigacja,
+                    modale, formularze, wykresy, dashboard, feedback),
+                    <code>layout/</code> (układ panelu admina) i
+                    <code>utilities/</code> (typografia, kolory, spacing,
+                    obramowania, animacje) - łatwiej znaleźć i nadpisać
+                    pojedynczy fragment stylu.
+                  </li>
+                  <li>
+                    <strong>Osobne bundle per moduł:</strong> Sklep, blog, panel
+                    admina i dokumentacja kompilują się teraz do niezależnych
+                    plików (<code>molique-style-shop.css</code>,
+                    <code>-blog.css</code>, <code>-admin.css</code>,
+                    <code>-docs.css</code>) - wpinasz przez
+                    <code>wp_enqueue_style</code> tylko to, czego dana podstrona
+                    faktycznie potrzebuje.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  Rozbudowa autoloadera JS
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>10 nowych mikro-modułów</strong> doładowywanych
+                    asynchronicznie z <code>js/modules/</code> tylko wtedy, gdy
+                    ich komponent istnieje na stronie: <code>carousel</code>,
+                    <code>context-menu</code>, <code>counters</code>,
+                    <code>filters</code>, <code>lightbox</code>,
+                    <code>parallax</code>, <code>select</code>,
+                    <code>shop</code>, <code>table-search</code> oraz
+                    <code>text-effects</code>.
+                  </li>
+                  <li>
+                    <strong>Odświeżone widżety:</strong> Przegląd i drobne
+                    poprawki w istniejących modułach
+                    <code>before-after.js</code>, <code>magnetic.js</code>,
+                    <code>share.js</code> i <code>tilt.js</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-1"
+                    >Dokumentacja</span
+                  >
+                  Podział na podstrony tematyczne
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Jedna podstrona = jeden temat:</strong> Zamiast
+                    pojedynczego, długiego dokumentu, dokumentacja została
+                    rozbita na osobne strony (Layout, Nawigacja, Sekcje,
+                    Typografia, Przyciski, Karty, Interakcje, Karuzele i
+                    Lightbox, Wykresy, Formularze, Select, Animacje, Widgety,
+                    Sklep, Blog, Panel Admina, Spis Klas) - szybsze wczytywanie
+                    i łatwiejsza nawigacja.
+                  </li>
+                  <li>
+                    <strong>Nowa strona Roadmapa</strong>
+                    (<code>docs-roadmap.html</code>) - publiczny plan rozwoju
+                    frameworka w postaci osi czasu, m.in. Container Queries,
+                    natywny <code>&lt;picture&gt;</code>, PurgeCSS i własne CLI.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-1"
+                    >Infrastruktura</span
+                  >
+                  Produkcja, SEO i wydajność
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Pliki produkcyjne:</strong> Dodano
+                    <code>manifest.json</code> (PWA), <code>robots.txt</code>,
+                    <code>sitemap.xml</code> oraz reguły <code>.htaccess</code>.
+                  </li>
+                  <li>
+                    <strong>Widoczność dla AI:</strong> Dodano
+                    <code>llms.txt</code> ułatwiający modelom językowym
+                    odnalezienie i poprawne zinterpretowanie dokumentacji.
+                  </li>
+                  <li>
+                    <strong>Fonty lokalne:</strong> Inter i Poppins są teraz
+                    hostowane lokalnie w folderze <code>fonts/</code> i ładowane
+                    przez <code>&lt;link rel="preload"&gt;</code> zamiast
+                    zewnętrznego CDN - szybszy pierwszy render i brak zależności
+                    od zewnętrznych serwerów.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.2.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v1.2.0</div>
+              <div class="text-muted text-2">Czerwiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-1"
+                    >Architektura</span
+                  >
+                  Inteligentny Autoloader JS
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>DOM-based Lazy Loading:</strong> Monolityczny plik
+                    JS został rozbity na kilkanaście mikro-modułów (w folderze
+                    <code>js/modules/</code>). Główny skrypt skanuje stronę i
+                    asynchronicznie pobiera tylko te skrypty, których komponenty
+                    fizycznie znajdują się w kodzie HTML.
+                  </li>
+                  <li>
+                    <strong>Zmienne Lokalne:</strong> Wdrożono dynamiczne
+                    obliczanie ujemnych marginesów dla zgrupowanych przycisków i
+                    formularzy w oparciu o zmienną
+                    <code>--btn-border-width</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  Data Viz & Zaawansowane UI
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Wykresy (Data Viz):</strong> Dodano moduł
+                    <code>_charts.scss</code> z wykresami opartymi na
+                    Progressive Enhancement (Sparklines, Radial Bar z CSS
+                    Houdini, Heatmapy, Area Chart w SVG oraz Donut Chart).
+                  </li>
+                  <li>
+                    <strong>Zaawansowane Inputy:</strong> Wdrożono dedykowane,
+                    spójne wizualnie style dla <code>type="range"</code> (z
+                    wypełnieniem paska), <code>type="color"</code> oraz
+                    <code>type="date"</code>.
+                  </li>
+                  <li>
+                    <strong>Zgrupowane Elementy:</strong> Dodano obsługę
+                    <code>.btn-group</code> oraz <code>.input-group</code> z
+                    perfekcyjnym nakładaniem się ramek.
+                  </li>
+                  <li>
+                    <strong>Interaktywne Ikony:</strong> Dodano komponent
+                    <code>.status-icon-toggle</code> (animacja Plus ->
+                    Checkmark), który może działać jako w pełni natywny checkbox
+                    formularza.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-1"
+                    >Poprawki</span
+                  >
+                  Bugfixes & UX
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Grid Blowout:</strong> Rozwiązano problem
+                    rozsadzania siatki na urządzeniach mobilnych poprzez
+                    globalne wymuszenie <code>min-width: 0</code> dla dzieci
+                    grida.
+                  </li>
+                  <li>
+                    <strong>Lightbox Pointer Events:</strong> Zastąpiono
+                    zdarzenia dotykowe uniwersalnymi
+                    <code>pointerdown/up</code>, co pozwala na "swipe'owanie"
+                    zdjęć również za pomocą myszki na desktopie.
+                  </li>
+                  <li>
+                    <strong>Mega Menu:</strong> Dodano "niewidzialny most"
+                    (pseudoelement) zapobiegający zamykaniu się menu podczas
+                    zjeżdżania kursorem z linku.
+                  </li>
+                  <li>
+                    <strong>Mobile Bottom Nav:</strong> Przebudowano mobilny
+                    sidebar w panelu admina na nowoczesny, poziomy pasek
+                    nawigacji przyklejony do dołu ekranu.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-1"
+                    >Dokumentacja</span
+                  >
+                  Kompletny Podręcznik
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>Rozbudowano dokumentację do 14 tematycznych podstron.</li>
+                  <li>
+                    Dodano bloki instruktażowe (Pro-Tipy, Wymagania, Opcje) do
+                    każdego komponentu, wyjaśniające architekturę i najlepsze
+                    praktyki wdrożeniowe.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.1.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v1.1.0</div>
+              <div class="text-muted text-2">Czerwiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-1">Nowość</span>
+                  Data Viz & Wykresy
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Progressive Enhancement:</strong> Wdrożono moduł
+                    wykresów (Sparklines, Radial Bar, Heatmap, Area Chart)
+                    oparty w 100% na czystym CSS/SVG. Wykresy ładują się
+                    natychmiast, zapobiegając CLS, i mogą być opcjonalnie
+                    nadpisane przez biblioteki JS.
+                  </li>
+                  <li>
+                    <strong>Zmienne CSS:</strong> Dane do wykresów przekazywane
+                    są bezpiecznie z backendu za pomocą atrybutu
+                    <code>style="--val: X%;"</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-1">Rozbudowa</span>
+                  Moduły i Widgety
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>E-commerce & Blog:</strong> Dodano kompletne,
+                    niezależne moduły dla sklepów (Star Ratings na maskach SVG,
+                    Swatche, Grid/List toggle) oraz blogów (Karty wpisów, Author
+                    Box).
+                  </li>
+                  <li>
+                    <strong>Widgety (Opt-in):</strong> Wdrożono niezależne
+                    skrypty i style dla: Before/After Slider, Speed Dial,
+                    Magnetic Buttons oraz Web Share API.
+                  </li>
+                  <li>
+                    <strong>Mikrointerakcje GPU:</strong> Dodano zaawansowane
+                    efekty tekstowe (Color Wipe, Animated Underline) oraz
+                    interaktywne ikony statusu (Plus -> Checkmark) działające
+                    jako natywne checkboxy.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-1">Dokumentacja</span>
+                  Kompletny Podręcznik
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    Stworzono 12 nowych podstron dokumentacji z interaktywnymi
+                    demami, blokami instruktażowymi i funkcją kopiowania kodu do
+                    schowka.
+                  </li>
+                  <li>
+                    Dokumentacja wykorzystuje moduł <code>admin-layout</code> z
+                    responsywnym paskiem bocznym (Bottom Nav na mobile).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.0.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v1.0.0</div>
+              <div class="text-muted text-2">Maj 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-1">Rewolucja</span>
+                  Architektura molique 2026
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Zero JS dla UI:</strong> Całkowite usunięcie
+                    JavaScriptu z Akordeonów, Zakładek, Dropdownów i Modali.
+                    Przejście na natywne tagi <code>&lt;details&gt;</code>,
+                    <code>&lt;dialog&gt;</code> oraz potężny selektor CSS
+                    <code>:has()</code>.
+                  </li>
+                  <li>
+                    <strong>Inteligentny Grid (RAM):</strong> Zastąpienie
+                    starego Flexboxa (<code>.row</code>, <code>.col-*</code>)
+                    natywnym CSS Gridem. Nowa klasa
+                    <code>.grid-auto</code> automatycznie układa elementy bez
+                    Media Queries.
+                  </li>
+                  <li>
+                    <strong>Płynna Typografia:</strong> Wdrożenie funkcji
+                    <code>clamp()</code> i skali Major Third. Fonty płynnie
+                    skalują się między mobile a desktopem.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-1">Nowość</span>
+                  Dostępność i Wydajność
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>B2B Target Size:</strong> Wymuszenie minimalnej
+                    wysokości 44px dla wszystkich elementów interaktywnych
+                    (zgodność z WCAG 2.2 AAA).
+                  </li>
+                  <li>
+                    <strong>Natywna Walidacja:</strong> Formularze używają teraz
+                    pseudoklasy <code>:user-invalid</code>, pokazując błędy
+                    dopiero po interakcji użytkownika (bez JS).
+                  </li>
+                  <li>
+                    <strong>GPU Acceleration:</strong> Przebudowa efektów
+                    Parallax i animowanych Blobów. Przeniesienie obliczeń na
+                    kartę graficzną (60 FPS na mobile).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v0.3.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v0.3.0</div>
+              <div class="text-muted text-2">Kwiecień 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-1">Rewolucja</span>
+                  Nowa architektura
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Cascade Layers:</strong> Przebudowano główny plik
+                    frameworka na natywny system warstw (<code>@layer</code>).
+                    Zlikwidowano problem wojen na specyficzność.
+                  </li>
+                  <li>
+                    <strong>Koniec z <code>!important</code>:</strong> Usunięto
+                    setki deklaracji <code>!important</code> z plików
+                    <code>_utilities.scss</code> i <code>_layout.scss</code>.
+                    Klasy narzędziowe wygrywają teraz dzięki architekturze
+                    warstwowej.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-1">Nowość</span>
+                  Komponenty natywne
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Natywne Modale:</strong> Całkowite porzucenie divów
+                    na rzecz natywnego elementu HTML
+                    <code>&lt;dialog&gt;</code>. Wbudowany focus trap, obsługa
+                    klawisza ESC i pseudoelement <code>::backdrop</code> bez
+                    ciężkich skryptów JS.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v0.2.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v0.2.0</div>
+              <div class="text-muted text-2">Marzec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-1">Dodano</span>
+                  Nowe komponenty
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Modale:</strong> Dodano responsywny komponent okien
+                    modalnych oparty o czysty flexbox i sztywne przyciemnienie
+                    tła (<code>.modal-backdrop</code>).
+                  </li>
+                  <li>
+                    <strong>Alerty:</strong> Dodano system alertów powiadomień
+                    we wszystkich wariantach kolorystycznych.
+                  </li>
+                  <li>
+                    <strong>Dynamiczne Utilities:</strong> Dodano pętle SCSS
+                    generujące klasy tła i tekstu (np. <code>.bg-primary</code>,
+                    <code>.text-white</code>) reagujące na kontrast.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-1">Zmiana</span>
+                  Refaktoryzacja
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Grid System:</strong> Przebudowano kod grida.
+                    Zastąpiono setki linii sztywnych deklaracji optymalnymi
+                    pętlami <code>@for</code> i <code>@each</code> w SCSS.
+                  </li>
+                  <li>
+                    <strong>Zmienne:</strong> Przeniesiono strukturalne zmienne
+                    CSS (cienie, rozmiary, wagi) z bloku
+                    <code>[data-theme="dark"]</code> do głównego
+                    <code>:root</code>.
+                  </li>
+                  <li>
+                    <strong>Dart Sass:</strong> Zaktualizowano matematykę w SCSS
+                    (<code>math.percentage()</code>, <code>math.div()</code>),
+                    aby usunąć błędy kompilacji przygotowując kod na wersję
+                    3.0.0.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-1 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-1">Poprawka</span>
+                  Bugfixes
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    Usunięto sztywne piksele i kolory HEX z plików bazowych
+                    (<code>_base.scss</code>, <code>_components.scss</code>) na
+                    rzecz zmiennych systemowych.
+                  </li>
+                  <li>
+                    Naprawiono problem z niepożądaną inwersją kolorów dla tagu
+                    <code>&lt;code&gt;</code> oraz elementów korzystających z
+                    <code>.overlay-dark</code> w trybie dark-mode.
+                  </li>
+                  <li>
+                    Usunięto powielające się klasy
+                    <code>:focus-visible</code> między plikiem bazowym a plikiem
+                    dostępności (<code>_a11y.scss</code>).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v0.1.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-3">v0.1.0</div>
+              <div class="text-muted text-2">Początek projektu</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-1 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-1"
+                    >Inicjalizacja</span
+                  >
+                  Wersja bazowa
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    Utworzenie struktury plików SCSS (<code>_variables</code>,
+                    <code>_mixins</code>, <code>_base</code>,
+                    <code>_layout</code>, <code>_grid</code>).
+                  </li>
+                  <li>
+                    Wdrożenie podstawowego 12-kolumnowego systemu Grid
+                    (Flexbox).
+                  </li>
+                  <li>
+                    Stworzenie podstawowych komponentów (Przyciski, Formularze,
+                    Karty).
+                  </li>
+                  <li>
+                    Dodanie obsługi trybu ciemnego (Dark Mode) za pomocą
+                    atrybutu <code>data-theme="dark"</code>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="bg-surface border-top pt-5 pb-4">
+      <div class="container">
+        <div class="grid-auto gap-4 mb-5">
+          <div>
+            <a href="index.html" class="navbar-brand text-main d-block mb-2"
+              >molique<span class="text-primary">.</span></a
+            >
+            <p class="m-0 text-muted" style="opacity: 0.8">
+              Lekki framework CSS zbudowany na natywnym HTML5 i najnowszym CSS.
+              Zero JavaScriptu tam, gdzie się da.
+            </p>
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Wprowadzenie</h6>
+            <a
+              href="docs.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Getting Started</a
+            >
+            <a
+              href="docs-roadmap.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Roadmapa</a
+            >
+            <a
+              href="docs-classes.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Spis Klas (Cheat Sheet)</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Komponenty</h6>
+            <a
+              href="docs-buttons.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Przyciski &amp; Badges</a
+            >
+            <a
+              href="docs-forms.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Formularze</a
+            >
+            <a
+              href="docs-cards.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Karty</a
+            >
+            <a
+              href="docs-charts.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Wykresy</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Moduły</h6>
+            <a
+              href="docs-eshop.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Sklep Internetowy</a
+            >
+            <a
+              href="docs-blog.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Blog &amp; Artykuły</a
+            >
+            <a
+              href="docs-admin.html"
+              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              >Panel Admina</a
+            >
+          </div>
+        </div>
+
+        <hr style="border-color: var(--border-color)" />
+
+        <div
+          class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-3"
+        >
+          <p class="text-muted m-0 text-2">
+            &copy; <span id="footer-year"></span> molique. Framework CSS dla
+            B2B.
+          </p>
+          <p class="text-muted m-0 text-2">Wersja 1.5.1</p>
+        </div>
+      </div>
+    </footer>
+
+    <button class="scroll-to-top" aria-label="Wróć na górę">↑</button>
+
+    <script>
+      document.getElementById("footer-year").textContent =
+        new Date().getFullYear();
+    </script>
+    <script src="js/molique-script.js" defer></script>
+  </body>
+</html>
+
+```

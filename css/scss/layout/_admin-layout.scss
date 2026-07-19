@@ -1,0 +1,64 @@
+@layer layout {
+  .admin-layout {
+    /* Zmienne sterujące aktualnym stanem layoutu */
+    --current-sidebar-width: var(--sidebar-width-lg);
+    --layout-gap: 0px;
+    --layout-padding: 0px;
+    --sidebar-radius: 0px;
+    --main-radius: 0px;
+    /* FIX: Domyślne tło dla głównej treści w trybie standardowym */
+    --main-bg: var(--bg-surface); 
+
+    display: grid;
+    grid-template-columns: var(--current-sidebar-width) 1fr;
+    gap: var(--layout-gap);
+    padding: var(--layout-padding);
+    min-height: 100dvh;
+    background-color: var(--bg-body);
+    transition: grid-template-columns var(--transition-speed) ease;
+
+    /* WARIANTY ROZMIARÓW */
+    &.sidebar-md { --current-sidebar-width: var(--sidebar-width-md); }
+    &.sidebar-sm { --current-sidebar-width: var(--sidebar-width-sm); }
+
+    /* WARIANT FLOATING (Odsunięty od krawędzi) */
+    &.admin-layout-floating {
+      --layout-gap: calc(var(--spacing-unit) * 3);
+      --layout-padding: calc(var(--spacing-unit) * 3);
+      --sidebar-radius: var(--border-radius-lg);
+      --main-radius: var(--border-radius-lg);
+      --main-bg: var(--bg-surface);
+      
+      /* Na mobile resetujemy floating */
+      @media (max-width: 768px) {
+        --layout-gap: 0px;
+        --layout-padding: 0px;
+        --sidebar-radius: 0px;
+        --main-radius: 0px;
+      }
+    }
+
+    /* Mobile: Przejście na Bottom Nav */
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      --current-sidebar-width: 100%;
+    }
+  }
+
+  .admin-main {
+    background-color: var(--main-bg);
+    border-radius: var(--main-radius);
+    /* FIX: Gwarantowany padding niezależnie od trybu */
+    padding: calc(var(--spacing-unit) * 4);
+    padding-bottom: calc(var(--spacing-unit) * 12);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    
+    /* Cień tylko w trybie floating */
+    .admin-layout-floating & {
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}

@@ -1,0 +1,74 @@
+/**
+ * molique - Utilities
+ * Obramowania (Borders) i Zaokrąglenia (Border Radius)
+ */
+
+@use '../variables' as *;
+
+@layer utilities {
+  /* =========================================
+     1. OBRAMOWANIA (Borders)
+     ========================================= */
+  .border { border: 1px solid var(--border-color) !important; }
+  .border-0 { border: 0 !important; }
+  
+  .border-top { border-top: 1px solid var(--border-color) !important; }
+  .border-top-0 { border-top: 0 !important; }
+  
+  .border-bottom { border-bottom: 1px solid var(--border-color) !important; }
+  .border-bottom-0 { border-bottom: 0 !important; }
+  
+  .border-start, .border-left { border-left: 1px solid var(--border-color) !important; }
+  .border-start-0, .border-left-0 { border-left: 0 !important; }
+  
+  .border-end, .border-right { border-right: 1px solid var(--border-color) !important; }
+  .border-end-0, .border-right-0 { border-right: 0 !important; }
+
+  /* =========================================
+     2. ZAOKRĄGLENIA (Border Radius)
+     ========================================= */
+  .rounded-0, .border-radius-0 { border-radius: 0 !important; }
+  .rounded-1, .border-radius-1 { border-radius: 4px !important; }
+  .rounded-2, .border-radius-2 { border-radius: var(--border-radius) !important; }
+  .rounded-3, .border-radius-3 { border-radius: var(--border-radius-lg, 16px) !important; }
+  .rounded-4, .border-radius-4 { border-radius: 24px !important; }
+  .rounded-5, .border-radius-5 { border-radius: 32px !important; }
+  
+  .rounded-circle { border-radius: 50% !important; }
+  .rounded-pill { border-radius: 50rem !important; }
+  
+  /* Zaokrąglanie tylko konkretnych stron */
+  .rounded-top { border-top-left-radius: var(--border-radius) !important; border-top-right-radius: var(--border-radius) !important; }
+  .rounded-bottom { border-bottom-left-radius: var(--border-radius) !important; border-bottom-right-radius: var(--border-radius) !important; }
+
+  /* Usuwanie zaokrągleń z konkretnych stron */
+  .rounded-top-0 { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+  .rounded-bottom-0 { border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+
+  /* =========================================
+     3. ROGI: OSTRE CIĘCIE (clip-path) I WKLĘSŁE WCIĘCIE (mask-image)
+     ========================================= */
+  $corner-size: 24px;
+
+  .corner-cut-tl { clip-path: polygon(#{$corner-size} 0, 100% 0, 100% 100%, 0 100%, 0 #{$corner-size}); }
+  .corner-cut-tr { clip-path: polygon(0 0, calc(100% - #{$corner-size}) 0, 100% #{$corner-size}, 100% 100%, 0 100%); }
+  .corner-cut-bl { clip-path: polygon(0 0, 100% 0, 100% 100%, #{$corner-size} 100%, 0 calc(100% - #{$corner-size})); }
+  .corner-cut-br { clip-path: polygon(0 0, 100% 0, 100% calc(100% - #{$corner-size}), calc(100% - #{$corner-size}) 100%, 0 100%); }
+
+  .corner-concave-tl {
+    mask-image: radial-gradient(circle #{$corner-size} at 0 0, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 0 0, transparent 99%, #fff 100%);
+  }
+  .corner-concave-tr {
+    mask-image: radial-gradient(circle #{$corner-size} at 100% 0, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 100% 0, transparent 99%, #fff 100%);
+  }
+  .corner-concave-bl {
+    mask-image: radial-gradient(circle #{$corner-size} at 0 100%, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 0 100%, transparent 99%, #fff 100%);
+  }
+  .corner-concave-br {
+    mask-image: radial-gradient(circle #{$corner-size} at 100% 100%, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle #{$corner-size} at 100% 100%, transparent 99%, #fff 100%);
+  }
+}

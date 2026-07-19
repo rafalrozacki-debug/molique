@@ -1,0 +1,93 @@
+@charset "UTF-8";
+/**
+ * molique - Plik kompilacyjny dla Widgetu Speed Dial
+ * Ten plik wygeneruje gotowy molique-style-speed-dial.css
+ */
+@layer modules;
+@layer modules {
+  /**
+   * molique - Widget Speed Dial (Floating Action Button)
+   * Pływający przycisk akcji, który po najechaniu (desktop) lub kliknięciu
+   * (dowolne urządzenie, dzięki :focus-within) rozwija dodatkowe opcje.
+   * Zero JavaScriptu.
+   */
+  /**
+   * molique - Zmienne SCSS
+   */
+  /**
+   * molique - Widget Speed Dial (Floating Action Button)
+   * Pływający przycisk akcji, który po najechaniu (desktop) lub kliknięciu
+   * (dowolne urządzenie, dzięki :focus-within) rozwija dodatkowe opcje.
+   * Zero JavaScriptu.
+   */
+  .speed-dial {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: var(--z-index-fixed);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.5);
+  }
+  .speed-dial-main {
+    width: 56px;
+    height: 56px;
+    min-height: 0;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform var(--transition-speed);
+  }
+  .speed-dial-main:hover {
+    transform: scale(1.05);
+  }
+  .speed-dial-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity var(--transition-speed), transform var(--transition-speed), visibility var(--transition-speed);
+  }
+  /* Rozwija się na hover CAŁEGO widgetu LUB gdy focus jest na którymkolwiek
+     jego dziecku (np. po kliknięciu .speed-dial-main) — działa więc też
+     na urządzeniach dotykowych i z klawiatury, bez ani linijki JS. */
+  .speed-dial:hover .speed-dial-actions,
+  .speed-dial:focus-within .speed-dial-actions {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .speed-dial-action {
+    width: 44px;
+    height: 44px;
+    min-height: 0;
+    border-radius: 50%;
+    background-color: var(--bg-surface);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform var(--transition-speed), background-color var(--transition-speed), color var(--transition-speed);
+  }
+  .speed-dial-action:hover {
+    transform: scale(1.1);
+    background-color: var(--primary);
+    color: #fff;
+  }
+}

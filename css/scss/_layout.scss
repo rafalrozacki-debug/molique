@@ -1,0 +1,129 @@
+/**
+ * molique - Layout
+ * Zawiera sizing, positioning, flexbox i display
+ */
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+/* =========================================
+   1. SIZING (Szerokość / Wysokość)
+   ========================================= */
+.w-25 { width: 25%; }
+.w-50 { width: 50%; }
+.w-75 { width: 75%; }
+.w-100 { width: 100%; }
+.w-auto { width: auto; }
+.mw-100 { max-width: 100%; }
+
+.h-100 { height: 100%; }
+.vh-100 { height: 100vh; }
+.min-vh-100 { min-height: 100vh; }
+
+/* DODANE: Responsywne szerokości */
+@include mq(md) {
+  .w-md-25 { width: 25%; }
+  .w-md-50 { width: 50%; }
+  .w-md-75 { width: 75%; }
+  .w-md-100 { width: 100%; }
+  .w-md-auto { width: auto; }
+}
+
+/* =========================================
+   2. DISPLAY & FLEXBOX
+   ========================================= */
+.d-none { display: none; }
+.d-block { display: block; }
+.d-inline-block { display: inline-block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+.flex-column { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+
+.justify-content-start { justify-content: flex-start; }
+.justify-content-end { justify-content: flex-end; }
+.justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
+
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
+.align-items-center { align-items: center; }
+.align-items-stretch { align-items: stretch; }
+
+.align-self-start { align-self: flex-start; }
+.align-self-end { align-self: flex-end; }
+.align-self-center { align-self: center; }
+.align-self-stretch { align-self: stretch; }
+
+/* Odstępy (Gap) dla Flexboxa i Grida */
+.gap-0 { gap: 0; }
+.gap-1 { gap: calc(var(--spacing-unit) * 1); }
+.gap-2 { gap: calc(var(--spacing-unit) * 2); }
+.gap-3 { gap: calc(var(--spacing-unit) * 3); }
+.gap-4 { gap: calc(var(--spacing-unit) * 4); }
+.gap-5 { gap: calc(var(--spacing-unit) * 6); }
+
+@include mq(md) {
+  .gap-md-0 { gap: 0; }
+  .gap-md-1 { gap: calc(var(--spacing-unit) * 1); }
+  .gap-md-2 { gap: calc(var(--spacing-unit) * 2); }
+  .gap-md-3 { gap: calc(var(--spacing-unit) * 3); }
+  .gap-md-4 { gap: calc(var(--spacing-unit) * 4); }
+  .gap-md-5 { gap: calc(var(--spacing-unit) * 6); }
+}
+
+@include mq(md) {
+  .d-md-none { display: none; }
+  .d-md-block { display: block; }
+  .d-md-flex { display: flex; }
+  
+  .flex-md-row { flex-direction: row; }
+  .flex-md-column { flex-direction: column; }
+}
+
+/* =========================================
+   3. POZYCJONOWANIE
+   ========================================= */
+.position-relative { position: relative !important; }
+.position-absolute { position: absolute !important; }
+.position-fixed { position: fixed !important; }
+.position-sticky { 
+  position: sticky !important; 
+  top: 0; 
+  z-index: var(--z-index-sticky); 
+}
+
+/* Krawędzie */
+.top-0 { top: 0 !important; }
+.bottom-0 { bottom: 0 !important; }
+.left-0 { left: 0 !important; }
+.right-0 { right: 0 !important; }
+.inset-0 { inset: 0 !important; }
+
+/* Centrowanie absolutne */
+.top-50 { top: 50% !important; }
+.left-50 { left: 50% !important; }
+
+.translate-middle { transform: translate(-50%, -50%) !important; }
+.translate-middle-x { transform: translateX(-50%) !important; }
+.translate-middle-y { transform: translateY(-50%) !important; }
+
+/* =========================================
+   4. Z-INDEX
+   ========================================= */
+.z-0 { z-index: 0; }
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.z-30 { z-index: 30; }
+
+/* =========================================
+   5. TEKST
+   ========================================= */
+.text-center { text-align: center; }
+.text-start { text-align: left; }
+.text-end { text-align: right; }
+
+.fw-bold { font-weight: var(--fw-bold); }
+.fw-normal { font-weight: var(--fw-normal); }
+.fw-light { font-weight: var(--fw-light); }

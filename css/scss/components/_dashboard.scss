@@ -1,0 +1,86 @@
+/**
+ * molique - Admin dashboard
+ * Zawiera elementy na dashboardzie, takie jak nakładki, karty i inne komponenty.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+   DASHBOARD HEADER (Faux Cutout / Nakładka)
+   ========================================= */
+.dashboard-header {
+  --cutout-radius: 32px;
+  --cutout-bg: var(--bg-body); 
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  
+  margin-top: calc(var(--spacing-unit) * -4);
+  margin-right: calc(var(--spacing-unit) * -4);
+  margin-left: calc(var(--spacing-unit) * -4);
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  
+  padding-left: calc(var(--spacing-unit) * 4);
+  padding-top: calc(var(--spacing-unit) * 4);
+  
+  /* FIX: Resetujemy ujemne marginesy na mobile. 
+     Nie potrzebujemy tu wycięcia, a zapobiega to ucinaniu tekstu! */
+  @include mq(md, max) {
+    flex-direction: column;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 0;
+    padding-left: 0;
+  }
+}
+
+.dashboard-header-actions {
+  background-color: var(--cutout-bg);
+  padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
+  border-bottom-left-radius: var(--cutout-radius);
+  border-top-right-radius: var(--main-radius, 0); 
+  
+  margin-top: calc(var(--spacing-unit) * -4);
+  
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  position: relative;
+  
+  @include mq(md) {
+    &::before {
+      content: "";
+      position: absolute;
+      left: calc(var(--cutout-radius) * -1);
+      top: 0;
+      width: var(--cutout-radius);
+      height: var(--cutout-radius);
+      background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
+      pointer-events: none;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: calc(var(--cutout-radius) * -1);
+      width: var(--cutout-radius);
+      height: var(--cutout-radius);
+      background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
+      pointer-events: none;
+    }
+  }
+  
+  /* FIX: Na mobile usuwamy tło i wyrównujemy przyciski do lewej krawędzi tekstu */
+  @include mq(md, max) {
+    background-color: transparent;
+    padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Tylko odstęp od góry */
+    border-radius: 0;
+    width: 100%;
+    &::before, &::after { display: none; }
+  }
+}
+}

@@ -1,0 +1,37 @@
+/* =========================================
+   OPTYMALIZACJA DLA E-INK / MONOCHROME
+   ========================================= */
+
+// Wykrywamy ekrany czarno-białe LUB takie o wolnym odświeżaniu
+@media (monochrome), (update: slow) {
+  
+  // Wyłączamy wszystkie animacje i przejścia, które mogą powodować efekt smużenia na e-ink
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  // Wymuszamy maksymalny kontrast
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  // Usuwamy cienie i obramowania, które mogą być nieczytelne lub powodować efekt smużenia
+  .card, .btn, .shadow, .dropdown-menu {
+    box-shadow: none !important;
+    border: 2px solid #000000 !important;
+  }
+
+  // Wyróżnienie linków bez użycia koloru
+  a {
+    color: #000000 !important;
+    text-decoration: underline !important;
+    font-weight: 700;
+  }
+
+  // Ukrywamy całkowicie elementy, które nie mają sensu bez kolorów/animacji
+  .video-bg, .skeleton-loader {
+    display: none !important;
+  }
+}

@@ -1,0 +1,19 @@
+/**
+ * molique - Plik kompilacyjny dla Panelu Admina
+ * Ten plik wygeneruje gotowy molique-style-admin.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod admina do warstwy
+@layer modules {
+  // Wczytujemy rozbite pliki, które utworzyliśmy w poprzednim kroku
+  @include meta.load-css("layout/admin-layout");
+  @include meta.load-css("components/admin-sidebar");
+  @include meta.load-css("components/admin-nav");
+  @include meta.load-css("components/chart-funnel"); 
+  @include meta.load-css("components/dashboard"); 
+}

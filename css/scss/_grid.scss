@@ -1,0 +1,164 @@
+/**
+ * molique - System Grid (Natywny CSS Grid - Wzorzec RAM)
+ * Architektura: Zero klas na dzieciach, pełna automatyzacja
+ */
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+@layer layout {
+  /* =========================================
+     1. BAZOWY KONTENER SIATKI
+     ========================================= */
+  .grid {
+    display: grid;
+    gap: var(--grid-gap);
+  }
+
+  /* NAPRAWA GRID BLOWOUT: 
+     Każde dziecko grida może się skurczyć poniżej swojej zawartości */
+  .grid > *,
+  [class*="grid-cols-"] > *,
+  [class*="grid-auto"] > * {
+    min-width: 0;
+  }
+
+  /* =========================================
+     2. INTELIGENTNY AUTO-GRID (Święty Graal RWD)
+     ========================================= */
+  /* 
+     Użycie: <div class="grid-auto">...</div>
+     Dzieci same ułożą się w kolumny o minimalnej szerokości 280px.
+     Jeśli brakuje miejsca, automatycznie spadną do nowej linii.
+  */
+  .grid-auto {
+    display: grid;
+    gap: var(--grid-gap);
+    /* Wzorzec RAM: Repeat, Auto-fit, Minmax */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 280px)), 1fr));
+  }
+
+  /* Warianty Auto-Grida (nadpisywanie zmiennej lokalnej) */
+  .grid-auto-sm { --grid-min: 200px; }
+  .grid-auto-lg { --grid-min: 350px; }
+
+  /* =========================================
+     3. SZTYWNE KOLUMNY (Tylko gdy naprawdę potrzebne)
+     ========================================= */
+  $grid-columns: 12;
+
+  @for $i from 1 through $grid-columns {
+    .grid-cols-#{$i} {
+      display: grid;
+      grid-template-columns: repeat(#{$i}, 1fr);
+    }
+  }
+
+  @include mq(md) {
+    @for $i from 1 through $grid-columns {
+      .grid-md-cols-#{$i} {
+        display: grid;
+        grid-template-columns: repeat(#{$i}, 1fr);
+      }
+    }
+  }
+
+  /* =========================================
+     4. OVERRIDE DZIECI (Rozpiętość i Offsety)
+     ========================================= */
+  
+  /* --- 1. ROZPIĘTOŚĆ (Span) --- */
+  /* FIX: Używamy grid-column-end zamiast grid-column! */
+  @for $i from 1 through $grid-columns {
+    .col-span-#{$i} {
+      grid-column-end: span #{$i};
+      min-width: 0;
+    }
+  }
+
+  @include mq(md) {
+    @for $i from 1 through $grid-columns {
+      .col-md-span-#{$i} {
+        grid-column-end: span #{$i};
+        min-width: 0;
+      }
+    }
+  }
+
+  @include mq(lg) {
+    @for $i from 1 through $grid-columns {
+      .col-lg-span-#{$i} {
+        grid-column-end: span #{$i};
+        min-width: 0;
+      }
+    }
+  }
+
+  /* --- 2. OFFSETY (Przesuwanie elementów w siatce) --- */
+  @for $i from 1 through 12 {
+    .col-start-#{$i}, 
+    .offset-#{$i - 1} { 
+      grid-column-start: #{$i}; 
+    }
+  }
+  
+  @include mq(md) {
+    @for $i from 1 through 12 {
+      .col-md-start-#{$i}, 
+      .offset-md-#{$i - 1} { 
+        grid-column-start: #{$i}; 
+      }
+    }
+  }
+
+  @include mq(lg) {
+    @for $i from 1 through 12 {
+      .col-lg-start-#{$i}, 
+      .offset-lg-#{$i - 1} { 
+        grid-column-start: #{$i}; 
+      }
+    }
+  }
+  
+  /* Reset offsetu */
+  .col-start-auto, .offset-0 { grid-column-start: auto; }
+  @include mq(md) { .col-md-start-auto, .offset-md-0 { grid-column-start: auto; } }
+  @include mq(lg) { .col-lg-start-auto, .offset-lg-0 { grid-column-start: auto; } }
+
+  /* =========================================
+     5. BENTO GRID (Asymetryczna siatka)
+     ========================================= */
+  .bento-grid {
+    display: grid;
+    /* Domyślna szerokość kafelka (Twoje płynne podejście) */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    
+    /* FIX 1: minmax() gwarantuje 250px, ale pozwala kafelkowi urosnąć, jeśli tekstu jest za dużo */
+    grid-auto-rows: minmax(250px, auto); 
+    gap: var(--grid-gap);
+    
+    /* FIX 2: MAGIA BENTO! Zmusza przeglądarkę do upychania mniejszych klocków w puste luki */
+    grid-auto-flow: dense;
+    
+    /* Dzieci Bento Grida */
+    > * {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      /* Zapewnia, że zawartość wypełnia kafelek */
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  /* Modyfikatory rozpiętości (Działają od tabletu w górę) */
+  @include mq(md) {
+    .bento-col-2 { grid-column: span 2; }
+    .bento-col-3 { grid-column: span 3; }
+    .bento-row-2 { grid-row: span 2; }
+    .bento-row-3 { grid-row: span 3; }
+    
+    /* FIX: Wymuszenie sztywnej liczby kolumn dla precyzyjnych układów Bento */
+    .bento-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .bento-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  }
+}

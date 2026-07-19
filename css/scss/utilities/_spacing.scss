@@ -1,0 +1,104 @@
+/**
+ * molique - Utilities (Narzędzia)
+ * Pętle generujące margines i paddingi dla wszystkich elementów
+ */
+ 
+@use '../variables' as *;
+@use '../mixins' as *;
+@use 'sass:meta';
+
+@layer utilities {
+  /* =========================================
+     1. SPACING (Marginesy i Paddingi)
+     ========================================= */
+  
+  /* Dodano wartość 'auto' do mapy */
+  $space-amounts: (
+    0: 0, 
+    1: var(--spacing-unit), 
+    2: calc(var(--spacing-unit) * 2), 
+    3: calc(var(--spacing-unit) * 3), 
+    4: calc(var(--spacing-unit) * 4), 
+    5: calc(var(--spacing-unit) * 6),
+    auto: auto
+  );
+  
+  /* Klasyczna nomenklatura (Top, Bottom, Left, Right, X, Y) */
+  $sides: (
+    t: top, 
+    b: bottom, 
+    l: left, 
+    r: right, 
+    x: (left, right), 
+    y: (top, bottom)
+  );
+
+  @each $space-key, $space-val in $space-amounts {
+    
+    /* Paddingi (pomijamy 'auto', bo padding: auto nie istnieje w CSS) */
+    @if $space-key != auto {
+      .p-#{$space-key} { padding: #{$space-val} !important; }
+      
+      @each $side-key, $side-val in $sides {
+        @if meta.type-of($side-val) == "list" {
+          .p#{$side-key}-#{$space-key} { 
+            padding-#{nth($side-val, 1)}: #{$space-val} !important; 
+            padding-#{nth($side-val, 2)}: #{$space-val} !important; 
+          }
+        } @else {
+          .p#{$side-key}-#{$space-key} { padding-#{$side-val}: #{$space-val} !important; }
+        }
+      }
+    }
+
+    /* Marginesy (wspierają 'auto') */
+    .m-#{$space-key} { margin: #{$space-val} !important; }
+    
+    @each $side-key, $side-val in $sides {
+      @if meta.type-of($side-val) == "list" {
+        .m#{$side-key}-#{$space-key} { 
+          margin-#{nth($side-val, 1)}: #{$space-val} !important; 
+          margin-#{nth($side-val, 2)}: #{$space-val} !important; 
+        }
+      } @else {
+        .m#{$side-key}-#{$space-key} { margin-#{$side-val}: #{$space-val} !important; }
+      }
+    }
+  }
+
+  /* =========================================
+     2. WARIANTY DESKTOPOWE (MD)
+     ========================================= */
+  @include mq(md) {
+    @each $space-key, $space-val in $space-amounts {
+      
+      @if $space-key != auto {
+        .p-md-#{$space-key} { padding: #{$space-val} !important; }
+        
+        @each $side-key, $side-val in $sides {
+          @if meta.type-of($side-val) == "list" {
+            .p#{$side-key}-md-#{$space-key} { 
+              padding-#{nth($side-val, 1)}: #{$space-val} !important; 
+              padding-#{nth($side-val, 2)}: #{$space-val} !important; 
+            }
+          } @else {
+            .p#{$side-key}-md-#{$space-key} { padding-#{$side-val}: #{$space-val} !important; }
+          }
+        }
+      }
+
+      .m-md-#{$space-key} { margin: #{$space-val} !important; }
+      
+      @each $side-key, $side-val in $sides {
+        @if meta.type-of($side-val) == "list" {
+          .m#{$side-key}-md-#{$space-key} { 
+            margin-#{nth($side-val, 1)}: #{$space-val} !important; 
+            margin-#{nth($side-val, 2)}: #{$space-val} !important; 
+          }
+        } @else {
+          .m#{$side-key}-md-#{$space-key} { margin-#{$side-val}: #{$space-val} !important; }
+        }
+      }
+    }
+  }
+}

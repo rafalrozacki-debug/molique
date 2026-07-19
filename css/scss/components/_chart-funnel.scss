@@ -1,0 +1,180 @@
+@layer components {
+  /* =========================================
+     1. LEJEK DANYCH (Pionowy, oparty na --val)
+     ========================================= */
+  .chart-funnel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.5);
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 2) 0;
+  }
+
+  .funnel-stage {
+    /* Szerokość sterowana z HTML, domyślnie 100% */
+    width: var(--val, 100%);
+    min-width: 140px; /* Zapobiega zgnieceniu tekstu na samym dole lejka */
+    min-height: var(--target-size-min);
+    
+    background-color: var(--stage-bg, var(--primary));
+    color: var(--stage-text, var(--btn-text-light));
+    border-radius: var(--border-radius);
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+    
+    font-size: 0.875rem;
+    font-weight: var(--fw-medium);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Subtelny efekt hover dla interaktywności */
+    &:hover {
+      filter: brightness(1.1);
+      transform: scale(1.02);
+    }
+  }
+
+  /* =========================================
+     2. LEJEK PROCESOWY (Poziomy CRM Pipeline)
+     ========================================= */
+  .chart-pipeline {
+    display: flex;
+    width: 100%;
+    gap: 4px; /* Odstęp między strzałkami */
+    
+    /* Na mobile zamieniamy w pionowy stos */
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+  .pipeline-stage {
+    flex: 1;
+    min-height: var(--target-size-min);
+    background-color: var(--stage-bg, var(--bg-surface));
+    color: var(--stage-text, var(--text-main));
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
+    
+    font-size: 0.875rem;
+    font-weight: var(--fw-medium);
+    text-align: center;
+    position: relative;
+    
+    /* Magia CSS: Kształt strzałki (Chevron) */
+    clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
+    
+    /* Pierwszy element nie ma wcięcia z lewej */
+    &:first-child {
+      clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
+      border-top-left-radius: var(--border-radius);
+      border-bottom-left-radius: var(--border-radius);
+    }
+    
+    /* Ostatni element nie ma szpica z prawej */
+    &:last-child {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
+      border-top-right-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+
+    /* Aktywny etap */
+    &.is-active {
+      --stage-bg: var(--primary);
+      --stage-text: var(--btn-text-light);
+    }
+
+    /* Reset kształtów na mobile (zwykłe zaokrąglone prostokąty) */
+    @media (max-width: 768px) {
+      clip-path: none !important;
+      border-radius: var(--border-radius) !important;
+      justify-content: space-between; /* Tekst do lewej, ew. ikona do prawej */
+    }
+  }
+
+   /* =========================================
+     3. TRUE FUNNEL (Praktyczny Lejek z nóżką)
+     ========================================= */
+  .chart-funnel-true {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    
+    /* Zmieniamy proporcje na kwadrat - bardziej kompaktowe i praktyczne */
+    aspect-ratio: 1 / 1; 
+    gap: 2px; 
+    
+    /* MAGIA CSS: Rzeźbiony wielokąt - Szersza nóżka (50% szerokości) */
+    clip-path: polygon(
+      /* Górna krawędź i prawe górne zaokrąglenie */
+      4% 0%, 96% 0%, 98.5% 1%, 100% 4%,
+      
+      /* Prawy skos w dół (kończy się niżej, na 70% wysokości) */
+      76% 68%,
+      /* Prawe wewnętrzne załamanie */
+      75% 72%,
+      
+      /* Prawa pionowa nóżka (szersza, na 75% osi X) */
+      75% 92%,
+      /* Prawy dolny róg (ścięty wyżej) */
+      73% 96%,
+      
+      /* Ścięty dół (kąt) */
+      27% 100%,
+      
+      /* Lewy dolny róg (ścięty niżej) */
+      25% 98%,
+      /* Lewa pionowa nóżka (szersza, na 25% osi X) */
+      25% 72%,
+      
+      /* Lewe wewnętrzne załamanie */
+      24% 68%,
+      /* Lewy skos w górę */
+      0% 4%,
+      
+      /* Lewe górne zaokrąglenie */
+      1.5% 1%
+    );
+  }
+
+  .funnel-true-stage {
+    flex: var(--val, 1); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--stage-bg, var(--primary));
+    color: var(--stage-text, var(--btn-text-light));
+    
+    /* Zabezpieczenie tekstu w wąskiej nóżce */
+    padding: calc(var(--spacing-unit) * 1) 5%;
+    overflow: hidden;
+    
+    line-height: 1.2;
+    text-align: center;
+    transition: filter var(--transition-speed);
+    
+    &:hover {
+      filter: brightness(1.1);
+    }
+
+    .stage-value {
+      font-size: 1.25rem;
+      font-weight: var(--fw-black);
+    }
+    .stage-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+    }
+  }
+}

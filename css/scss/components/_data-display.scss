@@ -1,0 +1,770 @@
+/**
+ * molique - Wyświetlanie Danych
+ * Zawiera Tabele, Data Rows, Akordeony, Zakładki (Tabs) oraz Grid Expand.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  /* =========================================
+     1. TABELE B2B (Zoptymalizowane pod dane)
+     ========================================= */
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-body);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-main);
+    font-size: 0.875rem; 
+    
+    /* Zmienne sterujące rozmiarem (Domyślnie MD) */
+    --table-padding-y: calc(var(--spacing-unit) * 1.5);
+    --table-padding-x: calc(var(--spacing-unit) * 2);
+    --table-font-size: 0.875rem;
+    --table-header-font-size: 0.75rem;
+  }
+
+  /* --- WARIANTY ROZMIARÓW --- */
+  
+  /* Kompaktowa (Gęste dane, np. raporty finansowe) */
+  .table-sm {
+    --table-padding-y: calc(var(--spacing-unit) * 0.75);
+    --table-padding-x: calc(var(--spacing-unit) * 1.5);
+    --table-font-size: 0.8125rem;
+    --table-header-font-size: 0.7rem;
+  }
+
+  /* Luźna (Dużo przestrzeni, np. lista użytkowników z awatarami) */
+  .table-lg {
+    --table-padding-y: calc(var(--spacing-unit) * 1.5);
+    --table-padding-x: calc(var(--spacing-unit) * 2);
+    --table-font-size: 1rem;
+    --table-header-font-size: 0.875rem;
+  }
+
+  /* --- STYLE BAZOWE KOMÓREK --- */
+  .table th, 
+  .table td {
+    padding: var(--table-padding-y) var(--table-padding-x);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    vertical-align: middle;
+    font-size: var(--table-font-size);
+  }
+
+  .table th {
+    font-weight: var(--fw-bold);
+    background-color: var(--bg-surface);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: var(--table-header-font-size);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Zapobiega podwójnemu obramowaniu przy sticky header */
+    box-shadow: 0 1px 0 var(--border-color);
+    border-bottom: none;
+  }
+
+  /* --- WARIANTY NAGŁÓWKÓW (THEAD) --- */
+  
+  /* Domyślny / Jasny (Subtelne odcięcie) */
+  .thead-light th {
+    background-color: var(--card-bg-subtle);
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-color); /* Mocniejsza linia pod nagłówkiem */
+  }
+
+  /* Ciemny (Mocny kontrast) */
+  .thead-dark th {
+    background-color: var(--dark);
+    color: var(--btn-text-light);
+    border-bottom: none;
+    /* Zmieniamy kolor cienia dla sticky header */
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  /* Primary (Kolor marki) */
+  .thead-primary th {
+    background-color: var(--primary);
+    color: var(--btn-text-light);
+    border-bottom: none;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+  }
+
+  /* --- WARIANTY WIELKOŚCI NAGŁÓWKÓW --- */
+  
+  /* Kompaktowy nagłówek (Mniejsze paddingi i font) */
+  .thead-sm th {
+    padding-top: calc(var(--spacing-unit) * 1);
+    padding-bottom: calc(var(--spacing-unit) * 1);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
+
+  /* Duży nagłówek (Więcej oddechu) */
+  .thead-lg th {
+    padding-top: calc(var(--spacing-unit) * 2.5);
+    padding-bottom: calc(var(--spacing-unit) * 2.5);
+    font-size: 0.875rem;
+    letter-spacing: 0;
+  }
+
+  /* --- WARIANTY WIZUALNE --- */
+  
+  /* Paski zebry (Zwiększają czytelność szerokich tabel) */
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(var(--dark-rgb), 0.02);
+  }
+
+  /* Podświetlanie wiersza na hover */
+  .table-hover tbody tr {
+    transition: background-color var(--transition-speed);
+    &:hover {
+      background-color: var(--card-bg-subtle);
+    }
+  }
+
+  /* Tabele bez bocznych ramek (Czysty, nowoczesny wygląd) */
+  .table-borderless {
+    th, td { border-bottom: none; }
+    tbody tr { border-bottom: 1px solid var(--border-color); }
+    tbody tr:last-child { border-bottom: none; }
+  }
+
+  /* --- MIXIN: Transformacja tabeli w karty (Mobile-First Data) --- */
+  @mixin make-table-cards {
+    thead { display: none; }
+    tbody, tr, td { display: block; width: 100%; }
+    
+    tr { 
+      margin-bottom: calc(var(--spacing-unit) * 2); 
+      border: 1px solid var(--border-color); 
+      border-radius: var(--border-radius); 
+      background-color: var(--bg-surface);
+      /* Resetujemy tło z zebry dla kart */
+      background-color: var(--bg-surface) !important;
+    }
+    
+    td { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      text-align: right; 
+      border-bottom: 1px solid var(--border-color); 
+      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    }
+    
+    td:last-child { border-bottom: none; }
+    
+    td::before { 
+      content: attr(data-label); 
+      font-weight: var(--fw-bold); 
+      color: var(--text-muted); 
+      text-align: left; 
+      padding-right: calc(var(--spacing-unit) * 2); 
+    }
+  }
+
+  /* Wersja Mobilna (Automatyczna) */
+  @include mq(sm, max) {
+    .table-cards { 
+      @include make-table-cards; 
+    }
+  }
+
+  /* Wersja Wymuszona (Działa zawsze, nawet na desktopie) */
+  .table-cards-always {
+    @include make-table-cards;
+  }
+}
+
+/* =========================================
+   2. DATA ROWS (Wiersze tabeli jako karty dla CRM)
+   ========================================= */
+.data-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  background-color: #fff;
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  transition: box-shadow var(--transition-speed);
+
+  &:hover {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+@include mq(md, max) {
+  .data-row {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+  .data-row-actions {
+    margin-top: calc(var(--spacing-unit) * 2);
+    padding-top: calc(var(--spacing-unit) * 2);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+}
+
+/* =========================================
+   3. COMPACT DATA ROW (List Item / Wariant kompaktowy)
+   ========================================= */
+.data-row-compact {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-speed);
+
+  /* Ostatni element na liście nie ma dolnej ramki */
+  &:last-child {
+    border-bottom: none;
+  }
+
+  /* Subtelny hover (jak na inspiracji) */
+  &:hover {
+    background-color: var(--card-bg-subtle);
+  }
+
+  /* Opcjonalna ikona / awatar po lewej */
+  .row-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Domyślnie kółko (awatar) */
+    background-color: var(--bg-body);
+    color: var(--text-muted);
+    flex-shrink: 0; /* Zapobiega zgniataniu ikony */
+    font-size: 1.25rem;
+    
+    /* Wariant: Kwadratowa ikona (np. dla plików) */
+    &.icon-square {
+      border-radius: var(--border-radius);
+    }
+  }
+
+  /* Środkowa część (Tytuł + Szczegóły) */
+  .row-content {
+    flex: 1; /* Zajmuje całą dostępną przestrzeń */
+    min-width: 0; /* Zapobiega rozpychaniu kontenera przez długi tekst */
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .row-title {
+    font-weight: var(--fw-bold);
+    color: var(--text-main);
+    font-size: 0.875rem;
+    /* Ucinanie zbyt długiego tekstu (...) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .row-details {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    /* Ucinanie zbyt długiego tekstu (...) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Prawa strona (Akcje / Przyciski) */
+  .row-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+}
+
+/* =========================================
+   3. AKORDEON (Natywny <details>)
+   ========================================= */
+.accordion {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--bg-surface);
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--border-color);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+
+  /* MAGIA CSS 2026: Płynne otwieranie natywnego details */
+  interpolate-size: allow-keywords;
+  
+  &::details-content {
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), content-visibility 0.3s allow-discrete;
+    height: 0;
+    overflow: hidden;
+  }
+
+  &[open]::details-content {
+    height: auto;
+  }
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 2);
+  font-weight: var(--fw-medium);
+  color: var(--text-main);
+  cursor: pointer;
+  list-style: none; 
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: "▼";
+    font-size: 0.8rem;
+    transition: transform var(--transition-speed) ease;
+  }
+
+  &:hover {
+    background-color: var(--card-bg-subtle);
+  }
+}
+
+.accordion-item[open] .accordion-header {
+  color: var(--primary);
+  border-bottom: 1px solid var(--border-color);
+  
+  &::after {
+    transform: rotate(180deg);
+  }
+}
+
+.accordion-body {
+  padding: calc(var(--spacing-unit) * 2);
+  color: var(--text-muted);
+}
+
+/* =========================================
+   4. ZAKŁADKI (CSS :has() + Radio Hack)
+   ========================================= */
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tabs-header {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.tab-input {
+  display: none; 
+}
+
+.tab-label {
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  transition: color var(--transition-speed), border-color var(--transition-speed);
+
+  &:hover {
+    color: var(--text-main);
+  }
+}
+
+.tab-pane {
+  display: none;
+  animation: fadeIn var(--transition-speed) ease;
+}
+
+/* Łączenie inputa z panelem na podstawie ID (do 10 zakładek) */
+@for $i from 1 through 10 {
+  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-content .tab-pane:nth-of-type(#{$i}) {
+    display: block;
+  }
+  
+  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: var(--fw-bold);
+  }
+}
+
+/* =========================================
+   4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik — Zero JS)
+   ========================================= */
+.tabs-pill {
+  /* Liczba zakładek — nadpisz per instancja: style="--tab-count: 3;" */
+  --tab-count: 2;
+
+  .tabs-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--tab-count), 1fr);
+    border-bottom: none;
+    background-color: var(--card-bg-subtle);
+    border-radius: 50rem;
+    padding: 4px;
+  }
+
+  .tab-label {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    border-bottom: none;
+    border-radius: 50rem;
+    margin-bottom: 0;
+  }
+
+  .tabs-pill-indicator {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    width: calc((100% - 8px) / var(--tab-count));
+    background-color: var(--bg-surface);
+    border-radius: 50rem;
+    box-shadow: var(--shadow-sm);
+    /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
+       wskaźnika, która = szerokości jednej kolumny grida — stąd przesunięcie
+       o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+  }
+
+  /* Dopasowanie inputa (po pozycji) do wskaźnika i koloru aktywnej etykiety */
+  @for $i from 1 through 8 {
+    &:has(.tab-input:nth-of-type(#{$i}):checked) .tabs-pill-indicator {
+      transform: translateX(calc(100% * #{$i - 1}));
+    }
+
+    .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+      color: var(--text-main);
+    }
+  }
+}
+
+/* =========================================
+   5. GRID EXPAND (Płynne rozwijanie bez JS)
+   ========================================= */
+.grid-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  & > .grid-expand-inner {
+    overflow: hidden;
+  }
+  
+  &.is-open,
+  details[open] & {
+    grid-template-rows: 1fr;
+  }
+}
+
+/* =========================================
+   6. KARUZELE (Sliders)
+   ========================================= */
+.carousel {
+  position: relative;
+  width: 100%;
+}
+
+.carousel-bg-sync {
+  position: relative;
+  min-height: 300px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.carousel-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.carousel-bg-sync .carousel-track {
+  position: relative;
+  z-index: 3;
+}
+
+.carousel-bg-sync .carousel-nav {
+  z-index: 4;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.carousel-slide {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Przyciski nawigacyjne (Strzałki) */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  color: var(--text-main);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+  
+  &:hover {
+    background-color: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+}
+
+.carousel-prev { left: -15px; }
+.carousel-next { right: -15px; }
+
+/* Kropki paginacji */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: calc(var(--spacing-unit) * 3);
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  min-height: 10px !important; /* Nadpisuje globalne 44px dla buttonów */
+  flex: 0 0 auto; /* Blokuje rozciąganie we Flexboxie */
+  border-radius: 50%;
+  background-color: var(--border-color);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  
+  /* Zwiększenie obszaru klikalnego dla mobile */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover { background-color: var(--secondary); }
+
+  &.is-active {
+    background-color: var(--primary);
+    transform: scale(1.3);
+  }
+}
+
+@include mq(sm, max) {
+  .carousel-prev { left: 5px; }
+  .carousel-next { right: 5px; }
+}
+
+/* Wariant BG-Sync: Strzałki wewnątrz, widoczne tylko na hover */
+.carousel-bg-sync {
+  .carousel-nav {
+    opacity: 0;
+    visibility: hidden;
+    /* Dodajemy lekki przesuw dla płynnego wjazdu */
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  
+  .carousel-prev { left: 20px; transform: translateY(-50%) translateX(-10px); }
+  .carousel-next { right: 20px; transform: translateY(-50%) translateX(10px); }
+
+  &:hover .carousel-nav {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+/* =========================================
+   7. LIST GROUPS (Grupy list)
+   ========================================= */
+.list-group {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  color: var(--text-main);
+  background-color: var(--bg-body);
+  border: 1px solid var(--border-color);
+  margin-bottom: -1px;
+  text-decoration: none;
+  transition: background-color var(--transition-speed), z-index 0s;
+}
+
+.list-group-item:first-child {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.list-group-item:last-child {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  margin-bottom: 0;
+}
+
+.list-group-item.is-active {
+  z-index: 2;
+  color: #fff;
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+a.list-group-item:hover, button.list-group-item:hover {
+  background-color: var(--card-bg-subtle);
+  z-index: 1;
+}
+
+/* =========================================
+   8. LIST ICONS (Listy z ikonami)
+   ========================================= */
+.list-unstyled {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-icons {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-icons li {
+  position: relative;
+  padding-left: calc(var(--spacing-unit) * 3.5);
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.list-icons li:last-child { margin-bottom: 0; }
+
+.list-icons li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--primary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.list-icons-check li::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+
+.list-icons-arrow li::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 10h10M11 5l4 5-4 5'/%3e%3c/svg%3e");
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 10h10M11 5l4 5-4 5'/%3e%3c/svg%3e");
+}
+
+.list-icons-cross li::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 6l8 8M14 6l-8 8'/%3e%3c/svg%3e");
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 6l8 8M14 6l-8 8'/%3e%3c/svg%3e");
+}
+
+.list-icons-success li::before { background-color: var(--success); }
+.list-icons-danger li::before { background-color: var(--danger); }
+.list-icons-dark li::before { background-color: var(--dark); }
+
+/* =========================================
+   9. COUNTERS (Liczniki)
+   ========================================= */
+.counter {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 3) 0;
+}
+
+.counter-value {
+  display: inline-block;
+  font-size: 3.5rem;
+  font-weight: var(--fw-black);
+  line-height: 1;
+  color: var(--primary);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  letter-spacing: -1px;
+}
+
+.counter-title {
+  font-size: 1.125rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

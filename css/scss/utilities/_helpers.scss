@@ -1,0 +1,219 @@
+/**
+ * molique - Utilities (Narzędzia)
+ * Filtry, Embeds, i Stany Hover
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer utilities {
+  /* =========================================
+     DISPLAY UTILITIES (Zarządzanie widocznością)
+     ========================================= */
+  
+  /* Domyślne (Mobile First) */
+  .d-none { display: none !important; }
+  .d-inline { display: inline !important; }
+  .d-inline-block { display: inline-block !important; }
+  .d-block { display: block !important; }
+  .d-flex { display: flex !important; }
+  .d-inline-flex { display: inline-flex !important; }
+  .d-grid { display: grid !important; }
+
+  /* Warianty dla Desktopu (MD) */
+  @include mq(md) {
+    .d-md-none { display: none !important; }
+    .d-md-inline { display: inline !important; }
+    .d-md-inline-block { display: inline-block !important; }
+    .d-md-block { display: block !important; }
+    .d-md-flex { display: flex !important; }
+    .d-md-inline-flex { display: inline-flex !important; }
+    .d-md-grid { display: grid !important; }
+  }
+
+  /* Warianty dla Dużych Ekranów (LG) */
+  @include mq(lg) {
+    .d-lg-none { display: none !important; }
+    .d-lg-inline { display: inline !important; }
+    .d-lg-inline-block { display: inline-block !important; }
+    .d-lg-block { display: block !important; }
+    .d-lg-flex { display: flex !important; }
+    .d-lg-inline-flex { display: inline-flex !important; }
+    .d-lg-grid { display: grid !important; }
+  }
+
+/* =========================================
+   5. HELPERS (Filtry, Embeds, Hover States)
+   ========================================= */
+.filter-grayscale { filter: grayscale(100%); transition: filter var(--transition-speed); }
+.filter-blur { filter: blur(4px); transition: filter var(--transition-speed); }
+.filter-none { filter: none; }
+
+.hover-scale { transition: transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1); display: inline-block; will-change: transform; }
+.hover-scale:hover { transform: scale(1.05); }
+
+.hover-shadow { transition: box-shadow var(--transition-speed), transform var(--transition-speed); }
+.hover-shadow:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+
+.hover-opacity-100 { transition: opacity var(--transition-speed); }
+.hover-opacity-100:hover { opacity: 1; }
+
+.hover-text-primary:hover { color: var(--primary); }
+.hover-bg-light:hover { background-color: var(--light); }
+
+.embed-responsive { position: relative; display: block; width: 100%; padding: 0; overflow: hidden; }
+.embed-responsive::before { display: block; content: ""; }
+.embed-responsive iframe, .embed-responsive video { position: absolute; top: 0; bottom: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.embed-responsive-16by9::before { padding-top: 56.25%; }
+.embed-responsive-4by3::before { padding-top: 75%; }
+
+/* =========================================
+   6. FILTRY I PRZEZROCZYSTOŚĆ (Logotypy)
+   ========================================= */
+.opacity-0 { opacity: 0 !important; }
+.opacity-25 { opacity: 0.25 !important; }
+.opacity-50 { opacity: 0.5 !important; }
+.opacity-75 { opacity: 0.75 !important; }
+.opacity-100 { opacity: 1 !important; }
+.hover-opacity-100 { transition: opacity var(--transition-speed) !important; }
+.hover-opacity-100:hover { opacity: 1 !important; }
+
+.hover-filter-none { transition: filter var(--transition-speed) !important; }
+.hover-filter-none:hover { filter: none !important; }
+
+/* =========================================
+   6b. CIENIE (Shadows)
+   ========================================= */
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+.shadow-none { box-shadow: none !important; }
+
+/* =========================================
+   6c. KURSOR
+   ========================================= */
+.cursor-pointer { cursor: pointer !important; }
+.cursor-default { cursor: default !important; }
+.cursor-not-allowed { cursor: not-allowed !important; }
+
+/* =========================================
+   7. STACKING SECTIONS (Przyklejone sekcje)
+   ========================================= */
+.stacking-container {
+  position: relative;
+}
+
+.section-stacked {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* WARIANT: Magnetyczne przeskakiwanie (Scroll Snap) */
+.stacking-container-snap {
+  /* Kontener musi mieć określoną wysokość i własny scroll */
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  
+  /* MAGIA CSS: Wymusza przeskakiwanie do krawędzi sekcji */
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  
+  /* Ukrywamy pasek przewijania dla efektu "czystej prezentacji" */
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  .section-stacked {
+    /* Każda sekcja staje się punktem przyciągania */
+    scroll-snap-align: start;
+    scroll-snap-stop: always; /* Wymusza zatrzymanie na każdej sekcji, zapobiega "przelatywaniu" */
+  }
+}
+
+/* =========================================
+   8. KNOCKOUT TEXT (Tekst wycinający tło)
+   ========================================= */
+/* Kontener ze zdjęciem w tle */
+.bg-knockout-wrapper {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  /* Opcjonalnie: dodaj background-attachment: fixed dla efektu parallax wewnątrz tekstu! */
+}
+
+/* Wariant Jasny: Białe tło, przezroczysty tekst */
+.text-knockout-light {
+  background-color: #fff;
+  color: #000; /* Musi być czarny, żeby mix-blend-mode zadziałał */
+  mix-blend-mode: screen; /* Czarny staje się przezroczysty, biały zostaje biały */
+}
+
+/* Wariant Ciemny: Czarne tło, przezroczysty tekst */
+.text-knockout-dark {
+  background-color: #000;
+  color: #fff; /* Musi być biały, żeby mix-blend-mode zadziałał */
+  mix-blend-mode: multiply; /* Biały staje się przezroczysty, czarny zostaje czarny */
+}
+
+  /* =========================================
+     BACKGROUND MEDIA (Wydajne tła: Wideo i Obrazki)
+     ========================================= */
+  .bg-video-container,
+  .bg-image-container {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate; 
+
+    /* Domyślny overlay (przyciemnienie) */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.4); 
+      z-index: -1;
+      pointer-events: none;
+    }
+  }
+
+  /* Wspólne style dla wideo, obrazków i tagu <picture> w tle */
+  .bg-video,
+  .bg-image,
+  picture.bg-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+    
+    /* Jeśli to tag <picture>, musimy ostylować <img> wewnątrz niego */
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  /* Specyficzne dla wideo (Akceleracja GPU) */
+  video.bg-video {
+    object-fit: cover;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* A11y: Ukrywanie wideo dla prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-video-container video.bg-video {
+      display: none; 
+    }
+  }
+
+  .z-index-1 { z-index: 1 !important; }
+  .z-index-2 { z-index: 2 !important; }
+  .z-index-3 { z-index: 3 !important; }
+  
+}

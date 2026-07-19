@@ -1,0 +1,721 @@
+﻿<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karuzele & Lightbox - molique Docs</title>
+
+    <link rel="stylesheet" href="css/molique-style.css" />
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+    <div class="progress-container-fixed">
+      <div class="progress-bar-reading"></div>
+    </div>
+    <div class="admin-layout">
+      <!-- PASEK BOCZNY -->
+      <aside class="admin-sidebar">
+        <a href="index.html" class="admin-brand admin-logo-compact">
+          molique<span class="text-primary">.</span>
+        </a>
+
+        <ul class="admin-nav">
+          <li class="mobile-only-nav-item">
+            <a href="docs.html" class="admin-nav-link"><span class="nav-text">Start</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-layout.html" class="admin-nav-link"><span class="nav-text">Layout</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-buttons.html" class="admin-nav-link"><span class="nav-text">Komponenty</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-charts.html" class="admin-nav-link"><span class="nav-text">Wykresy</span></a>
+          </li>
+
+          <input type="checkbox" id="docs-mobile-more" class="mobile-more-toggle" />
+          <label for="docs-mobile-more" class="admin-nav-link mobile-more-label">
+            <span class="nav-text">Więcej</span>
+          </label>
+
+          <div class="admin-nav-dropdown-menu">
+          <div class="docs-nav-title">Wprowadzenie</div>
+          <li>
+            <a href="docs.html" class="admin-nav-link">Getting Started</a>
+          </li>
+          <li>
+            <a href="docs-roadmap.html" class="admin-nav-link"
+              >Roadmapa (Plany)</a
+            >
+          </li>
+          <li>
+            <a href="docs-classes.html" class="admin-nav-link"
+              >Spis Klas (Cheat Sheet)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Layout & Podstawy</div>
+          <li>
+            <a href="docs-layout.html" class="admin-nav-link">Grid & Layout</a>
+          </li>
+          <li>
+            <a href="docs-navbar.html" class="admin-nav-link">Nawigacja & Menu</a>
+          </li>
+          <li>
+            <a href="docs-sections.html" class="admin-nav-link"
+              >Sekcje, Hero & Timeline</a
+            >
+          </li>
+          <li>
+            <a href="docs-typography.html" class="admin-nav-link"
+              >Typografia & Kolory</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Komponenty UI</div>
+          <li>
+            <a href="docs-buttons.html" class="admin-nav-link"
+              >Przyciski & Badges</a
+            >
+          </li>
+          <li>
+            <a href="docs-cards.html" class="admin-nav-link">Karty & Tabele</a>
+          </li>
+          <li>
+            <a href="docs-interactive.html" class="admin-nav-link"
+              >Modale, Tabs & Akordeony</a
+            >
+          </li>
+          <li>
+            <a
+              href="docs-components-extra.html"
+              class="admin-nav-link is-active"
+              >Karuzele & Lightbox</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Wykresy & Dane</div>
+          <li>
+            <a href="docs-charts.html" class="admin-nav-link"
+              >Wykresy (Data Viz)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Formularze</div>
+          <li>
+            <a href="docs-forms.html" class="admin-nav-link"
+              >Inputy & Walidacja</a
+            >
+          </li>
+          <li>
+            <a href="docs-select.html" class="admin-nav-link"
+              >Searchable Select & Switche</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Efekty & Widgety</div>
+          <li>
+            <a href="docs-animations.html" class="admin-nav-link"
+              >Animacje & Mikrointerakcje</a
+            >
+          </li>
+          <li>
+            <a href="docs-widgets.html" class="admin-nav-link"
+              >Widgety (Speed Dial, Share)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Moduły zaawansowane</div>
+          <li>
+            <a href="docs-eshop.html" class="admin-nav-link"
+              >Sklep Internetowy</a
+            >
+          </li>
+          <li>
+            <a href="docs-blog.html" class="admin-nav-link">Blog & Artykuły</a>
+          </li>
+          <li>
+            <a href="docs-admin.html" class="admin-nav-link"
+              >Panel Admina (Dashboard)</a
+            >
+          </li>
+        </div>
+        </ul>
+      </aside>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-10 fw-black mb-3">Karuzele & Lightbox</h1>
+            <p class="text-4 text-muted">
+              Nowoczesne komponenty multimedialne. Karuzele w molique
+              wykorzystują natywny
+              <code>scroll-snap</code>, dzięki czemu są niesamowicie płynne na
+              urządzeniach dotykowych i nie wymagają ciężkich bibliotek typu
+              Slick czy Swiper.
+            </p>
+          </div>
+
+          <!-- SEKCJA 1: KARUZELA Z KARTAMI -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">1. Karuzela (Slider)</h2>
+            <p class="text-muted mb-4">
+              Podstawowa karuzela. Wykorzystuje natywny
+              <code>scroll-snap</code>, dzięki czemu jest niesamowicie płynna na
+              urządzeniach dotykowych i nie wymaga ciężkich bibliotek typu Slick
+              czy Swiper.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Konfiguracja slajdów:</h5>
+              <p class="text-2 text-muted mb-3">
+                Szerokość pojedynczego slajdu definiujesz samodzielnie za pomocą
+                CSS (np. w atrybucie style). Karuzela automatycznie dostosuje
+                przewijanie.
+              </p>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted mb-3"
+              >
+                <li>
+                  <code>min-width: 100%</code> — Jeden slajd na pełną szerokość
+                  ekranu.
+                </li>
+                <li>
+                  <code>min-width: 50%</code> — Dwa slajdy widoczne
+                  jednocześnie.
+                </li>
+                <li>
+                  <code>min-width: 33.333%</code> — Trzy slajdy widoczne
+                  jednocześnie.
+                </li>
+              </ul>
+              <hr class="my-3" />
+              <h5 class="fw-bold text-3 mb-2">Automatyzacja JS:</h5>
+              <p class="text-2 text-muted m-0">
+                Skrypt <code>molique-script.js</code> automatycznie wykrywa
+                ilość slajdów, generuje kropki paginacji na dole i obsługuje
+                kliknięcia w strzałki nawigacyjne.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="carousel w-100 mx-auto" style="max-width: 600px">
+                  <button
+                    class="carousel-nav carousel-prev"
+                    aria-label="Poprzedni"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    class="carousel-nav carousel-next"
+                    aria-label="Następny"
+                  >
+                    ›
+                  </button>
+
+                  <div class="carousel-track">
+                    <!-- Slajd 1 -->
+                    <div class="carousel-slide px-2" style="min-width: 100%">
+                      <div class="card shadow-sm border-0">
+                        <div
+                          class="card-body text-center py-5 bg-primary text-white rounded-2"
+                        >
+                          <h3 class="fw-bold m-0">Slajd 1</h3>
+                          <p class="opacity-75 m-0 mt-2">
+                            Przesuń palcem lub użyj strzałek
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Slajd 2 -->
+                    <div class="carousel-slide px-2" style="min-width: 100%">
+                      <div class="card shadow-sm border-0">
+                        <div
+                          class="card-body text-center py-5 bg-dark text-white rounded-2"
+                        >
+                          <h3 class="fw-bold m-0">Slajd 2</h3>
+                          <p class="opacity-75 m-0 mt-2">
+                            Natywny scroll-snap w akcji
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Slajd 3 -->
+                    <div class="carousel-slide px-2" style="min-width: 100%">
+                      <div class="card shadow-sm border-0">
+                        <div
+                          class="card-body text-center py-5 bg-success text-white rounded-2"
+                        >
+                          <h3 class="fw-bold m-0">Slajd 3</h3>
+                          <p class="opacity-75 m-0 mt-2">
+                            Kropki na dole aktualizują się same
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="carousel"&gt;
+  &lt;button class="carousel-nav carousel-prev"&gt;‹&lt;/button&gt;
+  &lt;button class="carousel-nav carousel-next"&gt;›&lt;/button&gt;
+  
+  &lt;div class="carousel-track"&gt;
+    &lt;!-- Ustaw min-width, aby kontrolować ile slajdów widać naraz --&gt;
+    &lt;div class="carousel-slide" style="min-width: 100%;"&gt;
+      &lt;div class="card"&gt;Treść slajdu 1&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="carousel-slide" style="min-width: 100%;"&gt;
+      &lt;div class="card"&gt;Treść slajdu 2&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 2: KARUZELA HERO (BG-SYNC) -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              2. Karuzela Hero (Background Sync)
+            </h2>
+            <p class="text-muted mb-4">
+              Zaawansowany wariant karuzeli. Tło całego kontenera płynnie
+              zmienia się w zależności od tego, który slajd jest aktualnie
+              widoczny.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Wymagania strukturalne:</h5>
+              <ul
+                class="list-unstyled text-2 text-muted m-0 d-flex flex-column gap-2"
+              >
+                <li>
+                  <strong>Kontener:</strong> Musi posiadać klasę
+                  <code>.carousel-bg-sync</code>.
+                </li>
+                <li>
+                  <strong>Tło slajdu:</strong> Każdy element
+                  <code>.carousel-slide</code> musi posiadać atrybut
+                  <code>data-bg="sciezka/do/pliku.jpg"</code>.
+                </li>
+                <li>
+                  <strong>Nakładka:</strong> Użyj elementu
+                  <code
+                    >&lt;div class="carousel-bg-overlay"&gt;&lt;/div&gt;</code
+                  >
+                  wewnątrz kontenera, aby przyciemnić tło i zapewnić czytelność
+                  tekstu.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 p-0">
+                <div
+                  class="carousel carousel-bg-sync w-100"
+                  style="height: 400px"
+                >
+                  <div class="carousel-bg-overlay"></div>
+                  <button class="carousel-nav carousel-prev" style="z-index: 4">
+                    ‹
+                  </button>
+                  <button class="carousel-nav carousel-next" style="z-index: 4">
+                    ›
+                  </button>
+
+                  <div class="carousel-track h-100">
+                    <div
+                      class="carousel-slide d-flex align-items-center justify-content-center"
+                      style="min-width: 100%"
+                      data-bg="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop"
+                    >
+                      <h2
+                        class="text-10 fw-black text-white position-relative z-10"
+                      >
+                        Architektura
+                      </h2>
+                    </div>
+                    <div
+                      class="carousel-slide d-flex align-items-center justify-content-center"
+                      style="min-width: 100%"
+                      data-bg="https://images.unsplash.com/photo-1541888087425-41132243407e?q=80&w=1000&auto=format&fit=crop"
+                    >
+                      <h2
+                        class="text-10 fw-black text-white position-relative z-10"
+                      >
+                        Konstrukcja
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Dodaj klasę carousel-bg-sync --&gt;
+&lt;div class="carousel carousel-bg-sync"&gt;
+  &lt;div class="carousel-bg-overlay"&gt;&lt;/div&gt;
+  
+  &lt;div class="carousel-track"&gt;
+    &lt;!-- Atrybut data-bg definiuje tło dla danego slajdu --&gt;
+    &lt;div class="carousel-slide" data-bg="img/slide1.jpg"&gt;
+      &lt;h2&gt;Nagłówek 1&lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div class="carousel-slide" data-bg="img/slide2.jpg"&gt;
+      &lt;h2&gt;Nagłówek 2&lt;/h2&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 3: LIGHTBOX -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">3. Galeria Lightbox</h2>
+            <p class="text-muted mb-4">
+              Wbudowany skrypt pozwala na powiększanie zdjęć na pełny ekran.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">
+                Jak grupować zdjęcia w galerię?
+              </h5>
+              <p class="text-2 text-muted mb-3">
+                Aby uruchomić skrypt, dodaj atrybut
+                <code>data-lightbox</code> do linku otaczającego miniaturę.
+                Adres w atrybucie <code>href</code> linku wskazuje na duże
+                zdjęcie.
+              </p>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Dodanie atrybutu <code>data-gallery="nazwa-galerii"</code> do
+                  kilku elementów połączy je w jedną galerię, umożliwiając
+                  przełączanie strzałkami.
+                </li>
+                <li>
+                  Skrypt natywnie obsługuje nawigację klawiaturą (strzałki, ESC)
+                  oraz gesty przeciągania (Swipe) na urządzeniach dotykowych i
+                  myszką.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="grid-auto w-100 gap-3">
+                  <!-- Zdjęcie 1 -->
+                  <a
+                    href="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200"
+                    data-lightbox
+                    data-gallery="demo-gallery"
+                    class="hover-gpu-shadow hover-spring"
+                  >
+                    <img
+                      src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=400"
+                      alt="Miniatura 1"
+                      class="w-100 rounded-2"
+                      style="aspect-ratio: 4/3; object-fit: cover"
+                    />
+                  </a>
+                  <!-- Zdjęcie 2 -->
+                  <a
+                    href="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200"
+                    data-lightbox
+                    data-gallery="demo-gallery"
+                    class="hover-gpu-shadow hover-spring"
+                  >
+                    <img
+                      src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400"
+                      alt="Miniatura 2"
+                      class="w-100 rounded-2"
+                      style="aspect-ratio: 4/3; object-fit: cover"
+                    />
+                  </a>
+                  <!-- Zdjęcie 3 -->
+                  <a
+                    href="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200"
+                    data-lightbox
+                    data-gallery="demo-gallery"
+                    class="hover-gpu-shadow hover-spring"
+                  >
+                    <img
+                      src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=400"
+                      alt="Miniatura 3"
+                      class="w-100 rounded-2"
+                      style="aspect-ratio: 4/3; object-fit: cover"
+                    />
+                  </a>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Atrybut data-lightbox aktywuje skrypt --&gt;
+&lt;!-- Atrybut data-gallery łączy zdjęcia w jedną galerię --&gt;
+
+&lt;a href="duze-zdjecie-1.jpg" data-lightbox data-gallery="realizacje"&gt;
+  &lt;img src="miniatura-1.jpg" alt="Foto 1"&gt;
+&lt;/a&gt;
+
+&lt;a href="duze-zdjecie-2.jpg" data-lightbox data-gallery="realizacje"&gt;
+  &lt;img src="miniatura-2.jpg" alt="Foto 2"&gt;
+&lt;/a&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 4: NAV FILTERS -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              4. Filtry Portfolio (Nav Filters)
+            </h2>
+            <p class="text-muted mb-4">
+              Menu filtrujące elementy na stronie (np. galerię lub portfolio).
+              Wymaga wbudowanego skryptu JS do ukrywania/pokazywania elementów.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Zasada działania:</h5>
+              <ul
+                class="list-unstyled text-2 text-muted m-0 d-flex flex-column gap-2"
+              >
+                <li>
+                  <strong>Przyciski:</strong> Umieść w kontenerze
+                  <code>.nav-filters</code>. Każdy przycisk musi mieć atrybut
+                  <code>data-filter="kategoria"</code> (lub
+                  <code>"all"</code> dla wszystkich).
+                </li>
+                <li>
+                  <strong>Elementy:</strong> Każdy filtrowany element musi
+                  posiadać klasę <code>.filter-item</code> oraz atrybut
+                  <code>data-category="kategoria"</code>.
+                </li>
+                <li>
+                  <strong>Struktura:</strong> Kontener z elementami
+                  <code>.filter-item</code> musi znajdować się w kodzie HTML
+                  bezpośrednio po liście <code>.nav-filters</code> (skrypt używa
+                  <code>nextElementSibling</code>).
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column w-100 bg-surface">
+                <ul class="nav-filters w-100">
+                  <li>
+                    <button class="is-active" data-filter="all">
+                      Wszystkie
+                    </button>
+                  </li>
+                  <li><button data-filter="www">Strony www</button></li>
+                  <li><button data-filter="ads">Reklamy</button></li>
+                </ul>
+
+                <div class="grid-cols-1 grid-md-cols-3 gap-3 w-100 mt-4">
+                  <div
+                    class="card p-4 text-center filter-item"
+                    data-category="www"
+                  >
+                    Strona WWW 1
+                  </div>
+                  <div
+                    class="card p-4 text-center filter-item"
+                    data-category="ads"
+                  >
+                    Reklama 1
+                  </div>
+                  <div
+                    class="card p-4 text-center filter-item"
+                    data-category="www"
+                  >
+                    Strona WWW 2
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Menu filtrów --&gt;
+&lt;ul class="nav-filters"&gt;
+  &lt;li&gt;&lt;button class="is-active" data-filter="all"&gt;Wszystkie&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button data-filter="www"&gt;Strony www&lt;/button&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Elementy do filtrowania (bezpośrednio pod menu) --&gt;
+&lt;div class="grid-auto"&gt;
+  &lt;div class="filter-item" data-category="www"&gt;Projekt 1&lt;/div&gt;
+  &lt;div class="filter-item" data-category="ads"&gt;Projekt 2&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 5: PASKI POSTĘPU (PROGRESS BARS) -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              5. Paski Postępu (Progress Bars)
+            </h2>
+            <p class="text-muted mb-4">
+              Eleganckie, cienkie paski postępu z etykietami. Idealne do sekcji
+              "Umiejętności" lub prezentacji statystyk.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Sterowanie paskiem:</h5>
+              <p class="text-2 text-muted m-0">
+                Szerokość paska kontrolujesz za pomocą atrybutu
+                <code>style="width: 85%;"</code>. Kolor paska możesz zmienić
+                dodając standardowe klasy tła (np. <code>.bg-success</code>,
+                <code>.bg-danger</code>) do elementu <code>.progress-bar</code>.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column align-items-stretch w-100 bg-surface gap-4"
+              >
+                <div class="w-100" style="max-width: 500px">
+                  <!-- Pasek 1 -->
+                  <div class="progress-label">
+                    <span>Rozwój projektu</span>
+                    <span>85%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 85%"></div>
+                  </div>
+
+                  <!-- Pasek 2 -->
+                  <div class="progress-label mt-4">
+                    <span>Optymalizacja SEO</span>
+                    <span>60%</span>
+                  </div>
+                  <div class="progress">
+                    <div
+                      class="progress-bar bg-success"
+                      style="width: 60%"
+                    ></div>
+                  </div>
+
+                  <!-- Pasek 3 -->
+                  <div class="progress-label mt-4">
+                    <span>Zużycie serwera</span>
+                    <span class="text-danger">92%</span>
+                  </div>
+                  <div class="progress">
+                    <div
+                      class="progress-bar bg-danger"
+                      style="width: 92%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Pasek postępu z etykietą --&gt;
+&lt;div class="progress-label"&gt;
+  &lt;span&gt;Rozwój projektu&lt;/span&gt;
+  &lt;span&gt;85%&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="progress"&gt;
+  &lt;!-- Szerokość sterowana atrybutem style --&gt;
+  &lt;div class="progress-bar bg-success" style="width: 85%;"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 6: READING PROGRESS BAR -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              6. Pasek Czytania (Reading Progress)
+            </h2>
+            <p class="text-muted mb-4">
+              Cienki pasek przyklejony do górnej krawędzi ekranu, który rośnie w
+              miarę przewijania strony w dół. Niezbędny na nowoczesnych blogach
+              i w długich artykułach.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Wymagania techniczne:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Wymaga załadowania głównego skryptu
+                  <code>molique-script.js</code>.
+                </li>
+                <li>
+                  Kontener <code>.progress-container-fixed</code> musi zostać
+                  umieszczony bezpośrednio w tagu
+                  <code>&lt;body&gt;</code> (najlepiej na samej górze kodu
+                  HTML).
+                </li>
+                <li>
+                  Skrypt automatycznie oblicza wysokość dokumentu i aktualizuje
+                  szerokość paska podczas scrollowania.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface position-relative"
+                style="height: 200px"
+              >
+                <!-- Symulacja paska dla celów demonstracyjnych -->
+                <div
+                  class="position-absolute top-0 left-0 w-100"
+                  style="height: 4px; background: var(--border-color)"
+                >
+                  <div class="h-100 bg-primary" style="width: 65%"></div>
+                </div>
+
+                <p class="text-muted text-center w-100 mt-4">
+                  Spójrz na samą górę tej strony dokumentacji podczas
+                  przewijania! Pasek czytania jest tam aktywny.
+                </p>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Umieść ten kod tuż po otwarciu tagu &lt;body&gt; --&gt;
+&lt;div class="progress-container-fixed"&gt;
+  &lt;div class="progress-bar-reading"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-interactive.html" class="btn btn-secondary"
+              >➔ Wstecz: Modale & Tabs</a
+            >
+            <a
+              href="docs-forms.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Formularze ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Skrypty -->
+    <script src="js/molique-script.js"></script>
+    <script src="js/molique-script-widgets.js"></script>
+  </body>
+</html>

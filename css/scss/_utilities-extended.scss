@@ -1,0 +1,36 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'sass:meta';
+@use 'sass:list';
+
+/* =========================================
+   UTILITIES - EXTENDED (Włącz na żądanie)
+   ========================================= */
+
+$space-amounts: (0: 0, 1: $spacing-unit, 2: $spacing-unit * 2, 3: $spacing-unit * 3, 4: $spacing-unit * 4, 5: $spacing-unit * 6);
+$sides: (t: top, b: bottom, l: left, r: right, x: (left, right), y: (top, bottom));
+
+// Generowanie breakpointów pobocznych (sm, lg, xl)
+$extended-breakpoints: ('sm': sm, 'lg': lg, 'xl': xl);
+
+@each $bp-name, $bp-val in $extended-breakpoints {
+  @include mq($bp-val) {
+    @each $space-key, $space-val in $space-amounts {
+      .p-#{$bp-name}-#{$space-key} { padding: #{$space-val}; }
+      .m-#{$bp-name}-#{$space-key} { margin: #{$space-val}; }
+      
+      @each $side-key, $side-val in $sides {
+        @if meta.type-of($side-val) == "list" {
+          .p#{$side-key}-#{$bp-name}-#{$space-key} { padding-block: #{$space-val}; }
+          @if $side-key == x { .p#{$side-key}-#{$bp-name}-#{$space-key} { padding-inline: #{$space-val}; } }
+          
+          .m#{$side-key}-#{$bp-name}-#{$space-key} { margin-block: #{$space-val}; }
+          @if $side-key == x { .m#{$side-key}-#{$bp-name}-#{$space-key} { margin-inline: #{$space-val}; } }
+        } @else {
+          .p#{$side-key}-#{$bp-name}-#{$space-key} { padding-#{$side-val}: #{$space-val}; }
+          .m#{$side-key}-#{$bp-name}-#{$space-key} { margin-#{$side-val}: #{$space-val}; }
+        }
+      }
+    }
+  }
+}

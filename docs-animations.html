@@ -1,0 +1,948 @@
+﻿<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animacje & Mikrointerakcje - molique Docs</title>
+
+    <link rel="stylesheet" href="css/molique-style.css" />
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <!-- PASEK BOCZNY -->
+      <aside class="admin-sidebar">
+        <a href="index.html" class="admin-brand admin-logo-compact">
+          molique<span class="text-primary">.</span>
+        </a>
+
+        <ul class="admin-nav">
+          <li class="mobile-only-nav-item">
+            <a href="docs.html" class="admin-nav-link"><span class="nav-text">Start</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-layout.html" class="admin-nav-link"><span class="nav-text">Layout</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-buttons.html" class="admin-nav-link"><span class="nav-text">Komponenty</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-charts.html" class="admin-nav-link"><span class="nav-text">Wykresy</span></a>
+          </li>
+
+          <input type="checkbox" id="docs-mobile-more" class="mobile-more-toggle" />
+          <label for="docs-mobile-more" class="admin-nav-link mobile-more-label">
+            <span class="nav-text">Więcej</span>
+          </label>
+
+          <div class="admin-nav-dropdown-menu">
+          <div class="docs-nav-title">Wprowadzenie</div>
+          <li>
+            <a href="docs.html" class="admin-nav-link">Getting Started</a>
+          </li>
+          <li>
+            <a href="docs-roadmap.html" class="admin-nav-link"
+              >Roadmapa (Plany)</a
+            >
+          </li>
+          <li>
+            <a href="docs-classes.html" class="admin-nav-link"
+              >Spis Klas (Cheat Sheet)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Layout & Podstawy</div>
+          <li>
+            <a href="docs-layout.html" class="admin-nav-link">Grid & Layout</a>
+          </li>
+          <li>
+            <a href="docs-navbar.html" class="admin-nav-link">Nawigacja & Menu</a>
+          </li>
+          <li>
+            <a href="docs-sections.html" class="admin-nav-link"
+              >Sekcje, Hero & Timeline</a
+            >
+          </li>
+          <li>
+            <a href="docs-typography.html" class="admin-nav-link"
+              >Typografia & Kolory</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Komponenty UI</div>
+          <li>
+            <a href="docs-buttons.html" class="admin-nav-link"
+              >Przyciski & Badges</a
+            >
+          </li>
+          <li>
+            <a href="docs-cards.html" class="admin-nav-link">Karty & Tabele</a>
+          </li>
+          <li>
+            <a href="docs-interactive.html" class="admin-nav-link"
+              >Modale, Tabs & Akordeony</a
+            >
+          </li>
+          <li>
+            <a href="docs-components-extra.html" class="admin-nav-link"
+              >Karuzele & Lightbox</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Wykresy & Dane</div>
+          <li>
+            <a href="docs-charts.html" class="admin-nav-link"
+              >Wykresy (Data Viz)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Formularze</div>
+          <li>
+            <a href="docs-forms.html" class="admin-nav-link"
+              >Inputy & Walidacja</a
+            >
+          </li>
+          <li>
+            <a href="docs-select.html" class="admin-nav-link"
+              >Searchable Select & Switche</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Efekty & Widgety</div>
+          <li>
+            <a href="docs-animations.html" class="admin-nav-link is-active"
+              >Animacje & Mikrointerakcje</a
+            >
+          </li>
+          <li>
+            <a href="docs-widgets.html" class="admin-nav-link"
+              >Widgety (Speed Dial, Share)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Moduły zaawansowane</div>
+          <li>
+            <a href="docs-eshop.html" class="admin-nav-link"
+              >Sklep Internetowy</a
+            >
+          </li>
+          <li>
+            <a href="docs-blog.html" class="admin-nav-link">Blog & Artykuły</a>
+          </li>
+          <li>
+            <a href="docs-admin.html" class="admin-nav-link"
+              >Panel Admina (Dashboard)</a
+            >
+          </li>
+        </div>
+        </ul>
+      </aside>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-10 fw-black mb-3">Animacje & Mikrointerakcje</h1>
+            <p class="text-4 text-muted">
+              Wszystkie animacje w molique są zoptymalizowane pod kątem
+              akceleracji sprzętowej (GPU). Używamy właściwości
+              <code>transform</code>, <code>scale</code>,
+              <code>translate</code> oraz <code>opacity</code>, aby uniknąć
+              kosztownego przeliczania układu strony (Reflow).
+            </p>
+          </div>
+
+          <!-- SEKCJA 1: WEJŚCIA I POJAWIENIA -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              1. Wejścia i Pojawienia (Reveal)
+            </h2>
+            <p class="text-muted mb-4">
+              Klasy bazowe do płynnego pokazywania elementów podczas ładowania
+              strony lub przewijania.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">
+                Dostępne warianty i mechanika:
+              </h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  <strong>Wyzwalane przez JS:</strong> Klasy
+                  <code>.reveal-blur</code> oraz
+                  <code>.reveal-scale</code> wymagają dodania klasy
+                  <code>.is-visible</code> (np. przez wbudowany skrypt
+                  Intersection Observer), aby uruchomić animację. Dzięki regule
+                  <code>@starting-style</code> animacja zadziała płynnie nawet
+                  przy pierwszym renderowaniu DOM.
+                </li>
+                <li>
+                  <strong>Natywne (Zero JS):</strong> Klasa
+                  <code>.scroll-reveal</code> wykorzystuje najnowszy standard
+                  <code>animation-timeline: view()</code>. Element płynnie
+                  pojawia się i znika w zależności od swojej pozycji w oknie
+                  przeglądarki, bez użycia JavaScriptu.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 flex-column align-items-start"
+              >
+                <button
+                  class="btn btn-secondary btn-sm mb-4"
+                  onclick="toggleReveals()"
+                >
+                  Odtwórz ponownie
+                </button>
+
+                <div class="grid-auto w-100 gap-4">
+                  <div
+                    class="card p-4 text-center reveal-blur is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Blur Reveal</h4>
+                    <p class="text-muted text-2 m-0">Wjazd z rozmyciem</p>
+                  </div>
+                  <div
+                    class="card p-4 text-center reveal-scale is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Scale Fade</h4>
+                    <p class="text-muted text-2 m-0">
+                      Powiększenie ze skali 0.95
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Wymaga dodania klasy .is-visible przez JS --&gt;
+&lt;div class="reveal-blur is-visible"&gt;Płynne wejście z rozmyciem&lt;/div&gt;
+&lt;div class="reveal-scale is-visible"&gt;Wejście ze skali 95%&lt;/div&gt;
+
+&lt;!-- Natywna animacja na scrollu (Zero JS!) --&gt;
+&lt;div class="scroll-reveal"&gt;Pojawiam się podczas scrollowania&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 1.5: KIERUNKOWE ANIMACJE WEJŚCIA -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              1.5. Kierunkowe Animacje Wejścia
+            </h2>
+            <p class="text-muted mb-4">
+              Klasyczne animacje wjazdu z różnych stron. Wymagają klasy bazowej
+              <code>.animate</code> oraz klasy kierunkowej.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Dostępne klasy:</h5>
+              <ul
+                class="list-unstyled text-2 text-muted m-0 d-flex flex-column gap-2"
+              >
+                <li>
+                  <strong>Kierunki:</strong> <code>.fade-in-up</code>,
+                  <code>.fade-in-down</code>, <code>.fade-in-left</code>,
+                  <code>.fade-in-right</code>, <code>.zoom-in</code>.
+                </li>
+                <li>
+                  <strong>Opóźnienia (Stagger):</strong>
+                  <code>.delay-100</code>, <code>.delay-200</code>,
+                  <code>.delay-300</code>. Idealne do kaskadowego pojawiania się
+                  kart w gridzie.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 flex-column align-items-start"
+              >
+                <button
+                  class="btn btn-secondary btn-sm mb-4"
+                  onclick="toggleReveals()"
+                >
+                  Odtwórz ponownie
+                </button>
+
+                <div class="grid-cols-1 grid-md-cols-3 gap-4 w-100">
+                  <div
+                    class="card p-4 text-center animate fade-in-up is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Karta 1</h4>
+                    <p class="text-muted text-2 m-0">.fade-in-up</p>
+                  </div>
+                  <div
+                    class="card p-4 text-center animate fade-in-up delay-100 is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Karta 2</h4>
+                    <p class="text-muted text-2 m-0">.delay-100</p>
+                  </div>
+                  <div
+                    class="card p-4 text-center animate fade-in-up delay-200 is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Karta 3</h4>
+                    <p class="text-muted text-2 m-0">.delay-200</p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Kaskadowe pojawianie się elementów --&gt;
+&lt;div class="animate fade-in-up"&gt;Pierwszy&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-100"&gt;Drugi&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-200"&gt;Trzeci&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 2: MIKROINTERAKCJE HOVER -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">2. Mikrointerakcje (Hover)</h2>
+            <p class="text-muted mb-4">
+              Złożone efekty najechania myszką. Dzięki kompozycji zmiennych CSS,
+              możesz łączyć je ze sobą bez konfliktów.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Zasady łączenia i wymagania:</h5>
+              <ul
+                class="list-unstyled text-2 text-muted m-0 d-flex flex-column gap-2"
+              >
+                <li>
+                  <strong>Kompozycja CSS:</strong> Klasy
+                  <code>.hover-spring</code> (używająca właściwości
+                  <code>scale</code>) oraz
+                  <code>.hover-gpu-shadow</code> (używająca
+                  <code>translate</code>) działają niezależnie. Możesz dodać
+                  obie klasy do jednego elementu, a animacje połączą się w
+                  jedną, płynną całość.
+                </li>
+                <li>
+                  <strong>Wydajność cienia:</strong> Klasa
+                  <code>.hover-gpu-shadow</code> nie animuje właściwości
+                  <code>box-shadow</code> (co powoduje klatkowanie). Zamiast
+                  tego animuje przezroczystość (<code>opacity</code>)
+                  pseudoelementu, co gwarantuje stałe 60 FPS.
+                </li>
+                <li>
+                  <strong>Dynamiczny Tilt:</strong> Klasa
+                  <code>.tilt-card</code> wymaga załadowania skryptu
+                  <code>js/modules/tilt.js</code>. Skrypt automatycznie wyłącza
+                  efekt na urządzeniach dotykowych.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100 gap-4">
+                  <div class="card p-4 text-center hover-spring cursor-pointer">
+                    <div class="text-8 mb-2">🪀</div>
+                    <h4 class="fw-bold">Spring Hover</h4>
+                  </div>
+
+                  <div
+                    class="card p-4 text-center hover-gpu-shadow cursor-pointer"
+                  >
+                    <div class="text-8 mb-2">☁️</div>
+                    <h4 class="fw-bold">GPU Shadow</h4>
+                  </div>
+
+                  <div
+                    class="card p-4 text-center hover-spring hover-gpu-shadow cursor-pointer border-primary"
+                  >
+                    <div class="text-8 mb-2">🚀</div>
+                    <h4 class="fw-bold">Połączone!</h4>
+                  </div>
+
+                  <div
+                    class="card p-4 text-center tilt-card cursor-pointer bg-dark text-white"
+                  >
+                    <div class="text-8 mb-2">🧊</div>
+                    <h4 class="fw-bold">3D Tilt (JS)</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Sprężyste powiększenie --&gt;
+&lt;div class="hover-spring"&gt;...&lt;/div&gt;
+
+&lt;!-- Wydajny cień na GPU --&gt;
+&lt;div class="hover-gpu-shadow"&gt;...&lt;/div&gt;
+
+&lt;!-- Możesz je łączyć! --&gt;
+&lt;div class="hover-spring hover-gpu-shadow"&gt;...&lt;/div&gt;
+
+&lt;!-- Dynamiczny Tilt (wymaga tilt.js) --&gt;
+&lt;div class="tilt-card"&gt;...&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 3: EFEKTY TEKSTOWE -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">3. Efekty Tekstowe</h2>
+            <p class="text-muted mb-4">
+              Wydajne animacje tekstu i podkreśleń, które nie wywołują
+              przeliczania układu strony (Reflow).
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column align-items-start w-100 gap-5"
+              >
+                <!-- Animowany Gradient -->
+                <div>
+                  <p class="text-2 text-muted mb-1">
+                    Animowany Gradient (.text-gradient-animated)
+                  </p>
+                  <h3 class="text-8 fw-black m-0 text-gradient-animated">
+                    Płynnie zmieniające się kolory
+                  </h3>
+                </div>
+
+                <!-- Knockout Text (Nowość!) -->
+                <div class="w-100">
+                  <p class="text-2 text-muted mb-1">
+                    Knockout Text (Tekst jako przezroczysta maska)
+                  </p>
+                  <div
+                    class="bg-knockout-wrapper w-100 rounded-2 overflow-hidden"
+                    style="
+                      background-image: url(&quot;img/futuristic-bg.webp&quot;);
+                    "
+                  >
+                    <!-- Wariant Ciemny -->
+                    <div class="text-knockout-dark p-5 text-center">
+                      <h3 class="text-10 fw-black m-0 text-uppercase">
+                        Architektura
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Text Wipe -->
+                <div>
+                  <p class="text-2 text-muted mb-1">
+                    Text Color Wipe (Flow Through)
+                  </p>
+                  <h3
+                    class="text-8 fw-black m-0 hover-text-wipe cursor-pointer"
+                  >
+                    Najedź na mnie myszką
+                  </h3>
+                </div>
+
+                <!-- Underlines -->
+                <div class="d-flex gap-4">
+                  <div>
+                    <p class="text-2 text-muted mb-1">Animated Underline</p>
+                    <a href="#" class="text-4 fw-bold text-main hover-underline"
+                      >Od lewej do prawej</a
+                    >
+                  </div>
+                  <div>
+                    <p class="text-2 text-muted mb-1">
+                      Animated Underline Center
+                    </p>
+                    <a
+                      href="#"
+                      class="text-4 fw-bold text-main hover-underline-center"
+                      >Ze środka na zewnątrz</a
+                    >
+                  </div>
+                </div>
+
+                <!-- Highlight -->
+                <div>
+                  <p class="text-2 text-muted mb-1">Highlight Draw</p>
+                  <h3 class="text-6 fw-bold m-0">
+                    Zbuduj to z
+                    <span class="text-highlight is-active">molique</span>
+                  </h3>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Animowany Gradient --&gt;
+&lt;span class="text-gradient-animated"&gt;Tekst&lt;/span&gt;
+
+&lt;!-- Knockout Text (Tekst wycinający tło) --&gt;
+&lt;div class="bg-knockout-wrapper" style="background-image: url('foto.jpg');"&gt;
+  &lt;div class="text-knockout-dark"&gt;
+    &lt;h1&gt;Przezroczysty tekst&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 4: STATUSY I LAYOUT -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">4. Statusy, Błędy i Layout</h2>
+            <p class="text-muted mb-4">
+              Mikrointerakcje informujące użytkownika o stanie aplikacji oraz
+              płynne rozwijanie kontenerów.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Architektura Grid Expand:</h5>
+              <p class="text-2 text-muted m-0">
+                Klasa <code>.grid-expand</code> to nowoczesna alternatywa dla
+                animowania <code>max-height</code>. Wykorzystuje przejście z
+                <code>grid-template-rows: 0fr</code> na <code>1fr</code>. Wymaga
+                wewnętrznego kontenera <code>.grid-expand-inner</code> z ukrytym
+                przepełnieniem. Dodaj klasę <code>.is-open</code> do głównego
+                kontenera, aby go rozwinąć.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-5 align-items-start">
+                <!-- Ping & Shake -->
+                <div class="d-flex flex-column gap-4">
+                  <div>
+                    <p class="text-2 text-muted mb-2">
+                      Status Ping (Pulsująca kropka)
+                    </p>
+                    <span class="status-dot status-done status-ping"
+                      >System operacyjny (Live)</span
+                    >
+                  </div>
+
+                  <div>
+                    <p class="text-2 text-muted mb-2">Micro Shake (Błąd)</p>
+                    <button class="btn btn-danger" onclick="triggerShake(this)">
+                      Kliknij, by wywołać błąd
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Grid Expand -->
+                <div class="flex-grow-1" style="max-width: 400px">
+                  <p class="text-2 text-muted mb-2">
+                    Grid Expand (Płynne rozwijanie bez max-height)
+                  </p>
+                  <div class="card p-3">
+                    <button
+                      class="btn btn-secondary w-100 mb-2"
+                      onclick="
+                        document
+                          .getElementById('demoExpand')
+                          .classList.toggle('is-open')
+                      "
+                    >
+                      Rozwiń / Zwiń panel
+                    </button>
+                    <div id="demoExpand" class="grid-expand">
+                      <div class="grid-expand-inner">
+                        <div
+                          class="p-3 bg-surface rounded-2 mt-2 text-2 text-muted"
+                        >
+                          Ten tekst rozwija się idealnie płynnie dzięki animacji
+                          <code>grid-template-rows: 0fr</code> na
+                          <code>1fr</code>. Koniec z hakowaniem
+                          <code>max-height: 1000px</code>!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Pulsująca kropka --&gt;
+&lt;span class="status-dot status-done status-ping"&gt;Live&lt;/span&gt;
+
+&lt;!-- Trzęsienie (dodaj klasę .shake) --&gt;
+&lt;button class="btn shake"&gt;Błąd&lt;/button&gt;
+
+&lt;!-- Płynne rozwijanie (Grid Expand) --&gt;
+&lt;div class="grid-expand is-open"&gt;
+  &lt;div class="grid-expand-inner"&gt;
+    Treść, która płynnie się rozwinie...
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 5: BLOBS & GLASSMORPHISM -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">5. Blobs & Glassmorphism</h2>
+            <p class="text-muted mb-4">
+              Nowoczesne tła i efekty matowego szkła. Klasa
+              <code>.bg-blobs</code> generuje animowane, rozmyte plamy w tle, a
+              <code>.bg-glass</code> tworzy efekt szronionego szkła idealny na
+              nakładki.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Wydajność i wsparcie:</h5>
+              <p class="text-2 text-muted m-0">
+                Efekt Glassmorphism wykorzystuje właściwość
+                <code>backdrop-filter: blur()</code>. Upewnij się, że element z
+                tą klasą znajduje się nad innym, kolorowym lub obrazkowym tłem,
+                aby efekt rozmycia był widoczny.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 p-0">
+                <div
+                  class="bg-blobs w-100 position-relative d-flex align-items-center justify-content-center"
+                  style="height: 400px; overflow: hidden"
+                >
+                  <div
+                    class="card bg-glass border-0 p-5 text-center"
+                    style="max-width: 400px; z-index: 10"
+                  >
+                    <h3 class="fw-bold text-dark m-0">Glassmorphism</h3>
+                    <p class="text-dark opacity-75 mt-2 mb-0">
+                      Tło pod tą kartą jest dynamicznie rozmywane.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Kontener z animowanymi plamami (Blobs) --&gt;
+&lt;div class="bg-blobs"&gt;
+  
+  &lt;!-- Karta z efektem matowego szkła --&gt;
+  &lt;div class="card bg-glass"&gt;
+    &lt;h3&gt;Glassmorphism&lt;/h3&gt;
+  &lt;/div&gt;
+  
+  &lt;!-- Wariant ciemny --&gt;
+  &lt;div class="card bg-glass-dark text-white"&gt;
+    &lt;h3&gt;Dark Glass&lt;/h3&gt;
+  &lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 6: WORD ROTATOR -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              6. Word Rotator (Obracający się tekst)
+            </h2>
+            <p class="text-muted mb-4">
+              Dynamiczny efekt tekstowy, idealny do nagłówków Hero.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Wymagania techniczne:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Wymaga załadowania głównego skryptu
+                  <code>molique-script.js</code> do automatycznej zmiany słów co
+                  2.5 sekundy.
+                </li>
+                <li>
+                  Wszystkie słowa muszą znajdować się wewnątrz kontenera
+                  <code>.word-rotator-items</code>, każde w osobnym tagu
+                  <code>&lt;span&gt;</code>.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface py-5">
+                <h2 class="text-8 fw-black m-0 text-center w-100">
+                  Tworzymy niesamowite <br />
+                  <div class="word-rotator text-primary">
+                    <div class="word-rotator-items">
+                      <span>strony www</span>
+                      <span>aplikacje</span>
+                      <span>marki</span>
+                      <span>rozwiązania</span>
+                    </div>
+                  </div>
+                </h2>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;h2&gt;
+  Tworzymy niesamowite
+  &lt;div class="word-rotator text-primary"&gt;
+    &lt;div class="word-rotator-items"&gt;
+      &lt;span&gt;strony www&lt;/span&gt;
+      &lt;span&gt;aplikacje&lt;/span&gt;
+      &lt;span&gt;marki&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/h2&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 7: INTERAKTYWNA IKONA STATUSU -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              7. Interaktywna Ikona Statusu (Checkbox)
+            </h2>
+            <p class="text-muted mb-4">
+              Jeden element HTML, który płynnie transformuje się ze stanu
+              "Dodaj" do stanu "Sukces". Działa jako pełnoprawny, natywny
+              checkbox formularza!
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Zasada działania:</h5>
+              <p class="text-2 text-muted m-0">
+                Komponent wykorzystuje ukryty
+                <code>&lt;input type="checkbox"&gt;</code>. Dzięki temu możesz
+                go używać w formularzach (dane wyślą się do backendu), a stan
+                zaznaczenia (<code>:checked</code>) płynnie animuje ikonę za
+                pomocą czystego CSS. Zero JavaScriptu!
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center py-5"
+              >
+                <div class="text-center">
+                  <!-- Wersja jako Checkbox -->
+                  <label class="status-checkbox mb-3">
+                    <input type="checkbox" name="opcja_premium" value="1" />
+                    <span class="status-icon-toggle hover-spring"></span>
+                  </label>
+                  <h4 class="text-3 fw-bold m-0">Zaznacz mnie!</h4>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Pełnoprawny Checkbox Formularza --&gt;
+&lt;label class="status-checkbox"&gt;
+  &lt;input type="checkbox" name="nazwa_pola" value="1"&gt;
+  &lt;span class="status-icon-toggle"&gt;&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 8: BORDER ANIMATIONS -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              8. Animacje Ramek (Border Effects)
+            </h2>
+            <p class="text-muted mb-4">
+              Zestaw animacji rysowania ramki dookoła elementu. Podzielony na
+              warianty nowoczesne (idealnie opływające zaokrąglenia) oraz
+              klasyczne (tworzące ostre kąty).
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">
+                Ważna adnotacja o narożnikach:
+              </h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  <strong class="text-primary"
+                    >Warianty Główne (.hover-border-draw,
+                    .hover-border-trace):</strong
+                  >
+                  Wykorzystują nowoczesne maskowanie CSS
+                  (<code>mask-composite</code>). Idealnie
+                  <strong>respektują <code>border-radius</code></strong>
+                  kontenera, tworząc gładkie zaokrąglenia.
+                </li>
+                <li>
+                  <strong class="text-danger"
+                    >Warianty Alternatywne z sufiksem "-2"
+                    (.hover-border-draw-2, .hover-border-trace-2):</strong
+                  >
+                  Wykorzystują <code>linear-gradient</code>. Rysują idealnie
+                  proste linie, ale
+                  <strong>ignorują zaokrąglenia</strong> kontenera (tworzą ostre
+                  kąty). Przydatne do surowych, technicznych interfejsów.
+                </li>
+                <li>
+                  <strong class="text-info"
+                    >Zmiana koloru (Customization):</strong
+                  >
+                  Domyślnie wszystkie animacje używają koloru
+                  <code>primary</code>. Aby go zmienić, nie twórz nowych klas!
+                  Użyj lokalnej zmiennej CSS bezpośrednio w HTML: <br />
+                  <code>style="--hover-border-color: var(--success);"</code>
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center gap-4 py-5 flex-wrap"
+              >
+                <!-- Nowoczesne (Zaokrąglone) -->
+                <div
+                  class="card p-4 text-center hover-border-draw cursor-pointer"
+                  style="width: 220px"
+                >
+                  <h4 class="text-4 fw-bold m-0">Border Draw</h4>
+                  <p class="text-muted text-2 m-0 mt-2">
+                    Nowoczesny (Zaokrąglony)
+                  </p>
+                </div>
+
+                <div
+                  class="card p-4 text-center hover-border-trace cursor-pointer"
+                  style="width: 220px"
+                >
+                  <h4 class="text-4 fw-bold m-0">Border Trace</h4>
+                  <p class="text-muted text-2 m-0 mt-2">
+                    Nowoczesny (Zaokrąglony)
+                  </p>
+                </div>
+
+                <!-- Klasyczne (Ostre) -->
+                <div
+                  class="card p-4 text-center hover-border-draw-2 cursor-pointer"
+                  style="--hover-border-color: var(--success); width: 220px"
+                >
+                  <h4 class="text-4 fw-bold m-0">Border Draw 2</h4>
+                  <p class="text-muted text-2 m-0 mt-2">
+                    Klasyczny (Ostre rogi) z kolorem --success
+                  </p>
+                </div>
+
+                <div
+                  class="card p-4 text-center hover-border-trace-2 cursor-pointer"
+                  style="--hover-border-color: var(--danger); width: 220px"
+                >
+                  <h4 class="text-4 fw-bold m-0">Border Trace 2</h4>
+                  <p class="text-muted text-2 m-0 mt-2">
+                    Klasyczny (Ostre rogi) z kolorem --danger
+                  </p>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Warianty Nowoczesne (Zaokrąglone rogi) --&gt;
+&lt;div class="hover-border-draw"&gt;Domyślny kolor&lt;/div&gt;
+&lt;div class="hover-border-trace" style="--hover-border-color: var(--success);"&gt;Zielony wąż&lt;/div&gt;
+
+&lt;!-- Warianty Klasyczne (Ostre rogi) --&gt;
+&lt;div class="hover-border-draw-2" style="--hover-border-color: var(--danger);"&gt;Czerwona ramka&lt;/div&gt;
+&lt;div class="hover-border-trace-2"&gt;Domyślny kolor&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 9:TYPEWRITER -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">9. Typewriter</h2>
+            <p class="text-muted mb-4">
+              Pisze tekst litera po literze, gdy tylko element pojawi się na
+              ekranie.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Zasada działania:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Wymaga atrybutu <code>data-text</code> z docelowym tekstem.
+                  Skrypt JS automatycznie "pisze" tekst litera po literze, gdy
+                  tylko element pojawi się na ekranie (Intersection Observer).
+                  Prędkość regulujesz atrybutem
+                  <code>data-speed</code> (domyślnie 30ms).
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column w-100 bg-surface justify-content-center gap-5 py-5"
+              >
+                <!-- Typewriter -->
+                <div class="text-center">
+                  <p class="text-2 text-muted mb-2">
+                    Pojawia się przy scrollowaniu:
+                  </p>
+                  <h2
+                    class="text-8 fw-black typewriter m-1 text-primary"
+                    data-text="Tworzymy niesamowite marki."
+                    data-speed="50"
+                  ></h2>
+                  <hr class="my-4" />
+                  <p
+                    class="text-2 fw-black typewriter mt-5 d-block text-muted"
+                    data-text="Ten efekt można wykorzystać także do dłuższych akapitów, nagłówków i cytatów. Zmiana adtrybutu data-speed pozwala regulować prędkość pisania."
+                    data-speed="5"
+                  ></p>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Efekt pisania na maszynie --&gt;
+&lt;h2 class="typewriter" data-text="Twój tekst" data-speed="40"&gt;&lt;/h2&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-select.html" class="btn btn-secondary"
+              >➔ Wstecz: Select & Switche</a
+            >
+            <a
+              href="docs-widgets.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Widgety ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Skrypty -->
+    <script src="js/molique-script.js"></script>
+    <script src="js/molique-script-widgets.js"></script>
+    <script src="js/modules/tilt.js"></script>
+    <script>
+      // NAPRAWIONE: Funkcja do restartowania animacji Reveal
+      function toggleReveals() {
+        const reveals = document.querySelectorAll(".demo-reveal");
+        reveals.forEach((el) => {
+          el.classList.remove("is-visible");
+          el.style.transition = "none"; // 1. Wyłączamy płynność
+          void el.offsetWidth; // 2. Wymuszamy natychmiastowy skok do stanu 0
+          el.style.transition = ""; // 3. Włączamy płynność z powrotem
+          el.classList.add("is-visible"); // 4. Odpalamy animację!
+        });
+      }
+
+      // NAPRAWIONE: Funkcja do restartowania animacji Shake
+      function triggerShake(buttonElement) {
+        buttonElement.classList.remove("shake");
+        void buttonElement.offsetWidth; // Wymuszenie reflow dla animacji keyframes
+        buttonElement.classList.add("shake");
+      }
+    </script>
+  </body>
+</html>

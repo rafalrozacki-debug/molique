@@ -1,0 +1,592 @@
+/**
+ * molique - Komponenty Biznesowe
+ * Zawiera Tabele Cenowe, Paski Postępu, Oś Czasu (Timeline) oraz Stepper.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   1. TABELE CENOWE (Pricing Tables)
+   ========================================= */
+.pricing-table {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-unit) * 4);
+  text-align: center;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Wyróżniona karta (np. "Najpopularniejsze") */
+  &.is-featured {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: scale(1.05);
+    z-index: 2;
+    background-color: var(--bg-body);
+    
+    /* Tasiemka (Ribbon) */
+    &::before {
+      content: 'Popularne';
+      position: absolute;
+      top: 15px;
+      right: -35px;
+      background-color: var(--primary);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: var(--fw-bold);
+      padding: 4px 40px;
+      transform: rotate(45deg);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.pricing-header {
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  
+  .pricing-title {
+    font-size: 1.25rem;
+    font-weight: var(--fw-bold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .pricing-price {
+    font-size: 3rem;
+    font-weight: var(--fw-black);
+    color: var(--text-main);
+    line-height: 1;
+    margin: calc(var(--spacing-unit) * 2) 0;
+    
+    span {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: var(--fw-normal);
+    }
+  }
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 calc(var(--spacing-unit) * 4) 0;
+  flex-grow: 1; /* Pcha przycisk na sam dół */
+  
+  li {
+    padding: calc(var(--spacing-unit) * 1.5) 0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    
+    &:last-child { border-bottom: none; }
+    
+    /* Przekreślone, niedostępne funkcje */
+    &.is-disabled {
+      color: var(--text-muted);
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+  }
+}
+
+/* =========================================
+   2. PASKI POSTĘPU (Progress Bars)
+   ========================================= */
+.progress {
+  display: flex;
+  height: 8px; /* Cienki, nowoczesny pasek */
+  overflow: hidden;
+  background-color: var(--border-color);
+  border-radius: 50px;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--primary);
+  transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: var(--fw-bold);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  color: var(--text-main);
+}
+
+@layer components {
+  /* =========================================
+     3. TIMELINE (Oś czasu - Wersja Hybrydowa)
+     ========================================= */
+  
+  /* --- WERSJA KLASYCZNA (Pseudo-elementy) --- */
+  .timeline {
+    --timeline-line-color: var(--border-color);
+    --timeline-dot-color: var(--primary);
+    --timeline-dot-size: 14px;
+    --timeline-spacing: 30px;
+    
+    position: relative;
+    padding-left: var(--timeline-spacing);
+    margin: calc(var(--spacing-unit) * 4) 0;
+    list-style: none;
+    
+    /* Główna linia */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: calc(var(--timeline-dot-size) / 2 - 1px);
+      height: 100%;
+      width: 2px;
+      background: var(--timeline-line-color);
+    }
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    
+    &:last-child { margin-bottom: 0; }
+    
+    /* Domyślna kropka */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: calc(var(--timeline-spacing) * -1);
+      width: var(--timeline-dot-size);
+      height: var(--timeline-dot-size);
+      border-radius: 50%;
+      background: var(--timeline-dot-color);
+      border: 2px solid var(--bg-body);
+      z-index: 2;
+    }
+  }
+
+  /* Wariant 1: Duże kółka na ikony */
+  .timeline-large {
+    --timeline-dot-size: 48px;
+    --timeline-spacing: 70px;
+    
+    .timeline-item::before { display: none; }
+  }
+
+  .timeline-badge {
+    position: absolute;
+    top: 0;
+    left: calc(var(--timeline-spacing) * -1);
+    width: var(--timeline-dot-size);
+    height: var(--timeline-dot-size);
+    border-radius: 50%;
+    background: var(--bg-body);
+    border: 2px solid var(--border-color);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--fw-bold);
+    font-size: 1.25rem;
+    z-index: 2;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-speed), color var(--transition-speed);
+  }
+
+  .timeline-item:hover .timeline-badge {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* Wariant 2: Automatyczna numeracja */
+  .timeline-numbered {
+    @extend .timeline-large;
+    counter-reset: timeline-step;
+    
+    .timeline-item {
+      counter-increment: timeline-step;
+      
+      &::after {
+        content: counter(timeline-step);
+        position: absolute;
+        top: 0;
+        left: calc(var(--timeline-spacing) * -1);
+        width: var(--timeline-dot-size);
+        height: var(--timeline-dot-size);
+        border-radius: 50%;
+        background: var(--bg-body);
+        border: 2px solid var(--border-color);
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: var(--fw-light);
+        font-size: 1.5rem;
+        z-index: 2;
+        transition: border-color var(--transition-speed), background-color var(--transition-speed);
+      }
+      
+      &:hover::after {
+        border-color: var(--primary);
+        background-color: var(--primary);
+        color: #fff;
+      }
+    }
+  }
+
+  /* --- WERSJA ZAAWANSOWANA (Grid / Etykiety po lewej) --- */
+  .timeline-labeled {
+    --timeline-label-width: 90px;
+    
+    /* Resetujemy klasyczne pseudo-elementy, bo tu używamy Grida */
+    padding-left: 0;
+    &::before { display: none; }
+    
+    .timeline-item {
+      margin-bottom: 0;
+      &::before, &::after { display: none; }
+      
+      /* Układ Grida */
+      display: grid;
+      grid-template-columns: var(--timeline-label-width) 24px 1fr;
+      gap: calc(var(--spacing-unit) * 2);
+      
+      /* Mobile: Data nad treścią */
+      @include mq(md, max) {
+        grid-template-columns: 24px 1fr;
+        
+        .timeline-label {
+          grid-column: 2;
+          text-align: left;
+          display: flex;
+          align-items: center;
+          gap: calc(var(--spacing-unit) * 1);
+          padding-top: 0;
+          margin-bottom: calc(var(--spacing-unit) * 0.5);
+        }
+        
+        .timeline-separator {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+        }
+      }
+    }
+
+    /* Elementy wewnętrzne Grida */
+    .timeline-label {
+      text-align: right;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      padding-top: 4px;
+    }
+
+    .timeline-separator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timeline-node {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      flex-shrink: 0;
+      margin-top: 6px;
+      z-index: 2;
+      
+      &.node-primary { border-color: var(--primary); }
+      &.node-success { border-color: var(--success); }
+      &.node-danger { border-color: var(--danger); }
+    }
+
+    .timeline-line {
+      width: 2px;
+      flex-grow: 1;
+      background-color: var(--border-color);
+      margin-top: 4px;
+      margin-bottom: calc(var(--spacing-unit) * -2); 
+      z-index: 1;
+    }
+
+    .timeline-item:last-child .timeline-line {
+      display: none;
+    }
+
+    .timeline-content {
+      padding-bottom: calc(var(--spacing-unit) * 4);
+    }
+  }
+}
+
+/* =========================================
+   4. STEPPER (Pasek postępu formularza)
+   ========================================= */
+.stepper {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 1);
+  overflow-x: auto;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.step {
+  flex: 1; 
+  min-width: 140px; 
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 6px;
+    background-color: var(--border-color);
+    border-radius: 4px;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    transition: background-color var(--transition-speed);
+  }
+
+  &:hover { color: var(--text-main); }
+
+  &.is-active {
+    color: var(--text-main);
+    font-weight: var(--fw-bold);
+    &::before { background-color: var(--primary); }
+  }
+}
+
+/* Wariant 2: Stepper Numerowany (Kółka i linie) */
+.stepper-numbered {
+  counter-reset: stepper-counter;
+  gap: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+  
+  .step {
+    position: relative;
+    text-align: center;
+    padding-top: 44px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+    min-width: 120px;
+    
+    &::before { display: none; }
+    
+    &::after {
+      counter-increment: stepper-counter;
+      content: counter(stepper-counter);
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--fw-bold);
+      font-size: 0.875rem;
+      z-index: 2;
+      transition: all var(--transition-speed);
+    }
+
+    .step-line {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: var(--border-color);
+      z-index: 1;
+      transition: background-color var(--transition-speed);
+    }
+
+    &:last-child .step-line { display: none; }
+
+    &.is-active, &.is-completed {
+      color: var(--text-main);
+      &::after {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+    }
+    
+    &.is-completed .step-line {
+      background-color: var(--primary);
+    }
+  }
+}
+/* =========================================
+   5. TESTIMONIALS (Referencje)
+   ========================================= */
+.testimonial {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 4);
+  background: var(--bg-surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.testimonial-quote {
+  font-size: 1.125rem;
+  font-style: italic;
+  color: var(--text-main);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.testimonial-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-name { font-weight: var(--fw-bold); margin: 0; }
+.testimonial-role { font-size: 0.875rem; color: var(--text-muted); margin: 0; }
+.testimonial-stars { color: var(--warning); margin-bottom: calc(var(--spacing-unit) * 2); }
+
+/* =========================================
+   6. WORD ROTATOR (Obracający się tekst)
+   ========================================= */
+.word-rotator {
+  display: inline-flex;
+  vertical-align: bottom;
+  overflow: hidden;
+  position: relative;
+}
+
+.word-rotator-items {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center; 
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center; 
+  
+  span {
+    display: block;
+    white-space: nowrap;
+  }
+}
+
+/* =========================================
+   7. NAV FILTERS (Filtry Portfolio)
+   ========================================= */
+.nav-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  gap: calc(var(--spacing-unit) * 1);
+  
+  button {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+    border-radius: var(--border-radius);
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    
+    &:hover {
+      color: var(--primary);
+      background-color: var(--card-bg-subtle);
+    }
+    
+    &.is-active {
+      color: #fff;
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+  }
+}
+
+.filter-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  
+  &.is-hidden { display: none !important; }
+  &.is-animated { animation: filterPop 0.4s ease-out forwards; }
+}
+
+@keyframes filterPop {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* =========================================
+   5. PRICING LIST (Lista z kropkami)
+   ========================================= */
+.pricing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+}
+
+.pricing-list-title {
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pricing-list-dots {
+  flex-grow: 1;
+  border-bottom: 2px dotted var(--border-color);
+  margin: 0 8px;
+  position: relative;
+  top: -4px;
+  opacity: 0.5;
+}
+
+.pricing-list-price {
+  font-weight: var(--fw-black);
+  color: var(--primary);
+  font-size: 1.125rem;
+  white-space: nowrap;
+}

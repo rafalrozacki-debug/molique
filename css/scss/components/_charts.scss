@@ -1,0 +1,300 @@
+/**
+ * molique - Wykresy i Wizualizacje Danych (Data Viz)
+ * Architektura Progressive Enhancement (Czysty CSS/SVG jako fallback)
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   0. CSS HOUDINI (Rejestracja zmiennych do animacji)
+   ========================================= */
+/* Pozwala przeglądarce płynnie animować wartości procentowe w gradientach! */
+@property --chart-val {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
+}
+
+/* =========================================
+   1. BAZOWY KONTENER
+   ========================================= */
+.r-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Domyślna wysokość dla dużych wykresów */
+  display: flex;
+  align-items: flex-end;
+  
+  /* Zabezpieczenie przed rozsadzeniem kontenera */
+  max-width: 100%;
+  
+  /* WARIANT: MICRO CHART (Do kart statystyk i tabel) */
+  &.chart-micro {
+    width: 80px;  /* Sztywna, bezpieczna szerokość */
+    height: 40px; /* Sztywna, bezpieczna wysokość */
+    flex-shrink: 0; /* Zapobiega zgniataniu przez Flexboxa */
+  }
+}
+
+/* =========================================
+   2. SPARKLINES (Wykresy słupkowe)
+   ========================================= */
+.chart-sparkline {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  gap: 4px;
+}
+
+.sparkline-bar {
+  flex: 1;
+  height: var(--val, 0%);
+  background-color: var(--primary);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  &:hover { opacity: 0.8; }
+
+  /* Animacja rośnięcia przy ładowaniu */
+  @starting-style {
+    height: 0%;
+  }
+}
+
+/* =========================================
+   3. RADIAL BAR (Półotwarte pierścienie)
+   ========================================= */
+.chart-radial {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Mapujemy zmienną inline na zarejestrowaną zmienną Houdini */
+  --chart-val: var(--val, 0%);
+  
+  background: conic-gradient(
+    var(--primary) var(--chart-val), 
+    var(--border-color) 0
+  );
+  
+  -webkit-mask-image: radial-gradient(transparent 55%, black 56%);
+  mask-image: radial-gradient(transparent 55%, black 56%);
+  
+  /* MAGIA: Płynna animacja wypełniania pierścienia */
+  transition: --chart-val 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  /* Animacja wejścia całego kółka (Pop-in) */
+  animation: radialPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+
+  @starting-style {
+    --chart-val: 0%;
+  }
+}
+
+@keyframes radialPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.radial-value {
+  font-size: 1.5rem;
+  font-weight: var(--fw-black);
+  color: var(--text-main);
+  /* Animacja pojawiania się tekstu */
+  animation: fadeIn 1s ease backwards 0.3s;
+}
+
+/* =========================================
+   4. HEATMAP (Mapy aktywności)
+   ========================================= */
+.chart-heatmap {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+}
+
+.heatmap-cell {
+  border-radius: 4px;
+  background-color: rgba(var(--primary-rgb), var(--val, 0.1));
+  aspect-ratio: 1 / 1; 
+  
+  animation: heatmapPop 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  
+  &:hover {
+    transform: scale(1.2);
+    box-shadow: var(--shadow-md);
+    z-index: 2;
+  }
+}
+
+@for $i from 1 through 50 {
+  .heatmap-cell:nth-child(#{$i}) {
+    animation-delay: #{$i * 0.02}s; 
+  }
+}
+
+@keyframes heatmapPop {
+  0% { opacity: 0; transform: scale(0.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* =========================================
+   5. SMOOTH AREA CHART (Wykresy warstwowe SVG)
+   ========================================= */
+.chart-area {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  
+  /* MAGIA: Animacja odsłaniania wykresu od lewej do prawej */
+  animation: areaReveal 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  
+  .area-fill {
+    fill: url(#areaGradient);
+    opacity: 0.5;
+  }
+  
+  .area-line {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+@keyframes areaReveal {
+  /* Ukrywa cały wykres po prawej stronie */
+  0% { clip-path: inset(0 100% 0 0); }
+  /* Odsłania cały wykres */
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+/* =========================================
+   6. PIE / DONUT CHART (Wykres kołowy SVG)
+   ========================================= */
+.chart-pie {
+  width: 100%;
+  height: 100%;
+  /* Obracamy o -90 stopni, aby wykres zaczynał się na godzinie 12:00 */
+  transform: rotate(-90deg);
+  overflow: visible;
+  
+  circle {
+    fill: transparent;
+    /* Grubość pierścienia. Zmień na 16 dla pełnego koła (Pie), lub zostaw mniejsze dla Donuta */
+    stroke-width: 6; 
+    /* Zaokrąglone końce segmentów (B2B Premium) */
+    stroke-linecap: round; 
+  }
+  
+  .pie-bg {
+    stroke: var(--card-bg-subtle);
+  }
+  
+  .pie-segment {
+    stroke: currentColor;
+    stroke-dasharray: var(--val) calc(100 - var(--val));
+    stroke-dashoffset: calc(var(--offset) * -1);
+    
+    /* MAGIA PREMIUM: Transform origin na środek SVG */
+    transform-origin: center;
+    
+    /* Płynna animacja rysowania i hovera */
+    animation: pieReveal 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+    transition: 
+      stroke-dasharray var(--transition-speed), 
+      stroke-dashoffset var(--transition-speed),
+      transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+      filter 0.3s ease;
+      
+    cursor: pointer;
+
+    /* Efekt Hover: Segment rośnie i rzuca cień (Drop Shadow działa na SVG!) */
+    &:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      /* Przenosi segment na wierzch */
+      z-index: 10; 
+    }
+  }
+}
+
+@keyframes pieReveal {
+  0% { stroke-dasharray: 0 100; }
+}
+
+/* =========================================
+   7. STATS CARDS (Karty Statystyk)
+   ========================================= */
+.stat-card {
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.stat-title {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: var(--fw-black);
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.stat-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.875rem;
+  font-weight: var(--fw-bold);
+  
+  &.is-positive { color: var(--success); }
+  &.is-negative { color: var(--danger); }
+}
+
+/* =========================================
+   8. EMPTY STATES (Puste stany danych)
+   ========================================= */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 3);
+  background-color: rgba(var(--dark-rgb), 0.02);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}

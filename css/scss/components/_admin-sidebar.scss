@@ -1,0 +1,226 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* Wspólny wygląd kompaktowej wersji logo (plakietka z ikoną/inicjałem).
+   Współdzielony między trybami wąskimi na desktopie (-sm, -md) i mobile,
+   żeby nie duplikować reguł w trzech miejscach. */
+@mixin admin-logo-compact-style {
+  img, svg {
+    max-width: 32px;
+    max-height: 32px;
+    width: auto;
+    height: auto;
+    margin: auto; /* obrazek/SVG zawsze wyśrodkowany w plakietce, niezależnie od justify-content */
+  }
+
+  display: flex;
+  align-items: center;
+  /* flex-start (nie center): przy tekście dłuższym niż plakietka chcemy
+     obciąć koniec, a nie pokazywać losowy fragment ze środka */
+  justify-content: flex-start;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.25rem;
+  font-weight: var(--fw-black);
+  background-color: rgba(var(--light-rgb), 0.1);
+  border-radius: 8px;
+  margin: 0 !important;
+}
+
+@layer components {
+  .admin-sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: var(--layout-padding);
+    height: calc(100dvh - (var(--layout-padding) * 2));
+    border-radius: var(--sidebar-radius);
+    z-index: var(--z-index-sticky);
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
+    gap: calc(var(--spacing-unit) * 3);
+
+    /* Wracamy do bezpiecznego ukrywania, bo sidebar sam będzie rósł */
+    overflow-y: auto;
+    overflow-x: hidden; 
+    
+    /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie */
+    width: var(--current-sidebar-width);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+
+    /* Elegancki scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--light-rgb), 0.1) transparent;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { 
+      background: rgba(var(--light-rgb), 0.1); 
+      border-radius: var(--border-radius); 
+    }
+
+
+    /* Mobile Bottom Nav */
+    @media (max-width: 768px) {
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%; /* Wymuszamy 100% na mobile */
+      height: auto;
+      min-height: 70px;
+      flex-direction: row;
+      align-items: center;
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+      border-radius: 0;
+      border-top: 1px solid rgba(var(--light-rgb), 0.1);
+      padding-bottom: env(safe-area-inset-bottom);
+      overflow: visible; 
+    }
+  }
+  /* ... reszta pliku bez zmian ... */
+
+  /* Logo w sidebarze.
+     Działa niezależnie od typu treści (obrazek, SVG, tekst) - zawsze
+     mieści się w szerokości rodzica i nigdy nie rozsadza sidebara. */
+  .admin-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    height: var(--target-size-min);
+    flex-shrink: 0; /* FIX: overflow:hidden nadaje elementom flex automatyczne min-height:0 -
+                        bez tego logo zgniata się do zera, gdy .admin-nav jest wyższy niż sidebar */
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--sidebar-text-active);
+    font-family: var(--font-family-heading);
+    font-weight: var(--fw-black);
+    font-size: var(--h4-size);
+
+    img, svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
+  /* =========================================
+     ANIMOWANA IKONA PRZEŁĄCZNIKA (Morphing Hamburger)
+     ========================================= */
+  
+  /* 1. Przycisk przełącznika */
+  #molique-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    /* Domyślnie (LG) ikona jest po lewej stronie, jak reszta linków */
+    justify-content: flex-start; 
+    width: 100%; /* Zawsze zajmuje całą szerokość sidebara */
+    height: var(--target-size-min, 44px);
+    padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding jak w linkach */
+    margin: 0;
+    border-radius: var(--border-radius);
+  }
+
+  /* W trybie wąskim (MD i SM) środkujemy ikonę */
+  .admin-layout.sidebar-md #molique-sidebar-toggle,
+  .admin-layout.sidebar-sm #molique-sidebar-toggle {
+    justify-content: center;
+    padding: 0 !important;
+  }
+
+  /* 2. Baza ikony */
+  .sidebar-toggle-icon {
+    width: 20px;
+    height: 14px;
+    position: relative;
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    span {
+      position: absolute;
+      left: 0;
+      height: 2px;
+      background-color: currentColor;
+      border-radius: 2px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+    }
+    
+    /* Domyślny stan (LG) - Klasyczny Hamburger */
+    span:nth-child(1) { top: 0; }
+    span:nth-child(2) { top: 6px; }
+    span:nth-child(3) { top: 12px; }
+  }
+
+  /* Stan 2 (MD) - Asymetryczny */
+  .admin-layout.sidebar-md .sidebar-toggle-icon {
+    span:nth-child(1) { width: 100%; }
+    span:nth-child(2) { width: 75%; }
+    span:nth-child(3) { width: 50%; }
+  }
+
+  /* Stan 3 (SM) - Strzałka w prawo */
+  .admin-layout.sidebar-sm .sidebar-toggle-icon {
+    /* KOREKTA OPTYCZNA: Przesuwamy całą ikonę o 2px w lewo, żeby zrównoważyć ciężar grota strzałki */
+    transform: translateX(-2px);
+    
+    span:nth-child(1) {
+      width: 50%;
+      top: 2px;
+      left: 10px;
+      transform: rotate(45deg);
+    }
+    span:nth-child(2) {
+      width: 100%;
+      top: 6px;
+      left: 0;
+      transform: rotate(0);
+    }
+    span:nth-child(3) {
+      width: 50%;
+      top: 10px;
+      left: 10px;
+      transform: rotate(-45deg);
+    }
+  }
+
+  /* =========================================
+     ZARZĄDZANIE LOGO - WERSJA RESPONSYWNA
+     ========================================= */
+
+  /* Tryby wąskie na desktopie (-sm, -md): logo zwija się automatycznie,
+     tak samo jak etykiety linków w .admin-nav-link (patrz _admin-nav.scss) */
+  @include mq(md) {
+    .sidebar-sm .admin-logo-hide,
+    .sidebar-md .admin-logo-hide {
+      display: none !important;
+    }
+
+    .sidebar-sm .admin-logo-compact,
+    .sidebar-md .admin-logo-compact {
+      @include admin-logo-compact-style;
+    }
+  }
+
+  /* Mobile (sidebar zwinięty do dolnego paska): te same zasady */
+  @media (max-width: 768px) {
+    /* Opcja 1: Całkowite ukrycie logo na mobile */
+    .admin-logo-hide {
+      display: none !important;
+    }
+
+    /* Opcja 2: Wersja kompaktowa (zmniejszona) na mobile */
+    .admin-logo-compact {
+      @include admin-logo-compact-style;
+    }
+  }
+}

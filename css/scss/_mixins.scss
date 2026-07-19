@@ -1,0 +1,41 @@
+// Mixin dla responsywności (Mobile-first)
+
+@use 'variables' as *;
+
+// Mixin dla responsywności
+@mixin mq($breakpoint, $type: min) {
+  @if $type == min {
+    @if $breakpoint == sm {
+      @media (min-width: $breakpoint-sm) { @content; }
+    } @else if $breakpoint == md {
+      @media (min-width: $breakpoint-md) { @content; }
+    } @else if $breakpoint == lg {
+      @media (min-width: $breakpoint-lg) { @content; }
+    } @else if $breakpoint == xl {
+      @media (min-width: $breakpoint-xl) { @content; }
+    }
+  } @else if $type == max {
+    @if $breakpoint == xs {
+      @media (max-width: $breakpoint-xs-max) { @content; }
+    } @else if $breakpoint == sm {
+      @media (max-width: $breakpoint-sm-max) { @content; }
+    } @else if $breakpoint == md {
+      @media (max-width: $breakpoint-md-max) { @content; } /* TEGO BRAKOWAŁO */
+    } @else if $breakpoint == lg {
+      @media (max-width: $breakpoint-lg-max) { @content; } /* TEGO BRAKOWAŁO */
+    }
+  }
+}
+
+// Ukrywa strzałki (spinnery) w polach input type="number"
+@mixin hide-number-spinners {
+  appearance: textfield;
+  // stylelint-disable-next-line property-no-vendor-prefix
+  -moz-appearance: textfield; 
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

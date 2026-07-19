@@ -1,0 +1,1069 @@
+@charset "UTF-8";
+/**
+ * molique - Plik kompilacyjny dla Panelu Admina
+ * Ten plik wygeneruje gotowy molique-style-admin.css
+ */
+@layer modules;
+@layer modules {
+  @layer layout {
+    .admin-layout {
+      /* Zmienne sterujące aktualnym stanem layoutu */
+      --current-sidebar-width: var(--sidebar-width-lg);
+      --layout-gap: 0px;
+      --layout-padding: 0px;
+      --sidebar-radius: 0px;
+      --main-radius: 0px;
+      /* FIX: Domyślne tło dla głównej treści w trybie standardowym */
+      --main-bg: var(--bg-surface);
+      display: grid;
+      grid-template-columns: var(--current-sidebar-width) 1fr;
+      gap: var(--layout-gap);
+      padding: var(--layout-padding);
+      min-height: 100dvh;
+      background-color: var(--bg-body);
+      transition: grid-template-columns var(--transition-speed) ease;
+      /* WARIANTY ROZMIARÓW */
+    }
+    .admin-layout.sidebar-md {
+      --current-sidebar-width: var(--sidebar-width-md);
+    }
+    .admin-layout.sidebar-sm {
+      --current-sidebar-width: var(--sidebar-width-sm);
+    }
+    .admin-layout {
+      /* WARIANT FLOATING (Odsunięty od krawędzi) */
+    }
+    .admin-layout.admin-layout-floating {
+      --layout-gap: calc(var(--spacing-unit) * 3);
+      --layout-padding: calc(var(--spacing-unit) * 3);
+      --sidebar-radius: var(--border-radius-lg);
+      --main-radius: var(--border-radius-lg);
+      --main-bg: var(--bg-surface);
+      /* Na mobile resetujemy floating */
+    }
+    @media (max-width: 768px) {
+      .admin-layout.admin-layout-floating {
+        --layout-gap: 0px;
+        --layout-padding: 0px;
+        --sidebar-radius: 0px;
+        --main-radius: 0px;
+      }
+    }
+    .admin-layout {
+      /* Mobile: Przejście na Bottom Nav */
+    }
+    @media (max-width: 768px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+        --current-sidebar-width: 100%;
+      }
+    }
+    .admin-main {
+      background-color: var(--main-bg);
+      border-radius: var(--main-radius);
+      /* FIX: Gwarantowany padding niezależnie od trybu */
+      padding: calc(var(--spacing-unit) * 4);
+      padding-bottom: calc(var(--spacing-unit) * 12);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      /* Cień tylko w trybie floating */
+    }
+    .admin-layout-floating .admin-main {
+      box-shadow: var(--shadow-sm);
+    }
+  }
+  /**
+   * molique - Zmienne SCSS
+   */
+  /* Wspólny wygląd kompaktowej wersji logo (plakietka z ikoną/inicjałem).
+     Współdzielony między trybami wąskimi na desktopie (-sm, -md) i mobile,
+     żeby nie duplikować reguł w trzech miejscach. */
+  @layer components {
+    .admin-sidebar {
+      background-color: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: var(--layout-padding);
+      height: calc(100dvh - var(--layout-padding) * 2);
+      border-radius: var(--sidebar-radius);
+      z-index: var(--z-index-sticky);
+      padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
+      gap: calc(var(--spacing-unit) * 3);
+      /* Wracamy do bezpiecznego ukrywania, bo sidebar sam będzie rósł */
+      overflow-y: auto;
+      overflow-x: hidden;
+      /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie */
+      width: var(--current-sidebar-width);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+      /* Elegancki scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(var(--light-rgb), 0.1) transparent;
+    }
+    .admin-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .admin-sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .admin-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(var(--light-rgb), 0.1);
+      border-radius: var(--border-radius);
+    }
+    .admin-sidebar {
+      /* Mobile Bottom Nav */
+    }
+    @media (max-width: 768px) {
+      .admin-sidebar {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%; /* Wymuszamy 100% na mobile */
+        height: auto;
+        min-height: 70px;
+        flex-direction: row;
+        align-items: center;
+        padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+        border-radius: 0;
+        border-top: 1px solid rgba(var(--light-rgb), 0.1);
+        padding-bottom: env(safe-area-inset-bottom);
+        overflow: visible;
+      }
+    }
+    /* ... reszta pliku bez zmian ... */
+    /* Logo w sidebarze.
+       Działa niezależnie od typu treści (obrazek, SVG, tekst) - zawsze
+       mieści się w szerokości rodzica i nigdy nie rozsadza sidebara. */
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+      height: var(--target-size-min);
+      flex-shrink: 0; /* FIX: overflow:hidden nadaje elementom flex automatyczne min-height:0 -
+    bez tego logo zgniata się do zera, gdy .admin-nav jest wyższy niż sidebar */
+      margin-bottom: calc(var(--spacing-unit) * 4);
+      overflow: hidden;
+      white-space: nowrap;
+      text-decoration: none;
+      color: var(--sidebar-text-active);
+      font-family: var(--font-family-heading);
+      font-weight: var(--fw-black);
+      font-size: var(--h4-size);
+    }
+    .admin-brand img, .admin-brand svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+    /* =========================================
+       ANIMOWANA IKONA PRZEŁĄCZNIKA (Morphing Hamburger)
+       ========================================= */
+    /* 1. Przycisk przełącznika */
+    #molique-sidebar-toggle {
+      display: flex;
+      align-items: center;
+      /* Domyślnie (LG) ikona jest po lewej stronie, jak reszta linków */
+      justify-content: flex-start;
+      width: 100%; /* Zawsze zajmuje całą szerokość sidebara */
+      height: var(--target-size-min, 44px);
+      padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding jak w linkach */
+      margin: 0;
+      border-radius: var(--border-radius);
+    }
+    /* W trybie wąskim (MD i SM) środkujemy ikonę */
+    .admin-layout.sidebar-md #molique-sidebar-toggle,
+    .admin-layout.sidebar-sm #molique-sidebar-toggle {
+      justify-content: center;
+      padding: 0 !important;
+    }
+    /* 2. Baza ikony */
+    .sidebar-toggle-icon {
+      width: 20px;
+      height: 14px;
+      position: relative;
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .sidebar-toggle-icon span {
+      position: absolute;
+      left: 0;
+      height: 2px;
+      background-color: currentColor;
+      border-radius: 2px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+    }
+    .sidebar-toggle-icon {
+      /* Domyślny stan (LG) - Klasyczny Hamburger */
+    }
+    .sidebar-toggle-icon span:nth-child(1) {
+      top: 0;
+    }
+    .sidebar-toggle-icon span:nth-child(2) {
+      top: 6px;
+    }
+    .sidebar-toggle-icon span:nth-child(3) {
+      top: 12px;
+    }
+    /* Stan 2 (MD) - Asymetryczny */
+    .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(1) {
+      width: 100%;
+    }
+    .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(2) {
+      width: 75%;
+    }
+    .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(3) {
+      width: 50%;
+    }
+    /* Stan 3 (SM) - Strzałka w prawo */
+    .admin-layout.sidebar-sm .sidebar-toggle-icon {
+      /* KOREKTA OPTYCZNA: Przesuwamy całą ikonę o 2px w lewo, żeby zrównoważyć ciężar grota strzałki */
+      transform: translateX(-2px);
+    }
+    .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(1) {
+      width: 50%;
+      top: 2px;
+      left: 10px;
+      transform: rotate(45deg);
+    }
+    .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(2) {
+      width: 100%;
+      top: 6px;
+      left: 0;
+      transform: rotate(0);
+    }
+    .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(3) {
+      width: 50%;
+      top: 10px;
+      left: 10px;
+      transform: rotate(-45deg);
+    }
+    /* =========================================
+       ZARZĄDZANIE LOGO - WERSJA RESPONSYWNA
+       ========================================= */
+    /* Tryby wąskie na desktopie (-sm, -md): logo zwija się automatycznie,
+       tak samo jak etykiety linków w .admin-nav-link (patrz _admin-nav.scss) */
+    @media (min-width: 768px) {
+      .sidebar-sm .admin-logo-hide,
+      .sidebar-md .admin-logo-hide {
+        display: none !important;
+      }
+      .sidebar-sm .admin-logo-compact img, .sidebar-sm .admin-logo-compact svg,
+      .sidebar-md .admin-logo-compact img,
+      .sidebar-md .admin-logo-compact svg {
+        max-width: 32px;
+        max-height: 32px;
+        width: auto;
+        height: auto;
+        margin: auto; /* obrazek/SVG zawsze wyśrodkowany w plakietce, niezależnie od justify-content */
+      }
+      .sidebar-sm .admin-logo-compact,
+      .sidebar-md .admin-logo-compact {
+        display: flex;
+        align-items: center;
+        /* flex-start (nie center): przy tekście dłuższym niż plakietka chcemy
+           obciąć koniec, a nie pokazywać losowy fragment ze środka */
+        justify-content: flex-start;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 1.25rem;
+        font-weight: var(--fw-black);
+        background-color: rgba(var(--light-rgb), 0.1);
+        border-radius: 8px;
+        margin: 0 !important;
+      }
+    }
+    /* Mobile (sidebar zwinięty do dolnego paska): te same zasady */
+    @media (max-width: 768px) {
+      /* Opcja 1: Całkowite ukrycie logo na mobile */
+      .admin-logo-hide {
+        display: none !important;
+      }
+      /* Opcja 2: Wersja kompaktowa (zmniejszona) na mobile */
+      .admin-logo-compact img, .admin-logo-compact svg {
+        max-width: 32px;
+        max-height: 32px;
+        width: auto;
+        height: auto;
+        margin: auto; /* obrazek/SVG zawsze wyśrodkowany w plakietce, niezależnie od justify-content */
+      }
+      .admin-logo-compact {
+        display: flex;
+        align-items: center;
+        /* flex-start (nie center): przy tekście dłuższym niż plakietka chcemy
+           obciąć koniec, a nie pokazywać losowy fragment ze środka */
+        justify-content: flex-start;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 1.25rem;
+        font-weight: var(--fw-black);
+        background-color: rgba(var(--light-rgb), 0.1);
+        border-radius: 8px;
+        margin: 0 !important;
+      }
+    }
+  }
+  /**
+   * molique - Zmienne SCSS
+   */
+  /* Wysokość bloku logo (.admin-brand: target-size-min + margin-bottom) -
+     drill-down submenu w -sm/-md zaczyna się PONIŻEJ tej wysokości, żeby logo
+     zostawało widoczne zamiast znikać pod panelem "Cofnij". */
+  @layer components {
+    .admin-nav {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing-unit) * 1);
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      .admin-nav {
+        flex-direction: row;
+        /* Równe odstępy dla głównych ikon na pasku */
+        justify-content: space-around;
+        width: 100%;
+        gap: 0;
+      }
+    }
+    .admin-nav-link {
+      display: flex;
+      align-items: center;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      font-weight: var(--fw-medium);
+      transition: all var(--transition-speed) ease;
+      border-radius: var(--border-radius);
+      min-height: var(--target-size-min);
+      /* Domyślny układ (Standard - .sidebar-lg) */
+      flex-direction: row;
+      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
+      gap: calc(var(--spacing-unit) * 1.5);
+      justify-content: flex-start;
+    }
+    .admin-nav-link i, .admin-nav-link svg {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+    .admin-nav-link .nav-text {
+      white-space: nowrap;
+      opacity: 1;
+      transition: opacity var(--transition-speed);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .admin-nav-link:hover {
+      color: var(--sidebar-text-active);
+      background-color: rgba(var(--light-rgb), 0.05);
+    }
+    .admin-nav-link.is-active {
+      color: var(--btn-text-light);
+      background-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+    }
+    .admin-nav-link {
+      /* =========================================
+         WARIANTY DESKTOPOWE (Ignorowane na mobile!)
+         ========================================= */
+    }
+    @media (min-width: 768px) {
+      .admin-nav-link {
+        /* --- WARIANT: NARROW (Ikona na górze, tekst na dole) --- */
+      }
+      .sidebar-md .admin-nav-link {
+        /* FIX: Wymuszamy układ pionowy! */
+        flex-direction: column;
+        justify-content: center;
+        padding: calc(var(--spacing-unit) * 1) 4px;
+        gap: calc(var(--spacing-unit) * 0.5);
+        text-align: center;
+        width: 100%;
+      }
+      .sidebar-md .admin-nav-link .nav-text {
+        /* FIX: Mały, wyśrodkowany tekst */
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.1;
+        width: 100%;
+      }
+      .admin-nav-link {
+        /* --- WARIANT: COMPACT (Tylko ikony) --- */
+      }
+      .sidebar-sm .admin-nav-link {
+        justify-content: center;
+        align-items: center;
+        padding: calc(var(--spacing-unit) * 1.5) 0;
+        width: 100%;
+      }
+      .sidebar-sm .admin-nav-link i, .sidebar-sm .admin-nav-link svg, .sidebar-sm .admin-nav-link .sidebar-toggle-icon {
+        margin: 0 !important;
+      }
+      .sidebar-sm .admin-nav-link .nav-text {
+        display: none;
+      }
+    }
+    .admin-nav-link {
+      /* =========================================
+         MOBILE BOTTOM NAV
+         ========================================= */
+    }
+    @media (max-width: 768px) {
+      .admin-nav-link {
+        flex-direction: column;
+        justify-content: center;
+        padding: calc(var(--spacing-unit) * 1);
+        gap: 4px;
+        /* FIX: flex: 1 sprawia, że wszystkie 5 ikon podzieli się miejscem po równo */
+        flex: 1;
+        min-width: 0; /* Pozwala na zgniatanie, jeśli ekran jest bardzo wąski */
+      }
+      .admin-nav-link .nav-text {
+        display: block;
+        font-size: 0.65rem;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.1;
+      }
+      .admin-nav-link.is-active {
+        background-color: transparent;
+        color: var(--primary);
+        box-shadow: none;
+      }
+    }
+    /* =========================================
+       PODZIAŁ I DOLNA NAWIGACJA
+       ========================================= */
+    .admin-nav-divider {
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(var(--light-rgb), 0.1);
+      margin: 0;
+      border: none;
+      flex-shrink: 0;
+      border-top: calc(var(--spacing-unit) * 1) solid transparent;
+      border-bottom: calc(var(--spacing-unit) * 1) solid transparent;
+      background-clip: content-box;
+    }
+    @media (max-width: 768px) {
+      .admin-nav-divider {
+        display: none;
+      }
+    }
+    .admin-nav-bottom {
+      margin-top: auto !important;
+    }
+    @media (max-width: 768px) {
+      .admin-nav-bottom {
+        display: none !important; /* Ukrywamy dolną sekcję na mobile */
+      }
+    }
+    /* FIX: Klasa ukrywająca duplikaty linków na desktopie! */
+    @media (min-width: 768px) {
+      .mobile-only-nav-item {
+        display: none !important;
+      }
+    }
+    /* =========================================
+       MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
+       ========================================= */
+    .mobile-more-toggle {
+      display: none;
+    }
+    .mobile-more-label {
+      cursor: pointer;
+    }
+    @media (min-width: 768px) {
+      .mobile-more-label {
+        display: none !important;
+      }
+    }
+    .admin-nav-dropdown-menu {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing-unit) * 1);
+      /* DESKTOP: Linki na płasko */
+    }
+    @media (min-width: 768px) {
+      .admin-nav-dropdown-menu {
+        display: contents;
+      }
+    }
+    .admin-nav-dropdown-menu {
+      /* MOBILE: Pływająca szuflada */
+    }
+    @media (max-width: 991px) {
+      .admin-nav-dropdown-menu {
+        position: fixed;
+        bottom: 70px; /* Wysokość dolnego paska */
+        left: 0;
+        right: 0;
+        width: 100%;
+        background-color: var(--sidebar-bg);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top-left-radius: var(--border-radius-lg, 24px);
+        border-top-right-radius: var(--border-radius-lg, 24px);
+        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+        padding-bottom: calc(var(--spacing-unit) * 4);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        /* FIX: Długie listy (np. nawigacja dokumentacji) muszą się przewijać w pionie,
+           inaczej szuflada wystaje ponad górną krawędź ekranu */
+        max-height: calc(100dvh - 70px - var(--spacing-unit) * 4);
+        overflow-y: auto;
+        /* FIX: Zamiast display: none, ukrywamy szufladę pod ekranem! */
+        visibility: hidden;
+        transform: translateY(100%);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s;
+      }
+      .admin-nav-dropdown-menu .admin-nav-link {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: calc(var(--spacing-unit) * 2);
+        min-height: 48px;
+      }
+      .admin-nav-dropdown-menu .admin-nav-link i, .admin-nav-dropdown-menu .admin-nav-link svg {
+        font-size: 1.5rem;
+        margin-right: calc(var(--spacing-unit) * 2) !important;
+      }
+      .admin-nav-dropdown-menu .admin-nav-link .nav-text {
+        display: block;
+        font-size: 1rem;
+        text-align: left;
+        white-space: nowrap;
+      }
+    }
+    .admin-nav-dropdown-menu {
+      /* TEGO BRAKOWAŁO */
+    }
+    /* MAGIA: Wsuwanie szuflady po kliknięciu */
+    @media (max-width: 991px) {
+      .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
+    .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
+      /* TEGO BRAKOWAŁO */
+    }
+    /* =========================================
+       SUBMENU (Rozwijane drzewko linków)
+       ========================================= */
+    .admin-nav-submenu {
+      position: relative;
+    }
+    .admin-nav-submenu summary {
+      list-style: none;
+      cursor: pointer;
+    }
+    .admin-nav-submenu summary::-webkit-details-marker {
+      display: none;
+    }
+    .admin-nav-submenu summary::after {
+      content: "";
+      display: inline-block;
+      margin-left: auto;
+      width: 6px;
+      height: 6px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform var(--transition-speed);
+      opacity: 0.5;
+    }
+    .admin-nav-submenu[open] > summary::after {
+      transform: rotate(-135deg);
+    }
+    /* --- WARIANT DOMYŚLNY (Szeroki Sidebar - Drzewko) --- */
+    .admin-nav-submenu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 4px 0 8px 0;
+      padding-left: calc(var(--spacing-unit) * 5);
+      position: relative;
+    }
+    .admin-nav-submenu-list::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 8px;
+      left: calc(var(--spacing-unit) * 3);
+      width: 1px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .admin-nav-submenu-link {
+      display: flex;
+      align-items: center;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: var(--fw-medium);
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+      border-radius: var(--border-radius);
+      transition: all var(--transition-speed);
+      position: relative;
+      border: 1px solid transparent;
+    }
+    .admin-nav-submenu-link::before {
+      content: "";
+      position: absolute;
+      left: calc(var(--spacing-unit) * -2);
+      top: 50%;
+      width: 12px;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .admin-nav-submenu-link:hover {
+      color: var(--sidebar-text-active);
+      background-color: rgba(var(--light-rgb), 0.05);
+    }
+    .admin-nav-submenu-link.is-active {
+      color: var(--sidebar-text-active);
+      font-weight: var(--fw-bold);
+      border-color: rgba(255, 255, 255, 0.2);
+      background-color: transparent;
+      box-shadow: none !important;
+    }
+    /* --- WARIANTY WĄSKIE (Drill-down Menu) --- */
+    @media (min-width: 768px) {
+      .sidebar-md .admin-nav-submenu,
+      .sidebar-sm .admin-nav-submenu {
+        /* Uciekamy z kontekstu pozycjonowania, żeby móc przykryć cały sidebar! */
+        position: static;
+      }
+      .sidebar-md .admin-nav-submenu summary::after,
+      .sidebar-sm .admin-nav-submenu summary::after {
+        display: none;
+      }
+      .sidebar-md .admin-nav-submenu .admin-nav-submenu-list,
+      .sidebar-sm .admin-nav-submenu .admin-nav-submenu-list {
+        display: none !important;
+      }
+      .sidebar-md .admin-nav-submenu,
+      .sidebar-sm .admin-nav-submenu {
+        /* =========================================
+           STAN OTWARTY (Drill-down Active)
+           ========================================= */
+      }
+      .sidebar-md .admin-nav-submenu[open],
+      .sidebar-sm .admin-nav-submenu[open] {
+        /* 1. Tło przykrywające resztę sidebara PONIŻEJ logo (logo zostaje widoczne) */
+      }
+      .sidebar-md .admin-nav-submenu[open]::before,
+      .sidebar-sm .admin-nav-submenu[open]::before {
+        content: "";
+        position: absolute;
+        top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--sidebar-bg);
+        z-index: 100;
+      }
+      .sidebar-md .admin-nav-submenu[open],
+      .sidebar-sm .admin-nav-submenu[open] {
+        /* 2. Przycisk "Cofnij" (Transformacja tagu <summary>) - pod logo, nie w jego miejscu */
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary,
+      .sidebar-sm .admin-nav-submenu[open] > summary {
+        position: absolute;
+        top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
+        left: 0;
+        width: 100%;
+        height: 70px;
+        z-index: 102;
+        background-color: var(--sidebar-bg);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0;
+        flex-direction: row;
+        justify-content: center;
+        padding: 0;
+        gap: 8px;
+        transition: background-color var(--transition-speed);
+        /* FIX: bez tego przycisk "Cofnij" nie dawał żadnej reakcji na hover/focus
+           i wyglądał jak martwy element. Przyciemniamy (nie rozjaśniamy) - na
+           ciemnym tle sidebara jasne podświetlenie wygląda jak obca, źle
+           dopasowana poświata. */
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary:hover,
+      .sidebar-sm .admin-nav-submenu[open] > summary:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary:focus-visible,
+      .sidebar-sm .admin-nav-submenu[open] > summary:focus-visible {
+        background-color: rgba(0, 0, 0, 0.15);
+        /* FIX: nadpisuje domyślny, jasny pierścień fokusu z _base.scss
+           (oparty o --primary) - na ciemnym tle sidebara wygląda jak jasna
+           poświata zamiast dyskretnego wskaźnika fokusu */
+        outline: none;
+        box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary,
+      .sidebar-sm .admin-nav-submenu[open] > summary {
+        /* Ukrywamy oryginalną ikonę */
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary > i, .sidebar-md .admin-nav-submenu[open] > summary > svg,
+      .sidebar-sm .admin-nav-submenu[open] > summary > i,
+      .sidebar-sm .admin-nav-submenu[open] > summary > svg {
+        display: none !important;
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary,
+      .sidebar-sm .admin-nav-submenu[open] > summary {
+        /* Rysujemy ikonę strzałki w lewo (Cofnij) */
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary::before,
+      .sidebar-sm .admin-nav-submenu[open] > summary::before {
+        content: "";
+        display: block;
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        background-color: currentColor;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary,
+      .sidebar-sm .admin-nav-submenu[open] > summary {
+        /* Zmieniamy tekst na "Cofnij" za pomocą pseudo-elementu */
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary .nav-text,
+      .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+        display: block !important;
+        /* FIX: bez tego .nav-text dziedziczył width:100% z wariantu -md
+           (ikona nad tekstem), przez co przycisk "Cofnij" wyglądał na
+           niewyśrodkowany - tekst rozpychał się na całą dostępną szerokość */
+        width: auto;
+        font-size: 0 !important; /* Ukrywa oryginalny tekst */
+      }
+      .sidebar-md .admin-nav-submenu[open] > summary .nav-text::after,
+      .sidebar-sm .admin-nav-submenu[open] > summary .nav-text::after {
+        content: "Cofnij";
+        font-size: 0.875rem;
+        text-transform: none;
+        letter-spacing: normal;
+      }
+      .sidebar-md .admin-nav-submenu[open],
+      .sidebar-sm .admin-nav-submenu[open] {
+        /* 3. Lista linków submenu - zaczyna się pod przyciskiem Cofnij (który jest pod logo) */
+      }
+      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list,
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+        display: flex !important;
+        position: absolute;
+        top: calc(calc(var(--target-size-min) + var(--spacing-unit) * 4) + 70px);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 101;
+        background-color: var(--sidebar-bg);
+        padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 1);
+        margin: 0;
+        overflow-y: auto;
+        /* Resetujemy linie drzewka */
+      }
+      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list::before,
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
+        display: none;
+      }
+      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
+        justify-content: center;
+        text-align: center;
+        /* FIX: długie słowa bez naturalnych miejsc łamania (spacji, myślnika)
+           wylewały się poza wąski sidebar -sm - poszerzanie -sm nie wchodzi
+           w grę, więc zamiast tego łamiemy słowo, ale TYLKO gdy faktycznie
+           nie mieści się w wierszu (overflow-wrap, nie word-break: break-word -
+           ten drugi łamie słowa nawet gdy zmieściłyby się w całości) */
+        overflow-wrap: break-word;
+      }
+      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before,
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
+        display: none;
+      }
+      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link { /* Ukrywamy poziome kreseczki */ }
+      /* W trybie SM (najwęższym) ukrywamy tekst "Cofnij", zostawiamy samą strzałkę */
+      .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+        display: none !important;
+      }
+      /* --- WARIANT -SM: linki na pełną szerokość z separatorem zamiast ramek ---
+         Sidebar -sm jest zbyt wąski (72px), żeby zaokrąglona ramka + padding
+         wokół każdego linku miały sens - tekst dotykał/wylewał się poza ramkę.
+         Zamiast tego: linki na pełną szerokość, oddzielone cienką linią. */
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+        width: 100%;
+        border-radius: 0;
+        border-width: 0 0 1px 0;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link:last-child {
+        border-bottom: none;
+      }
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link.is-active {
+        background-color: rgba(var(--light-rgb), 0.05);
+      }
+    }
+    /* Na mobile (Bottom Nav) ukrywamy submenu całkowicie */
+    @media (max-width: 768px) {
+      .admin-nav-submenu-list {
+        display: none !important;
+      }
+      .admin-nav-submenu summary::after {
+        display: none;
+      }
+    }
+  } /* ZAMKNIĘCIE @layer components */
+  @layer components {
+    /* =========================================
+       1. LEJEK DANYCH (Pionowy, oparty na --val)
+       ========================================= */
+    .chart-funnel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: calc(var(--spacing-unit) * 0.5);
+      width: 100%;
+      padding: calc(var(--spacing-unit) * 2) 0;
+    }
+    .funnel-stage {
+      /* Szerokość sterowana z HTML, domyślnie 100% */
+      width: var(--val, 100%);
+      min-width: 140px; /* Zapobiega zgnieceniu tekstu na samym dole lejka */
+      min-height: var(--target-size-min);
+      background-color: var(--stage-bg, var(--primary));
+      color: var(--stage-text, var(--btn-text-light));
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      /* Subtelny efekt hover dla interaktywności */
+    }
+    .funnel-stage:hover {
+      filter: brightness(1.1);
+      transform: scale(1.02);
+    }
+    /* =========================================
+       2. LEJEK PROCESOWY (Poziomy CRM Pipeline)
+       ========================================= */
+    .chart-pipeline {
+      display: flex;
+      width: 100%;
+      gap: 4px; /* Odstęp między strzałkami */
+      /* Na mobile zamieniamy w pionowy stos */
+    }
+    @media (max-width: 768px) {
+      .chart-pipeline {
+        flex-direction: column;
+      }
+    }
+    .pipeline-stage {
+      flex: 1;
+      min-height: var(--target-size-min);
+      background-color: var(--stage-bg, var(--bg-surface));
+      color: var(--stage-text, var(--text-main));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+      text-align: center;
+      position: relative;
+      /* Magia CSS: Kształt strzałki (Chevron) */
+      clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
+      /* Pierwszy element nie ma wcięcia z lewej */
+    }
+    .pipeline-stage:first-child {
+      clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
+      border-top-left-radius: var(--border-radius);
+      border-bottom-left-radius: var(--border-radius);
+    }
+    .pipeline-stage {
+      /* Ostatni element nie ma szpica z prawej */
+    }
+    .pipeline-stage:last-child {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
+      border-top-right-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+    .pipeline-stage {
+      /* Aktywny etap */
+    }
+    .pipeline-stage.is-active {
+      --stage-bg: var(--primary);
+      --stage-text: var(--btn-text-light);
+    }
+    .pipeline-stage {
+      /* Reset kształtów na mobile (zwykłe zaokrąglone prostokąty) */
+    }
+    @media (max-width: 768px) {
+      .pipeline-stage {
+        clip-path: none !important;
+        border-radius: var(--border-radius) !important;
+        justify-content: space-between; /* Tekst do lewej, ew. ikona do prawej */
+      }
+    }
+    /* =========================================
+      3. TRUE FUNNEL (Praktyczny Lejek z nóżką)
+      ========================================= */
+    .chart-funnel-true {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      /* Zmieniamy proporcje na kwadrat - bardziej kompaktowe i praktyczne */
+      aspect-ratio: 1/1;
+      gap: 2px;
+      /* MAGIA CSS: Rzeźbiony wielokąt - Szersza nóżka (50% szerokości) */
+      clip-path: polygon(4% 0%, 96% 0%, 98.5% 1%, 100% 4%, 76% 68%, 75% 72%, 75% 92%, 73% 96%, 27% 100%, 25% 98%, 25% 72%, 24% 68%, 0% 4%, 1.5% 1%);
+    }
+    .funnel-true-stage {
+      flex: var(--val, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--stage-bg, var(--primary));
+      color: var(--stage-text, var(--btn-text-light));
+      /* Zabezpieczenie tekstu w wąskiej nóżce */
+      padding: calc(var(--spacing-unit) * 1) 5%;
+      overflow: hidden;
+      line-height: 1.2;
+      text-align: center;
+      transition: filter var(--transition-speed);
+    }
+    .funnel-true-stage:hover {
+      filter: brightness(1.1);
+    }
+    .funnel-true-stage .stage-value {
+      font-size: 1.25rem;
+      font-weight: var(--fw-black);
+    }
+    .funnel-true-stage .stage-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+    }
+  }
+  /**
+   * molique - Zmienne SCSS
+   */
+  /**
+   * molique - Admin dashboard
+   * Zawiera elementy na dashboardzie, takie jak nakładki, karty i inne komponenty.
+   */
+  @layer components {
+    /* =========================================
+       DASHBOARD HEADER (Faux Cutout / Nakładka)
+       ========================================= */
+    .dashboard-header {
+      --cutout-radius: 32px;
+      --cutout-bg: var(--bg-body);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: calc(var(--spacing-unit) * -4);
+      margin-right: calc(var(--spacing-unit) * -4);
+      margin-left: calc(var(--spacing-unit) * -4);
+      margin-bottom: calc(var(--spacing-unit) * 4);
+      padding-left: calc(var(--spacing-unit) * 4);
+      padding-top: calc(var(--spacing-unit) * 4);
+      /* FIX: Resetujemy ujemne marginesy na mobile. 
+         Nie potrzebujemy tu wycięcia, a zapobiega to ucinaniu tekstu! */
+    }
+    @media (max-width: 991px) {
+      .dashboard-header {
+        flex-direction: column;
+        margin-top: 0;
+        margin-left: 0;
+        margin-right: 0;
+        padding-top: 0;
+        padding-left: 0;
+      }
+    }
+    .dashboard-header {
+      /* TEGO BRAKOWAŁO */
+    }
+    .dashboard-header-actions {
+      background-color: var(--cutout-bg);
+      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
+      border-bottom-left-radius: var(--cutout-radius);
+      border-top-right-radius: var(--main-radius, 0);
+      margin-top: calc(var(--spacing-unit) * -4);
+      display: flex;
+      align-items: center;
+      gap: calc(var(--spacing-unit) * 2);
+      position: relative;
+    }
+    @media (min-width: 768px) {
+      .dashboard-header-actions::before {
+        content: "";
+        position: absolute;
+        left: calc(var(--cutout-radius) * -1);
+        top: 0;
+        width: var(--cutout-radius);
+        height: var(--cutout-radius);
+        background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
+        pointer-events: none;
+      }
+      .dashboard-header-actions::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: calc(var(--cutout-radius) * -1);
+        width: var(--cutout-radius);
+        height: var(--cutout-radius);
+        background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
+        pointer-events: none;
+      }
+    }
+    .dashboard-header-actions {
+      /* FIX: Na mobile usuwamy tło i wyrównujemy przyciski do lewej krawędzi tekstu */
+    }
+    @media (max-width: 991px) {
+      .dashboard-header-actions {
+        background-color: transparent;
+        padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Tylko odstęp od góry */
+        border-radius: 0;
+        width: 100%;
+      }
+      .dashboard-header-actions::before, .dashboard-header-actions::after {
+        display: none;
+      }
+    }
+    .dashboard-header-actions {
+      /* TEGO BRAKOWAŁO */
+    }
+  }
+}

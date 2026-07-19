@@ -1,0 +1,179 @@
+/**
+ * molique - Utilities (Narzędzia)
+ * Kolory tekstu, tła, hovery i efekty specjalne (Zgodne z Dark Mode)
+ */
+
+@use '../variables' as *;
+
+@layer utilities {
+  /* =========================================
+     1. KOLORY TEKSTU
+     ========================================= */
+  .text-main { color: var(--text-main) !important; }
+  .text-muted { color: var(--text-muted) !important; }
+  .text-white { color: #ffffff !important; }
+
+  .text-primary { color: var(--primary) !important; }
+  .text-secondary { color: var(--secondary) !important; }
+  .text-success { color: var(--success) !important; }
+  .text-danger { color: var(--danger) !important; }
+  .text-warning { color: var(--warning) !important; }
+  .text-info { color: var(--info) !important; }
+  .text-dark { color: var(--dark) !important; }
+  .text-light { color: var(--light) !important; }
+
+  /* =========================================
+     2. KOLORY TŁA
+     ========================================= */
+  .bg-body { background-color: var(--bg-body) !important; }
+  .bg-surface { background-color: var(--bg-surface) !important; }
+  .bg-transparent { background-color: transparent !important; }
+
+  .bg-primary { background-color: var(--primary) !important; color: var(--btn-text-light) !important; }
+  .bg-secondary { background-color: var(--secondary) !important; color: var(--btn-text-light) !important; }
+  .bg-success { background-color: var(--success) !important; color: var(--btn-text-light) !important; }
+  .bg-danger { background-color: var(--danger) !important; color: var(--btn-text-light) !important; }
+  .bg-warning { background-color: var(--warning) !important; color: var(--text-main) !important; }
+  .bg-info { background-color: var(--info) !important; color: var(--text-main) !important; }
+  .bg-dark { background-color: var(--dark) !important; color: var(--btn-text-light) !important; }
+  .bg-light { background-color: var(--light) !important; color: var(--text-main) !important; }
+
+  /* --- TŁA SUBTELNE (10% krycia) --- */
+  /* Wykorzystujemy zmienne RGB z _root.scss do uzyskania przezroczystości */
+  .bg-primary-subtle { background-color: rgba(var(--primary-rgb), 0.1) !important; color: var(--primary) !important; }
+  .bg-secondary-subtle { background-color: rgba(var(--secondary-rgb), 0.1) !important; color: var(--secondary) !important; }
+  .bg-success-subtle { background-color: rgba(var(--success-rgb), 0.1) !important; color: var(--success) !important; }
+  .bg-danger-subtle { background-color: rgba(var(--danger-rgb), 0.1) !important; color: var(--danger) !important; }
+  .bg-warning-subtle { background-color: rgba(var(--warning-rgb), 0.1) !important; color: var(--warning-hover) !important; }
+  .bg-info-subtle { background-color: rgba(var(--info-rgb), 0.1) !important; color: var(--info-hover) !important; }
+  .bg-dark-subtle { background-color: rgba(var(--dark-rgb), 0.1) !important; color: var(--dark) !important; }
+  .bg-light-subtle { background-color: rgba(var(--light-rgb), 0.5) !important; color: var(--text-main) !important; }
+  .bg-surface-subtle { background-color: rgba(var(--dark-rgb), 0.03) !important; color: var(--text-main) !important; }
+  .bg-body-subtle { background-color: rgba(var(--dark-rgb), 0.05) !important; color: var(--text-main) !important; }
+  .bg-white-subtle { background-color: rgba(255, 255, 255, 0.1) !important; color: var(--text-main) !important; }
+
+  /* =========================================
+     3. HOVER UTILITIES (Generowane z pętli)
+     ========================================= */
+  $theme-colors: (
+    "primary": var(--primary),
+    "secondary": var(--secondary),
+    "success": var(--success),
+    "danger": var(--danger),
+    "warning": var(--warning),
+    "info": var(--info),
+    "light": var(--light),
+    "dark": var(--dark),
+    "surface": var(--bg-surface),
+    "body": var(--bg-body)
+  );
+
+  @each $name, $color in $theme-colors {
+    
+    /* Tło na hover */
+    .bg-hover-#{$name} {
+      transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+      
+      &:hover {
+        background-color: #{$color} !important;
+        
+        /* Automatyczny kontrast tekstu */
+        @if $name == "primary" or $name == "success" or $name == "danger" or $name == "dark" or $name == "info" or $name == "secondary" {
+          color: var(--btn-text-light) !important;
+        } @else if $name == "warning" or $name == "light" or $name == "surface" or $name == "body" {
+          color: var(--text-main) !important;
+        }
+      }
+    }
+
+    /* Tekst na hover */
+    .text-hover-#{$name} {
+      transition: color var(--transition-speed) ease;
+      &:hover { color: #{$color} !important; }
+    }
+    
+    /* Obramowanie na hover */
+    .border-hover-#{$name} {
+      transition: border-color var(--transition-speed) ease;
+      &:hover { border-color: #{$color} !important; }
+    }
+  }
+
+  /* =========================================
+     4. GLASSMORPHISM
+     ========================================= */
+  .bg-glass {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(var(--bg-surface-rgb), 0.15) 0%, rgba(var(--bg-surface-rgb), 0.01) 100%);
+    backdrop-filter: blur(25px) saturate(180%) brightness(120%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%) brightness(120%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: var(--shadow-lg), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    border-radius: var(--border-radius);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0.06;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      z-index: 0;
+    }
+
+    > * { position: relative; z-index: 1; }
+  }
+
+  [data-theme="dark"] .bg-glass {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.02) 100%);
+    backdrop-filter: blur(25px) saturate(150%);
+    -webkit-backdrop-filter: blur(25px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-lg), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  }
+
+  /* =========================================
+     5. ZAAWANSOWANE TŁA
+     ========================================= */
+
+  /* Narożne gradienty (Efekt łuny) */
+  .bg-gradient-corners {
+    position: relative;
+    background-color: var(--dark);
+    z-index: 1;
+    /* Zabezpieczenie przed wylewaniem się zawartości */
+    overflow: hidden; 
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      
+      /* FIX: Pseudo-element musi dziedziczyć zaokrąglenia od rodzica! */
+      border-radius: inherit; 
+      
+      background: 
+        radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.4) 0%, transparent 50%), 
+        radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.4) 0%, transparent 50%);
+      pointer-events: none;
+    }
+  }
+
+  /* Tekst wycięty z tła (Wymaga zmiennej --clip-img w HTML) */
+  .text-clip-bg {
+    background-image: var(--clip-img);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    display: inline-block;
+  }
+}

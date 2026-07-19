@@ -1,0 +1,63 @@
+/**
+ * molique - Widget Udostępniania (Share Bar)
+ * Pionowy pasek social-share przyklejony do krawędzi ekranu (poziomy
+ * i przyklejony do dołu na mobile). Kolory sieci są celowo brandowe
+ * (nie z palety molique), żeby ikony pozostały rozpoznawalne.
+ */
+
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.share-bar {
+  position: fixed;
+  top: 50%;
+  left: 20px;
+  z-index: var(--z-index-fixed);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.25);
+  padding: calc(var(--spacing-unit) * 1.25);
+  background: #fff;
+  border-radius: 50rem;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-50%);
+
+  @include mq(md, max) {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: row;
+    justify-content: center;
+    border-radius: 0;
+    transform: none;
+  }
+}
+
+.share-btn {
+  width: 40px;
+  height: 40px;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.125rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition-speed), filter var(--transition-speed);
+
+  &:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+  }
+
+  &[data-network='facebook'] { background-color: #1877f2; }
+  &[data-network='twitter'] { background-color: #000000; }
+  &[data-network='linkedin'] { background-color: #0a66c2; }
+  &[data-network='whatsapp'] { background-color: #25d366; }
+  &[data-network='native'] { background-color: var(--primary); }
+}

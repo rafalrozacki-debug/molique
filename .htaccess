@@ -1,0 +1,63 @@
+# =========================================
+# 1. PRZEKIEROWANIE NA HTTPS
+# =========================================
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# =========================================
+# 2. UKRYWANIE ROZSZERZEŃ .html
+# =========================================
+# Kiedy klient wchodzi na /oferta, serwer ładuje plik oferta.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# =========================================
+# 3. WŁASNA STRONA BŁĘDU 404
+# =========================================
+ErrorDocument 404 /404.html
+
+# =========================================
+# 4. KOMPRESJA GZIP / DEFLATE
+# =========================================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# =========================================
+# 5. BROWSER CACHING (Pamięć podręczna)
+# =========================================
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # CSS, JS, Obrazy i Fonty w pamięci na rok
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  
+  # HTML odświeżany co godzinę (żeby klienci widzieli zmiany w tekstach)
+  ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# =========================================
+# 6. NAGŁÓWKI BEZPIECZEŃSTWA (Security Headers)
+# =========================================
+<IfModule mod_headers.c>
+  # Wymusza połączenie HTTPS przez rok i obejmuje subdomeny (HSTS)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  
+  # Blokuje osadzanie strony w ramkach na obcych domenach (Ochrona przed Clickjackingiem)
+  Header always set X-Frame-Options "SAMEORIGIN"
+  
+  # Blokuje przeglądarce zgadywanie typu MIME (Ochrona przed złośliwymi skryptami XSS)
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # Kontroluje, ile informacji o Twojej stronie przekazywać, gdy ktoś kliknie w link wychodzący
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

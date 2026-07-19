@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>molique — Nowoczesny Framework CSS dla B2B</title>
+    <meta
+      name="description"
+      content="molique to lekki framework CSS zbudowany na natywnym HTML5 i najnowszym CSS (Anchor Positioning, :has(), Popover API). Zero JavaScriptu tam, gdzie się da — gotowy pod gęste panele i dashboardy B2B."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <link
+      rel="preload"
+      href="fonts/inter-v20-latin_latin-ext-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/inter-v20-latin_latin-ext-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="fonts/poppins-v24-latin_latin-ext-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="css/molique-style.css" />
+  </head>
+  <body>
+    <!-- ==========================================
+         NAVBAR
+         ========================================== -->
+    <nav class="navbar navbar-sticky">
+      <div class="container navbar-container">
+        <input
+          type="checkbox"
+          id="mobile-nav-toggle"
+          class="navbar-offcanvas-toggle"
+        />
+        <label
+          for="mobile-nav-toggle"
+          class="navbar-offcanvas-backdrop"
+        ></label>
+
+        <a href="index.html" class="navbar-brand"
+          >molique<span class="text-primary">.</span></a
+        >
+
+        <label for="mobile-nav-toggle" class="navbar-toggle m-0">
+          <span></span><span></span><span></span>
+        </label>
+
+        <div class="navbar-menu navbar-menu-offcanvas">
+          <a href="index.html" class="navbar-item">Start</a>
+          <a href="blog.html" class="navbar-item">Blog</a>
+
+          <details class="mega-menu" name="nav-mega">
+            <summary class="navbar-item mega-menu-trigger">Komponenty</summary>
+            <div class="mega-menu-content">
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span>
+                  Layout & Nawigacja
+                </h6>
+                <a href="examples-layout.html" class="mega-menu-link">Grid &amp; Layout</a>
+                <a href="examples-navbar.html" class="mega-menu-link">Navbar</a>
+                <a href="examples-mega-menu.html" class="mega-menu-link">Mega Menu</a>
+                <a href="examples-pagination.html" class="mega-menu-link">Paginacja</a>
+                <a href="examples-dropdown.html" class="mega-menu-link">Dropdown</a>
+                <a href="examples-language-switch.html" class="mega-menu-link">Language Switch</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="14" y2="18"></line></svg></span>
+                  Sekcje & Typografia
+                </h6>
+                <a href="examples-hero-sections.html" class="mega-menu-link">Hero &amp; Sekcje Specjalne</a>
+                <a href="examples-timeline.html" class="mega-menu-link">Oś Czasu</a>
+                <a href="examples-background-video.html" class="mega-menu-link">Wideo w Tle</a>
+                <a href="examples-typography.html" class="mega-menu-link">Typografia &amp; Kolory</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+                  Przyciski & Karty
+                </h6>
+                <a href="examples-buttons.html" class="mega-menu-link">Przyciski</a>
+                <a href="examples-badges.html" class="mega-menu-link">Badges</a>
+                <a href="examples-alerts.html" class="mega-menu-link">Alerty</a>
+                <a href="examples-cards.html" class="mega-menu-link">Karty</a>
+                <a href="examples-testimonials.html" class="mega-menu-link">Referencje</a>
+                <a href="examples-pricing-tables.html" class="mega-menu-link">Tabele Cenowe</a>
+              </div>
+              <div class="mega-menu-featured">
+                <span class="mega-menu-featured-icon">✨</span>
+                <h6 class="mega-menu-featured-title">Nowość w bibliotece</h6>
+                <p class="mega-menu-featured-text">
+                  Dropdown i Alerty dołączyły do 57 gotowych przykładów —
+                  kopiuj i wklejaj do własnego projektu.
+                </p>
+                <a href="examples-dropdown.html" class="mega-menu-featured-link"
+                  >Zobacz co nowego →</a
+                >
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1.5"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="9" x2="9" y2="20"></line><line x1="15" y1="9" x2="15" y2="20"></line></svg></span>
+                  Tabele & Dane
+                </h6>
+                <a href="examples-tables.html" class="mega-menu-link">Tabele B2B</a>
+                <a href="examples-data-rows.html" class="mega-menu-link">Data Rows</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="4" y1="9" x2="20" y2="9"></line><circle cx="7" cy="6.5" r="0.75" fill="currentColor" stroke="none"></circle><circle cx="9.5" cy="6.5" r="0.75" fill="currentColor" stroke="none"></circle></svg></span>
+                  Okna & Nawigacja
+                </h6>
+                <a href="examples-modals.html" class="mega-menu-link">Modale</a>
+                <a href="examples-accordions.html" class="mega-menu-link">Akordeony</a>
+                <a href="examples-tabs.html" class="mega-menu-link">Zakładki</a>
+                <a href="examples-toasts.html" class="mega-menu-link">Powiadomienia</a>
+                <a href="examples-tooltips.html" class="mega-menu-link">Tooltipy</a>
+                <a href="examples-context-menu.html" class="mega-menu-link">Menu Kontekstowe</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="1.5"></circle><path d="M3 16l5-5 4 4 3-3 6 6"></path></svg></span>
+                  Media & Postęp
+                </h6>
+                <a href="examples-carousel.html" class="mega-menu-link">Karuzela</a>
+                <a href="examples-lightbox.html" class="mega-menu-link">Lightbox</a>
+                <a href="examples-portfolio-filters.html" class="mega-menu-link">Filtry Portfolio</a>
+                <a href="examples-progress-bars.html" class="mega-menu-link">Paski Postępu</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="20" y2="20"></line><rect x="6" y="12" width="3" height="8" fill="currentColor" stroke="none"></rect><rect x="11" y="8" width="3" height="12" fill="currentColor" stroke="none"></rect><rect x="16" y="4" width="3" height="16" fill="currentColor" stroke="none"></rect></svg></span>
+                  Wykresy & Dane
+                </h6>
+                <a href="examples-charts-basic.html" class="mega-menu-link">Wykresy Podstawowe</a>
+                <a href="examples-stats-cards.html" class="mega-menu-link">Karty Statystyk</a>
+                <a href="examples-empty-states.html" class="mega-menu-link">Puste Stany</a>
+                <a href="examples-funnels.html" class="mega-menu-link">Lejki</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="4" height="4" rx="1"></rect><path d="M5 7l1 1 2-2"></path><line x1="11" y1="7" x2="20" y2="7"></line><rect x="4" y="15" width="4" height="4" rx="1"></rect><line x1="11" y1="17" x2="20" y2="17"></line></svg></span>
+                  Formularze
+                </h6>
+                <a href="examples-forms-basics.html" class="mega-menu-link">Podstawy Formularzy</a>
+                <a href="examples-checkboxes-radio.html" class="mega-menu-link">Checkboxy &amp; Radio</a>
+                <a href="examples-input-groups.html" class="mega-menu-link">Input Groups</a>
+                <a href="examples-file-upload.html" class="mega-menu-link">File Upload</a>
+                <a href="examples-select.html" class="mega-menu-link">Searchable Select</a>
+                <a href="examples-switches.html" class="mega-menu-link">Przełączniki</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>
+                  Animacje
+                </h6>
+                <a href="examples-reveal-animations.html" class="mega-menu-link">Animacje Wejścia</a>
+                <a href="examples-hover-microinteractions.html" class="mega-menu-link">Mikrointerakcje Hover</a>
+                <a href="examples-text-effects.html" class="mega-menu-link">Efekty Tekstowe</a>
+                <a href="examples-status-feedback.html" class="mega-menu-link">Statusy &amp; Feedback</a>
+                <a href="examples-blobs-glassmorphism.html" class="mega-menu-link">Blobs &amp; Glassmorphism</a>
+                <a href="examples-border-effects.html" class="mega-menu-link">Animacje Ramek</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"></path><path d="M3 13l9 5 9-5"></path></svg></span>
+                  Widgety
+                </h6>
+                <a href="examples-before-after.html" class="mega-menu-link">Przed / Po</a>
+                <a href="examples-speed-dial.html" class="mega-menu-link">Speed Dial</a>
+                <a href="examples-share-widget.html" class="mega-menu-link">Udostępnianie</a>
+                <a href="examples-misc-widgets.html" class="mega-menu-link">Magnetic &amp; Scroll to Top</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span>
+                  E-commerce
+                </h6>
+                <a href="examples-product-cards.html" class="mega-menu-link">Karta Produktu</a>
+                <a href="examples-cart.html" class="mega-menu-link">Koszyk</a>
+                <a href="examples-selection-tiles.html" class="mega-menu-link">Kafelki Wyboru</a>
+                <a href="examples-ratings-swatches.html" class="mega-menu-link">Oceny &amp; Kolory</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"></path><path d="M15 3v4h4"></path><line x1="9" y1="12" x2="16" y2="12"></line><line x1="9" y1="16" x2="14" y2="16"></line></svg></span>
+                  Blog
+                </h6>
+                <a href="examples-blog-posts.html" class="mega-menu-link">Wpisy Blogowe</a>
+                <a href="examples-blog-sidebar.html" class="mega-menu-link">Sidebar Bloga</a>
+                <a href="examples-author-box.html" class="mega-menu-link">Sekcja Autora</a>
+              </div>
+              <div class="mega-menu-group">
+                <h6 class="mega-menu-col-title">
+                  <span class="mega-menu-col-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a8 8 0 1 1 16 0"></path><line x1="12" y1="15" x2="16" y2="10"></line><circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"></circle></svg></span>
+                  Panel Admina
+                </h6>
+                <a href="examples-admin-layout.html" class="mega-menu-link">Layout Admina</a>
+                <a href="examples-stepper.html" class="mega-menu-link">Stepper</a>
+                <a href="examples-status-dots.html" class="mega-menu-link">Kropki Statusu</a>
+              </div>
+            </div>
+          </details>
+
+          <a href="docs.html" class="navbar-item">Dokumentacja</a>
+          <a href="changelog.html" class="navbar-item">Changelog</a>
+          <a href="docs-roadmap.html" class="navbar-item">Roadmapa</a>
+
+          <a href="docs-classes.html" class="btn btn-primary btn-sm ml-md-2"
+            >Zacznij teraz</a
+          >
+          <button
+            class="language-switch-trigger"
+            popovertarget="lang-switch-menu"
+            title="Zmień język"
+          >
+            <span class="language-switch-flag"><img src="img/flags/pl.svg" width="20" height="15" alt="" /></span>
+            <span>PL</span>
+          </button>
+          <div
+            class="dropdown-menu dropdown-menu-end language-switch-menu"
+            popover
+            id="lang-switch-menu"
+          >
+            <a href="#" class="dropdown-item language-switch-item">
+              <span class="language-switch-flag"><img src="img/flags/pl.svg" width="20" height="15" alt="" /></span>
+              <span class="language-switch-name">Polski</span>
+              <span class="language-switch-check"><svg aria-hidden="true" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></span>
+            </a>
+            <a href="#" class="dropdown-item language-switch-item">
+              <span class="language-switch-flag"><img src="img/flags/gb.svg" width="20" height="15" alt="" /></span>
+              <span class="language-switch-name">English</span>
+            </a>
+            <a href="#" class="dropdown-item language-switch-item">
+              <span class="language-switch-flag"><img src="img/flags/de.svg" width="20" height="15" alt="" /></span>
+              <span class="language-switch-name">Deutsch</span>
+            </a>
+          </div>
+          <label class="theme-switch" title="Przełącz motyw (Light/Dark)">
+            <!-- ID musi zgadzać się z tym w JS -->
+            <input
+              type="checkbox"
+              id="theme-toggle"
+              class="theme-switch-input"
+            />
+
+            <div class="theme-switch-track">
+              <!-- Pływająca pastylka -->
+              <span class="theme-switch-thumb"></span>
+
+              <!-- Ikona Słońca (Lewa) -->
+
+              <div class="theme-icon-wrapper">
+                <svg
+                  class="theme-icon icon-sun"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                >
+                  <path
+                    d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm8,24a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"
+                  ></path>
+                </svg>
+              </div>
+
+              <!-- Ikona Księżyca (Prawa) -->
+
+              <div class="theme-icon-wrapper">
+                <svg
+                  class="theme-icon icon-moon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                >
+                  <path
+                    d="M235.54,150.21a104.84,104.84,0,0,1-37,52.91A104,104,0,0,1,32,120,103.09,103.09,0,0,1,52.88,57.48a104.84,104.84,0,0,1,52.91-37,8,8,0,0,1,10,10,88.08,88.08,0,0,0,109.8,109.8,8,8,0,0,1,10,10Z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ==========================================
+         HERO
+         ========================================== -->
+    <header
+      class="position-relative"
+      style="
+        background:
+          linear-gradient(rgba(8, 12, 24, 0.82), rgba(8, 12, 24, 0.92)),
+          url(&quot;img/futuristic-bg.webp&quot;) center/cover;
+      "
+    >
+      <div class="container py-5">
+        <div
+          class="d-flex flex-column flex-md-row align-items-center gap-5 py-5"
+        >
+          <div class="w-100 w-md-50">
+            <span class="badge badge-primary mb-3">molique 1.5.1</span>
+            <h1
+              class="text-9 fw-black mb-3 text-white animate fade-in-up"
+              style="line-height: 1.15"
+            >
+              CSS, który <span class="text-gradient-animated">myśli</span>
+              jak przeglądarka 2026&nbsp;roku
+            </h1>
+            <p
+              class="text-4 mb-4 animate fade-in-up delay-100"
+              style="color: rgba(255, 255, 255, 0.75); max-width: 540px"
+            >
+              Lekki framework B2B zbudowany na natywnym HTML5 i najnowszym CSS —
+              Anchor Positioning, <em>:has()</em>, Popover API. Akordeony, taby,
+              dropdowny i mega menu działają bez ani jednej linijki JavaScriptu.
+            </p>
+            <div
+              class="d-flex flex-column flex-md-row gap-3 animate fade-in-up delay-200"
+            >
+              <a href="docs.html" class="btn btn-primary btn-lg hover-spring"
+                >Zacznij teraz</a
+              >
+              <a
+                href="docs-classes.html"
+                class="btn btn-lg"
+                style="
+                  background: rgba(255, 255, 255, 0.08);
+                  color: #fff;
+                  border: 1px solid rgba(255, 255, 255, 0.25);
+                "
+                >Spis komponentów</a
+              >
+            </div>
+          </div>
+
+          <div class="w-100 w-md-50 animate fade-in-right delay-200">
+            <div class="card border-0 shadow-lg">
+              <div class="component-code m-0">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="tabs tabs-pill" style="--tab-count: 3;"&gt;
+  &lt;input type="radio" name="t" id="t1" class="tab-input" checked&gt;
+  &lt;input type="radio" name="t" id="t2" class="tab-input"&gt;
+  &lt;input type="radio" name="t" id="t3" class="tab-input"&gt;
+
+  &lt;div class="tabs-header"&gt;
+    &lt;div class="tabs-pill-indicator"&gt;&lt;/div&gt;
+    &lt;label for="t1" class="tab-label"&gt;Dzień&lt;/label&gt;
+    &lt;label for="t2" class="tab-label"&gt;Tydzień&lt;/label&gt;
+    &lt;label for="t3" class="tab-label"&gt;Miesiąc&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Zero JavaScriptu. Naprawdę. --&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         STATY
+         ========================================== -->
+    <section class="py-5 bg-body">
+      <div class="container">
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12 col-md-span-3 stat-card text-center">
+            <div class="stat-value">0&nbsp;KB</div>
+            <div class="stat-title">JS w rdzeniu frameworka</div>
+          </div>
+          <div class="col-span-12 col-md-span-3 stat-card text-center">
+            <div class="stat-value">100+</div>
+            <div class="stat-title">Gotowych komponentów</div>
+          </div>
+          <div class="col-span-12 col-md-span-3 stat-card text-center">
+            <div class="stat-value">44px</div>
+            <div class="stat-title">Min. touch target (A11y)</div>
+          </div>
+          <div class="col-span-12 col-md-span-3 stat-card text-center">
+            <div class="stat-value">100%</div>
+            <div class="stat-title">Wsparcie dla Dark Mode</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         FILOZOFIA / FEATURED BOXES
+         ========================================== -->
+    <section class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="text-9 fw-black mb-3">Zbudowany pod gęste panele B2B</h2>
+          <p class="text-4 text-muted" style="max-width: 640px; margin: 0 auto">
+            Nie kolejny framework pod landing page'e. molique projektowaliśmy z
+            myślą o dashboardach, panelach admina i danych — dużo, gęsto i
+            czytelnie.
+          </p>
+        </div>
+
+        <div class="grid-auto gap-4">
+          <div class="featured-box scroll-reveal">
+            <div class="featured-box-icon">⚡</div>
+            <h4 class="text-5 fw-bold mb-2">Zero JS, gdzie się da</h4>
+            <p class="text-muted m-0">
+              Akordeony, taby, dropdowny, mega menu i modale działają na czystym
+              HTML5 i CSS — Radio Hack, <code>&lt;details&gt;</code>
+              i Anchor Positioning zamiast skryptów.
+            </p>
+          </div>
+
+          <div class="featured-box scroll-reveal">
+            <div class="featured-box-icon">🧩</div>
+            <h4 class="text-5 fw-bold mb-2">Kompletny ekosystem</h4>
+            <p class="text-muted m-0">
+              Formularze, tabele, wykresy, e-commerce i panel admina — jeden
+              spójny system klas zamiast składania kilku bibliotek.
+            </p>
+          </div>
+
+          <div class="featured-box scroll-reveal">
+            <div class="featured-box-icon">🌗</div>
+            <h4 class="text-5 fw-bold mb-2">Dark Mode wbudowany</h4>
+            <p class="text-muted m-0">
+              Jedna zmienna motywu na całą paletę kolorów. Zero migotania (FOUC)
+              przy przełączaniu i przy pierwszym ładowaniu strony.
+            </p>
+          </div>
+
+          <div class="featured-box scroll-reveal">
+            <div class="featured-box-icon">♿</div>
+            <h4 class="text-5 fw-bold mb-2">Dostępność od podstawy</h4>
+            <p class="text-muted m-0">
+              Wymuszone 44px pola dotykowe na mobile, widoczny
+              <code>:focus-visible</code> i natywna walidacja formularzy.
+            </p>
+          </div>
+
+          <div class="featured-box scroll-reveal">
+            <div class="featured-box-icon">🚀</div>
+            <h4 class="text-5 fw-bold mb-2">Wydajność GPU</h4>
+            <p class="text-muted m-0">
+              Animacje wyłącznie na <code>transform</code> i
+              <code>opacity</code> — zero kosztownego reflow, nawet w gęstych
+              tabelach.
+            </p>
+          </div>
+
+          <div class="featured-box scroll-reveal">
+            <div class="featured-box-icon">🎨</div>
+            <h4 class="text-5 fw-bold mb-2">Modularny Sass</h4>
+            <p class="text-muted m-0">
+              Importuj tylko to, czego potrzebujesz — od bazowego grida po moduł
+              sklepu, bez zbędnego balastu w bundlu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         ŻYWY PODGLĄD KOMPONENTU
+         ========================================== -->
+    <section class="py-5 bg-body">
+      <div class="container">
+        <div class="d-flex flex-column flex-md-row align-items-center gap-5">
+          <div class="w-100 w-md-50">
+            <span class="badge badge-primary mb-3">Segmented Control</span>
+            <h2 class="text-8 fw-black mb-3">
+              To nie mockup. To jest live, prawdziwy komponent.
+            </h2>
+            <p class="text-4 text-muted mb-4">
+              Suwający się wskaźnik przesuwa się do klikniętej zakładki dzięki
+              CSS <code>:has()</code> — bez JavaScriptu i bez migania. Kliknij
+              poniżej.
+            </p>
+            <a href="docs-interactive.html" class="btn btn-secondary"
+              >Zobacz dokumentację Tabs ➔</a
+            >
+          </div>
+
+          <div class="w-100 w-md-50">
+            <div class="card shadow-sm p-4">
+              <div
+                class="tabs tabs-pill"
+                style="--tab-count: 3; max-width: 420px; margin: 0 auto"
+              >
+                <input
+                  type="radio"
+                  name="home-pill-tabs"
+                  id="home-pt-1"
+                  class="tab-input"
+                  checked
+                />
+                <input
+                  type="radio"
+                  name="home-pill-tabs"
+                  id="home-pt-2"
+                  class="tab-input"
+                />
+                <input
+                  type="radio"
+                  name="home-pill-tabs"
+                  id="home-pt-3"
+                  class="tab-input"
+                />
+
+                <div class="tabs-header">
+                  <div class="tabs-pill-indicator"></div>
+                  <label for="home-pt-1" class="tab-label">Dzień</label>
+                  <label for="home-pt-2" class="tab-label">Tydzień</label>
+                  <label for="home-pt-3" class="tab-label">Miesiąc</label>
+                </div>
+                <div class="tabs-content p-4 border rounded-2 mt-3 bg-surface">
+                  <div class="tab-pane">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                      <span class="status-dot status-done status-ping"></span>
+                      <span class="fw-medium"
+                        >Statystyki z ostatniego dnia</span
+                      >
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar" style="width: 42%"></div>
+                    </div>
+                  </div>
+                  <div class="tab-pane">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                      <span
+                        class="status-dot status-pending status-ping"
+                      ></span>
+                      <span class="fw-medium"
+                        >Statystyki z ostatniego tygodnia</span
+                      >
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar" style="width: 68%"></div>
+                    </div>
+                  </div>
+                  <div class="tab-pane">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                      <span class="status-dot status-draft"></span>
+                      <span class="fw-medium"
+                        >Statystyki z ostatniego miesiąca</span
+                      >
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar" style="width: 91%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CTA
+         ========================================== -->
+    <section class="py-5 bg-gradient-corners text-white">
+      <div class="container text-center py-5">
+        <h2 class="text-9 fw-black mb-3 text-white">Gotowy zacząć budować?</h2>
+        <p
+          class="text-4 mb-4"
+          style="max-width: 560px; margin: 0 auto; opacity: 0.75"
+        >
+          Pełna dokumentacja, gotowe komponenty i kompletny spis klas — wszystko
+          w jednym miejscu, bez rejestracji.
+        </p>
+        <div
+          class="d-flex justify-content-center gap-3 flex-column flex-md-row"
+        >
+          <a href="docs.html" class="btn btn-primary btn-lg"
+            >Przeglądaj dokumentację</a
+          >
+          <a
+            href="docs-classes.html"
+            class="btn btn-lg"
+            style="
+              background: rgba(255, 255, 255, 0.1);
+              color: #fff;
+              border: 1px solid rgba(255, 255, 255, 0.3);
+            "
+            >Spis klas (Cheat Sheet)</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="bg-dark text-white pt-5 pb-4">
+      <div class="container">
+        <div class="grid-auto gap-4 mb-5">
+          <div>
+            <a href="index.html" class="navbar-brand text-white d-block mb-2"
+              >molique<span class="text-primary">.</span></a
+            >
+            <p class="m-0" style="opacity: 0.8">
+              Lekki framework CSS zbudowany na natywnym HTML5 i najnowszym CSS.
+              Zero JavaScriptu tam, gdzie się da.
+            </p>
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3">Wprowadzenie</h6>
+            <a
+              href="docs.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Getting Started</a
+            >
+            <a
+              href="docs-roadmap.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Roadmapa</a
+            >
+            <a
+              href="docs-classes.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Spis Klas (Cheat Sheet)</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3">Komponenty</h6>
+            <a
+              href="docs-buttons.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Przyciski &amp; Badges</a
+            >
+            <a
+              href="docs-forms.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Formularze</a
+            >
+            <a
+              href="docs-cards.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Karty</a
+            >
+            <a
+              href="docs-charts.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Wykresy</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3">Moduły</h6>
+            <a
+              href="docs-eshop.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Sklep Internetowy</a
+            >
+            <a
+              href="docs-blog.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Blog &amp; Artykuły</a
+            >
+            <a
+              href="docs-admin.html"
+              class="d-block text-white text-decoration-none mb-2"
+              style="opacity: 0.8"
+              >Panel Admina</a
+            >
+          </div>
+        </div>
+
+        <hr style="border-color: rgba(255, 255, 255, 0.1)" />
+
+        <div
+          class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-3"
+        >
+          <p class="opacity-50 m-0 text-2">
+            &copy; <span id="footer-year"></span> molique. Framework CSS dla
+            B2B.
+          </p>
+          <p class="opacity-50 m-0 text-2">Wersja 1.5.1</p>
+        </div>
+      </div>
+    </footer>
+
+    <button class="scroll-to-top" aria-label="Wróć na górę">↑</button>
+
+    <script>
+      document.getElementById("footer-year").textContent =
+        new Date().getFullYear();
+    </script>
+    <script src="js/molique-script.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+@layer components {
+  /* =========================================
+     1. BAZOWY INPUT & SELECT
+     ========================================= */
+  .input {
+    --input-border-width: 1px;
+    --input-padding-y: calc(var(--spacing-unit) * 1.25);
+    display: block;
+    width: 100%;
+    padding: var(--input-padding-y) calc(var(--spacing-unit) * 2);
+    font-family: var(--font-family-base);
+    font-weight: var(--fw-medium);
+    line-height: 1.5;
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    background-clip: padding-box;
+    border: var(--input-border-width) solid var(--border-color);
+    border-radius: var(--border-radius);
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+
+     /* --- WARIANTY WIELKOŚCI ---
+        Działają na każdym elemencie noszącym klasę .input: input, select i textarea.
+        Sam .input (bez modyfikatora) to wariant środkowy ("md"). */
+
+    /* Kompaktowy (Idealny do tabel, popoverów i małych widgetów) */
+    &.input-sm {
+      --input-padding-y: calc(var(--spacing-unit) * 0.75);
+      padding: var(--input-padding-y) calc(var(--spacing-unit) * 1.5);
+      font-size: 0.8125rem; /* Mniejszy font */
+      border-radius: calc(var(--border-radius) * 0.8);
+      /* Nadpisujemy globalne 44px dla mobile, jeśli używamy input-sm */
+      min-height: 32px !important;
+    }
+
+    /* Duży (Idealny do wyszukiwarek Hero i głównych formularzy) */
+    &.input-lg {
+      --input-padding-y: calc(var(--spacing-unit) * 1.5);
+      padding: var(--input-padding-y) calc(var(--spacing-unit) * 2.5);
+      font-size: 1.125rem; /* Większy font */
+      border-radius: calc(var(--border-radius) * 1.2);
+      min-height: 56px !important;
+    }
+
+
+    &:focus {
+      border-color: var(--primary);
+      outline: 0;
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+    }
+
+    &::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    &:disabled, &[readonly] {
+      background-color: var(--bg-body);
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* Customowa strzałka dla Selecta */
+  select.input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right calc(var(--spacing-unit) * 1.5) center;
+    background-size: 16px 12px;
+    padding-right: calc(var(--spacing-unit) * 4);
+    cursor: pointer;
+
+    /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) —
+       tu przywracamy miejsce po prawej na strzałkę, żeby jej nie zasłaniać. */
+    &.input-sm { padding-right: calc(var(--spacing-unit) * 3); }
+    &.input-lg { padding-right: calc(var(--spacing-unit) * 5); }
+  }
+
+  /* =========================================
+     2. NATYWNA WALIDACJA (Bez JS)
+     ========================================= */
+  .input:user-valid {
+    border-color: var(--success);
+    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--success-rgb), 0.15); }
+  }
+
+  .input:user-invalid {
+    border-color: var(--danger);
+    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--danger-rgb), 0.15); }
+  }
+
+  .feedback-invalid {
+    display: none;
+    width: 100%;
+    margin-top: calc(var(--spacing-unit) * 0.5);
+    font-size: 0.875em;
+    color: var(--danger);
+  }
+
+  .input:user-invalid ~ .feedback-invalid {
+    display: block;
+    animation: fadeIn var(--transition-speed) ease;
+  }
+
+  /* =========================================
+     3. TEXTAREA: TRYB "JEDNA LINIJKA" (Auto-Expand, Zero JS)
+     ========================================= */
+  .textarea-expandable {
+    /* Do ilu wierszy pole ma się rozwinąć — nadpisywalne per instancja:
+       style="--textarea-rows-expanded: 10;" */
+    --textarea-rows-expanded: 6;
+
+    resize: none;
+    overflow-y: hidden;
+    /* Zmiana wysokości to reflow, więc zgodnie ze Złotą Zasadą GPU
+       (animujemy tylko transform/opacity) — przełącznik jest natychmiastowy. */
+    transition: none;
+    height: calc(1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+
+    /* Rozwinięte: pole aktywne LUB posiadające treść — dzięki :not(:placeholder-shown)
+       tekst nie znika z powrotem do jednej linijki po samej utracie fokusu.
+       WYMAGA atrybutu placeholder (choćby placeholder=" ") na <textarea>. */
+    &:focus,
+    &:not(:placeholder-shown) {
+      height: calc(var(--textarea-rows-expanded) * 1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+      overflow-y: auto;
+    }
+
+    /* Fallback: przeglądarki bez wsparcia jednostki `lh` (np. starsze Safari) */
+    @supports not (height: 1lh) {
+      height: calc(1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        height: calc(var(--textarea-rows-expanded) * 1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
+      }
+    }
+  }
+}

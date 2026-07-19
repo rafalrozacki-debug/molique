@@ -1,0 +1,2187 @@
+<!doctype html>
+<html lang="pl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spis Klas (Cheat Sheet) - molique Docs</title>
+
+    <link rel="stylesheet" href="css/molique-style.css" />
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+
+    <style>
+      /* Lokalne style dla czytelności tabeli */
+      .cheat-sheet-table th {
+        background-color: var(--dark);
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      .class-name {
+        font-family: var(--font-header);
+        color: var(--primary);
+        font-weight: var(--fw-bold);
+        background: rgba(var(--danger-rgb), 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 4px;
+      }
+      .accordion-body {
+        padding: 0; /* Usuwamy padding, żeby tabela wypełniła akordeon */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SIDEBAR -->
+      <aside class="admin-sidebar">
+        <div class="admin-brand">
+          <img src="logo.svg" alt="Logo" />
+        </div>
+        <hr class="admin-nav-divider" />
+
+        <nav class="admin-nav">
+          <a href="docs.html" class="admin-nav-link mobile-only-nav-item"
+            ><span class="nav-text">Start</span></a
+          >
+          <a
+            href="docs-layout.html"
+            class="admin-nav-link mobile-only-nav-item"
+            ><span class="nav-text">Layout</span></a
+          >
+          <a
+            href="docs-buttons.html"
+            class="admin-nav-link mobile-only-nav-item"
+            ><span class="nav-text">Komponenty</span></a
+          >
+          <a
+            href="docs-charts.html"
+            class="admin-nav-link mobile-only-nav-item"
+            ><span class="nav-text">Wykresy</span></a
+          >
+
+          <input type="checkbox" id="docs-mobile-more" class="mobile-more-toggle" />
+          <label for="docs-mobile-more" class="admin-nav-link mobile-more-label">
+            <span class="nav-text">Więcej</span>
+          </label>
+
+          <div class="admin-nav-dropdown-menu">
+          <div class="docs-nav-title">Wprowadzenie</div>
+          <a href="docs.html" class="admin-nav-link">Getting Started</a>
+          <a href="docs-roadmap.html" class="admin-nav-link"
+            >Roadmapa (Plany)</a
+          >
+          <a href="docs-classes.html" class="admin-nav-link is-active"
+            >Spis Klas (Cheat Sheet)</a
+          >
+
+          <div class="docs-nav-title">Layout & Podstawy</div>
+          <a href="docs-layout.html" class="admin-nav-link">Grid & Layout</a>
+          <a href="docs-navbar.html" class="admin-nav-link">Nawigacja & Menu</a>
+          <a href="docs-sections.html" class="admin-nav-link"
+            >Sekcje, Hero & Timeline</a
+          >
+          <a href="docs-typography.html" class="admin-nav-link"
+            >Typografia & Kolory</a
+          >
+
+          <div class="docs-nav-title">Komponenty UI</div>
+          <a href="docs-buttons.html" class="admin-nav-link"
+            >Przyciski & Badges</a
+          >
+          <a href="docs-cards.html" class="admin-nav-link">Karty & Tabele</a>
+          <a href="docs-interactive.html" class="admin-nav-link"
+            >Modale, Tabs & Akordeony</a
+          >
+          <a href="docs-components-extra.html" class="admin-nav-link"
+            >Karuzele & Lightbox</a
+          >
+
+          <div class="docs-nav-title">Wykresy & Dane</div>
+          <a href="docs-charts.html" class="admin-nav-link"
+            >Wykresy (Data Viz)</a
+          >
+
+          <div class="docs-nav-title">Formularze</div>
+          <a href="docs-forms.html" class="admin-nav-link"
+            >Inputy & Walidacja</a
+          >
+          <a href="docs-select.html" class="admin-nav-link"
+            >Searchable Select & Switche</a
+          >
+
+          <div class="docs-nav-title">Efekty & Widgety</div>
+          <a href="docs-animations.html" class="admin-nav-link"
+            >Animacje & Mikrointerakcje</a
+          >
+          <a href="docs-widgets.html" class="admin-nav-link"
+            >Widgety (Speed Dial, Share)</a
+          >
+
+          <div class="docs-nav-title">Moduły zaawansowane</div>
+          <a href="docs-eshop.html" class="admin-nav-link">Sklep Internetowy</a>
+          <a href="docs-blog.html" class="admin-nav-link">Blog & Artykuły</a>
+          <a href="docs-admin.html" class="admin-nav-link"
+            >Panel Admina (Dashboard)</a
+          >
+          </div>
+        </nav>
+      </aside>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper" style="max-width: 1200px">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="fw-black mb-3">Spis Klas (Master Cheat Sheet)</h1>
+            <p class="text-3 text-muted">
+              Kompletna, interaktywna lista wszystkich klas narzędziowych i
+              komponentów dostępnych w frameworku molique.
+            </p>
+          </div>
+
+          <!-- WYSZUKIWARKA -->
+          <div class="input-group shadow-sm mb-4" style="max-width: 400px">
+            <!-- FIX: Usunięto border-right-0 -->
+            <span class="input-group-text bg-surface">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="currentColor"
+                viewBox="0 0 256 256"
+              >
+                <path
+                  d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                ></path>
+              </svg>
+            </span>
+            <!-- FIX: Usunięto border-left-0 i pl-0 -->
+            <input
+              type="text"
+              class="input"
+              id="classSearch"
+              placeholder="Szukaj klasy (np. text-primary)..."
+              data-search-target="#cheatSheetBody"
+            />
+          </div>
+
+          <!-- GŁÓWNA TABELA -->
+          <div
+            class="table-wrapper shadow-sm border-0"
+          >
+            <table class="table table-lg table-hover cheat-sheet-table">
+              <thead>
+                <tr>
+                  <th style="width: 30%">Klasa CSS</th>
+                  <th style="width: 40%">Opis i zastosowanie</th>
+                  <th style="width: 30%">Przykład wizualny</th>
+                </tr>
+              </thead>
+              <tbody id="cheatSheetBody">
+                <!-- ==========================================
+                     SEKCJA 1: BAZA, GRID I LAYOUT
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    1. Baza, Grid i Layout
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.container</span>
+                    <span class="class-name">.container-fluid</span>
+                  </td>
+                  <td class="text-muted">
+                    Główne kontenery ograniczające szerokość treści (max-width:
+                    1200px).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.grid-auto</span>
+                    <span class="class-name">.grid-auto-sm</span>
+                    <span class="class-name">.grid-auto-lg</span>
+                  </td>
+                  <td class="text-muted">
+                    Inteligentne siatki (Auto-fit). Same dopasowują liczbę
+                    kolumn do szerokości ekranu.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.grid-cols-1</span> do
+                    <span class="class-name">-12</span><br /><span
+                      class="class-name"
+                      >.grid-md-cols-1</span
+                    >
+                    do <span class="class-name">-12</span>
+                  </td>
+                  <td class="text-muted">
+                    Sztywne siatki. Wymuszają konkretną liczbę kolumn na
+                    elemencie nadrzędnym (globalnie lub od breakpointu MD).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.col-span-1</span> do
+                    <span class="class-name">-12</span><br /><span
+                      class="class-name"
+                      >.col-md-span-1</span
+                    >
+                    do <span class="class-name">-12</span>
+                  </td>
+                  <td class="text-muted">
+                    Rozpiętość dzieci w siatce (ile kolumn ma zająć dany
+                    element).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.bento-grid</span>
+                    <span class="class-name">.bento-grid-3</span>
+                    <span class="class-name">.bento-grid-4</span>
+                  </td>
+                  <td class="text-muted">
+                    Asymetryczna siatka z automatycznym upychaniem elementów
+                    (dense).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.bento-col-2</span>
+                    <span class="class-name">.bento-col-3</span><br /><span
+                      class="class-name"
+                      >.bento-row-2</span
+                    >
+                    <span class="class-name">.bento-row-3</span>
+                  </td>
+                  <td class="text-muted">
+                    Modyfikatory rozpiętości dla klocków wewnątrz Bento Grid
+                    (działają na desktopie).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.d-none</span>
+                    <span class="class-name">.d-block</span>
+                    <span class="class-name">.d-flex</span>
+                    <span class="class-name">.d-grid</span>
+                  </td>
+                  <td class="text-muted">
+                    Narzędzia do zarządzania właściwością <code>display</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.w-25</span>
+                    <span class="class-name">.w-50</span>
+                    <span class="class-name">.w-100</span>
+                    <span class="class-name">.h-100</span>
+                    <span class="class-name">.vh-100</span>
+                  </td>
+                  <td class="text-muted">
+                    Szybkie wymiarowanie (Sizing) w procentach lub jednostkach
+                    viewportu.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.justify-content-*</span>
+                    <span class="class-name">.align-items-*</span>
+                  </td>
+                  <td class="text-muted">
+                    Wyrównywanie elementów we Flexboxie (np.
+                    <code>center</code>, <code>space-between</code>,
+                    <code>flex-start</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.gap-1</span> do
+                    <span class="class-name">.gap-5</span>
+                  </td>
+                  <td class="text-muted">
+                    Odstępy między elementami we Flexboxie i Gridzie.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.position-relative</span>
+                    <span class="class-name">.position-absolute</span>
+                    <span class="class-name">.position-sticky</span>
+                  </td>
+                  <td class="text-muted">Narzędzia pozycjonowania.</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.top-50</span>
+                    <span class="class-name">.left-50</span>
+                    <span class="class-name">.translate-middle</span>
+                  </td>
+                  <td class="text-muted">Szybkie centrowanie absolutne.</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.sr-only</span>
+                    <span class="class-name">.skip-link</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasy dostępności (A11y) dla czytników ekranu.
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 2: SPACING & BORDERS
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    2. Spacing (Odstępy) i Obramowania
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.m-0</span> do
+                    <span class="class-name">.m-5</span> <br /><span
+                      class="class-name"
+                      >.p-0</span
+                    >
+                    do <span class="class-name">.p-5</span>
+                  </td>
+                  <td class="text-muted">
+                    Marginesy (m) i Paddingi (p). Warianty: t (top), b (bottom),
+                    l (left), r (right), x (poziom), y (pion).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.m-md-*</span>
+                    <span class="class-name">.p-md-*</span>
+                  </td>
+                  <td class="text-muted">
+                    Marginesy i paddingi aplikowane tylko od breakpointu MD
+                    (desktop).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.ml-auto</span>
+                    <span class="class-name">.mr-auto</span>
+                    <span class="class-name">.mt-auto</span>
+                    <span class="class-name">.mb-auto</span>
+                  </td>
+                  <td class="text-muted">
+                    Automatyczne marginesy (wypychanie elementów we Flexboxie).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.border</span>
+                    <span class="class-name">.border-0</span>
+                  </td>
+                  <td class="text-muted">
+                    Dodawanie lub usuwanie obramowania (1px solid). Warianty:
+                    <code>-top</code>, <code>-bottom</code>, <code>-left</code>,
+                    <code>-right</code>.
+                  </td>
+                  <td>
+                    <div class="border p-1 text-center text-2">Ramka</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.rounded-0</span> do
+                    <span class="class-name">.rounded-5</span>
+                  </td>
+                  <td class="text-muted">
+                    Zaokrąglenia rogów (border-radius).
+                  </td>
+                  <td>
+                    <div
+                      class="bg-dark rounded-5"
+                      style="width: 20px; height: 20px; margin: 0 auto"
+                    ></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.rounded-circle</span>
+                    <span class="class-name">.rounded-pill</span>
+                  </td>
+                  <td class="text-muted">
+                    Idealne koło (50%) lub kształt pigułki.
+                  </td>
+                  <td>
+                    <div
+                      class="bg-primary rounded-circle"
+                      style="width: 20px; height: 20px; margin: 0 auto"
+                    ></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.rounded-top-0</span>
+                    <span class="class-name">.rounded-bottom-0</span>
+                  </td>
+                  <td class="text-muted">
+                    Usuwanie zaokrągleń z konkretnych stron.
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 3: TYPOGRAFIA I KOLORY
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    3. Typografia i Kolory
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.text-1</span> do
+                    <span class="class-name">.text-12</span>
+                  </td>
+                  <td class="text-muted">
+                    Płynna skala wielkości tekstu (clamp). Od 0.64rem do
+                    3.05rem.
+                  </td>
+                  <td><span class="text-4 fw-bold">Tekst 4</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.h1</span> do
+                    <span class="class-name">.h6</span>
+                  </td>
+                  <td class="text-muted">
+                    Wymusza styl nagłówka na zwykłym tekście.
+                  </td>
+                  <td><span class="h5 m-0">Nagłówek H5</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.fw-light</span> do
+                    <span class="class-name">.fw-black</span>
+                  </td>
+                  <td class="text-muted">Wagi fontów (od 300 do 900).</td>
+                  <td><span class="fw-black">Gruby tekst</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.text-start</span>
+                    <span class="class-name">.text-center</span>
+                    <span class="class-name">.text-end</span>
+                  </td>
+                  <td class="text-muted">
+                    Wyrównanie tekstu (text-align). Warianty
+                    <code>-md-</code> (np. <code>.text-md-center</code>)
+                    aplikują się od breakpointu desktop.
+                  </td>
+                  <td><span class="text-center">Wyśrodkowany</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.text-uppercase</span>
+                    <span class="class-name">.text-decoration-none</span>
+                  </td>
+                  <td class="text-muted">Transformacje i dekoracje tekstu.</td>
+                  <td><span class="text-uppercase">Wielkie litery</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.text-primary</span>
+                    <span class="class-name">.text-secondary</span><br />
+                    <span class="class-name">.text-success</span>
+                    <span class="class-name">.text-danger</span><br />
+                    <span class="class-name">.text-warning</span>
+                    <span class="class-name">.text-info</span><br />
+                    <span class="class-name">.text-dark</span>
+                    <span class="class-name">.text-light</span><br />
+                    <span class="class-name">.text-muted</span>
+                    <span class="class-name">.text-white</span>
+                  </td>
+                  <td class="text-muted">Pełna paleta kolorów tekstu.</td>
+                  <td>
+                    <span class="text-primary fw-bold">Pri</span>
+                    <span class="text-success fw-bold">Suc</span>
+                    <span class="text-danger fw-bold">Dan</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.bg-primary</span>
+                    <span class="class-name">.bg-secondary</span><br />
+                    <span class="class-name">.bg-success</span>
+                    <span class="class-name">.bg-danger</span><br />
+                    <span class="class-name">.bg-warning</span>
+                    <span class="class-name">.bg-info</span><br />
+                    <span class="class-name">.bg-dark</span>
+                    <span class="class-name">.bg-light</span><br />
+                    <span class="class-name">.bg-surface</span>
+                    <span class="class-name">.bg-body</span>
+                    <span class="class-name">.bg-transparent</span>
+                  </td>
+                  <td class="text-muted">
+                    Pełna paleta kolorów tła. Automatycznie dobierają
+                    kontrastowy kolor tekstu (np. biały tekst na ciemnym tle).
+                  </td>
+                  <td>
+                    <span class="badge bg-primary">Pri</span>
+                    <span class="badge bg-success">Suc</span>
+                    <span class="badge bg-danger">Dan</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.bg-primary-subtle</span>
+                    <span class="class-name">.bg-success-subtle</span><br />
+                    <span class="class-name">.bg-danger-subtle</span>
+                    <span class="class-name">.bg-warning-subtle</span><br />
+                    <span class="class-name">.bg-info-subtle</span>
+                    <span class="class-name">.bg-dark-subtle</span><br />
+                    <span class="class-name">.bg-surface-subtle</span>
+                    <span class="class-name">.bg-body-subtle</span>
+                  </td>
+                  <td class="text-muted">
+                    Subtelne tła (10% krycia). Automatycznie ustawiają kolor
+                    tekstu na dopasowany. Idealne do badge'y i wyróżnień.
+                  </td>
+                  <td>
+                    <span class="badge bg-primary-subtle">Pri</span>
+                    <span class="badge bg-success-subtle">Suc</span>
+                    <span class="badge bg-danger-subtle">Dan</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-muted">
+                    Kolory tła (automatycznie dobierają kontrast tekstu).
+                  </td>
+                  <td>
+                    <span class="badge bg-primary text-white">Primary</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.hover-bg-*</span>
+                    <span class="class-name">.hover-text-*</span>
+                    <span class="class-name">.hover-border-*</span>
+                  </td>
+                  <td class="text-muted">
+                    Zmiana koloru tła, tekstu lub ramki po najechaniu myszką.
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-surface hover-bg-success border cursor-pointer"
+                      >Najedź</span
+                    >
+                  </td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 4: PRZYCISKI I BADGES
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    4. Przyciski i Badges
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.btn</span>
+                    <span class="class-name">.btn-primary</span>
+                    <span class="class-name">.btn-danger</span>
+                  </td>
+                  <td class="text-muted">
+                    Podstawowy przycisk. Wymuszone 44px wysokości na mobile
+                    (A11y).
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm">Przycisk</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.btn-xs</span>
+                    <span class="class-name">.btn-sm</span>
+                    <span class="class-name">.btn-lg</span>
+                    <span class="class-name">.btn-xl</span>
+                  </td>
+                  <td class="text-muted">
+                    Warianty wielkości przycisku. Sam <code>.btn</code> (bez
+                    modyfikatora) to wariant środkowy (<code>.btn-md</code>).
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <button class="btn btn-primary btn-xs">xs</button>
+                      <button class="btn btn-primary btn-lg">lg</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-group</span></td>
+                  <td class="text-muted">
+                    Grupuje przyciski w jeden spójny blok (wspólne,
+                    nakładające się ramki, bez podwójnych linii na stykach).
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <button class="btn btn-secondary btn-sm">A</button>
+                      <button class="btn btn-secondary btn-sm">B</button>
+                      <button class="btn btn-secondary btn-sm">C</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-outline-primary</span></td>
+                  <td class="text-muted">
+                    Przycisk konturowy (przezroczyste tło, kolorowa ramka).
+                  </td>
+                  <td>
+                    <button class="btn btn-outline-primary btn-sm">
+                      Outline
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-action</span></td>
+                  <td class="text-muted">
+                    Ghost button (bez tła i ramki). Idealny do tabel i pasków
+                    narzędzi.
+                  </td>
+                  <td>
+                    <button class="btn-action">
+                      <i class="icon-edit"></i> Edytuj
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.btn-action-group</span>
+                    <span class="class-name">.with-dividers</span>
+                  </td>
+                  <td class="text-muted">
+                    Grupuje przyciski akcji, dodając między nimi pionowe
+                    separatory.
+                  </td>
+                  <td>
+                    <div class="btn-action-group with-dividers">
+                      <button class="btn-action px-2 py-1">A</button>
+                      <button class="btn-action px-2 py-1">B</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.badge</span>
+                    <span class="class-name">.badge-success</span>
+                  </td>
+                  <td class="text-muted">Mała etykieta statusu.</td>
+                  <td><span class="badge badge-success">Sukces</span></td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-glow</span></td>
+                  <td class="text-muted">
+                    Dodaje neonową poświatę (box-shadow) na hover.
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm btn-glow">
+                      Glow
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-glass</span></td>
+                  <td class="text-muted">
+                    Efekt szkła (Glassmorphism). Idealny na ciemne tła i wideo.
+                  </td>
+                  <td class="bg-dark p-2 rounded">
+                    <button class="btn btn-glass btn-sm">Glass</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-3d</span></td>
+                  <td class="text-muted">
+                    Fizyczny przycisk, który "wciska się" po kliknięciu. Wymaga
+                    zmiennej <code>--btn-3d-shadow</code>.
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm btn-3d">
+                      Push Me
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-shine</span></td>
+                  <td class="text-muted">
+                    Przesuwający się błysk światła na hover.
+                  </td>
+                  <td>
+                    <button class="btn btn-dark btn-sm btn-shine">Shine</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.btn-gradient</span></td>
+                  <td class="text-muted">Płynący, animowany gradient tła.</td>
+                  <td>
+                    <button class="btn btn-gradient btn-sm">Gradient</button>
+                  </td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 5: FORMULARZE
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    5. Formularze
+                  </td>
+                </tr>
+
+                <tr>
+                  <td><span class="class-name">.input</span></td>
+                  <td class="text-muted">
+                    Podstawowe pole tekstowe lub select. Posiada focus ring.
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="input p-1 text-2"
+                      placeholder="Wpisz..."
+                      style="min-height: 30px"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.input-sm</span>
+                    <span class="class-name">.input-lg</span>
+                  </td>
+                  <td class="text-muted">
+                    Warianty wielkości <code>.input</code> — działają na
+                    inputach, selectach i textarea. Sam <code>.input</code>
+                    (bez modyfikatora) to wariant środkowy.
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <input
+                        type="text"
+                        class="input input-sm p-1 text-2"
+                        placeholder="sm"
+                        style="max-width: 70px"
+                      />
+                      <input
+                        type="text"
+                        class="input input-lg p-1 text-2"
+                        placeholder="lg"
+                        style="max-width: 90px"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.textarea-expandable</span></td>
+                  <td class="text-muted">
+                    Textarea zwinięta do jednej linijki. Rozwija się po
+                    kliknięciu (lub gdy ma treść) do
+                    <code>--textarea-rows-expanded</code> wierszy, dalej
+                    przewija się w środku. Wymaga atrybutu
+                    <code>placeholder</code>.
+                  </td>
+                  <td>
+                    <textarea
+                      class="input textarea-expandable p-1 text-2"
+                      rows="1"
+                      placeholder="Kliknij…"
+                      style="max-width: 140px"
+                    ></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.form-floating</span></td>
+                  <td class="text-muted">
+                    Kontener dla pływających etykiet (wymaga
+                    <code>placeholder=" "</code> w inpucie).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.input-group</span>
+                    <span class="class-name">.input-group-text</span>
+                  </td>
+                  <td class="text-muted">
+                    Łączy inputy, przyciski i teksty w jeden gładki prostokąt.
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="input p-1 text-2"
+                        style="min-height: 30px"
+                      />
+                      <button
+                        class="btn btn-primary p-1 text-2"
+                        style="min-height: 30px"
+                      >
+                        OK
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.form-switch</span>
+                    <span class="class-name">.form-switch-square</span>
+                    <span class="class-name">.form-switch-outline</span>
+                  </td>
+                  <td class="text-muted">
+                    Przełącznik w stylu iOS. Wymaga
+                    <code>.form-switch-input</code> i
+                    <code>.form-switch-label</code>.
+                  </td>
+                  <td>
+                    <label class="form-switch m-0">
+                      <input
+                        type="checkbox"
+                        class="form-switch-input"
+                        checked
+                      />
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.form-check-input</span>
+                    <span class="class-name">.form-check-label</span>
+                  </td>
+                  <td class="text-muted">
+                    Customowe checkboxy i radio buttons oparte na CSS.
+                  </td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      class="form-check-input m-0"
+                      checked
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.form-pill</span>
+                    <span class="class-name">.form-pill-group</span>
+                  </td>
+                  <td class="text-muted">
+                    Checkboxy/Radio wyglądające jak klikalne pastylki (używa
+                    <code>:has()</code>). Warianty: <code>.pill-success</code>,
+                    <code>.pill-danger</code>.
+                  </td>
+                  <td>
+                    <label class="form-pill m-0 py-1 px-2"
+                      ><input type="checkbox" checked /> Opcja</label
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.custom-select</span>
+                    <span class="class-name">.custom-select-trigger</span>
+                  </td>
+                  <td class="text-muted">
+                    Premium Multi Select oparty na Popover API (top layer —
+                    nie jest przycinany w modalach). Zawiera
+                    <code>.custom-select-dropdown</code>,
+                    <code>.custom-select-option</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.select-search</span></td>
+                  <td class="text-muted">
+                    Pojedynczy Searchable Select (Combobox) oparty na Popover
+                    API (top layer — nie jest przycinany w modalach). Wymaga
+                    JS do obsługi wyboru. Wyszukiwarka opcjonalna — bez
+                    <code>.select-search-input</code> działa jak zwykły
+                    select.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.file-upload</span>
+                    <span class="class-name">.file-upload-animated</span>
+                  </td>
+                  <td class="text-muted">
+                    Strefa Drag & Drop dla plików. Wariant animowany ma biegnącą
+                    ramkę.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.input-range</span>
+                    <span class="class-name">.input-color</span>
+                  </td>
+                  <td class="text-muted">
+                    Zaawansowane inputy z customowym wyglądem.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.feedback-invalid</span></td>
+                  <td class="text-muted">
+                    Komunikat błędu. Pojawia się automatycznie dzięki
+                    <code>:user-invalid</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 6: TABELE I DANE
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    6. Tabele i Dane
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.table-wrapper</span>
+                    <span class="class-name">.table</span>
+                  </td>
+                  <td class="text-muted">
+                    Podstawowa tabela B2B. Warianty: <code>.table-sm</code>,
+                    <code>.table-lg</code>, <code>.table-striped</code>,
+                    <code>.table-hover</code>, <code>.table-borderless</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.thead-light</span>
+                    <span class="class-name">.thead-dark</span>
+                    <span class="class-name">.thead-primary</span>
+                  </td>
+                  <td class="text-muted">
+                    Kolory nagłówków tabeli. Warianty wielkości:
+                    <code>.thead-sm</code>, <code>.thead-lg</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.table-cards</span>
+                    <span class="class-name">.table-cards-always</span>
+                  </td>
+                  <td class="text-muted">
+                    Transformuje tabelę w karty na urządzeniach mobilnych
+                    (wymaga <code>data-label</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.data-row</span>
+                    <span class="class-name">.data-row-actions</span>
+                  </td>
+                  <td class="text-muted">
+                    Szeroki wiersz danych oparty na CSS Grid (idealny do CRM).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.data-row-compact</span>
+                    <span class="class-name">.row-icon</span>
+                    <span class="class-name">.row-content</span>
+                  </td>
+                  <td class="text-muted">
+                    Kompaktowy wiersz (List Item) oparty na Flexboxie.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.accordion</span>
+                    <span class="class-name">.accordion-item</span>
+                  </td>
+                  <td class="text-muted">
+                    Akordeon oparty na natywnym <code>&lt;details&gt;</code> z
+                    płynną animacją.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.tabs</span>
+                    <span class="class-name">.tab-input</span>
+                    <span class="class-name">.tab-label</span>
+                  </td>
+                  <td class="text-muted">Zakładki oparte na CSS Radio Hack.</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.tabs-pill</span>
+                    <span class="class-name">.tabs-pill-indicator</span>
+                  </td>
+                  <td class="text-muted">
+                    Wariant <code>.tabs</code> jako Segmented Control —
+                    wskaźnik przesuwa się do klikniętej zakładki (CSS
+                    <code>:has()</code>, zero JS). Wymaga
+                    <code>style="--tab-count: N;"</code>.
+                  </td>
+                  <td>
+                    <div
+                      class="tabs tabs-pill"
+                      style="--tab-count: 2; max-width: 140px"
+                    >
+                      <input
+                        type="radio"
+                        name="cheatPillTabs"
+                        id="cheatPt1"
+                        class="tab-input"
+                        checked
+                      />
+                      <input
+                        type="radio"
+                        name="cheatPillTabs"
+                        id="cheatPt2"
+                        class="tab-input"
+                      />
+                      <div class="tabs-header">
+                        <div class="tabs-pill-indicator"></div>
+                        <label for="cheatPt1" class="tab-label text-2 p-1"
+                          >A</label
+                        >
+                        <label for="cheatPt2" class="tab-label text-2 p-1"
+                          >B</label
+                        >
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.timeline</span>
+                    <span class="class-name">.timeline-item</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasyczna oś czasu. Warianty: <code>.timeline-large</code>,
+                    <code>.timeline-numbered</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.timeline-labeled</span>
+                    <span class="class-name">.timeline-label</span>
+                  </td>
+                  <td class="text-muted">
+                    Zaawansowana oś czasu z datami po lewej stronie (oparta na
+                    Gridzie).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.progress</span>
+                    <span class="class-name">.progress-bar</span>
+                  </td>
+                  <td class="text-muted">
+                    Prosty pasek postępu. Szerokość ustaw przez
+                    <code>style="width: 60%"</code> na
+                    <code>.progress-bar</code>.
+                  </td>
+                  <td>
+                    <div class="progress w-100" style="max-width: 140px">
+                      <div class="progress-bar" style="width: 60%"></div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.list-group</span>
+                    <span class="class-name">.list-group-item</span>
+                  </td>
+                  <td class="text-muted">
+                    Prosta, pionowa lista elementów ze wspólnymi ramkami.
+                    Dodaj <code>.is-active</code> do zaznaczonego elementu.
+                  </td>
+                  <td>
+                    <div class="list-group w-100" style="max-width: 140px">
+                      <span class="list-group-item p-1 text-2">Element A</span>
+                      <span class="list-group-item p-1 text-2 is-active"
+                        >Element B</span
+                      >
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.grid-expand</span></td>
+                  <td class="text-muted">
+                    Płynny akordeon oparty na CSS Grid
+                    (<code>grid-template-rows: 0fr → 1fr</code>) — zero JS.
+                    Działa wewnątrz <code>&lt;details&gt;</code> lub z klasą
+                    <code>.is-open</code>.
+                  </td>
+                  <td>
+                    <details>
+                      <summary class="cursor-pointer text-2">Rozwiń</summary>
+                      <div class="grid-expand">
+                        <div class="grid-expand-inner text-2 text-muted pt-1">
+                          Ukryta treść.
+                        </div>
+                      </div>
+                    </details>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.carousel</span>
+                    <span class="class-name">.carousel-track</span>
+                    <span class="class-name">.carousel-dots</span>
+                  </td>
+                  <td class="text-muted">
+                    Karuzela slajdów. Wariant <code>.carousel-bg-sync</code>
+                    synchronizuje tło sekcji ze slajdem. Wymaga
+                    <code>carousel.js</code> (autoloader).
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 7: WYKRESY (DATA VIZ)
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    7. Wykresy (Data Viz)
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.r-chart-wrapper</span>
+                    <span class="class-name">.chart-micro</span>
+                  </td>
+                  <td class="text-muted">
+                    Główny kontener wykresu. <code>.chart-micro</code> wymusza
+                    mały rozmiar (np. do kart).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-sparkline</span>
+                    <span class="class-name">.sparkline-bar</span>
+                  </td>
+                  <td class="text-muted">
+                    Wykres słupkowy. Wysokość sterowana zmienną
+                    <code>--val</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-radial</span>
+                    <span class="class-name">.radial-value</span>
+                  </td>
+                  <td class="text-muted">Półotwarty pierścień postępu.</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-heatmap</span>
+                    <span class="class-name">.heatmap-cell</span>
+                  </td>
+                  <td class="text-muted">
+                    Mapa aktywności. Przezroczystość sterowana zmienną
+                    <code>--val</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-area</span>
+                    <span class="class-name">.area-fill</span>
+                  </td>
+                  <td class="text-muted">
+                    Wykres warstwowy oparty na czystym SVG.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-pie</span>
+                    <span class="class-name">.pie-segment</span>
+                  </td>
+                  <td class="text-muted">
+                    Wykres kołowy/Donut. Wymaga zmiennych <code>--val</code> i
+                    <code>--offset</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-funnel</span>
+                    <span class="class-name">.funnel-stage</span>
+                  </td>
+                  <td class="text-muted">Pionowy lejek danych.</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-pipeline</span>
+                    <span class="class-name">.pipeline-stage</span>
+                  </td>
+                  <td class="text-muted">
+                    Poziomy lejek procesowy (strzałki/chevrons).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-funnel-true</span>
+                    <span class="class-name">.funnel-true-stage</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasyczny, trapezowy lejek konwersji z pionową nóżką.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.chart-nav</span>
+                    <span class="class-name">.chart-nav-item</span>
+                  </td>
+                  <td class="text-muted">
+                    Elegancka nawigacja (Segmented Control) do przełączania
+                    widoków wykresów.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.stat-card</span>
+                    <span class="class-name">.stat-value</span>
+                    <span class="class-name">.stat-trend</span>
+                  </td>
+                  <td class="text-muted">
+                    Karta statystyk KPI. Warianty trendu:
+                    <code>.is-positive</code>, <code>.is-negative</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.empty-state</span>
+                    <span class="class-name">.empty-state-icon</span>
+                  </td>
+                  <td class="text-muted">
+                    Pusty stan danych (gdy nie ma wyników).
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 8: NAWIGACJA I ADMIN
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    8. Nawigacja i Admin
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.admin-layout</span>
+                    <span class="class-name">.admin-layout-floating</span>
+                  </td>
+                  <td class="text-muted">
+                    Główna siatka panelu. Wariant floating odsuwa treść od
+                    krawędzi.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.sidebar-md</span>
+                    <span class="class-name">.sidebar-sm</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasy sterujące szerokością sidebara (dodawane do
+                    <code>.admin-layout</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.admin-sidebar</span>
+                    <span class="class-name">.admin-brand</span>
+                  </td>
+                  <td class="text-muted">
+                    Boczny pasek nawigacji. Na mobile zamienia się w Bottom Nav.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.admin-logo-hide</span>
+                    <span class="class-name">.admin-logo-compact</span>
+                  </td>
+                  <td class="text-muted">
+                    Zarządzanie widocznością logo w wąskich trybach sidebara
+                    (<code>.sidebar-sm</code>, <code>.sidebar-md</code>) oraz na
+                    urządzeniach mobilnych.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.admin-nav</span>
+                    <span class="class-name">.admin-nav-link</span>
+                    <span class="class-name">.nav-text</span>
+                  </td>
+                  <td class="text-muted">Lista linków w sidebarze.</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.admin-nav-submenu</span>
+                    <span class="class-name">.admin-nav-submenu-list</span>
+                  </td>
+                  <td class="text-muted">
+                    Rozwijane drzewko linków (Submenu). W trybie wąskim działa
+                    jako pływający panel.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.admin-nav-dropdown</span>
+                    <span class="class-name">.admin-nav-dropdown-menu</span>
+                  </td>
+                  <td class="text-muted">
+                    Drop-up Menu (Przycisk "Więcej"). Na mobile wysuwa szufladę
+                    z dołu ekranu.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.mobile-more-toggle</span>
+                    <span class="class-name">.mobile-only-nav-item</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasy pomocnicze do obsługi szuflady na mobile (Checkbox
+                    Hack).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.dashboard-header</span>
+                    <span class="class-name">.dashboard-header-actions</span>
+                  </td>
+                  <td class="text-muted">
+                    Tworzy iluzję wycięcia (Faux Cutout) w nagłówku panelu
+                    admina.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.pagination</span>
+                    <span class="class-name">.pagination-modern</span>
+                  </td>
+                  <td class="text-muted">
+                    Paginacja. Wariant modern tworzy oddzielone, zaokrąglone
+                    kafelki.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.breadcrumb</span>
+                    <span class="class-name">.breadcrumb-item</span>
+                  </td>
+                  <td class="text-muted">Nawigacja okruszkowa.</td>
+                  <td>-</td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 9: ANIMACJE I EFEKTY
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    9. Animacje i Efekty
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.animate</span>
+                    <span class="class-name">.fade-in-up</span>
+                    <span class="class-name">.fade-in-down</span><br />
+                    <span class="class-name">.fade-in-left</span>
+                    <span class="class-name">.fade-in-right</span>
+                    <span class="class-name">.zoom-in</span>
+                  </td>
+                  <td class="text-muted">
+                    Animacje wejścia uruchamiane przez
+                    <code>IntersectionObserver</code> z
+                    <code>molique-script.js</code> (dodaje
+                    <code>.is-visible</code>). Opóźnienie:
+                    <code>.delay-100</code>, <code>.delay-200</code>,
+                    <code>.delay-300</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.reveal-blur</span>
+                    <span class="class-name">.reveal-scale</span>
+                  </td>
+                  <td class="text-muted">
+                    Warianty wejścia: rozmycie lub powiększenie zamiast
+                    przesunięcia.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.scroll-reveal</span></td>
+                  <td class="text-muted">
+                    Animacja sterowana samym scrollem przez natywne
+                    <code>animation-timeline: view()</code> — zero JS i zero
+                    Intersection Observer.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.hover-spring</span></td>
+                  <td class="text-muted">
+                    Sprężyste powiększenie elementu na hover.
+                  </td>
+                  <td>
+                    <div class="hover-spring badge bg-primary cursor-pointer">
+                      Najedź
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.hover-gpu-shadow</span></td>
+                  <td class="text-muted">
+                    Unoszenie elementu z miękkim cieniem na hover (cień
+                    animowany przez pseudoelement, nie
+                    <code>box-shadow</code> bezpośrednio).
+                  </td>
+                  <td>
+                    <div
+                      class="hover-gpu-shadow badge bg-surface border text-main cursor-pointer"
+                    >
+                      Najedź
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.hover-tilt</span>
+                    <span class="class-name">.tilt-card</span>
+                  </td>
+                  <td class="text-muted">
+                    Przechylenie 3D na hover. <code>.hover-tilt</code> to
+                    statyczny efekt CSS, <code>.tilt-card</code> dynamicznie
+                    śledzi kursor (wymaga <code>tilt.js</code>).
+                  </td>
+                  <td>
+                    <div class="hover-tilt badge bg-primary cursor-pointer">
+                      Najedź
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.text-highlight</span></td>
+                  <td class="text-muted">
+                    Zakreślacz tekstu wjeżdżający na hover (lub na stałe z
+                    <code>.is-active</code>).
+                  </td>
+                  <td>
+                    <span class="text-highlight cursor-pointer"
+                      >Najedź na mnie</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.hover-underline</span>
+                    <span class="class-name">.hover-underline-center</span>
+                  </td>
+                  <td class="text-muted">
+                    Podkreślenie wjeżdżające na hover (od lewej lub od
+                    środka).
+                  </td>
+                  <td>
+                    <span class="hover-underline cursor-pointer"
+                      >Najedź na mnie</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.hover-text-wipe</span></td>
+                  <td class="text-muted">
+                    Kolor tekstu "wjeżdża" od lewej na hover (maskowanie tła
+                    przez tekst).
+                  </td>
+                  <td>
+                    <span class="hover-text-wipe fw-bold cursor-pointer"
+                      >Najedź na mnie</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.word-rotator</span>
+                    <span class="class-name">.typewriter</span>
+                  </td>
+                  <td class="text-muted">
+                    Rotujące słowa lub efekt maszyny do pisania. Wymaga
+                    <code>text-effects.js</code> (autoloader).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.shake</span></td>
+                  <td class="text-muted">
+                    Potrząśnięcie elementem (np. przy błędzie formularza —
+                    używane automatycznie razem z <code>:user-invalid</code>).
+                  </td>
+                  <td><span class="badge bg-danger shake">Błąd</span></td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.ken-burns</span></td>
+                  <td class="text-muted">
+                    Powolne, ciągłe powiększenie zdjęcia w tle na hover
+                    kontenera.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.parallax-container</span>
+                    <span class="class-name">.parallax-bg</span>
+                  </td>
+                  <td class="text-muted">
+                    Tło poruszające się wolniej niż treść podczas
+                    scrollowania. Wymaga <code>parallax.js</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.bg-blobs</span></td>
+                  <td class="text-muted">
+                    Dwie rozmyte, unoszące się plamy koloru w tle (dekoracja
+                    sekcji Hero).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.bg-video-container</span>
+                    <span class="class-name">.bg-video</span>
+                  </td>
+                  <td class="text-muted">
+                    Wideo w tle sekcji (z plakatem <code>img.bg-video</code>
+                    jako fallback przed załadowaniem).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.bg-knockout-wrapper</span>
+                    <span class="class-name">.text-knockout-light</span>
+                  </td>
+                  <td class="text-muted">
+                    Tekst "wycięty" z jasnego/ciemnego tła (mieszanie trybów
+                    CSS).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.embed-responsive</span></td>
+                  <td class="text-muted">
+                    Responsywny kontener 16:9 dla osadzonego wideo (YouTube,
+                    Vimeo).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.hover-border-draw</span>
+                    <span class="class-name">.hover-border-trace</span>
+                  </td>
+                  <td class="text-muted">
+                    Nowoczesne animacje ramki (Maskowanie CSS). Idealnie
+                    opływają <code>border-radius</code>.
+                  </td>
+                  <td>
+                    <div
+                      class="hover-border-draw p-1 text-center text-2 cursor-pointer"
+                    >
+                      Najedź
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.hover-border-draw-2</span>
+                    <span class="class-name">.hover-border-trace-2</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasyczne animacje ramki (Gradienty). Tworzą ostre kąty.
+                  </td>
+                  <td>
+                    <div
+                      class="hover-border-draw-2 p-1 text-center text-2 cursor-pointer"
+                    >
+                      Najedź
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.bg-glass</span></td>
+                  <td class="text-muted">
+                    Efekt Glassmorphism (rozmycie tła, szum,
+                    półprzezroczystość).
+                  </td>
+                  <td>
+                    <div class="bg-glass p-2 text-center text-2">Glass</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.bg-gradient-corners</span></td>
+                  <td class="text-muted">
+                    Narożne gradienty tworzące efekt świetlnej łuny.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.text-clip-bg</span></td>
+                  <td class="text-muted">
+                    Tekst wycięty z tła (wymaga zmiennej
+                    <code>--clip-img</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.corner-cut-*</span>
+                    <span class="class-name">.corner-concave-*</span>
+                  </td>
+                  <td class="text-muted">
+                    Odcięte lub wklęsłe narożniki (mask-image). Warianty: tl,
+                    tr, bl, br.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.hero-with-cutout</span>
+                    <span class="class-name">.cutout-wrapper</span>
+                  </td>
+                  <td class="text-muted">
+                    System wyciętych narożników dla sekcji Hero (np.
+                    <code>.cutout-md-tr</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.text-gradient-animated</span>
+                  </td>
+                  <td class="text-muted">
+                    Animowany gradient tekstu. Domyślnie używa kolorów primary,
+                    info i success.
+                    <br />Zmień kolory dodając:
+                    <code
+                      >style="--gradient-color-1: var(--danger);
+                      --gradient-color-2: var(--warning);"</code
+                    >
+                  </td>
+                  <td>
+                    <span class="text-gradient-animated fw-black text-4"
+                      >Gradient</span
+                    >
+                  </td>
+                </tr>
+                <!-- ==========================================
+                     SEKCJA 10: NAWIGACJA I MENU (_navigation.scss)
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    10. Nawigacja i Menu
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.navbar</span>
+                    <span class="class-name">.navbar-transparent</span>
+                  </td>
+                  <td class="text-muted">
+                    Główny pasek nawigacji. Wariant transparentny staje się
+                    pełny po scrollu (<code>.is-scrolled</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.navbar-sticky</span></td>
+                  <td class="text-muted">
+                    Dodaj do <code>.navbar</code>, aby przykleić go do góry i
+                    włączyć logikę <code>.is-scrolled</code>/chowania na
+                    scrollu w <code>molique-script.js</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.navbar-offcanvas-toggle</span>
+                  </td>
+                  <td class="text-muted">
+                    Checkbox Hack do otwierania mobilnego menu bocznego bez JS.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.mega-menu</span>
+                    <span class="class-name">.mega-menu-trigger</span>
+                    <span class="class-name">.mega-menu-content</span>
+                  </td>
+                  <td class="text-muted">
+                    Szerokie menu rozwijane oparte na
+                    <code>&lt;details&gt;</code> + CSS Anchor Positioning.
+                    Otwiera się kliknięciem (desktop i mobile — zero JS), na
+                    mobile automatycznie zamienia się w akordeon. Kolumna:
+                    <code>.mega-menu-group</code> >
+                    <code>.mega-menu-col-title</code> (opcjonalnie z ikoną w
+                    <code>.mega-menu-col-icon</code>) + lista
+                    <code>.mega-menu-link</code>. Jedną "komórkę" siatki może
+                    zastąpić wyróżniona karta
+                    <code>.mega-menu-featured</code> (z
+                    <code>.mega-menu-featured-icon</code>,
+                    <code>-title</code>, <code>-text</code>,
+                    <code>-link</code>) — np. do promowania nowości.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.dropdown</span>
+                    <span class="class-name">.dropdown-menu</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasyczne menu rozwijane oparte na natywnym tagu
+                    <code>&lt;details&gt;</code>. Domyślnie rozwija się od
+                    lewej — dodaj <code>.dropdown-menu-end</code> do
+                    <code>.dropdown-menu</code>, żeby rozwijało się od
+                    prawej krawędzi triggera (np. gdy siedzi blisko prawej
+                    krawędzi ekranu).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.language-switch</span>
+                    <span class="class-name">.language-switch-trigger</span>
+                  </td>
+                  <td class="text-muted">
+                    Przełącznik języka w formie pigułki — wzorzec Dropdown
+                    Popover: <code>&lt;button
+                    class="language-switch-trigger"
+                    popovertarget="ID"&gt;</code> +
+                    <code>.dropdown-menu.language-switch-menu</code> z
+                    atrybutem <code>popover</code> (top layer). Pozycje
+                    listy: <code>.language-switch-item</code> (w środku
+                    <code>.language-switch-flag</code> z flagą SVG przez
+                    <code>&lt;img src="img/flags/pl.svg"&gt;</code>,
+                    <code>-name</code>, opcjonalnie
+                    <code>-check</code> przy aktywnym języku). Zwykle łączona
+                    z <code>.dropdown-menu-end</code>, bo siedzi na końcu
+                    navbara.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.breadcrumb</span>
+                    <span class="class-name">.breadcrumb-item</span>
+                  </td>
+                  <td class="text-muted">
+                    Nawigacja okruszkowa pokazująca ścieżkę użytkownika.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.pagination</span>
+                    <span class="class-name">.pagination-modern</span>
+                  </td>
+                  <td class="text-muted">
+                    Paginacja stron. Wariant modern tworzy oddzielone,
+                    zaokrąglone kafelki.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.topbar</span></td>
+                  <td class="text-muted">
+                    Wąski pasek nad główną nawigacją (często używany na dane
+                    kontaktowe).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.progress-container-fixed</span>
+                    <span class="class-name">.progress-bar-reading</span>
+                  </td>
+                  <td class="text-muted">
+                    Pasek postępu czytania przyklejony do górnej krawędzi
+                    ekranu. Wymaga skryptu JS (wbudowanego w
+                    <code>molique-script.js</code>) do aktualizacji szerokości
+                    podczas scrollowania.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.scroll-to-top</span></td>
+                  <td class="text-muted">
+                    Pływający przycisk "do góry", pojawia się po przewinięciu
+                    (dodaje <code>.is-visible</code>, obsługiwane przez
+                    <code>molique-script.js</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 11: MODALE I FEEDBACK (_modals.scss, _feedback.scss)
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    11. Modale i Feedback
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.modal-dialog</span>
+                    <span class="class-name">.modal-sm</span>
+                  </td>
+                  <td class="text-muted">
+                    Natywne okno modalne oparte na tagu
+                    <code>&lt;dialog&gt;</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.modal-context</span></td>
+                  <td class="text-muted">
+                    Wariant <code>.modal-dialog</code> jako wąski panel
+                    boczny (desktop) lub dolna szufladka — Bottom Sheet
+                    (mobile).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.modal-confirm</span>
+                    <span class="class-name">.modal-confirm-icon</span>
+                  </td>
+                  <td class="text-muted">
+                    Wariant modala do potwierdzania akcji (np. usunięcia) — z
+                    wyśrodkowaną ikoną i skróconą treścią.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.popover-context</span></td>
+                  <td class="text-muted">
+                    Menu kontekstowe wykorzystujące natywne Popover API i Anchor
+                    Positioning.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.lightbox-overlay</span>
+                    <span class="class-name">.lightbox-content</span>
+                  </td>
+                  <td class="text-muted">
+                    Pełnoekranowa galeria zdjęć. Wystarczy
+                    <code>&lt;a href="duze.jpg" data-lightbox
+                    data-gallery="nazwa"&gt;</code>
+                    — reszta dzieje się automatycznie.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.alert</span>
+                    <span class="class-name">.alert-success</span>
+                  </td>
+                  <td class="text-muted">
+                    Paski powiadomień (ostrzeżenia, sukcesy, błędy).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.toast-container</span></td>
+                  <td class="text-muted">
+                    Pływające powiadomienia (Toasty) wywoływane przez JS.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.status-dot</span>
+                    <span class="class-name">.status-pending</span>
+                  </td>
+                  <td class="text-muted">
+                    Kropki statusu. Dodaj <code>.status-ping</code> dla efektu
+                    pulsowania.
+                  </td>
+                  <td>
+                    <span class="status-dot status-success status-ping"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.tooltip-element</span></td>
+                  <td class="text-muted">
+                    Prosty tooltip w czystym CSS oparty na atrybucie
+                    <code>data-tooltip</code>.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.status-icon-toggle</span>
+                    <span class="class-name">.status-checkbox</span>
+                  </td>
+                  <td class="text-muted">
+                    Animowana ikonka Plus → Ptaszek. Jako
+                    <code>&lt;label class="status-checkbox"&gt;</code> z
+                    ukrytym checkboxem działa w 100% na CSS (zero JS).
+                  </td>
+                  <td>
+                    <label class="status-checkbox m-0">
+                      <input type="checkbox" checked />
+                      <span class="status-icon-toggle"></span>
+                    </label>
+                  </td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 12: KOMPONENTY BIZNESOWE (_business.scss, _cards.scss)
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    12. Komponenty Biznesowe i Karty
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.card</span>
+                    <span class="class-name">.card-header</span>
+                    <span class="class-name">.card-body</span>
+                  </td>
+                  <td class="text-muted">
+                    Podstawowy kontener treści z zaokrągleniami i ramką.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.featured-box</span>
+                    <span class="class-name">.featured-box-icon</span>
+                  </td>
+                  <td class="text-muted">
+                    Karta wyróżniająca cechę produktu (często z ikoną na górze).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.thumb-info</span></td>
+                  <td class="text-muted">
+                    Karta ze zdjęciem w tle i tekstem pojawiającym się na hover.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.overlap-container</span></td>
+                  <td class="text-muted">
+                    Karta nachodząca na poprzednią sekcję (ujemny margines).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.pricing-table</span></td>
+                  <td class="text-muted">
+                    Tabela cennikowa. Dodaj <code>.is-featured</code> dla
+                    wyróżnionego pakietu.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.stepper</span>
+                    <span class="class-name">.stepper-numbered</span>
+                  </td>
+                  <td class="text-muted">
+                    Wizualizacja kroków procesu (np. w koszyku).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.counter</span>
+                    <span class="class-name">.counter-value</span>
+                  </td>
+                  <td class="text-muted">
+                    Licznik animowany przez JS (np. "Mamy 1500 klientów").
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.testimonial</span></td>
+                  <td class="text-muted">
+                    Cytat klienta z awatarem, imieniem i gwiazdkami oceny.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td><span class="class-name">.pricing-list</span></td>
+                  <td class="text-muted">
+                    Alternatywa dla <code>.pricing-table</code> — pozioma
+                    lista cenowa z kropkowaną linią łączącą nazwę z ceną.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.nav-filters</span>
+                    <span class="class-name">.filter-item</span>
+                  </td>
+                  <td class="text-muted">
+                    Pastylki filtrów (np. do portfolio/bloga). Zaznaczony
+                    filtr dostaje <code>.is-active</code>.
+                  </td>
+                  <td>
+                    <ul class="nav-filters m-0 p-0">
+                      <li><button class="is-active">Wszystkie</button></li>
+                      <li><button>Design</button></li>
+                    </ul>
+                  </td>
+                </tr>
+
+                <!-- ==========================================
+                     SEKCJA 13: HELPERS I MODUŁY (_helpers.scss, _shop.scss, _blog.scss)
+                     ========================================== -->
+                <tr>
+                  <td colspan="3" class="cheat-sheet-category">
+                    13. Helpers i Moduły (Shop/Blog)
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <span class="class-name">.filter-grayscale</span>
+                    <span class="class-name">.filter-blur</span>
+                  </td>
+                  <td class="text-muted">
+                    Klasy narzędziowe nakładające filtry CSS na obrazy.
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.stacking-container</span>
+                    <span class="class-name">.section-stacked</span>
+                  </td>
+                  <td class="text-muted">
+                    Efekt przyklejających się do siebie sekcji podczas
+                    scrollowania (Sticky Stacking).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.product-card</span>
+                    <span class="class-name">.product-list-view</span>
+                    <span class="class-name">.star-rating</span>
+                  </td>
+                  <td class="text-muted">
+                    Karta produktu. Dodaj <code>.product-list-view</code> do
+                    rodzica dla widoku poziomego (listy zamiast siatki).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.cart-item</span>
+                    <span class="class-name">.qty-input</span>
+                    <span class="class-name">.selection-tile</span>
+                    <span class="class-name">.product-swatches</span>
+                  </td>
+                  <td class="text-muted">
+                    Wiersz koszyka z kontrolerem ilości
+                    (<code>.qty-input</code>), klikalne kafelki wyboru
+                    wariantu oraz próbki kolorów (<code>.swatch</code>).
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="class-name">.post-card</span>
+                    <span class="class-name">.blog-post</span>
+                    <span class="class-name">.simple-post-list</span>
+                    <span class="class-name">.author-box</span>
+                  </td>
+                  <td class="text-muted">
+                    Komponenty modułu Bloga: karta posta
+                    (<code>.post-date-badge</code>), widok listy artykułu
+                    (<code>.blog-post</code>), lista w sidebarze
+                    (<code>.simple-post-list</code>) i box autora.
+                  </td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js" defer></script>
+  </body>
+</html>

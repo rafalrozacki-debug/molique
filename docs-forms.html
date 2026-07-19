@@ -1,0 +1,768 @@
+﻿<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formularze & Walidacja - molique Docs</title>
+
+    <link rel="stylesheet" href="css/molique-style.css" />
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <!-- PASEK BOCZNY -->
+      <aside class="admin-sidebar">
+        <a href="index.html" class="admin-brand admin-logo-compact">
+          molique<span class="text-primary">.</span>
+        </a>
+
+        <ul class="admin-nav">
+          <li class="mobile-only-nav-item">
+            <a href="docs.html" class="admin-nav-link"><span class="nav-text">Start</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-layout.html" class="admin-nav-link"><span class="nav-text">Layout</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-buttons.html" class="admin-nav-link"><span class="nav-text">Komponenty</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-charts.html" class="admin-nav-link"><span class="nav-text">Wykresy</span></a>
+          </li>
+
+          <input type="checkbox" id="docs-mobile-more" class="mobile-more-toggle" />
+          <label for="docs-mobile-more" class="admin-nav-link mobile-more-label">
+            <span class="nav-text">Więcej</span>
+          </label>
+
+          <div class="admin-nav-dropdown-menu">
+          <div class="docs-nav-title">Wprowadzenie</div>
+          <li>
+            <a href="docs.html" class="admin-nav-link">Getting Started</a>
+          </li>
+          <li>
+            <a href="docs-roadmap.html" class="admin-nav-link"
+              >Roadmapa (Plany)</a
+            >
+          </li>
+          <li>
+            <a href="docs-classes.html" class="admin-nav-link"
+              >Spis Klas (Cheat Sheet)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Layout & Podstawy</div>
+          <li>
+            <a href="docs-layout.html" class="admin-nav-link">Grid & Layout</a>
+          </li>
+          <li>
+            <a href="docs-navbar.html" class="admin-nav-link">Nawigacja & Menu</a>
+          </li>
+          <li>
+            <a href="docs-sections.html" class="admin-nav-link"
+              >Sekcje, Hero & Timeline</a
+            >
+          </li>
+          <li>
+            <a href="docs-typography.html" class="admin-nav-link"
+              >Typografia & Kolory</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Komponenty UI</div>
+          <li>
+            <a href="docs-buttons.html" class="admin-nav-link"
+              >Przyciski & Badges</a
+            >
+          </li>
+          <li>
+            <a href="docs-cards.html" class="admin-nav-link">Karty & Tabele</a>
+          </li>
+          <li>
+            <a href="docs-interactive.html" class="admin-nav-link"
+              >Modale, Tabs & Akordeony</a
+            >
+          </li>
+          <li>
+            <a href="docs-components-extra.html" class="admin-nav-link"
+              >Karuzele & Lightbox</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Wykresy & Dane</div>
+          <li>
+            <a href="docs-charts.html" class="admin-nav-link"
+              >Wykresy (Data Viz)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Formularze</div>
+          <li>
+            <a href="docs-forms.html" class="admin-nav-link is-active"
+              >Inputy & Walidacja</a
+            >
+          </li>
+          <li>
+            <a href="docs-select.html" class="admin-nav-link"
+              >Searchable Select & Switche</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Efekty & Widgety</div>
+          <li>
+            <a href="docs-animations.html" class="admin-nav-link"
+              >Animacje & Mikrointerakcje</a
+            >
+          </li>
+          <li>
+            <a href="docs-widgets.html" class="admin-nav-link"
+              >Widgety (Speed Dial, Share)</a
+            >
+          </li>
+
+          <div class="docs-nav-title">Moduły zaawansowane</div>
+          <li>
+            <a href="docs-eshop.html" class="admin-nav-link"
+              >Sklep Internetowy</a
+            >
+          </li>
+          <li>
+            <a href="docs-blog.html" class="admin-nav-link">Blog & Artykuły</a>
+          </li>
+          <li>
+            <a href="docs-admin.html" class="admin-nav-link"
+              >Panel Admina (Dashboard)</a
+            >
+          </li>
+        </div>
+        </ul>
+      </aside>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-10 fw-black mb-3">Formularze & Walidacja</h1>
+            <p class="text-4 text-muted">
+              Formularze w molique są zaprojektowane z myślą o B2B. Posiadają
+              wymuszone 44px wysokości (WCAG 2.2 AAA), pływające etykiety
+              oszczędzające miejsce oraz natywną walidację bez użycia
+              JavaScriptu.
+            </p>
+          </div>
+
+          <!-- SEKCJA 1: FLOATING LABELS -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              1. Pływające Etykiety (Floating Labels)
+            </h2>
+            <p class="text-muted mb-4">
+              Zamiast umieszczać etykietę nad polem, umieszczamy ją wewnątrz.
+              Kiedy użytkownik kliknie pole lub zacznie pisać, etykieta płynnie
+              wędruje do góry.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Wymagania strukturalne:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Input musi znajdować się wewnątrz kontenera
+                  <code>.form-floating</code>.
+                </li>
+                <li>
+                  Input musi posiadać atrybut <code>placeholder=" "</code> (ze
+                  spacją w środku). Jest to niezbędne, aby CSS mógł wykryć, czy
+                  pole jest puste za pomocą pseudoklasy
+                  <code>:placeholder-shown</code>.
+                </li>
+                <li>
+                  Etykieta <code>&lt;label&gt;</code> musi znajdować się w
+                  kodzie HTML bezpośrednio pod inputem.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="w-100" style="max-width: 400px">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="input"
+                      id="demoName"
+                      placeholder=" "
+                    />
+                    <label for="demoName">Imię i nazwisko</label>
+                  </div>
+                  <div class="form-floating">
+                    <input
+                      type="email"
+                      class="input"
+                      id="demoEmail"
+                      placeholder=" "
+                    />
+                    <label for="demoEmail">Adres e-mail</label>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="form-floating"&gt;
+  &lt;!-- Atrybut placeholder=" " jest wymagany dla magii CSS! --&gt;
+  &lt;input type="text" class="input" id="imie" placeholder=" "&gt;
+  &lt;label for="imie"&gt;Imię i nazwisko&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 2: NATYWNA WALIDACJA -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">2. Natywna Walidacja (Zero JS)</h2>
+            <p class="text-muted mb-4">
+              Koniec ze skryptami walidacyjnymi. Używamy pseudoklasy
+              <code>:user-invalid</code>, która jest nowym standardem CSS.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Jak to działa?</h5>
+              <p class="text-2 text-muted mb-3">
+                W przeciwieństwie do starego <code>:invalid</code>, nowa
+                pseudoklasa <code>:user-invalid</code> nie krzyczy na
+                użytkownika na czerwono od razu po załadowaniu strony. Pole
+                zaświeci się na czerwono i pokaże błąd
+                <strong>dopiero wtedy</strong>, gdy użytkownik wejdzie w pole,
+                wpisze złe dane i z niego wyjdzie.
+              </p>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Dodaj atrybut <code>required</code> lub odpowiedni
+                  <code>type</code> (np. email, number) do inputa.
+                </li>
+                <li>
+                  Umieść komunikat błędu w
+                  <code>&lt;div class="feedback-invalid"&gt;</code> bezpośrednio
+                  pod etykietą. CSS sam go pokaże, gdy zajdzie taka potrzeba.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <form
+                  class="w-100"
+                  style="max-width: 400px"
+                  onsubmit="event.preventDefault()"
+                >
+                  <div class="form-floating">
+                    <input
+                      type="email"
+                      class="input"
+                      id="valEmail"
+                      placeholder=" "
+                      required
+                    />
+                    <label for="valEmail">Służbowy e-mail (Wymagany)</label>
+                    <div class="feedback-invalid">
+                      Proszę podać poprawny adres e-mail.
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100">
+                    Testuj wysyłkę (Zostaw puste)
+                  </button>
+                </form>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="form-floating"&gt;
+  &lt;input type="email" class="input" id="email" placeholder=" " required&gt;
+  &lt;label for="email"&gt;Służbowy e-mail&lt;/label&gt;
+  
+  &lt;!-- Komunikat błędu (CSS sam go pokaże dzięki :user-invalid) --&gt;
+  &lt;div class="feedback-invalid"&gt;Błędny adres e-mail.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 3: CHECKBOXY I RADIO -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">3. Checkboxy i Radio Buttons</h2>
+            <p class="text-muted mb-4">
+              Niestandardowe, w 100% oparte na CSS kontrolki. Posiadają
+              odpowiedni rozmiar i wyraźny stan focus dla nawigacji klawiaturą.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Budowa komponentu:</h5>
+              <p class="text-2 text-muted mb-3">
+                Kontrolki wykorzystują właściwość <code>appearance: none</code>,
+                co pozwala na całkowite nadpisanie domyślnego wyglądu
+                przeglądarki. Stan zaznaczenia (<code>:checked</code>)
+                wykorzystuje lekkie ikony SVG osadzone bezpośrednio w CSS (Data
+                URI), co eliminuje potrzebę ładowania zewnętrznych fontów z
+                ikonami.
+              </p>
+              <hr class="my-3" />
+              <h5 class="fw-bold text-3 mb-2">Dostępność (A11y):</h5>
+              <p class="text-2 text-muted m-0">
+                Komponenty w pełni wspierają nawigację klawiaturą (klawisze Tab
+                / Spacja) i posiadają wyraźny stan <code>:focus-visible</code>,
+                co jest kluczowe w systemach B2B.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface gap-5">
+                <div>
+                  <h4 class="text-3 fw-bold mb-3">Checkboxy</h4>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="check1"
+                      checked
+                    />
+                    <label class="form-check-label" for="check1"
+                      >Zgoda marketingowa</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="check2"
+                    />
+                    <label class="form-check-label" for="check2"
+                      >Akceptuję regulamin</label
+                    >
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="text-3 fw-bold mb-3">Radio Buttons</h4>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="radioDemo"
+                      id="radio1"
+                      checked
+                    />
+                    <label class="form-check-label" for="radio1"
+                      >Opcja domyślna</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="radioDemo"
+                      id="radio2"
+                    />
+                    <label class="form-check-label" for="radio2"
+                      >Opcja alternatywna</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Checkbox --&gt;
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="check1"&gt;
+  &lt;label class="form-check-label" for="check1"&gt;Zgoda&lt;/label&gt;
+&lt;/div&gt;
+
+&lt;!-- Radio --&gt;
+&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="radio" name="grupa" id="radio1"&gt;
+  &lt;label class="form-check-label" for="radio1"&gt;Opcja 1&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 4: INPUT GROUPS -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              4. Zgrupowane Pola (Input Groups)
+            </h2>
+            <p class="text-muted mb-4">
+              Pozwalają na doklejanie tekstu, ikon lub przycisków bezpośrednio
+              do pola tekstowego. Niezbędne w wyszukiwarkach i polach z
+              jednostkami (np. waluty, wagi).
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Architektura komponentu:</h5>
+              <p class="text-2 text-muted m-0">
+                Grupa automatycznie usuwa wewnętrzne zaokrąglenia rogów za
+                pomocą selektorów <code>:not(:first-child)</code>. Dzięki
+                wykorzystaniu ujemnych marginesów, ramki sąsiadujących elementów
+                idealnie się nakładają, zapobiegając powstawaniu podwójnych
+                linii na stykach. Focus na inpucie automatycznie wyciąga jego
+                ramkę na wierzch.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 gap-4 flex-column align-items-start bg-surface"
+              >
+                <!-- Wyszukiwarka z lupką -->
+                <div class="input-group w-100" style="max-width: 400px">
+                  <input
+                    type="text"
+                    class="input"
+                    placeholder="Szukaj klienta..."
+                  />
+                  <button class="btn text-muted">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                    >
+                      <path
+                        d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Input + Przycisk -->
+                <div class="input-group w-100" style="max-width: 400px">
+                  <input
+                    type="text"
+                    class="input"
+                    placeholder="Wpisz kod rabatowy..."
+                  />
+                  <button class="btn btn-primary">Zastosuj</button>
+                </div>
+
+                <!-- Tekst + Input + Tekst -->
+                <div class="input-group w-100" style="max-width: 400px">
+                  <span class="input-group-text">Cena</span>
+                  <input type="number" class="input" placeholder="0.00" />
+                  <span class="input-group-text">PLN</span>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Wyszukiwarka z lupką --&gt;
+&lt;div class="input-group"&gt;
+  &lt;input type="text" class="input" placeholder="Szukaj..."&gt;
+  &lt;!-- FIX: Usunięto klasę bg-surface --&gt;
+  &lt;button class="btn text-muted"&gt;
+    &lt;!-- Ikona lupy --&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Pole z jednostką --&gt;
+&lt;div class="input-group"&gt;
+  &lt;span class="input-group-text"&gt;Cena&lt;/span&gt;
+  &lt;input type="number" class="input" placeholder="0.00"&gt;
+  &lt;span class="input-group-text"&gt;PLN&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 5: FILE UPLOAD -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">5. Custom File Upload</h2>
+            <p class="text-muted mb-4">
+              Natywne pole wyboru pliku wygląda różnie w każdej przeglądarce.
+              Nasz komponent tworzy nowoczesną strefę "Drag & Drop" opartą na
+              czystym CSS.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Zasada działania:</h5>
+              <p class="text-2 text-muted m-0">
+                Natywny <code>&lt;input type="file"&gt;</code> jest rozciągnięty
+                na całą szerokość kontenera i całkowicie przezroczysty (<code
+                  >opacity: 0</code
+                >). Dzięki temu użytkownik widzi ładny interfejs, ale fizycznie
+                klika w natywny input, co gwarantuje 100% kompatybilności z
+                formularzami i urządzeniami mobilnymi.
+              </p>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface gap-4">
+                <!-- Wariant Domyślny -->
+                <div class="file-upload w-100" style="max-width: 350px">
+                  <input type="file" name="dokument" />
+                  <div class="file-upload-icon text-8">📄</div>
+                  <h4 class="text-3 fw-bold m-0">Wariant domyślny</h4>
+                  <p class="text-2 text-muted m-0 mt-1">Statyczna ramka</p>
+                </div>
+
+                <!-- Wariant Animowany -->
+                <div
+                  class="file-upload file-upload-animated w-100"
+                  style="max-width: 350px"
+                >
+                  <input type="file" name="dokument" />
+                  <div class="file-upload-icon text-8">☁️</div>
+                  <h4 class="text-3 fw-bold m-0">Wariant animowany</h4>
+                  <p class="text-2 text-muted m-0 mt-1">
+                    Biegnąca linia (.file-upload-animated)
+                  </p>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Dodaj klasę .file-upload-animated --&gt;
+&lt;div class="file-upload file-upload-animated"&gt;
+  &lt;input type="file" name="plik"&gt;
+  &lt;div class="file-upload-icon"&gt;☁️&lt;/div&gt;
+  &lt;h4&gt;Upuść plik tutaj&lt;/h4&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 6: ZAAWANSOWANE INPUTY -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              6. Zaawansowane Inputy (Data, Kolor, Zakres)
+            </h2>
+            <p class="text-muted mb-4">
+              Niestandardowe style dla specyficznych typów danych, zapewniające
+              spójność wizualną w różnych przeglądarkach.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Zasady użycia:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  <strong>Date Picker:</strong> Użyj standardowej klasy
+                  <code>.input</code> dla <code>type="date"</code>. CSS
+                  automatycznie ostyluje ikonę kalendarza.
+                </li>
+                <li>
+                  <strong>Color Picker:</strong> Użyj dedykowanej klasy
+                  <code>.input-color</code>. Komponent ma wymuszone 44x44px dla
+                  zachowania dostępności B2B.
+                </li>
+                <li>
+                  <strong>Range Slider:</strong> Użyj dedykowanej klasy
+                  <code>.input-range</code>. Uchwyt suwaka posiada efekt
+                  powiększenia na hover.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column align-items-start w-100 bg-surface gap-4"
+              >
+                <!-- Date Picker -->
+                <div class="w-100" style="max-width: 400px">
+                  <label class="fw-bold mb-2 d-block">Wybierz datę:</label>
+                  <input type="date" class="input" />
+                </div>
+
+                <!-- Color Picker -->
+                <div class="w-100" style="max-width: 400px">
+                  <label class="fw-bold mb-2 d-block">Kolor wiodący:</label>
+                  <div class="d-flex align-items-center gap-3">
+                    <input type="color" class="input-color" value="#0d6efd" />
+                    <span class="text-muted text-2"
+                      >Kliknij kwadrat, aby zmienić</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Range Slider -->
+                <div class="w-100" style="max-width: 400px">
+                  <label class="fw-bold mb-2 d-block">Ustaw limit (w %):</label>
+                  <input
+                    type="range"
+                    class="input-range"
+                    min="0"
+                    max="100"
+                    value="50"
+                  />
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Date Picker --&gt;
+&lt;input type="date" class="input"&gt;
+
+&lt;!-- Color Picker --&gt;
+&lt;input type="color" class="input-color" value="#0d6efd"&gt;
+
+&lt;!-- Range Slider --&gt;
+&lt;input type="range" class="input-range" min="0" max="100" value="50"&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 7: WARIANTY WIELKOŚCI -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              7. Warianty Wielkości (sm / lg)
+            </h2>
+            <p class="text-muted mb-4">
+              Każdy element formularza noszący klasę <code>.input</code> —
+              input, select i textarea — obsługuje te same modyfikatory
+              wielkości. Sam <code>.input</code> bez dodatkowej klasy to
+              wariant środkowy.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Klasy modyfikujące:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  <code>.input-sm</code> — kompaktowy, do tabel, popoverów i
+                  gęstych paneli admina.
+                </li>
+                <li>
+                  <code>.input</code> (bez modyfikatora) — domyślny, wygodny
+                  rozmiar dla większości formularzy.
+                </li>
+                <li>
+                  <code>.input-lg</code> — duży, do wyszukiwarek Hero i
+                  eksponowanych formularzy.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column align-items-start w-100 bg-surface gap-3"
+              >
+                <div class="w-100" style="max-width: 400px">
+                  <input type="text" class="input input-sm" placeholder="Input — sm" />
+                </div>
+                <div class="w-100" style="max-width: 400px">
+                  <input type="text" class="input" placeholder="Input — domyślny" />
+                </div>
+                <div class="w-100" style="max-width: 400px">
+                  <input type="text" class="input input-lg" placeholder="Input — lg" />
+                </div>
+                <div class="w-100" style="max-width: 400px">
+                  <select class="input input-sm">
+                    <option>Select — sm</option>
+                  </select>
+                </div>
+                <div class="w-100" style="max-width: 400px">
+                  <select class="input input-lg">
+                    <option>Select — lg</option>
+                  </select>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;input type="text" class="input input-sm" placeholder="Kompaktowy"&gt;
+&lt;input type="text" class="input" placeholder="Domyślny"&gt;
+&lt;input type="text" class="input input-lg" placeholder="Duży"&gt;
+
+&lt;select class="input input-sm"&gt;...&lt;/select&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 8: TEXTAREA "JEDNA LINIJKA" -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-6 fw-bold mb-3">
+              8. Textarea "Jedna Linijka" (Auto-Expand)
+            </h2>
+            <p class="text-muted mb-4">
+              Pole domyślnie zajmuje wysokość jednej linijki. Po kliknięciu
+              (lub gdy zawiera już treść) rozwija się do
+              <code>--textarea-rows-expanded</code> wierszy, a po
+              przekroczeniu tego poziomu zaczyna się przewijać w środku —
+              zero JavaScriptu.
+            </p>
+
+            <!-- BLOK INSTRUKCJI -->
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-3 mb-3">Jak to połączyć?</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-2 text-muted m-0"
+              >
+                <li>
+                  Dodaj klasę <code>.textarea-expandable</code> obok
+                  <code>.input</code>.
+                </li>
+                <li>
+                  Wymagany atrybut <code>placeholder</code> (choćby
+                  <code>placeholder=" "</code>) — CSS wykrywa wpisaną treść
+                  pseudoklasą <code>:not(:placeholder-shown)</code>, tak samo
+                  jak w pływających etykietach.
+                </li>
+                <li>
+                  Poziom rozwinięcia (domyślnie 6 wierszy) zmienisz przez
+                  <code>style="--textarea-rows-expanded: 10;"</code> na
+                  danej instancji.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="w-100" style="max-width: 400px">
+                  <textarea
+                    class="input textarea-expandable"
+                    rows="1"
+                    placeholder="Kliknij, aby rozwinąć…"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;textarea
+  class="input textarea-expandable"
+  rows="1"
+  placeholder="Kliknij, aby rozwinąć…"
+  style="--textarea-rows-expanded: 8;"
+&gt;&lt;/textarea&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-interactive.html" class="btn btn-secondary"
+              >➔ Wstecz: Modale & Tabs</a
+            >
+            <a
+              href="docs-select.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Select & Switche ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Skrypty -->
+    <script src="js/molique-script.js"></script>
+    <script src="js/molique-script-widgets.js"></script>
+  </body>
+</html>
