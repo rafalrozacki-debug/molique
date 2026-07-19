@@ -518,6 +518,16 @@
                     <code>.admin-nav-dropdown-menu</code>) - służy do
                     przepełnienia paska, nie do zagnieżdżonego submenu.
                   </li>
+                  <li>
+                    <strong>Szuflada "Więcej" nie wchodzi już pod pasek:</strong>
+                    <code>.admin-nav-dropdown-menu</code> miała zahardkodowane
+                    <code>bottom: 70px</code> bez
+                    <code>env(safe-area-inset-bottom)</code>, przez co na
+                    telefonach z nawigacją gestową dolne pozycje chowały się
+                    za paskiem (były nieczytelne). Teraz używa tej samej
+                    formuły co bottom-sheet submenu
+                    (<code>calc(70px + env(safe-area-inset-bottom))</code>).
+                  </li>
                 </ul>
               </div>
             </div>

@@ -552,7 +552,11 @@
     @media (max-width: 991px) {
       .admin-nav-dropdown-menu {
         position: fixed;
-        bottom: 70px; /* Wysokość dolnego paska */
+        /* FIX: dolny pasek to min-height 70px PLUS padding-bottom
+           env(safe-area-inset-bottom) - bez wliczenia wcięcia szuflada wchodzi
+           dolną krawędzią pod pasek i ostatnie pozycje są przycięte
+           (identyczna formuła jak w bottom-sheet submenu). */
+        bottom: calc(70px + env(safe-area-inset-bottom));
         left: 0;
         right: 0;
         width: 100%;
@@ -566,7 +570,7 @@
         z-index: 100;
         /* FIX: Długie listy (np. nawigacja dokumentacji) muszą się przewijać w pionie,
            inaczej szuflada wystaje ponad górną krawędź ekranu */
-        max-height: calc(100dvh - 70px - var(--spacing-unit) * 4);
+        max-height: calc(100dvh - 70px - env(safe-area-inset-bottom) - var(--spacing-unit) * 4);
         overflow-y: auto;
         /* FIX: Zamiast display: none, ukrywamy szufladę pod ekranem! */
         visibility: hidden;
