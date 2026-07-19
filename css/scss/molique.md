@@ -174,9 +174,18 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Admin Header (Faux Cutout):** `.dashboard-header` > lewa strona +
   `.dashboard-header-actions`. Tworzy iluzję wycięcia w nagłówku.
 - **Admin Nav:** `.admin-nav` > `.admin-nav-link`. Submenu:
-  `<details class="admin-nav-submenu">` > `<summary>` +
-  `.admin-nav-submenu-list`. Drop-up na mobile:
-  `<details class="admin-nav-dropdown">`.
+  `<details class="admin-nav-submenu">` > `<summary class="admin-nav-link">`
+  + `.admin-nav-submenu-list` (z `.admin-nav-submenu-link`). Ten sam markup
+  działa wszędzie dzięki natywnemu `<details>`: drzewko (szeroki sidebar),
+  pływający panel (drill-down `-sm`/`-md`) i dolna szuflada (bottom sheet) w
+  Bottom Nav na mobile.
+- **Admin Nav — Drop-up "Więcej" (mobile):** OSOBNY wzorzec od submenu, do
+  przepełnienia paska. Checkbox Hack: `<input type="checkbox"
+  class="mobile-more-toggle">` + `<label class="admin-nav-link
+  mobile-more-label">` (trigger w pasku) + `.admin-nav-dropdown-menu`
+  (szuflada z linkami; na desktopie `display: contents`, na mobile wysuwana
+  od dołu). NIE ma klasy `.admin-nav-dropdown` na `<details>` — to checkbox,
+  nie `<details>`.
 - **E-commerce:**
   - Karta: `.product-card` (dodaj `.product-list-view` do rodzica dla
     widoku poziomego).

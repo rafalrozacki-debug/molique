@@ -485,6 +485,40 @@
                     <code>molique.md</code>) uzupełnione o wszystkie powyższe.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Submenu admina otwiera się na mobile (Bottom Sheet)
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Submenu działa w Bottom Nav:</strong> dotąd
+                    <code>.admin-nav-submenu</code> było na mobile całkowicie
+                    ukrywane (<code>display: none</code>) - w poziomym pasku
+                    dolnym nie dało się go rozwinąć. Teraz to samo
+                    <code>&lt;details&gt;</code> otwiera swoją listę jako
+                    wysuwaną od dołu szufladę (bottom sheet) tuż nad paskiem.
+                    Jeden markup działa wszędzie: drzewko (szeroki sidebar),
+                    drill-down (<code>-sm</code>/<code>-md</code>) i bottom
+                    sheet (mobile) - bez JS, na natywnym stanie
+                    <code>[open]</code>.
+                  </li>
+                  <li>
+                    <strong>Doprecyzowany drop-up "Więcej":</strong> słowniki i
+                    spis klas błędnie sugerowały klasę
+                    <code>.admin-nav-dropdown</code> na
+                    <code>&lt;details&gt;</code>. W rzeczywistości to osobny
+                    wzorzec (Checkbox Hack:
+                    <code>.mobile-more-toggle</code> +
+                    <code>.mobile-more-label</code> +
+                    <code>.admin-nav-dropdown-menu</code>) - służy do
+                    przepełnienia paska, nie do zagnieżdżonego submenu.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>

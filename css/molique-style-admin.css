@@ -873,13 +873,77 @@
         background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
       }
     }
-    /* Na mobile (Bottom Nav) ukrywamy submenu całkowicie */
+    /* =========================================
+       MOBILE: SUBMENU JAKO DOLNA SZUFLADA (Bottom Sheet)
+       =========================================
+       W poziomym Bottom Nav drzewko linków nie ma sensu - zamiast chować
+       submenu, otwieramy jego listę jako wysuwaną od dołu szufladę. Bazujemy
+       na natywnym stanie [open] elementu <details>, więc TEN SAM markup
+       działa wszędzie: drzewko (szeroki sidebar), drill-down (-sm/-md) oraz
+       bottom sheet (mobile) - bez JS i bez osobnego wariantu markupu. */
     @media (max-width: 768px) {
-      .admin-nav-submenu-list {
-        display: none !important;
+      .admin-nav-submenu {
+        position: static;
+        /* details rozciąga swój <summary> (trigger) na cały kafelek paska */
+        display: flex;
       }
-      .admin-nav-submenu summary::after {
+      .admin-nav-submenu > summary {
+        width: 100%;
+        /* strzałka rozwinięcia drzewka jest zbędna w poziomym pasku */
+      }
+      .admin-nav-submenu > summary::after {
         display: none;
+      }
+      .admin-nav-submenu {
+        /* Lista submenu: szuflada przyklejona tuż nad dolnym paskiem (70px) */
+      }
+      .admin-nav-submenu > .admin-nav-submenu-list {
+        display: flex !important; /* nadpisuje domyślny stan drzewka */
+        flex-direction: column;
+        gap: calc(var(--spacing-unit) * 1);
+        margin: 0;
+        position: fixed;
+        bottom: calc(70px + env(safe-area-inset-bottom));
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: calc(100dvh - 70px - var(--spacing-unit) * 4);
+        overflow-y: auto;
+        background-color: var(--sidebar-bg);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top-left-radius: var(--border-radius-lg, 24px);
+        border-top-right-radius: var(--border-radius-lg, 24px);
+        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        /* Domyślnie schowana pod ekranem (details zamknięty) */
+        visibility: hidden;
+        transform: translateY(100%);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s;
+        /* Reset pionowej linii drzewka */
+      }
+      .admin-nav-submenu > .admin-nav-submenu-list::before {
+        display: none;
+      }
+      .admin-nav-submenu > .admin-nav-submenu-list {
+        /* Linki na pełną szerokość, bez poziomych kreseczek drzewka */
+      }
+      .admin-nav-submenu > .admin-nav-submenu-list .admin-nav-submenu-link {
+        justify-content: flex-start;
+        text-align: left;
+        padding: calc(var(--spacing-unit) * 2);
+        min-height: 48px;
+        font-size: 1rem;
+      }
+      .admin-nav-submenu > .admin-nav-submenu-list .admin-nav-submenu-link::before {
+        display: none;
+      }
+      .admin-nav-submenu {
+        /* Stan otwarty (natywny <details>) - wsuwamy szufladę */
+      }
+      .admin-nav-submenu[open] > .admin-nav-submenu-list {
+        visibility: visible;
+        transform: translateY(0);
       }
     }
   } /* ZAMKNIĘCIE @layer components */
