@@ -35,11 +35,19 @@
   --text-muted: var(--secondary);
   --border-color: #E2E8F0;
   
-  /* ZMIENNE SIDEBARA ADMINA */
+  /* ZMIENNE SIDEBARA ADMINA.
+     UWAGA: sidebar jest ZAWSZE ciemny (--sidebar-bg nie zmienia się
+     w dark mode), więc jego jasne akcenty muszą być literalne — NIE
+     wolno tu używać var(--light) / var(--light-rgb), bo dark mode
+     odwraca te zmienne (jasny → ciemny) i tekst oraz podświetlenia
+     znikają na ciemnym tle sidebara. */
   --sidebar-bg: #102E4A;
   --sidebar-submenu-bg: #52677D;
   --sidebar-text: #94A3B8;
-  --sidebar-text-active: var(--light);
+  --sidebar-text-active: #F9F9F9;
+  /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
+     logo) — niezależne od motywu, w przeciwieństwie do --light-rgb */
+  --sidebar-highlight-rgb: 249, 249, 249;
   
   /* Rozmiary Sidebara */
   --sidebar-width-lg: 280px;
