@@ -3485,7 +3485,10 @@
     width: var(--target-size-min);
     height: var(--target-size-min);
     background-color: var(--primary);
-    color: #fff;
+    /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+       primary jaśnieje, więc ikona musi ciemnieć - literal #fff ginął
+       i na jasnym primary, i na hoverze z flipowanym var(--dark)) */
+    color: var(--btn-text-light);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -3676,11 +3679,15 @@
       pointer-events: none;
     }
     /* --- Kolory nakładki --- */
+    /* overlay-dark na literale (jak overlay-light): nakładka ma ZAWSZE
+       przyciemniać zdjęcie pod jasnym tekstem hero, a dark mode odwraca
+       var(--dark) do prawie białego - "przyciemnienie" stawało się
+       rozjaśnieniem i biały tekst lądował na jasnym tle. */
     .bg-overlay {
       background-color: #000;
     }
     .overlay-dark {
-      background-color: var(--dark);
+      background-color: #1E293B;
     }
     .overlay-primary {
       background-color: var(--primary);
@@ -7584,9 +7591,12 @@
       background-color: var(--info) !important;
       color: var(--text-main) !important;
     }
+    /* bg-dark na literałach: sekcje "zawsze ciemne" (stopki, hero) łączone
+       w HTML z .text-white - z flipowanym var(--dark) w ciemnym motywie tło
+       robiło się jasne pod białym tekstem. */
     .bg-dark {
-      background-color: var(--dark) !important;
-      color: var(--btn-text-light) !important;
+      background-color: #1E293B !important;
+      color: #F9F9F9 !important;
     }
     .bg-light {
       background-color: var(--light) !important;
@@ -7916,7 +7926,9 @@
     /* Narożne gradienty (Efekt łuny) */
     .bg-gradient-corners {
       position: relative;
-      background-color: var(--dark);
+      /* Literal: łuna wymaga zawsze ciemnego tła (flipowany var(--dark)
+         w ciemnym motywie rozjaśniał sekcję pod jasną treścią) */
+      background-color: #1E293B;
       z-index: 1;
       /* Zabezpieczenie przed wylewaniem się zawartości */
       overflow: hidden;
