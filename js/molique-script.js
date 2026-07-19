@@ -29,8 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
         let theme = rootEl.getAttribute('data-theme');
         newTheme = theme === 'dark' ? 'light' : 'dark';
       }
-      
-      rootEl.setAttribute('data-theme', newTheme);
+
+      const applyTheme = () => rootEl.setAttribute('data-theme', newTheme);
+
+      // Płynna zmiana motywu: View Transitions API robi cross-fade dwóch
+      // migawek całej strony na GPU (czysta opacity) - zero animowania
+      // kolorów per element, więc koszt jest pomijalny. Czas trwania
+      // steruje CSS (::view-transition-old/new w _animations.scss).
+      // Fallback: starsze przeglądarki oraz prefers-reduced-motion
+      // przełączają natychmiast, jak dotychczas.
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (document.startViewTransition && !prefersReducedMotion) {
+        document.startViewTransition(applyTheme);
+      } else {
+        applyTheme();
+      }
+
       localStorage.setItem('molique-theme', newTheme);
     });
   }

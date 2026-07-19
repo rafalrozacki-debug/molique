@@ -15,6 +15,27 @@
 @property --t-left { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
 @property --trace-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
+/* =========================================
+   0.5. PŁYNNA ZMIANA MOTYWU (View Transitions API)
+   ========================================= */
+/* Cross-fade wyzwalany przez document.startViewTransition() w
+   molique-script.js (przełącznik motywu). Przenikają się dwie migawki
+   całej strony na GPU (czysta opacity) - zgodnie ze złotą zasadą:
+   żadnego animowania kolorów per element. Pseudo-elementy poza @layer,
+   bo dotyczą specjalnego drzewa ::view-transition, nie komponentów. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 @layer utilities {
   /* =========================================
      1. ANIMACJE WEJŚCIA (Intersection Observer)
