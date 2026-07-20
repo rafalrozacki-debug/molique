@@ -412,6 +412,31 @@
                 </ul>
 
                 <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Podstrona pobierania + paczki do pobrania
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Dwie paczki:</strong>
+                    <a href="download.html">download.html</a> oferuje
+                    <em>Production</em> (skompilowane CSS min+pełne, JS z
+                    autoloaderem, fonty, flagi, <code>starter.html</code>) oraz
+                    <em>Source</em> (to co Production + źródła
+                    <code>css/scss/</code> do własnej kompilacji).
+                  </li>
+                  <li>
+                    <strong>Skrypt pakujący:</strong>
+                    <code>tools/build-packages.ps1</code> minifikuje bundle
+                    (<code>sass --style=compressed</code>) i buduje oba ZIP-y do
+                    <code>dist/</code>. Doszły też <code>README.md</code>,
+                    <code>LICENSE</code> (placeholder), <code>starter.html</code>
+                    i opcjonalny <code>css/fonts.css</code> (Inter + Poppins).
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-success mx-2 text-3">Ulepszenie</span>
