@@ -22,7 +22,9 @@ const input = Object.fromEntries(
 // buildu, tak samo jak użytkownik kopiuje je do swojego projektu. Dzięki temu
 // css/molique-style.css zostaje css/molique-style.css (bez sufiksu z hashem),
 // a kompilacja SCSS i tools/build-packages.ps1 nadal celują w root repo.
-const assetDirs = ['css', 'js', 'fonts', 'img'];
+// dist zawiera paczki wydania (molique-*.zip) - kopiujemy je do buildu, bo
+// download.html linkuje do dist/molique-<wersja>.zip.
+const assetDirs = ['css', 'js', 'fonts', 'img', 'dist'];
 
 // Zasoby frameworka celowo nie są w grafie modułów Vite (dowozi je static-copy),
 // więc Vite informuje o każdym z nich "resolved at runtime". To zachowanie

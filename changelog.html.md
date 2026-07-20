@@ -4,7 +4,7 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.6.0."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.6.1."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -50,11 +50,11 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
-          <!-- v1.6.0 -->
+          <!-- v1.6.1 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-5">v1.6.0</div>
+              <div class="fw-black text-5">v1.6.1</div>
               <div class="text-muted text-4">Lipiec 2026</div>
             </div>
             <div class="timeline-separator">
@@ -88,6 +88,42 @@
                     wszystkie jej wystąpienia. Zero zależności, zero jQuery.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Porządki wydania
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Ujednolicone sourcemapy:</strong> wszystkie bundle
+                    CSS kompilowane bez <code>--source-map</code> - koniec ze
+                    stopkami <code>sourceMappingURL</code> wskazującymi
+                    nieistniejące pliki <code>.map</code> (dotąd niespójne
+                    między bundlami).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.6.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.6.0</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
 
                 <h3
                   class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
