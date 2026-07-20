@@ -283,7 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: 'input[data-search-target]', file: 'modules/table-search.js', init: 'initTableSearch' },
     { selectors: '.popover-context', file: 'modules/context-menu.js', init: 'initContextMenu' },
     { selectors: '.admin-nav-submenu', file: 'modules/admin-nav.js', init: 'initAdminNav' },
-    { selectors: '.theme-editor', file: 'modules/theme-editor.js', init: 'initThemeEditor' }
+    { selectors: '.theme-editor', file: 'modules/theme-editor.js', init: 'initThemeEditor' },
+    { selectors: '.navbar-menu', file: 'modules/navbar-active.js', init: 'initNavbarActive' }
   ];
 
   dynamicModules.forEach(module => {

@@ -5569,6 +5569,17 @@ a.list-group-item:hover, button.list-group-item:hover {
   }
 }
 
+/* Aktywna pozycja = bieżąca strona. Klasę .is-active nadaje wg URL moduł
+   js/modules/navbar-active.js (auto-ładowany przy .navbar-menu) - linkowi
+   bieżącej strony oraz triggerowi menu, w którym się znajduje. Wyróżnienie
+   mocniejsze niż hover: kolor primary + grubsza waga. */
+.navbar-item.is-active,
+.dropdown-item.is-active,
+.mega-menu-link.is-active {
+  color: var(--primary);
+  font-weight: var(--fw-bold);
+}
+
 /* =========================================
    2. NAVBAR - WARIANTY
    ========================================= */

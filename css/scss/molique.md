@@ -52,6 +52,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 
 - **Baza:** `.navbar` > `.navbar-container` > `.navbar-brand` +
   `.navbar-menu` > `.navbar-item`.
+- **Aktywna pozycja (bieżąca strona):** klasa `.is-active` na `.navbar-item`
+  (oraz `.dropdown-item` / `.mega-menu-link`) — kolor primary + grubsza waga.
+  Nadaje ją wg URL moduł `js/modules/navbar-active.js` (auto-ładowany przy
+  `.navbar-menu`): podświetla link bieżącej strony ORAZ trigger rozwijanego
+  menu (dropdown/mega-menu), w którym ten link leży. Aktywności NIE wpisuj do
+  markupu — navbar bywa współdzielony między podstronami, robi to skrypt z
+  adresu.
 - **Warianty:** `.navbar-transparent`, `.navbar-sticky` (dodaje
   `.is-scrolled`).
 - **Offcanvas (Mobile):** oparte na Checkbox Hack
