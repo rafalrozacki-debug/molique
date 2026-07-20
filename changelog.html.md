@@ -375,6 +375,43 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Theme Editor - żywy edytor zmiennych CSS
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Nowa strona
+                    <a href="theme-editor.html">theme-editor.html</a>:</strong>
+                    interaktywne narzędzie do sterowania motywem na żywo -
+                    kolory (z automatyczną synchronizacją par
+                    <code>-rgb</code> i przyciemnianiem
+                    <code>-hover</code>), powierzchnie, sidebar, zaokrąglenia,
+                    odstępy, focus ring i rozmiar bazowy tekstu. Panel
+                    kontrolek po lewej, żywy podgląd komponentów po prawej.
+                  </li>
+                  <li>
+                    <strong>Poprawny light/dark:</strong> zmiany trafiają do
+                    <code>&lt;style&gt;</code> (nie inline), więc edytujesz
+                    aktywny motyw osobno - paleta do
+                    <code>:root</code> lub <code>[data-theme="dark"]</code>,
+                    a zmienne „zawsze ciemne" (sidebar) i wymiary zawsze do
+                    <code>:root</code>. „Kopiuj CSS" eksportuje gotowe bloki
+                    do wklejenia; stan trzyma się w
+                    <code>localStorage</code>, jest też Reset.
+                  </li>
+                  <li>
+                    <strong>Architektura:</strong> moduł
+                    <code>js/modules/theme-editor.js</code> (auto-ładowany po
+                    <code>.theme-editor</code>), styl chrome w
+                    <code>components/_theme-editor.scss</code> (bundle docs).
+                    Konfiguracja kontrolek w atrybutach <code>data-te-*</code>
+                    - zero zależności, zero jQuery.
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-danger mx-2 text-3"

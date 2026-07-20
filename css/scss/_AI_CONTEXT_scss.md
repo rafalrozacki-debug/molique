@@ -1,7 +1,7 @@
 # Zbiorczy kontekst projektu dla AI
 
 **Folder glowny:** `scss`
-**Liczba plikow w paczce:** 51
+**Liczba plikow w paczce:** 52
 
 ## Struktura plikow:
 - `components/_admin-nav.scss`
@@ -20,6 +20,7 @@
 - `components/_language-switch.scss`
 - `components/_modals.scss`
 - `components/_navigation.scss`
+- `components/_theme-editor.scss`
 - `layout/_admin-layout.scss`
 - `modules/_docs.scss`
 - `molique-style-admin.scss`
@@ -2263,6 +2264,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   position: relative;
   
   @include mq(md) {
+     margin-top: 0px;
     &::before {
       content: "";
       position: absolute;
@@ -6197,6 +6199,242 @@ a.list-group-item:hover, button.list-group-item:hover {
   transition: width 0.1s ease-out;
 }```
 
+## Plik: `components/_theme-editor.scss`
+
+```scss
+/**
+ * molique - Theme Editor (Playground zmiennych CSS)
+ * Układ narzędzia: panel kontrolek + żywy podgląd. Styl chrome edytora,
+ * a NIE komponentów molique (te podglądamy w stanie surowym). Ładowany
+ * tylko w bundlu dokumentacji (molique-style-docs.css).
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* Strona edytora: kolumna flex, żeby panele wypełniły resztę okna pod
+   navbarem BEZ zgadywania jego wysokości (navbar w flow jako 1. dziecko). */
+.te-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+
+  /* Navbar ma tylko pionowy padding - dla pełnoszerokiego narzędzia
+     dokładamy poziomy oddech, żeby brand/akcje nie dotykały krawędzi. */
+  > .navbar .navbar-container {
+    padding-inline: calc(var(--spacing-unit) * 3);
+  }
+}
+
+.theme-editor {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) 1fr;
+  overflow: hidden;
+
+  @include mq(md, max) {
+    display: block;
+    overflow: visible;
+  }
+}
+
+/* --- Panel kontrolek (lewy) --- */
+.te-controls {
+  overflow-y: auto;
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 3);
+
+  @include mq(md, max) {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    max-height: none;
+  }
+}
+
+.te-mode-hint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  background-color: var(--card-bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-unit) * 1.5);
+  margin: 0;
+
+  strong { color: var(--text-main); }
+}
+
+/* --- Grupa kontrolek --- */
+.te-group {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+
+  > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    font-weight: var(--fw-bold);
+    color: var(--text-main);
+    background-color: var(--card-bg-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--target-size-min);
+
+    &::-webkit-details-marker { display: none; }
+
+    &::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform var(--transition-speed);
+      opacity: 0.5;
+    }
+  }
+  &[open] > summary::after { transform: rotate(-135deg); }
+}
+
+.te-group-body {
+  padding: calc(var(--spacing-unit) * 2);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+/* --- Wiersz kontrolki --- */
+.te-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+}
+
+.te-label {
+  font-size: var(--text-sm);
+  color: var(--text-main);
+  line-height: 1.3;
+
+  code {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+}
+
+/* Kontrolka koloru: natywny input opakowany w okrągły swatch */
+.te-color {
+  inline-size: 40px;
+  block-size: 40px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  &::-webkit-color-swatch-wrapper { padding: 0; }
+  &::-webkit-color-swatch { border: none; border-radius: 50%; }
+  &::-moz-color-swatch { border: none; border-radius: 50%; }
+}
+
+/* Suwak + odczyt wartości */
+.te-range-wrap {
+  display: grid;
+  grid-template-columns: 1fr 3.5rem;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  min-width: 0;
+}
+.te-range { width: 100%; min-width: 0; margin: 0; }
+.te-output {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Wiersz z suwakiem zajmuje pełną szerokość (label nad kontrolką) */
+.te-row-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+/* --- Panel podglądu (prawy) --- */
+.te-preview {
+  overflow-y: auto;
+  padding: calc(var(--spacing-unit) * 4);
+  background-color: var(--bg-body);
+
+  @include mq(md, max) {
+    padding: calc(var(--spacing-unit) * 3);
+  }
+}
+
+.te-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: calc(var(--spacing-unit) * 3);
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.te-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-unit) * 1);
+}
+.te-swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(var(--dark-rgb), 0.1);
+  flex-shrink: 0;
+}
+
+/* Podgląd kolorów sidebara (zmienne "zawsze ciemne") */
+.te-sidebar-preview {
+  background-color: var(--sidebar-bg);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-unit) * 1.5);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 0.5);
+
+  .te-sb-item {
+    color: var(--sidebar-text);
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    border-radius: var(--border-radius);
+    font-size: var(--text-sm);
+
+    &.is-active {
+      color: var(--sidebar-text-active);
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.08);
+      font-weight: var(--fw-bold);
+    }
+  }
+}
+
+/* Pasek akcji w navbarze edytora */
+.te-actions {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+}
+```
+
 ## Plik: `layout/_admin-layout.scss`
 
 ```scss
@@ -6476,6 +6714,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 @layer modules {
   @include meta.load-css("modules/docs");
+  @include meta.load-css("components/theme-editor");
 }```
 
 ## Plik: `molique-style-share.scss`

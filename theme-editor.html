@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme Editor - molique</title>
+    <meta
+      name="description"
+      content="Interaktywny edytor motywu molique: steruj zmiennymi CSS (kolory, typografia, radius, sidebar) na żywo i skopiuj gotowy blok :root."
+    />
+
+    <link rel="stylesheet" href="css/molique-style.css" />
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body class="te-page">
+    <!-- ==========================================
+         NAVBAR
+         ========================================== -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="index.html" class="navbar-brand">
+          molique<span class="text-primary">.</span>
+        </a>
+
+        <div class="navbar-menu">
+          <a href="docs.html" class="navbar-item">Dokumentacja</a>
+          <div class="te-actions">
+            <button class="btn btn-secondary btn-sm" data-te-reset>Reset</button>
+            <button class="btn btn-primary btn-sm" data-te-copy>Kopiuj CSS</button>
+
+            <label class="theme-switch" title="Przełącz motyw (Light/Dark)">
+              <input type="checkbox" id="theme-toggle" class="theme-switch-input" />
+              <div class="theme-switch-track">
+                <span class="theme-switch-thumb"></span>
+                <div class="theme-icon-wrapper">
+                  <svg class="theme-icon icon-sun" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm8,24a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"></path>
+                  </svg>
+                </div>
+                <div class="theme-icon-wrapper">
+                  <svg class="theme-icon icon-moon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M235.54,150.21a104.84,104.84,0,0,1-37,52.91A104,104,0,0,1,32,120,103.09,103.09,0,0,1,52.88,57.48a104.84,104.84,0,0,1,52.91-37,8,8,0,0,1,10,10,88.08,88.08,0,0,0,109.8,109.8,8,8,0,0,1,10,10Z"></path>
+                  </svg>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ==========================================
+         EDYTOR
+         ========================================== -->
+    <div class="theme-editor">
+      <!-- ---------- KONTROLKI ---------- -->
+      <aside class="te-controls">
+        <p class="te-mode-hint">
+          Edytujesz motyw: <strong data-te-mode-label>Jasny</strong>. Przełącz
+          motyw w prawym górnym rogu, aby edytować drugi wariant. Zmiany zapisują
+          się w przeglądarce; „Kopiuj CSS" eksportuje gotowy blok
+          <code>:root</code> / <code>[data-theme="dark"]</code>.
+        </p>
+
+        <!-- Marka i akcenty -->
+        <details class="te-group" open>
+          <summary>Marka i akcenty</summary>
+          <div class="te-group-body">
+            <div class="te-row">
+              <span class="te-label">Primary <code>--primary</code></span>
+              <input type="color" class="te-color" data-te-var="--primary" data-te-type="color" data-te-rgb="--primary-rgb" data-te-hover="--primary-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Success <code>--success</code></span>
+              <input type="color" class="te-color" data-te-var="--success" data-te-type="color" data-te-rgb="--success-rgb" data-te-hover="--success-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Danger <code>--danger</code></span>
+              <input type="color" class="te-color" data-te-var="--danger" data-te-type="color" data-te-rgb="--danger-rgb" data-te-hover="--danger-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Warning <code>--warning</code></span>
+              <input type="color" class="te-color" data-te-var="--warning" data-te-type="color" data-te-rgb="--warning-rgb" data-te-hover="--warning-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Info <code>--info</code></span>
+              <input type="color" class="te-color" data-te-var="--info" data-te-type="color" data-te-rgb="--info-rgb" data-te-hover="--info-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Secondary <code>--secondary</code></span>
+              <input type="color" class="te-color" data-te-var="--secondary" data-te-type="color" data-te-rgb="--secondary-rgb" data-te-hover="--secondary-hover" data-te-scope="mode" />
+            </div>
+          </div>
+        </details>
+
+        <!-- Powierzchnie i tekst -->
+        <details class="te-group" open>
+          <summary>Powierzchnie i tekst</summary>
+          <div class="te-group-body">
+            <div class="te-row">
+              <span class="te-label">Tło strony <code>--bg-body</code></span>
+              <input type="color" class="te-color" data-te-var="--bg-body" data-te-type="color" data-te-rgb="--body-rgb" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Powierzchnia (karty) <code>--bg-surface</code></span>
+              <input type="color" class="te-color" data-te-var="--bg-surface" data-te-type="color" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Ramki <code>--border-color</code></span>
+              <input type="color" class="te-color" data-te-var="--border-color" data-te-type="color" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Tekst główny <code>--dark</code></span>
+              <input type="color" class="te-color" data-te-var="--dark" data-te-type="color" data-te-rgb="--dark-rgb" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Tekst na kolorze <code>--light</code></span>
+              <input type="color" class="te-color" data-te-var="--light" data-te-type="color" data-te-rgb="--light-rgb" data-te-scope="mode" />
+            </div>
+          </div>
+        </details>
+
+        <!-- Sidebar / Admin (niezależne od motywu) -->
+        <details class="te-group">
+          <summary>Sidebar / Admin</summary>
+          <div class="te-group-body">
+            <p class="te-label"><code>Zawsze ciemny — wspólny dla obu motywów.</code></p>
+            <div class="te-row">
+              <span class="te-label">Tło sidebara <code>--sidebar-bg</code></span>
+              <input type="color" class="te-color" data-te-var="--sidebar-bg" data-te-type="color" data-te-rgb="--sidebar-rgb" data-te-scope="root" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Tekst sidebara <code>--sidebar-text</code></span>
+              <input type="color" class="te-color" data-te-var="--sidebar-text" data-te-type="color" data-te-scope="root" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Tekst aktywny <code>--sidebar-text-active</code></span>
+              <input type="color" class="te-color" data-te-var="--sidebar-text-active" data-te-type="color" data-te-scope="root" />
+            </div>
+            <div class="te-sidebar-preview">
+              <span class="te-sb-item is-active">Dashboard</span>
+              <span class="te-sb-item">Klienci</span>
+              <span class="te-sb-item">Ustawienia</span>
+            </div>
+          </div>
+        </details>
+
+        <!-- Kształt i ruch -->
+        <details class="te-group">
+          <summary>Kształt i ruch</summary>
+          <div class="te-group-body">
+            <div class="te-row-stacked">
+              <span class="te-label">Zaokrąglenie <code>--border-radius</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--border-radius" data-te-type="range" data-te-unit="px" data-te-scope="root" min="0" max="24" step="1" />
+                <output class="te-output">8px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Zaokrąglenie duże <code>--border-radius-lg</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--border-radius-lg" data-te-type="range" data-te-unit="px" data-te-scope="root" min="0" max="32" step="1" />
+                <output class="te-output">16px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Jednostka odstępu <code>--spacing-unit</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--spacing-unit" data-te-type="range" data-te-unit="px" data-te-scope="root" min="4" max="12" step="1" />
+                <output class="te-output">8px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Prędkość animacji <code>--transition-speed</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--transition-speed" data-te-type="range" data-te-unit="s" data-te-scope="root" min="0" max="0.6" step="0.05" />
+                <output class="te-output">0.2s</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Grubość focus ring <code>--focus-ring-width</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--focus-ring-width" data-te-type="range" data-te-unit="px" data-te-scope="root" min="0" max="6" step="1" />
+                <output class="te-output">3px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Szerokość sidebara <code>--sidebar-width-lg</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--sidebar-width-lg" data-te-type="range" data-te-unit="px" data-te-scope="root" min="220" max="360" step="4" />
+                <output class="te-output">280px</output>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Typografia -->
+        <details class="te-group">
+          <summary>Typografia</summary>
+          <div class="te-group-body">
+            <div class="te-row-stacked">
+              <span class="te-label">
+                Rozmiar bazowy <code>--text-base-size</code>
+                <code>Nadpisuje płynny clamp() stałą wartością.</code>
+              </span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--text-base-size" data-te-type="range" data-te-unit="px" data-te-scope="root" min="13" max="18" step="0.5" value="15" />
+                <output class="te-output">15px</output>
+              </div>
+            </div>
+          </div>
+        </details>
+      </aside>
+
+      <!-- ---------- PODGLĄD ---------- -->
+      <main class="te-preview">
+        <div class="te-preview-grid">
+          <!-- Kolory -->
+          <div class="card">
+            <div class="card-header fw-bold">Paleta</div>
+            <div class="card-body">
+              <div class="te-swatches">
+                <span class="te-swatch bg-primary" title="primary"></span>
+                <span class="te-swatch bg-success" title="success"></span>
+                <span class="te-swatch bg-danger" title="danger"></span>
+                <span class="te-swatch bg-warning" title="warning"></span>
+                <span class="te-swatch bg-info" title="info"></span>
+                <span class="te-swatch bg-secondary" title="secondary"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Przyciski -->
+          <div class="card">
+            <div class="card-header fw-bold">Przyciski</div>
+            <div class="card-body d-flex flex-wrap gap-2">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-success">Success</button>
+              <button class="btn btn-danger">Danger</button>
+              <button class="btn btn-outline-primary">Outline</button>
+              <button class="btn btn-secondary btn-sm">Mały</button>
+            </div>
+          </div>
+
+          <!-- Badges & statusy -->
+          <div class="card">
+            <div class="card-header fw-bold">Badges i statusy</div>
+            <div class="card-body d-flex flex-wrap align-items-center gap-2">
+              <span class="badge badge-primary">Primary</span>
+              <span class="badge badge-success">Success</span>
+              <span class="badge badge-danger">Danger</span>
+              <span class="badge bg-warning-subtle">Subtle</span>
+              <span class="status-dot status-success status-ping"></span>
+              <span class="status-dot status-danger"></span>
+            </div>
+          </div>
+
+          <!-- Alerty -->
+          <div class="card">
+            <div class="card-header fw-bold">Alerty</div>
+            <div class="card-body d-flex flex-column gap-2">
+              <div class="alert alert-success m-0">Zapisano zmiany.</div>
+              <div class="alert alert-danger m-0">Coś poszło nie tak.</div>
+            </div>
+          </div>
+
+          <!-- Formularz -->
+          <div class="card">
+            <div class="card-header fw-bold">Formularz</div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div class="form-floating">
+                <input type="text" class="input" id="tePreviewInput" placeholder=" " />
+                <label for="tePreviewInput">Nazwa klienta</label>
+              </div>
+              <input type="text" class="input" placeholder="Zwykły input (kliknij = focus ring)" />
+              <label class="form-switch">
+                <input type="checkbox" class="form-switch-input" checked />
+                <span class="form-switch-label">Powiadomienia e-mail</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="card">
+            <div class="card-header fw-bold">Postęp</div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+              <span class="badge badge-primary">Typografia bazowa: przykładowy akapit</span>
+              <p class="m-0 text-muted">
+                Zmień zmienne po lewej, a ten podgląd zareaguje natychmiast -
+                kolory, zaokrąglenia, odstępy i rozmiar tekstu.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tabela -->
+          <div class="card">
+            <div class="card-header fw-bold">Tabela</div>
+            <div class="card-body">
+              <div class="table-wrapper">
+                <table class="table table-sm table-hover m-0">
+                  <thead class="thead-light">
+                    <tr><th>Klient</th><th>Status</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>DrewHOME</td><td><span class="badge badge-success">Aktywny</span></td></tr>
+                    <tr><td>iBRIDO</td><td><span class="badge bg-warning-subtle">Oczekuje</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
