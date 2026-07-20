@@ -438,6 +438,37 @@
                 </ul>
 
                 <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Autoloader modułów + searchable-select
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Moduły ładowane z bezwzględnego adresu:</strong>
+                    autoloader dołączał moduły przez względną ścieżkę
+                    (<code>modules/x.js</code>), która rozwiązywała się względem
+                    adresu <em>bieżącej strony</em>, nie
+                    <code>molique-script.js</code> - na podstronach (np.
+                    <code>/clock/</code>) dawało to 404. Teraz baza liczona z
+                    <code>document.currentScript.src</code>. Bug był w repo od
+                    pierwszego commita; namierzony przez użytkownika osadzającego
+                    molique we własnej wtyczce.
+                  </li>
+                  <li>
+                    <strong>Searchable Select na delegacji zdarzeń:</strong>
+                    <code>select.js</code> obsługuje teraz opcje dolewane do DOM
+                    <em>po</em> starcie strony (np. z AJAX), ukryty input
+                    dostaje <code>change</code> na wybór, a nowe API
+                    <code>MoliqueSelectSearch.setValue(hiddenInput, value)</code>
+                    ustawia wartość z JS. Pełna kompatybilność wstecz
+                    (Popover API + stary <code>&lt;details&gt;</code>).
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-primary mx-2 text-3">Nowość</span>

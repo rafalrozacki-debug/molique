@@ -138,6 +138,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   (top layer — menu NIE jest przycinane w modalach ani przewijanych
   kontenerach). Wyszukiwarka (`.select-search-input`) jest OPCJONALNA —
   bez niej komponent działa jak zwykły select (sama lista opcji).
+  `select.js` działa na delegacji zdarzeń, więc obsługuje opcje dolewane
+  do DOM PO starcie strony (np. z AJAX). Na wybór opcji ukryty
+  `.select-search-hidden` dostaje `change` (bubbling). Ustawienie z JS:
+  `MoliqueSelectSearch.setValue(hiddenInput, value)`.
 - **Premium Multi Select (Popover API):** `.custom-select` >
   `<button class="custom-select-trigger" popovertarget="ID">` +
   `.custom-select-dropdown` z atrybutem `popover` i unikalnym `id`
