@@ -3,19 +3,17 @@
  * Zawiera niezbędne fundamenty oraz dynamicznie ładuje opcjonalne moduły.
  */
 
-/* Bazowy URL do modułów (js/modules/) liczony względem lokalizacji TEGO pliku,
-   a NIE bieżącej strony. Autoloader dołączał moduły przez względną ścieżkę
-   'js/modules/x.js', która rozwiązuje się względem adresu strony - na
-   podstronach (np. /clock/) dawało to /clock/js/modules/x.js → 404.
-   document.currentScript jest dostępne WYŁĄCZNIE na najwyższym poziomie pliku
-   (w handlerze DOMContentLoaded jest już null), więc przechwytujemy je tutaj. */
-const MOLIQUE_MODULE_BASE = (function () {
-  try {
-    var src = document.currentScript && document.currentScript.src;
-    if (src) return src.replace(/[^/]*$/, '') + 'modules/';
-  } catch (e) { /* ignore */ }
-  return 'js/modules/'; // fallback (dotychczasowe zachowanie)
-})();
+// Katalog, w którym leży ten plik (js/) - autoloader niżej buduje z niego
+// ABSOLUTNE adresy modułów. document.currentScript działa tylko podczas
+// synchronicznego wykonania TEGO pliku, dlatego stała jest na najwyższym
+// poziomie, a nie w handlerze DOMContentLoaded (tam byłby już null).
+// Bez tego script.src = 'modules/x.js' rozwiązywałby się względem adresu
+// BIEŻĄCEJ STRONY (np. /clock/), a nie lokalizacji tego skryptu - moduł
+// 404-owałby na każdej podstronie poza katalogiem, w którym akurat
+// przypadkiem zgadzała się głębokość ścieżki.
+const MOLIQUE_JS_BASE = document.currentScript
+  ? document.currentScript.src.replace(/[^/]*$/, '')
+  : '';
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -270,29 +268,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // 9. INTELIGENTNY AUTO-LOADER MODUŁÓW
   // =========================================
   const dynamicModules = [
-    { selectors: '.carousel', file: 'js/modules/carousel.js' },
-    { selectors: '[data-lightbox]', file: 'js/modules/lightbox.js' },
-    { selectors: '.select-search', file: 'js/modules/select.js' },
-    { selectors: '.parallax-container', file: 'js/modules/parallax.js' },
-    { selectors: '.nav-filters', file: 'js/modules/filters.js' },
-    { selectors: '.counter-value', file: 'js/modules/counters.js' },
-    { selectors: '.word-rotator, .typewriter', file: 'js/modules/text-effects.js' },
-    { selectors: '.product-gallery, .qty-input', file: 'js/modules/shop.js' },
-    { selectors: '.tilt-card', file: 'js/modules/tilt.js', init: 'initTilt' },
-    { selectors: '.btn-magnetic', file: 'js/modules/magnetic.js', init: 'initMagneticButtons' },
-    { selectors: '.share-btn', file: 'js/modules/share.js', init: 'initShare' },
-    { selectors: '.before-after-slider', file: 'js/modules/before-after.js', init: 'initBeforeAfter' },
-    { selectors: 'input[data-search-target]', file: 'js/modules/table-search.js', init: 'initTableSearch' },
-    { selectors: '.popover-context', file: 'js/modules/context-menu.js', init: 'initContextMenu' },
-    { selectors: '.admin-nav-submenu', file: 'js/modules/admin-nav.js', init: 'initAdminNav' },
-    { selectors: '.theme-editor', file: 'js/modules/theme-editor.js', init: 'initThemeEditor' }
+    { selectors: '.carousel', file: 'modules/carousel.js' },
+    { selectors: '[data-lightbox]', file: 'modules/lightbox.js' },
+    { selectors: '.select-search', file: 'modules/select.js' },
+    { selectors: '.parallax-container', file: 'modules/parallax.js' },
+    { selectors: '.nav-filters', file: 'modules/filters.js' },
+    { selectors: '.counter-value', file: 'modules/counters.js' },
+    { selectors: '.word-rotator, .typewriter', file: 'modules/text-effects.js' },
+    { selectors: '.product-gallery, .qty-input', file: 'modules/shop.js' },
+    { selectors: '.tilt-card', file: 'modules/tilt.js', init: 'initTilt' },
+    { selectors: '.btn-magnetic', file: 'modules/magnetic.js', init: 'initMagneticButtons' },
+    { selectors: '.share-btn', file: 'modules/share.js', init: 'initShare' },
+    { selectors: '.before-after-slider', file: 'modules/before-after.js', init: 'initBeforeAfter' },
+    { selectors: 'input[data-search-target]', file: 'modules/table-search.js', init: 'initTableSearch' },
+    { selectors: '.popover-context', file: 'modules/context-menu.js', init: 'initContextMenu' },
+    { selectors: '.admin-nav-submenu', file: 'modules/admin-nav.js', init: 'initAdminNav' },
+    { selectors: '.theme-editor', file: 'modules/theme-editor.js', init: 'initThemeEditor' }
   ];
 
   dynamicModules.forEach(module => {
     if (document.querySelector(module.selectors)) {
       const script = document.createElement('script');
-      // Bezwzględny adres: baza (obok molique-script.js) + sama nazwa pliku.
-      script.src = MOLIQUE_MODULE_BASE + module.file.split('/').pop();
+      // Bezwzględny adres: katalog tego pliku + względna ścieżka modułu.
+      script.src = MOLIQUE_JS_BASE + module.file;
       script.defer = true;
       
       if (module.init) {
