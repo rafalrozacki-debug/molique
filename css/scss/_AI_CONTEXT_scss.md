@@ -9248,6 +9248,40 @@ a.list-group-item:hover, button.list-group-item:hover {
       width: 100%;
     }
   }
+
+  /* =========================================
+     DOMYŚLNY HOVER PRZYCISKÓW (opt-in)
+     =========================================
+     Dodaj JEDNĄ z klas do <body> (lub dowolnego kontenera), aby WSZYSTKIE
+     .btn w środku dostały wspólny efekt hover - twórca wybiera go raz,
+     zamiast oznaczać każdy przycisk osobno. Przyciski z własną klasą
+     hover-* są pomijane (mają pierwszeństwo). GPU: transform + box-shadow. */
+  .btn-hover-spring .btn:not([class*="hover-"]),
+  .btn-hover-lift .btn:not([class*="hover-"]),
+  .btn-hover-glow .btn:not([class*="hover-"]) {
+    transition: background-color var(--transition-speed),
+      border-color var(--transition-speed), color var(--transition-speed),
+      transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1),
+      box-shadow var(--transition-speed);
+    will-change: transform;
+  }
+  .btn-hover-spring .btn:not([class*="hover-"]):hover {
+    transform: scale(1.05);
+  }
+  .btn-hover-lift .btn:not([class*="hover-"]):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-hover-glow .btn:not([class*="hover-"]):hover {
+    box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.25);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-hover-spring .btn:not([class*="hover-"]):hover,
+    .btn-hover-lift .btn:not([class*="hover-"]):hover {
+      transform: none;
+    }
+  }
 }```
 
 ## Plik: `_components.scss`

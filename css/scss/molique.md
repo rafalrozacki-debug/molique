@@ -84,6 +84,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Przyciski:** `.btn` + `.btn-primary` (lub `secondary`, `success`,
   `danger`, `warning`, `dark`). Warianty: `.btn-outline-primary`, `.btn-sm`,
   `.btn-lg`. Grupowanie: `.btn-group`.
+- **Domyślny hover wszystkich `.btn`:** klasa na `<body>` (lub kontenerze):
+  `.btn-hover-spring` / `.btn-hover-lift` / `.btn-hover-glow` — nadaje
+  wspólny efekt hover wszystkim `.btn` w środku; przyciski z własną klasą
+  `hover-*` mają pierwszeństwo. Do wyboru też w edytorze motywu.
 - **Ghost Buttons (Tabele):** `.btn-action` (np. akcje Edytuj/Usuń).
   Grupowanie z separatorami: `.btn-action-group.with-dividers`.
 - **Badges:** `.badge` + `.badge-primary` (lub inne kolory).

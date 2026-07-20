@@ -31,6 +31,18 @@ function initThemeEditor() {
 
   const mode = () => (html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
+  /* --- Domyślny hover przycisków (klasa na <body>, poza mechanizmem zmiennych) --- */
+  const BTN_HOVER_KEY = 'molique-theme-editor-btnhover';
+  const BTN_HOVER_CLASSES = ['btn-hover-spring', 'btn-hover-lift', 'btn-hover-glow'];
+  const btnHoverSel = root.querySelector('[data-te-btn-hover]');
+  let btnHover = '';
+  try { btnHover = localStorage.getItem(BTN_HOVER_KEY) || ''; } catch (e) { /* ignore */ }
+  const applyBtnHover = (val) => {
+    BTN_HOVER_CLASSES.forEach((c) => document.body.classList.remove(c));
+    if (val) document.body.classList.add(val);
+    btnHover = val;
+  };
+
   /* Odwracalna zmienna edytowana w dark => blok [data-theme="dark"];
      reszta (w tym light) => :root. */
   const bucketFor = (control) =>
@@ -100,9 +112,13 @@ function initThemeEditor() {
       const lines = keys.map((k) => '  ' + k + ': ' + obj[k] + ';').join('\n');
       return selector + ' {\n' + lines + '\n}';
     };
-    return [block(':root', overrides.light), block('[data-theme="dark"]', overrides.dark)]
+    const css = [block(':root', overrides.light), block('[data-theme="dark"]', overrides.dark)]
       .filter(Boolean)
       .join('\n\n');
+    const hint = btnHover
+      ? '/* Domyślny hover przycisków - dodaj klasę do <body>: */\n/* <body class="' + btnHover + '"> */'
+      : '';
+    return [css, hint].filter(Boolean).join('\n\n');
   }
 
   /* --- Akcje: Kopiuj / Reset --- */
@@ -126,6 +142,9 @@ function initThemeEditor() {
       applyOverrides();
       save();
       syncControls();
+      applyBtnHover('');
+      if (btnHoverSel) btnHoverSel.value = '';
+      try { localStorage.removeItem(BTN_HOVER_KEY); } catch (e) { /* ignore */ }
       toast('Przywrócono domyślny motyw', 'info');
     });
   }
@@ -134,6 +153,14 @@ function initThemeEditor() {
   controls.forEach((control) => {
     control.addEventListener('input', () => setVar(control));
   });
+
+  if (btnHoverSel) {
+    btnHoverSel.value = btnHover;
+    btnHoverSel.addEventListener('change', () => {
+      applyBtnHover(btnHoverSel.value);
+      try { localStorage.setItem(BTN_HOVER_KEY, btnHoverSel.value); } catch (e) { /* ignore */ }
+    });
+  }
 
   /* Przełączenie motywu (checkbox #theme-toggle z rdzenia) zmienia data-theme
      na <html> - obserwujemy i przeładowujemy kontrolki na wartości motywu. */
@@ -145,6 +172,7 @@ function initThemeEditor() {
   applyOverrides();
   syncControls();
   updateModeHint();
+  applyBtnHover(btnHover);
 
   /* ============ pomocnicze ============ */
   function load() {
