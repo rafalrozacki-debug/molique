@@ -529,19 +529,11 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       }
 
       &[open] {
-        /* 1. <summary> -> pasek "Cofnij" przyklejony do góry ekranu */
-        > summary {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 56px;
-          z-index: 1051; /* nad panelem i nad dolnym paskiem (1040) */
-          @include admin-drilldown-back;
-          animation: adminDrilldownBar 0.2s ease both;
-        }
-
-        /* 2. Lista -> pełnoekranowy panel pod paskiem "Cofnij" */
+        /* 1. Lista -> pełnoekranowy panel (od samej góry ekranu). Jego ciemne
+           tło stanowi CIĄGŁĄ powierzchnię także pod paskiem "Cofnij" - linki
+           odsuwamy paddingiem, żeby nie chowały się pod paskiem. Dzięki temu
+           "Cofnij" i lista są jedną całością niezależnie od tego, jak przeglądarka
+           pomaluje tło samego <summary>. */
         > .admin-nav-submenu-list {
           display: flex !important; /* nadpisuje domyślny stan drzewka */
           flex-direction: column;
@@ -549,13 +541,14 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           margin: 0;
 
           position: fixed;
-          top: 56px;
+          top: 0;
           left: 0;
           right: 0;
           bottom: 0;
           z-index: 1050;
           background-color: var(--sidebar-bg);
-          padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2)
+          /* padding-top mieści pasek "Cofnij" (56px) + oddech */
+          padding: calc(56px + var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2)
             calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
           overflow-y: auto;
           animation: adminDrilldownPanel 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -573,6 +566,21 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
             &::before { display: none; }
           }
         }
+
+        /* 2. <summary> -> pasek "Cofnij" na górze, NA panelu (leży na jego
+           ciemnym tle). z-index nad panelem. */
+        > summary {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 56px;
+          z-index: 1051; /* nad panelem i nad dolnym paskiem (1040) */
+          @include admin-drilldown-back;
+          /* na dotyku (brak hover) jaśniejszy napis = wyraźny przycisk wstecz */
+          color: var(--sidebar-text-active);
+          animation: adminDrilldownBar 0.2s ease both;
+        }
       }
     }
 
@@ -581,9 +589,10 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       from { opacity: 0; }
       to { opacity: 1; }
     }
+    /* Pełnoekranowy panel: sam fade (translateY zostawiałby szczelinę u góry) */
     @keyframes adminDrilldownPanel {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   }
 
