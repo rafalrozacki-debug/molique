@@ -890,6 +890,11 @@
         position: static;
         /* details rozciąga swój <summary> (trigger) na kafelek paska */
         display: flex;
+        /* Wysokość użytecznej (dotykalnej) części paska "Cofnij". Do niej
+           dochodzi jeszcze env(safe-area-inset-top) - status bar/notch - żeby
+           napis nie lądował pod paskiem powiadomień, a duży target był daleko
+           od górnej krawędzi (mniej przypadkowych gestów notyfikacji). */
+        --drilldown-bar-h: 64px;
       }
       .admin-nav-submenu > summary {
         width: 100%;
@@ -917,10 +922,14 @@
         bottom: 0;
         z-index: 1050;
         background-color: var(--sidebar-bg);
-        /* padding-top mieści pasek "Cofnij" (56px) + oddech */
-        padding: calc(56px + var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
+        /* padding-top mieści pasek "Cofnij" (wysokość + status bar) + oddech */
+        padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
         overflow-y: auto;
         animation: adminDrilldownPanel 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        /* Linki wyśrodkowane w pionie (wygodniej dla kciuka na mobile);
+           "safe" cofa do góry i pozwala przewijać, gdy pozycji jest dużo. */
+        justify-content: center;
+        justify-content: safe center;
         /* Reset pionowej linii drzewka */
       }
       .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
@@ -948,7 +957,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 56px;
+        height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
         z-index: 1051; /* nad panelem i nad dolnym paskiem (1040) */
         background-color: var(--sidebar-bg);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1012,6 +1021,9 @@
         letter-spacing: normal;
       }
       .admin-nav-submenu[open] > summary {
+        /* napis schodzi spod status bara/notcha (env), a duży, niżej
+           położony target jest wygodniejszy dla kciuka */
+        padding-top: env(safe-area-inset-top);
         /* na dotyku (brak hover) jaśniejszy napis = wyraźny przycisk wstecz */
         color: var(--sidebar-text-active);
         animation: adminDrilldownBar 0.2s ease both;

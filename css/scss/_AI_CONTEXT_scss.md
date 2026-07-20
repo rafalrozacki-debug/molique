@@ -583,6 +583,12 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       /* details rozciąga swój <summary> (trigger) na kafelek paska */
       display: flex;
 
+      /* Wysokość użytecznej (dotykalnej) części paska "Cofnij". Do niej
+         dochodzi jeszcze env(safe-area-inset-top) - status bar/notch - żeby
+         napis nie lądował pod paskiem powiadomień, a duży target był daleko
+         od górnej krawędzi (mniej przypadkowych gestów notyfikacji). */
+      --drilldown-bar-h: 64px;
+
       > summary {
         width: 100%;
         /* strzałka rozwinięcia drzewka jest zbędna w poziomym pasku */
@@ -608,11 +614,17 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           bottom: 0;
           z-index: 1050;
           background-color: var(--sidebar-bg);
-          /* padding-top mieści pasek "Cofnij" (56px) + oddech */
-          padding: calc(56px + var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2)
+          /* padding-top mieści pasek "Cofnij" (wysokość + status bar) + oddech */
+          padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2)
+            calc(var(--spacing-unit) * 2)
             calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
           overflow-y: auto;
           animation: adminDrilldownPanel 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+          /* Linki wyśrodkowane w pionie (wygodniej dla kciuka na mobile);
+             "safe" cofa do góry i pozwala przewijać, gdy pozycji jest dużo. */
+          justify-content: center;
+          justify-content: safe center;
 
           /* Reset pionowej linii drzewka */
           &::before { display: none; }
@@ -635,9 +647,12 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           top: 0;
           left: 0;
           width: 100%;
-          height: 56px;
+          height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
           z-index: 1051; /* nad panelem i nad dolnym paskiem (1040) */
           @include admin-drilldown-back;
+          /* napis schodzi spod status bara/notcha (env), a duży, niżej
+             położony target jest wygodniejszy dla kciuka */
+          padding-top: env(safe-area-inset-top);
           /* na dotyku (brak hover) jaśniejszy napis = wyraźny przycisk wstecz */
           color: var(--sidebar-text-active);
           animation: adminDrilldownBar 0.2s ease both;
