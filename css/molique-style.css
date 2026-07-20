@@ -3036,6 +3036,18 @@
   .navbar-transparent .navbar-toggle span {
     background-color: #fff;
   }
+  .navbar-transparent {
+    /* Logo: przed scrollem navbar leży na ciemnym hero, więc pokazujemy jasną
+       wersję logo NIEZALEŻNIE od motywu (nadpisuje logikę dark-mode). Po
+       scrollu (.is-scrolled) navbar dostaje tło i logo wraca do wersji
+       zależnej od motywu (reguły bazowe / [data-theme="dark"]). */
+  }
+  .navbar-transparent:not(.is-scrolled) .navbar-brand .logo-light {
+    display: none;
+  }
+  .navbar-transparent:not(.is-scrolled) .navbar-brand .logo-dark {
+    display: contents;
+  }
   .navbar-transparent.is-scrolled {
     position: fixed;
     background-color: var(--bg-surface);

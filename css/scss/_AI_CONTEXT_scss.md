@@ -5582,9 +5582,18 @@ a.list-group-item:hover, button.list-group-item:hover {
   z-index: var(--z-index-fixed);
   background-color: transparent;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  
+
   .navbar-brand, .navbar-item { color: #fff; }
   .navbar-toggle { color: #fff; span { background-color: #fff; } }
+
+  /* Logo: przed scrollem navbar leży na ciemnym hero, więc pokazujemy jasną
+     wersję logo NIEZALEŻNIE od motywu (nadpisuje logikę dark-mode). Po
+     scrollu (.is-scrolled) navbar dostaje tło i logo wraca do wersji
+     zależnej od motywu (reguły bazowe / [data-theme="dark"]). */
+  &:not(.is-scrolled) .navbar-brand {
+    .logo-light { display: none; }
+    .logo-dark { display: contents; }
+  }
 
   &.is-scrolled {
     position: fixed;
