@@ -79,9 +79,29 @@
       border-radius: 0;
       border-top: 1px solid rgba(var(--sidebar-highlight-rgb), 0.1);
       padding-bottom: env(safe-area-inset-bottom);
-      overflow: visible; 
+      overflow: visible;
     }
   }
+
+  /* =========================================
+     KOORDYNACJA Z GLOBALNYM NAVBAREM
+     =========================================
+     Gdy nad layoutem admina siedzi navbar (body > .navbar), sidebar musi
+     zaczynać się POD nim i wypełniać resztę okna. Tylko desktop - na mobile
+     sidebar to dolny Bottom Nav (position: fixed; bottom). */
+  @include mq(md) {
+    body:has(> .navbar) .admin-sidebar {
+      top: calc(var(--navbar-h) + var(--layout-padding));
+      height: calc(100dvh - var(--navbar-h) - (var(--layout-padding) * 2));
+    }
+  }
+
+  /* Na stronach z layoutem admina navbar zostaje przyklejony (nie chowa się
+     przy scrollu w dół), inaczej sidebar odsłaniałby pusty pasek u góry. */
+  body:has(.admin-layout) .navbar-sticky.is-hidden {
+    transform: none;
+  }
+
   /* Zanikanie treści na dole przewijanego sidebara (opt-in: klasa
      .fade-bottom z warstwy layout). Gradient musi mieć kolor tła
      sidebara (zawsze ciemny), nie powierzchni strony. */

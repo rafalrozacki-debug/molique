@@ -797,9 +797,29 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       border-radius: 0;
       border-top: 1px solid rgba(var(--sidebar-highlight-rgb), 0.1);
       padding-bottom: env(safe-area-inset-bottom);
-      overflow: visible; 
+      overflow: visible;
     }
   }
+
+  /* =========================================
+     KOORDYNACJA Z GLOBALNYM NAVBAREM
+     =========================================
+     Gdy nad layoutem admina siedzi navbar (body > .navbar), sidebar musi
+     zaczynać się POD nim i wypełniać resztę okna. Tylko desktop - na mobile
+     sidebar to dolny Bottom Nav (position: fixed; bottom). */
+  @include mq(md) {
+    body:has(> .navbar) .admin-sidebar {
+      top: calc(var(--navbar-h) + var(--layout-padding));
+      height: calc(100dvh - var(--navbar-h) - (var(--layout-padding) * 2));
+    }
+  }
+
+  /* Na stronach z layoutem admina navbar zostaje przyklejony (nie chowa się
+     przy scrollu w dół), inaczej sidebar odsłaniałby pusty pasek u góry. */
+  body:has(.admin-layout) .navbar-sticky.is-hidden {
+    transform: none;
+  }
+
   /* Zanikanie treści na dole przewijanego sidebara (opt-in: klasa
      .fade-bottom z warstwy layout). Gradient musi mieć kolor tła
      sidebara (zawsze ciemny), nie powierzchni strony. */
@@ -2264,7 +2284,6 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   position: relative;
   
   @include mq(md) {
-     margin-top: 0px;
     &::before {
       content: "";
       position: absolute;
@@ -6218,12 +6237,6 @@ a.list-group-item:hover, button.list-group-item:hover {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-
-  /* Navbar ma tylko pionowy padding - dla pełnoszerokiego narzędzia
-     dokładamy poziomy oddech, żeby brand/akcje nie dotykały krawędzi. */
-  > .navbar .navbar-container {
-    padding-inline: calc(var(--spacing-unit) * 3);
-  }
 }
 
 .theme-editor {
@@ -6254,6 +6267,21 @@ a.list-group-item:hover, button.list-group-item:hover {
     border-bottom: 1px solid var(--border-color);
     max-height: none;
   }
+}
+
+/* Akcje edytora (Reset / Kopiuj CSS) - przypięte na górze panelu kontrolek */
+.te-controls-actions {
+  position: sticky;
+  top: calc(var(--spacing-unit) * -3);
+  z-index: 2;
+  display: flex;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 2) 0;
+  margin: calc(var(--spacing-unit) * -3) 0 0;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+
+  .btn { flex: 1; }
 }
 
 .te-mode-hint {
@@ -6427,12 +6455,6 @@ a.list-group-item:hover, button.list-group-item:hover {
   }
 }
 
-/* Pasek akcji w navbarze edytora */
-.te-actions {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 1);
-}
 ```
 
 ## Plik: `layout/_admin-layout.scss`
@@ -6456,6 +6478,12 @@ a.list-group-item:hover, button.list-group-item:hover {
     min-height: 100dvh;
     background-color: var(--bg-body);
     transition: grid-template-columns var(--transition-speed) ease;
+
+    /* Gdy nad layoutem jest globalny navbar, nie licz jego wysokości do
+       min-height (inaczej strona ma zbędny pasek pustego scrolla u dołu). */
+    body:has(> .navbar) & {
+      min-height: calc(100dvh - var(--navbar-h));
+    }
 
     /* WARIANTY ROZMIARÓW */
     &.sidebar-md { --current-sidebar-width: var(--sidebar-width-md); }
@@ -9799,6 +9827,11 @@ a.list-group-item:hover, button.list-group-item:hover {
   /* Rozmiary kontenerów i komponentów */
   --container-max-width: 1200px;
   --post-thumb-size: 60px;
+
+  /* Wysokość globalnego navbara (logo 44px + pionowy padding 2x16px).
+     Używana, gdy pod navbarem siedzi layout admina - sidebar startuje
+     dokładnie pod paskiem i wypełnia resztę okna. */
+  --navbar-h: 76px;
 
   /* Cienie i Poświaty */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);

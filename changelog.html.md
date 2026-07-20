@@ -412,6 +412,32 @@
                 </ul>
 
                 <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Ulepszenie</span>
+                  Globalny navbar na wszystkich podstronach
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Spójna nawigacja wszędzie:</strong> ten sam górny
+                    navbar (logo <code>&lt;picture&gt;</code> light/dark,
+                    mega-menu, language switch, przełącznik motywu) trafił na
+                    wszystkie strony dokumentacji i przykładów - dotąd miały
+                    tylko lewy sidebar. Sidebar layoutu admina siedzi teraz
+                    POD navbarem (wzorzec jak docs Bootstrapa).
+                  </li>
+                  <li>
+                    <strong>Koordynacja CSS:</strong> nowa zmienna
+                    <code>--navbar-h</code>; gdy nad
+                    <code>.admin-layout</code> jest navbar
+                    (<code>body:has(&gt; .navbar)</code>), sidebar startuje pod
+                    nim i wypełnia resztę okna, a navbar nie chowa się przy
+                    scrollu (inaczej odsłaniałby pusty pasek). Naprawione też
+                    logo na <code>index.html</code> (tekst → <code>picture</code>).
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-danger mx-2 text-3"

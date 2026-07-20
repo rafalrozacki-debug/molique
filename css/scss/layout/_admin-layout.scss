@@ -17,6 +17,12 @@
     background-color: var(--bg-body);
     transition: grid-template-columns var(--transition-speed) ease;
 
+    /* Gdy nad layoutem jest globalny navbar, nie licz jego wysokości do
+       min-height (inaczej strona ma zbędny pasek pustego scrolla u dołu). */
+    body:has(> .navbar) & {
+      min-height: calc(100dvh - var(--navbar-h));
+    }
+
     /* WARIANTY ROZMIARÓW */
     &.sidebar-md { --current-sidebar-width: var(--sidebar-width-md); }
     &.sidebar-sm { --current-sidebar-width: var(--sidebar-width-sm); }
