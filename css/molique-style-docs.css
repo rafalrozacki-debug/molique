@@ -132,11 +132,6 @@
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
-    /* Navbar ma tylko pionowy padding - dla pełnoszerokiego narzędzia
-       dokładamy poziomy oddech, żeby brand/akcje nie dotykały krawędzi. */
-  }
-  .te-page > .navbar .navbar-container {
-    padding-inline: calc(var(--spacing-unit) * 3);
   }
   .theme-editor {
     flex: 1;
@@ -173,6 +168,21 @@
   }
   .te-controls {
     /* TEGO BRAKOWAŁO */
+  }
+  /* Akcje edytora (Reset / Kopiuj CSS) - przypięte na górze panelu kontrolek */
+  .te-controls-actions {
+    position: sticky;
+    top: calc(var(--spacing-unit) * -3);
+    z-index: 2;
+    display: flex;
+    gap: calc(var(--spacing-unit) * 1);
+    padding: calc(var(--spacing-unit) * 2) 0;
+    margin: calc(var(--spacing-unit) * -3) 0 0;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .te-controls-actions .btn {
+    flex: 1;
   }
   .te-mode-hint {
     font-size: var(--text-sm);
@@ -346,12 +356,6 @@
     color: var(--sidebar-text-active);
     background-color: rgba(var(--sidebar-highlight-rgb), 0.08);
     font-weight: var(--fw-bold);
-  }
-  /* Pasek akcji w navbarze edytora */
-  .te-actions {
-    display: flex;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 1);
   }
 }
 

@@ -14,12 +14,6 @@
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-
-  /* Navbar ma tylko pionowy padding - dla pełnoszerokiego narzędzia
-     dokładamy poziomy oddech, żeby brand/akcje nie dotykały krawędzi. */
-  > .navbar .navbar-container {
-    padding-inline: calc(var(--spacing-unit) * 3);
-  }
 }
 
 .theme-editor {
@@ -50,6 +44,21 @@
     border-bottom: 1px solid var(--border-color);
     max-height: none;
   }
+}
+
+/* Akcje edytora (Reset / Kopiuj CSS) - przypięte na górze panelu kontrolek */
+.te-controls-actions {
+  position: sticky;
+  top: calc(var(--spacing-unit) * -3);
+  z-index: 2;
+  display: flex;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 2) 0;
+  margin: calc(var(--spacing-unit) * -3) 0 0;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+
+  .btn { flex: 1; }
 }
 
 .te-mode-hint {
@@ -223,9 +232,3 @@
   }
 }
 
-/* Pasek akcji w navbarze edytora */
-.te-actions {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 1);
-}
