@@ -3,6 +3,20 @@
  * Zawiera niezbędne fundamenty oraz dynamicznie ładuje opcjonalne moduły.
  */
 
+/* Bazowy URL do modułów (js/modules/) liczony względem lokalizacji TEGO pliku,
+   a NIE bieżącej strony. Autoloader dołączał moduły przez względną ścieżkę
+   'js/modules/x.js', która rozwiązuje się względem adresu strony - na
+   podstronach (np. /clock/) dawało to /clock/js/modules/x.js → 404.
+   document.currentScript jest dostępne WYŁĄCZNIE na najwyższym poziomie pliku
+   (w handlerze DOMContentLoaded jest już null), więc przechwytujemy je tutaj. */
+const MOLIQUE_MODULE_BASE = (function () {
+  try {
+    var src = document.currentScript && document.currentScript.src;
+    if (src) return src.replace(/[^/]*$/, '') + 'modules/';
+  } catch (e) { /* ignore */ }
+  return 'js/modules/'; // fallback (dotychczasowe zachowanie)
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================
@@ -277,7 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
   dynamicModules.forEach(module => {
     if (document.querySelector(module.selectors)) {
       const script = document.createElement('script');
-      script.src = module.file;
+      // Bezwzględny adres: baza (obok molique-script.js) + sama nazwa pliku.
+      script.src = MOLIQUE_MODULE_BASE + module.file.split('/').pop();
       script.defer = true;
       
       if (module.init) {
