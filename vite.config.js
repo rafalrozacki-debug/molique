@@ -52,7 +52,16 @@ function moliqueInclude() {
     transformIndexHtml: {
       order: 'pre',
       async handler(html, ctx) {
-        const result = await posthtml([posthtmlInclude({ root: srcDir })]).process(html, {
+        const result = await posthtml([
+          posthtmlInclude({
+            root: srcDir,
+            // Domyślne locals dla posthtml-expressions: description='' sprawia,
+            // że warunek <if condition="description"> na stronach bez opisu jest
+            // falsy (pomija <meta description>) zamiast rzucać ReferenceError.
+            // Strony z opisem nadpisują to swoim locals.
+            posthtmlExpressionsOptions: { locals: { description: '' } },
+          }),
+        ]).process(html, {
           from: ctx.filename,
         });
         return result.html;
