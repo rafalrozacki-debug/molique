@@ -87,7 +87,16 @@
 
         <div class="navbar-menu navbar-menu-offcanvas">
           <a href="index.html" class="navbar-item">Start</a>
-          <a href="blog.html" class="navbar-item">Blog</a>
+
+          <details class="dropdown" name="nav-mega">
+            <summary class="navbar-item dropdown-toggle">Przykłady</summary>
+            <div class="dropdown-menu">
+              <a href="blog.html" class="dropdown-item">Blog</a>
+              <a href="examples-admin-layout.html" class="dropdown-item">Panel Admina</a>
+              <a href="examples-hero-sections.html" class="dropdown-item">Sekcje Hero</a>
+              <a href="examples-pricing-tables.html" class="dropdown-item">Tabele Cenowe</a>
+            </div>
+          </details>
 
           <details class="mega-menu" name="nav-mega">
             <summary class="navbar-item mega-menu-trigger">Komponenty</summary>
@@ -242,13 +251,22 @@
             </div>
           </details>
 
-          <a href="docs.html" class="navbar-item">Dokumentacja</a>
-          <a href="changelog.html" class="navbar-item">Changelog</a>
-          <a href="docs-roadmap.html" class="navbar-item">Roadmapa</a>
+          <details class="dropdown" name="nav-mega">
+            <summary class="navbar-item dropdown-toggle">Zasoby</summary>
+            <div class="dropdown-menu">
+              <a href="docs.html" class="dropdown-item">Dokumentacja</a>
+              <a href="changelog.html" class="dropdown-item">Changelog</a>
+              <a href="docs-roadmap.html" class="dropdown-item">Roadmapa</a>
+            </div>
+          </details>
 
-          <a href="docs-classes.html" class="btn btn-primary btn-sm ml-md-2"
-            >Zacznij teraz</a
+          <a
+            href="download.html"
+            class="btn btn-primary p-2 ml-md-2 hover-spring"
+            >Pobierz molique</a
           >
+
+          <div class="d-flex flex-column align-items-center gap-1 ml-md-2">
           <button
             class="language-switch-trigger"
             popovertarget="lang-switch-menu"
@@ -319,6 +337,7 @@
               </div>
             </div>
           </label>
+          </div>
         </div>
       </div>
     </nav>
@@ -482,6 +501,15 @@
                     nim i wypełnia resztę okna, a navbar nie chowa się przy
                     scrollu (inaczej odsłaniałby pusty pasek). Naprawione też
                     logo na <code>index.html</code> (tekst → <code>picture</code>).
+                  </li>
+                  <li>
+                    <strong>Przebudowa układu (wszystko w jednej linii):</strong>
+                    Blog przeniesiony do dropdownu <em>Przykłady</em>,
+                    Dokumentacja/Changelog/Roadmapa zgrupowane w dropdownie
+                    <em>Zasoby</em>, przycisk <em>Pobierz molique</em>
+                    (<code>download.html</code>) z <code>hover-spring</code>, a
+                    przełącznik języka i motywu ułożone pionowo obok siebie.
+                    Ten sam navbar odświeżony na wszystkich ~82 stronach.
                   </li>
                 </ul>
 
