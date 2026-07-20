@@ -614,12 +614,17 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           bottom: 0;
           z-index: 1050;
           background-color: var(--sidebar-bg);
+          /* Wypełnienie na czas "bounce": overshoot unosi panel nieco w górę,
+             odsłaniając pasek u dołu - ten solidny cień (blur 0) domalowuje
+             ciemne tło poniżej panelu, więc przez przeskok nie mignie strona. */
+          box-shadow: 0 160px 0 var(--sidebar-bg);
           /* padding-top mieści pasek "Cofnij" (wysokość + status bar) + oddech */
           padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2)
             calc(var(--spacing-unit) * 2)
             calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
           overflow-y: auto;
-          animation: adminDrilldownPanel 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+          /* Wjazd od dołu z lekkim odbiciem (back-ease: control point > 1) */
+          animation: adminDrilldownPanelIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) both;
 
           /* Linki wyśrodkowane w pionie (wygodniej dla kciuka na mobile);
              "safe" cofa do góry i pozwala przewijać, gdy pozycji jest dużo. */
@@ -655,27 +660,52 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           padding-top: env(safe-area-inset-top);
           /* na dotyku (brak hover) jaśniejszy napis = wyraźny przycisk wstecz */
           color: var(--sidebar-text-active);
-          animation: adminDrilldownBar 0.2s ease both;
+          /* Napis pojawia się z lekkim opóźnieniem - dopiero gdy panel zdąży
+             już przykryć górę ekranu (inaczej mignąłby nad stroną). */
+          animation: adminDrilldownBar 0.24s ease 0.12s both;
         }
+      }
+
+      /* =========================================
+         WYJAZD (animowane zamknięcie - klasa .is-closing z admin-nav.js)
+         =========================================
+         Natywny <details> chowa treść natychmiast, więc moduł JS opóźnia
+         faktyczne zamknięcie: dodaje .is-closing, czeka na koniec animacji
+         i dopiero wtedy zdejmuje [open]. */
+      &.is-closing > .admin-nav-submenu-list {
+        animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
+      }
+      &.is-closing > summary {
+        animation: adminDrilldownBarOut 0.18s ease both;
       }
     }
 
-    /* Wejście drill-downu (GPU: wyłącznie opacity + transform) */
+    /* Wejście/wyjście drill-downu (GPU: wyłącznie opacity + transform) */
     @keyframes adminDrilldownBar {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    /* Pełnoekranowy panel: sam fade (translateY zostawiałby szczelinę u góry) */
-    @keyframes adminDrilldownPanel {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes adminDrilldownBarOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes adminDrilldownPanelIn {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    @keyframes adminDrilldownPanelOut {
+      from { transform: translateY(0); }
+      to { transform: translateY(100%); }
     }
   }
 
-  /* A11y: bez animacji dla użytkowników z prefers-reduced-motion */
+  /* A11y: bez animacji dla użytkowników z prefers-reduced-motion
+     (moduł admin-nav.js dodatkowo zamyka natychmiast, bez czekania). */
   @media (prefers-reduced-motion: reduce) {
     .admin-nav-submenu[open] > summary,
-    .admin-nav-submenu[open] > .admin-nav-submenu-list {
+    .admin-nav-submenu[open] > .admin-nav-submenu-list,
+    .admin-nav-submenu.is-closing > summary,
+    .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
       animation: none;
     }
   }

@@ -520,6 +520,19 @@
                     zmianie breakpointu.
                   </li>
                   <li>
+                    <strong>Animacja wjazdu/wyjazdu (feedback dotyku):</strong>
+                    panel wjeżdża od dołu z lekkim odbiciem
+                    (<code>cubic-bezier</code> z overshootem; przeskok maskuje
+                    solidny <code>box-shadow</code>, więc nie mignie strona),
+                    a napis „Cofnij" pojawia się z drobnym opóźnieniem. Wyjazd
+                    (zjazd w dół) obsługuje moduł: natywny
+                    <code>&lt;details&gt;</code> chowa treść od razu, więc JS
+                    dokłada klasę <code>.is-closing</code>, czeka na koniec
+                    animacji i dopiero zdejmuje <code>[open]</code>. Ruch tylko
+                    na <code>transform</code>/<code>opacity</code> (GPU), z
+                    poszanowaniem <code>prefers-reduced-motion</code>.
+                  </li>
+                  <li>
                     <strong>Doprecyzowany drop-up "Więcej":</strong> słowniki i
                     spis klas błędnie sugerowały klasę
                     <code>.admin-nav-dropdown</code> na
