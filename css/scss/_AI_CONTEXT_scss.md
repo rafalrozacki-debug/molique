@@ -1,7 +1,7 @@
 # Zbiorczy kontekst projektu dla AI
 
 **Folder glowny:** `scss`
-**Liczba plikow w paczce:** 53
+**Liczba plikow w paczce:** 54
 
 ## Struktura plikow:
 - `components/_admin-nav.scss`
@@ -10,6 +10,7 @@
 - `components/_cards.scss`
 - `components/_chart-funnel.scss`
 - `components/_charts.scss`
+- `components/_code-preview.scss`
 - `components/_dashboard.scss`
 - `components/_data-display.scss`
 - `components/_feedback.scss`
@@ -2227,6 +2228,84 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   opacity: 0.5;
   margin-bottom: calc(var(--spacing-unit) * 2);
 }```
+
+## Plik: `components/_code-preview.scss`
+
+```scss
+/**
+ * molique - Code Preview (podgląd + kod)
+ * Bloki prezentacyjne: .component-showcase > .component-preview + .component-code.
+ * Przeniesione z modułu docs do rdzenia, żeby działały wszędzie (np. hero na
+ * stronie głównej), nie tylko na stronach ładujących bundle dokumentacji.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  .component-showcase {
+    margin: calc(var(--spacing-unit) * 4) 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    background-color: var(--bg-body);
+    /* Zabezpieczenie przed rozsadzaniem przez zawartość */
+    max-width: 100%;
+  }
+
+  .component-preview {
+    padding: calc(var(--spacing-unit) * 3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 3);
+    background-image: radial-gradient(var(--border-color) 1px, transparent 0);
+    background-size: 20px 20px;
+
+    @include mq(md) {
+      padding: calc(var(--spacing-unit) * 6);
+    }
+  }
+
+  .component-code {
+    position: relative;
+    background-color: #1e293b;
+    margin: 0;
+    padding: 0;
+    /* Zabezpieczenie przed rozsadzaniem przez długi kod */
+    max-width: 100%;
+
+    pre {
+      margin: 0;
+      padding: calc(var(--spacing-unit) * 4);
+      /* Wymuszenie scrollowania w poziomie dla długich linii kodu */
+      overflow-x: auto;
+      max-width: 100%;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+  }
+
+  .btn-copy {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+
+    &:hover { background-color: rgba(255, 255, 255, 0.2); }
+    &.is-copied { background-color: var(--success); border-color: var(--success); }
+  }
+}
+```
 
 ## Plik: `components/_dashboard.scss`
 
@@ -6606,69 +6685,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     margin: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1) 0;
   }
 
-  /* Bloki prezentacyjne (Showcase) */
-  .component-showcase {
-    margin: calc(var(--spacing-unit) * 4) 0;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    background-color: var(--bg-body);
-    /* FIX: Zabezpieczenie przed rozsadzaniem przez zawartość */
-    max-width: 100%;
-  }
-
-  .component-preview {
-    /* FIX: Mniejszy padding na mobile */
-    padding: calc(var(--spacing-unit) * 3);
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacing-unit) * 3);
-    background-image: radial-gradient(var(--border-color) 1px, transparent 0);
-    background-size: 20px 20px;
-    
-    @include mq(md) {
-      padding: calc(var(--spacing-unit) * 6);
-    }
-  }
-
-  .component-code {
-    position: relative;
-    background-color: #1e293b;
-    margin: 0;
-    padding: 0;
-    /* FIX: Zabezpieczenie przed rozsadzaniem przez długi kod */
-    max-width: 100%;
-    
-    pre {
-      margin: 0;
-      padding: calc(var(--spacing-unit) * 4);
-      /* FIX: Wymuszenie scrollowania w poziomie dla długich linii kodu */
-      overflow-x: auto;
-      max-width: 100%;
-      color: #e2e8f0;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.875rem;
-      line-height: 1.6;
-    }
-  }
-
-  .btn-copy {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-
-    &:hover { background-color: rgba(255, 255, 255, 0.2); }
-    &.is-copied { background-color: var(--success); border-color: var(--success); }
-  }
+  /* Bloki prezentacyjne (Showcase) przeniesione do rdzenia:
+     components/_code-preview.scss (działają też poza bundle'em docs). */
 }```
 
 ## Plik: `molique-style-admin.scss`
@@ -9300,7 +9318,8 @@ a.list-group-item:hover, button.list-group-item:hover {
 @use 'components/data-display' as *;
 @use 'components/feedback' as *;
 @use 'components/business' as *;
-@use 'components/charts' as *;```
+@use 'components/charts' as *;
+@use 'components/code-preview' as *;```
 
 ## Plik: `_eink.scss`
 
