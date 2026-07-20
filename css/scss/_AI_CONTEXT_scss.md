@@ -1,7 +1,7 @@
 # Zbiorczy kontekst projektu dla AI
 
 **Folder glowny:** `scss`
-**Liczba plikow w paczce:** 52
+**Liczba plikow w paczce:** 53
 
 ## Struktura plikow:
 - `components/_admin-nav.scss`
@@ -45,6 +45,7 @@
 - `_buttons.scss`
 - `_components.scss`
 - `_eink.scss`
+- `_fonts.scss`
 - `_forms.scss`
 - `_grid.scss`
 - `_layout.scss`
@@ -6812,6 +6813,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 // Wstrzykiwanie kodu bezpośrednio do warstw
 @layer reset {
   @include meta.load-css("root"); // Tylko root ma fizyczny CSS (:root)
+  @include meta.load-css("fonts"); // @font-face: Inter + Poppins
 }
 
 @layer base {
@@ -9306,6 +9308,99 @@ a.list-group-item:hover, button.list-group-item:hover {
     display: none !important;
   }
 }```
+
+## Plik: `_fonts.scss`
+
+```scss
+/**
+ * molique - Fonty (@font-face)
+ * FontBody = Inter (tekst), FontHeading = Poppins (nagłówki).
+ * Nazwy rodzin odpowiadają --font-family-base / --font-family-heading z _root.
+ * Ścieżki względne do skompilowanego CSS w css/ (pliki w css/../fonts/).
+ * font-display: swap - tekst widoczny od razu, bez FOIT.
+ */
+
+/* --- FontBody: Inter --- */
+@font-face {
+  font-family: 'FontBody';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter-v20-latin_latin-ext-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontBody';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/inter-v20-latin_latin-ext-700.woff2') format('woff2');
+}
+
+/* --- FontHeading: Poppins (100–900) --- */
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-100.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-200.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-300.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin_latin-ext-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-800.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'FontHeading';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('../fonts/poppins-v24-latin-900.woff2') format('woff2');
+}
+```
 
 ## Plik: `_forms.scss`
 

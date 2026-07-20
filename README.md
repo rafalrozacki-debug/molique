@@ -6,8 +6,9 @@ zależności (zero jQuery). Wersja: **1.6.0**.
 
 ## Szybki start
 
-1. Skopiuj folder `css/`, `js/` (i `fonts/`, jeśli chcesz markowe fonty) do
-   swojego projektu.
+1. Skopiuj foldery `css/`, `js/` i `fonts/` do swojego projektu
+   (`fonts/` jest wymagany przez wbudowany `@font-face` - Inter + Poppins;
+   bez niego molique zdegraduje się łagodnie do `system-ui`).
 2. W `<head>` dołącz rdzeń, a JS na końcu `<body>` z atrybutem `defer`:
 
 ```html
@@ -28,10 +29,9 @@ zależności (zero jQuery). Wersja: **1.6.0**.
 | `css/molique-style-shop.css` | Moduł e-commerce. Opcjonalny. |
 | `css/molique-style-blog.css` | Moduł bloga. Opcjonalny. |
 | `css/molique-style-docs.css` | Chrome dokumentacji + theme-editor. Opcjonalny. |
-| `css/fonts.css` | **Opcjonalne** `@font-face` (Inter + Poppins). Domyślnie molique używa `system-ui`. |
 | `js/molique-script.js` | Rdzeń JS + inteligentny autoloader modułów. |
 | `js/modules/*.js` | Mikro-moduły dociągane w runtime (carousel, lightbox, select, theme-editor, …). |
-| `fonts/` | Pliki `woff2` (opcjonalne, do `fonts.css`). |
+| `fonts/` | Pliki `woff2` (Inter + Poppins). Używane przez `@font-face` wbudowany w `molique-style.css` - skopiuj ten folder obok `css/`. |
 | `img/flags/` | Flagi SVG do komponentu language-switch. |
 | `starter.html` | Minimalny szablon startowy. |
 | `scss/` | *(tylko paczka Source)* Źródła Sass do własnej kompilacji. |
@@ -68,4 +68,5 @@ Zmienne motywu (kolory, spacing, radius, typografia) są w
 
 ## Licencja
 
-Zobacz plik `LICENSE`.
+Apache License 2.0. Copyright 2026 Rafał Różacki. Pełny tekst w pliku
+`LICENSE`, informacja o atrybucji w `NOTICE`.

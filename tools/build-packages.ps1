@@ -52,7 +52,7 @@ Copy-Item -Recurse (Join-Path $root 'fonts') (Join-Path $prod 'fonts')
 New-Item -ItemType Directory -Force (Join-Path $prod 'img/flags') | Out-Null
 Copy-Item (Join-Path $root 'img/flags/*.svg') (Join-Path $prod 'img/flags')
 
-foreach ($f in @('starter.html','README.md','LICENSE','llms.txt')) {
+foreach ($f in @('starter.html','README.md','LICENSE','NOTICE','llms.txt')) {
   if (Test-Path (Join-Path $root $f)) { Copy-Item (Join-Path $root $f) $prod }
 }
 
