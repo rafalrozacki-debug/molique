@@ -61,6 +61,16 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   adresu.
 - **Warianty:** `.navbar-transparent`, `.navbar-sticky` (dodaje
   `.is-scrolled`).
+- **Nakładkowe (`.navbar-transparent`, `.navbar-pill`):** `position: absolute`,
+  więc navbar leży NA treści — tło/zdjęcie hero zaczyna się od samej góry
+  strony. Po scrollu JS nadaje `.is-scrolled` → `position: fixed` + tło motywu.
+  **NIE łącz ich z `.navbar-sticky`** — sticky wraca do przepływu dokumentu
+  (i wygrywa w kaskadzie), więc nakładka przestaje działać. Treść hero odsuń
+  o `var(--navbar-h)`, bo navbar jest poza przepływem.
+- **Pastylka:** `.navbar-pill` — navbar jako odsunięta od krawędzi pastylka
+  z własnym tłem, po scrollu rozkłada się do paska przy krawędzi. Tło jest
+  ZAWSZE ciemne (leży na zdjęciu), także w motywie jasnym; podmiana przez
+  `style="--navbar-pill-bg: #123"`. Linki białe do momentu zescrollowania.
 - **Offcanvas (Mobile):** oparte na Checkbox Hack
   (`.navbar-offcanvas-toggle:checked`).
 - **Mega Menu:** `.mega-menu` > `.mega-menu-content` (rozwijane na hover).

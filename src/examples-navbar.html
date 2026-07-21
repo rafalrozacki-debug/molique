@@ -535,16 +535,111 @@
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Dodaj klasy: navbar-transparent oraz navbar-sticky --&gt;
-&lt;nav class="navbar navbar-transparent navbar-sticky"&gt;
-  &lt;div class="container"&gt;
+                <pre><code>&lt;!-- Sama klasa navbar-transparent. NIE dodawaj navbar-sticky:
+     sticky wraca do przepływu dokumentu i efekt nakładki znika. --&gt;
+&lt;nav class="navbar navbar-transparent"&gt;
+  &lt;div class="container navbar-container"&gt;
     &lt;a href="#" class="navbar-brand"&gt;Logo&lt;/a&gt;
     &lt;div class="navbar-menu"&gt;
       &lt;a href="#" class="navbar-item"&gt;Biały link&lt;/a&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-&lt;/nav&gt;</code></pre>
+&lt;/nav&gt;
+
+&lt;!-- Navbar jest poza przepływem, więc odsuń treść hero --&gt;
+&lt;header style="padding-top: calc(var(--navbar-h) + 4rem)"&gt;…&lt;/header&gt;</code></pre>
               </div>
+            </div>
+          </section>
+
+          <!-- Navbar Pastylka -->
+          <section class="mb-5 pb-5">
+            <h3 class="text-7 fw-bold mb-3">
+              Navbar „Pastylka" (Floating Pill)
+              <span class="badge badge-primary text-2 ml-2">Nowość</span>
+            </h3>
+            <p class="text-muted mb-4">
+              Nawigacja jako odsunięta od krawędzi pastylka leżąca
+              <strong>na</strong> treści — dzięki temu zdjęcie hero zaczyna się
+              od samej góry strony, a nie dopiero pod paskiem. Po
+              zescrollowaniu pastylka rozkłada się do zwykłego paska przy
+              krawędzi i wraca do kolorów motywu.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 p-0 position-relative"
+                style="
+                  height: 300px;
+                  background: url(&quot;https://images.unsplash.com/photo-1541888087425-41132243407e?q=80&w=1000&auto=format&fit=crop&quot;)
+                    center/cover;
+                "
+              >
+                <!-- NAVBAR -->
+                <nav class="navbar navbar-pill w-100">
+                  <div class="container navbar-container">
+                    <a href="#" class="navbar-brand">Logo</a>
+                    <div class="navbar-menu d-none d-md-flex">
+                      <a href="#" class="navbar-item">Oferta</a>
+                      <a href="#" class="navbar-item">Realizacje</a>
+                      <a href="#" class="btn btn-primary p-2">Wyceń</a>
+                    </div>
+                  </div>
+                </nav>
+
+                <div
+                  class="position-relative d-flex align-items-center justify-content-center h-100"
+                >
+                  <h2 class="text-white">Zdjęcie zaczyna się od góry</h2>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;nav class="navbar navbar-pill"&gt;
+  &lt;div class="container navbar-container"&gt;
+    &lt;a href="#" class="navbar-brand"&gt;Logo&lt;/a&gt;
+    &lt;div class="navbar-menu"&gt;
+      &lt;a href="#" class="navbar-item"&gt;Oferta&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;!-- Navbar jest poza przepływem - odsuń treść hero --&gt;
+&lt;header style="padding-top: calc(var(--navbar-h) + 4rem)"&gt;…&lt;/header&gt;
+
+&lt;!-- Kolor pastylki zmienisz jedną zmienną: --&gt;
+&lt;nav class="navbar navbar-pill" style="--navbar-pill-bg: #4c1d95"&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mt-4">
+              <h5 class="fw-bold text-5 mb-3">O czym pamiętać:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
+              >
+                <li>
+                  <strong>Nie łącz z <code>navbar-sticky</code>.</strong> Sticky
+                  wraca do przepływu dokumentu i cały efekt nakładki znika.
+                  Klasę <code>.is-scrolled</code> nadaje JS automatycznie.
+                </li>
+                <li>
+                  <strong>Odsuń treść hero</strong> o
+                  <code>var(--navbar-h)</code> — navbar jest
+                  <code>position: absolute</code>, więc bez tego nagłówek wejdzie
+                  pod pastylkę.
+                </li>
+                <li>
+                  <strong>Pastylka jest zawsze ciemna</strong> (leży na zdjęciu),
+                  także w trybie jasnym. Kolor podmienisz zmienną
+                  <code>--navbar-pill-bg</code>. Linki są białe do momentu
+                  zescrollowania.
+                </li>
+                <li>
+                  <strong>Logo:</strong> jeśli masz wersję jasną i ciemną
+                  (<code>.logo-light</code> / <code>.logo-dark</code>), nad
+                  pastylką pokaże się jasna, a po scrollu ta zgodna z motywem.
+                </li>
+              </ul>
             </div>
           </section>
 

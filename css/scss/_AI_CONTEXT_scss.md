@@ -5650,6 +5650,66 @@ a.list-group-item:hover, button.list-group-item:hover {
   }
 }
 
+/* --- Navbar "Pastylka" (pływająca nad hero -> sticky po scrollu) ---
+   Wariant nakładkowy: navbar jest odsuniętą od krawędzi pastylką leżącą NA
+   treści, więc tło/zdjęcie sekcji pod spodem zaczyna się od samej góry strony.
+   Po przescrollowaniu klasa .is-scrolled rozkłada pastylkę do zwykłego paska.
+   NIE łącz z .navbar-sticky - sticky wraca do przepływu i efekt znika. */
+.navbar-pill {
+  /* ZAWSZE ciemna (leży na zdjęciu hero) - literał, bo var(--dark) w dark
+     mode jaśnieje. Podmiana: style="--navbar-pill-bg: #123" */
+  --navbar-pill-bg: #1e293b;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: var(--z-index-fixed);
+  padding: calc(var(--spacing-unit) * 2);
+  background-color: transparent;
+  border-bottom: none;
+
+  .navbar-container {
+    background-color: var(--navbar-pill-bg);
+    border-radius: 999px;
+    padding-block: calc(var(--spacing-unit) * 1.5);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .navbar-brand,
+  .navbar-item { color: #fff; }
+
+  .navbar-toggle {
+    color: #fff;
+    span { background-color: #fff; }
+  }
+
+  &:not(.is-scrolled) .navbar-brand {
+    .logo-light { display: none; }
+    .logo-dark { display: contents; }
+  }
+
+  &.is-scrolled {
+    position: fixed;
+    padding: 0;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+
+    .navbar-container {
+      background-color: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      padding-block: calc(var(--spacing-unit) * 2);
+    }
+
+    .navbar-brand,
+    .navbar-item { color: var(--text-main); }
+
+    .navbar-toggle span { background-color: var(--text-main); }
+  }
+}
+
 /* --- Offcanvas Mobile Menu (Zero JS) --- */
 .navbar-offcanvas-toggle {
   display: none;

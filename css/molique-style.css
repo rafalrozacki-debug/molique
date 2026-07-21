@@ -3089,6 +3089,78 @@
   .navbar-sticky.is-hidden {
     transform: translateY(-100%);
   }
+  /* --- Navbar "Pastylka" (pływająca nad hero -> sticky po scrollu) ---
+     Wariant nakładkowy: navbar jest odsuniętą od krawędzi pastylką leżącą NA
+     treści, więc tło/zdjęcie sekcji pod spodem zaczyna się od samej góry strony
+     (a nie dopiero pod paskiem). Po przescrollowaniu klasa .is-scrolled
+     (molique-script.js) rozkłada pastylkę do zwykłego paska przy krawędzi.
+
+     NIE łącz z .navbar-sticky - sticky wraca do przepływu dokumentu i efekt
+     nakładki znika. */
+  .navbar-pill {
+    /* Kolor pastylki: ZAWSZE ciemny, bo leży na zdjęciu hero. Literał, a nie
+       var(--dark), które w dark mode jaśnieje (pastylka zbielałaby, a biały
+       tekst zniknął). Podmiana jedną zmienną:
+       <nav class="navbar navbar-pill" style="--navbar-pill-bg: #123"> */
+    --navbar-pill-bg: #1e293b;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: var(--z-index-fixed);
+    padding: calc(var(--spacing-unit) * 2);
+    background-color: transparent;
+    border-bottom: none;
+  }
+  .navbar-pill .navbar-container {
+    background-color: var(--navbar-pill-bg);
+    border-radius: 999px;
+    /* Tylko w pionie - poziome wcięcie daje .container, żeby nie dublować. */
+    padding-block: calc(var(--spacing-unit) * 1.5);
+    box-shadow: var(--shadow-lg);
+  }
+  .navbar-pill .navbar-brand,
+  .navbar-pill .navbar-item {
+    color: #fff;
+  }
+  .navbar-pill .navbar-toggle {
+    color: #fff;
+  }
+  .navbar-pill .navbar-toggle span {
+    background-color: #fff;
+  }
+  .navbar-pill {
+    /* Nad ciemną pastylką jasne logo niezależnie od motywu (jak w transparent). */
+  }
+  .navbar-pill:not(.is-scrolled) .navbar-brand .logo-light {
+    display: none;
+  }
+  .navbar-pill:not(.is-scrolled) .navbar-brand .logo-dark {
+    display: contents;
+  }
+  .navbar-pill {
+    /* Po scrollu: pastylka rozkłada się do krawędzi i wraca do kolorów motywu. */
+  }
+  .navbar-pill.is-scrolled {
+    position: fixed;
+    padding: 0;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+  }
+  .navbar-pill.is-scrolled .navbar-container {
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    padding-block: calc(var(--spacing-unit) * 2);
+  }
+  .navbar-pill.is-scrolled .navbar-brand,
+  .navbar-pill.is-scrolled .navbar-item {
+    color: var(--text-main);
+  }
+  .navbar-pill.is-scrolled .navbar-toggle span {
+    background-color: var(--text-main);
+  }
   /* --- Offcanvas Mobile Menu (Zero JS) --- */
   .navbar-offcanvas-toggle {
     display: none;
