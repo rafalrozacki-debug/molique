@@ -17,7 +17,10 @@ Kluczowe cechy istotne dla dokumentacji:
   Positioning, `interpolate-size`). JS to ostateczność.
 - Kaskada oparta na `@layer reset, base, layout, components, modules, utilities`
   — zero wojen na specyficzność, `!important` tylko w `@layer utilities`.
-- **111 zmiennych CSS** — na nich stoi cały motyw i dark mode.
+- **148 zmiennych CSS** — na nich stoi cały motyw i dark mode. (Wcześniejszy
+  szacunek „111" był nietrafiony: to 86 zmiennych motywu w `:root`, 56
+  zmiennych komponentów i 6 czystych wejść z markupu — trzy kategorie o
+  różnym kontrakcie z użytkownikiem. Udokumentowane w `docs-variables.html`.)
 - **57 niezależnych modułów SCSS** (po rozbiciu w lipcu 2026) + konfigurator
   paczki (`builder.html`) i manifest `dist/chunks/manifest.json`.
 
@@ -71,9 +74,17 @@ Minimum demo — od pokazywania wariantów są `examples-*`.
 
 ## 4. Proponowana kolejność prac
 
-### Etap 1 — Referencja zmiennych CSS (największa luka, niezależna)
+### Etap 1 — Referencja zmiennych CSS ✅ ZROBIONE
 
-Nowa strona `docs-variables.html`: wszystkie 111 zmiennych w tabelach, pogrupowane
+Zrealizowane: `src/docs-variables.html` + generator `tools/gen-variables-doc.js`
+(wartości z SCSS) i `tools/variables-doc.data.js` (opisy). Generator przerywa
+build przy rozjeździe opisów ze źródłem. Przy okazji wyszła i została naprawiona
+martwa deklaracja w `.bg-glass` (brak `--bg-surface-rgb`).
+
+<details>
+<summary>Pierwotne założenia etapu</summary>
+
+Nowa strona `docs-variables.html`: wszystkie zmienne w tabelach, pogrupowane
 (kolory, typografia, odstępy, zaokrąglenia, cienie, z-index, sidebar, focus).
 Dla każdej: nazwa, wartość domyślna (light + dark), co steruje, gdzie użyta.
 
@@ -91,6 +102,8 @@ pierwszej zmianie.
   niepoprawne i przeglądarka odrzuca całą deklarację.
 - `variables: true` w PurgeCSS niszczy motyw.
 
+</details>
+
 ### Etap 2 — Przepisanie `docs-*` na model referencyjny
 
 19 stron. Sugerowana kolejność: `docs-navbar`, `docs-forms`, `docs-interactive`,
@@ -99,12 +112,18 @@ pierwszej zmianie.
 Dla każdej: przenieść showcase'y do odpowiedniego `examples-*` (jeśli tam ich
 nie ma), zostawić maksymalnie jedno demo, dopisać tabele i sekcję pułapek.
 
-### Etap 3 — Spójność nawigacji
+### Etap 3 — Spójność nawigacji ✅ ZROBIONE (wykonany przed Etapem 2)
 
-Sidebar dokumentacji jest **zduplikowany w 19 plikach** (~116 linii każdy) i ma
-**zahardkodowany `is-active`**. To ostatni duży kandydat na partial — analogicznie
-do navbara, z podświetlaniem aktywnej pozycji z URL (jest już
-`js/modules/molique-navbar-active.js`, który robi to dla górnego menu).
+Wyciągnięty do `src/partials/docs-sidebar.html`; aktywną pozycję nadaje z URL
+nowy `js/modules/molique-admin-nav-active.js` (auto-ładowany przy `.admin-nav`).
+
+Zrobiony wcześniej niż planowano, bo 19 kopii **już się rozjechało** i dokładanie
+do nich dwudziestej pozycji byłoby pracą do wyrzucenia w tym etapie. Rozjazd
+naprawiony przy okazji: sześć stron nie linkowało do Spisu klas ani Roadmapy,
+`docs.html` gubiło blog, a `docs-tables.html` wypadło z osiemnastu menu.
+
+Uwaga na przyszłość: `docs-roadmap.html` nadal nie ma layoutu admina ani
+sidebara — jeśli ma go dostać, to osobne zadanie.
 
 ---
 
@@ -171,8 +190,12 @@ Sprawdzone narzędzia z tej sesji:
 
 ---
 
-## 7. Pierwszy krok
+## 7. Następny krok
 
-Zacznij od **Etapu 1** (referencja zmiennych) — jest samowystarczalny, domyka
-największą lukę i nie wymaga ruszania istniejących stron. Dopiero potem
-przepisywanie `docs-*`, które z tej referencji będzie korzystać.
+Etapy 1 i 3 są zamknięte. Zostaje **Etap 2** — przepisanie 19 stron `docs-*`
+na model referencyjny. Grunt jest przygotowany: jest z czego linkować
+(`docs-variables.html`), a nawigacja to jeden plik, więc dokładanie stron nie
+wymaga już edycji dwudziestu kopii.
+
+Sugerowana kolejność bez zmian: `docs-navbar`, `docs-forms`, `docs-interactive`,
+`docs-cards`, `docs-tables`, reszta.
