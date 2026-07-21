@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Konfigurator paczki - molique","description":"Złóż własną paczkę CSS molique: zaznacz tylko te moduły, których używasz, i pobierz gotowy plik. Zależności dobierane automatycznie, rozmiar liczony na żywo."}'></include>
+  </head>
+  <body class="btn-hover-spring">
+<include src="partials/navbar.html"></include>
+
+    <header class="container py-5">
+      <div class="text-center mb-5">
+        <span class="badge badge-primary mb-3">Konfigurator</span>
+        <h1 class="text-9 fw-black mb-3">Złóż własną paczkę</h1>
+        <p class="text-4 text-muted" style="max-width: 640px; margin: 0 auto">
+          Zaznacz tylko te moduły, których używasz. Zależności dobiorą się same,
+          a rozmiar zobaczysz na żywo. To redukcja <strong>bez ryzyka</strong> —
+          w przeciwieństwie do PurgeCSS nic nie jest zgadywane.
+        </p>
+      </div>
+
+      <!-- PRESETY -->
+      <div class="mb-4">
+        <h2 class="text-5 fw-bold mb-3">Zacznij od gotowego zestawu</h2>
+        <div class="d-flex flex-column flex-md-row gap-2">
+          <button type="button" class="btn btn-outline-primary" data-preset="nano">
+            Nano
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="landing">
+            Landing page
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="admin">
+            Panel admina
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="shop">
+            Sklep
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="all">
+            Wszystko
+          </button>
+          <button type="button" class="btn btn-outline-primary" id="btn-clear">
+            Wyczyść
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container pb-5">
+      <div class="grid grid-cols-1 grid-md-cols-3 gap-4">
+        <!-- LISTA MODUŁÓW -->
+        <div class="col-md-span-2">
+          <div id="builder-loading" class="p-4 bg-surface border rounded-2">
+            <p class="text-muted m-0">Wczytuję listę modułów…</p>
+          </div>
+          <div id="builder-list"></div>
+        </div>
+
+        <!-- PODSUMOWANIE -->
+        <aside>
+          <div class="card position-sticky" style="top: calc(var(--navbar-h) + 1rem)">
+            <div class="card-header">
+              <h2 class="text-5 m-0">Twoja paczka</h2>
+            </div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Moduły</span>
+                <strong id="sum-count">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Rozmiar</span>
+                <strong id="sum-size">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Po gzip</span>
+                <strong id="sum-gzip" class="text-primary">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Oszczędność</span>
+                <strong id="sum-saved" class="text-success">—</strong>
+              </div>
+
+              <button type="button" class="btn btn-primary fw-bold w-100" id="btn-download">
+                Pobierz CSS ⬇
+              </button>
+
+              <p class="text-1 text-muted m-0">
+                Pobierasz jeden plik <code>molique-custom.css</code>. JavaScript
+                i fonty weź ze zwykłej paczki ze
+                <a href="download.html">strony pobierania</a>.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- JAK TO DZIAŁA -->
+      <section class="mt-5 pt-5 border-top">
+        <h2 class="text-7 fw-bold mb-3">Jak to działa</h2>
+        <div class="grid grid-cols-1 grid-md-cols-3 gap-4">
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Zależności same się dobiorą</h3>
+            <p class="text-3 text-muted m-0">
+              Niektóre komponenty korzystają z innych — np. modal potwierdzenia
+              używa karty i przycisków. Zaznaczenie takiego modułu automatycznie
+              dociąga to, czego potrzebuje.
+            </p>
+          </div>
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Kolejność nie ma znaczenia</h3>
+            <p class="text-3 text-muted m-0">
+              molique deklaruje kolejność warstw <code>@layer</code> z góry, więc
+              o precedencji decyduje deklaracja, a nie kolejność sklejenia. Dlatego
+              składanie paczki z klocków jest bezpieczne.
+            </p>
+          </div>
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Bez ryzyka, inaczej niż purge</h3>
+            <p class="text-3 text-muted m-0">
+              Tu <strong>Ty</strong> decydujesz, co wchodzi.
+              <a href="docs-purgecss.html">PurgeCSS</a> zgaduje na podstawie
+              plików i bez safelisty potrafi wyciąć działające komponenty.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+<include src="partials/footer.html"></include>
+
+    <script src="js/molique-script.js" defer></script>
+    <script type="module" src="./builder.js"></script>
+  </body>
+</html>
