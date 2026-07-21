@@ -47,6 +47,79 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.6.2 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.6.2</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Wsparcie dla PurgeCSS - gotowa safelista
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Nowy plik
+                    <code>purgecss.safelist.cjs</code></strong> w paczce -
+                    gotowa safelista klas, których PurgeCSS nie widzi, bo dodaje
+                    je JS w runtime (stany <code>.is-*</code>, markup karuzeli,
+                    lightboxa i toastów). Użycie:
+                    <code>safelist: molique.runtime</code>.
+                  </li>
+                  <li>
+                    <strong>Drugi poziom dla dynamicznych nazw:</strong>
+                    <code>molique.merge('status','grid')</code> dla projektów,
+                    gdzie backend skleja klasy (np.
+                    <code>badge-&lt;?= $status ?&gt;</code>). Grupy:
+                    <code>colors</code>, <code>grid</code>,
+                    <code>spacing</code>, <code>status</code>.
+                  </li>
+                  <li>
+                    <strong>Generator zamiast listy pisanej ręcznie:</strong>
+                    <code>tools/gen-safelist.js</code> odtwarza safelistę ze
+                    źródeł (<code>css/*.css</code> + <code>js/</code>), więc nie
+                    rozjedzie się przy nowym module.
+                  </li>
+                  <li>
+                    <strong>Zweryfikowane realnym buildem:</strong> 277 KB →
+                    68 KB (−75%) przy zachowaniu wszystkiego, co dodaje JS.
+                    Deklaracja <code>@layer</code> (kolejność kaskady) przeżywa
+                    purge - architektura warstw jest bezpieczna.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Toasty bez sklejania nazw klas
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <code>MoliqueToast</code> nie buduje już nazw klas z
+                    szablonu (<code>toast-${type}</code>) - używa map literałów.
+                    Dzięki temu wszystkie klasy toastów są widoczne dla PurgeCSS
+                    i narzędzi, a nieznany <code>type</code>/<code>position</code>
+                    dostaje bezpieczny fallback zamiast klasy bez stylu.
+                    Zachowanie bez zmian (zweryfikowane: 4 typy × 6 pozycji).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.6.1 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -34,12 +34,49 @@ zależności (zero jQuery). Wersja: **1.6.1**.
 | `fonts/` | Pliki `woff2` (Inter + Poppins). Używane przez `@font-face` wbudowany w `molique-style.css` - skopiuj ten folder obok `css/`. |
 | `img/flags/` | Flagi SVG do komponentu language-switch. |
 | `starter.html` | Minimalny szablon startowy. |
+| `purgecss.safelist.cjs` | Gotowa safelista dla PurgeCSS (patrz niżej). Potrzebna tylko, jeśli purge'ujesz CSS. |
 | `scss/` | *(tylko paczka Source)* Źródła Sass do własnej kompilacji. |
 
 ## Moduły opcjonalne (CSS)
 
 Dołączaj tylko te, których używasz — każdy to osobny plik `css/molique-style-*.css`
 (admin, shop, blog, docs, before-after, share, speed-dial).
+
+## PurgeCSS (opcjonalnie)
+
+Część klas molique **nie występuje w Twoim HTML** — dodaje je JS w czasie działania
+(stany `.is-*`, markup karuzeli, lightboxa i toastów). PurgeCSS ich nie widzi i bez
+safelisty je wytnie. Dlatego w paczce jest gotowy plik:
+
+```js
+// purgecss.config.js
+const molique = require('./purgecss.safelist.cjs');
+
+module.exports = {
+  content: ['./**/*.html', './**/*.php', './js/**/*.js'],
+  css: ['./css/molique-style.css'],
+  safelist: molique.runtime,   // MINIMUM - bez tego komponenty się psują
+  keyframes: true,
+  variables: false,            // NIE usuwaj zmiennych - na nich stoi motyw
+};
+```
+
+**Warianty safelisty:**
+
+| Wywołanie | Kiedy |
+| --- | --- |
+| `molique.runtime` | Zawsze. Klasy dodawane przez JS molique. |
+| `molique.merge('status', 'grid')` | Gdy Twój **backend skleja nazwy klas** — np. `class="badge-<?= $status ?>"` albo `col-md-span-<?= $n ?>`. Takich klas nie ma w żadnym pliku, więc trzeba je zachować jawnie. |
+| `molique.all` | Wszystkie rodziny utilities (najbezpieczniej, najmniejszy zysk). |
+
+Dostępne grupy: `colors`, `grid`, `spacing`, `status`.
+
+**Efekt na realnej stronie** (navbar + karta + przyciski): `277 KB → 68 KB` (−75%),
+przy zachowaniu wszystkiego, co dodaje JS.
+
+> **Uwaga:** zanim sięgniesz po PurgeCSS, sprawdź czy wystarczy dobór modułów wyżej —
+> to redukcja bez żadnego ryzyka. `variables: true` zepsuje motyw (111 zmiennych CSS),
+> a `keyframes: true` jest bezpieczne **tylko** z safelistą.
 
 ## Autoloader JS
 

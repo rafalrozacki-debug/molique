@@ -64,21 +64,42 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================
   // 2. TOAST NOTIFICATIONS (Globalny Obiekt)
   // =========================================
+  // Mapy literałów zamiast sklejania nazw klas z szablonu. Dzięki temu nazwy
+  // istnieją w źródle jako pełne literały, więc widzą je PurgeCSS, generator
+  // safelisty i wyszukiwarka IDE. Nieznany klucz => bezpieczny fallback.
+  const TOAST_TYPE = {
+    success: 'toast-success',
+    danger: 'toast-danger',
+    warning: 'toast-warning',
+    info: 'toast-info'
+  };
+  const TOAST_POSITION = {
+    'top-left': 'toast-top-left',
+    'top-center': 'toast-top-center',
+    'top-right': 'toast-top-right',
+    'bottom-left': 'toast-bottom-left',
+    'bottom-center': 'toast-bottom-center',
+    'bottom-right': 'toast-bottom-right'
+  };
+
   window.MoliqueToast = {
     show(options) {
       const { message = 'Powiadomienie', type = 'info', position = 'top-right', duration = 4000 } = options;
       
-      let container = document.querySelector(`.toast-container.toast-${position}`);
+      const typeClass = TOAST_TYPE[type] || TOAST_TYPE.info;
+      const positionClass = TOAST_POSITION[position] || TOAST_POSITION['top-right'];
+
+      let container = document.querySelector('.toast-container.' + positionClass);
       if (!container) {
         container = document.createElement('div');
-        container.className = `toast-container toast-${position}`;
+        container.className = 'toast-container ' + positionClass;
         container.setAttribute('popover', 'manual');
         document.body.appendChild(container);
         container.showPopover();
       }
       
       const toast = document.createElement('div');
-      toast.className = `toast toast-${type}`;
+      toast.className = 'toast ' + typeClass;
       toast.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
           <span>${message}</span>
@@ -86,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="toast-progress" style="animation: toastProgressAnim ${duration}ms linear forwards;"></div>
       `;
-      position.includes('bottom') ? container.appendChild(toast) : container.prepend(toast);
+      positionClass.includes('bottom') ? container.appendChild(toast) : container.prepend(toast);
       
       let timeout;
       const removeToast = () => {

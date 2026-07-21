@@ -295,3 +295,21 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   asynchronicznie pobiera mikro-moduły z `js/modules/` (np. `carousel.js`,
   `lightbox.js`) tylko wtedy, gdy komponent istnieje na stronie.
 - **Vanilla JS:** całkowity zakaz używania jQuery.
+- **NIGDY nie sklejaj nazw klas dynamicznie** (`'toast-' + type`,
+  `` `col-span-${n}` ``). Taka nazwa nie istnieje w źródle jako literał, więc
+  nie widzi jej ani PurgeCSS, ani wyszukiwarka IDE, ani generator safelisty.
+  Zamiast tego mapa literałów: `const T = { success: 'toast-success', … }`
+  i `T[type] || T.info` (przy okazji dostajesz walidację wejścia).
+- **Stany zawsze jako `.is-*`** (`is-active`, `is-hidden`, `is-selected`) —
+  to konwencja, na której opiera się jeden pattern w safeliście PurgeCSS.
+
+## Purge / rozmiar CSS
+
+- **Najpierw moduły, potem purge:** dobór bundli (`admin`, `shop`, `blog`…)
+  to redukcja bez ryzyka. PurgeCSS dopiero potem.
+- **Safelista:** paczka zawiera `purgecss.safelist.cjs`.
+  `safelist: molique.runtime` to minimum (klasy dodawane przez JS);
+  `molique.merge('status','grid')` gdy backend skleja nazwy klas
+  (np. `badge-<?= $status ?>`). Bez tego wylatują m.in. `.is-*`, `toast-*`,
+  `lightbox-*` i `@keyframes toastProgressAnim`.
+- **Nigdy `variables: true`** — na zmiennych CSS stoi cały motyw.

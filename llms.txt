@@ -114,3 +114,10 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 ## 3. ARCHITEKTURA JAVASCRIPT
 - **Autoloader:** Główny plik `molique-script.js` skanuje DOM i asynchronicznie pobiera mikro-moduły z `js/modules/` (np. `carousel.js`, `lightbox.js`) tylko wtedy, gdy komponent istnieje na stronie.
 - **Vanilla JS:** Całkowity zakaz używania jQuery.
+- **NIGDY nie sklejaj nazw klas dynamicznie** (`'toast-' + type`, `` `col-span-${n}` ``) — taka nazwa nie istnieje w źródle jako literał, więc nie widzi jej PurgeCSS ani generator safelisty. Używaj mapy literałów: `const T = { success: 'toast-success', … }` + `T[type] || T.info`.
+- **Stany zawsze jako `.is-*`** (`is-active`, `is-hidden`, `is-selected`) — konwencja, na której opiera się pattern w safeliście.
+
+## 4. PURGE / ROZMIAR CSS
+- **Najpierw moduły, potem purge:** dobór bundli (admin, shop, blog…) to redukcja bez ryzyka; PurgeCSS dopiero potem.
+- **Safelista:** paczka zawiera `purgecss.safelist.cjs`. `safelist: molique.runtime` = minimum (klasy dodawane przez JS). `molique.merge('status','grid')` gdy backend skleja nazwy klas (np. `badge-<?= $status ?>`). Bez safelisty wylatują m.in. `.is-*`, `toast-*`, `lightbox-*`, `@keyframes toastProgressAnim`.
+- **Nigdy `variables: true`** — na zmiennych CSS stoi cały motyw. Efekt na realnej stronie: 277 KB → 68 KB (−75%).
