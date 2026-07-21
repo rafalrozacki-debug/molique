@@ -50,6 +50,24 @@
           <div id="builder-loading" class="p-4 bg-surface border rounded-2">
             <p class="text-muted m-0">Wczytuję listę modułów…</p>
           </div>
+          <!-- Wyjątek od zasady "zero inline JS": to ostrzeżenie MUSI być
+               skryptem klasycznym i inline. Konfigurator to moduł ES, a te są
+               na file:// blokowane przez CORS - czyli kod umieszczony w nim
+               nigdy by się nie wykonał i strona wyglądałaby na wiecznie
+               ładującą się, bez żadnej wskazówki. -->
+          <script>
+            if (location.protocol === 'file:') {
+              document.getElementById('builder-loading').innerHTML =
+                '<div class="alert alert-warning m-0">' +
+                '<strong>Ta strona musi być otwarta przez serwer, nie z dysku.</strong>' +
+                '<p class="m-0 mt-2">Konfigurator pobiera listę modułów przez <code>fetch</code>, ' +
+                'a przeglądarka blokuje to dla adresów <code>file://</code>. ' +
+                'Uruchom jedno z poniższych i wejdź na podany adres:</p>' +
+                '<pre class="m-0 mt-2"><code>npm run dev      → http://localhost:5173/builder.html\n' +
+                'npm run preview  → podgląd zbudowanej wersji</code></pre>' +
+                '</div>';
+            }
+          </script>
           <div id="builder-list"></div>
         </div>
 

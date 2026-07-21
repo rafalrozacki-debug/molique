@@ -234,16 +234,9 @@ function bind() {
 const loadingEl = $('#builder-loading');
 if (loadingEl) loadingEl.querySelector('p').textContent = 'Pobieram listę modułów…';
 
-// Otwarcie pliku dwuklikiem (file://) blokuje moduły ES i fetch przez CORS -
-// strona wygląda wtedy na "wiecznie ładującą się", bez żadnego komunikatu.
-if (location.protocol === 'file:') {
-  loadingEl.innerHTML =
-    '<div class="alert alert-warning m-0"><strong>Otwórz tę stronę przez serwer.</strong> ' +
-    'Konfigurator pobiera pliki przez <code>fetch</code>, a przeglądarka blokuje to ' +
-    'dla adresów <code>file://</code>. Uruchom <code>npm run dev</code> i wejdź na ' +
-    '<code>http://localhost:5173/builder.html</code>.</div>';
-  throw new Error('builder: protokol file:// nie jest obslugiwany');
-}
+// Uwaga: ostrzeżenia o file:// NIE ma tutaj celowo. Ten plik jest modułem ES,
+// a przeglądarka blokuje moduły na file:// przez CORS - kod stąd nigdy by się
+// nie wykonał. Ostrzeżenie siedzi jako skrypt klasyczny inline w builder.html.
 
 fetch(MANIFEST_URL)
   .then((r) => {
