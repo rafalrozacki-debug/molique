@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // .navbar-transparent też ma dostawać .is-scrolled (tło + kolory po scrollu),
   // nie tylko .navbar-sticky. is-hidden (auto-hide) ma CSS tylko dla sticky,
   // więc na transparent jest bez efektu.
-  const stickyNavbar = document.querySelector('.navbar-sticky, .navbar-transparent');
+  const stickyNavbar = document.querySelector('.navbar-sticky, .navbar-transparent, .navbar-pill');
   const progressBar = document.querySelector('.progress-bar-reading');
   const mobileNavToggle = document.getElementById('mobile-nav-toggle');
   

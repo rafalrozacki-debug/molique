@@ -71,6 +71,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   z własnym tłem, po scrollu rozkłada się do paska przy krawędzi. Tło jest
   ZAWSZE ciemne (leży na zdjęciu), także w motywie jasnym; podmiana przez
   `style="--navbar-pill-bg: #123"`. Linki białe do momentu zescrollowania.
+  Wcięcie treści od zaokrąglonych krawędzi: `--navbar-pill-padding-x`
+  (domyślnie 32px; po scrollu automatycznie wraca do 16px `.container`).
 - **Offcanvas (Mobile):** oparte na Checkbox Hack
   (`.navbar-offcanvas-toggle:checked`).
 - **Mega Menu:** `.mega-menu` > `.mega-menu-content` (rozwijane na hover).

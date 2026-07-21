@@ -3103,6 +3103,10 @@
        tekst zniknął). Podmiana jedną zmienną:
        <nav class="navbar navbar-pill" style="--navbar-pill-bg: #123"> */
     --navbar-pill-bg: #1e293b;
+    /* Wcięcie treści od zaokrąglonych krawędzi. Przy promieniu 999px domyślne
+       16px z .container jest za ciasne - stąd osobna zmienna. Po scrollu (niżej)
+       wraca do wartości .container, żeby treść równała się z resztą strony. */
+    --navbar-pill-padding-x: calc(var(--spacing-unit) * 4);
     position: absolute;
     top: 0;
     left: 0;
@@ -3115,8 +3119,9 @@
   .navbar-pill .navbar-container {
     background-color: var(--navbar-pill-bg);
     border-radius: 999px;
-    /* Tylko w pionie - poziome wcięcie daje .container, żeby nie dublować. */
     padding-block: calc(var(--spacing-unit) * 1.5);
+    /* Nadpisuje poziomy padding .container (wyższa specyficzność). */
+    padding-inline: var(--navbar-pill-padding-x);
     box-shadow: var(--shadow-lg);
   }
   .navbar-pill .navbar-brand,
@@ -3147,6 +3152,8 @@
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
+    /* Powrót do wcięcia .container - treść równa się z resztą strony. */
+    --navbar-pill-padding-x: calc(var(--spacing-unit) * 2);
   }
   .navbar-pill.is-scrolled .navbar-container {
     background-color: transparent;

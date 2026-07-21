@@ -5659,6 +5659,9 @@ a.list-group-item:hover, button.list-group-item:hover {
   /* ZAWSZE ciemna (leży na zdjęciu hero) - literał, bo var(--dark) w dark
      mode jaśnieje. Podmiana: style="--navbar-pill-bg: #123" */
   --navbar-pill-bg: #1e293b;
+  /* Wcięcie treści od zaokrąglonych krawędzi (999px). Po scrollu wraca do
+     wartości .container, żeby treść równała się z resztą strony. */
+  --navbar-pill-padding-x: calc(var(--spacing-unit) * 4);
 
   position: absolute;
   top: 0;
@@ -5673,6 +5676,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     background-color: var(--navbar-pill-bg);
     border-radius: 999px;
     padding-block: calc(var(--spacing-unit) * 1.5);
+    padding-inline: var(--navbar-pill-padding-x);
     box-shadow: var(--shadow-lg);
   }
 
@@ -5695,6 +5699,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
+    --navbar-pill-padding-x: calc(var(--spacing-unit) * 2);
 
     .navbar-container {
       background-color: transparent;
