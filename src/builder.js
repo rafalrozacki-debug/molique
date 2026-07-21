@@ -229,6 +229,22 @@ function bind() {
 
 /* ---------- Start ---------- */
 
+// Ślad, że skrypt w ogóle wystartował. Bez tego strona z zablokowanym
+// modułem wygląda identycznie jak strona, która wciąż się ładuje.
+const loadingEl = $('#builder-loading');
+if (loadingEl) loadingEl.querySelector('p').textContent = 'Pobieram listę modułów…';
+
+// Otwarcie pliku dwuklikiem (file://) blokuje moduły ES i fetch przez CORS -
+// strona wygląda wtedy na "wiecznie ładującą się", bez żadnego komunikatu.
+if (location.protocol === 'file:') {
+  loadingEl.innerHTML =
+    '<div class="alert alert-warning m-0"><strong>Otwórz tę stronę przez serwer.</strong> ' +
+    'Konfigurator pobiera pliki przez <code>fetch</code>, a przeglądarka blokuje to ' +
+    'dla adresów <code>file://</code>. Uruchom <code>npm run dev</code> i wejdź na ' +
+    '<code>http://localhost:5173/builder.html</code>.</div>';
+  throw new Error('builder: protokol file:// nie jest obslugiwany');
+}
+
 fetch(MANIFEST_URL)
   .then((r) => {
     if (!r.ok) throw new Error('HTTP ' + r.status);
