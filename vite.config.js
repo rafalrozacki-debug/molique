@@ -1,7 +1,7 @@
 import { defineConfig, normalizePath, createLogger } from 'vite';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readdirSync } from 'node:fs';
+import { readdirSync, existsSync, copyFileSync, readFileSync } from 'node:fs';
 import posthtml from 'posthtml';
 import posthtmlInclude from 'posthtml-include';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -44,6 +44,43 @@ logger.warnOnce = (msg, opts) => {
   baseWarnOnce(msg, opts);
 };
 
+// Pliki z korzenia repo, które muszą być pobieralne spod adresu strony.
+// llms.txt MUSI leżeć dokładnie w /llms.txt - na tym polega cała konwencja
+// (agent AI pobiera go z korzenia domeny), więc nie może wylądować w podfolderze.
+const rootFiles = ['llms.txt', 'purgecss.safelist.cjs', 'LICENSE', 'NOTICE'];
+const outDir = resolve(__dirname, '_site');
+
+// Własny mini-plugin zamiast static-copy: ta wtyczka dla pojedynczych plików
+// z dest:'.' liczy cel na źródło i wywala build (EINVAL: src and dest are same).
+function copyRootFiles() {
+  const mime = (name) =>
+    name.endsWith('.txt') ? 'text/plain; charset=utf-8'
+    : name.endsWith('.cjs') ? 'text/javascript; charset=utf-8'
+    : 'text/plain; charset=utf-8';
+
+  return {
+    name: 'molique-copy-root-files',
+    // DEV: serwuj prosto z korzenia repo.
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const name = (req.url || '').split('?')[0].replace(/^\//, '');
+        if (!rootFiles.includes(name)) return next();
+        const from = resolve(__dirname, name);
+        if (!existsSync(from)) return next();
+        res.setHeader('Content-Type', mime(name));
+        res.end(readFileSync(from));
+      });
+    },
+    // BUILD: skopiuj do korzenia _site/.
+    closeBundle() {
+      for (const name of rootFiles) {
+        const from = resolve(__dirname, name);
+        if (existsSync(from)) copyFileSync(from, resolve(outDir, name));
+      }
+    },
+  };
+}
+
 // Mini-plugin: rozwija <include src="partials/…"> w czasie builda (posthtml +
 // posthtml-include). Własny zamiast vite-plugin-posthtml (porzucony, wywala się
 // na nowym Node). order:'pre' — include musi rozwinąć się ZANIM Vite czyta
@@ -84,7 +121,7 @@ export default defineConfig({
   build: {
     // Build strony trafia do _site/ (ignorowany w gicie). NIGDY do dist/,
     // bo tam leżą wersjonowane paczki wydania (molique-*.zip).
-    outDir: resolve(__dirname, '_site'),
+    outDir,
     emptyOutDir: true,
     rollupOptions: { input },
   },
@@ -97,5 +134,6 @@ export default defineConfig({
         dest: '.',
       })),
     }),
+    copyRootFiles(),
   ],
 });
