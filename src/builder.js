@@ -78,7 +78,10 @@ function withDeps(ids) {
 
 /* ---------- Render ---------- */
 
-function render() {
+// Lista budowana JEDEN RAZ. Przebudowywanie jej przy każdym kliknięciu
+// (innerHTML) gubiło pozycję przewijania i fokus - wyglądało to, jakby sekcja
+// się zwijała. Zmiany stanu nanosi syncUI(), które tylko odświeża checkboxy.
+function renderOnce() {
   const cats = {};
   for (const c of manifest.chunks) (cats[c.cat] = cats[c.cat] || []).push(c);
 
@@ -95,30 +98,48 @@ function render() {
       </div>`)
     .join('');
 
-  updateSummary();
+  syncUI();
 }
 
+// Klikalny jest TYLKO checkbox z etykietą modułu. Opis i lista zależności
+// leżą poza <label>, żeby dało się je przeczytać (i zaznaczyć myszą) bez
+// przypadkowego przełączania modułu.
 function itemHtml(c) {
-  const on = selected.has(c.id);
-  const lock = c.mandatory ? ' disabled' : '';
   const deps = c.deps.length
     ? `<span class="text-1 text-muted d-block">wymaga: ${c.deps.join(', ')}</span>`
     : '';
+  const note = c.mandatory
+    ? '<span class="text-1 text-primary d-block">zawsze w paczce</span>'
+    : '';
   return `
-    <label class="d-flex align-items-start gap-2 p-2 border rounded-2 ${on ? 'border-hover-primary' : ''}"
-           style="cursor: ${c.mandatory ? 'not-allowed' : 'pointer'}">
-      <input type="checkbox" class="form-check-input mt-1" data-id="${c.id}"
-             ${on ? 'checked' : ''}${lock} />
-      <span class="w-100">
-        <span class="d-flex align-items-center justify-content-between gap-2">
+    <div class="p-2 border rounded-2" data-row="${c.id}">
+      <label class="d-flex align-items-center gap-2"
+             style="cursor: ${c.mandatory ? 'not-allowed' : 'pointer'}">
+        <input type="checkbox" class="form-check-input" data-id="${c.id}"
+               ${c.mandatory ? 'disabled' : ''} />
+        <span class="d-flex align-items-center justify-content-between gap-2 w-100">
           <strong class="text-3">${c.label}</strong>
           <span class="badge badge-secondary text-1">${kb(c.gzip)}</span>
         </span>
-        <span class="text-2 text-muted d-block">${c.desc || ''}</span>
-        ${deps}
-        ${c.mandatory ? '<span class="text-1 text-primary d-block">wymagany</span>' : ''}
-      </span>
-    </label>`;
+      </label>
+      <span class="text-2 text-muted d-block mt-1">${c.desc || ''}</span>
+      ${deps}
+      ${note}
+    </div>`;
+}
+
+// Nanosi aktualny stan na istniejący DOM - bez przebudowy listy.
+function syncUI() {
+  for (const c of manifest.chunks) {
+    const box = document.querySelector(`input[data-id="${c.id}"]`);
+    const row = document.querySelector(`[data-row="${c.id}"]`);
+    if (!box || !row) continue;
+    const on = selected.has(c.id);
+    box.checked = on;
+    row.classList.toggle('border-primary', on);
+    row.classList.toggle('bg-body', on);
+  }
+  updateSummary();
 }
 
 function updateSummary() {
@@ -175,7 +196,7 @@ function bind() {
     if (!box) return;
     if (box.checked) selected = withDeps([...selected, box.dataset.id]);
     else selected.delete(box.dataset.id);
-    render();
+    syncUI();
   });
 
   $('#builder-list').addEventListener('click', (e) => {
@@ -185,20 +206,20 @@ function bind() {
     const allOn = ids.every((id) => selected.has(id));
     if (allOn) ids.forEach((id) => selected.delete(id));
     else selected = withDeps([...selected, ...ids]);
-    render();
+    syncUI();
   });
 
   document.querySelectorAll('[data-preset]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const p = PRESETS[btn.dataset.preset];
       selected = p ? withDeps(p.ids) : withDeps(manifest.chunks.map((c) => c.id));
-      render();
+      syncUI();
     });
   });
 
   $('#btn-clear').addEventListener('click', () => {
     selected = withDeps([]);
-    render();
+    syncUI();
   });
 
   $('#btn-download').addEventListener('click', async () => {
@@ -246,7 +267,7 @@ fetch(MANIFEST_URL)
   .then((m) => {
     manifest = m;
     selected = withDeps(PRESETS.landing.ids);
-    render();
+    renderOnce();
     bind();
     $('#builder-loading').remove();
   })
