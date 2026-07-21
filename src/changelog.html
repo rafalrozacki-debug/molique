@@ -76,10 +76,20 @@
                     zwykłego paska przy krawędzi i wraca do kolorów motywu.
                   </li>
                   <li>
-                    <strong>Tło zawsze ciemne</strong> - pastylka leży na
-                    zdjęciu, więc nie może jaśnieć w dark mode (pułapka
-                    <code>var(--dark)</code>, które się odwraca). Podmiana jedną
-                    zmienną: <code>style="--navbar-pill-bg: #123"</code>.
+                    <strong>Sześć zmiennych - osobno na każdy stan:</strong>
+                    <code>--navbar-pill-bg</code> /
+                    <code>--navbar-pill-color</code> /
+                    <code>--navbar-pill-padding-x</code> nad hero oraz ich
+                    warianty z sufiksem <code>-scrolled</code> po
+                    zescrollowaniu. Osobne, a nie przedefiniowanie bazowej -
+                    styl inline (czyli sposób, w jaki się je ustawia) wygrywa
+                    z regułą klasy i zablokowałby drugi stan.
+                  </li>
+                  <li>
+                    <strong>Domyślne tło pastylki to literał</strong>, nie
+                    <code>var(--dark)</code> - ta zmienna w dark mode jaśnieje,
+                    więc pastylka leżąca na zdjęciu zbielałaby, a biały tekst
+                    zniknął. Po scrollu domyślne są normalne kolory motywu.
                   </li>
                   <li>
                     <strong>Poprawiony mylący przykład:</strong>

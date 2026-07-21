@@ -71,8 +71,11 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   z własnym tłem, po scrollu rozkłada się do paska przy krawędzi. Tło jest
   ZAWSZE ciemne (leży na zdjęciu), także w motywie jasnym; podmiana przez
   `style="--navbar-pill-bg: #123"`. Linki białe do momentu zescrollowania.
-  Wcięcie treści od zaokrąglonych krawędzi: `--navbar-pill-padding-x`
-  (domyślnie 32px; po scrollu automatycznie wraca do 16px `.container`).
+  Oba stany mają OSOBNE zmienne (nie jedną wspólną, bo styl inline wygrywa
+  z regułą klasy i zablokowałby drugi stan):
+  `--navbar-pill-bg` / `--navbar-pill-color` (nad hero),
+  `--navbar-pill-bg-scrolled` / `--navbar-pill-color-scrolled` (po scrollu),
+  `--navbar-pill-padding-x` (32px) / `--navbar-pill-padding-x-scrolled` (16px).
 - **Offcanvas (Mobile):** oparte na Checkbox Hack
   (`.navbar-offcanvas-toggle:checked`).
 - **Mega Menu:** `.mega-menu` > `.mega-menu-content` (rozwijane na hover).

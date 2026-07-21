@@ -3098,15 +3098,27 @@
      NIE łącz z .navbar-sticky - sticky wraca do przepływu dokumentu i efekt
      nakładki znika. */
   .navbar-pill {
-    /* Kolor pastylki: ZAWSZE ciemny, bo leży na zdjęciu hero. Literał, a nie
-       var(--dark), które w dark mode jaśnieje (pastylka zbielałaby, a biały
-       tekst zniknął). Podmiana jedną zmienną:
-       <nav class="navbar navbar-pill" style="--navbar-pill-bg: #123"> */
+    /* --- API kolorów: osobna zmienna na każdy stan -------------------------
+       <nav class="navbar navbar-pill" style="
+              --navbar-pill-bg: #4c1d95;
+              --navbar-pill-bg-scrolled: #1e293b;
+              --navbar-pill-color-scrolled: #fff;">
+
+       Świadomie NIE przedefiniowujemy zmiennych bazowych w .is-scrolled -
+       styl inline (czyli sposób, w jaki się je ustawia) wygrywa z regułą klasy
+       i zablokowałby drugi stan. Stąd osobne pary *-scrolled. */
+    /* Stan pastylki (nad hero). Tło to LITERAŁ, nie var(--dark) - ta zmienna
+       w dark mode jaśnieje, więc pastylka by zbielała, a biały tekst zniknął. */
     --navbar-pill-bg: #1e293b;
+    --navbar-pill-color: #fff;
+    /* Stan po scrollu - domyślnie kolory motywu, jak zwykły navbar. */
+    --navbar-pill-bg-scrolled: var(--bg-surface);
+    --navbar-pill-color-scrolled: var(--text-main);
     /* Wcięcie treści od zaokrąglonych krawędzi. Przy promieniu 999px domyślne
-       16px z .container jest za ciasne - stąd osobna zmienna. Po scrollu (niżej)
-       wraca do wartości .container, żeby treść równała się z resztą strony. */
+       16px z .container jest za ciasne - stąd osobna zmienna. Po scrollu wraca
+       do wartości .container, żeby treść równała się z resztą strony. */
     --navbar-pill-padding-x: calc(var(--spacing-unit) * 4);
+    --navbar-pill-padding-x-scrolled: calc(var(--spacing-unit) * 2);
     position: absolute;
     top: 0;
     left: 0;
@@ -3126,13 +3138,13 @@
   }
   .navbar-pill .navbar-brand,
   .navbar-pill .navbar-item {
-    color: #fff;
+    color: var(--navbar-pill-color);
   }
   .navbar-pill .navbar-toggle {
-    color: #fff;
+    color: var(--navbar-pill-color);
   }
   .navbar-pill .navbar-toggle span {
-    background-color: #fff;
+    background-color: var(--navbar-pill-color);
   }
   .navbar-pill {
     /* Nad ciemną pastylką jasne logo niezależnie od motywu (jak w transparent). */
@@ -3144,29 +3156,32 @@
     display: contents;
   }
   .navbar-pill {
-    /* Po scrollu: pastylka rozkłada się do krawędzi i wraca do kolorów motywu. */
+    /* Po scrollu: pastylka rozkłada się do krawędzi i przechodzi na drugi
+       komplet zmiennych (*-scrolled). */
   }
   .navbar-pill.is-scrolled {
     position: fixed;
     padding: 0;
-    background-color: var(--bg-surface);
+    background-color: var(--navbar-pill-bg-scrolled);
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
-    /* Powrót do wcięcia .container - treść równa się z resztą strony. */
-    --navbar-pill-padding-x: calc(var(--spacing-unit) * 2);
   }
   .navbar-pill.is-scrolled .navbar-container {
     background-color: transparent;
     border-radius: 0;
     box-shadow: none;
     padding-block: calc(var(--spacing-unit) * 2);
+    padding-inline: var(--navbar-pill-padding-x-scrolled);
   }
   .navbar-pill.is-scrolled .navbar-brand,
   .navbar-pill.is-scrolled .navbar-item {
-    color: var(--text-main);
+    color: var(--navbar-pill-color-scrolled);
+  }
+  .navbar-pill.is-scrolled .navbar-toggle {
+    color: var(--navbar-pill-color-scrolled);
   }
   .navbar-pill.is-scrolled .navbar-toggle span {
-    background-color: var(--text-main);
+    background-color: var(--navbar-pill-color-scrolled);
   }
   /* --- Offcanvas Mobile Menu (Zero JS) --- */
   .navbar-offcanvas-toggle {

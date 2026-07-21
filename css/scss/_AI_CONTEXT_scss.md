@@ -5658,10 +5658,15 @@ a.list-group-item:hover, button.list-group-item:hover {
 .navbar-pill {
   /* ZAWSZE ciemna (leży na zdjęciu hero) - literał, bo var(--dark) w dark
      mode jaśnieje. Podmiana: style="--navbar-pill-bg: #123" */
+  /* Osobna zmienna na KAŻDY stan - świadomie nie przedefiniowujemy bazowych
+     w .is-scrolled, bo styl inline wygrywa z regułą klasy i zablokowałby
+     drugi stan. */
   --navbar-pill-bg: #1e293b;
-  /* Wcięcie treści od zaokrąglonych krawędzi (999px). Po scrollu wraca do
-     wartości .container, żeby treść równała się z resztą strony. */
+  --navbar-pill-color: #fff;
+  --navbar-pill-bg-scrolled: var(--bg-surface);
+  --navbar-pill-color-scrolled: var(--text-main);
   --navbar-pill-padding-x: calc(var(--spacing-unit) * 4);
+  --navbar-pill-padding-x-scrolled: calc(var(--spacing-unit) * 2);
 
   position: absolute;
   top: 0;
@@ -5681,11 +5686,11 @@ a.list-group-item:hover, button.list-group-item:hover {
   }
 
   .navbar-brand,
-  .navbar-item { color: #fff; }
+  .navbar-item { color: var(--navbar-pill-color); }
 
   .navbar-toggle {
-    color: #fff;
-    span { background-color: #fff; }
+    color: var(--navbar-pill-color);
+    span { background-color: var(--navbar-pill-color); }
   }
 
   &:not(.is-scrolled) .navbar-brand {
@@ -5696,22 +5701,25 @@ a.list-group-item:hover, button.list-group-item:hover {
   &.is-scrolled {
     position: fixed;
     padding: 0;
-    background-color: var(--bg-surface);
+    background-color: var(--navbar-pill-bg-scrolled);
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
-    --navbar-pill-padding-x: calc(var(--spacing-unit) * 2);
 
     .navbar-container {
       background-color: transparent;
       border-radius: 0;
       box-shadow: none;
       padding-block: calc(var(--spacing-unit) * 2);
+      padding-inline: var(--navbar-pill-padding-x-scrolled);
     }
 
     .navbar-brand,
-    .navbar-item { color: var(--text-main); }
+    .navbar-item { color: var(--navbar-pill-color-scrolled); }
 
-    .navbar-toggle span { background-color: var(--text-main); }
+    .navbar-toggle {
+      color: var(--navbar-pill-color-scrolled);
+      span { background-color: var(--navbar-pill-color-scrolled); }
+    }
   }
 }
 

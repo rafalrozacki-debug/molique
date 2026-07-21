@@ -641,8 +641,11 @@
   &lt;/div&gt;
 &lt;/nav&gt;
 
-&lt;!-- Kolor pastylki zmienisz jedną zmienną --&gt;
-&lt;nav class="navbar navbar-pill" style="--navbar-pill-bg: #4c1d95"&gt;</code></pre>
+&lt;!-- Oba stany sterowane osobno, bez pisania CSS --&gt;
+&lt;nav class="navbar navbar-pill" style="
+       --navbar-pill-bg: #4c1d95;
+       --navbar-pill-bg-scrolled: #1e293b;
+       --navbar-pill-color-scrolled: #fff;"&gt;</code></pre>
               </div>
             </div>
 
@@ -660,9 +663,19 @@
                   <code>position: absolute</code>.
                 </li>
                 <li>
-                  <strong>Pastylka jest zawsze ciemna</strong> (leży na zdjęciu),
-                  także w motywie jasnym — stąd białe linki do momentu
-                  zescrollowania.
+                  <strong>Pastylka jest domyślnie ciemna</strong> (leży na
+                  zdjęciu), także w motywie jasnym — stąd białe linki do
+                  momentu zescrollowania.
+                </li>
+                <li>
+                  <strong>Oba stany mają osobne zmienne:</strong>
+                  <code>--navbar-pill-bg</code> /
+                  <code>--navbar-pill-color</code> nad hero oraz
+                  <code>--navbar-pill-bg-scrolled</code> /
+                  <code>--navbar-pill-color-scrolled</code> po scrollu (plus
+                  <code>--navbar-pill-padding-x</code> i wersja
+                  <code>-scrolled</code>). Osobne, a nie jedna wspólna, bo styl
+                  inline wygrywa z regułą klasy i zablokowałby drugi stan.
                 </li>
               </ul>
             </div>
