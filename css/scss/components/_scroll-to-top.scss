@@ -1,0 +1,55 @@
+// molique - Scroll to top: przycisk powrotu na gore.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   8. SCROLL TO TOP (Powrót na górę)
+   ========================================= */
+.scroll-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: var(--target-size-min);
+  height: var(--target-size-min);
+  background-color: var(--primary);
+  /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+     primary jaśnieje, więc ikona musi ciemnieć - literal #fff ginął
+     i na jasnym primary, i na hoverze z flipowanym var(--dark)) */
+  color: var(--btn-text-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  z-index: 1050;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all var(--transition-speed);
+  box-shadow: var(--shadow-md);
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  &:hover {
+    background-color: var(--dark);
+    transform: translateY(-3px);
+  }
+}
+
+@include mq(xs, max) {
+  .scroll-to-top {
+    bottom: 20px;
+    right: 20px;
+  }
+}

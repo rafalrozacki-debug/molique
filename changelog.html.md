@@ -64,6 +64,47 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Rozbicie SCSS na niezależne moduły (start)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>_navigation.scss</code> (968 linii) rozbity
+                    na 8 samodzielnych plików:</strong> <code>_navbar</code>,
+                    <code>_mega-menu</code>, <code>_dropdown</code>,
+                    <code>_breadcrumbs</code>, <code>_pagination</code>,
+                    <code>_topbar</code>, <code>_scroll-to-top</code>,
+                    <code>_reading-progress</code>. Każdy można pominąć w
+                    bundlu bez błędów kompilacji - pierwszy krok do
+                    konfiguratora paczki i wariantu <code>molique-nano</code>
+                    z roadmapy.
+                  </li>
+                  <li>
+                    <strong>Zweryfikowane, że nic nie zginęło:</strong>
+                    porównanie skompilowanego CSS przed i po podziale na
+                    poziomie par selektor→deklaracje - <strong>1771 par,
+                    zero zgubionych, zero dodanych, zero zmienionych</strong>.
+                    Pozostałe bundle (admin, shop, blog…) bit w bit identyczne.
+                  </li>
+                  <li>
+                    <strong>Usunięty wyciek modularności:</strong> reguła
+                    <code>.is-active</code> spinała w jednym selektorze navbar,
+                    dropdown i mega menu - przez co bundle bez mega menu
+                    zawierał osierocony <code>.mega-menu-link</code>. Każdy
+                    komponent ma teraz własną regułę.
+                  </li>
+                  <li>
+                    <strong>Nowy generator
+                    <code>tools/gen-scss-context.js</code></strong> odtwarza
+                    <code>_AI_CONTEXT_scss.md</code> ze źródeł - ten plik jest
+                    pełnym zrzutem SCSS, więc po każdym podziale rozjeżdżał się
+                    z rzeczywistością.
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-danger mx-2 text-3">Zmiana</span>

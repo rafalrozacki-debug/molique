@@ -2894,10 +2894,6 @@
    * molique - Style Bazowe i Reset
    * Zawiera reset CSS, style dla html/body i podstawowe kontenery
    */
-  /**
-   * molique - Nawigacja i Menu
-   * Zawiera Navbar, Offcanvas, Mega Menu oraz Dropdowny.
-   */
   /* =========================================
      1. NAVBAR (Baza)
      ========================================= */
@@ -3017,10 +3013,11 @@
   /* Aktywna pozycja = bieżąca strona. Klasę .is-active nadaje wg URL moduł
      js/modules/navbar-active.js (auto-ładowany przy .navbar-menu) - linkowi
      bieżącej strony oraz triggerowi menu, w którym się znajduje. Wyróżnienie
-     mocniejsze niż hover: kolor primary + grubsza waga. */
-  .navbar-item.is-active,
-  .dropdown-item.is-active,
-  .mega-menu-link.is-active {
+     mocniejsze niż hover: kolor primary + grubsza waga.
+
+     Odpowiedniki dla .dropdown-item i .mega-menu-link siedzą w SWOICH plikach,
+     żeby pominięcie tamtych modułów nie zostawiało tu osieroconych selektorów. */
+  .navbar-item.is-active {
     color: var(--primary);
     font-weight: var(--fw-bold);
   }
@@ -3382,6 +3379,12 @@
   }
   /* Wyróżniona karta (Featured) — jedna "komórka" siatki, wizualnie
      podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
+  /* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
+     Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+  .mega-menu-link.is-active {
+    color: var(--primary);
+    font-weight: var(--fw-bold);
+  }
   .mega-menu-featured {
     grid-row: span 2;
     display: flex;
@@ -3556,6 +3559,12 @@
   /* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
      lewej — niezbędne dla dropdownów siedzących blisko prawej krawędzi
      ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
+  /* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
+     Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+  .dropdown-item.is-active {
+    color: var(--primary);
+    font-weight: var(--fw-bold);
+  }
   .dropdown-menu-end {
     left: auto;
     right: 0;

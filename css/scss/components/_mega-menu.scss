@@ -1,0 +1,287 @@
+// molique - Mega Menu: <details> + CSS Anchor Positioning, na mobile degraduje sie do akordeonu w offcanvas.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   3. MEGA MENU (<details> + Anchor Positioning — Zero JS, działa na mobile)
+   ========================================= */
+.mega-menu {
+  /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+     żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
+     (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
+     position:relative — .mega-menu-content ma się pozycjonować względem
+     .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
+     panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
+     krawędzi navbara. */
+  anchor-scope: --mega-menu-trigger;
+}
+
+.mega-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.5);
+  min-height: var(--target-size-min);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--transition-speed);
+  /* Punkt zaczepienia dla .mega-menu-content (CSS Anchor Positioning) */
+  anchor-name: --mega-menu-trigger;
+
+  &::-webkit-details-marker { display: none; }
+
+  &::after {
+    content: '';
+    display: inline-block;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: transform var(--transition-speed);
+  }
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.mega-menu[open] > .mega-menu-trigger {
+  color: var(--primary);
+
+  &::after {
+    transform: rotate(180deg);
+  }
+
+  /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte —
+     klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
+     <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
+     powyżej — zero JS potrzebne do zamykania na klik-poza-menu). */
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-index-dropdown);
+    cursor: default;
+  }
+}
+
+.mega-menu-content {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 5);
+  margin: 0;
+  padding: calc(var(--spacing-unit) * 4);
+  background-color: var(--bg-surface);
+  background-image: radial-gradient(circle at 100% 0%, rgba(var(--primary-rgb), 0.06), transparent 55%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg, 16px);
+  box-shadow: var(--shadow-lg), 0 20px 40px -20px rgba(0, 0, 0, 0.25);
+
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease, display 0.25s allow-discrete;
+}
+
+.mega-menu[open] > .mega-menu-content {
+  display: grid;
+  opacity: 1;
+}
+
+.mega-menu-group {
+  padding-block: calc(var(--spacing-unit) * 2.5);
+}
+
+.mega-menu-col-title {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.25);
+  margin: 0 0 calc(var(--spacing-unit) * 1.5) 0;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+}
+
+.mega-menu-col-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+
+  svg { width: 17px; height: 17px; }
+}
+
+.mega-menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1);
+  margin-inline: calc(var(--spacing-unit) * -1);
+  border-radius: var(--border-radius);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
+
+  /* Strzałka pojawiająca się na hover — czysto dekoracyjna (opacity/transform,
+     GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
+  &::after {
+    content: '\2192';
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity var(--transition-speed), transform var(--transition-speed);
+  }
+
+  &:hover, &:focus-visible {
+    background-color: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+    transform: translateX(2px);
+
+    &::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+/* Wyróżniona karta (Featured) — jedna "komórka" siatki, wizualnie
+   podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
+/* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
+   Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+.mega-menu-link.is-active {
+  color: var(--primary);
+  font-weight: var(--fw-bold);
+}
+
+.mega-menu-featured {
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 3);
+  border-radius: var(--border-radius);
+  /* Gradient na literałach, NIE na var(--dark)/var(--primary): karta jest
+     celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
+     odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
+     zmiennymi biały tekst lądował na jasnym tle. */
+  background-image: linear-gradient(145deg, #1E293B, #0284C7);
+  color: #fff;
+}
+
+.mega-menu-featured-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.15);
+  font-size: 1.25rem;
+}
+
+.mega-menu-featured-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: var(--fw-bold);
+  color: #fff;
+}
+
+.mega-menu-featured-text {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.mega-menu-featured-link {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.75);
+  margin-top: auto;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.75);
+  border-radius: var(--border-radius-pill, 999px);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+
+  &:hover, &:focus-visible {
+    background-color: rgba(255, 255, 255, 0.28);
+    transform: translateX(2px);
+  }
+}
+
+@include mq(md) {
+  .mega-menu-content {
+    position: absolute;
+    /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
+       wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
+       .navbar (position:relative, patrz sekcja 1) — dzięki temu szeroki
+       panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
+       trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
+    position-anchor: --mega-menu-trigger;
+    top: anchor(bottom);
+    left: 50%;
+    margin-top: calc(var(--spacing-unit) * 1);
+    width: min(94vw, 980px);
+    /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
+       zrobić się wyższy niż viewport — ograniczamy wysokość i włączamy
+       wewnętrzny scroll zamiast wypychania poza ekran. */
+    max-height: min(78vh, 680px);
+    overflow-y: auto;
+    z-index: calc(var(--z-index-dropdown) + 1);
+    transform: translateX(-50%) translateY(-8px);
+
+    /* Fallback dla przeglądarek bez wsparcia CSS Anchor Positioning:
+       "top" liczony od dołu całego .navbar zamiast od samego triggera. */
+    @supports not (top: anchor(bottom)) {
+      top: 100%;
+    }
+  }
+
+  .mega-menu[open] > .mega-menu-content {
+    transform: translateX(-50%) translateY(0);
+
+    @starting-style {
+      transform: translateX(-50%) translateY(-8px);
+    }
+  }
+}
+
+@include mq(sm, max) {
+  .mega-menu-content {
+    position: static;
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 3);
+    width: 100%;
+    margin-top: calc(var(--spacing-unit) * 1);
+    box-shadow: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.02);
+
+    /* Na mobile pokazuje/chowa się natychmiast, bez animacji — spójnie z
+       .admin-nav-submenu, który też jest oparty na <details>. */
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .mega-menu-group {
+    padding-block: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .mega-menu-featured {
+    grid-row: auto;
+  }
+}

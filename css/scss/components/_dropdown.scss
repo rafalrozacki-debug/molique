@@ -1,0 +1,130 @@
+// molique - Dropdown: wariant w navbarze (<details>) oraz wariant Popover API (top layer, poza navbarem).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. DROPDOWN (Zwykłe menu rozwijane)
+   ========================================= */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  list-style: none;
+  cursor: pointer;
+  
+  &::-webkit-details-marker { display: none; }
+
+  &::after {
+    content: "";
+    display: inline-block;
+    margin-left: calc(var(--spacing-unit) * 1);
+    vertical-align: middle;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-bottom: 0;
+    border-left: 4px solid transparent;
+  }
+}
+
+.dropdown[open] .dropdown-toggle::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-index-dropdown);
+  cursor: default;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: calc(var(--z-index-dropdown) + 1);
+  min-width: 200px;
+  padding: calc(var(--spacing-unit) * 1) 0;
+  background-color: var(--bg-body);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  animation: fadeInDown 0.2s ease;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  color: var(--text-main);
+  text-decoration: none;
+  transition: background-color var(--transition-speed);
+
+  &:hover {
+    background-color: var(--card-bg-subtle);
+    color: var(--primary);
+  }
+}
+
+/* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
+   lewej — niezbędne dla dropdownów siedzących blisko prawej krawędzi
+   ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
+/* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
+   Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+.dropdown-item.is-active {
+  color: var(--primary);
+  font-weight: var(--fw-bold);
+}
+
+.dropdown-menu-end {
+  left: auto;
+  right: 0;
+}
+
+/* =========================================
+   4.1. DROPDOWN JAKO POPOVER (Top Layer)
+   ========================================= */
+/* Zalecany wariant POZA navbarem (tabele, karty, modale, przewijane
+   kontenery): dowolny istniejący przycisk z [popovertarget="ID"] +
+   `.dropdown-menu` z atrybutem [popover] i tym samym `id`. Atrybut
+   [popover] przenosi menu do top layer przeglądarki — koniec przycinania
+   przez overflow przodków — a Esc i klik poza menu zamykają je natywnie
+   (light dismiss).
+
+   Pozycjonowanie: popover otwarty przez [popovertarget] dostaje swój
+   przycisk jako NIEJAWNY anchor (position-anchor: auto — wartość
+   domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
+   i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
+   buttona jedną parą atrybutów. */
+.dropdown-menu[popover] {
+  /* Reset domyślnych stylów UA popovera (position:fixed + inset:0 +
+     margin:auto centruje na ekranie) */
+  position: absolute;
+  inset: auto;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin: 4px 0 0 0;
+  color: var(--text-main);
+
+  /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
+     Firefox): menu otwiera się jako wyśrodkowany panel — nadal w top
+     layer, więc nic go nie przycina. */
+  @supports not (top: anchor(bottom)) {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(320px, calc(100vw - 2rem));
+    height: fit-content;
+  }
+}
+
+/* Wyrównanie do prawej krawędzi przycisku — tylko tam, gdzie działa
+   anchor positioning (w fallbacku menu i tak jest wyśrodkowane). */
+@supports (top: anchor(bottom)) {
+  .dropdown-menu-end[popover] {
+    left: auto;
+    right: anchor(right);
+  }
+}

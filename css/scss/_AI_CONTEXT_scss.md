@@ -1,11 +1,12 @@
 # Zbiorczy kontekst projektu dla AI
 
 **Folder glowny:** `scss`
-**Liczba plikow w paczce:** 54
+**Liczba plikow w paczce:** 61
 
 ## Struktura plikow:
 - `components/_admin-nav.scss`
 - `components/_admin-sidebar.scss`
+- `components/_breadcrumbs.scss`
 - `components/_business.scss`
 - `components/_cards.scss`
 - `components/_chart-funnel.scss`
@@ -13,25 +14,23 @@
 - `components/_code-preview.scss`
 - `components/_dashboard.scss`
 - `components/_data-display.scss`
+- `components/_dropdown.scss`
 - `components/_feedback.scss`
 - `components/_form-advanced.scss`
 - `components/_form-base.scss`
 - `components/_form-groups.scss`
 - `components/_hero.scss`
 - `components/_language-switch.scss`
+- `components/_mega-menu.scss`
 - `components/_modals.scss`
-- `components/_navigation.scss`
+- `components/_navbar.scss`
+- `components/_pagination.scss`
+- `components/_reading-progress.scss`
+- `components/_scroll-to-top.scss`
 - `components/_theme-editor.scss`
+- `components/_topbar.scss`
 - `layout/_admin-layout.scss`
 - `modules/_docs.scss`
-- `molique-style-admin.scss`
-- `molique-style-before-after.scss`
-- `molique-style-blog.scss`
-- `molique-style-docs.scss`
-- `molique-style-share.scss`
-- `molique-style-shop.scss`
-- `molique-style-speed-dial.scss`
-- `molique-style.scss`
 - `utilities/_animations.scss`
 - `utilities/_borders.scss`
 - `utilities/_colors.scss`
@@ -58,6 +57,14 @@
 - `_utilities-extended.scss`
 - `_utilities.scss`
 - `_variables.scss`
+- `molique-style-admin.scss`
+- `molique-style-before-after.scss`
+- `molique-style-blog.scss`
+- `molique-style-docs.scss`
+- `molique-style-share.scss`
+- `molique-style-shop.scss`
+- `molique-style-speed-dial.scss`
+- `molique-style.scss`
 
 ## Plik: `components/_admin-nav.scss`
 
@@ -713,7 +720,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
   }
 
-} /* ZAMKNIĘCIE @layer components */```
+} /* ZAMKNIĘCIE @layer components */
+```
 
 ## Plik: `components/_admin-sidebar.scss`
 
@@ -974,7 +982,52 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       @include admin-logo-compact-style;
     }
   }
-}```
+}
+```
+
+## Plik: `components/_breadcrumbs.scss`
+
+```scss
+// molique - Breadcrumbs: nawigacja okruszkowa.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   5. BREADCRUMBS (Nawigacja okruszkowa)
+   ========================================= */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0 0 calc(var(--spacing-unit) * 2) 0;
+  list-style: none;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover { text-decoration: underline; }
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "/";
+  display: inline-block;
+  padding: 0 calc(var(--spacing-unit) * 1);
+  color: var(--text-muted);
+}
+
+.breadcrumb-item.is-active { color: var(--text-muted); }
+```
 
 ## Plik: `components/_business.scss`
 
@@ -1570,7 +1623,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   color: var(--primary);
   font-size: 1.125rem;
   white-space: nowrap;
-}```
+}
+```
 
 ## Plik: `components/_cards.scss`
 
@@ -1739,7 +1793,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   .overlap-up-50 { margin-top: -50px; }
   .overlap-up-100 { margin-top: -100px; }
   .overlap-up-150 { margin-top: -150px; }
-}```
+}
+```
 
 ## Plik: `components/_chart-funnel.scss`
 
@@ -1923,7 +1978,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       opacity: 0.9;
     }
   }
-}```
+}
+```
 
 ## Plik: `components/_charts.scss`
 
@@ -2227,7 +2283,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   color: var(--text-muted);
   opacity: 0.5;
   margin-bottom: calc(var(--spacing-unit) * 2);
-}```
+}
+```
 
 ## Plik: `components/_code-preview.scss`
 
@@ -2395,7 +2452,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     &::before, &::after { display: none; }
   }
 }
-}```
+}
+```
 
 ## Plik: `components/_data-display.scss`
 
@@ -3188,7 +3246,143 @@ a.list-group-item:hover, button.list-group-item:hover {
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
-}```
+}
+```
+
+## Plik: `components/_dropdown.scss`
+
+```scss
+// molique - Dropdown: wariant w navbarze (<details>) oraz wariant Popover API (top layer, poza navbarem).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. DROPDOWN (Zwykłe menu rozwijane)
+   ========================================= */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  list-style: none;
+  cursor: pointer;
+  
+  &::-webkit-details-marker { display: none; }
+
+  &::after {
+    content: "";
+    display: inline-block;
+    margin-left: calc(var(--spacing-unit) * 1);
+    vertical-align: middle;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-bottom: 0;
+    border-left: 4px solid transparent;
+  }
+}
+
+.dropdown[open] .dropdown-toggle::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-index-dropdown);
+  cursor: default;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: calc(var(--z-index-dropdown) + 1);
+  min-width: 200px;
+  padding: calc(var(--spacing-unit) * 1) 0;
+  background-color: var(--bg-body);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  animation: fadeInDown 0.2s ease;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  color: var(--text-main);
+  text-decoration: none;
+  transition: background-color var(--transition-speed);
+
+  &:hover {
+    background-color: var(--card-bg-subtle);
+    color: var(--primary);
+  }
+}
+
+/* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
+   lewej — niezbędne dla dropdownów siedzących blisko prawej krawędzi
+   ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
+/* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
+   Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+.dropdown-item.is-active {
+  color: var(--primary);
+  font-weight: var(--fw-bold);
+}
+
+.dropdown-menu-end {
+  left: auto;
+  right: 0;
+}
+
+/* =========================================
+   4.1. DROPDOWN JAKO POPOVER (Top Layer)
+   ========================================= */
+/* Zalecany wariant POZA navbarem (tabele, karty, modale, przewijane
+   kontenery): dowolny istniejący przycisk z [popovertarget="ID"] +
+   `.dropdown-menu` z atrybutem [popover] i tym samym `id`. Atrybut
+   [popover] przenosi menu do top layer przeglądarki — koniec przycinania
+   przez overflow przodków — a Esc i klik poza menu zamykają je natywnie
+   (light dismiss).
+
+   Pozycjonowanie: popover otwarty przez [popovertarget] dostaje swój
+   przycisk jako NIEJAWNY anchor (position-anchor: auto — wartość
+   domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
+   i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
+   buttona jedną parą atrybutów. */
+.dropdown-menu[popover] {
+  /* Reset domyślnych stylów UA popovera (position:fixed + inset:0 +
+     margin:auto centruje na ekranie) */
+  position: absolute;
+  inset: auto;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin: 4px 0 0 0;
+  color: var(--text-main);
+
+  /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
+     Firefox): menu otwiera się jako wyśrodkowany panel — nadal w top
+     layer, więc nic go nie przycina. */
+  @supports not (top: anchor(bottom)) {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(320px, calc(100vw - 2rem));
+    height: fit-content;
+  }
+}
+
+/* Wyrównanie do prawej krawędzi przycisku — tylko tam, gdzie działa
+   anchor positioning (w fallbacku menu i tak jest wyśrodkowane). */
+@supports (top: anchor(bottom)) {
+  .dropdown-menu-end[popover] {
+    left: auto;
+    right: anchor(right);
+  }
+}
+```
 
 ## Plik: `components/_feedback.scss`
 
@@ -3647,7 +3841,8 @@ a.list-group-item:hover, button.list-group-item:hover {
       outline-offset: 2px;
     }
   }
-}```
+}
+```
 
 ## Plik: `components/_form-advanced.scss`
 
@@ -4379,7 +4574,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: 2px;
   }
-}```
+}
+```
 
 ## Plik: `components/_form-base.scss`
 
@@ -4522,7 +4718,8 @@ a.list-group-item:hover, button.list-group-item:hover {
       }
     }
   }
-}```
+}
+```
 
 ## Plik: `components/_form-groups.scss`
 
@@ -4651,7 +4848,8 @@ a.list-group-item:hover, button.list-group-item:hover {
       padding-bottom: 0.625rem;
     }
   }
-}```
+}
+```
 
 ## Plik: `components/_hero.scss`
 
@@ -4913,6 +5111,298 @@ a.list-group-item:hover, button.list-group-item:hover {
       width: 14px;
       height: 14px;
     }
+  }
+}
+```
+
+## Plik: `components/_mega-menu.scss`
+
+```scss
+// molique - Mega Menu: <details> + CSS Anchor Positioning, na mobile degraduje sie do akordeonu w offcanvas.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   3. MEGA MENU (<details> + Anchor Positioning — Zero JS, działa na mobile)
+   ========================================= */
+.mega-menu {
+  /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+     żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
+     (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
+     position:relative — .mega-menu-content ma się pozycjonować względem
+     .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
+     panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
+     krawędzi navbara. */
+  anchor-scope: --mega-menu-trigger;
+}
+
+.mega-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.5);
+  min-height: var(--target-size-min);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--transition-speed);
+  /* Punkt zaczepienia dla .mega-menu-content (CSS Anchor Positioning) */
+  anchor-name: --mega-menu-trigger;
+
+  &::-webkit-details-marker { display: none; }
+
+  &::after {
+    content: '';
+    display: inline-block;
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: transform var(--transition-speed);
+  }
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.mega-menu[open] > .mega-menu-trigger {
+  color: var(--primary);
+
+  &::after {
+    transform: rotate(180deg);
+  }
+
+  /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte —
+     klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
+     <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
+     powyżej — zero JS potrzebne do zamykania na klik-poza-menu). */
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-index-dropdown);
+    cursor: default;
+  }
+}
+
+.mega-menu-content {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 5);
+  margin: 0;
+  padding: calc(var(--spacing-unit) * 4);
+  background-color: var(--bg-surface);
+  background-image: radial-gradient(circle at 100% 0%, rgba(var(--primary-rgb), 0.06), transparent 55%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg, 16px);
+  box-shadow: var(--shadow-lg), 0 20px 40px -20px rgba(0, 0, 0, 0.25);
+
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease, display 0.25s allow-discrete;
+}
+
+.mega-menu[open] > .mega-menu-content {
+  display: grid;
+  opacity: 1;
+}
+
+.mega-menu-group {
+  padding-block: calc(var(--spacing-unit) * 2.5);
+}
+
+.mega-menu-col-title {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.25);
+  margin: 0 0 calc(var(--spacing-unit) * 1.5) 0;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+}
+
+.mega-menu-col-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+
+  svg { width: 17px; height: 17px; }
+}
+
+.mega-menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1);
+  margin-inline: calc(var(--spacing-unit) * -1);
+  border-radius: var(--border-radius);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
+
+  /* Strzałka pojawiająca się na hover — czysto dekoracyjna (opacity/transform,
+     GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
+  &::after {
+    content: '\2192';
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity var(--transition-speed), transform var(--transition-speed);
+  }
+
+  &:hover, &:focus-visible {
+    background-color: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+    transform: translateX(2px);
+
+    &::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+/* Wyróżniona karta (Featured) — jedna "komórka" siatki, wizualnie
+   podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
+/* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
+   Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+.mega-menu-link.is-active {
+  color: var(--primary);
+  font-weight: var(--fw-bold);
+}
+
+.mega-menu-featured {
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 3);
+  border-radius: var(--border-radius);
+  /* Gradient na literałach, NIE na var(--dark)/var(--primary): karta jest
+     celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
+     odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
+     zmiennymi biały tekst lądował na jasnym tle. */
+  background-image: linear-gradient(145deg, #1E293B, #0284C7);
+  color: #fff;
+}
+
+.mega-menu-featured-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.15);
+  font-size: 1.25rem;
+}
+
+.mega-menu-featured-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: var(--fw-bold);
+  color: #fff;
+}
+
+.mega-menu-featured-text {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.mega-menu-featured-link {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.75);
+  margin-top: auto;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.75);
+  border-radius: var(--border-radius-pill, 999px);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+
+  &:hover, &:focus-visible {
+    background-color: rgba(255, 255, 255, 0.28);
+    transform: translateX(2px);
+  }
+}
+
+@include mq(md) {
+  .mega-menu-content {
+    position: absolute;
+    /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
+       wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
+       .navbar (position:relative, patrz sekcja 1) — dzięki temu szeroki
+       panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
+       trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
+    position-anchor: --mega-menu-trigger;
+    top: anchor(bottom);
+    left: 50%;
+    margin-top: calc(var(--spacing-unit) * 1);
+    width: min(94vw, 980px);
+    /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
+       zrobić się wyższy niż viewport — ograniczamy wysokość i włączamy
+       wewnętrzny scroll zamiast wypychania poza ekran. */
+    max-height: min(78vh, 680px);
+    overflow-y: auto;
+    z-index: calc(var(--z-index-dropdown) + 1);
+    transform: translateX(-50%) translateY(-8px);
+
+    /* Fallback dla przeglądarek bez wsparcia CSS Anchor Positioning:
+       "top" liczony od dołu całego .navbar zamiast od samego triggera. */
+    @supports not (top: anchor(bottom)) {
+      top: 100%;
+    }
+  }
+
+  .mega-menu[open] > .mega-menu-content {
+    transform: translateX(-50%) translateY(0);
+
+    @starting-style {
+      transform: translateX(-50%) translateY(-8px);
+    }
+  }
+}
+
+@include mq(sm, max) {
+  .mega-menu-content {
+    position: static;
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 3);
+    width: 100%;
+    margin-top: calc(var(--spacing-unit) * 1);
+    box-shadow: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.02);
+
+    /* Na mobile pokazuje/chowa się natychmiast, bez animacji — spójnie z
+       .admin-nav-submenu, który też jest oparty na <details>. */
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .mega-menu-group {
+    padding-block: calc(var(--spacing-unit) * 1.5);
+  }
+
+  .mega-menu-featured {
+    grid-row: auto;
   }
 }
 ```
@@ -5451,15 +5941,16 @@ a.list-group-item:hover, button.list-group-item:hover {
       .popover-context:popover-open::backdrop { opacity: 0; }
     }
   }
-}```
+}
+```
 
-## Plik: `components/_navigation.scss`
+## Plik: `components/_navbar.scss`
 
 ```scss
-/**
- * molique - Nawigacja i Menu
- * Zawiera Navbar, Offcanvas, Mega Menu oraz Dropdowny.
- */
+// molique - Navbar: baza, logo w dark mode, warianty (transparent / sticky / pastylka) i offcanvas mobile.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
 
 @use '../variables' as *;
 @use '../mixins' as *;
@@ -5585,10 +6076,11 @@ a.list-group-item:hover, button.list-group-item:hover {
 /* Aktywna pozycja = bieżąca strona. Klasę .is-active nadaje wg URL moduł
    js/modules/navbar-active.js (auto-ładowany przy .navbar-menu) - linkowi
    bieżącej strony oraz triggerowi menu, w którym się znajduje. Wyróżnienie
-   mocniejsze niż hover: kolor primary + grubsza waga. */
-.navbar-item.is-active,
-.dropdown-item.is-active,
-.mega-menu-link.is-active {
+   mocniejsze niż hover: kolor primary + grubsza waga.
+
+   Odpowiedniki dla .dropdown-item i .mega-menu-link siedzą w SWOICH plikach,
+   żeby pominięcie tamtych modułów nie zostawiało tu osieroconych selektorów. */
+.navbar-item.is-active {
   color: var(--primary);
   font-weight: var(--fw-bold);
 }
@@ -5652,19 +6144,35 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 /* --- Navbar "Pastylka" (pływająca nad hero -> sticky po scrollu) ---
    Wariant nakładkowy: navbar jest odsuniętą od krawędzi pastylką leżącą NA
-   treści, więc tło/zdjęcie sekcji pod spodem zaczyna się od samej góry strony.
-   Po przescrollowaniu klasa .is-scrolled rozkłada pastylkę do zwykłego paska.
-   NIE łącz z .navbar-sticky - sticky wraca do przepływu i efekt znika. */
+   treści, więc tło/zdjęcie sekcji pod spodem zaczyna się od samej góry strony
+   (a nie dopiero pod paskiem). Po przescrollowaniu klasa .is-scrolled
+   (molique-script.js) rozkłada pastylkę do zwykłego paska przy krawędzi.
+
+   NIE łącz z .navbar-sticky - sticky wraca do przepływu dokumentu i efekt
+   nakładki znika. */
 .navbar-pill {
-  /* ZAWSZE ciemna (leży na zdjęciu hero) - literał, bo var(--dark) w dark
-     mode jaśnieje. Podmiana: style="--navbar-pill-bg: #123" */
-  /* Osobna zmienna na KAŻDY stan - świadomie nie przedefiniowujemy bazowych
-     w .is-scrolled, bo styl inline wygrywa z regułą klasy i zablokowałby
-     drugi stan. */
+  /* --- API kolorów: osobna zmienna na każdy stan -------------------------
+     <nav class="navbar navbar-pill" style="
+            --navbar-pill-bg: #4c1d95;
+            --navbar-pill-bg-scrolled: #1e293b;
+            --navbar-pill-color-scrolled: #fff;">
+
+     Świadomie NIE przedefiniowujemy zmiennych bazowych w .is-scrolled -
+     styl inline (czyli sposób, w jaki się je ustawia) wygrywa z regułą klasy
+     i zablokowałby drugi stan. Stąd osobne pary *-scrolled. */
+
+  /* Stan pastylki (nad hero). Tło to LITERAŁ, nie var(--dark) - ta zmienna
+     w dark mode jaśnieje, więc pastylka by zbielała, a biały tekst zniknął. */
   --navbar-pill-bg: #1e293b;
   --navbar-pill-color: #fff;
+
+  /* Stan po scrollu - domyślnie kolory motywu, jak zwykły navbar. */
   --navbar-pill-bg-scrolled: var(--bg-surface);
   --navbar-pill-color-scrolled: var(--text-main);
+
+  /* Wcięcie treści od zaokrąglonych krawędzi. Przy promieniu 999px domyślne
+     16px z .container jest za ciasne - stąd osobna zmienna. Po scrollu wraca
+     do wartości .container, żeby treść równała się z resztą strony. */
   --navbar-pill-padding-x: calc(var(--spacing-unit) * 4);
   --navbar-pill-padding-x-scrolled: calc(var(--spacing-unit) * 2);
 
@@ -5681,23 +6189,29 @@ a.list-group-item:hover, button.list-group-item:hover {
     background-color: var(--navbar-pill-bg);
     border-radius: 999px;
     padding-block: calc(var(--spacing-unit) * 1.5);
+    /* Nadpisuje poziomy padding .container (wyższa specyficzność). */
     padding-inline: var(--navbar-pill-padding-x);
     box-shadow: var(--shadow-lg);
   }
 
   .navbar-brand,
-  .navbar-item { color: var(--navbar-pill-color); }
+  .navbar-item {
+    color: var(--navbar-pill-color);
+  }
 
   .navbar-toggle {
     color: var(--navbar-pill-color);
     span { background-color: var(--navbar-pill-color); }
   }
 
+  /* Nad ciemną pastylką jasne logo niezależnie od motywu (jak w transparent). */
   &:not(.is-scrolled) .navbar-brand {
     .logo-light { display: none; }
     .logo-dark { display: contents; }
   }
 
+  /* Po scrollu: pastylka rozkłada się do krawędzi i przechodzi na drugi
+     komplet zmiennych (*-scrolled). */
   &.is-scrolled {
     position: fixed;
     padding: 0;
@@ -5791,427 +6305,18 @@ a.list-group-item:hover, button.list-group-item:hover {
     top: 19px; transform: rotate(-135deg);
   }
 }
+```
 
-/* =========================================
-   3. MEGA MENU (<details> + Anchor Positioning — Zero JS, działa na mobile)
-   ========================================= */
-.mega-menu {
-  /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
-     żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
-     (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
-     position:relative — .mega-menu-content ma się pozycjonować względem
-     .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
-     panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
-     krawędzi navbara. */
-  anchor-scope: --mega-menu-trigger;
-}
+## Plik: `components/_pagination.scss`
 
-.mega-menu-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 0.5);
-  min-height: var(--target-size-min);
-  color: var(--text-muted);
-  font-weight: var(--fw-medium);
-  cursor: pointer;
-  list-style: none;
-  transition: color var(--transition-speed);
-  /* Punkt zaczepienia dla .mega-menu-content (CSS Anchor Positioning) */
-  anchor-name: --mega-menu-trigger;
+```scss
+// molique - Paginacja.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
 
-  &::-webkit-details-marker { display: none; }
-
-  &::after {
-    content: '';
-    display: inline-block;
-    border-top: 4px solid;
-    border-right: 4px solid transparent;
-    border-left: 4px solid transparent;
-    transition: transform var(--transition-speed);
-  }
-
-  &:hover {
-    color: var(--primary);
-  }
-}
-
-.mega-menu[open] > .mega-menu-trigger {
-  color: var(--primary);
-
-  &::after {
-    transform: rotate(180deg);
-  }
-
-  /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte —
-     klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
-     <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
-     powyżej — zero JS potrzebne do zamykania na klik-poza-menu). */
-  &::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: var(--z-index-dropdown);
-    cursor: default;
-  }
-}
-
-.mega-menu-content {
-  display: none;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 5);
-  margin: 0;
-  padding: calc(var(--spacing-unit) * 4);
-  background-color: var(--bg-surface);
-  background-image: radial-gradient(circle at 100% 0%, rgba(var(--primary-rgb), 0.06), transparent 55%);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-lg, 16px);
-  box-shadow: var(--shadow-lg), 0 20px 40px -20px rgba(0, 0, 0, 0.25);
-
-  opacity: 0;
-  transition: opacity 0.25s ease, transform 0.25s ease, display 0.25s allow-discrete;
-}
-
-.mega-menu[open] > .mega-menu-content {
-  display: grid;
-  opacity: 1;
-}
-
-.mega-menu-group {
-  padding-block: calc(var(--spacing-unit) * 2.5);
-}
-
-.mega-menu-col-title {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 1.25);
-  margin: 0 0 calc(var(--spacing-unit) * 1.5) 0;
-  font-size: 0.8125rem;
-  font-weight: var(--fw-bold);
-  color: var(--text-main);
-}
-
-.mega-menu-col-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--border-radius);
-  background-color: rgba(var(--primary-rgb), 0.1);
-  color: var(--primary);
-
-  svg { width: 17px; height: 17px; }
-}
-
-.mega-menu-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(var(--spacing-unit) * 1);
-  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1);
-  margin-inline: calc(var(--spacing-unit) * -1);
-  border-radius: var(--border-radius);
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  text-decoration: none;
-  transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
-
-  /* Strzałka pojawiająca się na hover — czysto dekoracyjna (opacity/transform,
-     GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
-  &::after {
-    content: '\2192';
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: opacity var(--transition-speed), transform var(--transition-speed);
-  }
-
-  &:hover, &:focus-visible {
-    background-color: rgba(var(--primary-rgb), 0.08);
-    color: var(--primary);
-    transform: translateX(2px);
-
-    &::after {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-}
-
-/* Wyróżniona karta (Featured) — jedna "komórka" siatki, wizualnie
-   podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
-.mega-menu-featured {
-  grid-row: span 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: calc(var(--spacing-unit) * 1.5);
-  padding: calc(var(--spacing-unit) * 3);
-  border-radius: var(--border-radius);
-  /* Gradient na literałach, NIE na var(--dark)/var(--primary): karta jest
-     celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
-     odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
-     zmiennymi biały tekst lądował na jasnym tle. */
-  background-image: linear-gradient(145deg, #1E293B, #0284C7);
-  color: #fff;
-}
-
-.mega-menu-featured-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--border-radius);
-  background-color: rgba(255, 255, 255, 0.15);
-  font-size: 1.25rem;
-}
-
-.mega-menu-featured-title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: var(--fw-bold);
-  color: #fff;
-}
-
-.mega-menu-featured-text {
-  margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.mega-menu-featured-link {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 0.75);
-  margin-top: auto;
-  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.75);
-  border-radius: var(--border-radius-pill, 999px);
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  font-size: 0.8125rem;
-  font-weight: var(--fw-medium);
-  text-decoration: none;
-  transition: background-color var(--transition-speed), transform var(--transition-speed);
-
-  &:hover, &:focus-visible {
-    background-color: rgba(255, 255, 255, 0.28);
-    transform: translateX(2px);
-  }
-}
-
-@include mq(md) {
-  .mega-menu-content {
-    position: absolute;
-    /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
-       wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
-       .navbar (position:relative, patrz sekcja 1) — dzięki temu szeroki
-       panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
-       trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
-    position-anchor: --mega-menu-trigger;
-    top: anchor(bottom);
-    left: 50%;
-    margin-top: calc(var(--spacing-unit) * 1);
-    width: min(94vw, 980px);
-    /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
-       zrobić się wyższy niż viewport — ograniczamy wysokość i włączamy
-       wewnętrzny scroll zamiast wypychania poza ekran. */
-    max-height: min(78vh, 680px);
-    overflow-y: auto;
-    z-index: calc(var(--z-index-dropdown) + 1);
-    transform: translateX(-50%) translateY(-8px);
-
-    /* Fallback dla przeglądarek bez wsparcia CSS Anchor Positioning:
-       "top" liczony od dołu całego .navbar zamiast od samego triggera. */
-    @supports not (top: anchor(bottom)) {
-      top: 100%;
-    }
-  }
-
-  .mega-menu[open] > .mega-menu-content {
-    transform: translateX(-50%) translateY(0);
-
-    @starting-style {
-      transform: translateX(-50%) translateY(-8px);
-    }
-  }
-}
-
-@include mq(sm, max) {
-  .mega-menu-content {
-    position: static;
-    grid-template-columns: 1fr;
-    gap: calc(var(--spacing-unit) * 3);
-    width: 100%;
-    margin-top: calc(var(--spacing-unit) * 1);
-    box-shadow: none;
-    border: none;
-    background-color: rgba(0, 0, 0, 0.02);
-
-    /* Na mobile pokazuje/chowa się natychmiast, bez animacji — spójnie z
-       .admin-nav-submenu, który też jest oparty na <details>. */
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
-  .mega-menu-group {
-    padding-block: calc(var(--spacing-unit) * 1.5);
-  }
-
-  .mega-menu-featured {
-    grid-row: auto;
-  }
-}
-
-/* =========================================
-   4. DROPDOWN (Zwykłe menu rozwijane)
-   ========================================= */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-toggle {
-  list-style: none;
-  cursor: pointer;
-  
-  &::-webkit-details-marker { display: none; }
-
-  &::after {
-    content: "";
-    display: inline-block;
-    margin-left: calc(var(--spacing-unit) * 1);
-    vertical-align: middle;
-    border-top: 4px solid;
-    border-right: 4px solid transparent;
-    border-bottom: 0;
-    border-left: 4px solid transparent;
-  }
-}
-
-.dropdown[open] .dropdown-toggle::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-index-dropdown);
-  cursor: default;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  z-index: calc(var(--z-index-dropdown) + 1);
-  min-width: 200px;
-  padding: calc(var(--spacing-unit) * 1) 0;
-  background-color: var(--bg-body);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  animation: fadeInDown 0.2s ease;
-}
-
-.dropdown-item {
-  display: block;
-  width: 100%;
-  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-  color: var(--text-main);
-  text-decoration: none;
-  transition: background-color var(--transition-speed);
-
-  &:hover {
-    background-color: var(--card-bg-subtle);
-    color: var(--primary);
-  }
-}
-
-/* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
-   lewej — niezbędne dla dropdownów siedzących blisko prawej krawędzi
-   ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
-.dropdown-menu-end {
-  left: auto;
-  right: 0;
-}
-
-/* =========================================
-   4.1. DROPDOWN JAKO POPOVER (Top Layer)
-   ========================================= */
-/* Zalecany wariant POZA navbarem (tabele, karty, modale, przewijane
-   kontenery): dowolny istniejący przycisk z [popovertarget="ID"] +
-   `.dropdown-menu` z atrybutem [popover] i tym samym `id`. Atrybut
-   [popover] przenosi menu do top layer przeglądarki — koniec przycinania
-   przez overflow przodków — a Esc i klik poza menu zamykają je natywnie
-   (light dismiss).
-
-   Pozycjonowanie: popover otwarty przez [popovertarget] dostaje swój
-   przycisk jako NIEJAWNY anchor (position-anchor: auto — wartość
-   domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
-   i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
-   buttona jedną parą atrybutów. */
-.dropdown-menu[popover] {
-  /* Reset domyślnych stylów UA popovera (position:fixed + inset:0 +
-     margin:auto centruje na ekranie) */
-  position: absolute;
-  inset: auto;
-  top: anchor(bottom);
-  left: anchor(left);
-  margin: 4px 0 0 0;
-  color: var(--text-main);
-
-  /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
-     Firefox): menu otwiera się jako wyśrodkowany panel — nadal w top
-     layer, więc nic go nie przycina. */
-  @supports not (top: anchor(bottom)) {
-    position: fixed;
-    inset: 0;
-    margin: auto;
-    width: min(320px, calc(100vw - 2rem));
-    height: fit-content;
-  }
-}
-
-/* Wyrównanie do prawej krawędzi przycisku — tylko tam, gdzie działa
-   anchor positioning (w fallbacku menu i tak jest wyśrodkowane). */
-@supports (top: anchor(bottom)) {
-  .dropdown-menu-end[popover] {
-    left: auto;
-    right: anchor(right);
-  }
-}
-
-/* =========================================
-   5. BREADCRUMBS (Nawigacja okruszkowa)
-   ========================================= */
-.breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0;
-  margin: 0 0 calc(var(--spacing-unit) * 2) 0;
-  list-style: none;
-}
-
-.breadcrumb-item {
-  display: flex;
-  align-items: center;
-}
-
-.breadcrumb-item a {
-  color: var(--primary);
-  text-decoration: none;
-}
-
-.breadcrumb-item a:hover { text-decoration: underline; }
-
-.breadcrumb-item + .breadcrumb-item::before {
-  content: "/";
-  display: inline-block;
-  padding: 0 calc(var(--spacing-unit) * 1);
-  color: var(--text-muted);
-}
-
-.breadcrumb-item.is-active { color: var(--text-muted); }
+@use '../variables' as *;
+@use '../mixins' as *;
 
 /* =========================================
    6. PAGINACJA (Pagination)
@@ -6295,45 +6400,51 @@ a.list-group-item:hover, button.list-group-item:hover {
       box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
     }
   }
+```
+
+## Plik: `components/_reading-progress.scss`
+
+```scss
+// molique - Reading progress bar: pasek postepu czytania.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
 
 /* =========================================
-   7. TOPBAR (Pasek nad nawigacją)
+   9. READING PROGRESS BAR
    ========================================= */
-.topbar {
-  background-color: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
-  font-size: 0.875rem;
-  padding: 4px 0;
-  color: var(--text-muted);
+.progress-container-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  z-index: 2000;
+  pointer-events: none;
 }
 
-.topbar a {
-  color: inherit;
-  text-decoration: none;
-  transition: color var(--transition-speed);
+.progress-bar-reading {
+  height: 100%;
+  background: var(--primary);
+  width: 0%;
+  transition: width 0.1s ease-out;
 }
+```
 
-.topbar a:hover { color: var(--primary); }
+## Plik: `components/_scroll-to-top.scss`
 
-.topbar-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-}
+```scss
+// molique - Scroll to top: przycisk powrotu na gore.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
 
-.topbar-list {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 16px;
-}
-
-@include mq(sm, max) {
-  .topbar { display: none; }
-}
+@use '../variables' as *;
+@use '../mixins' as *;
 
 /* =========================================
    8. SCROLL TO TOP (Powrót na górę)
@@ -6382,27 +6493,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     right: 20px;
   }
 }
-
-/* =========================================
-   9. READING PROGRESS BAR
-   ========================================= */
-.progress-container-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: transparent;
-  z-index: 2000;
-  pointer-events: none;
-}
-
-.progress-bar-reading {
-  height: 100%;
-  background: var(--primary);
-  width: 0%;
-  transition: width 0.1s ease-out;
-}```
+```
 
 ## Plik: `components/_theme-editor.scss`
 
@@ -6640,7 +6731,57 @@ a.list-group-item:hover, button.list-group-item:hover {
     }
   }
 }
+```
 
+## Plik: `components/_topbar.scss`
+
+```scss
+// molique - Topbar: pasek nad nawigacja.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   7. TOPBAR (Pasek nad nawigacją)
+   ========================================= */
+.topbar {
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  padding: 4px 0;
+  color: var(--text-muted);
+}
+
+.topbar a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+.topbar a:hover { color: var(--primary); }
+
+.topbar-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 16px;
+}
+
+@include mq(sm, max) {
+  .topbar { display: none; }
+}
 ```
 
 ## Plik: `layout/_admin-layout.scss`
@@ -6745,7 +6886,8 @@ a.list-group-item:hover, button.list-group-item:hover {
       }
     }
   }
-}```
+}
+```
 
 ## Plik: `modules/_docs.scss`
 
@@ -6793,181 +6935,8 @@ a.list-group-item:hover, button.list-group-item:hover {
 
   /* Bloki prezentacyjne (Showcase) przeniesione do rdzenia:
      components/_code-preview.scss (działają też poza bundle'em docs). */
-}```
-
-## Plik: `molique-style-admin.scss`
-
-```scss
-/**
- * molique - Plik kompilacyjny dla Panelu Admina
- * Ten plik wygeneruje gotowy molique-style-admin.css
- */
-
-@use "sass:meta";
-
-// 1. Deklarujemy warstwę
-@layer modules;
-
-// 2. Wstrzykujemy fizyczny kod admina do warstwy
-@layer modules {
-  // Wczytujemy rozbite pliki, które utworzyliśmy w poprzednim kroku
-  @include meta.load-css("layout/admin-layout");
-  @include meta.load-css("components/admin-sidebar");
-  @include meta.load-css("components/admin-nav");
-  @include meta.load-css("components/chart-funnel"); 
-  @include meta.load-css("components/dashboard"); 
-}```
-
-## Plik: `molique-style-before-after.scss`
-
-```scss
-/**
- * molique - Plik kompilacyjny dla Widgetu Przed / Po
- * Ten plik wygeneruje gotowy molique-style-before-after.css
- */
-
-@use "sass:meta";
-
-// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
-@layer modules;
-
-// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
-@layer modules {
-  @include meta.load-css("before-after");
 }
 ```
-
-## Plik: `molique-style-blog.scss`
-
-```scss
-/**
- * molique - Plik kompilacyjny dla Modułu Bloga
- * Ten plik wygeneruje gotowy molique-style-blog.css
- */
-
-@use "sass:meta";
-
-@layer modules;
-
-@layer modules {
-  @include meta.load-css("blog");
-}```
-
-## Plik: `molique-style-docs.scss`
-
-```scss
-/**
- * molique - Plik kompilacyjny dla Dokumentacji
- * Ten plik wygeneruje gotowy molique-style-docs.css
- */
-
-@use "sass:meta";
-
-@layer modules;
-
-@layer modules {
-  @include meta.load-css("modules/docs");
-  @include meta.load-css("components/theme-editor");
-}```
-
-## Plik: `molique-style-share.scss`
-
-```scss
-/**
- * molique - Plik kompilacyjny dla Widgetu Udostępniania (Share)
- * Ten plik wygeneruje gotowy molique-style-share.css
- */
-
-@use "sass:meta";
-
-// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
-@layer modules;
-
-// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
-@layer modules {
-  @include meta.load-css("share");
-}
-```
-
-## Plik: `molique-style-shop.scss`
-
-```scss
-/**
- * molique - Plik kompilacyjny dla Modułu E-commerce
- * Ten plik wygeneruje gotowy molique-style-shop.css
- */
-
-@use "sass:meta";
-
-// 1. Deklarujemy warstwę, aby style sklepu miały odpowiedni priorytet
-@layer modules;
-
-// 2. Wstrzykujemy fizyczny kod sklepu do warstwy
-@layer modules {
-  @include meta.load-css("shop");
-}```
-
-## Plik: `molique-style-speed-dial.scss`
-
-```scss
-/**
- * molique - Plik kompilacyjny dla Widgetu Speed Dial
- * Ten plik wygeneruje gotowy molique-style-speed-dial.css
- */
-
-@use "sass:meta";
-
-// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
-@layer modules;
-
-// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
-@layer modules {
-  @include meta.load-css("speed-dial");
-}
-```
-
-## Plik: `molique-style.scss`
-
-```scss
-@use "sass:meta";
-
-// Definicja kolejności warstw
-@layer reset, base, layout, components, modules, utilities;
-
-// Wstrzykiwanie kodu bezpośrednio do warstw
-@layer reset {
-  @include meta.load-css("root"); // Tylko root ma fizyczny CSS (:root)
-  @include meta.load-css("fonts"); // @font-face: Inter + Poppins
-}
-
-@layer base {
-  @include meta.load-css("base");
-  @include meta.load-css("a11y");
-  @include meta.load-css("eink");
-}
-
-@layer layout {
-  @include meta.load-css("grid");
-  @include meta.load-css("layout");
-}
-
-@layer components {
-  @include meta.load-css("buttons");
-  @include meta.load-css("forms");
-  @include meta.load-css("components");
-}
-
-@layer modules {
-  // Moduły opcjonalne (zakomentowane, bo kompilujemy je do osobnych plików!)
-  // @include meta.load-css("shop");
-  // @include meta.load-css("blog");
-  // @include meta.load-css("admin");
-}
-
-@layer utilities {
-  @include meta.load-css("utilities");
-  // @use 'utilities-extended'; 
-}```
 
 ## Plik: `utilities/_animations.scss`
 
@@ -7276,7 +7245,8 @@ a.list-group-item:hover, button.list-group-item:hover {
       transition: --t-top 0.15s linear 0s, --t-right 0.15s linear 0.15s, --t-bottom 0.15s linear 0.3s, --t-left 0.15s linear 0.45s;
     }
   }
-}```
+}
+```
 
 ## Plik: `utilities/_borders.scss`
 
@@ -7354,7 +7324,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     mask-image: radial-gradient(circle #{$corner-size} at 100% 100%, transparent 99%, #fff 100%);
     -webkit-mask-image: radial-gradient(circle #{$corner-size} at 100% 100%, transparent 99%, #fff 100%);
   }
-}```
+}
+```
 
 ## Plik: `utilities/_colors.scss`
 
@@ -7542,7 +7513,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     color: transparent;
     display: inline-block;
   }
-}```
+}
+```
 
 ## Plik: `utilities/_helpers.scss`
 
@@ -7765,7 +7737,8 @@ a.list-group-item:hover, button.list-group-item:hover {
   .z-index-2 { z-index: 2 !important; }
   .z-index-3 { z-index: 3 !important; }
   
-}```
+}
+```
 
 ## Plik: `utilities/_spacing.scss`
 
@@ -7873,7 +7846,8 @@ a.list-group-item:hover, button.list-group-item:hover {
       }
     }
   }
-}```
+}
+```
 
 ## Plik: `utilities/_typography.scss`
 
@@ -7937,7 +7911,8 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 .text-decoration-none { text-decoration: none !important; }
 .text-decoration-underline { text-decoration: underline !important; }
-.text-decoration-line-through { text-decoration: line-through !important; }```
+.text-decoration-line-through { text-decoration: line-through !important; }
+```
 
 ## Plik: `_a11y.scss`
 
@@ -7980,7 +7955,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     outline: var(--focus-ring-width) solid var(--text-main);
     outline-offset: 2px;
   }
-}```
+}
+```
 
 ## Plik: `_admin.scss`
 
@@ -8441,7 +8417,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     white-space: nowrap;
     text-overflow: clip;
   }
-}```
+}
+```
 
 ## Plik: `_base.scss`
 
@@ -8618,7 +8595,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     border-radius: 0;
     word-break: normal;
   }
-}```
+}
+```
 
 ## Plik: `_before-after.scss`
 
@@ -8964,7 +8942,8 @@ a.list-group-item:hover, button.list-group-item:hover {
   .author-name { font-size: 1.125rem; font-weight: var(--fw-bold); margin-bottom: 4px; }
   .author-role { font-size: 0.875rem; color: var(--primary); font-weight: var(--fw-medium); margin-bottom: 12px; }
   .author-bio { color: var(--text-muted); margin-bottom: 0; font-size: 0.95rem; }
-}```
+}
+```
 
 ## Plik: `_buttons.scss`
 
@@ -9406,7 +9385,8 @@ a.list-group-item:hover, button.list-group-item:hover {
       transform: none;
     }
   }
-}```
+}
+```
 
 ## Plik: `_components.scss`
 
@@ -9416,7 +9396,16 @@ a.list-group-item:hover, button.list-group-item:hover {
  * Ten plik ładuje wszystkie mniejsze moduły z folderu components/
  */
 
-@use 'components/navigation' as *;
+// Nawigacja rozbita na niezalezne moduly (kolejnosc = kolejnosc w CSS).
+// Kazdy z nich mozna pominac w wlasnym bundlu bez bledow kompilacji.
+@use 'components/navbar' as *;
+@use 'components/mega-menu' as *;
+@use 'components/dropdown' as *;
+@use 'components/breadcrumbs' as *;
+@use 'components/pagination' as *;
+@use 'components/topbar' as *;
+@use 'components/scroll-to-top' as *;
+@use 'components/reading-progress' as *;
 @use 'components/language-switch' as *;
 @use 'components/hero' as *;
 @use 'components/cards' as *;
@@ -9425,7 +9414,8 @@ a.list-group-item:hover, button.list-group-item:hover {
 @use 'components/feedback' as *;
 @use 'components/business' as *;
 @use 'components/charts' as *;
-@use 'components/code-preview' as *;```
+@use 'components/code-preview' as *;
+```
 
 ## Plik: `_eink.scss`
 
@@ -9466,7 +9456,8 @@ a.list-group-item:hover, button.list-group-item:hover {
   .video-bg, .skeleton-loader {
     display: none !important;
   }
-}```
+}
+```
 
 ## Plik: `_fonts.scss`
 
@@ -9571,7 +9562,8 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 @use 'components/form-base' as *;
 @use 'components/form-groups' as *;
-@use 'components/form-advanced' as *;```
+@use 'components/form-advanced' as *;
+```
 
 ## Plik: `_grid.scss`
 
@@ -9739,7 +9731,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     .bento-grid-3 { grid-template-columns: repeat(3, 1fr); }
     .bento-grid-4 { grid-template-columns: repeat(4, 1fr); }
   }
-}```
+}
+```
 
 ## Plik: `_layout.scss`
 
@@ -9945,7 +9938,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     -webkit-appearance: none;
     margin: 0;
   }
-}```
+}
+```
 
 ## Plik: `_root.scss`
 
@@ -10169,7 +10163,8 @@ a.list-group-item:hover, button.list-group-item:hover {
   --light-rgb: 15, 23, 42;   
   --body-rgb: 15, 23, 42;
   --sidebar-rgb: 15, 23, 42;
-}```
+}
+```
 
 ## Plik: `_share.scss`
 
@@ -10574,7 +10569,8 @@ a.list-group-item:hover, button.list-group-item:hover {
     border-color: var(--border-color) !important;
     box-shadow: none;
   }
-}```
+}
+```
 
 ## Plik: `_speed-dial.scss`
 
@@ -10705,7 +10701,8 @@ $extended-breakpoints: ('sm': sm, 'lg': lg, 'xl': xl);
       }
     }
   }
-}```
+}
+```
 
 ## Plik: `_utilities.scss`
 
@@ -10720,7 +10717,8 @@ $extended-breakpoints: ('sm': sm, 'lg': lg, 'xl': xl);
 @use 'utilities/colors';
 @use 'utilities/borders';
 @use 'utilities/animations';
-@use 'utilities/helpers';```
+@use 'utilities/helpers';
+```
 
 ## Plik: `_variables.scss`
 
@@ -10749,4 +10747,185 @@ $breakpoint-xs-max: $breakpoint-sm - 1px;
 $breakpoint-sm-max: $breakpoint-md - 1px;
 $breakpoint-md-max: $breakpoint-lg - 1px;
 $breakpoint-lg-max: $breakpoint-xl - 1px;
-$breakpoint-xl-max: $breakpoint-xxl - 1px;```
+$breakpoint-xl-max: $breakpoint-xxl - 1px;
+```
+
+## Plik: `molique-style-admin.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Panelu Admina
+ * Ten plik wygeneruje gotowy molique-style-admin.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod admina do warstwy
+@layer modules {
+  // Wczytujemy rozbite pliki, które utworzyliśmy w poprzednim kroku
+  @include meta.load-css("layout/admin-layout");
+  @include meta.load-css("components/admin-sidebar");
+  @include meta.load-css("components/admin-nav");
+  @include meta.load-css("components/chart-funnel"); 
+  @include meta.load-css("components/dashboard"); 
+}
+```
+
+## Plik: `molique-style-before-after.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Widgetu Przed / Po
+ * Ten plik wygeneruje gotowy molique-style-before-after.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
+@layer modules {
+  @include meta.load-css("before-after");
+}
+```
+
+## Plik: `molique-style-blog.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Modułu Bloga
+ * Ten plik wygeneruje gotowy molique-style-blog.css
+ */
+
+@use "sass:meta";
+
+@layer modules;
+
+@layer modules {
+  @include meta.load-css("blog");
+}
+```
+
+## Plik: `molique-style-docs.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Dokumentacji
+ * Ten plik wygeneruje gotowy molique-style-docs.css
+ */
+
+@use "sass:meta";
+
+@layer modules;
+
+@layer modules {
+  @include meta.load-css("modules/docs");
+  @include meta.load-css("components/theme-editor");
+}
+```
+
+## Plik: `molique-style-share.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Widgetu Udostępniania (Share)
+ * Ten plik wygeneruje gotowy molique-style-share.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
+@layer modules {
+  @include meta.load-css("share");
+}
+```
+
+## Plik: `molique-style-shop.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Modułu E-commerce
+ * Ten plik wygeneruje gotowy molique-style-shop.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę, aby style sklepu miały odpowiedni priorytet
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod sklepu do warstwy
+@layer modules {
+  @include meta.load-css("shop");
+}
+```
+
+## Plik: `molique-style-speed-dial.scss`
+
+```scss
+/**
+ * molique - Plik kompilacyjny dla Widgetu Speed Dial
+ * Ten plik wygeneruje gotowy molique-style-speed-dial.css
+ */
+
+@use "sass:meta";
+
+// 1. Deklarujemy warstwę, aby style widgetu miały odpowiedni priorytet
+@layer modules;
+
+// 2. Wstrzykujemy fizyczny kod widgetu do warstwy
+@layer modules {
+  @include meta.load-css("speed-dial");
+}
+```
+
+## Plik: `molique-style.scss`
+
+```scss
+@use "sass:meta";
+
+// Definicja kolejności warstw
+@layer reset, base, layout, components, modules, utilities;
+
+// Wstrzykiwanie kodu bezpośrednio do warstw
+@layer reset {
+  @include meta.load-css("root"); // Tylko root ma fizyczny CSS (:root)
+  @include meta.load-css("fonts"); // @font-face: Inter + Poppins
+}
+
+@layer base {
+  @include meta.load-css("base");
+  @include meta.load-css("a11y");
+  @include meta.load-css("eink");
+}
+
+@layer layout {
+  @include meta.load-css("grid");
+  @include meta.load-css("layout");
+}
+
+@layer components {
+  @include meta.load-css("buttons");
+  @include meta.load-css("forms");
+  @include meta.load-css("components");
+}
+
+@layer modules {
+  // Moduły opcjonalne (zakomentowane, bo kompilujemy je do osobnych plików!)
+  // @include meta.load-css("shop");
+  // @include meta.load-css("blog");
+  // @include meta.load-css("admin");
+}
+
+@layer utilities {
+  @include meta.load-css("utilities");
+  // @use 'utilities-extended'; 
+}
+```
+
