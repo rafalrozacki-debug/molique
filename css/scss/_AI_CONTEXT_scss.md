@@ -196,6 +196,7 @@
 ## Plik: `components/_admin-nav.scss`
 
 ```scss
+// molique - Nawigacja panelu admina: submenu, drill-down na mobile, bottom nav.
 @use '../variables' as *;
 @use '../mixins' as *;
 
@@ -853,6 +854,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 ## Plik: `components/_admin-sidebar.scss`
 
 ```scss
+// molique - Pasek boczny panelu admina: warianty szerokosci, logo kompaktowe.
 @use '../variables' as *;
 @use '../mixins' as *;
 
@@ -1562,6 +1564,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 ## Plik: `components/_chart-funnel.scss`
 
 ```scss
+// molique - Lejki danych: pionowy, poziomy pipeline i trapezowy.
 @layer components {
   /* =========================================
      1. LEJEK DANYCH (Pionowy, oparty na --val)
@@ -2730,6 +2733,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 ## Plik: `components/_form-base.scss`
 
 ```scss
+// molique - Bazowy input, select, textarea, floating labels i walidacja.
 @layer components {
   /* =========================================
      1. BAZOWY INPUT & SELECT
@@ -3030,6 +3034,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 ## Plik: `components/_form-groups.scss`
 
 ```scss
+// molique - Input groups: laczenie pol z przyciskami i prefiksami.
 @layer components {
   /* =========================================
      1. INPUT GROUPS (Zgrupowane pola i przyciski)
@@ -8312,6 +8317,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 ## Plik: `_a11y.scss`
 
 ```scss
+// molique - Dostepnosc (A11y): focus-visible, skip-link, prefers-reduced-motion.
 /* =========================================
    DOSTĘPNOŚĆ (ACCESSIBILITY - A11y)
    ========================================= */
@@ -9845,6 +9851,7 @@ a.list-group-item:hover, button.list-group-item:hover {
 ## Plik: `_eink.scss`
 
 ```scss
+// molique - Optymalizacja dla e-ink / monochrome i wydruku.
 /* =========================================
    OPTYMALIZACJA DLA E-INK / MONOCHROME
    ========================================= */
