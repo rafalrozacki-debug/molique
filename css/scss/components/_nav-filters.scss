@@ -1,0 +1,53 @@
+// molique - Nav filters: filtry portfolio (+ keyframes filterPop).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   7. NAV FILTERS (Filtry Portfolio)
+   ========================================= */
+.nav-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  gap: calc(var(--spacing-unit) * 1);
+  
+  button {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+    border-radius: var(--border-radius);
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    
+    &:hover {
+      color: var(--primary);
+      background-color: var(--card-bg-subtle);
+    }
+    
+    &.is-active {
+      color: #fff;
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+  }
+}
+
+.filter-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  
+  &.is-hidden { display: none !important; }
+  &.is-animated { animation: filterPop 0.4s ease-out forwards; }
+}
+
+@keyframes filterPop {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}

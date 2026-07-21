@@ -1,0 +1,44 @@
+// molique - Pricing list: lista z kropkami (cennik pozycjami).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   5. PRICING LIST (Lista z kropkami)
+   ========================================= */
+.pricing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+}
+
+.pricing-list-title {
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pricing-list-dots {
+  flex-grow: 1;
+  border-bottom: 2px dotted var(--border-color);
+  margin: 0 8px;
+  position: relative;
+  top: -4px;
+  opacity: 0.5;
+}
+
+.pricing-list-price {
+  font-weight: var(--fw-black);
+  color: var(--primary);
+  font-size: 1.125rem;
+  white-space: nowrap;
+}

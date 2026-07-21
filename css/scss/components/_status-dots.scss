@@ -1,0 +1,55 @@
+// molique - Status dots (kropki statusu) + wariant pulsujacy ping.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. STATUS DOTS (Kropki statusu i Ping)
+   ========================================= */
+.status-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  color: var(--text-main);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Definiujemy kolory tła ORAZ zmienną dla cienia (Ping) */
+  &.status-draft { 
+    --ping-color: var(--border-color);
+    &::before { background-color: var(--border-color); }
+  }
+  &.status-pending { 
+    --ping-color: var(--warning);
+    &::before { background-color: var(--warning); }
+  }
+  &.status-done { 
+    --ping-color: var(--success);
+    &::before { background-color: var(--success); }
+  }
+  &.status-danger { 
+    --ping-color: var(--danger);
+    &::before { background-color: var(--danger); }
+  }
+}
+
+/* Animowany Ping (box-shadow na kropce) */
+.status-ping::before {
+  animation: pingDot 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes pingDot {
+  0% { box-shadow: 0 0 0 0 var(--ping-color); }
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}

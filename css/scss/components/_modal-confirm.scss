@@ -1,0 +1,42 @@
+// molique - Confirm modal: maly modal potwierdzenia.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+   1.1. CONFIRM MODAL (Mały modal potwierdzenia)
+   ========================================= */
+/* Modyfikator szerokości */
+.modal-sm {
+  max-width: 360px;
+}
+
+/* Specyficzny układ dla potwierdzeń (bez nagłówka, wyśrodkowany) */
+.modal-confirm .card-body {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+}
+
+.modal-confirm-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  /* Używamy animacji z _animations.scss dla zwrócenia uwagi */
+  display: inline-block;
+}
+
+.modal-confirm .card-footer {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 2);
+  background-color: transparent; /* Czysty wygląd bez szarego tła */
+  border-top: none;
+  padding: 0 calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 3);
+}
+
+.modal-confirm .card-footer .btn {
+  flex: 1; /* Przyciski zajmują równo po 50% szerokości */
+}
+}

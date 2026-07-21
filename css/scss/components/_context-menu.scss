@@ -1,0 +1,194 @@
+// molique - Anchored context menu (Anchor Positioning + Popover) wraz z zagniezdzonym wariantem bottom sheet na mobile.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+     4. ANCHORED CONTEXT MENU (CSS Anchor Positioning)
+     ========================================= */
+  .popover-context {
+    /* Reset domyślnych stylów Popover API (UA daje [popover]
+       color: CanvasText - patrz komentarz przy .modal-dialog) */
+    margin: 0;
+    padding: calc(var(--spacing-unit) * 1);
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    min-width: 160px;
+    
+    /* MAGIA 2026: CSS Anchor Positioning */
+    position: absolute;
+    top: anchor(bottom);
+    left: anchor(start);
+    margin-top: 4px; 
+    
+    /* Fallback dla starszych przeglądarek */
+    @supports not (top: anchor(bottom)) {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+    }
+
+    /* Animacja wejścia */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+
+    /* --- FLIP: menu blisko dolnej krawędzi ekranu (patrz js/modules/context-menu.js) --- */
+    &.is-flipped {
+      top: auto;
+      bottom: anchor(top);
+      margin-top: 0;
+      margin-bottom: 4px;
+
+      transform: translateY(10px);
+
+      &:popover-open {
+        transform: translateY(0);
+      }
+
+      @starting-style {
+        &:popover-open {
+          transform: translateY(10px);
+        }
+      }
+    }
+
+    /* --- FIX: KULOODPORNY RESET LISTY --- */
+    ul, ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* --- WSPARCIE DLA STARYCH KLAS (.popover-action-btn) --- */
+    .popover-action-btn {
+      width: 100%;
+      text-align: left;
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+      background: transparent;
+      border: none;
+      border-radius: calc(var(--border-radius) / 2);
+      color: var(--text-main);
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+      cursor: pointer;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &:hover {
+        background-color: var(--card-bg-subtle);
+        color: var(--primary);
+      }
+
+      &.text-danger:hover {
+        background-color: rgba(var(--danger-rgb), 0.1);
+        color: var(--danger);
+      }
+    }
+
+    /* =========================================
+       MOBILE: BOTTOM SHEET (Szuflada z dołu)
+       ========================================= */
+    @media (max-width: 768px) {
+      /* Resetujemy pozycjonowanie Anchor */
+      position: fixed !important;
+      top: auto !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      
+      /* Rozciągamy na całą szerokość */
+      width: 100% !important;
+      min-width: 100%;
+      margin: 0;
+      
+      /* Stylizacja szuflady */
+      border: none;
+      border-top: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+      padding-bottom: env(safe-area-inset-bottom); 
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+      
+      /* Animacja wjazdu z dołu */
+      transform: translateY(100%);
+      &:popover-open {
+        transform: translateY(0);
+      }
+      @starting-style {
+        &:popover-open { transform: translateY(100%); }
+      }
+
+      /* "Uchwyt" (pill) na górze szuflady */
+      &::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background-color: var(--border-color);
+        border-radius: 4px;
+        margin: 0 auto calc(var(--spacing-unit) * 2) auto;
+      }
+
+      /* Powiększamy przyciski dla łatwiejszego klikania palcem */
+      .popover-action-btn,
+      .btn-action {
+        width: 100%;
+        justify-content: flex-start;
+        padding: calc(var(--spacing-unit) * 2);
+        font-size: 1rem;
+        min-height: 48px !important;
+        
+        i, svg {
+          font-size: 1.25rem;
+          margin-right: calc(var(--spacing-unit) * 1);
+        }
+      }
+    }
+  }
+
+  /* Tło przyciemniające (Backdrop) dla Bottom Sheet na mobile */
+  @media (max-width: 768px) {
+    .popover-context::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+    }
+    .popover-context:popover-open::backdrop {
+      opacity: 1;
+    }
+    @starting-style {
+      .popover-context:popover-open::backdrop { opacity: 0; }
+    }
+  }
+}

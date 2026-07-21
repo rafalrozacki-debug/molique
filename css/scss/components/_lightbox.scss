@@ -1,0 +1,101 @@
+// molique - Lightbox: galeria pelnoekranowa (markup budowany z JS).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+   3. LIGHTBOX (Galeria pełnoekranowa)
+   ========================================= */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: none; /* Zmieniane przez JS na flex */
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-speed);
+  
+  &.is-active {
+    opacity: 1;
+  }
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+.lightbox-top-bar {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 calc(var(--spacing-unit) * 3);
+  z-index: 2010;
+}
+
+.lightbox-counter {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: var(--fw-bold);
+}
+
+.lightbox-close {
+  color: #fff;
+  font-size: 2.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity var(--transition-speed);
+  
+  &:hover { opacity: 1; }
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  padding: 20px;
+  z-index: 2010;
+  transition: color var(--transition-speed);
+  
+  &:hover { color: #fff; }
+}
+
+.lightbox-prev { left: 10px; }
+.lightbox-next { right: 10px; }
+
+@include mq(sm, max) {
+  .lightbox-nav { font-size: 2rem; padding: 10px; }
+  .lightbox-content img { max-height: 75vh; }
+}
+}

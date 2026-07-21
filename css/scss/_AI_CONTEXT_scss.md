@@ -1,25 +1,26 @@
 # Zbiorczy kontekst projektu dla AI
 
 **Folder glowny:** `scss`
-**Liczba plikow w paczce:** 76
+**Liczba plikow w paczce:** 93
 
 ## Struktura plikow:
 - `components/_accordion.scss`
 - `components/_admin-nav.scss`
 - `components/_admin-sidebar.scss`
+- `components/_alerts.scss`
+- `components/_badges.scss`
 - `components/_breadcrumbs.scss`
-- `components/_business.scss`
 - `components/_cards.scss`
 - `components/_carousel.scss`
 - `components/_chart-funnel.scss`
 - `components/_charts.scss`
 - `components/_code-preview.scss`
+- `components/_context-menu.scss`
 - `components/_counters.scss`
 - `components/_dashboard.scss`
 - `components/_data-row-compact.scss`
 - `components/_data-rows.scss`
 - `components/_dropdown.scss`
-- `components/_feedback.scss`
 - `components/_form-base.scss`
 - `components/_form-check.scss`
 - `components/_form-file-upload.scss`
@@ -31,19 +32,35 @@
 - `components/_grid-expand.scss`
 - `components/_hero.scss`
 - `components/_language-switch.scss`
+- `components/_lightbox.scss`
 - `components/_list-group.scss`
 - `components/_list-icons.scss`
 - `components/_mega-menu.scss`
-- `components/_modals.scss`
+- `components/_modal-confirm.scss`
+- `components/_modal-context.scss`
+- `components/_modal.scss`
+- `components/_nav-filters.scss`
 - `components/_navbar.scss`
 - `components/_pagination.scss`
+- `components/_pricing-list.scss`
+- `components/_pricing-table.scss`
+- `components/_progress.scss`
 - `components/_reading-progress.scss`
 - `components/_scroll-to-top.scss`
+- `components/_status-dots.scss`
+- `components/_status-icons.scss`
+- `components/_stepper.scss`
+- `components/_stock-bar.scss`
 - `components/_tables.scss`
 - `components/_tabs.scss`
+- `components/_testimonials.scss`
 - `components/_theme-editor.scss`
 - `components/_theme-switch.scss`
+- `components/_timeline.scss`
+- `components/_toasts.scss`
+- `components/_tooltips.scss`
 - `components/_topbar.scss`
+- `components/_word-rotator.scss`
 - `layout/_admin-layout.scss`
 - `modules/_docs.scss`
 - `utilities/_animations.scss`
@@ -1095,6 +1112,82 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 ```
 
+## Plik: `components/_alerts.scss`
+
+```scss
+// molique - Alerty (komunikaty inline).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   2. ALERTS (Komunikaty)
+   ========================================= */
+.alert {
+  padding: calc(var(--spacing-unit) * 2);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  border-radius: var(--border-radius);
+  border-left: 4px solid;
+}
+
+.alert-info { 
+  background-color: rgba(var(--info-rgb), 0.1); 
+  border-color: var(--info); 
+  color: var(--text-main); 
+}
+.alert-success { 
+  background-color: rgba(var(--success-rgb), 0.1); 
+  border-color: var(--success); 
+  color: var(--text-main); 
+}
+.alert-danger { 
+  background-color: rgba(var(--danger-rgb), 0.1); 
+  border-color: var(--danger); 
+  color: var(--text-main); 
+}
+.alert-warning { 
+  background-color: rgba(var(--warning-rgb), 0.1); 
+  border-color: var(--warning); 
+  color: var(--text-main); 
+}
+```
+
+## Plik: `components/_badges.scss`
+
+```scss
+// molique - Badges (pigulki statusow).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   1. BADGES (Pigułki)
+   ========================================= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25em 0.65em;
+  font-size: 0.75em;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  border-radius: 50rem; /* Kształt pigułki */
+  color: var(--btn-text-light);
+}
+
+.badge-primary { background-color: var(--primary); }
+.badge-secondary { background-color: var(--secondary); }
+.badge-success { background-color: var(--success); }
+.badge-danger { background-color: var(--danger); }
+.badge-warning { background-color: var(--warning); color: var(--text-main); }
+.badge-info { background-color: var(--info); color: var(--text-main); }
+.badge-dark { background-color: var(--dark); }
+```
+
 ## Plik: `components/_breadcrumbs.scss`
 
 ```scss
@@ -1137,603 +1230,6 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 
 .breadcrumb-item.is-active { color: var(--text-muted); }
-```
-
-## Plik: `components/_business.scss`
-
-```scss
-/**
- * molique - Komponenty Biznesowe
- * Zawiera Tabele Cenowe, Paski Postępu, Oś Czasu (Timeline) oraz Stepper.
- */
-
-@use '../variables' as *;
-@use '../mixins' as *;
-
-/* =========================================
-   1. TABELE CENOWE (Pricing Tables)
-   ========================================= */
-.pricing-table {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  padding: calc(var(--spacing-unit) * 4);
-  text-align: center;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  /* Wyróżniona karta (np. "Najpopularniejsze") */
-  &.is-featured {
-    border-color: var(--primary);
-    box-shadow: var(--shadow-md);
-    transform: scale(1.05);
-    z-index: 2;
-    background-color: var(--bg-body);
-    
-    /* Tasiemka (Ribbon) */
-    &::before {
-      content: 'Popularne';
-      position: absolute;
-      top: 15px;
-      right: -35px;
-      background-color: var(--primary);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: var(--fw-bold);
-      padding: 4px 40px;
-      transform: rotate(45deg);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-  }
-}
-
-.pricing-header {
-  margin-bottom: calc(var(--spacing-unit) * 3);
-  
-  .pricing-title {
-    font-size: 1.25rem;
-    font-weight: var(--fw-bold);
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  
-  .pricing-price {
-    font-size: 3rem;
-    font-weight: var(--fw-black);
-    color: var(--text-main);
-    line-height: 1;
-    margin: calc(var(--spacing-unit) * 2) 0;
-    
-    span {
-      font-size: 1rem;
-      color: var(--text-muted);
-      font-weight: var(--fw-normal);
-    }
-  }
-}
-
-.pricing-features {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 calc(var(--spacing-unit) * 4) 0;
-  flex-grow: 1; /* Pcha przycisk na sam dół */
-  
-  li {
-    padding: calc(var(--spacing-unit) * 1.5) 0;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-main);
-    
-    &:last-child { border-bottom: none; }
-    
-    /* Przekreślone, niedostępne funkcje */
-    &.is-disabled {
-      color: var(--text-muted);
-      text-decoration: line-through;
-      opacity: 0.5;
-    }
-  }
-}
-
-/* =========================================
-   2. PASKI POSTĘPU (Progress Bars)
-   ========================================= */
-.progress {
-  display: flex;
-  height: 8px; /* Cienki, nowoczesny pasek */
-  overflow: hidden;
-  background-color: var(--border-color);
-  border-radius: 50px;
-  margin-bottom: calc(var(--spacing-unit) * 2);
-}
-
-.progress-bar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  color: #fff;
-  text-align: center;
-  white-space: nowrap;
-  background-color: var(--primary);
-  transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.progress-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  font-weight: var(--fw-bold);
-  margin-bottom: calc(var(--spacing-unit) * 1);
-  color: var(--text-main);
-}
-
-@layer components {
-  /* =========================================
-     3. TIMELINE (Oś czasu - Wersja Hybrydowa)
-     ========================================= */
-  
-  /* --- WERSJA KLASYCZNA (Pseudo-elementy) --- */
-  .timeline {
-    --timeline-line-color: var(--border-color);
-    --timeline-dot-color: var(--primary);
-    --timeline-dot-size: 14px;
-    --timeline-spacing: 30px;
-    
-    position: relative;
-    padding-left: var(--timeline-spacing);
-    margin: calc(var(--spacing-unit) * 4) 0;
-    list-style: none;
-    
-    /* Główna linia */
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: calc(var(--timeline-dot-size) / 2 - 1px);
-      height: 100%;
-      width: 2px;
-      background: var(--timeline-line-color);
-    }
-  }
-
-  .timeline-item {
-    position: relative;
-    margin-bottom: calc(var(--spacing-unit) * 4);
-    
-    &:last-child { margin-bottom: 0; }
-    
-    /* Domyślna kropka */
-    &::before {
-      content: '';
-      position: absolute;
-      top: 4px;
-      left: calc(var(--timeline-spacing) * -1);
-      width: var(--timeline-dot-size);
-      height: var(--timeline-dot-size);
-      border-radius: 50%;
-      background: var(--timeline-dot-color);
-      border: 2px solid var(--bg-body);
-      z-index: 2;
-    }
-  }
-
-  /* Wariant 1: Duże kółka na ikony */
-  .timeline-large {
-    --timeline-dot-size: 48px;
-    --timeline-spacing: 70px;
-    
-    .timeline-item::before { display: none; }
-  }
-
-  .timeline-badge {
-    position: absolute;
-    top: 0;
-    left: calc(var(--timeline-spacing) * -1);
-    width: var(--timeline-dot-size);
-    height: var(--timeline-dot-size);
-    border-radius: 50%;
-    background: var(--bg-body);
-    border: 2px solid var(--border-color);
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: var(--fw-bold);
-    font-size: 1.25rem;
-    z-index: 2;
-    box-shadow: var(--shadow-sm);
-    transition: border-color var(--transition-speed), color var(--transition-speed);
-  }
-
-  .timeline-item:hover .timeline-badge {
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-
-  /* Wariant 2: Automatyczna numeracja */
-  .timeline-numbered {
-    @extend .timeline-large;
-    counter-reset: timeline-step;
-    
-    .timeline-item {
-      counter-increment: timeline-step;
-      
-      &::after {
-        content: counter(timeline-step);
-        position: absolute;
-        top: 0;
-        left: calc(var(--timeline-spacing) * -1);
-        width: var(--timeline-dot-size);
-        height: var(--timeline-dot-size);
-        border-radius: 50%;
-        background: var(--bg-body);
-        border: 2px solid var(--border-color);
-        color: var(--text-main);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: var(--fw-light);
-        font-size: 1.5rem;
-        z-index: 2;
-        transition: border-color var(--transition-speed), background-color var(--transition-speed);
-      }
-      
-      &:hover::after {
-        border-color: var(--primary);
-        background-color: var(--primary);
-        color: #fff;
-      }
-    }
-  }
-
-  /* --- WERSJA ZAAWANSOWANA (Grid / Etykiety po lewej) --- */
-  .timeline-labeled {
-    --timeline-label-width: 90px;
-    
-    /* Resetujemy klasyczne pseudo-elementy, bo tu używamy Grida */
-    padding-left: 0;
-    &::before { display: none; }
-    
-    .timeline-item {
-      margin-bottom: 0;
-      &::before, &::after { display: none; }
-      
-      /* Układ Grida */
-      display: grid;
-      grid-template-columns: var(--timeline-label-width) 24px 1fr;
-      gap: calc(var(--spacing-unit) * 2);
-      
-      /* Mobile: Data nad treścią */
-      @include mq(md, max) {
-        grid-template-columns: 24px 1fr;
-        
-        .timeline-label {
-          grid-column: 2;
-          text-align: left;
-          display: flex;
-          align-items: center;
-          gap: calc(var(--spacing-unit) * 1);
-          padding-top: 0;
-          margin-bottom: calc(var(--spacing-unit) * 0.5);
-        }
-        
-        .timeline-separator {
-          grid-column: 1;
-          grid-row: 1 / span 2;
-        }
-      }
-    }
-
-    /* Elementy wewnętrzne Grida */
-    .timeline-label {
-      text-align: right;
-      font-size: 0.75rem;
-      line-height: 1.2;
-      padding-top: 4px;
-    }
-
-    .timeline-separator {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .timeline-node {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: var(--bg-surface);
-      border: 2px solid var(--border-color);
-      flex-shrink: 0;
-      margin-top: 6px;
-      z-index: 2;
-      
-      &.node-primary { border-color: var(--primary); }
-      &.node-success { border-color: var(--success); }
-      &.node-danger { border-color: var(--danger); }
-    }
-
-    .timeline-line {
-      width: 2px;
-      flex-grow: 1;
-      background-color: var(--border-color);
-      margin-top: 4px;
-      margin-bottom: calc(var(--spacing-unit) * -2); 
-      z-index: 1;
-    }
-
-    .timeline-item:last-child .timeline-line {
-      display: none;
-    }
-
-    .timeline-content {
-      padding-bottom: calc(var(--spacing-unit) * 4);
-    }
-  }
-}
-
-/* =========================================
-   4. STEPPER (Pasek postępu formularza)
-   ========================================= */
-.stepper {
-  display: flex;
-  gap: calc(var(--spacing-unit) * 1);
-  overflow-x: auto;
-  margin-bottom: calc(var(--spacing-unit) * 4);
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-}
-
-.step {
-  flex: 1; 
-  min-width: 140px; 
-  color: var(--text-muted);
-  font-weight: var(--fw-medium);
-  font-size: 0.875rem;
-  text-align: left;
-  cursor: pointer;
-  transition: color var(--transition-speed);
-
-  &::before {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 6px;
-    background-color: var(--border-color);
-    border-radius: 4px;
-    margin-bottom: calc(var(--spacing-unit) * 1.5);
-    transition: background-color var(--transition-speed);
-  }
-
-  &:hover { color: var(--text-main); }
-
-  &.is-active {
-    color: var(--text-main);
-    font-weight: var(--fw-bold);
-    &::before { background-color: var(--primary); }
-  }
-}
-
-/* Wariant 2: Stepper Numerowany (Kółka i linie) */
-.stepper-numbered {
-  counter-reset: stepper-counter;
-  gap: 0;
-  border-bottom: none;
-  padding-bottom: 0;
-  
-  .step {
-    position: relative;
-    text-align: center;
-    padding-top: 44px;
-    padding-bottom: 0;
-    margin-bottom: 0;
-    border-bottom: none;
-    min-width: 120px;
-    
-    &::before { display: none; }
-    
-    &::after {
-      counter-increment: stepper-counter;
-      content: counter(stepper-counter);
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: var(--bg-surface);
-      border: 2px solid var(--border-color);
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: var(--fw-bold);
-      font-size: 0.875rem;
-      z-index: 2;
-      transition: all var(--transition-speed);
-    }
-
-    .step-line {
-      position: absolute;
-      top: 15px;
-      left: 50%;
-      width: 100%;
-      height: 2px;
-      background-color: var(--border-color);
-      z-index: 1;
-      transition: background-color var(--transition-speed);
-    }
-
-    &:last-child .step-line { display: none; }
-
-    &.is-active, &.is-completed {
-      color: var(--text-main);
-      &::after {
-        background-color: var(--primary);
-        border-color: var(--primary);
-        color: #fff;
-      }
-    }
-    
-    &.is-completed .step-line {
-      background-color: var(--primary);
-    }
-  }
-}
-/* =========================================
-   5. TESTIMONIALS (Referencje)
-   ========================================= */
-.testimonial {
-  text-align: center;
-  padding: calc(var(--spacing-unit) * 4);
-  background: var(--bg-surface);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--border-color);
-}
-
-.testimonial-quote {
-  font-size: 1.125rem;
-  font-style: italic;
-  color: var(--text-main);
-  margin-bottom: calc(var(--spacing-unit) * 3);
-}
-
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: calc(var(--spacing-unit) * 2);
-}
-
-.testimonial-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.testimonial-name { font-weight: var(--fw-bold); margin: 0; }
-.testimonial-role { font-size: 0.875rem; color: var(--text-muted); margin: 0; }
-.testimonial-stars { color: var(--warning); margin-bottom: calc(var(--spacing-unit) * 2); }
-
-/* =========================================
-   6. WORD ROTATOR (Obracający się tekst)
-   ========================================= */
-.word-rotator {
-  display: inline-flex;
-  vertical-align: bottom;
-  overflow: hidden;
-  position: relative;
-}
-
-.word-rotator-items {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center; 
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  text-align: center; 
-  
-  span {
-    display: block;
-    white-space: nowrap;
-  }
-}
-
-/* =========================================
-   7. NAV FILTERS (Filtry Portfolio)
-   ========================================= */
-.nav-filters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  list-style: none;
-  padding: 0;
-  margin-bottom: calc(var(--spacing-unit) * 4);
-  gap: calc(var(--spacing-unit) * 1);
-  
-  button {
-    background: transparent;
-    border: 1px solid transparent;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-    border-radius: var(--border-radius);
-    color: var(--text-muted);
-    font-weight: var(--fw-medium);
-    cursor: pointer;
-    transition: all var(--transition-speed);
-    
-    &:hover {
-      color: var(--primary);
-      background-color: var(--card-bg-subtle);
-    }
-    
-    &.is-active {
-      color: #fff;
-      background-color: var(--primary);
-      border-color: var(--primary);
-    }
-  }
-}
-
-.filter-item {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  
-  &.is-hidden { display: none !important; }
-  &.is-animated { animation: filterPop 0.4s ease-out forwards; }
-}
-
-@keyframes filterPop {
-  0% { opacity: 0; transform: scale(0.95); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* =========================================
-   5. PRICING LIST (Lista z kropkami)
-   ========================================= */
-.pricing-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  
-  li {
-    display: flex;
-    align-items: baseline;
-    margin-bottom: 12px;
-    font-size: 1rem;
-  }
-}
-
-.pricing-list-title {
-  font-weight: var(--fw-bold);
-  color: var(--text-main);
-  margin: 0;
-}
-
-.pricing-list-dots {
-  flex-grow: 1;
-  border-bottom: 2px dotted var(--border-color);
-  margin: 0 8px;
-  position: relative;
-  top: -4px;
-  opacity: 0.5;
-}
-
-.pricing-list-price {
-  font-weight: var(--fw-black);
-  color: var(--primary);
-  font-size: 1.125rem;
-  white-space: nowrap;
-}
 ```
 
 ## Plik: `components/_cards.scss`
@@ -2631,6 +2127,205 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 ```
 
+## Plik: `components/_context-menu.scss`
+
+```scss
+// molique - Anchored context menu (Anchor Positioning + Popover) wraz z zagniezdzonym wariantem bottom sheet na mobile.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+     4. ANCHORED CONTEXT MENU (CSS Anchor Positioning)
+     ========================================= */
+  .popover-context {
+    /* Reset domyślnych stylów Popover API (UA daje [popover]
+       color: CanvasText - patrz komentarz przy .modal-dialog) */
+    margin: 0;
+    padding: calc(var(--spacing-unit) * 1);
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    min-width: 160px;
+    
+    /* MAGIA 2026: CSS Anchor Positioning */
+    position: absolute;
+    top: anchor(bottom);
+    left: anchor(start);
+    margin-top: 4px; 
+    
+    /* Fallback dla starszych przeglądarek */
+    @supports not (top: anchor(bottom)) {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+    }
+
+    /* Animacja wejścia */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+
+    /* --- FLIP: menu blisko dolnej krawędzi ekranu (patrz js/modules/context-menu.js) --- */
+    &.is-flipped {
+      top: auto;
+      bottom: anchor(top);
+      margin-top: 0;
+      margin-bottom: 4px;
+
+      transform: translateY(10px);
+
+      &:popover-open {
+        transform: translateY(0);
+      }
+
+      @starting-style {
+        &:popover-open {
+          transform: translateY(10px);
+        }
+      }
+    }
+
+    /* --- FIX: KULOODPORNY RESET LISTY --- */
+    ul, ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* --- WSPARCIE DLA STARYCH KLAS (.popover-action-btn) --- */
+    .popover-action-btn {
+      width: 100%;
+      text-align: left;
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+      background: transparent;
+      border: none;
+      border-radius: calc(var(--border-radius) / 2);
+      color: var(--text-main);
+      font-size: 0.875rem;
+      font-weight: var(--fw-medium);
+      cursor: pointer;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &:hover {
+        background-color: var(--card-bg-subtle);
+        color: var(--primary);
+      }
+
+      &.text-danger:hover {
+        background-color: rgba(var(--danger-rgb), 0.1);
+        color: var(--danger);
+      }
+    }
+
+    /* =========================================
+       MOBILE: BOTTOM SHEET (Szuflada z dołu)
+       ========================================= */
+    @media (max-width: 768px) {
+      /* Resetujemy pozycjonowanie Anchor */
+      position: fixed !important;
+      top: auto !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      
+      /* Rozciągamy na całą szerokość */
+      width: 100% !important;
+      min-width: 100%;
+      margin: 0;
+      
+      /* Stylizacja szuflady */
+      border: none;
+      border-top: 1px solid var(--border-color);
+      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+      padding-bottom: env(safe-area-inset-bottom); 
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+      
+      /* Animacja wjazdu z dołu */
+      transform: translateY(100%);
+      &:popover-open {
+        transform: translateY(0);
+      }
+      @starting-style {
+        &:popover-open { transform: translateY(100%); }
+      }
+
+      /* "Uchwyt" (pill) na górze szuflady */
+      &::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background-color: var(--border-color);
+        border-radius: 4px;
+        margin: 0 auto calc(var(--spacing-unit) * 2) auto;
+      }
+
+      /* Powiększamy przyciski dla łatwiejszego klikania palcem */
+      .popover-action-btn,
+      .btn-action {
+        width: 100%;
+        justify-content: flex-start;
+        padding: calc(var(--spacing-unit) * 2);
+        font-size: 1rem;
+        min-height: 48px !important;
+        
+        i, svg {
+          font-size: 1.25rem;
+          margin-right: calc(var(--spacing-unit) * 1);
+        }
+      }
+    }
+  }
+
+  /* Tło przyciemniające (Backdrop) dla Bottom Sheet na mobile */
+  @media (max-width: 768px) {
+    .popover-context::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+    }
+    .popover-context:popover-open::backdrop {
+      opacity: 1;
+    }
+    @starting-style {
+      .popover-context:popover-open::backdrop { opacity: 0; }
+    }
+  }
+}
+```
+
 ## Plik: `components/_counters.scss`
 
 ```scss
@@ -3028,466 +2723,6 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   .dropdown-menu-end[popover] {
     left: auto;
     right: anchor(right);
-  }
-}
-```
-
-## Plik: `components/_feedback.scss`
-
-```scss
-/**
- * molique - Feedback Wizualny
- * Zawiera Badges, Alerty, Powiadomienia (Toasts) oraz Kropki Statusu.
- */
-
-@use '../variables' as *;
-@use '../mixins' as *;
-
-/* =========================================
-   1. BADGES (Pigułki)
-   ========================================= */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25em 0.65em;
-  font-size: 0.75em;
-  font-weight: var(--fw-bold);
-  line-height: 1;
-  border-radius: 50rem; /* Kształt pigułki */
-  color: var(--btn-text-light);
-}
-
-.badge-primary { background-color: var(--primary); }
-.badge-secondary { background-color: var(--secondary); }
-.badge-success { background-color: var(--success); }
-.badge-danger { background-color: var(--danger); }
-.badge-warning { background-color: var(--warning); color: var(--text-main); }
-.badge-info { background-color: var(--info); color: var(--text-main); }
-.badge-dark { background-color: var(--dark); }
-
-/* =========================================
-   2. ALERTS (Komunikaty)
-   ========================================= */
-.alert {
-  padding: calc(var(--spacing-unit) * 2);
-  margin-bottom: calc(var(--spacing-unit) * 2);
-  border-radius: var(--border-radius);
-  border-left: 4px solid;
-}
-
-.alert-info { 
-  background-color: rgba(var(--info-rgb), 0.1); 
-  border-color: var(--info); 
-  color: var(--text-main); 
-}
-.alert-success { 
-  background-color: rgba(var(--success-rgb), 0.1); 
-  border-color: var(--success); 
-  color: var(--text-main); 
-}
-.alert-danger { 
-  background-color: rgba(var(--danger-rgb), 0.1); 
-  border-color: var(--danger); 
-  color: var(--text-main); 
-}
-.alert-warning { 
-  background-color: rgba(var(--warning-rgb), 0.1); 
-  border-color: var(--warning); 
-  color: var(--text-main); 
-}
-
-/* =========================================
-   3. TOAST NOTIFICATIONS (Powiadomienia)
-   ========================================= */
-.toast-container {
-  position: fixed;
-  z-index: var(--z-index-toast);
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 1.5);
-  padding: calc(var(--spacing-unit) * 2);
-  pointer-events: none; 
-
-  /* NAPRAWA TOP LAYER: Reset domyślnych stylów Popover API */
-  margin: 0;
-  border: none;
-  background: transparent;
-  overflow: visible;
-  inset: auto; /* Resetujemy domyślne rozciągnięcie popovera */
-}
-
-/* Pozycje kontenera (Dodano 'auto' dla nieużywanych krawędzi, by nadpisać Popover) */
-.toast-top-right { top: 0; right: 0; bottom: auto; left: auto; align-items: flex-end; }
-.toast-top-left { top: 0; left: 0; bottom: auto; right: auto; align-items: flex-start; }
-.toast-bottom-right { bottom: 0; right: 0; top: auto; left: auto; align-items: flex-end; }
-.toast-bottom-left { bottom: 0; left: 0; top: auto; right: auto; align-items: flex-start; }
-.toast-top-center { top: 0; left: 50%; bottom: auto; right: auto; transform: translateX(-50%); align-items: center; }
-.toast-bottom-center { bottom: 0; left: 50%; top: auto; right: auto; transform: translateX(-50%); align-items: center; }
-
-/* Sam Toast */
-.toast {
-  background-color: var(--bg-surface);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-lg);
-  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
-  min-width: 280px;
-  max-width: 350px;
-  pointer-events: auto; /* Toast sam w sobie jest klikalny */
-  position: relative;
-  overflow: hidden;
-  font-size: 0.875rem;
-  font-weight: var(--fw-medium);
-  
-  /* Animacja wejścia */
-  animation: toastEnter 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  will-change: transform, opacity;
-}
-
-/* Animacja wyjścia (dodawana przez JS) */
-.toast.is-closing {
-  animation: toastExit 0.3s ease-in forwards;
-}
-
-/* Warianty kolorystyczne (B2B style - pasek z boku) */
-.toast-success { border-left: 4px solid var(--success); }
-.toast-danger { border-left: 4px solid var(--danger); }
-.toast-info { border-left: 4px solid var(--info); }
-.toast-warning { border-left: 4px solid var(--warning); }
-
-/* Pasek postępu czasu */
-.toast-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background-color: currentColor;
-  opacity: 0.2;
-  width: 100%;
-  transform-origin: left;
-}
-
-/* Keyframes dla Toastów */
-@keyframes toastEnter {
-  from { opacity: 0; transform: translate3d(0, 20px, 0) scale(0.95); }
-  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-}
-
-@keyframes toastExit {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.9); }
-}
-
-@keyframes toastProgressAnim {
-  from { transform: scaleX(1); }
-  to { transform: scaleX(0); }
-}
-
-/* Na mobile toasty zajmują całą szerokość */
-@include mq(sm, max) {
-  .toast-container {
-    width: 100%;
-    left: 0 !important;
-    right: 0 !important;
-    transform: none !important;
-    align-items: center !important;
-  }
-  .toast {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-/* =========================================
-   4. STATUS DOTS (Kropki statusu i Ping)
-   ========================================= */
-.status-dot {
-  display: inline-flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 1);
-  font-size: 0.875rem;
-  font-weight: var(--fw-medium);
-  color: var(--text-main);
-
-  &::before {
-    content: '';
-    display: block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-
-  /* Definiujemy kolory tła ORAZ zmienną dla cienia (Ping) */
-  &.status-draft { 
-    --ping-color: var(--border-color);
-    &::before { background-color: var(--border-color); }
-  }
-  &.status-pending { 
-    --ping-color: var(--warning);
-    &::before { background-color: var(--warning); }
-  }
-  &.status-done { 
-    --ping-color: var(--success);
-    &::before { background-color: var(--success); }
-  }
-  &.status-danger { 
-    --ping-color: var(--danger);
-    &::before { background-color: var(--danger); }
-  }
-}
-
-/* Animowany Ping (box-shadow na kropce) */
-.status-ping::before {
-  animation: pingDot 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-@keyframes pingDot {
-  0% { box-shadow: 0 0 0 0 var(--ping-color); }
-  70% { box-shadow: 0 0 0 6px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
-}
-
-/* =========================================
-   4.5. STOCK BAR (Segmentowy poziom zapasu)
-   ========================================= */
-/* Pięciosegmentowy wskaźnik poziomu (stany magazynowe, limity, quoty).
-   Zero JS i zero dodatkowego markupu: segmenty rysuje maska SVG (5
-   zaokrąglonych prostokątów), a wypełnienie to zwykły gradient ucinany
-   na granicy segmentu. Liczba wypełnionych segmentów z backendu przez
-   zmienną CSS: style="--stock-filled: 3" (0-5). "Puste" segmenty to
-   tint koloru wariantu (rgba), więc działają też w dark mode.
-   A11y: element jest czysto wizualny - podawaj wartość obok jako tekst
-   lub nadaj role="img" + aria-label="Stan: 3/5". */
-.stock-bar {
-  --stock-segments: 5;
-  --stock-filled: 0;
-  --stock-color: var(--secondary);
-  --stock-color-rgb: var(--secondary-rgb);
-
-  display: inline-block;
-  width: 60px;
-  height: 10px;
-  flex-shrink: 0;
-  vertical-align: middle;
-  background: linear-gradient(
-    to right,
-    var(--stock-color) 0 calc(var(--stock-filled) / var(--stock-segments) * 100%),
-    rgba(var(--stock-color-rgb), 0.25) 0
-  );
-  /* Maska: 5 segmentów 10x10 (rx=2) z odstępem 2.5 w siatce 60x10.
-     Granica k/5 wypełnienia zawsze wypada w przerwie między segmentami,
-     więc krawędź gradientu nigdy nie tnie segmentu w połowie. */
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-
-/* Warianty kolorystyczne (semantyka jak w statusach) */
-.stock-bar-success { --stock-color: var(--success); --stock-color-rgb: var(--success-rgb); }
-.stock-bar-warning { --stock-color: var(--warning); --stock-color-rgb: var(--warning-rgb); }
-.stock-bar-danger  { --stock-color: var(--danger);  --stock-color-rgb: var(--danger-rgb); }
-
-/* =========================================
-   5. TOOLTIPS (Dymki podpowiedzi - Czysty CSS)
-   ========================================= */
-.tooltip-element {
-  position: relative;
-  display: inline-block;
-  cursor: help;
-  border-bottom: 1px dotted var(--text-muted);
-}
-
-.tooltip-element::before, 
-.tooltip-element::after {
-  position: absolute;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-  z-index: var(--z-index-tooltip);
-  pointer-events: none;
-}
-
-/* Strzałka dymku */
-.tooltip-element::before {
-  content: "";
-  bottom: 100%;
-  left: 50%;
-  transform: translate(-50%, 10px);
-  border: 5px solid transparent;
-  border-top-color: var(--dark);
-  margin-bottom: -1px;
-}
-
-/* Treść dymku */
-.tooltip-element::after {
-  content: attr(data-tooltip);
-  bottom: 100%;
-  left: 50%;
-  transform: translate(-50%, 10px);
-  background-color: var(--dark);
-  color: #fff;
-  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-  border-radius: var(--border-radius);
-  font-size: 0.75rem;
-  font-weight: var(--fw-medium);
-  white-space: nowrap;
-  margin-bottom: 9px;
-  box-shadow: var(--shadow-sm);
-}
-
-.tooltip-element:hover::before, 
-.tooltip-element:hover::after {
-  opacity: 1;
-  visibility: visible;
-  transform: translate(-50%, 0);
-}
-
-/* =========================================
-   6. ANIMOWANE IKONY STATUSU (Statyczne)
-   ========================================= */
-.status-icon {
-  width: 32px; /* Zmniejszono z 64px */
-  height: 32px;
-  border-radius: 50%;
-  position: relative;
-  display: inline-block;
-  transition: all var(--transition-speed);
-}
-
-/* Ikona Plus (Dodaj) */
-.status-icon-add {
-  border: 2px solid var(--text-main); /* Cieńsza ramka */
-  
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    background-color: var(--text-main);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 1px;
-  }
-
-  &::before { width: 2px; height: 50%; }
-  &::after { width: 50%; height: 2px; }
-}
-
-/* Ikona Sukces (Checkmark) */
-.status-icon-success {
-  background-color: var(--success);
-  
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -60%) rotate(45deg);
-    width: 8px; /* Pomniejszony ptaszek */
-    height: 14px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
-  }
-}
-
-/* =========================================
-   7. INTERAKTYWNA IKONA STATUSU (Plus -> Sukces)
-   ========================================= */
-.status-icon-toggle {
-  width: 32px; /* Zmniejszono z 64px */
-  height: 32px;
-  border: 2px solid var(--border-color); /* Cieńsza ramka */
-  border-radius: 50%;
-  background-color: transparent;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
-
-  /* Stan początkowy: PLUS */
-  &::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 14px; /* Pomniejszony plus */
-    height: 14px;
-    background: 
-      linear-gradient(var(--text-muted), var(--text-muted)) center/2px 100% no-repeat,
-      linear-gradient(var(--text-muted), var(--text-muted)) center/100% 2px no-repeat;
-    transform: translate(-50%, -50%) scale(1) rotate(0deg);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    opacity: 1;
-  }
-
-  /* Stan końcowy: CHECKMARK (Ptaszek) */
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 8px; /* Pomniejszony ptaszek */
-    height: 14px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
-    opacity: 0;
-    transform: translate(-50%, -60%) rotate(45deg) scale(0);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-  }
-
-  /* AKCJA: Po dodaniu klasy .is-success */
-  &.is-success {
-    background-color: var(--success);
-    border-color: var(--success);
-
-    &::before {
-      transform: translate(-50%, -50%) scale(0) rotate(90deg);
-      opacity: 0;
-    }
-
-    &::after {
-      transform: translate(-50%, -60%) rotate(45deg) scale(1);
-      opacity: 1;
-    }
-  }
-}
-
-/* --- Wersja jako natywny Checkbox (Zero JS) --- */
-.status-checkbox {
-  display: inline-flex;
-  cursor: pointer;
-  margin: 0;
-  position: relative;
-
-  input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    width: 1px;
-    height: 1px;
-    z-index: -1;
-
-    &:checked + .status-icon-toggle {
-      background-color: var(--success);
-      border-color: var(--success);
-
-      &::before {
-        transform: translate(-50%, -50%) scale(0) rotate(90deg);
-        opacity: 0;
-      }
-
-      &::after {
-        transform: translate(-50%, -60%) rotate(45deg) scale(1);
-        opacity: 1;
-      }
-    }
-
-    &:focus-visible + .status-icon-toggle {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
   }
 }
 ```
@@ -4746,6 +3981,112 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 ```
 
+## Plik: `components/_lightbox.scss`
+
+```scss
+// molique - Lightbox: galeria pelnoekranowa (markup budowany z JS).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+   3. LIGHTBOX (Galeria pełnoekranowa)
+   ========================================= */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: none; /* Zmieniane przez JS na flex */
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-speed);
+  
+  &.is-active {
+    opacity: 1;
+  }
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+.lightbox-top-bar {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 calc(var(--spacing-unit) * 3);
+  z-index: 2010;
+}
+
+.lightbox-counter {
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: var(--fw-bold);
+}
+
+.lightbox-close {
+  color: #fff;
+  font-size: 2.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity var(--transition-speed);
+  
+  &:hover { opacity: 1; }
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  padding: 20px;
+  z-index: 2010;
+  transition: color var(--transition-speed);
+  
+  &:hover { color: #fff; }
+}
+
+.lightbox-prev { left: 10px; }
+.lightbox-next { right: 10px; }
+
+@include mq(sm, max) {
+  .lightbox-nav { font-size: 2rem; padding: 10px; }
+  .lightbox-content img { max-height: 75vh; }
+}
+}
+```
+
 ## Plik: `components/_list-group.scss`
 
 ```scss
@@ -5163,101 +4504,17 @@ a.list-group-item:hover, button.list-group-item:hover {
 }
 ```
 
-## Plik: `components/_modals.scss`
+## Plik: `components/_modal-confirm.scss`
 
 ```scss
-/**
- * molique - Modale i Lightbox
- * Zawiera natywne okna dialogowe, menu kontekstowe oraz galerię pełnoekranową.
- */
+// molique - Confirm modal: maly modal potwierdzenia.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 @layer components {
-/* =========================================
-   1. NATYWNY MODAL (<dialog>)
-   ========================================= */
-.modal-dialog {
-  border: none;
-  padding: 0;
-  background: transparent;
-  /* UA daje <dialog> color: CanvasText, co przerywa dziedziczenie
-     koloru z body - jawny kolor motywu przywraca łańcuch dziedziczenia
-     (m.in. dla nagłówków z color: inherit) niezależnie od color-scheme. */
-  color: var(--text-main);
-  overflow: visible;
-  
-  max-width: 600px;
-  width: 90%;
-  margin: auto; 
-
-  /* NAPRAWA 1: Ograniczamy wysokość modala do wielkości ekranu (z małym marginesem) */
-  max-height: calc(100vh - 2rem);
-  max-height: calc(100dvh - 2rem); /* Nowoczesne jednostki dla mobile */
-  
-  /* NAPRAWA 2: Modal staje się kontenerem flex */
-  display: flex;
-  flex-direction: column;
-
-  &:not([open]) {
-    display: none !important;
-    pointer-events: none !important;
-  }
-
-  &::backdrop {
-    /* Literal zamiast rgba(var(--dark-rgb)): przyciemnienie tła ma ZAWSZE
-       przyciemniać, a dark mode odwraca --dark-rgb do jasnego - backdrop
-       robił się jasną mgłą, wbrew idei ciemnego motywu. */
-    background-color: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(4px);
-  }
-
-  transition: 
-    opacity var(--transition-speed) ease, 
-    transform var(--transition-speed) ease,
-    display var(--transition-speed) ease allow-discrete, 
-    overlay var(--transition-speed) ease allow-discrete;
-  
-  opacity: 0;
-  transform: translateY(-20px);
-
-  &[open] {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  @starting-style {
-    &[open] {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-  }
-}
-
-/* Karta wewnątrz modala */
-.modal-dialog .card {
-  margin: 0;
-  box-shadow: var(--shadow-lg);
-  
-  /* NAPRAWA 3: Karta nie może być wyższa niż sam modal */
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* NAPRAWA 4: MAGIA UX - Tylko ciało karty się scrolluje! */
-.modal-dialog .card-body {
-  overflow-y: auto;
-  overscroll-behavior: contain; /* Zapobiega scrollowaniu tła strony pod modalem */
-  
-  /* Elegancki, cienki scrollbar */
-  scrollbar-width: thin;
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-}
-
 /* =========================================
    1.1. CONFIRM MODAL (Mały modal potwierdzenia)
    ========================================= */
@@ -5291,7 +4548,20 @@ a.list-group-item:hover, button.list-group-item:hover {
 .modal-confirm .card-footer .btn {
   flex: 1; /* Przyciski zajmują równo po 50% szerokości */
 }
+}
+```
 
+## Plik: `components/_modal-context.scss`
+
+```scss
+// molique - Context modal: waski panel boczny/dolny.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
 /* =========================================
    2. CONTEXT MODAL (Wąskie menu kontekstowe)
    ========================================= */
@@ -5418,285 +4688,160 @@ a.list-group-item:hover, button.list-group-item:hover {
     border-bottom-right-radius: 0;
   }
 }
+}
+```
 
+## Plik: `components/_modal.scss`
+
+```scss
+// molique - Natywny modal <dialog> + backdrop i animacje wejscia.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
 /* =========================================
-   3. LIGHTBOX (Galeria pełnoekranowa)
+   1. NATYWNY MODAL (<dialog>)
    ========================================= */
-.lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 2000;
-  display: none; /* Zmieniane przez JS na flex */
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity var(--transition-speed);
+.modal-dialog {
+  border: none;
+  padding: 0;
+  background: transparent;
+  /* UA daje <dialog> color: CanvasText, co przerywa dziedziczenie
+     koloru z body - jawny kolor motywu przywraca łańcuch dziedziczenia
+     (m.in. dla nagłówków z color: inherit) niezależnie od color-scheme. */
+  color: var(--text-main);
+  overflow: visible;
   
-  &.is-active {
+  max-width: 600px;
+  width: 90%;
+  margin: auto; 
+
+  /* NAPRAWA 1: Ograniczamy wysokość modala do wielkości ekranu (z małym marginesem) */
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem); /* Nowoczesne jednostki dla mobile */
+  
+  /* NAPRAWA 2: Modal staje się kontenerem flex */
+  display: flex;
+  flex-direction: column;
+
+  &:not([open]) {
+    display: none !important;
+    pointer-events: none !important;
+  }
+
+  &::backdrop {
+    /* Literal zamiast rgba(var(--dark-rgb)): przyciemnienie tła ma ZAWSZE
+       przyciemniać, a dark mode odwraca --dark-rgb do jasnego - backdrop
+       robił się jasną mgłą, wbrew idei ciemnego motywu. */
+    background-color: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  transition: 
+    opacity var(--transition-speed) ease, 
+    transform var(--transition-speed) ease,
+    display var(--transition-speed) ease allow-discrete, 
+    overlay var(--transition-speed) ease allow-discrete;
+  
+  opacity: 0;
+  transform: translateY(-20px);
+
+  &[open] {
     opacity: 1;
+    transform: translateY(0);
+  }
+
+  @starting-style {
+    &[open] {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
   }
 }
 
-.lightbox-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 85vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-}
-
-.lightbox-content img {
-  max-width: 100%;
-  max-height: 85vh;
-  border-radius: var(--border-radius);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  user-select: none;
-  will-change: transform, opacity;
-}
-
-.lightbox-top-bar {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 calc(var(--spacing-unit) * 3);
-  z-index: 2010;
-}
-
-.lightbox-counter {
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: var(--fw-bold);
-}
-
-.lightbox-close {
-  color: #fff;
-  font-size: 2.5rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  line-height: 1;
-  opacity: 0.7;
-  transition: opacity var(--transition-speed);
+/* Karta wewnątrz modala */
+.modal-dialog .card {
+  margin: 0;
+  box-shadow: var(--shadow-lg);
   
-  &:hover { opacity: 1; }
+  /* NAPRAWA 3: Karta nie może być wyższa niż sam modal */
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.lightbox-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  color: rgba(255, 255, 255, 0.5);
-  border: none;
-  font-size: 3rem;
-  cursor: pointer;
-  padding: 20px;
-  z-index: 2010;
-  transition: color var(--transition-speed);
+/* NAPRAWA 4: MAGIA UX - Tylko ciało karty się scrolluje! */
+.modal-dialog .card-body {
+  overflow-y: auto;
+  overscroll-behavior: contain; /* Zapobiega scrollowaniu tła strony pod modalem */
   
-  &:hover { color: #fff; }
+  /* Elegancki, cienki scrollbar */
+  scrollbar-width: thin;
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
 }
-
-.lightbox-prev { left: 10px; }
-.lightbox-next { right: 10px; }
-
-@include mq(sm, max) {
-  .lightbox-nav { font-size: 2rem; padding: 10px; }
-  .lightbox-content img { max-height: 75vh; }
 }
+```
+
+## Plik: `components/_nav-filters.scss`
+
+```scss
+// molique - Nav filters: filtry portfolio (+ keyframes filterPop).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
 
 /* =========================================
-     4. ANCHORED CONTEXT MENU (CSS Anchor Positioning)
-     ========================================= */
-  .popover-context {
-    /* Reset domyślnych stylów Popover API (UA daje [popover]
-       color: CanvasText - patrz komentarz przy .modal-dialog) */
-    margin: 0;
-    padding: calc(var(--spacing-unit) * 1);
-    color: var(--text-main);
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-color);
+   7. NAV FILTERS (Filtry Portfolio)
+   ========================================= */
+.nav-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  gap: calc(var(--spacing-unit) * 1);
+  
+  button {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-    min-width: 160px;
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    cursor: pointer;
+    transition: all var(--transition-speed);
     
-    /* MAGIA 2026: CSS Anchor Positioning */
-    position: absolute;
-    top: anchor(bottom);
-    left: anchor(start);
-    margin-top: 4px; 
-    
-    /* Fallback dla starszych przeglądarek */
-    @supports not (top: anchor(bottom)) {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      margin: 0;
-    }
-
-    /* Animacja wejścia */
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
-
-    &:popover-open {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @starting-style {
-      &:popover-open {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-    }
-
-    /* --- FLIP: menu blisko dolnej krawędzi ekranu (patrz js/modules/context-menu.js) --- */
-    &.is-flipped {
-      top: auto;
-      bottom: anchor(top);
-      margin-top: 0;
-      margin-bottom: 4px;
-
-      transform: translateY(10px);
-
-      &:popover-open {
-        transform: translateY(0);
-      }
-
-      @starting-style {
-        &:popover-open {
-          transform: translateY(10px);
-        }
-      }
-    }
-
-    /* --- FIX: KULOODPORNY RESET LISTY --- */
-    ul, ol {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    &:hover {
+      color: var(--primary);
+      background-color: var(--card-bg-subtle);
     }
     
-    li {
-      margin: 0;
-      padding: 0;
-    }
-
-    /* --- WSPARCIE DLA STARYCH KLAS (.popover-action-btn) --- */
-    .popover-action-btn {
-      width: 100%;
-      text-align: left;
-      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-      background: transparent;
-      border: none;
-      border-radius: calc(var(--border-radius) / 2);
-      color: var(--text-main);
-      font-size: 0.875rem;
-      font-weight: var(--fw-medium);
-      cursor: pointer;
-      transition: background-color var(--transition-speed), color var(--transition-speed);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      &:hover {
-        background-color: var(--card-bg-subtle);
-        color: var(--primary);
-      }
-
-      &.text-danger:hover {
-        background-color: rgba(var(--danger-rgb), 0.1);
-        color: var(--danger);
-      }
-    }
-
-    /* =========================================
-       MOBILE: BOTTOM SHEET (Szuflada z dołu)
-       ========================================= */
-    @media (max-width: 768px) {
-      /* Resetujemy pozycjonowanie Anchor */
-      position: fixed !important;
-      top: auto !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      
-      /* Rozciągamy na całą szerokość */
-      width: 100% !important;
-      min-width: 100%;
-      margin: 0;
-      
-      /* Stylizacja szuflady */
-      border: none;
-      border-top: 1px solid var(--border-color);
-      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
-      padding-bottom: env(safe-area-inset-bottom); 
-      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
-      
-      /* Animacja wjazdu z dołu */
-      transform: translateY(100%);
-      &:popover-open {
-        transform: translateY(0);
-      }
-      @starting-style {
-        &:popover-open { transform: translateY(100%); }
-      }
-
-      /* "Uchwyt" (pill) na górze szuflady */
-      &::before {
-        content: '';
-        display: block;
-        width: 40px;
-        height: 4px;
-        background-color: var(--border-color);
-        border-radius: 4px;
-        margin: 0 auto calc(var(--spacing-unit) * 2) auto;
-      }
-
-      /* Powiększamy przyciski dla łatwiejszego klikania palcem */
-      .popover-action-btn,
-      .btn-action {
-        width: 100%;
-        justify-content: flex-start;
-        padding: calc(var(--spacing-unit) * 2);
-        font-size: 1rem;
-        min-height: 48px !important;
-        
-        i, svg {
-          font-size: 1.25rem;
-          margin-right: calc(var(--spacing-unit) * 1);
-        }
-      }
+    &.is-active {
+      color: #fff;
+      background-color: var(--primary);
+      border-color: var(--primary);
     }
   }
+}
 
-  /* Tło przyciemniające (Backdrop) dla Bottom Sheet na mobile */
-  @media (max-width: 768px) {
-    .popover-context::backdrop {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(2px);
-      opacity: 0;
-      transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
-    }
-    .popover-context:popover-open::backdrop {
-      opacity: 1;
-    }
-    @starting-style {
-      .popover-context:popover-open::backdrop { opacity: 0; }
-    }
-  }
+.filter-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  
+  &.is-hidden { display: none !important; }
+  &.is-animated { animation: filterPop 0.4s ease-out forwards; }
+}
+
+@keyframes filterPop {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
 }
 ```
 
@@ -6158,6 +5303,204 @@ a.list-group-item:hover, button.list-group-item:hover {
   }
 ```
 
+## Plik: `components/_pricing-list.scss`
+
+```scss
+// molique - Pricing list: lista z kropkami (cennik pozycjami).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   5. PRICING LIST (Lista z kropkami)
+   ========================================= */
+.pricing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+}
+
+.pricing-list-title {
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pricing-list-dots {
+  flex-grow: 1;
+  border-bottom: 2px dotted var(--border-color);
+  margin: 0 8px;
+  position: relative;
+  top: -4px;
+  opacity: 0.5;
+}
+
+.pricing-list-price {
+  font-weight: var(--fw-black);
+  color: var(--primary);
+  font-size: 1.125rem;
+  white-space: nowrap;
+}
+```
+
+## Plik: `components/_pricing-table.scss`
+
+```scss
+// molique - Tabele cenowe (pricing tables) + wariant wyrozniony.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   1. TABELE CENOWE (Pricing Tables)
+   ========================================= */
+.pricing-table {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-unit) * 4);
+  text-align: center;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Wyróżniona karta (np. "Najpopularniejsze") */
+  &.is-featured {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: scale(1.05);
+    z-index: 2;
+    background-color: var(--bg-body);
+    
+    /* Tasiemka (Ribbon) */
+    &::before {
+      content: 'Popularne';
+      position: absolute;
+      top: 15px;
+      right: -35px;
+      background-color: var(--primary);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: var(--fw-bold);
+      padding: 4px 40px;
+      transform: rotate(45deg);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.pricing-header {
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  
+  .pricing-title {
+    font-size: 1.25rem;
+    font-weight: var(--fw-bold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .pricing-price {
+    font-size: 3rem;
+    font-weight: var(--fw-black);
+    color: var(--text-main);
+    line-height: 1;
+    margin: calc(var(--spacing-unit) * 2) 0;
+    
+    span {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: var(--fw-normal);
+    }
+  }
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 calc(var(--spacing-unit) * 4) 0;
+  flex-grow: 1; /* Pcha przycisk na sam dół */
+  
+  li {
+    padding: calc(var(--spacing-unit) * 1.5) 0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    
+    &:last-child { border-bottom: none; }
+    
+    /* Przekreślone, niedostępne funkcje */
+    &.is-disabled {
+      color: var(--text-muted);
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+  }
+}
+```
+
+## Plik: `components/_progress.scss`
+
+```scss
+// molique - Paski postepu (progress bars).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   2. PASKI POSTĘPU (Progress Bars)
+   ========================================= */
+.progress {
+  display: flex;
+  height: 8px; /* Cienki, nowoczesny pasek */
+  overflow: hidden;
+  background-color: var(--border-color);
+  border-radius: 50px;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--primary);
+  transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: var(--fw-bold);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  color: var(--text-main);
+}
+```
+
 ## Plik: `components/_reading-progress.scss`
 
 ```scss
@@ -6249,6 +5592,396 @@ a.list-group-item:hover, button.list-group-item:hover {
     right: 20px;
   }
 }
+```
+
+## Plik: `components/_status-dots.scss`
+
+```scss
+// molique - Status dots (kropki statusu) + wariant pulsujacy ping.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. STATUS DOTS (Kropki statusu i Ping)
+   ========================================= */
+.status-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  color: var(--text-main);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Definiujemy kolory tła ORAZ zmienną dla cienia (Ping) */
+  &.status-draft { 
+    --ping-color: var(--border-color);
+    &::before { background-color: var(--border-color); }
+  }
+  &.status-pending { 
+    --ping-color: var(--warning);
+    &::before { background-color: var(--warning); }
+  }
+  &.status-done { 
+    --ping-color: var(--success);
+    &::before { background-color: var(--success); }
+  }
+  &.status-danger { 
+    --ping-color: var(--danger);
+    &::before { background-color: var(--danger); }
+  }
+}
+
+/* Animowany Ping (box-shadow na kropce) */
+.status-ping::before {
+  animation: pingDot 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes pingDot {
+  0% { box-shadow: 0 0 0 0 var(--ping-color); }
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+```
+
+## Plik: `components/_status-icons.scss`
+
+```scss
+// molique - Ikony statusu: statyczne animowane oraz interaktywna plus->checkmark.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   6. ANIMOWANE IKONY STATUSU (Statyczne)
+   ========================================= */
+.status-icon {
+  width: 32px; /* Zmniejszono z 64px */
+  height: 32px;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  transition: all var(--transition-speed);
+}
+
+/* Ikona Plus (Dodaj) */
+.status-icon-add {
+  border: 2px solid var(--text-main); /* Cieńsza ramka */
+  
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: var(--text-main);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 1px;
+  }
+
+  &::before { width: 2px; height: 50%; }
+  &::after { width: 50%; height: 2px; }
+}
+
+/* Ikona Sukces (Checkmark) */
+.status-icon-success {
+  background-color: var(--success);
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%) rotate(45deg);
+    width: 8px; /* Pomniejszony ptaszek */
+    height: 14px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+  }
+}
+
+/* =========================================
+   7. INTERAKTYWNA IKONA STATUSU (Plus -> Sukces)
+   ========================================= */
+.status-icon-toggle {
+  width: 32px; /* Zmniejszono z 64px */
+  height: 32px;
+  border: 2px solid var(--border-color); /* Cieńsza ramka */
+  border-radius: 50%;
+  background-color: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+
+  /* Stan początkowy: PLUS */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px; /* Pomniejszony plus */
+    height: 14px;
+    background: 
+      linear-gradient(var(--text-muted), var(--text-muted)) center/2px 100% no-repeat,
+      linear-gradient(var(--text-muted), var(--text-muted)) center/100% 2px no-repeat;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  /* Stan końcowy: CHECKMARK (Ptaszek) */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px; /* Pomniejszony ptaszek */
+    height: 14px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+    opacity: 0;
+    transform: translate(-50%, -60%) rotate(45deg) scale(0);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  }
+
+  /* AKCJA: Po dodaniu klasy .is-success */
+  &.is-success {
+    background-color: var(--success);
+    border-color: var(--success);
+
+    &::before {
+      transform: translate(-50%, -50%) scale(0) rotate(90deg);
+      opacity: 0;
+    }
+
+    &::after {
+      transform: translate(-50%, -60%) rotate(45deg) scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+/* --- Wersja jako natywny Checkbox (Zero JS) --- */
+.status-checkbox {
+  display: inline-flex;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+
+  input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    z-index: -1;
+
+    &:checked + .status-icon-toggle {
+      background-color: var(--success);
+      border-color: var(--success);
+
+      &::before {
+        transform: translate(-50%, -50%) scale(0) rotate(90deg);
+        opacity: 0;
+      }
+
+      &::after {
+        transform: translate(-50%, -60%) rotate(45deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    &:focus-visible + .status-icon-toggle {
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: 2px;
+    }
+  }
+}
+```
+
+## Plik: `components/_stepper.scss`
+
+```scss
+// molique - Stepper: pasek postepu formularza.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. STEPPER (Pasek postępu formularza)
+   ========================================= */
+.stepper {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 1);
+  overflow-x: auto;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.step {
+  flex: 1; 
+  min-width: 140px; 
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 6px;
+    background-color: var(--border-color);
+    border-radius: 4px;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    transition: background-color var(--transition-speed);
+  }
+
+  &:hover { color: var(--text-main); }
+
+  &.is-active {
+    color: var(--text-main);
+    font-weight: var(--fw-bold);
+    &::before { background-color: var(--primary); }
+  }
+}
+
+/* Wariant 2: Stepper Numerowany (Kółka i linie) */
+.stepper-numbered {
+  counter-reset: stepper-counter;
+  gap: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+  
+  .step {
+    position: relative;
+    text-align: center;
+    padding-top: 44px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+    min-width: 120px;
+    
+    &::before { display: none; }
+    
+    &::after {
+      counter-increment: stepper-counter;
+      content: counter(stepper-counter);
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--fw-bold);
+      font-size: 0.875rem;
+      z-index: 2;
+      transition: all var(--transition-speed);
+    }
+
+    .step-line {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: var(--border-color);
+      z-index: 1;
+      transition: background-color var(--transition-speed);
+    }
+
+    &:last-child .step-line { display: none; }
+
+    &.is-active, &.is-completed {
+      color: var(--text-main);
+      &::after {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+    }
+    
+    &.is-completed .step-line {
+      background-color: var(--primary);
+    }
+  }
+}
+```
+
+## Plik: `components/_stock-bar.scss`
+
+```scss
+// molique - Stock bar: segmentowy poziom zapasu (maska SVG, zero JS).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4.5. STOCK BAR (Segmentowy poziom zapasu)
+   ========================================= */
+/* Pięciosegmentowy wskaźnik poziomu (stany magazynowe, limity, quoty).
+   Zero JS i zero dodatkowego markupu: segmenty rysuje maska SVG (5
+   zaokrąglonych prostokątów), a wypełnienie to zwykły gradient ucinany
+   na granicy segmentu. Liczba wypełnionych segmentów z backendu przez
+   zmienną CSS: style="--stock-filled: 3" (0-5). "Puste" segmenty to
+   tint koloru wariantu (rgba), więc działają też w dark mode.
+   A11y: element jest czysto wizualny - podawaj wartość obok jako tekst
+   lub nadaj role="img" + aria-label="Stan: 3/5". */
+.stock-bar {
+  --stock-segments: 5;
+  --stock-filled: 0;
+  --stock-color: var(--secondary);
+  --stock-color-rgb: var(--secondary-rgb);
+
+  display: inline-block;
+  width: 60px;
+  height: 10px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  background: linear-gradient(
+    to right,
+    var(--stock-color) 0 calc(var(--stock-filled) / var(--stock-segments) * 100%),
+    rgba(var(--stock-color-rgb), 0.25) 0
+  );
+  /* Maska: 5 segmentów 10x10 (rx=2) z odstępem 2.5 w siatce 60x10.
+     Granica k/5 wypełnienia zawsze wypada w przerwie między segmentami,
+     więc krawędź gradientu nigdy nie tnie segmentu w połowie. */
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+/* Warianty kolorystyczne (semantyka jak w statusach) */
+.stock-bar-success { --stock-color: var(--success); --stock-color-rgb: var(--success-rgb); }
+.stock-bar-warning { --stock-color: var(--warning); --stock-color-rgb: var(--warning-rgb); }
+.stock-bar-danger  { --stock-color: var(--danger);  --stock-color-rgb: var(--danger-rgb); }
 ```
 
 ## Plik: `components/_tables.scss`
@@ -6560,6 +6293,53 @@ a.list-group-item:hover, button.list-group-item:hover {
     }
   }
 }
+```
+
+## Plik: `components/_testimonials.scss`
+
+```scss
+// molique - Testimonials (referencje).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   5. TESTIMONIALS (Referencje)
+   ========================================= */
+.testimonial {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 4);
+  background: var(--bg-surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.testimonial-quote {
+  font-size: 1.125rem;
+  font-style: italic;
+  color: var(--text-main);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.testimonial-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-name { font-weight: var(--fw-bold); margin: 0; }
+.testimonial-role { font-size: 0.875rem; color: var(--text-muted); margin: 0; }
+.testimonial-stars { color: var(--warning); margin-bottom: calc(var(--spacing-unit) * 2); }
 ```
 
 ## Plik: `components/_theme-editor.scss`
@@ -6918,6 +6698,402 @@ a.list-group-item:hover, button.list-group-item:hover {
 }
 ```
 
+## Plik: `components/_timeline.scss`
+
+```scss
+// molique - Timeline (os czasu) + warianty large/numbered/labeled.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  /* =========================================
+     3. TIMELINE (Oś czasu - Wersja Hybrydowa)
+     ========================================= */
+  
+  /* --- WERSJA KLASYCZNA (Pseudo-elementy) --- */
+  .timeline {
+    --timeline-line-color: var(--border-color);
+    --timeline-dot-color: var(--primary);
+    --timeline-dot-size: 14px;
+    --timeline-spacing: 30px;
+    
+    position: relative;
+    padding-left: var(--timeline-spacing);
+    margin: calc(var(--spacing-unit) * 4) 0;
+    list-style: none;
+    
+    /* Główna linia */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: calc(var(--timeline-dot-size) / 2 - 1px);
+      height: 100%;
+      width: 2px;
+      background: var(--timeline-line-color);
+    }
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    
+    &:last-child { margin-bottom: 0; }
+    
+    /* Domyślna kropka */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: calc(var(--timeline-spacing) * -1);
+      width: var(--timeline-dot-size);
+      height: var(--timeline-dot-size);
+      border-radius: 50%;
+      background: var(--timeline-dot-color);
+      border: 2px solid var(--bg-body);
+      z-index: 2;
+    }
+  }
+
+  /* Wariant 1: Duże kółka na ikony */
+  .timeline-large {
+    --timeline-dot-size: 48px;
+    --timeline-spacing: 70px;
+    
+    .timeline-item::before { display: none; }
+  }
+
+  .timeline-badge {
+    position: absolute;
+    top: 0;
+    left: calc(var(--timeline-spacing) * -1);
+    width: var(--timeline-dot-size);
+    height: var(--timeline-dot-size);
+    border-radius: 50%;
+    background: var(--bg-body);
+    border: 2px solid var(--border-color);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--fw-bold);
+    font-size: 1.25rem;
+    z-index: 2;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition-speed), color var(--transition-speed);
+  }
+
+  .timeline-item:hover .timeline-badge {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* Wariant 2: Automatyczna numeracja */
+  .timeline-numbered {
+    @extend .timeline-large;
+    counter-reset: timeline-step;
+    
+    .timeline-item {
+      counter-increment: timeline-step;
+      
+      &::after {
+        content: counter(timeline-step);
+        position: absolute;
+        top: 0;
+        left: calc(var(--timeline-spacing) * -1);
+        width: var(--timeline-dot-size);
+        height: var(--timeline-dot-size);
+        border-radius: 50%;
+        background: var(--bg-body);
+        border: 2px solid var(--border-color);
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: var(--fw-light);
+        font-size: 1.5rem;
+        z-index: 2;
+        transition: border-color var(--transition-speed), background-color var(--transition-speed);
+      }
+      
+      &:hover::after {
+        border-color: var(--primary);
+        background-color: var(--primary);
+        color: #fff;
+      }
+    }
+  }
+
+  /* --- WERSJA ZAAWANSOWANA (Grid / Etykiety po lewej) --- */
+  .timeline-labeled {
+    --timeline-label-width: 90px;
+    
+    /* Resetujemy klasyczne pseudo-elementy, bo tu używamy Grida */
+    padding-left: 0;
+    &::before { display: none; }
+    
+    .timeline-item {
+      margin-bottom: 0;
+      &::before, &::after { display: none; }
+      
+      /* Układ Grida */
+      display: grid;
+      grid-template-columns: var(--timeline-label-width) 24px 1fr;
+      gap: calc(var(--spacing-unit) * 2);
+      
+      /* Mobile: Data nad treścią */
+      @include mq(md, max) {
+        grid-template-columns: 24px 1fr;
+        
+        .timeline-label {
+          grid-column: 2;
+          text-align: left;
+          display: flex;
+          align-items: center;
+          gap: calc(var(--spacing-unit) * 1);
+          padding-top: 0;
+          margin-bottom: calc(var(--spacing-unit) * 0.5);
+        }
+        
+        .timeline-separator {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+        }
+      }
+    }
+
+    /* Elementy wewnętrzne Grida */
+    .timeline-label {
+      text-align: right;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      padding-top: 4px;
+    }
+
+    .timeline-separator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timeline-node {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      flex-shrink: 0;
+      margin-top: 6px;
+      z-index: 2;
+      
+      &.node-primary { border-color: var(--primary); }
+      &.node-success { border-color: var(--success); }
+      &.node-danger { border-color: var(--danger); }
+    }
+
+    .timeline-line {
+      width: 2px;
+      flex-grow: 1;
+      background-color: var(--border-color);
+      margin-top: 4px;
+      margin-bottom: calc(var(--spacing-unit) * -2); 
+      z-index: 1;
+    }
+
+    .timeline-item:last-child .timeline-line {
+      display: none;
+    }
+
+    .timeline-content {
+      padding-bottom: calc(var(--spacing-unit) * 4);
+    }
+  }
+}
+```
+
+## Plik: `components/_toasts.scss`
+
+```scss
+// molique - Toast notifications (Popover API) + animacja paska postepu.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   3. TOAST NOTIFICATIONS (Powiadomienia)
+   ========================================= */
+.toast-container {
+  position: fixed;
+  z-index: var(--z-index-toast);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 2);
+  pointer-events: none; 
+
+  /* NAPRAWA TOP LAYER: Reset domyślnych stylów Popover API */
+  margin: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+  inset: auto; /* Resetujemy domyślne rozciągnięcie popovera */
+}
+
+/* Pozycje kontenera (Dodano 'auto' dla nieużywanych krawędzi, by nadpisać Popover) */
+.toast-top-right { top: 0; right: 0; bottom: auto; left: auto; align-items: flex-end; }
+.toast-top-left { top: 0; left: 0; bottom: auto; right: auto; align-items: flex-start; }
+.toast-bottom-right { bottom: 0; right: 0; top: auto; left: auto; align-items: flex-end; }
+.toast-bottom-left { bottom: 0; left: 0; top: auto; right: auto; align-items: flex-start; }
+.toast-top-center { top: 0; left: 50%; bottom: auto; right: auto; transform: translateX(-50%); align-items: center; }
+.toast-bottom-center { bottom: 0; left: 50%; top: auto; right: auto; transform: translateX(-50%); align-items: center; }
+
+/* Sam Toast */
+.toast {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  min-width: 280px;
+  max-width: 350px;
+  pointer-events: auto; /* Toast sam w sobie jest klikalny */
+  position: relative;
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  
+  /* Animacja wejścia */
+  animation: toastEnter 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Animacja wyjścia (dodawana przez JS) */
+.toast.is-closing {
+  animation: toastExit 0.3s ease-in forwards;
+}
+
+/* Warianty kolorystyczne (B2B style - pasek z boku) */
+.toast-success { border-left: 4px solid var(--success); }
+.toast-danger { border-left: 4px solid var(--danger); }
+.toast-info { border-left: 4px solid var(--info); }
+.toast-warning { border-left: 4px solid var(--warning); }
+
+/* Pasek postępu czasu */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: currentColor;
+  opacity: 0.2;
+  width: 100%;
+  transform-origin: left;
+}
+
+/* Keyframes dla Toastów */
+@keyframes toastEnter {
+  from { opacity: 0; transform: translate3d(0, 20px, 0) scale(0.95); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes toastExit {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.9); }
+}
+
+@keyframes toastProgressAnim {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* Na mobile toasty zajmują całą szerokość */
+@include mq(sm, max) {
+  .toast-container {
+    width: 100%;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    align-items: center !important;
+  }
+  .toast {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+```
+
+## Plik: `components/_tooltips.scss`
+
+```scss
+// molique - Tooltipy (czysty CSS, data-tooltip).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   5. TOOLTIPS (Dymki podpowiedzi - Czysty CSS)
+   ========================================= */
+.tooltip-element {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  border-bottom: 1px dotted var(--text-muted);
+}
+
+.tooltip-element::before, 
+.tooltip-element::after {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: var(--z-index-tooltip);
+  pointer-events: none;
+}
+
+/* Strzałka dymku */
+.tooltip-element::before {
+  content: "";
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  border: 5px solid transparent;
+  border-top-color: var(--dark);
+  margin-bottom: -1px;
+}
+
+/* Treść dymku */
+.tooltip-element::after {
+  content: attr(data-tooltip);
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  background-color: var(--dark);
+  color: #fff;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  border-radius: var(--border-radius);
+  font-size: 0.75rem;
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  margin-bottom: 9px;
+  box-shadow: var(--shadow-sm);
+}
+
+.tooltip-element:hover::before, 
+.tooltip-element:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+```
+
 ## Plik: `components/_topbar.scss`
 
 ```scss
@@ -6966,6 +7142,40 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 @include mq(sm, max) {
   .topbar { display: none; }
+}
+```
+
+## Plik: `components/_word-rotator.scss`
+
+```scss
+// molique - Word rotator: obracajacy sie tekst.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   6. WORD ROTATOR (Obracający się tekst)
+   ========================================= */
+.word-rotator {
+  display: inline-flex;
+  vertical-align: bottom;
+  overflow: hidden;
+  position: relative;
+}
+
+.word-rotator-items {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center; 
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center; 
+  
+  span {
+    display: block;
+    white-space: nowrap;
+  }
 }
 ```
 
@@ -9594,7 +9804,12 @@ a.list-group-item:hover, button.list-group-item:hover {
 @use 'components/language-switch' as *;
 @use 'components/hero' as *;
 @use 'components/cards' as *;
-@use 'components/modals' as *;
+// Modale rozbite na niezalezne moduly (kolejnosc = kolejnosc w CSS).
+@use 'components/modal' as *;
+@use 'components/modal-confirm' as *;
+@use 'components/modal-context' as *;
+@use 'components/lightbox' as *;
+@use 'components/context-menu' as *;
 // Wyswietlanie danych rozbite na niezalezne moduly (kolejnosc = kolejnosc w CSS).
 @use 'components/tables' as *;
 @use 'components/data-rows' as *;
@@ -9606,8 +9821,23 @@ a.list-group-item:hover, button.list-group-item:hover {
 @use 'components/list-group' as *;
 @use 'components/list-icons' as *;
 @use 'components/counters' as *;
-@use 'components/feedback' as *;
-@use 'components/business' as *;
+// Feedback rozbity na niezalezne moduly (kolejnosc = kolejnosc w CSS).
+@use 'components/badges' as *;
+@use 'components/alerts' as *;
+@use 'components/toasts' as *;
+@use 'components/status-dots' as *;
+@use 'components/stock-bar' as *;
+@use 'components/tooltips' as *;
+@use 'components/status-icons' as *;
+// Komponenty biznesowe rozbite na niezalezne moduly (kolejnosc = kolejnosc w CSS).
+@use 'components/pricing-table' as *;
+@use 'components/progress' as *;
+@use 'components/timeline' as *;
+@use 'components/stepper' as *;
+@use 'components/testimonials' as *;
+@use 'components/word-rotator' as *;
+@use 'components/nav-filters' as *;
+@use 'components/pricing-list' as *;
 @use 'components/charts' as *;
 @use 'components/code-preview' as *;
 ```

@@ -1,0 +1,109 @@
+// molique - Toast notifications (Popover API) + animacja paska postepu.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   3. TOAST NOTIFICATIONS (Powiadomienia)
+   ========================================= */
+.toast-container {
+  position: fixed;
+  z-index: var(--z-index-toast);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 2);
+  pointer-events: none; 
+
+  /* NAPRAWA TOP LAYER: Reset domyślnych stylów Popover API */
+  margin: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+  inset: auto; /* Resetujemy domyślne rozciągnięcie popovera */
+}
+
+/* Pozycje kontenera (Dodano 'auto' dla nieużywanych krawędzi, by nadpisać Popover) */
+.toast-top-right { top: 0; right: 0; bottom: auto; left: auto; align-items: flex-end; }
+.toast-top-left { top: 0; left: 0; bottom: auto; right: auto; align-items: flex-start; }
+.toast-bottom-right { bottom: 0; right: 0; top: auto; left: auto; align-items: flex-end; }
+.toast-bottom-left { bottom: 0; left: 0; top: auto; right: auto; align-items: flex-start; }
+.toast-top-center { top: 0; left: 50%; bottom: auto; right: auto; transform: translateX(-50%); align-items: center; }
+.toast-bottom-center { bottom: 0; left: 50%; top: auto; right: auto; transform: translateX(-50%); align-items: center; }
+
+/* Sam Toast */
+.toast {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  min-width: 280px;
+  max-width: 350px;
+  pointer-events: auto; /* Toast sam w sobie jest klikalny */
+  position: relative;
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  
+  /* Animacja wejścia */
+  animation: toastEnter 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Animacja wyjścia (dodawana przez JS) */
+.toast.is-closing {
+  animation: toastExit 0.3s ease-in forwards;
+}
+
+/* Warianty kolorystyczne (B2B style - pasek z boku) */
+.toast-success { border-left: 4px solid var(--success); }
+.toast-danger { border-left: 4px solid var(--danger); }
+.toast-info { border-left: 4px solid var(--info); }
+.toast-warning { border-left: 4px solid var(--warning); }
+
+/* Pasek postępu czasu */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: currentColor;
+  opacity: 0.2;
+  width: 100%;
+  transform-origin: left;
+}
+
+/* Keyframes dla Toastów */
+@keyframes toastEnter {
+  from { opacity: 0; transform: translate3d(0, 20px, 0) scale(0.95); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes toastExit {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.9); }
+}
+
+@keyframes toastProgressAnim {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* Na mobile toasty zajmują całą szerokość */
+@include mq(sm, max) {
+  .toast-container {
+    width: 100%;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    align-items: center !important;
+  }
+  .toast {
+    width: 100%;
+    max-width: 100%;
+  }
+}

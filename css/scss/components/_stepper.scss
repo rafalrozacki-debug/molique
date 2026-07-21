@@ -1,0 +1,116 @@
+// molique - Stepper: pasek postepu formularza.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. STEPPER (Pasek postępu formularza)
+   ========================================= */
+.stepper {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 1);
+  overflow-x: auto;
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.step {
+  flex: 1; 
+  min-width: 140px; 
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 6px;
+    background-color: var(--border-color);
+    border-radius: 4px;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    transition: background-color var(--transition-speed);
+  }
+
+  &:hover { color: var(--text-main); }
+
+  &.is-active {
+    color: var(--text-main);
+    font-weight: var(--fw-bold);
+    &::before { background-color: var(--primary); }
+  }
+}
+
+/* Wariant 2: Stepper Numerowany (Kółka i linie) */
+.stepper-numbered {
+  counter-reset: stepper-counter;
+  gap: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+  
+  .step {
+    position: relative;
+    text-align: center;
+    padding-top: 44px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+    min-width: 120px;
+    
+    &::before { display: none; }
+    
+    &::after {
+      counter-increment: stepper-counter;
+      content: counter(stepper-counter);
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--fw-bold);
+      font-size: 0.875rem;
+      z-index: 2;
+      transition: all var(--transition-speed);
+    }
+
+    .step-line {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: var(--border-color);
+      z-index: 1;
+      transition: background-color var(--transition-speed);
+    }
+
+    &:last-child .step-line { display: none; }
+
+    &.is-active, &.is-completed {
+      color: var(--text-main);
+      &::after {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+    }
+    
+    &.is-completed .step-line {
+      background-color: var(--primary);
+    }
+  }
+}

@@ -1,0 +1,38 @@
+// molique - Paski postepu (progress bars).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   2. PASKI POSTĘPU (Progress Bars)
+   ========================================= */
+.progress {
+  display: flex;
+  height: 8px; /* Cienki, nowoczesny pasek */
+  overflow: hidden;
+  background-color: var(--border-color);
+  border-radius: 50px;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.progress-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--primary);
+  transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: var(--fw-bold);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  color: var(--text-main);
+}

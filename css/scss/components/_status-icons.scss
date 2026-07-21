@@ -1,0 +1,154 @@
+// molique - Ikony statusu: statyczne animowane oraz interaktywna plus->checkmark.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   6. ANIMOWANE IKONY STATUSU (Statyczne)
+   ========================================= */
+.status-icon {
+  width: 32px; /* Zmniejszono z 64px */
+  height: 32px;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  transition: all var(--transition-speed);
+}
+
+/* Ikona Plus (Dodaj) */
+.status-icon-add {
+  border: 2px solid var(--text-main); /* Cieńsza ramka */
+  
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: var(--text-main);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 1px;
+  }
+
+  &::before { width: 2px; height: 50%; }
+  &::after { width: 50%; height: 2px; }
+}
+
+/* Ikona Sukces (Checkmark) */
+.status-icon-success {
+  background-color: var(--success);
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%) rotate(45deg);
+    width: 8px; /* Pomniejszony ptaszek */
+    height: 14px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+  }
+}
+
+/* =========================================
+   7. INTERAKTYWNA IKONA STATUSU (Plus -> Sukces)
+   ========================================= */
+.status-icon-toggle {
+  width: 32px; /* Zmniejszono z 64px */
+  height: 32px;
+  border: 2px solid var(--border-color); /* Cieńsza ramka */
+  border-radius: 50%;
+  background-color: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+
+  /* Stan początkowy: PLUS */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px; /* Pomniejszony plus */
+    height: 14px;
+    background: 
+      linear-gradient(var(--text-muted), var(--text-muted)) center/2px 100% no-repeat,
+      linear-gradient(var(--text-muted), var(--text-muted)) center/100% 2px no-repeat;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  /* Stan końcowy: CHECKMARK (Ptaszek) */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px; /* Pomniejszony ptaszek */
+    height: 14px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+    opacity: 0;
+    transform: translate(-50%, -60%) rotate(45deg) scale(0);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  }
+
+  /* AKCJA: Po dodaniu klasy .is-success */
+  &.is-success {
+    background-color: var(--success);
+    border-color: var(--success);
+
+    &::before {
+      transform: translate(-50%, -50%) scale(0) rotate(90deg);
+      opacity: 0;
+    }
+
+    &::after {
+      transform: translate(-50%, -60%) rotate(45deg) scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+/* --- Wersja jako natywny Checkbox (Zero JS) --- */
+.status-checkbox {
+  display: inline-flex;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+
+  input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    z-index: -1;
+
+    &:checked + .status-icon-toggle {
+      background-color: var(--success);
+      border-color: var(--success);
+
+      &::before {
+        transform: translate(-50%, -50%) scale(0) rotate(90deg);
+        opacity: 0;
+      }
+
+      &::after {
+        transform: translate(-50%, -60%) rotate(45deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    &:focus-visible + .status-icon-toggle {
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: 2px;
+    }
+  }
+}

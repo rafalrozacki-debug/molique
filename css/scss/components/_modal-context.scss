@@ -1,0 +1,135 @@
+// molique - Context modal: waski panel boczny/dolny.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+   2. CONTEXT MODAL (Wąskie menu kontekstowe)
+   ========================================= */
+.modal-context {
+  max-width: 400px; 
+  margin-right: calc(var(--spacing-unit) * 2);
+  margin-left: auto;
+  transform: translateX(20px);
+  
+  &[open] { transform: translateX(0); }
+  @starting-style { &[open] { transform: translateX(20px); } }
+}
+
+.modal-context .card {
+  border-radius: var(--border-radius);
+}
+
+.modal-context .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  border-top-left-radius: calc(var(--border-radius) - 1px);
+  border-top-right-radius: calc(var(--border-radius) - 1px);
+  
+  h3 { margin: 0; font-size: 1.125rem; }
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+  width: var(--target-size-min);
+  height: var(--target-size-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: -12px;
+
+  &:hover { color: var(--danger); }
+}
+
+/* Przycisk zamykania w nagłówku modala dostaje fokus automatycznie przy
+   showModal() (przeglądarka focusuje pierwszy fokusowalny element okna),
+   więc pełny pierścień fokusu świeci się od razu po otwarciu i wygląda
+   jak błąd renderowania. Zamieniamy go na subtelniejszy wskaźnik — nadal
+   widoczny przy nawigacji klawiaturą (A11y), ale nie krzyczący. */
+.modal-dialog .card-header .btn-action:focus-visible,
+.modal-dialog .card-header .modal-close-btn:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-ring-color);
+  background-color: var(--card-bg-subtle);
+}
+
+.modal-context .card-body {
+  padding: calc(var(--spacing-unit) * 3);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.modal-divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: calc(var(--spacing-unit) * 1) 0;
+  width: 100%;
+}
+
+.modal-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 0.5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.modal-action-btn {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--border-radius) / 2);
+  color: var(--text-main);
+  font-weight: var(--fw-medium);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+  min-height: var(--target-size-min) !important;
+
+  &:hover { background-color: var(--card-bg-subtle); color: var(--primary); }
+  &.text-danger:hover { background-color: rgba(var(--danger-rgb), 0.1); color: var(--danger); }
+}
+
+@include mq(sm, max) {
+  .modal-context {
+    max-width: 100%;
+    margin: auto 0 0 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transform: translateY(100%);
+    
+    /* NAPRAWA 5: Bottom Sheet na mobile nie powinien zajmować 100% ekranu, 
+       żeby użytkownik widział, że to modal */
+    max-height: 90vh;
+    max-height: 90dvh;
+    
+    &[open] { transform: translateY(0); }
+    @starting-style { &[open] { transform: translateY(100%); } }
+  }
+  
+  .modal-context .card {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+}

@@ -1,0 +1,61 @@
+// molique - Tooltipy (czysty CSS, data-tooltip).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   5. TOOLTIPS (Dymki podpowiedzi - Czysty CSS)
+   ========================================= */
+.tooltip-element {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  border-bottom: 1px dotted var(--text-muted);
+}
+
+.tooltip-element::before, 
+.tooltip-element::after {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: var(--z-index-tooltip);
+  pointer-events: none;
+}
+
+/* Strzałka dymku */
+.tooltip-element::before {
+  content: "";
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  border: 5px solid transparent;
+  border-top-color: var(--dark);
+  margin-bottom: -1px;
+}
+
+/* Treść dymku */
+.tooltip-element::after {
+  content: attr(data-tooltip);
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  background-color: var(--dark);
+  color: #fff;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  border-radius: var(--border-radius);
+  font-size: 0.75rem;
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  margin-bottom: 9px;
+  box-shadow: var(--shadow-sm);
+}
+
+.tooltip-element:hover::before, 
+.tooltip-element:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}

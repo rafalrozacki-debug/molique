@@ -1,0 +1,91 @@
+// molique - Natywny modal <dialog> + backdrop i animacje wejscia.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+/* =========================================
+   1. NATYWNY MODAL (<dialog>)
+   ========================================= */
+.modal-dialog {
+  border: none;
+  padding: 0;
+  background: transparent;
+  /* UA daje <dialog> color: CanvasText, co przerywa dziedziczenie
+     koloru z body - jawny kolor motywu przywraca łańcuch dziedziczenia
+     (m.in. dla nagłówków z color: inherit) niezależnie od color-scheme. */
+  color: var(--text-main);
+  overflow: visible;
+  
+  max-width: 600px;
+  width: 90%;
+  margin: auto; 
+
+  /* NAPRAWA 1: Ograniczamy wysokość modala do wielkości ekranu (z małym marginesem) */
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem); /* Nowoczesne jednostki dla mobile */
+  
+  /* NAPRAWA 2: Modal staje się kontenerem flex */
+  display: flex;
+  flex-direction: column;
+
+  &:not([open]) {
+    display: none !important;
+    pointer-events: none !important;
+  }
+
+  &::backdrop {
+    /* Literal zamiast rgba(var(--dark-rgb)): przyciemnienie tła ma ZAWSZE
+       przyciemniać, a dark mode odwraca --dark-rgb do jasnego - backdrop
+       robił się jasną mgłą, wbrew idei ciemnego motywu. */
+    background-color: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  transition: 
+    opacity var(--transition-speed) ease, 
+    transform var(--transition-speed) ease,
+    display var(--transition-speed) ease allow-discrete, 
+    overlay var(--transition-speed) ease allow-discrete;
+  
+  opacity: 0;
+  transform: translateY(-20px);
+
+  &[open] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @starting-style {
+    &[open] {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+}
+
+/* Karta wewnątrz modala */
+.modal-dialog .card {
+  margin: 0;
+  box-shadow: var(--shadow-lg);
+  
+  /* NAPRAWA 3: Karta nie może być wyższa niż sam modal */
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAPRAWA 4: MAGIA UX - Tylko ciało karty się scrolluje! */
+.modal-dialog .card-body {
+  overflow-y: auto;
+  overscroll-behavior: contain; /* Zapobiega scrollowaniu tła strony pod modalem */
+  
+  /* Elegancki, cienki scrollbar */
+  scrollbar-width: thin;
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+}
+}
