@@ -75,6 +75,7 @@ export const GLOBAL = {
   '--dark-rgb':      ['rgb', 'Kanały <code>--dark</code> — odwracają się w dark mode. Baza dla <code>--card-bg-subtle</code> i delikatnych cieni.'],
   '--light-rgb':     ['rgb', 'Kanały <code>--light</code> — odwracają się w dark mode. NIE używaj ich w sidebarze (pułapka nr 4).'],
   '--body-rgb':      ['rgb', 'Kanały <code>--bg-body</code> — gradienty zanikania (<code>.fade-bottom</code>), nakładki.'],
+  '--bg-surface-rgb':['rgb', 'Kanały <code>--bg-surface</code> — warstwa barwiąca w <code>.bg-glass</code> (glassmorphism).'],
   '--sidebar-rgb':   ['rgb', 'Kanały tła sidebara — cienie i gradienty w panelu admina.'],
 
   /* --- typography --- */
@@ -203,5 +204,23 @@ export const COMPONENT = {
   '--gradient-color-1': ['Animacje', 'api', 'Pierwszy przystanek gradientu animowanego.'],
   '--gradient-color-2': ['Animacje', 'api', 'Drugi przystanek gradientu animowanego.'],
   '--gradient-color-3': ['Animacje', 'api', 'Trzeci przystanek gradientu animowanego.'],
-  '--t-top':            ['Animacje', 'internal', 'Postęp rysowania górnej krawędzi w <code>.hover-border-draw-2</code>. Ma rodzeństwo <code>--t-right/-bottom/-left</code>.'],
+  '--t-top':            ['Animacje', 'internal', 'Postęp rysowania górnej krawędzi w <code>.hover-border-draw-2</code>. Zarejestrowana przez <code>@property</code> — bez tego procentu nie da się animować.'],
+  '--t-right':          ['Animacje', 'internal', 'Postęp rysowania prawej krawędzi. Opóźniona względem górnej, żeby ramka rysowała się po kolei.'],
+  '--t-bottom':         ['Animacje', 'internal', 'Postęp rysowania dolnej krawędzi.'],
+  '--t-left':           ['Animacje', 'internal', 'Postęp rysowania lewej krawędzi — domyka obrys.'],
+  '--trace-angle':      ['Animacje', 'internal', 'Kąt gradientu stożkowego w <code>.hover-border-spin</code>. Animowany dzięki rejestracji w <code>@property</code>.'],
+};
+
+/* ---------- Czyste wejścia z markupu ----------
+   Zmienne, których framework NIGDY nie deklaruje — tylko je czyta.
+   Ustawiasz je sam, zwykle przez style="--x: …". Wartość zapasową
+   (jeśli jest) generator czyta z var(--x, FALLBACK) w SCSS. */
+
+export const INPUT = {
+  '--val':                 ['Wykresy', 'Wartość wykresu — procent dla <code>.chart-radial</code> i <code>.chart-area</code>, waga etapu w lejkach. <strong>Jedyny sposób podania danych z backendu.</strong>'],
+  '--offset':              ['Wykresy', 'Przesunięcie początku wycinka w <code>.chart-pie</code> — suma poprzednich wycinków. Bez niej wszystkie wycinki startują z tego samego miejsca.'],
+  '--grid-min':            ['Layout', 'Minimalna szerokość kolumny w <code>.grid-auto</code>. Poniżej niej siatka zwija się do mniejszej liczby kolumn.'],
+  '--hover-border-color':  ['Animacje', 'Kolor rysowanej ramki dla efektów <code>.hover-border-*</code>. Domyślnie <code>--primary</code>.'],
+  '--border-radius-pill':  ['Nawigacja', 'Zaokrąglenie elementów w kształcie pastylki (language switch, mega menu). Domyślnie <code>999px</code>.'],
+  '--clip-img':            ['Typografia', 'Obraz lub gradient przycinany do kształtu liter w <code>.text-clip-bg</code>. Bez niej tekst zostaje bez wypełnienia.'],
 };

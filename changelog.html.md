@@ -67,6 +67,74 @@
                   class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Referencja zmiennych CSS (<code>docs-variables.html</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Wszystkie 148 zmiennych w tabelach</strong> — 86
+                    zmiennych motywu (z wartościami dla trybu jasnego i
+                    ciemnego), 56 zmiennych komponentów i 6 wejść z markupu.
+                    Dla każdej: co steruje i w których modułach SCSS jest
+                    używana.
+                  </li>
+                  <li>
+                    <strong>Tabele są generowane</strong> przez
+                    <code>tools/gen-variables-doc.js</code> prosto z
+                    <code>_root.scss</code> — wartości nie mogą rozjechać się z
+                    kodem. Generator <strong>przerywa build</strong>, gdy w SCSS
+                    pojawi się zmienna bez opisu albo gdy opis zostanie po
+                    usuniętej zmiennej.
+                  </li>
+                  <li>
+                    <strong>Sekcja pułapek:</strong> dlaczego
+                    <code>--dark</code> w dark mode robi się jasny, dlaczego
+                    <code>--x-rgb</code> działa wyłącznie w <code>rgba()</code>,
+                    dlaczego <code>variables: true</code> w PurgeCSS kasuje
+                    motyw i dlaczego w sidebarze nie wolno użyć
+                    <code>--light-rgb</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  <code>.bg-glass</code> bez gradientu i rozjechany sidebar
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>.bg-glass</code> nie renderował warstwy
+                    barwiącej.</strong> Tło sięgało po
+                    <code>rgba(var(--bg-surface-rgb), …)</code>, a ta zmienna
+                    nie była nigdzie zadeklarowana — <code>var()</code> bez
+                    wartości zapasowej unieważnia całą deklarację, więc
+                    glassmorphism działał na samym
+                    <code>backdrop-filter</code>. Zmienna doszła do obu motywów.
+                  </li>
+                  <li>
+                    <strong>Sidebar dokumentacji wyciągnięty do partiala.</strong>
+                    Był skopiowany w 19 plikach i zdążył się rozjechać: sześć
+                    stron nie linkowało do Spisu klas ani Roadmapy, a
+                    <code>docs-tables.html</code> wypadło z osiemnastu menu.
+                    Teraz jeden <code>partials/docs-sidebar.html</code>, a
+                    aktywną pozycję nadaje z adresu URL nowy moduł
+                    <code>js/modules/molique-admin-nav-active.js</code>.
+                  </li>
+                  <li>
+                    <strong>Zweryfikowane:</strong> po podmianie treść wszystkich
+                    22 stron dokumentacji <strong>poza sidebarem jest bajt w
+                    bajt identyczna</strong>, a przy naprawie
+                    <code>.bg-glass</code> siedem z ośmiu bundli CSS skompilowało
+                    się bez najmniejszej zmiany.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
                   Rozbicie SCSS na niezależne moduły (start)
                 </h3>
                 <ul class="text-secondary mb-4">

@@ -214,6 +214,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   gałęzi auto-rozwinąć się na mobile i wyklucza wzajemnie otwarte submenu.
   Aktywności NIE oznaczaj przez `open` (na mobile auto-otworzyłoby panel) —
   moduł robi to z adresu.
+- **Admin Nav — aktywność płaskich linków:** sidebar bez submenu (np. wspólny
+  dla wielu podstron) obsługuje `js/modules/molique-admin-nav-active.js`
+  (auto-ładowany przy `.admin-nav`): nadaje `.is-active` każdemu
+  `.admin-nav-link` wskazującemu bieżący URL — także temu zdublowanemu
+  w pasku mobilnym. Pomija linki leżące w `.admin-nav-submenu` (tamte należą
+  do `molique-admin-nav.js`). Aktywności NIE wpisuj do markupu — sidebar bywa
+  współdzielony przez podstrony, robi to skrypt z adresu.
 - **Admin Nav — Drop-up "Więcej" (mobile):** OSOBNY wzorzec od submenu, do
   przepełnienia paska. Checkbox Hack: `<input type="checkbox"
   class="mobile-more-toggle">` + `<label class="admin-nav-link

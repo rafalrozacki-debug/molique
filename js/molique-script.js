@@ -304,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: 'input[data-search-target]', file: 'modules/molique-table-search.js', init: 'initTableSearch' },
     { selectors: '.popover-context', file: 'modules/molique-context-menu.js', init: 'initContextMenu' },
     { selectors: '.admin-nav-submenu', file: 'modules/molique-admin-nav.js', init: 'initAdminNav' },
+    { selectors: '.admin-nav', file: 'modules/molique-admin-nav-active.js', init: 'initAdminNavActive' },
     { selectors: '.theme-editor', file: 'modules/molique-theme-editor.js', init: 'initThemeEditor' },
     { selectors: '.navbar-menu', file: 'modules/molique-navbar-active.js', init: 'initNavbarActive' }
   ];
