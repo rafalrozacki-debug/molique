@@ -106,9 +106,24 @@
                   <span class="badge badge-warning text-dark mx-2 text-3"
                     >Poprawki</span
                   >
-                  Toasty bez sklejania nazw klas
+                  Akordeon i toasty
                 </h3>
                 <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Akordeon: brak przewijania po rozwinięciu.</strong>
+                    <code>.accordion-item::details-content</code> ma bazowo
+                    <code>overflow: hidden</code> (część triku animacji
+                    <code>height: 0 → auto</code>). Stan
+                    <code>[open]</code> nadpisywał tylko wysokość, więc gdy
+                    treść była wyższa niż wysokość policzona przez animację,
+                    zostawała trwale przycięta - a przewijalny rodzic
+                    (<code>overflow-y: auto</code>) nie widział, że jest co
+                    przewijać. Teraz <code>[open]</code> zdejmuje przycinanie,
+                    ale <strong>dopiero po zakończeniu animacji</strong>
+                    (<code>overflow 0s 0.3s allow-discrete</code>) - inaczej
+                    treść wychodziłaby poza rosnące pudełko i nachodziła na
+                    sąsiadów. Przy zwijaniu przycinanie wraca natychmiast.
+                  </li>
                   <li>
                     <code>MoliqueToast</code> nie buduje już nazw klas z
                     szablonu (<code>toast-${type}</code>) - używa map literałów.
