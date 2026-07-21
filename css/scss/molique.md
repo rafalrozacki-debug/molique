@@ -54,7 +54,7 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.navbar-menu` > `.navbar-item`.
 - **Aktywna pozycja (bieżąca strona):** klasa `.is-active` na `.navbar-item`
   (oraz `.dropdown-item` / `.mega-menu-link`) — kolor primary + grubsza waga.
-  Nadaje ją wg URL moduł `js/modules/navbar-active.js` (auto-ładowany przy
+  Nadaje ją wg URL moduł `js/modules/molique-navbar-active.js` (auto-ładowany przy
   `.navbar-menu`): podświetla link bieżącej strony ORAZ trigger rozwijanego
   menu (dropdown/mega-menu), w którym ten link leży. Aktywności NIE wpisuj do
   markupu — navbar bywa współdzielony między podstronami, robi to skrypt z
@@ -209,7 +209,7 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   działa wszędzie dzięki natywnemu `<details>`: drzewko (szeroki sidebar),
   a w wariantach wąskich (`-sm`/`-md`) oraz w Bottom Nav na mobile —
   pełnoekranowy drill-down z paskiem „Cofnij". Aktywność ogarnia moduł
-  `js/modules/admin-nav.js` (auto-ładowany po `.admin-nav-submenu`):
+  `js/modules/molique-admin-nav.js` (auto-ładowany po `.admin-nav-submenu`):
   podświetla aktywną pozycję z URL bez `[open]`, nie pozwala aktywnej
   gałęzi auto-rozwinąć się na mobile i wyklucza wzajemnie otwarte submenu.
   Aktywności NIE oznaczaj przez `open` (na mobile auto-otworzyłoby panel) —
@@ -307,8 +307,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 ## Architektura JavaScript
 
 - **Autoloader:** główny plik `molique-script.js` skanuje DOM i
-  asynchronicznie pobiera mikro-moduły z `js/modules/` (np. `carousel.js`,
-  `lightbox.js`) tylko wtedy, gdy komponent istnieje na stronie.
+  asynchronicznie pobiera mikro-moduły z `js/modules/` (np.
+  `molique-carousel.js`, `molique-lightbox.js`) tylko wtedy, gdy komponent
+  istnieje na stronie.
+- **Nazwy plików JS zawsze z prefiksem `molique-`** — zarówno rdzeń
+  (`molique-script.js`), jak i każdy moduł (`js/modules/molique-*.js`).
+  Dzięki temu skrypty synchronizujące framework do projektu mogą podmieniać
+  wyłącznie pliki molique, nie ruszając kodu użytkownika.
 - **Vanilla JS:** całkowity zakaz używania jQuery.
 - **NIGDY nie sklejaj nazw klas dynamicznie** (`'toast-' + type`,
   `` `col-span-${n}` ``). Taka nazwa nie istnieje w źródle jako literał, więc

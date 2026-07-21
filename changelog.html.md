@@ -50,6 +50,74 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.0</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Zmiana</span>
+                  Wszystkie pliki JS z prefiksem <code>molique-</code>
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Moduły przemianowane:</strong>
+                    <code>js/modules/carousel.js</code> →
+                    <code>js/modules/molique-carousel.js</code> (i analogicznie
+                    pozostałe 16). Rdzeń <code>molique-script.js</code> miał
+                    prefiks od zawsze. Dzięki temu skrypty synchronizujące
+                    framework do projektu mogą podmieniać <strong>wyłącznie
+                    pliki molique</strong>, nie ruszając kodu użytkownika.
+                  </li>
+                  <li>
+                    <strong>Nie wymaga zmian w Twoim kodzie</strong>, jeśli
+                    korzystasz z autoloadera — ścieżki są w
+                    <code>molique-script.js</code> i zostały zaktualizowane.
+                    Zmień tylko, jeśli ładujesz któryś moduł ręcznie przez
+                    <code>&lt;script src&gt;</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Martwy skrypt i odnajdywalność zasobów
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Usunięty martwy
+                    <code>js/molique-script-widgets.js</code></strong> — 7 stron
+                    ładowało plik, którego nie ma w paczce (404 w konsoli).
+                    Widgety i tak dociąga autoloader; dokumentacja poprawiona,
+                    bo instruowała, żeby ten plik dołączyć.
+                  </li>
+                  <li>
+                    <strong><code>llms.txt</code> i safelista są teraz
+                    serwowane</strong> ze strony. Wcześniej build kopiował tylko
+                    katalogi zasobów, więc <code>/llms.txt</code> zwracał 404 —
+                    a to adres, spod którego pobierają go agenty AI. Doszły też
+                    linki w menu „Zasoby", sekcja „Dla deweloperów" na stronie
+                    głównej i „Zmniejsz paczkę" na stronie pobierania.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.6.2 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
@@ -211,7 +279,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <strong>Nowy moduł
-                    <code>js/modules/navbar-active.js</code></strong>
+                    <code>js/modules/molique-navbar-active.js</code></strong>
                     (auto-ładowany przy <code>.navbar-menu</code>): czyta adres
                     URL i nadaje klasę <code>.is-active</code> linkowi bieżącej
                     strony oraz triggerowi rozwijanego menu
@@ -293,7 +361,7 @@
                   </li>
                   <li>
                     <strong>Architektura:</strong> moduł
-                    <code>js/modules/theme-editor.js</code> (auto-ładowany po
+                    <code>js/modules/molique-theme-editor.js</code> (auto-ładowany po
                     <code>.theme-editor</code>), styl chrome w
                     <code>components/_theme-editor.scss</code> (bundle docs).
                     Konfiguracja kontrolek w atrybutach <code>data-te-*</code>

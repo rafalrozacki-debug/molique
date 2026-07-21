@@ -289,23 +289,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // 9. INTELIGENTNY AUTO-LOADER MODUŁÓW
   // =========================================
   const dynamicModules = [
-    { selectors: '.carousel', file: 'modules/carousel.js' },
-    { selectors: '[data-lightbox]', file: 'modules/lightbox.js' },
-    { selectors: '.select-search', file: 'modules/select.js' },
-    { selectors: '.parallax-container', file: 'modules/parallax.js' },
-    { selectors: '.nav-filters', file: 'modules/filters.js' },
-    { selectors: '.counter-value', file: 'modules/counters.js' },
-    { selectors: '.word-rotator, .typewriter', file: 'modules/text-effects.js' },
-    { selectors: '.product-gallery, .qty-input', file: 'modules/shop.js' },
-    { selectors: '.tilt-card', file: 'modules/tilt.js', init: 'initTilt' },
-    { selectors: '.btn-magnetic', file: 'modules/magnetic.js', init: 'initMagneticButtons' },
-    { selectors: '.share-btn', file: 'modules/share.js', init: 'initShare' },
-    { selectors: '.before-after-slider', file: 'modules/before-after.js', init: 'initBeforeAfter' },
-    { selectors: 'input[data-search-target]', file: 'modules/table-search.js', init: 'initTableSearch' },
-    { selectors: '.popover-context', file: 'modules/context-menu.js', init: 'initContextMenu' },
-    { selectors: '.admin-nav-submenu', file: 'modules/admin-nav.js', init: 'initAdminNav' },
-    { selectors: '.theme-editor', file: 'modules/theme-editor.js', init: 'initThemeEditor' },
-    { selectors: '.navbar-menu', file: 'modules/navbar-active.js', init: 'initNavbarActive' }
+    { selectors: '.carousel', file: 'modules/molique-carousel.js' },
+    { selectors: '[data-lightbox]', file: 'modules/molique-lightbox.js' },
+    { selectors: '.select-search', file: 'modules/molique-select.js' },
+    { selectors: '.parallax-container', file: 'modules/molique-parallax.js' },
+    { selectors: '.nav-filters', file: 'modules/molique-filters.js' },
+    { selectors: '.counter-value', file: 'modules/molique-counters.js' },
+    { selectors: '.word-rotator, .typewriter', file: 'modules/molique-text-effects.js' },
+    { selectors: '.product-gallery, .qty-input', file: 'modules/molique-shop.js' },
+    { selectors: '.tilt-card', file: 'modules/molique-tilt.js', init: 'initTilt' },
+    { selectors: '.btn-magnetic', file: 'modules/molique-magnetic.js', init: 'initMagneticButtons' },
+    { selectors: '.share-btn', file: 'modules/molique-share.js', init: 'initShare' },
+    { selectors: '.before-after-slider', file: 'modules/molique-before-after.js', init: 'initBeforeAfter' },
+    { selectors: 'input[data-search-target]', file: 'modules/molique-table-search.js', init: 'initTableSearch' },
+    { selectors: '.popover-context', file: 'modules/molique-context-menu.js', init: 'initContextMenu' },
+    { selectors: '.admin-nav-submenu', file: 'modules/molique-admin-nav.js', init: 'initAdminNav' },
+    { selectors: '.theme-editor', file: 'modules/molique-theme-editor.js', init: 'initThemeEditor' },
+    { selectors: '.navbar-menu', file: 'modules/molique-navbar-active.js', init: 'initNavbarActive' }
   ];
 
   dynamicModules.forEach(module => {

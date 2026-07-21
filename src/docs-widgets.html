@@ -95,9 +95,10 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Widgety (Opt-in)</h1>
             <p class="text-6 text-muted">
-              Widgety to niezależne, zaawansowane moduły. Wymagają załadowania dedykowanego pliku
-              CSS oraz skryptu <code>molique-script-widgets.js</code>, który dynamicznie pobiera
-              potrzebną logikę.
+              Widgety to niezależne, zaawansowane moduły. Wymagają załadowania
+              dedykowanego pliku CSS. Logiki JS nie dołączasz ręcznie —
+              <code>molique-script.js</code> wykrywa widget na stronie i sam
+              dociąga odpowiedni moduł z <code>js/modules/</code>.
             </p>
           </div>
 
@@ -115,7 +116,11 @@
                 <li>
                   Wymaga załadowania pliku stylów: <code>css/molique-style-before-after.css</code>.
                 </li>
-                <li>Wymaga załadowania skryptu: <code>js/molique-script-widgets.js</code>.</li>
+                <li>
+                  Logika JS dociągana automatycznie
+                  (<code>js/modules/molique-before-after.js</code>) — wystarczy
+                  <code>js/molique-script.js</code> na stronie.
+                </li>
                 <li>
                   Oba zdjęcia (przed i po) powinny mieć identyczne proporcje (np. 16:9) i rozmiary,
                   aby suwak działał perfekcyjnie.
@@ -354,7 +359,6 @@
 
     <!-- Skrypty -->
     <script src="js/molique-script.js"></script>
-    <script src="js/molique-script-widgets.js"></script>
   </body>
 </html>
 
