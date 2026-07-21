@@ -1,0 +1,84 @@
+// molique - Compact Data Row: kompaktowy wariant listy z ikona i akcjami.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   3. COMPACT DATA ROW (List Item / Wariant kompaktowy)
+   ========================================= */
+.data-row-compact {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-speed);
+
+  /* Ostatni element na liście nie ma dolnej ramki */
+  &:last-child {
+    border-bottom: none;
+  }
+
+  /* Subtelny hover (jak na inspiracji) */
+  &:hover {
+    background-color: var(--card-bg-subtle);
+  }
+
+  /* Opcjonalna ikona / awatar po lewej */
+  .row-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Domyślnie kółko (awatar) */
+    background-color: var(--bg-body);
+    color: var(--text-muted);
+    flex-shrink: 0; /* Zapobiega zgniataniu ikony */
+    font-size: 1.25rem;
+    
+    /* Wariant: Kwadratowa ikona (np. dla plików) */
+    &.icon-square {
+      border-radius: var(--border-radius);
+    }
+  }
+
+  /* Środkowa część (Tytuł + Szczegóły) */
+  .row-content {
+    flex: 1; /* Zajmuje całą dostępną przestrzeń */
+    min-width: 0; /* Zapobiega rozpychaniu kontenera przez długi tekst */
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .row-title {
+    font-weight: var(--fw-bold);
+    color: var(--text-main);
+    font-size: 0.875rem;
+    /* Ucinanie zbyt długiego tekstu (...) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .row-details {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    /* Ucinanie zbyt długiego tekstu (...) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Prawa strona (Akcje / Przyciski) */
+  .row-actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+}

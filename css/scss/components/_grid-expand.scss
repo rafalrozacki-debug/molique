@@ -1,0 +1,24 @@
+// molique - Grid Expand: plynne rozwijanie bez JS.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   5. GRID EXPAND (Płynne rozwijanie bez JS)
+   ========================================= */
+.grid-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  & > .grid-expand-inner {
+    overflow: hidden;
+  }
+  
+  &.is-open,
+  details[open] & {
+    grid-template-rows: 1fr;
+  }
+}

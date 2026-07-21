@@ -1,0 +1,211 @@
+// molique - Premium Multi Select (kategorie + wielokrotny wybor).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
+  /* =========================================
+     5. PREMIUM MULTI SELECT (Wzorowany na UI)
+     ========================================= */
+  .custom-select {
+    position: relative;
+    width: 100%;
+    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+       żeby wiele .custom-select na jednej stronie nie "podpinało się" nawzajem. */
+    anchor-scope: --custom-select-trigger;
+
+    /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
+       na elemencie nadrzędnym. */
+    &:has(.custom-select-dropdown:popover-open) .custom-select-trigger {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+      .icon-chevron { transform: rotate(180deg); }
+    }
+  }
+
+  .custom-select-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: var(--target-size-min);
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    text-align: left;
+    /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+       fontu automatycznie. */
+    font: inherit;
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    /* Punkt zaczepienia dla .custom-select-dropdown (CSS Anchor Positioning) */
+    anchor-name: --custom-select-trigger;
+
+    .icon-chevron {
+      transition: transform var(--transition-speed);
+      color: var(--text-muted);
+    }
+  }
+
+  .custom-select-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; 
+    flex: 1;
+    
+    .badge {
+      padding: 4px 10px; 
+      font-size: 0.75rem;
+      border-radius: 50px; 
+      font-weight: var(--fw-medium);
+    }
+  }
+
+  .custom-select-dropdown {
+    /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki —
+       dzięki temu NIE jest przycinany przez overflow przodków (np. przewijany
+       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
+       na Esc i klik poza menu obsługuje natywnie light dismiss.
+       Pozycję względem przycisku ustala CSS Anchor Positioning (Chrome 125+,
+       Safari 26+). position-anchor MUSI być ustawiony — bez niego
+       anchor()/anchor-size() nie mają się do czego odnieść. */
+    position: absolute;
+    position-anchor: --custom-select-trigger;
+    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+    inset: auto;
+    /* Przyklejamy górę popovera do dołu przycisku (anchor) */
+    top: anchor(bottom);
+    /* Wyrównujemy lewą krawędź popovera z lewą krawędzią przycisku */
+    left: anchor(left);
+    /* Szerokość taka sama jak przycisk */
+    width: anchor-size(width);
+    /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+       moment otwarcia, nie z-index (sticky nagłówki tabel z z-index:10
+       przestają być problemem). */
+    z-index: var(--z-index-dropdown);
+
+    margin: 4px 0 0 0;
+    padding: 0;
+    min-width: 180px;
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg, 12px);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+
+    &:popover-open {
+      display: flex;
+      flex-direction: column;
+      animation: fadeInDown 0.2s ease;
+    }
+
+    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
+       dropdown otwiera się jako wyśrodkowany panel — nadal w top layer,
+       więc nic go nie przycina. */
+    @supports not (top: anchor(bottom)) {
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      width: min(400px, calc(100vw - 2rem));
+      height: fit-content;
+    }
+  }
+
+  .custom-select-search {
+    padding: calc(var(--spacing-unit) * 1);
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    
+    .search-icon {
+      position: absolute;
+      left: calc(var(--spacing-unit) * 2.5);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none; 
+      z-index: 2;
+    }
+
+    .input {
+      padding-left: calc(var(--spacing-unit) * 4.5);
+      
+      &:user-valid, &:user-invalid {
+        border-color: var(--border-color) !important;
+      }
+      &:focus {
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color) !important;
+      }
+    }
+  }
+
+  .custom-select-category {
+    font-size: 0.7rem;
+    font-weight: var(--fw-bold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    margin-top: calc(var(--spacing-unit) * 1);
+    
+    &:first-child { margin-top: 0; }
+  }
+
+  .custom-select-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: calc(var(--spacing-unit) * 2);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+  }
+
+  .custom-select-option {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 2);
+    padding: calc(var(--spacing-unit) * 1.5);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all var(--transition-speed);
+
+    &:hover {
+      background-color: var(--card-bg-subtle);
+    }
+
+    &:has(input:checked) {
+      border-color: var(--primary);
+      background-color: rgba(var(--primary-rgb), 0.05);
+    }
+
+    input[type="checkbox"] {
+      appearance: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin: 0 0 0 auto; 
+      background-color: var(--bg-body);
+      border: 2px solid var(--border-color);
+      border-radius: calc(var(--border-radius) / 2);
+      cursor: pointer;
+      transition: background var(--transition-speed), border-color var(--transition-speed);
+      
+      &:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+        background-size: 70%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+}

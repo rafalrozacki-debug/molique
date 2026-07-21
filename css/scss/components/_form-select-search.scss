@@ -1,0 +1,120 @@
+// molique - Searchable Select (combobox na Popover API).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
+  /* =========================================
+     4. SEARCHABLE SELECT (Combobox)
+     ========================================= */
+  .select-search {
+    position: relative;
+    width: 100%;
+    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+       żeby wiele .select-search na jednej stronie nie "podpinało się" nawzajem. */
+    anchor-scope: --select-search-trigger;
+
+    /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
+       na elemencie nadrzędnym. */
+    &:has(.select-search-menu:popover-open) .select-search-trigger {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+      &::after { transform: rotate(180deg); }
+    }
+  }
+
+  .select-search-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+       fontu automatycznie. */
+    font: inherit;
+    cursor: pointer;
+    user-select: none;
+    background-color: var(--bg-surface);
+    /* Punkt zaczepienia dla .select-search-menu (CSS Anchor Positioning) */
+    anchor-name: --select-search-trigger;
+
+    &::after {
+      content: "▼";
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      transition: transform var(--transition-speed);
+    }
+  }
+
+  .select-search-menu {
+    /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki —
+       dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
+       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
+       na Esc i klik poza menu obsługuje natywnie light dismiss. */
+    position: absolute;
+    position-anchor: --select-search-trigger;
+    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin: 4px 0 0 0;
+    max-height: 300px;
+    padding: calc(var(--spacing-unit) * 1);
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+       moment otwarcia, nie z-index. */
+    z-index: var(--z-index-dropdown);
+
+    &:popover-open {
+      display: flex;
+      flex-direction: column;
+      animation: fadeInDown 0.2s ease;
+    }
+
+    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
+       menu otwiera się jako wyśrodkowany panel — nadal w top layer, więc
+       nic go nie przycina. */
+    @supports not (top: anchor(bottom)) {
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      width: min(400px, calc(100vw - 2rem));
+      height: fit-content;
+    }
+  }
+
+  .select-search-input {
+    margin-bottom: calc(var(--spacing-unit) * 1);
+    min-height: 36px !important; 
+    padding: 0.5rem 0.75rem;
+  }
+
+  .select-search-list {
+    overflow-y: auto;
+    flex: 1;
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+  }
+
+  .select-search-option {
+    cursor: pointer;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    border-radius: calc(var(--border-radius) / 2);
+    transition: background-color var(--transition-speed);
+    
+    &:hover { background-color: var(--card-bg-subtle); }
+    &.is-hidden { display: none !important; }
+    &.is-selected {
+      background-color: rgba(var(--primary-rgb), 0.1);
+      color: var(--primary);
+      font-weight: var(--fw-bold);
+    }
+  }
+}

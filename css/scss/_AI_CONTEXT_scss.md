@@ -1,33 +1,48 @@
 # Zbiorczy kontekst projektu dla AI
 
 **Folder glowny:** `scss`
-**Liczba plikow w paczce:** 61
+**Liczba plikow w paczce:** 76
 
 ## Struktura plikow:
+- `components/_accordion.scss`
 - `components/_admin-nav.scss`
 - `components/_admin-sidebar.scss`
 - `components/_breadcrumbs.scss`
 - `components/_business.scss`
 - `components/_cards.scss`
+- `components/_carousel.scss`
 - `components/_chart-funnel.scss`
 - `components/_charts.scss`
 - `components/_code-preview.scss`
+- `components/_counters.scss`
 - `components/_dashboard.scss`
-- `components/_data-display.scss`
+- `components/_data-row-compact.scss`
+- `components/_data-rows.scss`
 - `components/_dropdown.scss`
 - `components/_feedback.scss`
-- `components/_form-advanced.scss`
 - `components/_form-base.scss`
+- `components/_form-check.scss`
+- `components/_form-file-upload.scss`
 - `components/_form-groups.scss`
+- `components/_form-input-range.scss`
+- `components/_form-select-custom.scss`
+- `components/_form-select-search.scss`
+- `components/_form-switch.scss`
+- `components/_grid-expand.scss`
 - `components/_hero.scss`
 - `components/_language-switch.scss`
+- `components/_list-group.scss`
+- `components/_list-icons.scss`
 - `components/_mega-menu.scss`
 - `components/_modals.scss`
 - `components/_navbar.scss`
 - `components/_pagination.scss`
 - `components/_reading-progress.scss`
 - `components/_scroll-to-top.scss`
+- `components/_tables.scss`
+- `components/_tabs.scss`
 - `components/_theme-editor.scss`
+- `components/_theme-switch.scss`
 - `components/_topbar.scss`
 - `layout/_admin-layout.scss`
 - `modules/_docs.scss`
@@ -65,6 +80,101 @@
 - `molique-style-shop.scss`
 - `molique-style-speed-dial.scss`
 - `molique-style.scss`
+
+## Plik: `components/_accordion.scss`
+
+```scss
+// molique - Akordeon na natywnym <details> + interpolate-size.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   3. AKORDEON (Natywny <details>)
+   ========================================= */
+.accordion {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--bg-surface);
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--border-color);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+
+  /* MAGIA CSS 2026: Płynne otwieranie natywnego details */
+  interpolate-size: allow-keywords;
+  
+  &::details-content {
+    /* Stan zamknięty ORAZ zamykanie: overflow wraca do hidden natychmiast,
+       więc zwijana treść jest przycinana od pierwszej klatki. */
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), content-visibility 0.3s allow-discrete;
+    height: 0;
+    overflow: hidden;
+  }
+
+  &[open]::details-content {
+    height: auto;
+    /* Po rozwinięciu zdejmujemy przycinanie. Bez tego treść wyższa niż
+       wysokość policzona przez animację zostaje ucięta na stałe, a przewijalny
+       rodzic (overflow-y: auto) nie widzi, że jest co przewijać.
+       `0s 0.3s` = przełącz dopiero PO zakończeniu animacji wysokości; gdyby
+       overflow stał się widoczny od razu, treść wychodziłaby poza rosnące
+       pudełko i nachodziła na sąsiadów przez cały czas otwierania. */
+    overflow: visible;
+    transition:
+      height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      content-visibility 0.3s allow-discrete,
+      overflow 0s 0.3s allow-discrete;
+  }
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 2);
+  font-weight: var(--fw-medium);
+  color: var(--text-main);
+  cursor: pointer;
+  list-style: none; 
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: "▼";
+    font-size: 0.8rem;
+    transition: transform var(--transition-speed) ease;
+  }
+
+  &:hover {
+    background-color: var(--card-bg-subtle);
+  }
+}
+
+.accordion-item[open] .accordion-header {
+  color: var(--primary);
+  border-bottom: 1px solid var(--border-color);
+  
+  &::after {
+    transform: rotate(180deg);
+  }
+}
+
+.accordion-body {
+  padding: calc(var(--spacing-unit) * 2);
+  color: var(--text-muted);
+}
+```
 
 ## Plik: `components/_admin-nav.scss`
 
@@ -1796,6 +1906,163 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 ```
 
+## Plik: `components/_carousel.scss`
+
+```scss
+// molique - Karuzele (slidery) + warianty i kontrolki.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   6. KARUZELE (Sliders)
+   ========================================= */
+.carousel {
+  position: relative;
+  width: 100%;
+}
+
+.carousel-bg-sync {
+  position: relative;
+  min-height: 300px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.carousel-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.carousel-bg-sync .carousel-track {
+  position: relative;
+  z-index: 3;
+}
+
+.carousel-bg-sync .carousel-nav {
+  z-index: 4;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.carousel-slide {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* Przyciski nawigacyjne (Strzałki) */
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  color: var(--text-main);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+  
+  &:hover {
+    background-color: var(--primary);
+    /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
+       ciemnieć - literal #fff tracił kontrast */
+    color: var(--btn-text-light);
+    border-color: var(--primary);
+  }
+}
+
+.carousel-prev { left: -15px; }
+.carousel-next { right: -15px; }
+
+/* Kropki paginacji */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: calc(var(--spacing-unit) * 3);
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  min-height: 10px !important; /* Nadpisuje globalne 44px dla buttonów */
+  flex: 0 0 auto; /* Blokuje rozciąganie we Flexboxie */
+  border-radius: 50%;
+  background-color: var(--border-color);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  
+  /* Zwiększenie obszaru klikalnego dla mobile */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover { background-color: var(--secondary); }
+
+  &.is-active {
+    background-color: var(--primary);
+    transform: scale(1.3);
+  }
+}
+
+@include mq(sm, max) {
+  .carousel-prev { left: 5px; }
+  .carousel-next { right: 5px; }
+}
+
+/* Wariant BG-Sync: Strzałki wewnątrz, widoczne tylko na hover */
+.carousel-bg-sync {
+  .carousel-nav {
+    opacity: 0;
+    visibility: hidden;
+    /* Dodajemy lekki przesuw dla płynnego wjazdu */
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  
+  .carousel-prev { left: 20px; transform: translateY(-50%) translateX(-10px); }
+  .carousel-next { right: 20px; transform: translateY(-50%) translateX(10px); }
+
+  &:hover .carousel-nav {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+```
+
 ## Plik: `components/_chart-funnel.scss`
 
 ```scss
@@ -2364,6 +2631,44 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 ```
 
+## Plik: `components/_counters.scss`
+
+```scss
+// molique - Counters: liczniki liczbowe.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   9. COUNTERS (Liczniki)
+   ========================================= */
+.counter {
+  text-align: center;
+  padding: calc(var(--spacing-unit) * 3) 0;
+}
+
+.counter-value {
+  display: inline-block;
+  font-size: 3.5rem;
+  font-weight: var(--fw-black);
+  line-height: 1;
+  color: var(--primary);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  letter-spacing: -1px;
+}
+
+.counter-title {
+  font-size: 1.125rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+```
+
 ## Plik: `components/_dashboard.scss`
 
 ```scss
@@ -2455,235 +2760,15 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 ```
 
-## Plik: `components/_data-display.scss`
+## Plik: `components/_data-row-compact.scss`
 
 ```scss
-/**
- * molique - Wyświetlanie Danych
- * Zawiera Tabele, Data Rows, Akordeony, Zakładki (Tabs) oraz Grid Expand.
- */
+// molique - Compact Data Row: kompaktowy wariant listy z ikona i akcjami.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
 
 @use '../variables' as *;
 @use '../mixins' as *;
-
-@layer components {
-  /* =========================================
-     1. TABELE B2B (Zoptymalizowane pod dane)
-     ========================================= */
-  .table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-body);
-  }
-
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    color: var(--text-main);
-    font-size: 0.875rem; 
-    
-    /* Zmienne sterujące rozmiarem (Domyślnie MD) */
-    --table-padding-y: calc(var(--spacing-unit) * 1.5);
-    --table-padding-x: calc(var(--spacing-unit) * 2);
-    --table-font-size: 0.875rem;
-    --table-header-font-size: 0.75rem;
-  }
-
-  /* --- WARIANTY ROZMIARÓW --- */
-  
-  /* Kompaktowa (Gęste dane, np. raporty finansowe) */
-  .table-sm {
-    --table-padding-y: calc(var(--spacing-unit) * 0.75);
-    --table-padding-x: calc(var(--spacing-unit) * 1.5);
-    --table-font-size: 0.8125rem;
-    --table-header-font-size: 0.7rem;
-  }
-
-  /* Luźna (Dużo przestrzeni, np. lista użytkowników z awatarami) */
-  .table-lg {
-    --table-padding-y: calc(var(--spacing-unit) * 1.5);
-    --table-padding-x: calc(var(--spacing-unit) * 2);
-    --table-font-size: 1rem;
-    --table-header-font-size: 0.875rem;
-  }
-
-  /* --- STYLE BAZOWE KOMÓREK --- */
-  .table th, 
-  .table td {
-    padding: var(--table-padding-y) var(--table-padding-x);
-    border-bottom: 1px solid var(--border-color);
-    text-align: left;
-    vertical-align: middle;
-    font-size: var(--table-font-size);
-  }
-
-  .table th {
-    font-weight: var(--fw-bold);
-    background-color: var(--bg-surface);
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: var(--table-header-font-size);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    /* Zapobiega podwójnemu obramowaniu przy sticky header */
-    box-shadow: 0 1px 0 var(--border-color);
-    border-bottom: none;
-  }
-
-  /* --- WARIANTY NAGŁÓWKÓW (THEAD) --- */
-  
-  /* Domyślny / Jasny (Subtelne odcięcie) */
-  .thead-light th {
-    background-color: var(--card-bg-subtle);
-    color: var(--text-muted);
-    border-bottom: 2px solid var(--border-color); /* Mocniejsza linia pod nagłówkiem */
-  }
-
-  /* Ciemny (Mocny kontrast) */
-  .thead-dark th {
-    background-color: var(--dark);
-    color: var(--btn-text-light);
-    border-bottom: none;
-    /* Zmieniamy kolor cienia dla sticky header */
-    box-shadow: 0 1px 0 rgba(255,255,255,0.1);
-  }
-
-  /* Primary (Kolor marki) */
-  .thead-primary th {
-    background-color: var(--primary);
-    color: var(--btn-text-light);
-    border-bottom: none;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
-  }
-
-  /* --- WARIANTY WIELKOŚCI NAGŁÓWKÓW --- */
-  
-  /* Kompaktowy nagłówek (Mniejsze paddingi i font) */
-  .thead-sm th {
-    padding-top: calc(var(--spacing-unit) * 1);
-    padding-bottom: calc(var(--spacing-unit) * 1);
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-  }
-
-  /* Duży nagłówek (Więcej oddechu) */
-  .thead-lg th {
-    padding-top: calc(var(--spacing-unit) * 2.5);
-    padding-bottom: calc(var(--spacing-unit) * 2.5);
-    font-size: 0.875rem;
-    letter-spacing: 0;
-  }
-
-  /* --- WARIANTY WIZUALNE --- */
-  
-  /* Paski zebry (Zwiększają czytelność szerokich tabel) */
-  .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(var(--dark-rgb), 0.02);
-  }
-
-  /* Podświetlanie wiersza na hover */
-  .table-hover tbody tr {
-    transition: background-color var(--transition-speed);
-    &:hover {
-      background-color: var(--card-bg-subtle);
-    }
-  }
-
-  /* Tabele bez bocznych ramek (Czysty, nowoczesny wygląd) */
-  .table-borderless {
-    th, td { border-bottom: none; }
-    tbody tr { border-bottom: 1px solid var(--border-color); }
-    tbody tr:last-child { border-bottom: none; }
-  }
-
-  /* --- MIXIN: Transformacja tabeli w karty (Mobile-First Data) --- */
-  @mixin make-table-cards {
-    thead { display: none; }
-    tbody, tr, td { display: block; width: 100%; }
-    
-    tr { 
-      margin-bottom: calc(var(--spacing-unit) * 2); 
-      border: 1px solid var(--border-color); 
-      border-radius: var(--border-radius); 
-      background-color: var(--bg-surface);
-      /* Resetujemy tło z zebry dla kart */
-      background-color: var(--bg-surface) !important;
-    }
-    
-    td { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      text-align: right; 
-      border-bottom: 1px solid var(--border-color); 
-      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
-    }
-    
-    td:last-child { border-bottom: none; }
-    
-    td::before { 
-      content: attr(data-label); 
-      font-weight: var(--fw-bold); 
-      color: var(--text-muted); 
-      text-align: left; 
-      padding-right: calc(var(--spacing-unit) * 2); 
-    }
-  }
-
-  /* Wersja Mobilna (Automatyczna) */
-  @include mq(sm, max) {
-    .table-cards { 
-      @include make-table-cards; 
-    }
-  }
-
-  /* Wersja Wymuszona (Działa zawsze, nawet na desktopie) */
-  .table-cards-always {
-    @include make-table-cards;
-  }
-}
-
-/* =========================================
-   2. DATA ROWS (Wiersze tabeli jako karty dla CRM)
-   ========================================= */
-.data-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr auto;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 2);
-  /* Kolor powierzchni zamiast literalnego #fff - w dark mode wiersz ma
-     ciemnieć razem z kartami (w light mode bez zmiany: biel). */
-  background-color: var(--bg-surface);
-  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  margin-bottom: calc(var(--spacing-unit) * 1);
-  transition: box-shadow var(--transition-speed);
-
-  &:hover {
-    box-shadow: var(--shadow-sm);
-  }
-}
-
-@include mq(md, max) {
-  .data-row {
-    grid-template-columns: 1fr;
-    gap: calc(var(--spacing-unit) * 1);
-  }
-  .data-row-actions {
-    margin-top: calc(var(--spacing-unit) * 2);
-    padding-top: calc(var(--spacing-unit) * 2);
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacing-unit) * 1);
-  }
-}
 
 /* =========================================
    3. COMPACT DATA ROW (List Item / Wariant kompaktowy)
@@ -2762,490 +2847,53 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     gap: calc(var(--spacing-unit) * 1);
   }
 }
+```
+
+## Plik: `components/_data-rows.scss`
+
+```scss
+// molique - Data Rows: wiersze danych jako karty (grid CRM).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
 
 /* =========================================
-   3. AKORDEON (Natywny <details>)
+   2. DATA ROWS (Wiersze tabeli jako karty dla CRM)
    ========================================= */
-.accordion {
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  background-color: var(--bg-surface);
-}
-
-.accordion-item {
-  border-bottom: 1px solid var(--border-color);
-  
-  &:last-child {
-    border-bottom: none;
-  }
-
-  /* MAGIA CSS 2026: Płynne otwieranie natywnego details */
-  interpolate-size: allow-keywords;
-  
-  &::details-content {
-    /* Stan zamknięty ORAZ zamykanie: overflow wraca do hidden natychmiast,
-       więc zwijana treść jest przycinana od pierwszej klatki. */
-    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), content-visibility 0.3s allow-discrete;
-    height: 0;
-    overflow: hidden;
-  }
-
-  &[open]::details-content {
-    height: auto;
-    /* Po rozwinięciu zdejmujemy przycinanie. Bez tego treść wyższa niż
-       wysokość policzona przez animację zostaje ucięta na stałe, a przewijalny
-       rodzic (overflow-y: auto) nie widzi, że jest co przewijać.
-       `0s 0.3s` = przełącz dopiero PO zakończeniu animacji wysokości; gdyby
-       overflow stał się widoczny od razu, treść wychodziłaby poza rosnące
-       pudełko i nachodziła na sąsiadów przez cały czas otwierania. */
-    overflow: visible;
-    transition:
-      height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      content-visibility 0.3s allow-discrete,
-      overflow 0s 0.3s allow-discrete;
-  }
-}
-
-.accordion-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: calc(var(--spacing-unit) * 2);
-  font-weight: var(--fw-medium);
-  color: var(--text-main);
-  cursor: pointer;
-  list-style: none; 
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-
-  &::-webkit-details-marker {
-    display: none;
-  }
-
-  &::after {
-    content: "▼";
-    font-size: 0.8rem;
-    transition: transform var(--transition-speed) ease;
-  }
-
-  &:hover {
-    background-color: var(--card-bg-subtle);
-  }
-}
-
-.accordion-item[open] .accordion-header {
-  color: var(--primary);
-  border-bottom: 1px solid var(--border-color);
-  
-  &::after {
-    transform: rotate(180deg);
-  }
-}
-
-.accordion-body {
-  padding: calc(var(--spacing-unit) * 2);
-  color: var(--text-muted);
-}
-
-/* =========================================
-   4. ZAKŁADKI (CSS :has() + Radio Hack)
-   ========================================= */
-.tabs {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.tabs-header {
-  display: flex;
-  flex-wrap: wrap;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: calc(var(--spacing-unit) * 2);
-}
-
-.tab-input {
-  display: none; 
-}
-
-.tab-label {
-  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  color: var(--text-muted);
-  font-weight: var(--fw-medium);
-  transition: color var(--transition-speed), border-color var(--transition-speed);
-
-  &:hover {
-    color: var(--text-main);
-  }
-}
-
-.tab-pane {
-  display: none;
-  animation: fadeIn var(--transition-speed) ease;
-}
-
-/* Łączenie inputa z panelem na podstawie ID (do 10 zakładek) */
-@for $i from 1 through 10 {
-  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-content .tab-pane:nth-of-type(#{$i}) {
-    display: block;
-  }
-  
-  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-}
-
-/* =========================================
-   4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik — Zero JS)
-   ========================================= */
-.tabs-pill {
-  /* Liczba zakładek — nadpisz per instancja: style="--tab-count: 3;" */
-  --tab-count: 2;
-
-  .tabs-header {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(var(--tab-count), 1fr);
-    border-bottom: none;
-    background-color: var(--card-bg-subtle);
-    border-radius: 50rem;
-    padding: 4px;
-  }
-
-  .tab-label {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    border-bottom: none;
-    border-radius: 50rem;
-    margin-bottom: 0;
-  }
-
-  .tabs-pill-indicator {
-    position: absolute;
-    z-index: 1;
-    top: 4px;
-    left: 4px;
-    height: calc(100% - 8px);
-    width: calc((100% - 8px) / var(--tab-count));
-    background-color: var(--bg-surface);
-    border-radius: 50rem;
-    box-shadow: var(--shadow-sm);
-    /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
-       wskaźnika, która = szerokości jednej kolumny grida — stąd przesunięcie
-       o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    pointer-events: none;
-  }
-
-  /* Dopasowanie inputa (po pozycji) do wskaźnika i koloru aktywnej etykiety */
-  @for $i from 1 through 8 {
-    &:has(.tab-input:nth-of-type(#{$i}):checked) .tabs-pill-indicator {
-      transform: translateX(calc(100% * #{$i - 1}));
-    }
-
-    .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
-      color: var(--text-main);
-    }
-  }
-}
-
-/* =========================================
-   5. GRID EXPAND (Płynne rozwijanie bez JS)
-   ========================================= */
-.grid-expand {
+.data-row {
   display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  
-  & > .grid-expand-inner {
-    overflow: hidden;
-  }
-  
-  &.is-open,
-  details[open] & {
-    grid-template-rows: 1fr;
-  }
-}
-
-/* =========================================
-   6. KARUZELE (Sliders)
-   ========================================= */
-.carousel {
-  position: relative;
-  width: 100%;
-}
-
-.carousel-bg-sync {
-  position: relative;
-  min-height: 300px;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.carousel-bg-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: 2;
-}
-
-.carousel-bg-sync .carousel-track {
-  position: relative;
-  z-index: 3;
-}
-
-.carousel-bg-sync .carousel-nav {
-  z-index: 4;
-}
-
-.carousel-track {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-}
-
-.carousel-slide {
-  scroll-snap-align: start;
-  flex-shrink: 0;
-}
-
-/* Przyciski nawigacyjne (Strzałki) */
-.carousel-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 50%;
-  box-shadow: var(--shadow-md);
-  color: var(--text-main);
-  font-size: 1.25rem;
-  display: flex;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
-  
-  &:hover {
-    background-color: var(--primary);
-    /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
-       ciemnieć - literal #fff tracił kontrast */
-    color: var(--btn-text-light);
-    border-color: var(--primary);
-  }
-}
-
-.carousel-prev { left: -15px; }
-.carousel-next { right: -15px; }
-
-/* Kropki paginacji */
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: calc(var(--spacing-unit) * 3);
-}
-
-.carousel-dot {
-  width: 10px;
-  height: 10px;
-  min-height: 10px !important; /* Nadpisuje globalne 44px dla buttonów */
-  flex: 0 0 auto; /* Blokuje rozciąganie we Flexboxie */
-  border-radius: 50%;
-  background-color: var(--border-color);
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  position: relative;
-  transition: background-color var(--transition-speed), transform var(--transition-speed);
-  
-  /* Zwiększenie obszaru klikalnego dla mobile */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 24px;
-    height: 24px;
-    transform: translate(-50%, -50%);
-  }
-
-  &:hover { background-color: var(--secondary); }
-
-  &.is-active {
-    background-color: var(--primary);
-    transform: scale(1.3);
-  }
-}
-
-@include mq(sm, max) {
-  .carousel-prev { left: 5px; }
-  .carousel-next { right: 5px; }
-}
-
-/* Wariant BG-Sync: Strzałki wewnątrz, widoczne tylko na hover */
-.carousel-bg-sync {
-  .carousel-nav {
-    opacity: 0;
-    visibility: hidden;
-    /* Dodajemy lekki przesuw dla płynnego wjazdu */
-    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  
-  .carousel-prev { left: 20px; transform: translateY(-50%) translateX(-10px); }
-  .carousel-next { right: 20px; transform: translateY(-50%) translateX(10px); }
-
-  &:hover .carousel-nav {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(-50%) translateX(0);
-  }
-}
-
-/* =========================================
-   7. LIST GROUPS (Grupy list)
-   ========================================= */
-.list-group {
-  display: flex;
-  flex-direction: column;
-  padding-left: 0;
-  margin-bottom: calc(var(--spacing-unit) * 2);
-}
-
-.list-group-item {
-  position: relative;
-  display: block;
-  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
-  color: var(--text-main);
-  background-color: var(--bg-body);
+  gap: calc(var(--spacing-unit) * 2);
+  /* Kolor powierzchni zamiast literalnego #fff - w dark mode wiersz ma
+     ciemnieć razem z kartami (w light mode bez zmiany: biel). */
+  background-color: var(--bg-surface);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
   border: 1px solid var(--border-color);
-  margin-bottom: -1px;
-  text-decoration: none;
-  transition: background-color var(--transition-speed), z-index 0s;
-}
-
-.list-group-item:first-child {
-  border-top-left-radius: var(--border-radius);
-  border-top-right-radius: var(--border-radius);
-}
-
-.list-group-item:last-child {
-  border-bottom-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-  margin-bottom: 0;
-}
-
-.list-group-item.is-active {
-  z-index: 2;
-  /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
-     primary jaśnieje, literal #fff tracił kontrast) */
-  color: var(--btn-text-light);
-  background-color: var(--primary);
-  border-color: var(--primary);
-}
-
-a.list-group-item:hover, button.list-group-item:hover {
-  background-color: var(--card-bg-subtle);
-  z-index: 1;
-}
-
-/* =========================================
-   8. LIST ICONS (Listy z ikonami)
-   ========================================= */
-.list-unstyled {
-  padding-left: 0;
-  list-style: none;
-}
-
-.list-icons {
-  padding-left: 0;
-  list-style: none;
-}
-
-.list-icons li {
-  position: relative;
-  padding-left: calc(var(--spacing-unit) * 3.5);
-  margin-bottom: calc(var(--spacing-unit) * 1.5);
-}
-
-.list-icons li:last-child { margin-bottom: 0; }
-
-.list-icons li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 4px;
-  width: 18px;
-  height: 18px;
-  background-color: var(--primary);
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-}
-
-.list-icons-check li::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
-  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
-}
-
-.list-icons-arrow li::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 10h10M11 5l4 5-4 5'/%3e%3c/svg%3e");
-  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 10h10M11 5l4 5-4 5'/%3e%3c/svg%3e");
-}
-
-.list-icons-cross li::before {
-  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 6l8 8M14 6l-8 8'/%3e%3c/svg%3e");
-  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 6l8 8M14 6l-8 8'/%3e%3c/svg%3e");
-}
-
-.list-icons-success li::before { background-color: var(--success); }
-.list-icons-danger li::before { background-color: var(--danger); }
-.list-icons-dark li::before { background-color: var(--dark); }
-
-/* =========================================
-   9. COUNTERS (Liczniki)
-   ========================================= */
-.counter {
-  text-align: center;
-  padding: calc(var(--spacing-unit) * 3) 0;
-}
-
-.counter-value {
-  display: inline-block;
-  font-size: 3.5rem;
-  font-weight: var(--fw-black);
-  line-height: 1;
-  color: var(--primary);
+  border-radius: var(--border-radius);
   margin-bottom: calc(var(--spacing-unit) * 1);
-  letter-spacing: -1px;
+  transition: box-shadow var(--transition-speed);
+
+  &:hover {
+    box-shadow: var(--shadow-sm);
+  }
 }
 
-.counter-title {
-  font-size: 1.125rem;
-  font-weight: var(--fw-bold);
-  color: var(--text-main);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+@include mq(md, max) {
+  .data-row {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+  .data-row-actions {
+    margin-top: calc(var(--spacing-unit) * 2);
+    padding-top: calc(var(--spacing-unit) * 2);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1);
+  }
 }
 ```
 
@@ -3844,9 +3492,158 @@ a.list-group-item:hover, button.list-group-item:hover {
 }
 ```
 
-## Plik: `components/_form-advanced.scss`
+## Plik: `components/_form-base.scss`
 
 ```scss
+@layer components {
+  /* =========================================
+     1. BAZOWY INPUT & SELECT
+     ========================================= */
+  .input {
+    --input-border-width: 1px;
+    --input-padding-y: calc(var(--spacing-unit) * 1.25);
+    display: block;
+    width: 100%;
+    padding: var(--input-padding-y) calc(var(--spacing-unit) * 2);
+    font-family: var(--font-family-base);
+    font-weight: var(--fw-medium);
+    line-height: 1.5;
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    background-clip: padding-box;
+    border: var(--input-border-width) solid var(--border-color);
+    border-radius: var(--border-radius);
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+
+     /* --- WARIANTY WIELKOŚCI ---
+        Działają na każdym elemencie noszącym klasę .input: input, select i textarea.
+        Sam .input (bez modyfikatora) to wariant środkowy ("md"). */
+
+    /* Kompaktowy (Idealny do tabel, popoverów i małych widgetów) */
+    &.input-sm {
+      --input-padding-y: calc(var(--spacing-unit) * 0.75);
+      padding: var(--input-padding-y) calc(var(--spacing-unit) * 1.5);
+      font-size: 0.8125rem; /* Mniejszy font */
+      border-radius: calc(var(--border-radius) * 0.8);
+      /* Nadpisujemy globalne 44px dla mobile, jeśli używamy input-sm */
+      min-height: 32px !important;
+    }
+
+    /* Duży (Idealny do wyszukiwarek Hero i głównych formularzy) */
+    &.input-lg {
+      --input-padding-y: calc(var(--spacing-unit) * 1.5);
+      padding: var(--input-padding-y) calc(var(--spacing-unit) * 2.5);
+      font-size: 1.125rem; /* Większy font */
+      border-radius: calc(var(--border-radius) * 1.2);
+      min-height: 56px !important;
+    }
+
+
+    &:focus {
+      border-color: var(--primary);
+      outline: 0;
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+    }
+
+    &::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    &:disabled, &[readonly] {
+      background-color: var(--bg-body);
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  /* Customowa strzałka dla Selecta */
+  select.input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right calc(var(--spacing-unit) * 1.5) center;
+    background-size: 16px 12px;
+    padding-right: calc(var(--spacing-unit) * 4);
+    cursor: pointer;
+
+    /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) —
+       tu przywracamy miejsce po prawej na strzałkę, żeby jej nie zasłaniać. */
+    &.input-sm { padding-right: calc(var(--spacing-unit) * 3); }
+    &.input-lg { padding-right: calc(var(--spacing-unit) * 5); }
+  }
+
+  /* =========================================
+     2. NATYWNA WALIDACJA (Bez JS)
+     ========================================= */
+  .input:user-valid {
+    border-color: var(--success);
+    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--success-rgb), 0.15); }
+  }
+
+  .input:user-invalid {
+    border-color: var(--danger);
+    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--danger-rgb), 0.15); }
+  }
+
+  .feedback-invalid {
+    display: none;
+    width: 100%;
+    margin-top: calc(var(--spacing-unit) * 0.5);
+    font-size: 0.875em;
+    color: var(--danger);
+  }
+
+  .input:user-invalid ~ .feedback-invalid {
+    display: block;
+    animation: fadeIn var(--transition-speed) ease;
+  }
+
+  /* =========================================
+     3. TEXTAREA: TRYB "JEDNA LINIJKA" (Auto-Expand, Zero JS)
+     ========================================= */
+  .textarea-expandable {
+    /* Do ilu wierszy pole ma się rozwinąć — nadpisywalne per instancja:
+       style="--textarea-rows-expanded: 10;" */
+    --textarea-rows-expanded: 6;
+
+    resize: none;
+    overflow-y: hidden;
+    /* Zmiana wysokości to reflow, więc zgodnie ze Złotą Zasadą GPU
+       (animujemy tylko transform/opacity) — przełącznik jest natychmiastowy. */
+    transition: none;
+    height: calc(1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+
+    /* Rozwinięte: pole aktywne LUB posiadające treść — dzięki :not(:placeholder-shown)
+       tekst nie znika z powrotem do jednej linijki po samej utracie fokusu.
+       WYMAGA atrybutu placeholder (choćby placeholder=" ") na <textarea>. */
+    &:focus,
+    &:not(:placeholder-shown) {
+      height: calc(var(--textarea-rows-expanded) * 1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+      overflow-y: auto;
+    }
+
+    /* Fallback: przeglądarki bez wsparcia jednostki `lh` (np. starsze Safari) */
+    @supports not (height: 1lh) {
+      height: calc(1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
+
+      &:focus,
+      &:not(:placeholder-shown) {
+        height: calc(var(--textarea-rows-expanded) * 1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
+      }
+    }
+  }
+}
+```
+
+## Plik: `components/_form-check.scss`
+
+```scss
+// molique - Checkboxy i radio (custom appearance).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
 @layer components {
   /* =========================================
      1. CHECKBOXY I RADIO
@@ -3900,83 +3697,240 @@ a.list-group-item:hover, button.list-group-item:hover {
     margin: 0;
     line-height: 1.25rem; 
   }
+}
+```
 
+## Plik: `components/_form-file-upload.scss`
+
+```scss
+// molique - Custom file upload (z wariantem animowanym).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
   /* =========================================
-     1.5. PRZEŁĄCZNIKI (Switche iOS Style)
+     3. CUSTOM FILE UPLOAD
      ========================================= */
-  .form-switch {
-    display: inline-flex;
+  .file-upload {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: calc(var(--spacing-unit) * 1.5);
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 4);
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-surface);
+    transition: all var(--transition-speed);
+    text-align: center;
     cursor: pointer;
+
+    &:hover, &:focus-within {
+      border-color: var(--primary);
+      background-color: rgba(var(--primary-rgb), 0.03);
+    }
+
+    input[type="file"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .file-upload-icon {
+      font-size: 2rem;
+      color: var(--text-muted);
+      margin-bottom: calc(var(--spacing-unit) * 1);
+      transition: color var(--transition-speed), transform var(--transition-speed);
+    }
+
+    &:hover .file-upload-icon {
+      color: var(--primary);
+      transform: translateY(-5px);
+    }
   }
 
-  .form-switch-input {
-    appearance: none;
-    width: 44px;
-    height: 24px;
-    background-color: var(--border-color);
-    border-radius: 50px;
-    position: relative;
-    cursor: pointer;
-    transition: background-color var(--transition-speed);
-    margin: 0;
+  .file-upload-animated {
+    border: none; 
+    background-image: 
+      linear-gradient(to right, var(--border-color) 50%, transparent 50%),
+      linear-gradient(to bottom, var(--border-color) 50%, transparent 50%),
+      linear-gradient(to left, var(--border-color) 50%, transparent 50%),
+      linear-gradient(to top, var(--border-color) 50%, transparent 50%);
+    background-size: 16px 2px, 2px 16px, 16px 2px, 2px 16px;
+    background-position: 0 0, 100% 0, 0 100%, 0 0;
+    background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+    
+    &:hover, &:focus-within {
+      background-color: rgba(var(--primary-rgb), 0.03);
+      background-image: 
+        linear-gradient(to right, var(--primary) 50%, transparent 50%),
+        linear-gradient(to bottom, var(--primary) 50%, transparent 50%),
+        linear-gradient(to left, var(--primary) 50%, transparent 50%),
+        linear-gradient(to top, var(--primary) 50%, transparent 50%);
+      animation: marchingAnts 0.6s linear infinite;
+    }
+
+    /* UWAGA: input[type="file"] celowo POZA tą listą — musi zachować
+       position: absolute z bazowego .file-upload (niewidoczny overlay
+       na całej karcie, z-index: 2 ma już z bazy). Nadpisanie na relative
+       wprowadzało go do układu i spychało zawartość karty w dół. */
+    .file-upload-icon, h4, p, .file-upload-name {
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  @keyframes marchingAnts {
+    0% { background-position: 0 0, 100% 0, 0 100%, 0 0; }
+    100% { background-position: 16px 0, 100% 16px, -16px 100%, 0 -16px; }
+  }
+}
+```
+
+## Plik: `components/_form-groups.scss`
+
+```scss
+@layer components {
+  /* =========================================
+     1. INPUT GROUPS (Zgrupowane pola i przyciski)
+     ========================================= */
+  .input-group {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    border-radius: var(--border-radius);
+    transition: box-shadow var(--transition-speed);
+
+    /* Focus na całej grupie */
+    &:focus-within {
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+      
+      > .input, > .btn, > .input-group-text {
+        border-color: var(--primary) !important;
+      }
+    }
+
+    /* 1. BAZA: Wszystkie elementy w grupie */
+    > .input, 
+    > .btn, 
+    > .input-group-text {
+      position: relative;
+      margin-bottom: 0;
+      /* ŁOPATOLOGICZNIE: Zabijamy wszystkie rogi każdemu elementowi */
+      border-radius: 0 !important; 
+      
+      /* Wyłączamy indywidualny focus i walidację */
+      &:focus, &:user-valid, &:user-invalid {
+        box-shadow: none !important;
+        border-color: var(--border-color) !important;
+        z-index: 3;
+      }
+    }
+
+    /* 2. NAKŁADANIE RAMEK: Każdy element (oprócz pierwszego) wsuwa się pod poprzednika */
+    > .input + .input,
+    > .input + .btn,
+    > .input + .input-group-text,
+    > .btn + .input,
+    > .btn + .btn,
+    > .btn + .input-group-text,
+    > .input-group-text + .input,
+    > .input-group-text + .btn,
+    > .input-group-text + .input-group-text {
+      margin-left: -1px;
+    }
+
+    /* 3. ODZYSKIWANIE ROGÓW: Tylko skrajne elementy */
+    > :first-child {
+      border-top-left-radius: var(--border-radius) !important;
+      border-bottom-left-radius: var(--border-radius) !important;
+    }
+
+    > :last-child {
+      border-top-right-radius: var(--border-radius) !important;
+      border-bottom-right-radius: var(--border-radius) !important;
+    }
+
+    /* 4. SPECYFIKA ELEMENTÓW */
+    > .input {
+      flex: 1 1 auto;
+      width: 1%;
+      min-width: 0;
+    }
+
+    > .btn {
+      z-index: 2;
+      border: 1px solid var(--border-color);
+      
+      &:hover { 
+        z-index: 3; 
+        background-color: var(--card-bg-subtle);
+      }
+    }
+  }
+
+  .input-group-text {
+    --input-border-width: 1px;
     display: flex;
     align-items: center;
-
-    &::after {
-      content: '';
-      position: absolute;
-      left: 2px;
-      width: 20px;
-      height: 20px;
-      background-color: #fff;
-      border-radius: 50%;
-      transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: var(--shadow-sm);
-    }
-
-    &:checked {
-      background-color: var(--success);
-      &::after {
-        transform: translateX(20px);
-      }
-    }
-  }
-
-  .form-switch-label {
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
     font-weight: var(--fw-medium);
-    color: var(--text-main);
-    user-select: none;
+    color: var(--text-muted);
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--card-bg-subtle);
+    border: var(--input-border-width) solid var(--border-color);
+    min-height: var(--target-size-min); 
+    transition: border-color var(--transition-speed);
   }
 
-  .form-switch-square .form-switch-input {
-    border-radius: var(--border-radius);
-    &::after { border-radius: calc(var(--border-radius) - 2px); }
-  }
+  /* =========================================
+     2. FLOATING LABELS
+     ========================================= */
+  .form-floating {
+    position: relative;
+    margin-bottom: calc(var(--spacing-unit) * 2);
 
-  .form-switch-outline .form-switch-input {
-    background-color: transparent;
-    border: 2px solid var(--border-color);
-    
-    &::after {
-      background-color: var(--border-color);
-      box-shadow: none;
-      width: 16px;
-      height: 16px;
-      left: 2px; 
+    label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      padding: 1rem 0.75rem;
+      pointer-events: none;
+      transform-origin: 0 0;
+      transition: opacity var(--transition-speed), transform var(--transition-speed);
+      color: var(--text-muted);
     }
-    
-    &:checked {
-      background-color: transparent;
-      border-color: var(--success);
-      &::after {
-        background-color: var(--success);
-        transform: translateX(20px);
-      }
+
+    .input:focus ~ label,
+    .input:not(:placeholder-shown) ~ label {
+      opacity: 0.8;
+      transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
+    }
+
+    .input {
+      padding-top: 1.625rem;
+      padding-bottom: 0.625rem;
     }
   }
+}
+```
 
+## Plik: `components/_form-input-range.scss`
+
+```scss
+// molique - Specyficzne inputy: range, date, color, number.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
   /* =========================================
      2. SPECYFICZNE INPUTY (Range, Date, Color)
      ========================================= */
@@ -4068,202 +4022,18 @@ a.list-group-item:hover, button.list-group-item:hover {
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
     }
   }
+}
+```
 
-  /* =========================================
-     3. CUSTOM FILE UPLOAD
-     ========================================= */
-  .file-upload {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: calc(var(--spacing-unit) * 4);
-    border: 2px dashed var(--border-color);
-    border-radius: var(--border-radius);
-    background-color: var(--bg-surface);
-    transition: all var(--transition-speed);
-    text-align: center;
-    cursor: pointer;
+## Plik: `components/_form-select-custom.scss`
 
-    &:hover, &:focus-within {
-      border-color: var(--primary);
-      background-color: rgba(var(--primary-rgb), 0.03);
-    }
+```scss
+// molique - Premium Multi Select (kategorie + wielokrotny wybor).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
 
-    input[type="file"] {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-      z-index: 2;
-    }
-
-    .file-upload-icon {
-      font-size: 2rem;
-      color: var(--text-muted);
-      margin-bottom: calc(var(--spacing-unit) * 1);
-      transition: color var(--transition-speed), transform var(--transition-speed);
-    }
-
-    &:hover .file-upload-icon {
-      color: var(--primary);
-      transform: translateY(-5px);
-    }
-  }
-
-  .file-upload-animated {
-    border: none; 
-    background-image: 
-      linear-gradient(to right, var(--border-color) 50%, transparent 50%),
-      linear-gradient(to bottom, var(--border-color) 50%, transparent 50%),
-      linear-gradient(to left, var(--border-color) 50%, transparent 50%),
-      linear-gradient(to top, var(--border-color) 50%, transparent 50%);
-    background-size: 16px 2px, 2px 16px, 16px 2px, 2px 16px;
-    background-position: 0 0, 100% 0, 0 100%, 0 0;
-    background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
-    
-    &:hover, &:focus-within {
-      background-color: rgba(var(--primary-rgb), 0.03);
-      background-image: 
-        linear-gradient(to right, var(--primary) 50%, transparent 50%),
-        linear-gradient(to bottom, var(--primary) 50%, transparent 50%),
-        linear-gradient(to left, var(--primary) 50%, transparent 50%),
-        linear-gradient(to top, var(--primary) 50%, transparent 50%);
-      animation: marchingAnts 0.6s linear infinite;
-    }
-
-    /* UWAGA: input[type="file"] celowo POZA tą listą — musi zachować
-       position: absolute z bazowego .file-upload (niewidoczny overlay
-       na całej karcie, z-index: 2 ma już z bazy). Nadpisanie na relative
-       wprowadzało go do układu i spychało zawartość karty w dół. */
-    .file-upload-icon, h4, p, .file-upload-name {
-      position: relative;
-      z-index: 2;
-    }
-  }
-
-  @keyframes marchingAnts {
-    0% { background-position: 0 0, 100% 0, 0 100%, 0 0; }
-    100% { background-position: 16px 0, 100% 16px, -16px 100%, 0 -16px; }
-  }
-
-  /* =========================================
-     4. SEARCHABLE SELECT (Combobox)
-     ========================================= */
-  .select-search {
-    position: relative;
-    width: 100%;
-    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
-       żeby wiele .select-search na jednej stronie nie "podpinało się" nawzajem. */
-    anchor-scope: --select-search-trigger;
-
-    /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
-       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
-       na elemencie nadrzędnym. */
-    &:has(.select-search-menu:popover-open) .select-search-trigger {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-      &::after { transform: rotate(180deg); }
-    }
-  }
-
-  .select-search-trigger {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    text-align: left;
-    /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
-       fontu automatycznie. */
-    font: inherit;
-    cursor: pointer;
-    user-select: none;
-    background-color: var(--bg-surface);
-    /* Punkt zaczepienia dla .select-search-menu (CSS Anchor Positioning) */
-    anchor-name: --select-search-trigger;
-
-    &::after {
-      content: "▼";
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      transition: transform var(--transition-speed);
-    }
-  }
-
-  .select-search-menu {
-    /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki —
-       dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
-       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
-       na Esc i klik poza menu obsługuje natywnie light dismiss. */
-    position: absolute;
-    position-anchor: --select-search-trigger;
-    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
-    inset: auto;
-    top: anchor(bottom);
-    left: anchor(left);
-    width: anchor-size(width);
-    margin: 4px 0 0 0;
-    max-height: 300px;
-    padding: calc(var(--spacing-unit) * 1);
-    color: var(--text-main);
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-    /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
-       moment otwarcia, nie z-index. */
-    z-index: var(--z-index-dropdown);
-
-    &:popover-open {
-      display: flex;
-      flex-direction: column;
-      animation: fadeInDown 0.2s ease;
-    }
-
-    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-       menu otwiera się jako wyśrodkowany panel — nadal w top layer, więc
-       nic go nie przycina. */
-    @supports not (top: anchor(bottom)) {
-      position: fixed;
-      inset: 0;
-      margin: auto;
-      width: min(400px, calc(100vw - 2rem));
-      height: fit-content;
-    }
-  }
-
-  .select-search-input {
-    margin-bottom: calc(var(--spacing-unit) * 1);
-    min-height: 36px !important; 
-    padding: 0.5rem 0.75rem;
-  }
-
-  .select-search-list {
-    overflow-y: auto;
-    flex: 1;
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-  }
-
-  .select-search-option {
-    cursor: pointer;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    border-radius: calc(var(--border-radius) / 2);
-    transition: background-color var(--transition-speed);
-    
-    &:hover { background-color: var(--card-bg-subtle); }
-    &.is-hidden { display: none !important; }
-    &.is-selected {
-      background-color: rgba(var(--primary-rgb), 0.1);
-      color: var(--primary);
-      font-weight: var(--fw-bold);
-    }
-  }
-
+@layer components {
   /* =========================================
      5. PREMIUM MULTI SELECT (Wzorowany na UI)
      ========================================= */
@@ -4468,385 +4238,246 @@ a.list-group-item:hover, button.list-group-item:hover {
       }
     }
   }
+}
+```
+
+## Plik: `components/_form-select-search.scss`
+
+```scss
+// molique - Searchable Select (combobox na Popover API).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
   /* =========================================
-     THEME SWITCH (Light / Dark Mode Toggle)
+     4. SEARCHABLE SELECT (Combobox)
      ========================================= */
-  .theme-switch {
-    display: inline-flex;
+  .select-search {
+    position: relative;
+    width: 100%;
+    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
+       żeby wiele .select-search na jednej stronie nie "podpinało się" nawzajem. */
+    anchor-scope: --select-search-trigger;
+
+    /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
+       na elemencie nadrzędnym. */
+    &:has(.select-search-menu:popover-open) .select-search-trigger {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+      &::after { transform: rotate(180deg); }
+    }
+  }
+
+  .select-search-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+       fontu automatycznie. */
+    font: inherit;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    background-color: var(--bg-surface);
+    /* Punkt zaczepienia dla .select-search-menu (CSS Anchor Positioning) */
+    anchor-name: --select-search-trigger;
+
+    &::after {
+      content: "▼";
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      transition: transform var(--transition-speed);
+    }
+  }
+
+  .select-search-menu {
+    /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki —
+       dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
+       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
+       na Esc i klik poza menu obsługuje natywnie light dismiss. */
+    position: absolute;
+    position-anchor: --select-search-trigger;
+    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(left);
+    width: anchor-size(width);
+    margin: 4px 0 0 0;
+    max-height: 300px;
+    padding: calc(var(--spacing-unit) * 1);
+    color: var(--text-main);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+       moment otwarcia, nie z-index. */
+    z-index: var(--z-index-dropdown);
+
+    &:popover-open {
+      display: flex;
+      flex-direction: column;
+      animation: fadeInDown 0.2s ease;
+    }
+
+    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
+       menu otwiera się jako wyśrodkowany panel — nadal w top layer, więc
+       nic go nie przycina. */
+    @supports not (top: anchor(bottom)) {
+      position: fixed;
+      inset: 0;
+      margin: auto;
+      width: min(400px, calc(100vw - 2rem));
+      height: fit-content;
+    }
+  }
+
+  .select-search-input {
+    margin-bottom: calc(var(--spacing-unit) * 1);
+    min-height: 36px !important; 
+    padding: 0.5rem 0.75rem;
+  }
+
+  .select-search-list {
+    overflow-y: auto;
+    flex: 1;
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+  }
+
+  .select-search-option {
+    cursor: pointer;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    border-radius: calc(var(--border-radius) / 2);
+    transition: background-color var(--transition-speed);
+    
+    &:hover { background-color: var(--card-bg-subtle); }
+    &.is-hidden { display: none !important; }
+    &.is-selected {
+      background-color: rgba(var(--primary-rgb), 0.1);
+      color: var(--primary);
+      font-weight: var(--fw-bold);
+    }
+  }
+}
+```
+
+## Plik: `components/_form-switch.scss`
+
+```scss
+// molique - Przelaczniki (switche) + warianty square/outline.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
+  /* =========================================
+     1.5. PRZEŁĄCZNIKI (Switche iOS Style)
+     ========================================= */
+  .form-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.5);
+    cursor: pointer;
+  }
+
+  .form-switch-input {
+    appearance: none;
+    width: 44px;
+    height: 24px;
+    background-color: var(--border-color);
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+    margin: 0;
+    display: flex;
+    align-items: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    &:checked {
+      background-color: var(--success);
+      &::after {
+        transform: translateX(20px);
+      }
+    }
+  }
+
+  .form-switch-label {
+    font-weight: var(--fw-medium);
+    color: var(--text-main);
     user-select: none;
   }
 
-  .theme-switch-input {
-    display: none;
+  .form-switch-square .form-switch-input {
+    border-radius: var(--border-radius);
+    &::after { border-radius: calc(var(--border-radius) - 2px); }
   }
 
-  .theme-switch-track {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 64px;
-    height: 32px;
-    padding: 4px;
-    background-color: var(--card-bg-subtle);
-    border: 1px solid var(--border-color);
-    border-radius: 50px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
-  }
-
-  /* Pływająca pastylka (Tło pod aktywną ikoną) */
-  .theme-switch-thumb {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 24px;
-    height: 24px;
-    background-color: var(--bg-surface);
-    border-radius: 50%;
-    box-shadow: var(--shadow-sm), 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 1;
-  }
-
-  .theme-icon-wrapper {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-  }
-
-
-  /* Ikony Słońca i Księżyca */
-  .theme-icon {
-    width: 14px;
-    height: 14px;
-    color: var(--text-muted);
-    transition: color 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-
-    &.icon-sun {
-      margin-right: 4px !important;
+  .form-switch-outline .form-switch-input {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    
+    &::after {
+      background-color: var(--border-color);
+      box-shadow: none;
+      width: 16px;
+      height: 16px;
+      left: 2px; 
     }
     
-    &.icon-moon {
-      margin-left: 4px !important;
-    }
-  }
-
-  /* --- STAN: LIGHT MODE (Domyślny) --- */
-  .theme-switch-input:not(:checked) + .theme-switch-track {
-    .icon-sun {
-      color: var(--warning); /* Słońce świeci na żółto/pomarańczowo */
-      transform: rotate(0deg) scale(1.1);
-      opacity: 1;
-    }
-    .icon-moon {
-      transform: rotate(-30deg) scale(0.85);
-      opacity: 0.4;
-    }
-  }
-
-  /* --- STAN: DARK MODE (Zaznaczony) --- */
-  .theme-switch-input:checked + .theme-switch-track {
-    /* Opcjonalnie: zmiana tła całego przełącznika w dark mode */
-    background-color: rgba(var(--primary-rgb), 0.1);
-    border-color: rgba(var(--primary-rgb), 0.2);
-
-    .theme-switch-thumb {
-      transform: translateX(32px); /* Przesunięcie pastylki na prawą stronę */
-    }
-
-    .icon-sun {
-      transform: rotate(90deg) scale(0.85);
-      opacity: 0.4;
-    }
-    .icon-moon {
-      color: var(--primary); /* Księżyc świeci w kolorze głównym marki */
-      transform: rotate(0deg) scale(1.1);
-      opacity: 1;
-    }
-  }
-
-  /* Focus Ring dla dostępności (A11y) */
-  .theme-switch-input:focus-visible + .theme-switch-track {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: 2px;
-  }
-}
-```
-
-## Plik: `components/_form-base.scss`
-
-```scss
-@layer components {
-  /* =========================================
-     1. BAZOWY INPUT & SELECT
-     ========================================= */
-  .input {
-    --input-border-width: 1px;
-    --input-padding-y: calc(var(--spacing-unit) * 1.25);
-    display: block;
-    width: 100%;
-    padding: var(--input-padding-y) calc(var(--spacing-unit) * 2);
-    font-family: var(--font-family-base);
-    font-weight: var(--fw-medium);
-    line-height: 1.5;
-    color: var(--text-main);
-    background-color: var(--bg-surface);
-    background-clip: padding-box;
-    border: var(--input-border-width) solid var(--border-color);
-    border-radius: var(--border-radius);
-    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-
-     /* --- WARIANTY WIELKOŚCI ---
-        Działają na każdym elemencie noszącym klasę .input: input, select i textarea.
-        Sam .input (bez modyfikatora) to wariant środkowy ("md"). */
-
-    /* Kompaktowy (Idealny do tabel, popoverów i małych widgetów) */
-    &.input-sm {
-      --input-padding-y: calc(var(--spacing-unit) * 0.75);
-      padding: var(--input-padding-y) calc(var(--spacing-unit) * 1.5);
-      font-size: 0.8125rem; /* Mniejszy font */
-      border-radius: calc(var(--border-radius) * 0.8);
-      /* Nadpisujemy globalne 44px dla mobile, jeśli używamy input-sm */
-      min-height: 32px !important;
-    }
-
-    /* Duży (Idealny do wyszukiwarek Hero i głównych formularzy) */
-    &.input-lg {
-      --input-padding-y: calc(var(--spacing-unit) * 1.5);
-      padding: var(--input-padding-y) calc(var(--spacing-unit) * 2.5);
-      font-size: 1.125rem; /* Większy font */
-      border-radius: calc(var(--border-radius) * 1.2);
-      min-height: 56px !important;
-    }
-
-
-    &:focus {
-      border-color: var(--primary);
-      outline: 0;
-      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-    }
-
-    &::placeholder {
-      color: var(--text-muted);
-      opacity: 0.6;
-    }
-
-    &:disabled, &[readonly] {
-      background-color: var(--bg-body);
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-  }
-
-  /* Customowa strzałka dla Selecta */
-  select.input {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right calc(var(--spacing-unit) * 1.5) center;
-    background-size: 16px 12px;
-    padding-right: calc(var(--spacing-unit) * 4);
-    cursor: pointer;
-
-    /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) —
-       tu przywracamy miejsce po prawej na strzałkę, żeby jej nie zasłaniać. */
-    &.input-sm { padding-right: calc(var(--spacing-unit) * 3); }
-    &.input-lg { padding-right: calc(var(--spacing-unit) * 5); }
-  }
-
-  /* =========================================
-     2. NATYWNA WALIDACJA (Bez JS)
-     ========================================= */
-  .input:user-valid {
-    border-color: var(--success);
-    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--success-rgb), 0.15); }
-  }
-
-  .input:user-invalid {
-    border-color: var(--danger);
-    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--danger-rgb), 0.15); }
-  }
-
-  .feedback-invalid {
-    display: none;
-    width: 100%;
-    margin-top: calc(var(--spacing-unit) * 0.5);
-    font-size: 0.875em;
-    color: var(--danger);
-  }
-
-  .input:user-invalid ~ .feedback-invalid {
-    display: block;
-    animation: fadeIn var(--transition-speed) ease;
-  }
-
-  /* =========================================
-     3. TEXTAREA: TRYB "JEDNA LINIJKA" (Auto-Expand, Zero JS)
-     ========================================= */
-  .textarea-expandable {
-    /* Do ilu wierszy pole ma się rozwinąć — nadpisywalne per instancja:
-       style="--textarea-rows-expanded: 10;" */
-    --textarea-rows-expanded: 6;
-
-    resize: none;
-    overflow-y: hidden;
-    /* Zmiana wysokości to reflow, więc zgodnie ze Złotą Zasadą GPU
-       (animujemy tylko transform/opacity) — przełącznik jest natychmiastowy. */
-    transition: none;
-    height: calc(1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
-
-    /* Rozwinięte: pole aktywne LUB posiadające treść — dzięki :not(:placeholder-shown)
-       tekst nie znika z powrotem do jednej linijki po samej utracie fokusu.
-       WYMAGA atrybutu placeholder (choćby placeholder=" ") na <textarea>. */
-    &:focus,
-    &:not(:placeholder-shown) {
-      height: calc(var(--textarea-rows-expanded) * 1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
-      overflow-y: auto;
-    }
-
-    /* Fallback: przeglądarki bez wsparcia jednostki `lh` (np. starsze Safari) */
-    @supports not (height: 1lh) {
-      height: calc(1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
-
-      &:focus,
-      &:not(:placeholder-shown) {
-        height: calc(var(--textarea-rows-expanded) * 1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
+    &:checked {
+      background-color: transparent;
+      border-color: var(--success);
+      &::after {
+        background-color: var(--success);
+        transform: translateX(20px);
       }
     }
   }
 }
 ```
 
-## Plik: `components/_form-groups.scss`
+## Plik: `components/_grid-expand.scss`
 
 ```scss
-@layer components {
-  /* =========================================
-     1. INPUT GROUPS (Zgrupowane pola i przyciski)
-     ========================================= */
-  .input-group {
-    display: flex;
-    align-items: stretch;
-    width: 100%;
-    border-radius: var(--border-radius);
-    transition: box-shadow var(--transition-speed);
+// molique - Grid Expand: plynne rozwijanie bez JS.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
 
-    /* Focus na całej grupie */
-    &:focus-within {
-      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-      
-      > .input, > .btn, > .input-group-text {
-        border-color: var(--primary) !important;
-      }
-    }
+@use '../variables' as *;
+@use '../mixins' as *;
 
-    /* 1. BAZA: Wszystkie elementy w grupie */
-    > .input, 
-    > .btn, 
-    > .input-group-text {
-      position: relative;
-      margin-bottom: 0;
-      /* ŁOPATOLOGICZNIE: Zabijamy wszystkie rogi każdemu elementowi */
-      border-radius: 0 !important; 
-      
-      /* Wyłączamy indywidualny focus i walidację */
-      &:focus, &:user-valid, &:user-invalid {
-        box-shadow: none !important;
-        border-color: var(--border-color) !important;
-        z-index: 3;
-      }
-    }
-
-    /* 2. NAKŁADANIE RAMEK: Każdy element (oprócz pierwszego) wsuwa się pod poprzednika */
-    > .input + .input,
-    > .input + .btn,
-    > .input + .input-group-text,
-    > .btn + .input,
-    > .btn + .btn,
-    > .btn + .input-group-text,
-    > .input-group-text + .input,
-    > .input-group-text + .btn,
-    > .input-group-text + .input-group-text {
-      margin-left: -1px;
-    }
-
-    /* 3. ODZYSKIWANIE ROGÓW: Tylko skrajne elementy */
-    > :first-child {
-      border-top-left-radius: var(--border-radius) !important;
-      border-bottom-left-radius: var(--border-radius) !important;
-    }
-
-    > :last-child {
-      border-top-right-radius: var(--border-radius) !important;
-      border-bottom-right-radius: var(--border-radius) !important;
-    }
-
-    /* 4. SPECYFIKA ELEMENTÓW */
-    > .input {
-      flex: 1 1 auto;
-      width: 1%;
-      min-width: 0;
-    }
-
-    > .btn {
-      z-index: 2;
-      border: 1px solid var(--border-color);
-      
-      &:hover { 
-        z-index: 3; 
-        background-color: var(--card-bg-subtle);
-      }
-    }
+/* =========================================
+   5. GRID EXPAND (Płynne rozwijanie bez JS)
+   ========================================= */
+.grid-expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  
+  & > .grid-expand-inner {
+    overflow: hidden;
   }
-
-  .input-group-text {
-    --input-border-width: 1px;
-    display: flex;
-    align-items: center;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    font-weight: var(--fw-medium);
-    color: var(--text-muted);
-    text-align: center;
-    white-space: nowrap;
-    background-color: var(--card-bg-subtle);
-    border: var(--input-border-width) solid var(--border-color);
-    min-height: var(--target-size-min); 
-    transition: border-color var(--transition-speed);
-  }
-
-  /* =========================================
-     2. FLOATING LABELS
-     ========================================= */
-  .form-floating {
-    position: relative;
-    margin-bottom: calc(var(--spacing-unit) * 2);
-
-    label {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      padding: 1rem 0.75rem;
-      pointer-events: none;
-      transform-origin: 0 0;
-      transition: opacity var(--transition-speed), transform var(--transition-speed);
-      color: var(--text-muted);
-    }
-
-    .input:focus ~ label,
-    .input:not(:placeholder-shown) ~ label {
-      opacity: 0.8;
-      transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
-    }
-
-    .input {
-      padding-top: 1.625rem;
-      padding-bottom: 0.625rem;
-    }
+  
+  &.is-open,
+  details[open] & {
+    grid-template-rows: 1fr;
   }
 }
 ```
@@ -5113,6 +4744,131 @@ a.list-group-item:hover, button.list-group-item:hover {
     }
   }
 }
+```
+
+## Plik: `components/_list-group.scss`
+
+```scss
+// molique - List Groups: grupy list.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   7. LIST GROUPS (Grupy list)
+   ========================================= */
+.list-group {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  color: var(--text-main);
+  background-color: var(--bg-body);
+  border: 1px solid var(--border-color);
+  margin-bottom: -1px;
+  text-decoration: none;
+  transition: background-color var(--transition-speed), z-index 0s;
+}
+
+.list-group-item:first-child {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.list-group-item:last-child {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  margin-bottom: 0;
+}
+
+.list-group-item.is-active {
+  z-index: 2;
+  /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+     primary jaśnieje, literal #fff tracił kontrast) */
+  color: var(--btn-text-light);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+a.list-group-item:hover, button.list-group-item:hover {
+  background-color: var(--card-bg-subtle);
+  z-index: 1;
+}
+```
+
+## Plik: `components/_list-icons.scss`
+
+```scss
+// molique - List Icons: listy z ikonami (check/arrow/cross).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   8. LIST ICONS (Listy z ikonami)
+   ========================================= */
+.list-unstyled {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-icons {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-icons li {
+  position: relative;
+  padding-left: calc(var(--spacing-unit) * 3.5);
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+}
+
+.list-icons li:last-child { margin-bottom: 0; }
+
+.list-icons li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--primary);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.list-icons-check li::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+
+.list-icons-arrow li::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 10h10M11 5l4 5-4 5'/%3e%3c/svg%3e");
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 10h10M11 5l4 5-4 5'/%3e%3c/svg%3e");
+}
+
+.list-icons-cross li::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 6l8 8M14 6l-8 8'/%3e%3c/svg%3e");
+  mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='black' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 6l8 8M14 6l-8 8'/%3e%3c/svg%3e");
+}
+
+.list-icons-success li::before { background-color: var(--success); }
+.list-icons-danger li::before { background-color: var(--danger); }
+.list-icons-dark li::before { background-color: var(--dark); }
 ```
 
 ## Plik: `components/_mega-menu.scss`
@@ -6495,6 +6251,317 @@ a.list-group-item:hover, button.list-group-item:hover {
 }
 ```
 
+## Plik: `components/_tables.scss`
+
+```scss
+// molique - Tabele B2B: warianty rozmiaru, naglowki, tryb kart na mobile.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  /* =========================================
+     1. TABELE B2B (Zoptymalizowane pod dane)
+     ========================================= */
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-body);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-main);
+    font-size: 0.875rem; 
+    
+    /* Zmienne sterujące rozmiarem (Domyślnie MD) */
+    --table-padding-y: calc(var(--spacing-unit) * 1.5);
+    --table-padding-x: calc(var(--spacing-unit) * 2);
+    --table-font-size: 0.875rem;
+    --table-header-font-size: 0.75rem;
+  }
+
+  /* --- WARIANTY ROZMIARÓW --- */
+  
+  /* Kompaktowa (Gęste dane, np. raporty finansowe) */
+  .table-sm {
+    --table-padding-y: calc(var(--spacing-unit) * 0.75);
+    --table-padding-x: calc(var(--spacing-unit) * 1.5);
+    --table-font-size: 0.8125rem;
+    --table-header-font-size: 0.7rem;
+  }
+
+  /* Luźna (Dużo przestrzeni, np. lista użytkowników z awatarami) */
+  .table-lg {
+    --table-padding-y: calc(var(--spacing-unit) * 1.5);
+    --table-padding-x: calc(var(--spacing-unit) * 2);
+    --table-font-size: 1rem;
+    --table-header-font-size: 0.875rem;
+  }
+
+  /* --- STYLE BAZOWE KOMÓREK --- */
+  .table th, 
+  .table td {
+    padding: var(--table-padding-y) var(--table-padding-x);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    vertical-align: middle;
+    font-size: var(--table-font-size);
+  }
+
+  .table th {
+    font-weight: var(--fw-bold);
+    background-color: var(--bg-surface);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: var(--table-header-font-size);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Zapobiega podwójnemu obramowaniu przy sticky header */
+    box-shadow: 0 1px 0 var(--border-color);
+    border-bottom: none;
+  }
+
+  /* --- WARIANTY NAGŁÓWKÓW (THEAD) --- */
+  
+  /* Domyślny / Jasny (Subtelne odcięcie) */
+  .thead-light th {
+    background-color: var(--card-bg-subtle);
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-color); /* Mocniejsza linia pod nagłówkiem */
+  }
+
+  /* Ciemny (Mocny kontrast) */
+  .thead-dark th {
+    background-color: var(--dark);
+    color: var(--btn-text-light);
+    border-bottom: none;
+    /* Zmieniamy kolor cienia dla sticky header */
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  /* Primary (Kolor marki) */
+  .thead-primary th {
+    background-color: var(--primary);
+    color: var(--btn-text-light);
+    border-bottom: none;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+  }
+
+  /* --- WARIANTY WIELKOŚCI NAGŁÓWKÓW --- */
+  
+  /* Kompaktowy nagłówek (Mniejsze paddingi i font) */
+  .thead-sm th {
+    padding-top: calc(var(--spacing-unit) * 1);
+    padding-bottom: calc(var(--spacing-unit) * 1);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
+
+  /* Duży nagłówek (Więcej oddechu) */
+  .thead-lg th {
+    padding-top: calc(var(--spacing-unit) * 2.5);
+    padding-bottom: calc(var(--spacing-unit) * 2.5);
+    font-size: 0.875rem;
+    letter-spacing: 0;
+  }
+
+  /* --- WARIANTY WIZUALNE --- */
+  
+  /* Paski zebry (Zwiększają czytelność szerokich tabel) */
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(var(--dark-rgb), 0.02);
+  }
+
+  /* Podświetlanie wiersza na hover */
+  .table-hover tbody tr {
+    transition: background-color var(--transition-speed);
+    &:hover {
+      background-color: var(--card-bg-subtle);
+    }
+  }
+
+  /* Tabele bez bocznych ramek (Czysty, nowoczesny wygląd) */
+  .table-borderless {
+    th, td { border-bottom: none; }
+    tbody tr { border-bottom: 1px solid var(--border-color); }
+    tbody tr:last-child { border-bottom: none; }
+  }
+
+  /* --- MIXIN: Transformacja tabeli w karty (Mobile-First Data) --- */
+  @mixin make-table-cards {
+    thead { display: none; }
+    tbody, tr, td { display: block; width: 100%; }
+    
+    tr { 
+      margin-bottom: calc(var(--spacing-unit) * 2); 
+      border: 1px solid var(--border-color); 
+      border-radius: var(--border-radius); 
+      background-color: var(--bg-surface);
+      /* Resetujemy tło z zebry dla kart */
+      background-color: var(--bg-surface) !important;
+    }
+    
+    td { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      text-align: right; 
+      border-bottom: 1px solid var(--border-color); 
+      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    }
+    
+    td:last-child { border-bottom: none; }
+    
+    td::before { 
+      content: attr(data-label); 
+      font-weight: var(--fw-bold); 
+      color: var(--text-muted); 
+      text-align: left; 
+      padding-right: calc(var(--spacing-unit) * 2); 
+    }
+  }
+
+  /* Wersja Mobilna (Automatyczna) */
+  @include mq(sm, max) {
+    .table-cards { 
+      @include make-table-cards; 
+    }
+  }
+
+  /* Wersja Wymuszona (Działa zawsze, nawet na desktopie) */
+  .table-cards-always {
+    @include make-table-cards;
+  }
+}
+```
+
+## Plik: `components/_tabs.scss`
+
+```scss
+// molique - Zakladki (:has() + radio hack) wraz z wariantem pill.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. ZAKŁADKI (CSS :has() + Radio Hack)
+   ========================================= */
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tabs-header {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.tab-input {
+  display: none; 
+}
+
+.tab-label {
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  transition: color var(--transition-speed), border-color var(--transition-speed);
+
+  &:hover {
+    color: var(--text-main);
+  }
+}
+
+.tab-pane {
+  display: none;
+  animation: fadeIn var(--transition-speed) ease;
+}
+
+/* Łączenie inputa z panelem na podstawie ID (do 10 zakładek) */
+@for $i from 1 through 10 {
+  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-content .tab-pane:nth-of-type(#{$i}) {
+    display: block;
+  }
+  
+  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: var(--fw-bold);
+  }
+}
+
+/* =========================================
+   4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik — Zero JS)
+   ========================================= */
+.tabs-pill {
+  /* Liczba zakładek — nadpisz per instancja: style="--tab-count: 3;" */
+  --tab-count: 2;
+
+  .tabs-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--tab-count), 1fr);
+    border-bottom: none;
+    background-color: var(--card-bg-subtle);
+    border-radius: 50rem;
+    padding: 4px;
+  }
+
+  .tab-label {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    border-bottom: none;
+    border-radius: 50rem;
+    margin-bottom: 0;
+  }
+
+  .tabs-pill-indicator {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    width: calc((100% - 8px) / var(--tab-count));
+    background-color: var(--bg-surface);
+    border-radius: 50rem;
+    box-shadow: var(--shadow-sm);
+    /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
+       wskaźnika, która = szerokości jednej kolumny grida — stąd przesunięcie
+       o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+  }
+
+  /* Dopasowanie inputa (po pozycji) do wskaźnika i koloru aktywnej etykiety */
+  @for $i from 1 through 8 {
+    &:has(.tab-input:nth-of-type(#{$i}):checked) .tabs-pill-indicator {
+      transform: translateX(calc(100% * #{$i - 1}));
+    }
+
+    .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+      color: var(--text-main);
+    }
+  }
+}
+```
+
 ## Plik: `components/_theme-editor.scss`
 
 ```scss
@@ -6729,6 +6796,124 @@ a.list-group-item:hover, button.list-group-item:hover {
       background-color: rgba(var(--sidebar-highlight-rgb), 0.08);
       font-weight: var(--fw-bold);
     }
+  }
+}
+```
+
+## Plik: `components/_theme-switch.scss`
+
+```scss
+// molique - Theme Switch: przelacznik motywu light/dark.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
+  /* =========================================
+     THEME SWITCH (Light / Dark Mode Toggle)
+     ========================================= */
+  .theme-switch {
+    display: inline-flex;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  .theme-switch-input {
+    display: none;
+  }
+
+  .theme-switch-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 64px;
+    height: 32px;
+    padding: 4px;
+    background-color: var(--card-bg-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+  }
+
+  /* Pływająca pastylka (Tło pod aktywną ikoną) */
+  .theme-switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background-color: var(--bg-surface);
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm), 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+  }
+
+  .theme-icon-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+
+  /* Ikony Słońca i Księżyca */
+  .theme-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+    transition: color 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+
+    &.icon-sun {
+      margin-right: 4px !important;
+    }
+    
+    &.icon-moon {
+      margin-left: 4px !important;
+    }
+  }
+
+  /* --- STAN: LIGHT MODE (Domyślny) --- */
+  .theme-switch-input:not(:checked) + .theme-switch-track {
+    .icon-sun {
+      color: var(--warning); /* Słońce świeci na żółto/pomarańczowo */
+      transform: rotate(0deg) scale(1.1);
+      opacity: 1;
+    }
+    .icon-moon {
+      transform: rotate(-30deg) scale(0.85);
+      opacity: 0.4;
+    }
+  }
+
+  /* --- STAN: DARK MODE (Zaznaczony) --- */
+  .theme-switch-input:checked + .theme-switch-track {
+    /* Opcjonalnie: zmiana tła całego przełącznika w dark mode */
+    background-color: rgba(var(--primary-rgb), 0.1);
+    border-color: rgba(var(--primary-rgb), 0.2);
+
+    .theme-switch-thumb {
+      transform: translateX(32px); /* Przesunięcie pastylki na prawą stronę */
+    }
+
+    .icon-sun {
+      transform: rotate(90deg) scale(0.85);
+      opacity: 0.4;
+    }
+    .icon-moon {
+      color: var(--primary); /* Księżyc świeci w kolorze głównym marki */
+      transform: rotate(0deg) scale(1.1);
+      opacity: 1;
+    }
+  }
+
+  /* Focus Ring dla dostępności (A11y) */
+  .theme-switch-input:focus-visible + .theme-switch-track {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
   }
 }
 ```
@@ -9410,7 +9595,17 @@ a.list-group-item:hover, button.list-group-item:hover {
 @use 'components/hero' as *;
 @use 'components/cards' as *;
 @use 'components/modals' as *;
-@use 'components/data-display' as *;
+// Wyswietlanie danych rozbite na niezalezne moduly (kolejnosc = kolejnosc w CSS).
+@use 'components/tables' as *;
+@use 'components/data-rows' as *;
+@use 'components/data-row-compact' as *;
+@use 'components/accordion' as *;
+@use 'components/tabs' as *;
+@use 'components/grid-expand' as *;
+@use 'components/carousel' as *;
+@use 'components/list-group' as *;
+@use 'components/list-icons' as *;
+@use 'components/counters' as *;
 @use 'components/feedback' as *;
 @use 'components/business' as *;
 @use 'components/charts' as *;
@@ -9562,7 +9757,14 @@ a.list-group-item:hover, button.list-group-item:hover {
 
 @use 'components/form-base' as *;
 @use 'components/form-groups' as *;
-@use 'components/form-advanced' as *;
+// Formularze zaawansowane rozbite na niezalezne moduly (kolejnosc = kolejnosc w CSS).
+@use 'components/form-check' as *;
+@use 'components/form-switch' as *;
+@use 'components/form-input-range' as *;
+@use 'components/form-file-upload' as *;
+@use 'components/form-select-search' as *;
+@use 'components/form-select-custom' as *;
+@use 'components/theme-switch' as *;
 ```
 
 ## Plik: `_grid.scss`

@@ -1,0 +1,53 @@
+// molique - List Groups: grupy list.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   7. LIST GROUPS (Grupy list)
+   ========================================= */
+.list-group {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.list-group-item {
+  position: relative;
+  display: block;
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  color: var(--text-main);
+  background-color: var(--bg-body);
+  border: 1px solid var(--border-color);
+  margin-bottom: -1px;
+  text-decoration: none;
+  transition: background-color var(--transition-speed), z-index 0s;
+}
+
+.list-group-item:first-child {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.list-group-item:last-child {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  margin-bottom: 0;
+}
+
+.list-group-item.is-active {
+  z-index: 2;
+  /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
+     primary jaśnieje, literal #fff tracił kontrast) */
+  color: var(--btn-text-light);
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+a.list-group-item:hover, button.list-group-item:hover {
+  background-color: var(--card-bg-subtle);
+  z-index: 1;
+}

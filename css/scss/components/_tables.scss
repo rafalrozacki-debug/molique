@@ -1,0 +1,188 @@
+// molique - Tabele B2B: warianty rozmiaru, naglowki, tryb kart na mobile.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  /* =========================================
+     1. TABELE B2B (Zoptymalizowane pod dane)
+     ========================================= */
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-body);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text-main);
+    font-size: 0.875rem; 
+    
+    /* Zmienne sterujące rozmiarem (Domyślnie MD) */
+    --table-padding-y: calc(var(--spacing-unit) * 1.5);
+    --table-padding-x: calc(var(--spacing-unit) * 2);
+    --table-font-size: 0.875rem;
+    --table-header-font-size: 0.75rem;
+  }
+
+  /* --- WARIANTY ROZMIARÓW --- */
+  
+  /* Kompaktowa (Gęste dane, np. raporty finansowe) */
+  .table-sm {
+    --table-padding-y: calc(var(--spacing-unit) * 0.75);
+    --table-padding-x: calc(var(--spacing-unit) * 1.5);
+    --table-font-size: 0.8125rem;
+    --table-header-font-size: 0.7rem;
+  }
+
+  /* Luźna (Dużo przestrzeni, np. lista użytkowników z awatarami) */
+  .table-lg {
+    --table-padding-y: calc(var(--spacing-unit) * 1.5);
+    --table-padding-x: calc(var(--spacing-unit) * 2);
+    --table-font-size: 1rem;
+    --table-header-font-size: 0.875rem;
+  }
+
+  /* --- STYLE BAZOWE KOMÓREK --- */
+  .table th, 
+  .table td {
+    padding: var(--table-padding-y) var(--table-padding-x);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    vertical-align: middle;
+    font-size: var(--table-font-size);
+  }
+
+  .table th {
+    font-weight: var(--fw-bold);
+    background-color: var(--bg-surface);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: var(--table-header-font-size);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Zapobiega podwójnemu obramowaniu przy sticky header */
+    box-shadow: 0 1px 0 var(--border-color);
+    border-bottom: none;
+  }
+
+  /* --- WARIANTY NAGŁÓWKÓW (THEAD) --- */
+  
+  /* Domyślny / Jasny (Subtelne odcięcie) */
+  .thead-light th {
+    background-color: var(--card-bg-subtle);
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-color); /* Mocniejsza linia pod nagłówkiem */
+  }
+
+  /* Ciemny (Mocny kontrast) */
+  .thead-dark th {
+    background-color: var(--dark);
+    color: var(--btn-text-light);
+    border-bottom: none;
+    /* Zmieniamy kolor cienia dla sticky header */
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  /* Primary (Kolor marki) */
+  .thead-primary th {
+    background-color: var(--primary);
+    color: var(--btn-text-light);
+    border-bottom: none;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+  }
+
+  /* --- WARIANTY WIELKOŚCI NAGŁÓWKÓW --- */
+  
+  /* Kompaktowy nagłówek (Mniejsze paddingi i font) */
+  .thead-sm th {
+    padding-top: calc(var(--spacing-unit) * 1);
+    padding-bottom: calc(var(--spacing-unit) * 1);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
+
+  /* Duży nagłówek (Więcej oddechu) */
+  .thead-lg th {
+    padding-top: calc(var(--spacing-unit) * 2.5);
+    padding-bottom: calc(var(--spacing-unit) * 2.5);
+    font-size: 0.875rem;
+    letter-spacing: 0;
+  }
+
+  /* --- WARIANTY WIZUALNE --- */
+  
+  /* Paski zebry (Zwiększają czytelność szerokich tabel) */
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(var(--dark-rgb), 0.02);
+  }
+
+  /* Podświetlanie wiersza na hover */
+  .table-hover tbody tr {
+    transition: background-color var(--transition-speed);
+    &:hover {
+      background-color: var(--card-bg-subtle);
+    }
+  }
+
+  /* Tabele bez bocznych ramek (Czysty, nowoczesny wygląd) */
+  .table-borderless {
+    th, td { border-bottom: none; }
+    tbody tr { border-bottom: 1px solid var(--border-color); }
+    tbody tr:last-child { border-bottom: none; }
+  }
+
+  /* --- MIXIN: Transformacja tabeli w karty (Mobile-First Data) --- */
+  @mixin make-table-cards {
+    thead { display: none; }
+    tbody, tr, td { display: block; width: 100%; }
+    
+    tr { 
+      margin-bottom: calc(var(--spacing-unit) * 2); 
+      border: 1px solid var(--border-color); 
+      border-radius: var(--border-radius); 
+      background-color: var(--bg-surface);
+      /* Resetujemy tło z zebry dla kart */
+      background-color: var(--bg-surface) !important;
+    }
+    
+    td { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      text-align: right; 
+      border-bottom: 1px solid var(--border-color); 
+      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    }
+    
+    td:last-child { border-bottom: none; }
+    
+    td::before { 
+      content: attr(data-label); 
+      font-weight: var(--fw-bold); 
+      color: var(--text-muted); 
+      text-align: left; 
+      padding-right: calc(var(--spacing-unit) * 2); 
+    }
+  }
+
+  /* Wersja Mobilna (Automatyczna) */
+  @include mq(sm, max) {
+    .table-cards { 
+      @include make-table-cards; 
+    }
+  }
+
+  /* Wersja Wymuszona (Działa zawsze, nawet na desktopie) */
+  .table-cards-always {
+    @include make-table-cards;
+  }
+}

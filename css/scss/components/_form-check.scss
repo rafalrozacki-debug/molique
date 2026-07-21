@@ -1,0 +1,59 @@
+// molique - Checkboxy i radio (custom appearance).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
+  /* =========================================
+     1. CHECKBOXY I RADIO
+     ========================================= */
+  .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: calc(var(--spacing-unit) * 1);
+  }
+
+  .form-check-input {
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0; 
+    margin-right: calc(var(--spacing-unit) * 1.5);
+    flex-shrink: 0; 
+    background-color: var(--bg-body);
+    border: 2px solid var(--border-color);
+    border-radius: calc(var(--border-radius) / 2);
+    cursor: pointer;
+    transition: background var(--transition-speed), border-color var(--transition-speed);
+    position: relative;
+  }
+
+  .form-check-input[type="radio"] { border-radius: 50%; }
+
+  .form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .form-check-input[type="checkbox"]:checked {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .form-check-input[type="radio"]:checked {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3ccircle cx='10' cy='10' r='5' fill='%23fff'/%3e%3c/svg%3e");
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .form-check-label {
+    cursor: pointer;
+    color: var(--text-main);
+    user-select: none;
+    margin: 0;
+    line-height: 1.25rem; 
+  }
+}

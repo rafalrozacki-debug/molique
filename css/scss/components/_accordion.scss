@@ -1,0 +1,90 @@
+// molique - Akordeon na natywnym <details> + interpolate-size.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   3. AKORDEON (Natywny <details>)
+   ========================================= */
+.accordion {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--bg-surface);
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--border-color);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+
+  /* MAGIA CSS 2026: Płynne otwieranie natywnego details */
+  interpolate-size: allow-keywords;
+  
+  &::details-content {
+    /* Stan zamknięty ORAZ zamykanie: overflow wraca do hidden natychmiast,
+       więc zwijana treść jest przycinana od pierwszej klatki. */
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), content-visibility 0.3s allow-discrete;
+    height: 0;
+    overflow: hidden;
+  }
+
+  &[open]::details-content {
+    height: auto;
+    /* Po rozwinięciu zdejmujemy przycinanie. Bez tego treść wyższa niż
+       wysokość policzona przez animację zostaje ucięta na stałe, a przewijalny
+       rodzic (overflow-y: auto) nie widzi, że jest co przewijać.
+       `0s 0.3s` = przełącz dopiero PO zakończeniu animacji wysokości; gdyby
+       overflow stał się widoczny od razu, treść wychodziłaby poza rosnące
+       pudełko i nachodziła na sąsiadów przez cały czas otwierania. */
+    overflow: visible;
+    transition:
+      height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      content-visibility 0.3s allow-discrete,
+      overflow 0s 0.3s allow-discrete;
+  }
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 2);
+  font-weight: var(--fw-medium);
+  color: var(--text-main);
+  cursor: pointer;
+  list-style: none; 
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: "▼";
+    font-size: 0.8rem;
+    transition: transform var(--transition-speed) ease;
+  }
+
+  &:hover {
+    background-color: var(--card-bg-subtle);
+  }
+}
+
+.accordion-item[open] .accordion-header {
+  color: var(--primary);
+  border-bottom: 1px solid var(--border-color);
+  
+  &::after {
+    transform: rotate(180deg);
+  }
+}
+
+.accordion-body {
+  padding: calc(var(--spacing-unit) * 2);
+  color: var(--text-muted);
+}

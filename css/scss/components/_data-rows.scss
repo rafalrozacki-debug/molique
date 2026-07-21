@@ -1,0 +1,43 @@
+// molique - Data Rows: wiersze danych jako karty (grid CRM).
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   2. DATA ROWS (Wiersze tabeli jako karty dla CRM)
+   ========================================= */
+.data-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  /* Kolor powierzchni zamiast literalnego #fff - w dark mode wiersz ma
+     ciemnieć razem z kartami (w light mode bez zmiany: biel). */
+  background-color: var(--bg-surface);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  transition: box-shadow var(--transition-speed);
+
+  &:hover {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+@include mq(md, max) {
+  .data-row {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+  .data-row-actions {
+    margin-top: calc(var(--spacing-unit) * 2);
+    padding-top: calc(var(--spacing-unit) * 2);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1);
+  }
+}

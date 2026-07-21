@@ -1,0 +1,82 @@
+// molique - Przelaczniki (switche) + warianty square/outline.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
+  /* =========================================
+     1.5. PRZEŁĄCZNIKI (Switche iOS Style)
+     ========================================= */
+  .form-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.5);
+    cursor: pointer;
+  }
+
+  .form-switch-input {
+    appearance: none;
+    width: 44px;
+    height: 24px;
+    background-color: var(--border-color);
+    border-radius: 50px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+    margin: 0;
+    display: flex;
+    align-items: center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    &:checked {
+      background-color: var(--success);
+      &::after {
+        transform: translateX(20px);
+      }
+    }
+  }
+
+  .form-switch-label {
+    font-weight: var(--fw-medium);
+    color: var(--text-main);
+    user-select: none;
+  }
+
+  .form-switch-square .form-switch-input {
+    border-radius: var(--border-radius);
+    &::after { border-radius: calc(var(--border-radius) - 2px); }
+  }
+
+  .form-switch-outline .form-switch-input {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    
+    &::after {
+      background-color: var(--border-color);
+      box-shadow: none;
+      width: 16px;
+      height: 16px;
+      left: 2px; 
+    }
+    
+    &:checked {
+      background-color: transparent;
+      border-color: var(--success);
+      &::after {
+        background-color: var(--success);
+        transform: translateX(20px);
+      }
+    }
+  }
+}

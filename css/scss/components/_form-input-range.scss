@@ -1,0 +1,98 @@
+// molique - Specyficzne inputy: range, date, color, number.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+
+@layer components {
+  /* =========================================
+     2. SPECYFICZNE INPUTY (Range, Date, Color)
+     ========================================= */
+  .input-range {
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 1rem;
+    outline: none;
+    cursor: pointer;
+    overflow: hidden; 
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--primary);
+      box-shadow: -10010px 0 0 10000px var(--primary), 0 2px 5px rgba(0,0,0,0.15);
+      transition: transform var(--transition-speed);
+    }
+
+    &::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    &::-moz-range-progress { background: var(--primary); height: 8px; border-radius: 1rem; }
+    &::-moz-range-thumb {
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      border: 2px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      transition: transform var(--transition-speed);
+    }
+    &::-moz-range-thumb:hover { transform: scale(1.15); }
+  }
+
+  /* Number: chowamy natywne strzałki (spinner) - w gęstych formularzach
+     B2B wyglądają obco i gryzą się z własnymi przyciskami krokowania.
+     Zamiennik to kontrolka .qty-input (przyciski + / -), a wartość nadal
+     można zmieniać klawiaturą (góra/dół) i scrollem. */
+  input[type="number"].input {
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  input[type="date"].input,
+  input[type="time"].input,
+  input[type="datetime-local"].input {
+    appearance: none;
+    position: relative;
+    cursor: pointer;
+
+    &::-webkit-calendar-picker-indicator {
+      background-color: transparent;
+      padding: 4px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity var(--transition-speed), background-color var(--transition-speed);
+      border-radius: 4px;
+
+      &:hover { opacity: 1; background-color: var(--card-bg-subtle); }
+    }
+  }
+
+  .input-color {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    padding: 0;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+
+    &::-webkit-color-swatch-wrapper { padding: 4px; }
+    &::-webkit-color-swatch { border: none; border-radius: calc(var(--border-radius) - 4px); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); }
+    &::-moz-color-swatch { border: none; border-radius: calc(var(--border-radius) - 4px); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); }
+
+    &:focus-visible {
+      outline: 0;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+    }
+  }
+}

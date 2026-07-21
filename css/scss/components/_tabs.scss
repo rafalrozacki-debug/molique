@@ -1,0 +1,113 @@
+// molique - Zakladki (:has() + radio hack) wraz z wariantem pill.
+//
+// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4. ZAKŁADKI (CSS :has() + Radio Hack)
+   ========================================= */
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tabs-header {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.tab-input {
+  display: none; 
+}
+
+.tab-label {
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  transition: color var(--transition-speed), border-color var(--transition-speed);
+
+  &:hover {
+    color: var(--text-main);
+  }
+}
+
+.tab-pane {
+  display: none;
+  animation: fadeIn var(--transition-speed) ease;
+}
+
+/* Łączenie inputa z panelem na podstawie ID (do 10 zakładek) */
+@for $i from 1 through 10 {
+  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-content .tab-pane:nth-of-type(#{$i}) {
+    display: block;
+  }
+  
+  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: var(--fw-bold);
+  }
+}
+
+/* =========================================
+   4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik — Zero JS)
+   ========================================= */
+.tabs-pill {
+  /* Liczba zakładek — nadpisz per instancja: style="--tab-count: 3;" */
+  --tab-count: 2;
+
+  .tabs-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--tab-count), 1fr);
+    border-bottom: none;
+    background-color: var(--card-bg-subtle);
+    border-radius: 50rem;
+    padding: 4px;
+  }
+
+  .tab-label {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    border-bottom: none;
+    border-radius: 50rem;
+    margin-bottom: 0;
+  }
+
+  .tabs-pill-indicator {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    left: 4px;
+    height: calc(100% - 8px);
+    width: calc((100% - 8px) / var(--tab-count));
+    background-color: var(--bg-surface);
+    border-radius: 50rem;
+    box-shadow: var(--shadow-sm);
+    /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
+       wskaźnika, która = szerokości jednej kolumny grida — stąd przesunięcie
+       o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+  }
+
+  /* Dopasowanie inputa (po pozycji) do wskaźnika i koloru aktywnej etykiety */
+  @for $i from 1 through 8 {
+    &:has(.tab-input:nth-of-type(#{$i}):checked) .tabs-pill-indicator {
+      transform: translateX(calc(100% * #{$i - 1}));
+    }
+
+    .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+      color: var(--text-main);
+    }
+  }
+}
