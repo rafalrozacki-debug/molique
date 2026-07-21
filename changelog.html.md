@@ -4,7 +4,7 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.6.1."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.6.2."}'></include>
   </head>
   <body>
     <!-- ==========================================
