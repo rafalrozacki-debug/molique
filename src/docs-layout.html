@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Grid & Layout - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Grid & Layout - molique Docs","description":"Referencja układu w molique: auto-grid na wzorcu RAM, sztywna siatka 12-kolumnowa, flexbox, pozycjonowanie i bento grid. Tabele klas, breakpointy i złota zasada RWD."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -15,386 +15,627 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <h1 class="text-11 fw-black mb-3">Grid & Layout</h1>
+            <h1 class="text-11 fw-black mb-3">Grid &amp; Layout</h1>
             <p class="text-6 text-muted">
-              System siatki w molique oparty jest w 100% na natywnym CSS Grid.
-              Koniec z ujemnymi marginesami z Flexboxa i zupą klas w HTML.
-              Przeglądarka wykonuje całą matematykę za Ciebie.
+              Trzy sposoby układania treści i komplet narzędzi do
+              pozycjonowania. Najważniejsza rzecz na tej stronie to
+              <strong>złota zasada RWD</strong> w sekcji pułapek — najczęstszy
+              błąd w całym frameworku. Gotowe układy:
+              <a href="examples-layout.html">przykłady</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: SMART GRID -->
+          <!-- ===================================================== -->
+          <!-- 1. CO WYBRAĆ                                          -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">1. Inteligentny Auto-Grid (RAM)</h2>
-            <p class="text-muted mb-4">
-              Święty Graal responsywności. Klasa
-              <code>.grid-auto</code> automatycznie układa elementy w kolumny.
-              Jeśli brakuje miejsca (np. na telefonie), elementy same spadają do
-              nowej linii. <strong>Zero Media Queries!</strong>
-            </p>
+            <h2 class="text-8 fw-bold mb-3">1. Co wybrać</h2>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Dostępne modyfikatory:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <code>.grid-auto</code> — Domyślna siatka. Elementy mają
-                  minimum <strong>280px</strong> szerokości.
-                </li>
-                <li>
-                  <code>.grid-auto-sm</code> — Gęstsza siatka. Elementy mają
-                  minimum <strong>200px</strong> szerokości (idealne na małe
-                  kafelki).
-                </li>
-                <li>
-                  <code>.grid-auto-lg</code> — Luźniejsza siatka. Elementy mają
-                  minimum <strong>350px</strong> szerokości (idealne na duże
-                  karty blogowe).
-                </li>
-              </ul>
-              <hr class="my-3" />
-              <h5 class="fw-bold text-5 mb-2">Pro-Tip:</h5>
-              <p class="text-4 text-muted m-0">
-                Możesz nadpisać szerokość w locie w HTML-u używając zmiennej
-                lokalnej: <br />
-                <code
-                  >&lt;div class="grid-auto" style="--grid-min:
-                  150px;"&gt;</code
-                >
-              </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Narzędzie</th>
+                    <th>Kiedy</th>
+                    <th>Kto decyduje o liczbie kolumn</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Narzędzie"><code>.grid-auto</code></td>
+                    <td data-label="Kiedy">
+                      Powtarzalne kafelki: karty produktów, siatka usług, lista
+                      realizacji.
+                    </td>
+                    <td data-label="Kto decyduje">
+                      <strong>Przeglądarka.</strong> Ty podajesz minimalną
+                      szerokość kafelka.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Narzędzie"><code>.grid-cols-*</code></td>
+                    <td data-label="Kiedy">
+                      Układ zaprojektowany: tekst 8 kolumn + sidebar 4.
+                    </td>
+                    <td data-label="Kto decyduje"><strong>Ty</strong>, osobno na każdym breakpoincie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Narzędzie"><code>.d-flex</code></td>
+                    <td data-label="Kiedy">
+                      Jeden wiersz elementów: pasek narzędzi, nagłówek karty,
+                      grupa przycisków.
+                    </td>
+                    <td data-label="Kto decyduje">Nie dotyczy — to jedna oś.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Narzędzie"><code>.bento-grid</code></td>
+                    <td data-label="Kiedy">
+                      Mozaika kafelków o różnych rozmiarach — strona główna,
+                      dashboard.
+                    </td>
+                    <td data-label="Kto decyduje">Ty, przez rozpiętość kafelków.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="grid-auto w-100 gap-3">
-                  <div
-                    class="bg-primary text-white p-4 rounded-2 text-center hover-gpu-shadow"
-                  >
-                    Karta 1
-                  </div>
-                  <div
-                    class="bg-primary text-white p-4 rounded-2 text-center hover-gpu-shadow"
-                  >
-                    Karta 2
-                  </div>
-                  <div
-                    class="bg-primary text-white p-4 rounded-2 text-center hover-gpu-shadow"
-                  >
-                    Karta 3
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Elementy same ułożą się w 1, 2 lub 3 kolumny w zależności od ekranu --&gt;
-&lt;div class="grid-auto gap-4"&gt;
-  &lt;div class="card"&gt;Karta 1&lt;/div&gt;
-  &lt;div class="card"&gt;Karta 2&lt;/div&gt;
-  &lt;div class="card"&gt;Karta 3&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Dwa breakpointy, nie pięć</h5>
+              <p class="text-4 text-muted m-0">
+                molique ma tylko <code>md</code> (od 768px) i
+                <code>lg</code> (od 992px). Klasy bez przedrostka działają
+                <strong>od zera w górę</strong>, czyli opisują widok mobilny.
+                Wariant <code>-md-</code> nadpisuje je od tabletu, a
+                <code>-lg-</code> od desktopu. Mniej progów to mniej miejsc,
+                w których układ może się rozjechać.
+              </p>
             </div>
           </section>
 
-          <!-- SEKCJA 2: SZTYWNY GRID -->
+          <!-- ===================================================== -->
+          <!-- 2. AUTO-GRID                                          -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">2. Sztywny Grid (12-kolumnowy)</h2>
+            <h2 class="text-8 fw-bold mb-3">2. Auto-grid</h2>
             <p class="text-muted mb-4">
-              Gdy potrzebujesz precyzyjnej kontroli (np. 8 kolumn na formularz,
-              4 na podsumowanie). Używaj klas <code>.grid-cols-12</code> na
-              rodzicu oraz <code>.col-span-*</code> na dzieciach.
+              Najprostsze narzędzie i zwykle właściwy wybór.
+              <strong>Nie deklarujesz liczby kolumn</strong> — podajesz
+              minimalną szerokość kafelka, a przeglądarka mieści ich tyle, ile
+              wejdzie. Przy zwężaniu okna sama zmniejsza liczbę kolumn, bez
+              media queries.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Jak budować responsywnie?</h5>
-              <p class="text-4 text-muted mb-3">
-                Zawsze projektuj w podejściu <strong>Mobile-First</strong>.
-                Domyślne klasy działają na telefonach, a klasy z przedrostkiem
-                <code>-md-</code> aktywują się od tabletów w górę.
-              </p>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted mb-3"
-              >
-                <li>
-                  <strong>Rodzic:</strong>
-                  <code>.grid-cols-1 .grid-md-cols-12</code> (Na mobile 1
-                  kolumna, na desktopie 12).
-                </li>
-                <li>
-                  <strong>Dziecko:</strong> <code>.col-md-span-8</code> (Na
-                  mobile zajmie 100% szerokości, na desktopie 8 z 12 kolumn).
-                </li>
-              </ul>
-              <hr class="my-3" />
-              <h5 class="fw-bold text-5 mb-2">
-                Rozszerzone Breakpointy (Opcjonalne)
-              </h5>
-              <p class="text-4 text-muted m-0">
-                Domyślnie framework generuje tylko kluczowy breakpoint
-                <code>-md-</code> dla zachowania minimalnej wagi pliku CSS.
-                Jeśli potrzebujesz pełnej kontroli dla innych ekranów (sm, lg,
-                xl), odkomentuj linię <code>@use 'utilities-extended';</code> w
-                głównym pliku <code>molique-style.scss</code>.
-              </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="grid-auto"&gt;
+  &lt;div class="card"&gt;…&lt;/div&gt;
+  &lt;div class="card"&gt;…&lt;/div&gt;
+  &lt;div class="card"&gt;…&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Własna szerokość progowa --&gt;
+&lt;div class="grid-auto" style="--grid-min: 240px;"&gt;…&lt;/div&gt;</code></pre>
             </div>
 
-            <div class="component-showcase">
+            <div class="component-showcase mb-4">
               <div class="component-preview w-100">
-                <div class="grid-cols-1 grid-md-cols-12 gap-3 w-100">
-                  <div
-                    class="col-md-span-8 bg-dark text-white p-4 rounded-2 text-center"
-                  >
-                    .col-md-span-8 (66%)
-                  </div>
-                  <div
-                    class="col-md-span-4 bg-secondary text-white p-4 rounded-2 text-center"
-                  >
-                    .col-md-span-4 (33%)
-                  </div>
+                <div class="grid-auto w-100">
+                  <div class="card"><div class="card-body">Kafelek 1</div></div>
+                  <div class="card"><div class="card-body">Kafelek 2</div></div>
+                  <div class="card"><div class="card-body">Kafelek 3</div></div>
+                  <div class="card"><div class="card-body">Kafelek 4</div></div>
                 </div>
               </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Na mobile 1 kolumna, od tabletu 12 kolumn --&gt;
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Próg kafelka</th>
+                    <th>Do czego</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.grid-auto-sm</code></td>
+                    <td data-label="Próg"><code>200px</code></td>
+                    <td data-label="Do czego">Ikony, małe kafelki statystyk.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.grid-auto</code></td>
+                    <td data-label="Próg"><code>280px</code></td>
+                    <td data-label="Do czego">Domyślny — karty z tekstem.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.grid-auto-lg</code></td>
+                    <td data-label="Próg"><code>350px</code></td>
+                    <td data-label="Do czego">Karty ze zdjęciem, artykuły.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Dlaczego to się nie przepełnia</h5>
+              <p class="text-4 text-muted m-0">
+                Reguła to
+                <code>minmax(min(100%, var(--grid-min)), 1fr)</code>.
+                Funkcja <code>min()</code> jest tu kluczowa: gdy okno jest
+                węższe niż próg kafelka, wygrywa <code>100%</code> i kafelek
+                zwęża się do szerokości ekranu. Bez niej trzymałby sztywne
+                280px i wyjeżdżał poza telefon.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. SIATKA 12-KOLUMNOWA                                -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">3. Siatka 12-kolumnowa</h2>
+            <p class="text-muted mb-4">
+              Gdy układ ma być zaprojektowany, a nie wyliczony. Rodzic dostaje
+              liczbę kolumn, dzieci — rozpiętość. Klasy istnieją w trzech
+              odmianach: bez przedrostka (mobile), z <code>-md-</code> i z
+              <code>-lg-</code>.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;!-- Mobile: jedna kolumna. Desktop: 8 + 4 --&gt;
 &lt;div class="grid-cols-1 grid-md-cols-12 gap-4"&gt;
-  
-  &lt;!-- Na desktopie zajmie 8 kolumn (na mobile 100%) --&gt;
-  &lt;div class="col-md-span-8"&gt;Główna treść&lt;/div&gt;
-  
-  &lt;!-- Na desktopie zajmie 4 kolumny (na mobile 100%) --&gt;
-  &lt;div class="col-md-span-4"&gt;Pasek boczny&lt;/div&gt;
-
+  &lt;article class="col-md-span-8"&gt;Treść&lt;/article&gt;
+  &lt;aside class="col-md-span-4"&gt;Sidebar&lt;/aside&gt;
 &lt;/div&gt;</code></pre>
-              </div>
             </div>
-          </section>
 
-          <!-- SEKCJA 3: OVERLAPPING CARDS -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              3. Overlapping Cards (Nachodzące Karty)
-            </h2>
-            <p class="text-muted mb-4">
-              Częsty wzorzec w projektach Premium. Karta "wjeżdża" na sekcję
-              powyżej (np. wyszukiwarka na zdjęciu Hero).
-            </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Rodzina</th>
+                    <th>Zakres</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.grid</code></td>
+                    <td data-label="Zakres">—</td>
+                    <td data-label="Co robi">Włącza siatkę bez ustalania kolumn.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.grid-cols-*</code></td>
+                    <td data-label="Zakres">1–12</td>
+                    <td data-label="Co robi">
+                      Liczba kolumn rodzica. Wariant:
+                      <code>.grid-md-cols-*</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.col-span-*</code></td>
+                    <td data-label="Zakres">1–12</td>
+                    <td data-label="Co robi">
+                      Ile kolumn zajmuje dziecko. Warianty:
+                      <code>.col-md-span-*</code>, <code>.col-lg-span-*</code>.
+                      <strong>Na mobile nie używaj</strong> — patrz pułapka nr 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.col-start-*</code></td>
+                    <td data-label="Zakres">1–12, <code>auto</code></td>
+                    <td data-label="Co robi">
+                      Od której kolumny element się zaczyna. Warianty:
+                      <code>.col-md-start-*</code>, <code>.col-lg-start-*</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.offset-*</code></td>
+                    <td data-label="Zakres">0–11</td>
+                    <td data-label="Co robi">
+                      Klasyczne przesunięcie o N kolumn. Warianty:
+                      <code>.offset-md-*</code>, <code>.offset-lg-*</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.gap-*</code></td>
+                    <td data-label="Zakres">0–5</td>
+                    <td data-label="Co robi">
+                      Przerwa między elementami. Wariant:
+                      <code>.gap-md-*</code>. Działa też we flexboksie.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">
-                Dostępne modyfikatory przesunięcia:
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">
+                <code>col-start</code> czy <code>offset</code>
               </h5>
-              <ul
-                class="list-unstyled text-4 text-muted mb-3 d-flex flex-column gap-2"
-              >
-                <li>
-                  <code>.overlap-container</code> — Domyślne przesunięcie (ok.
-                  100px w górę na desktopie, 48px na mobile).
-                </li>
-                <li>
-                  <code>.overlap-up-50</code> — Sztywne przesunięcie o 50px w
-                  górę.
-                </li>
-                <li>
-                  <code>.overlap-up-100</code> — Sztywne przesunięcie o 100px w
-                  górę.
-                </li>
-                <li>
-                  <code>.overlap-up-150</code> — Sztywne przesunięcie o 150px w
-                  górę.
-                </li>
-              </ul>
-              <div class="alert alert-warning m-0 p-3 text-4">
-                <strong>⚠️ Ważne:</strong> Sekcja, na którą wjeżdża karta (np.
-                Hero), musi mieć odpowiednio duży dolny padding (np.
-                <code>.pb-5</code>), aby karta nie zasłoniła jej ważnej treści!
-              </div>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview flex-column w-100 p-0">
-                <!-- Symulacja Hero -->
-                <div
-                  class="bg-dark text-white w-100 p-5 text-center"
-                  style="padding-bottom: 100px !important"
-                >
-                  <h3 class="text-9 m-0">Sekcja Hero</h3>
-                </div>
-                <!-- Nachodząca karta -->
-                <div class="overlap-container w-75 mx-auto">
-                  <div class="card p-4 shadow-lg text-center border-0">
-                    <p class="m-0 fw-bold">
-                      Nachodząca karta (.overlap-container)
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Sekcja z dużym dolnym paddingiem (pb-5) --&gt;
-&lt;section class="bg-dark pb-5"&gt;...&lt;/section&gt;
-
-&lt;!-- Karta, która wjeżdża na sekcję wyżej --&gt;
-&lt;div class="container overlap-container"&gt;
-  &lt;div class="card shadow-lg"&gt;
-    Treść karty
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 4: FLEXBOX I WYRÓWNANIE -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              4. Flexbox i Wyrównanie Elementów
-            </h2>
-            <p class="text-muted mb-4">
-              Zestaw klas narzędziowych do kontrolowania układu elementów
-              wewnątrz kontenerów. Pozwala na łatwe centrowanie, rozkładanie i
-              zmianę kolejności.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Kluczowe klasy narzędziowe:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <strong>Wyrównanie w poziomie:</strong>
-                  <code>.justify-content-start</code>,
-                  <code>.justify-content-center</code>,
-                  <code>.justify-content-end</code>,
-                  <code>.justify-content-between</code>.
-                </li>
-                <li>
-                  <strong>Wyrównanie w pionie:</strong>
-                  <code>.align-items-start</code>,
-                  <code>.align-items-center</code>,
-                  <code>.align-items-end</code>.
-                </li>
-                <li>
-                  <strong>Zmiana kolejności (Mobile Reverse):</strong> Użyj
-                  kombinacji <code>.flex-column-reverse .flex-md-row</code>, aby
-                  na telefonie elementy ustawiły się w odwrotnej kolejności (np.
-                  tekst pod zdjęciem), a na desktopie wróciły do układu obok
-                  siebie.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview flex-column w-100 gap-5">
-                <!-- Przykład 1: Wyrównanie -->
-                <div class="w-100">
-                  <p class="text-4 text-muted mb-2">
-                    Wyrównanie do prawej i wyśrodkowanie w pionie
-                  </p>
-                  <div
-                    class="d-flex justify-content-end align-items-center bg-surface border p-3 rounded-2"
-                    style="height: 100px"
-                  >
-                    <button class="btn btn-primary">Przycisk po prawej</button>
-                  </div>
-                </div>
-
-                <!-- Przykład 2: Mobile Reverse -->
-                <div class="w-100">
-                  <p class="text-4 text-muted mb-2">
-                    Mobile Reverse (Zmniejsz okno, aby zobaczyć zmianę
-                    kolejności!)
-                  </p>
-                  <div
-                    class="d-flex flex-column-reverse flex-md-row align-items-center gap-4 bg-surface border p-4 rounded-2"
-                  >
-                    <div class="w-100 w-md-50">
-                      <h3 class="fw-bold m-0">Tekst po lewej</h3>
-                      <p class="text-muted m-0 mt-2">
-                        Na desktopie jestem po lewej. Na telefonie spadam na sam
-                        dół, pod zdjęcie!
-                      </p>
-                    </div>
-                    <div
-                      class="w-100 w-md-50 bg-dark text-white d-flex align-items-center justify-content-center rounded-2"
-                      style="height: 150px"
-                    >
-                      Zdjęcie po prawej
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wyrównanie elementów --&gt;
-&lt;div class="d-flex justify-content-end align-items-center"&gt;...&lt;/div&gt;
-
-&lt;!-- Zmiana kolejności na mobile (Mobile Reverse) --&gt;
-&lt;div class="d-flex flex-column-reverse flex-md-row"&gt;
-  &lt;div class="w-100 w-md-50"&gt;Tekst (Na dole na mobile)&lt;/div&gt;
-  &lt;div class="w-100 w-md-50"&gt;Zdjęcie (Na górze na mobile)&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 3: BENTO GRID -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">3. Bento Grid</h2>
-            <p class="text-muted mb-4">
-              Nowoczesny, asymetryczny układ kafelkowy spopularyzowany przez
-              Apple. Idealny do dashboardów i sekcji "Features".
-            </p>
-
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Jak to działa?</h5>
               <p class="text-4 text-muted m-0">
-                Na urządzeniach mobilnych wszystkie kafelki układają się w jedną
-                kolumnę o równej wysokości. Na desktopie możesz użyć klas
-                <code>.bento-col-2</code> oraz <code>.bento-row-2</code>, aby
-                kafelek zajął podwójną szerokość lub wysokość, tworząc
-                asymetryczną mozaikę.
+                Robią to samo dwoma sposobami.
+                <code>.col-start-4</code> mówi „zacznij w czwartej kolumnie" —
+                pozycja bezwzględna, czytelna przy projektowaniu układu.
+                <code>.offset-3</code> mówi „odsuń się o trzy" — wygodniejsze,
+                gdy przenosisz kod z Bootstrapa. Wybierz jedno i trzymaj się go
+                w obrębie projektu.
               </p>
             </div>
+          </section>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="bento-grid w-100">
-                  <div
-                    class="bg-primary text-white p-4 bento-col-2 bento-row-2 hover-gpu-shadow"
-                  >
-                    <h3 class="fw-bold">Główny kafelek</h3>
-                    <p class="opacity-75">.bento-col-2 .bento-row-2</p>
-                  </div>
-                  <div class="bg-dark text-white p-4 hover-gpu-shadow">
-                    <h3 class="fw-bold">Mały</h3>
-                  </div>
-                  <div
-                    class="bg-secondary text-white p-4 bento-row-2 hover-gpu-shadow"
-                  >
-                    <h3 class="fw-bold">Pionowy</h3>
-                    <p class="opacity-75">.bento-row-2</p>
-                  </div>
-                  <div
-                    class="bg-success text-white p-4 bento-col-2 hover-gpu-shadow"
-                  >
-                    <h3 class="fw-bold">Poziomy</h3>
-                    <p class="opacity-75">.bento-col-2</p>
+          <!-- ===================================================== -->
+          <!-- 4. FLEXBOX                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">4. Flexbox</h2>
+            <p class="text-muted mb-4">
+              Do jednej osi: pasek z logo i przyciskami, nagłówek karty, stopka
+              z akcjami. Do układu strony używaj siatki.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.d-flex</code></td>
+                    <td data-label="Co robi">Włącza flexbox. Domyślnie w wierszu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.flex-column</code></td>
+                    <td data-label="Co robi">
+                      Układa w kolumnie. Warianty:
+                      <code>.flex-md-column</code>, <code>.flex-md-row</code> —
+                      np. kolumna na mobile, wiersz na desktopie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.flex-wrap</code></td>
+                    <td data-label="Co robi">Pozwala elementom zawijać się do kolejnych linii.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.justify-content-start</code></td>
+                    <td data-label="Co robi">
+                      Rozkład wzdłuż osi głównej. Dalej:
+                      <code>.justify-content-center</code>,
+                      <code>.justify-content-end</code>,
+                      <code>.justify-content-between</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.align-items-center</code></td>
+                    <td data-label="Co robi">
+                      Wyrównanie w poprzek osi. Dalej:
+                      <code>.align-items-start</code>,
+                      <code>.align-items-end</code>,
+                      <code>.align-items-stretch</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.align-self-center</code></td>
+                    <td data-label="Co robi">
+                      To samo, ale dla <strong>jednego</strong> dziecka. Dalej:
+                      <code>.align-self-start</code>,
+                      <code>.align-self-end</code>,
+                      <code>.align-self-stretch</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.d-block</code></td>
+                    <td data-label="Co robi">
+                      Pozostałe tryby wyświetlania:
+                      <code>.d-inline-block</code>, <code>.d-grid</code>,
+                      <code>.d-none</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.d-md-none</code></td>
+                    <td data-label="Co robi">
+                      Widoczność zależna od szerokości. Także
+                      <code>.d-md-block</code>, <code>.d-md-flex</code> — np.
+                      menu pokazywane dopiero od tabletu.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. POZYCJONOWANIE I ROZMIARY                          -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">5. Pozycjonowanie i rozmiary</h2>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Grupa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.position-relative</code></td>
+                    <td data-label="Grupa">Pozycja</td>
+                    <td data-label="Co robi">
+                      Punkt odniesienia dla dzieci. Dalej:
+                      <code>.position-absolute</code>,
+                      <code>.position-fixed</code>,
+                      <code>.position-sticky</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.top-0</code></td>
+                    <td data-label="Grupa">Krawędzie</td>
+                    <td data-label="Co robi">
+                      Przypięcie do krawędzi: <code>.bottom-0</code>,
+                      <code>.left-0</code>, <code>.right-0</code>.
+                      <code>.inset-0</code> przypina do wszystkich naraz.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.top-50</code></td>
+                    <td data-label="Grupa">Centrowanie</td>
+                    <td data-label="Co robi">
+                      Razem z <code>.left-50</code> i
+                      <code>.translate-middle</code> centruje element w
+                      rodzicu. Osobno: <code>.translate-middle-x</code>,
+                      <code>.translate-middle-y</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.z-10</code></td>
+                    <td data-label="Grupa">Warstwy</td>
+                    <td data-label="Co robi">
+                      Kolejność nakładania wewnątrz sekcji: <code>.z-0</code>,
+                      <code>.z-20</code>, <code>.z-30</code>. Do komponentów
+                      globalnych służą zmienne <code>--z-index-*</code> —
+                      patrz pułapka nr 3.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.w-100</code></td>
+                    <td data-label="Grupa">Szerokość</td>
+                    <td data-label="Co robi">
+                      Także <code>.w-25</code>, <code>.w-50</code>,
+                      <code>.w-75</code>, <code>.w-auto</code> oraz warianty
+                      <code>.w-md-*</code>. <code>.mw-100</code> ogranicza
+                      maksimum — ratunek na zdjęcia rozpychające układ.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.h-100</code></td>
+                    <td data-label="Grupa">Wysokość</td>
+                    <td data-label="Co robi">
+                      Pełna wysokość rodzica. <code>.vh-100</code> i
+                      <code>.min-vh-100</code> odnoszą się do okna.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-center</code></td>
+                    <td data-label="Grupa">Tekst</td>
+                    <td data-label="Co robi">
+                      Wyrównanie treści: <code>.text-start</code>,
+                      <code>.text-end</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.fade-bottom</code></td>
+                    <td data-label="Grupa">Efekt</td>
+                    <td data-label="Co robi">
+                      Zanikanie treści przy dolnej krawędzi zamiast ostrego
+                      ucięcia. Kolor: <code>--fade-color</code>, wysokość:
+                      <code>--fade-height</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-code">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;!-- Element idealnie na środku rodzica --&gt;
+&lt;div class="position-relative" style="height: 200px"&gt;
+  &lt;span class="position-absolute top-50 left-50 translate-middle"&gt;Środek&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. BENTO GRID                                         -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">6. Bento grid</h2>
+            <p class="text-muted mb-4">
+              Mozaika kafelków o różnej wielkości — układ znany ze stron
+              produktowych i dashboardów. Rodzic ustala siatkę, a wybrane
+              kafelki rozciągasz na więcej kolumn albo wierszy.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="bento-grid"&gt;
+  &lt;div class="card bento-col-2 bento-row-2"&gt;Duży kafelek&lt;/div&gt;
+  &lt;div class="card"&gt;Mały&lt;/div&gt;
+  &lt;div class="card bento-row-2"&gt;Pionowy&lt;/div&gt;
+  &lt;div class="card bento-col-2"&gt;Poziomy&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.bento-grid</code></td>
+                    <td data-label="Co robi">
+                      Siatka mozaiki. Warianty gęstości:
+                      <code>.bento-grid-3</code>, <code>.bento-grid-4</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.bento-col-2</code></td>
+                    <td data-label="Co robi">
+                      Kafelek na dwie kolumny. Szerszy:
+                      <code>.bento-col-3</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.bento-row-2</code></td>
+                    <td data-label="Co robi">
+                      Kafelek na dwa wiersze. Wyższy:
+                      <code>.bento-row-3</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="lay-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>ZŁOTA ZASADA: <code>.col-span-*</code> na mobile</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <strong>Najczęstszy błąd w całym frameworku.</strong> Klasy
+                    bez przedrostka działają od zera w górę, czyli
+                    <strong>także na telefonie</strong>. Rodzic ma tam
+                    <code>.grid-cols-1</code> — jedną kolumnę — więc
+                    <code>.col-span-12</code> każe dziecku zająć dwanaście
+                    kolumn w siatce, która ma jedną. Układ się rozsadza.
+                  </p>
+                  <p class="text-muted mb-3">
+                    W siatce jednokolumnowej element i tak zajmuje pełną
+                    szerokość. Rozpiętość deklaruj <strong>wyłącznie</strong>
+                    wariantami <code>-md-</code> i <code>-lg-</code>.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;!-- ŹLE - col-span-12 działa też na telefonie --&gt;
+&lt;div class="grid-cols-1 grid-md-cols-12"&gt;
+  &lt;div class="col-span-12 col-md-span-8"&gt;…&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- DOBRZE - na mobile pełna szerokość wychodzi sama --&gt;
+&lt;div class="grid-cols-1 grid-md-cols-12"&gt;
+  &lt;div class="col-md-span-8"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
                   </div>
                 </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="bento-grid"&gt;
-  &lt;div class="bento-col-2 bento-row-2"&gt;Duży kwadrat&lt;/div&gt;
-  &lt;div&gt;Zwykły kwadrat&lt;/div&gt;
-  &lt;div class="bento-row-2"&gt;Pionowy prostokąt&lt;/div&gt;
-  &lt;div class="bento-col-2"&gt;Poziomy prostokąt&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Sztywna siatka tam, gdzie wystarczy auto-grid</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Lista kart nie potrzebuje układu projektowanego. Zapis
+                    <code>grid-cols-1 grid-md-cols-2 grid-lg-cols-3</code> to
+                    trzy decyzje do utrzymania i trzy miejsca, w których można
+                    się pomylić. <code>.grid-auto</code> daje ten sam efekt
+                    jedną klasą i dopasowuje się także do szerokości
+                    pośrednich, których nie przewidziałeś.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Własne liczby w <code>z-index</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Klasy <code>.z-0</code>–<code>.z-30</code> porządkują
+                    warstwy <strong>wewnątrz jednej sekcji</strong> — np. treść
+                    nad nakładką na zdjęciu. Nie używaj ich do komponentów
+                    globalnych: modal, toast i dropdown mają ustaloną
+                    hierarchię w zmiennych <code>--z-index-*</code>. Wpisanie
+                    tam <code>z-index: 9999</code> na skróty kończy się modalem
+                    pod navbarem w zupełnie innym miejscu serwisu.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    Pełna skala:
+                    <a href="docs-variables.html">Zmienne CSS</a>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Zdjęcie rozpychające siatkę</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Element siatki domyślnie nie kurczy się poniżej rozmiaru
+                    swojej zawartości. Duże zdjęcie albo długi ciąg bez spacji
+                    (adres URL, numer konta) rozpycha więc kolumnę i wywołuje
+                    poziomy pasek przewijania całej strony. Na obrazki
+                    wystarczy <code>.mw-100</code>.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-5">
+            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-layout.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: layout</h5>
+                  <p class="text-4 text-muted m-0">
+                    Gotowe układy stron, siatki i bento.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-sections.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Sekcje &amp; Hero</h5>
+                  <p class="text-4 text-muted m-0">
+                    Kontenery, odstępy pionowe i nagłówki sekcji.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-admin.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Panel admina</h5>
+                  <p class="text-4 text-muted m-0">
+                    Layout z sidebarem — osobny zestaw klas.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
 
@@ -402,13 +643,11 @@
           <div
             class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
           >
-            <a href="docs.html" class="btn btn-secondary"
-              >➔ Wstecz: Getting Started</a
+            <a href="docs-variables.html" class="btn btn-secondary"
+              >➔ Wstecz: Zmienne CSS</a
             >
-            <a
-              href="docs-typography.html"
-              class="btn btn-primary fw-bold hover-spring"
-              >Następny krok: Typografia & Kolory ➔</a
+            <a href="docs-navbar.html" class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Nawigacja &amp; Menu ➔</a
             >
           </div>
         </div>

@@ -120,7 +120,8 @@ pułapek.
 | `docs-cards` | ✅ | 23/23 |
 | `docs-tables` | ✅ | 37/37 |
 | `docs-buttons` | ✅ | 46/46 |
-| `docs-layout`, `docs-typography`, `docs-sections`, `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 11 | — |
+| `docs-layout` | ✅ | 70/70 rodzin |
+| `docs-typography`, `docs-sections`, `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 10 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -145,6 +146,11 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
 5. **Test kompletności** — porównaj klasy opisane na stronie
    (`<code>.x</code>`) z listą z kroku 2. Ma wyjść **zero pominiętych**.
    Ten test wyłapał realne dziury w `docs-navbar` i `docs-interactive`.
+   Przy klasach narzędziowych (`docs-layout`: 221 klas) **zwiń rodziny
+   numerowane** do wzorca przed porównaniem —
+   `sed -E 's/-(auto|100|75|50|25|1[0-2]|[0-9])$/-N/'` — inaczej test każe
+   wypisywać `.col-span-1` … `.col-span-12` osobno i strona robi się
+   nieczytelna. Dokumentuj rodzinę z zakresem, nie każdy jej element.
 6. **Sprawdź, czy nic nie zginęło**: usunięte showcase'y muszą istnieć
    w `examples-*` (`grep -rl 'class="…' src/examples-*.html`).
 7. **Martwe linki**: każdy `href="*.html"` musi wskazywać istniejący plik.
