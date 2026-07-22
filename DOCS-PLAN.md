@@ -123,7 +123,9 @@ pułapek.
 | `docs-layout` | ✅ | 70/70 rodzin |
 | `docs-typography` | ✅ | 67/67 rodzin |
 | `docs-sections` | ✅ | 41/41 |
-| `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 8 | — |
+| `docs-animations` | ✅ | 26/26 |
+| `docs-charts` | ✅ | 31/31 |
+| `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 6 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -159,6 +161,9 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
    Na samej stronie wypisz komplet kolorów raz, w kolumnie „warianty".
 6. **Sprawdź, czy nic nie zginęło**: usunięte showcase'y muszą istnieć
    w `examples-*` (`grep -rl 'class="…' src/examples-*.html`).
+   **Uwaga na fałszywe trafienia z sidebara** — link w menu
+   (`href="examples-X.html"`) pasuje do grepa, choć strona wcale nie ma tej
+   klasy w treści. Sprawdź `grep -c 'class="nazwa'`, nie samo `grep -rl`.
 7. **Martwe linki**: każdy `href="*.html"` musi wskazywać istniejący plik.
 8. `npm run build` + commit.
 
