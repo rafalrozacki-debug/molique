@@ -293,7 +293,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.bg-glass` (Glassmorphism).
 - **Kolory na hover:** `.bg-hover-*`, `.text-hover-*`, `.border-hover-*`
   (pełna paleta: primary, success, danger, warning, info, dark, light,
-  secondary, surface, body) — UWAGA: nazwa to `bg-hover-`, NIE `hover-bg-`.
+  secondary, surface, body) — kolor jest PO myślniku: `bg-hover-primary`,
+  nie `hover-bg-primary`. Wyjątkiem są dwa starsze helpery o odwróconej
+  nazwie i bez palety: `.hover-text-primary` i `.hover-bg-light` — istnieją
+  i działają, ale nie mają odpowiedników w innych kolorach.
+  Na `.btn` tych klas NIE dokładaj: przycisk ma własny kolor hover z
+  wariantu, więc obie reguły ze sobą konkurują. Zmień `--<kolor>-hover`.
 - **Listy z ikonami:** `.list-unstyled` (bez punktorów) oraz `.list-icons`
   z wariantem ikony `.list-icons-check/-arrow/-cross` i kolorem
   `.list-icons-success/-danger/-dark` (domyślnie primary).

@@ -291,7 +291,7 @@
               </table>
             </div>
 
-            <div class="p-4 bg-surface border rounded-2 mt-4">
+            <div class="p-4 bg-surface border rounded-2 mt-4 mb-4">
               <h5 class="fw-bold text-5 mb-2">Jak działa pierwszeństwo</h5>
               <p class="text-4 text-muted m-0">
                 Reguła celuje w <code>.btn:not([class*="hover-"])</code>, czyli
@@ -300,6 +300,134 @@
                 walkę ze specyficznością. Efekt można też wybrać w
                 <a href="theme-editor.html">edytorze motywu</a>.
               </p>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Efekty spoza modułu przycisków</h3>
+            <p class="text-muted mb-3">
+              Klasy <code>hover-*</code> z modułu narzędzi nie są przypisane do
+              żadnego komponentu — działają na dowolnym elemencie, więc i na
+              przycisku. Poniżej te, które mają na nim sens, wraz z tym, czego
+              wymagają. Pełne galerie:
+              <a href="examples-hover-microinteractions.html">mikrointerakcje</a>
+              i <a href="examples-border-effects.html">efekty ramek</a>.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Efekt</th>
+                    <th>Na przycisku</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-scale</code></td>
+                    <td data-label="Efekt">
+                      Powiększenie. Siłę ustala <code>--hover-scale</code>.
+                    </td>
+                    <td data-label="Na przycisku"><span class="badge badge-success">bez zastrzeżeń</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-shadow</code></td>
+                    <td data-label="Efekt">
+                      Uniesienie z cieniem. Wysokość: <code>--hover-y</code>.
+                    </td>
+                    <td data-label="Na przycisku"><span class="badge badge-success">bez zastrzeżeń</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-gpu-shadow</code></td>
+                    <td data-label="Efekt">
+                      Cień narastający bez animowania <code>box-shadow</code>.
+                    </td>
+                    <td data-label="Na przycisku"><span class="badge badge-success">bez zastrzeżeń</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-tilt</code></td>
+                    <td data-label="Efekt">Stałe wychylenie 3D.</td>
+                    <td data-label="Na przycisku"><span class="badge badge-success">bez zastrzeżeń</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-border-draw</code></td>
+                    <td data-label="Efekt">
+                      Ramka rysowana od środka na zewnątrz, zaokrąglona.
+                    </td>
+                    <td data-label="Na przycisku">
+                      <span class="badge badge-success">bez zastrzeżeń</span>
+                      Rysuje we własnym <code>::before</code>, więc nie rusza
+                      tła przycisku.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-border-trace</code></td>
+                    <td data-label="Efekt">
+                      Światło obiegające obrys, zaokrąglone.
+                    </td>
+                    <td data-label="Na przycisku">
+                      <span class="badge badge-success">bez zastrzeżeń</span>
+                      Też <code>::before</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-border-draw-2</code></td>
+                    <td data-label="Efekt">Ramka rysowana bok po boku, ostre rogi.</td>
+                    <td data-label="Na przycisku">
+                      <span class="badge badge-warning">ustaw kolor</span>
+                      Patrz uwaga pod tabelą.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-border-trace-2</code></td>
+                    <td data-label="Efekt">Obrys obiegany bok po boku, ostre rogi.</td>
+                    <td data-label="Na przycisku">
+                      <span class="badge badge-warning">ustaw kolor</span>
+                      Patrz uwaga pod tabelą.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tilt-card</code></td>
+                    <td data-label="Efekt">Wychylenie podążające za kursorem.</td>
+                    <td data-label="Na przycisku">
+                      <span class="badge badge-warning">wymaga JS</span>
+                      Na dotyku moduł sam się wyłącza.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa">
+                      <code class="fw-bold">.bg-hover-*</code>,
+                      <code class="fw-bold">.text-hover-*</code>,
+                      <code class="fw-bold">.border-hover-*</code>
+                    </td>
+                    <td data-label="Efekt">Zmiana koloru po najechaniu.</td>
+                    <td data-label="Na przycisku">
+                      <span class="badge badge-danger">odradzane</span>
+                      Przycisk ma własny kolor hover z wariantu — te klasy z nim
+                      konkurują. Zmień <code>--primary-hover</code> zamiast
+                      doklejać utility.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">
+                Dlaczego warianty <code>-2</code> wymagają koloru
+              </h5>
+              <p class="text-4 text-muted mb-3">
+                Odmiany z ostrymi rogami nie rysują pseudoelementu — kreski to
+                cztery gradienty w <code>background-image</code> samego
+                elementu. Tło przycisku (<code>background-color</code>)
+                zostaje nietknięte, więc technicznie działają. Problem jest
+                wizualny: kreska ma domyślnie kolor <code>--primary</code>,
+                czyli na przycisku <code>.btn-primary</code> jest niewidoczna.
+              </p>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;button class="btn btn-primary hover-border-draw-2"
+        style="--hover-border-color: #fff;"&gt;Biała ramka&lt;/button&gt;</code></pre>
+              </div>
             </div>
           </section>
 
