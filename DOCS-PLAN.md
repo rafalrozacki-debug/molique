@@ -125,7 +125,8 @@ pułapek.
 | `docs-sections` | ✅ | 41/41 |
 | `docs-animations` | ✅ | 26/26 |
 | `docs-charts` | ✅ | 31/31 |
-| `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 6 | — |
+| `docs-select` | ✅ | 23/23 |
+| `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 5 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,

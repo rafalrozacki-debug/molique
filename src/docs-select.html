@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Select & Switche - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Searchable Select & Switche - molique Docs","description":"Referencja select z wyszukiwarką i multi selecta molique na Popover API oraz przełączników iOS-style. Struktura HTML, API JavaScript, warianty i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -15,577 +15,419 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <h1 class="text-11 fw-black mb-3">Searchable Select & Switche</h1>
+            <h1 class="text-11 fw-black mb-3">Searchable Select &amp; Switche</h1>
             <p class="text-6 text-muted">
-              Zaawansowane kontrolki formularzy niezbędne w systemach B2B.
-              Zbudowane hybrydowo: wykorzystują natywne tagi HTML5 do
-              zarządzania stanem, wspierane lekkim JS do filtrowania.
+              Dwa selecty na Popover API — pojedynczy wybór z wyszukiwarką i
+              wielokrotny z tagami — oraz przełączniki w stylu iOS. Gotowe
+              zestawy: <a href="examples-select.html">select</a> i
+              <a href="examples-switches.html">switche</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: SEARCHABLE SELECT -->
+          <!-- ===================================================== -->
+          <!-- 1. DLACZEGO POPOVER API                               -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">1. Searchable Select (Combobox)</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Dlaczego Popover API</h2>
             <p class="text-muted mb-4">
-              Zastępuje klasyczny tag <code>&lt;select&gt;</code>. Otwieranie i
-              zamykanie działa natywnie dzięki Popover API — menu renderuje
-              się w top layer, więc nie jest przycinane nawet wewnątrz modala.
+              Natywny <code>&lt;select&gt;</code> nie ma wyszukiwarki ani
+              wielokrotnego wyboru z tagami. Zamiast odtwarzać go w całości
+              w JavaScripcie, oba komponenty stoją na atrybucie
+              <code>popover</code>: rozwijane menu trafia do
+              <strong>top layer</strong> — osobnej warstwy przeglądarki nad
+              całą resztą strony.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Architektura i integracja:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  <strong>Zero JS dla UI:</strong> Otwieranie opiera się na
-                  natywnym Popover API (<code>popovertarget</code> na
-                  przycisku + atrybut <code>popover</code> na menu). Zamykanie
-                  klawiszem Esc i kliknięciem poza menu obsługuje przeglądarka
-                  (light dismiss).
-                </li>
-                <li>
-                  <strong>Top layer:</strong> Menu renderuje się w top layer
-                  przeglądarki, więc <em>nie jest przycinane</em> przez
-                  przewijane kontenery — działa poprawnie także wewnątrz
-                  modala <code>&lt;dialog&gt;</code>.
-                </li>
-                <li>
-                  <strong>Unikalne ID:</strong> Każda instancja wymaga
-                  unikalnego <code>id</code> na menu, wskazanego w atrybucie
-                  <code>popovertarget</code> przycisku.
-                </li>
-                <li>
-                  <strong>Backend:</strong> Wybrana wartość jest automatycznie
-                  wstawiana do ukrytego pola
-                  <code
-                    >&lt;input type="hidden"
-                    class="select-search-hidden"&gt;</code
-                  >. Dzięki temu formularz wysyła dane do PHP dokładnie tak
-                  samo, jak przy użyciu standardowego selecta.
-                </li>
-                <li>
-                  <strong>Wymagania:</strong> Komponent wymaga załadowania pliku
-                  <code>molique-script.js</code> do obsługi wyboru opcji
-                  (wpis do ukrytego pola) oraz filtrowania podczas wpisywania
-                  tekstu.
-                </li>
-                <li>
-                  <strong>Wyszukiwarka jest opcjonalna:</strong> pomiń
-                  <code>.select-search-input</code>, a komponent działa jak
-                  klasyczny select — sama lista opcji (przykład niżej).
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface"
-                style="min-height: 350px; align-items: flex-start"
-              >
-                <div class="w-100" style="max-width: 400px">
-                  <label class="fw-bold mb-2 d-block">Wybierz klienta:</label>
-
-                  <div class="select-search">
-                    <button
-                      type="button"
-                      class="input select-search-trigger"
-                      popovertarget="docs-klient-select"
-                    >
-                      <span style="color: var(--text-muted)"
-                        >Wybierz z listy...</span
-                      >
-                    </button>
-
-                    <div
-                      class="select-search-menu shadow-lg"
-                      popover
-                      id="docs-klient-select"
-                    >
-                      <input
-                        type="text"
-                        class="input select-search-input"
-                        placeholder="Szukaj klienta..."
-                      />
-
-                      <div class="select-search-list">
-                        <div
-                          class="select-search-option"
-                          data-value="1"
-                        >
-                          Jan Kowalski (Firma A)
-                        </div>
-                        <div
-                          class="select-search-option"
-                          data-value="2"
-                        >
-                          Anna Nowak (Firma B)
-                        </div>
-                        <div
-                          class="select-search-option"
-                          data-value="3"
-                        >
-                          Piotr Wiśniewski (Firma C)
-                        </div>
-                        <div
-                          class="select-search-option"
-                          data-value="4"
-                        >
-                          Katarzyna Zielińska (Firma D)
-                        </div>
-                        <div
-                          class="select-search-option"
-                          data-value="5"
-                        >
-                          Michał Lewandowski (Firma E)
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- To pole leci do backendu -->
-                    <input
-                      type="hidden"
-                      name="klient_id"
-                      class="select-search-hidden"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="select-search"&gt;
-  &lt;button type="button" class="input select-search-trigger" popovertarget="klient-select"&gt;
-    &lt;span&gt;Wybierz z listy...&lt;/span&gt;
-  &lt;/button&gt;
-
-  &lt;!-- [popover] = top layer: menu nie jest przycinane nawet w modalu --&gt;
-  &lt;div class="select-search-menu" popover id="klient-select"&gt;
-    &lt;input type="text" class="input select-search-input" placeholder="Szukaj..."&gt;
-    &lt;div class="select-search-list"&gt;
-      &lt;div class="select-search-option" data-value="1"&gt;Opcja 1&lt;/div&gt;
-      &lt;div class="select-search-option" data-value="2"&gt;Opcja 2&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;!-- Ukryte pole dla backendu --&gt;
-  &lt;input type="hidden" name="klient_id" class="select-search-hidden"&gt;
-&lt;/div&gt;</code></pre>
-              </div>
-            </div>
-
-            <h3 class="text-6 fw-bold mb-3 mt-5">
-              Wariant bez wyszukiwarki (zwykły select)
-            </h3>
-            <p class="text-muted mb-4">
-              Pole <code>.select-search-input</code> jest opcjonalne — po jego
-              pominięciu komponent działa jak klasyczny
-              <code>&lt;select&gt;</code>: sama lista opcji, nadal w top layer
-              i bez przycinania w modalach. Aktywną opcję oznacz klasą
-              <code>.is-selected</code> i ustaw <code>value</code> ukrytego
-              pola.
-            </p>
-
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface"
-                style="min-height: 300px; align-items: flex-start"
-              >
-                <div class="w-100" style="max-width: 400px">
-                  <label class="fw-bold mb-2 d-block">Status początkowy:</label>
-
-                  <div class="select-search">
-                    <button
-                      type="button"
-                      class="input select-search-trigger"
-                      popovertarget="docs-status-select"
-                    >
-                      <span>Planowanie</span>
-                    </button>
-
-                    <div
-                      class="select-search-menu shadow-lg"
-                      popover
-                      id="docs-status-select"
-                    >
-                      <div class="select-search-list">
-                        <div
-                          class="select-search-option is-selected"
-                          data-value="planowanie"
-                        >
-                          Planowanie
-                        </div>
-                        <div class="select-search-option" data-value="oczekuje">
-                          Oczekuje
-                        </div>
-                        <div
-                          class="select-search-option"
-                          data-value="w-trakcie"
-                        >
-                          W trakcie
-                        </div>
-                        <div
-                          class="select-search-option"
-                          data-value="zakonczone"
-                        >
-                          Zakończone
-                        </div>
-                      </div>
-                    </div>
-
-                    <input
-                      type="hidden"
-                      name="status"
-                      class="select-search-hidden"
-                      value="planowanie"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="select-search"&gt;
-  &lt;button type="button" class="input select-search-trigger" popovertarget="status-select"&gt;
-    &lt;span&gt;Planowanie&lt;/span&gt;
-  &lt;/button&gt;
-
-  &lt;!-- Bez .select-search-input = zwykły select --&gt;
-  &lt;div class="select-search-menu" popover id="status-select"&gt;
-    &lt;div class="select-search-list"&gt;
-      &lt;div class="select-search-option is-selected" data-value="planowanie"&gt;Planowanie&lt;/div&gt;
-      &lt;div class="select-search-option" data-value="oczekuje"&gt;Oczekuje&lt;/div&gt;
-      &lt;div class="select-search-option" data-value="w-trakcie"&gt;W trakcie&lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-
-  &lt;input type="hidden" name="status" class="select-search-hidden" value="planowanie"&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Efekt: menu nigdy nie jest przycięte</h5>
+              <p class="text-4 text-muted m-0">
+                Menu w tabeli z przewijaniem, w modalu, w karcie z
+                <code>overflow: hidden</code> — w każdym z tych miejsc
+                zwykły <code>position: absolute</code> zostałby ucięty przez
+                rodzica. Top layer jest poza tą hierarchią, więc menu zawsze
+                wychodzi na wierzch, a kotwiczenie do przycisku jest
+                automatyczne (niejawny anchor).
+              </p>
             </div>
           </section>
 
-          <!-- SEKCJA 2: PREMIUM MULTI SELECT -->
+          <!-- ===================================================== -->
+          <!-- 2. SELECT Z WYSZUKIWARKĄ                              -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">2. Premium Multi Select</h2>
+            <h2 class="text-8 fw-bold mb-3">2. Select z wyszukiwarką</h2>
             <p class="text-muted mb-4">
-              Zaawansowany komponent do wyboru wielu opcji, wzorowany na
-              nowoczesnych interfejsach SaaS. Posiada wbudowaną wyszukiwarkę,
-              podział na kategorie i interaktywne karty opcji.
+              Pojedynczy wybór z listy. Wyszukiwarka jest
+              <strong>opcjonalna</strong> — bez pola tekstowego komponent
+              działa jak zwykły select, tylko z menu w top layer.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">
-                Zasada działania (Zero JS dla UI):
-              </h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  <strong>Natywny Dropdown:</strong> Otwieranie opiera się na
-                  Popover API (<code>popovertarget</code> +
-                  <code>popover</code>), a menu renderuje się w top layer —
-                  nie jest przycinane przez przewijane kontenery ani modale.
-                  Esc i klik poza menu zamykają je natywnie.
-                </li>
-                <li>
-                  <strong>Magia CSS:</strong> Karty opcji
-                  (<code>.custom-select-option</code>) automatycznie zmieniają
-                  kolor i obramowanie, gdy ukryty w nich checkbox zostanie
-                  zaznaczony, dzięki selektorowi
-                  <code>:has(input:checked)</code>.
-                </li>
-                <li>
-                  <strong>Kategorie:</strong> Użyj
-                  <code>&lt;div class="custom-select-category"&gt;</code>, aby
-                  pogrupować opcje w logiczne sekcje.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface"
-                style="min-height: 450px; align-items: flex-start"
-              >
-                <div class="w-100" style="max-width: 400px">
-                  <label class="fw-bold mb-2 d-block">Filtruj wyniki:</label>
-
-                  <div class="custom-select shadow-sm">
-                    <button
-                      type="button"
-                      class="custom-select-trigger"
-                      popovertarget="docs-skills-select"
-                    >
-                      <span class="custom-select-pills">
-                        <span
-                          class="badge bg-primary text-white d-flex align-items-center gap-1"
-                        >
-                          HTML
-                          <i
-                            class="icon-x"
-                            style="font-size: 0.7em; cursor: pointer"
-                          ></i>
-                        </span>
-                        <span
-                          class="badge bg-primary text-white d-flex align-items-center gap-1"
-                        >
-                          CSS
-                          <i
-                            class="icon-x"
-                            style="font-size: 0.7em; cursor: pointer"
-                          ></i>
-                        </span>
-                      </span>
-                      <span
-                        class="d-flex align-items-center gap-2 text-muted"
-                      >
-                        <span class="badge bg-secondary text-white">2</span>
-                        <svg
-                          class="icon-chevron"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 256 256"
-                        >
-                          <path
-                            d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"
-                          ></path>
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div
-                      class="custom-select-dropdown"
-                      popover
-                      id="docs-skills-select"
-                    >
-                      <div class="custom-select-search">
-                        <svg
-                          class="search-icon"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          viewBox="0 0 256 256"
-                        >
-                          <path
-                            d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
-                          ></path>
-                        </svg>
-                        <input
-                          type="text"
-                          class="input"
-                          placeholder="Szukaj umiejętności..."
-                        />
-                      </div>
-
-                      <div class="custom-select-list">
-                        <div class="custom-select-category">Popularne</div>
-
-                        <label class="custom-select-option">
-                          <div
-                            class="d-flex align-items-center justify-content-center rounded-2"
-                            style="
-                              width: 32px;
-                              height: 32px;
-                              background: rgba(var(--danger-rgb), 0.1);
-                              color: var(--danger);
-                            "
-                          >
-                            <span class="fw-black">H</span>
-                          </div>
-                          <div class="flex-1">
-                            <div class="fw-bold text-4 text-dark">HTML</div>
-                            <div class="text-muted text-3">Markup Language</div>
-                          </div>
-                          <input
-                            type="checkbox"
-                            class="form-check-input"
-                            checked
-                          />
-                        </label>
-
-                        <label class="custom-select-option">
-                          <div
-                            class="d-flex align-items-center justify-content-center rounded-2"
-                            style="
-                              width: 32px;
-                              height: 32px;
-                              background: rgba(var(--info-rgb), 0.1);
-                              color: var(--info);
-                            "
-                          >
-                            <span class="fw-black">C</span>
-                          </div>
-                          <div class="flex-1">
-                            <div class="fw-bold text-4 text-dark">CSS</div>
-                            <div class="text-muted text-3">
-                              Styling Language
-                            </div>
-                          </div>
-                          <input
-                            type="checkbox"
-                            class="form-check-input"
-                            checked
-                          />
-                        </label>
-
-                        <div class="custom-select-category">Inne</div>
-
-                        <label class="custom-select-option">
-                          <div
-                            class="d-flex align-items-center justify-content-center rounded-2"
-                            style="
-                              width: 32px;
-                              height: 32px;
-                              background: rgba(var(--warning-rgb), 0.1);
-                              color: var(--warning);
-                            "
-                          >
-                            <span class="fw-black">JS</span>
-                          </div>
-                          <div class="flex-1">
-                            <div class="fw-bold text-4 text-dark">
-                              JavaScript
-                            </div>
-                            <div class="text-muted text-3">
-                              Programming Language
-                            </div>
-                          </div>
-                          <input type="checkbox" class="form-check-input" />
-                        </label>
-                      </div>
-
-                      <div class="p-2 border-top d-flex gap-2">
-                        <button class="btn bg-body text-muted border flex-1">
-                          Wyczyść
-                        </button>
-                        <button class="btn btn-primary flex-1">Zastosuj</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="custom-select"&gt;
-  &lt;button type="button" class="custom-select-trigger" popovertarget="skills-select"&gt;
-    &lt;!-- Tagi i strzałka --&gt;
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="select-search"&gt;
+  &lt;button type="button" class="input select-search-trigger"
+          popovertarget="klient-select"&gt;
+    &lt;span&gt;Wybierz z listy…&lt;/span&gt;
   &lt;/button&gt;
 
-  &lt;!-- [popover] = top layer: menu nie jest przycinane nawet w modalu --&gt;
-  &lt;div class="custom-select-dropdown" popover id="skills-select"&gt;
-    &lt;!-- Wyszukiwarka --&gt;
-    &lt;div class="custom-select-search"&gt;
-      &lt;input type="text" class="input" placeholder="Szukaj..."&gt;
+  &lt;div class="select-search-menu" popover id="klient-select"&gt;
+    &lt;input type="text" class="input select-search-input"
+           placeholder="Szukaj…"&gt;
+    &lt;div class="select-search-list"&gt;
+      &lt;div class="select-search-option" data-value="1"&gt;Molique&lt;/div&gt;
+      &lt;div class="select-search-option" data-value="2"&gt;Briko&lt;/div&gt;
     &lt;/div&gt;
-    
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa / atrybut</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.select-search</code></td>
+                    <td data-label="Co robi">Obudowa. Niejawny anchor dla menu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.select-search-trigger</code></td>
+                    <td data-label="Co robi">
+                      Przycisk otwierający. Wymaga
+                      <code>popovertarget</code> wskazującego na
+                      <code>id</code> menu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.select-search-menu</code></td>
+                    <td data-label="Co robi">
+                      Panel. Wymaga atrybutu <code>popover</code> i
+                      unikalnego <code>id</code> — bez nich nie trafi do top
+                      layer i zniknie jak zwykły <code>&lt;div&gt;</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.select-search-input</code></td>
+                    <td data-label="Co robi">Pole wyszukiwania. Opcjonalne.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.select-search-list</code></td>
+                    <td data-label="Co robi">Kontener opcji.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.select-search-option</code></td>
+                    <td data-label="Co robi">
+                      Pojedyncza opcja. Wymaga <code>data-value</code> —
+                      moduł czyta stąd wartość przy wyborze.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-selected</code></td>
+                    <td data-label="Co robi">Opcja aktualnie wybrana. Nadaje ją skrypt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-hidden</code></td>
+                    <td data-label="Co robi">
+                      Opcja odfiltrowana przez wyszukiwarkę. Też skrypt.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Delegacja zdarzeń — działa z AJAX-em</h5>
+              <p class="text-4 text-muted m-0">
+                Moduł nasłuchuje na kontenerze, nie na pojedynczych opcjach,
+                więc obsługuje też <code>.select-search-option</code>
+                dolane do DOM <strong>po</strong> starcie strony — np. wynik
+                zapytania AJAX. Nie trzeba niczego re-inicjalizować.
+              </p>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Ustawianie wartości z JavaScriptu</h3>
+            <p class="text-muted mb-3">
+              Do programowego wypełnienia (np. otwarcie formularza edycji z
+              danymi rekordu) służy jedna funkcja globalna — synchronizuje
+              etykietę na przycisku i podświetlenie tak samo, jak wybór
+              myszką.
+            </p>
+            <div class="component-code">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>const hidden = document.querySelector('#klient-id');
+MoliqueSelectSearch.setValue(hidden, '2');</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. MULTI SELECT                                       -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Multi select</h2>
+            <p class="text-muted mb-4">
+              Wielokrotny wybór z tagami na przycisku. Struktura opcji to
+              zwykły <code>&lt;label&gt;</code> z checkboxem — zaznaczanie
+              działa więc natywnie, bez logiki w JS.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="custom-select"&gt;
+  &lt;button type="button" class="custom-select-trigger"
+          popovertarget="skills-select"&gt;
+    &lt;div class="custom-select-pills"&gt;…&lt;/div&gt;
+  &lt;/button&gt;
+
+  &lt;div class="custom-select-dropdown" popover id="skills-select"&gt;
+    &lt;div class="custom-select-search"&gt;
+      &lt;input type="text" class="input" placeholder="Szukaj…"&gt;
+    &lt;/div&gt;
     &lt;div class="custom-select-list"&gt;
-      &lt;div class="custom-select-category"&gt;Kategoria&lt;/div&gt;
-      
-      &lt;!-- Karta opcji --&gt;
+      &lt;div class="custom-select-category"&gt;Backend&lt;/div&gt;
       &lt;label class="custom-select-option"&gt;
-        &lt;div class="flex-1"&gt;
-          &lt;div class="fw-bold"&gt;Opcja 1&lt;/div&gt;
-        &lt;/div&gt;
+        &lt;div class="flex-1"&gt;PHP&lt;/div&gt;
         &lt;input type="checkbox" class="form-check-input"&gt;
       &lt;/label&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
-              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select</code></td>
+                    <td data-label="Co robi">Obudowa.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select-trigger</code></td>
+                    <td data-label="Co robi">
+                      Przycisk. W środku <code>.custom-select-pills</code>
+                      zamiast pojedynczej etykiety.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select-pills</code></td>
+                    <td data-label="Co robi">
+                      Rząd tagów wybranych opcji, wewnątrz
+                      <code>.badge</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select-dropdown</code></td>
+                    <td data-label="Co robi">
+                      Panel. Wymaga <code>popover</code> i <code>id</code> —
+                      tak samo jak w selekcie pojedynczym.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select-search</code></td>
+                    <td data-label="Co robi">Kontener pola wyszukiwania.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select-list</code></td>
+                    <td data-label="Co robi">Kontener kategorii i opcji.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select-category</code></td>
+                    <td data-label="Co robi">Nagłówek grupujący opcje.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.custom-select-option</code></td>
+                    <td data-label="Co robi">
+                      Na <code>&lt;label&gt;</code>. W środku zwykły
+                      <code>input[type="checkbox"].form-check-input</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.icon-chevron</code></td>
+                    <td data-label="Co robi">
+                      Strzałka w przycisku; obraca się o 180° po otwarciu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.search-icon</code></td>
+                    <td data-label="Co robi">Ikona lupy w polu wyszukiwania.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 3: SWITCHES -->
+          <!-- ===================================================== -->
+          <!-- 4. PRZEŁĄCZNIKI                                       -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">2. Przełączniki (Switche)</h2>
+            <h2 class="text-8 fw-bold mb-3">4. Przełączniki</h2>
             <p class="text-muted mb-4">
-              Zbudowane na bazie natywnego
-              <code>&lt;input type="checkbox"&gt;</code>. Posiadają wymuszone
-              44px wysokości dla dostępności B2B.
+              Checkbox przebrany za suwak w stylu iOS. Cały mechanizm to
+              <code>appearance: none</code> na checkboxie i pseudoelement
+              jako pływająca gałka — zero JavaScriptu, zero dodatkowych
+              elementów w DOM.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Dostępne warianty wizualne:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <code>.form-switch</code> — Domyślny wariant w stylu iOS
-                  (zaokrąglony, pełne tło).
-                </li>
-                <li>
-                  <code>.form-switch-square</code> — Wariant kwadratowy, idealny
-                  do surowych, technicznych interfejsów B2B.
-                </li>
-                <li>
-                  <code>.form-switch-outline</code> — Wariant konturowy, oparty
-                  na obramowaniu. Przezroczyste tło nadaje mu minimalistyczny
-                  charakter.
-                </li>
-              </ul>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;label class="form-switch"&gt;
+  &lt;input type="checkbox" class="form-switch-input" checked&gt;
+  &lt;span class="form-switch-label"&gt;Powiadomienia e-mail&lt;/span&gt;
+&lt;/label&gt;</code></pre>
             </div>
 
-            <div class="component-showcase">
-              <div
-                class="component-preview flex-column align-items-start w-100 bg-surface gap-4"
-              >
-                <!-- Domyślny (iOS) -->
-                <div class="w-100">
-                  <p class="text-4 text-muted mb-2">Domyślny (iOS Style)</p>
-                  <label class="form-switch">
-                    <input type="checkbox" class="form-switch-input" checked />
-                    <span class="form-switch-label">Powiadomienia e-mail</span>
-                  </label>
-                </div>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.form-switch</code></td>
+                    <td data-label="Co robi">
+                      Na <code>&lt;label&gt;</code>. Klik w dowolnym miejscu
+                      — także w tekst — przełącza stan.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.form-switch-input</code></td>
+                    <td data-label="Co robi">
+                      Sam checkbox, przestylowany na suwak 44×24px. Kolor
+                      zaznaczenia to zawsze <code>--success</code> — patrz
+                      pułapka nr 3.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.form-switch-label</code></td>
+                    <td data-label="Co robi">Podpis obok suwaka.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.form-switch-square</code></td>
+                    <td data-label="Co robi">Wariant z prostymi rogami zamiast okrągłych.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.form-switch-outline</code></td>
+                    <td data-label="Co robi">
+                      Wariant z samą ramką zamiast wypełnionego tła — mniej
+                      dominujący wizualnie.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-                <!-- Kwadratowy -->
-                <div class="w-100">
-                  <p class="text-4 text-muted mb-2">
-                    Kwadratowy (.form-switch-square)
+          <!-- ===================================================== -->
+          <!-- 5. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Pułapki</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="select-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Brak <code>popover</code> lub <code>id</code> na panelu</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Bez atrybutu <code>popover</code> panel jest zwykłym
+                    <code>&lt;div&gt;</code> — przycisk z
+                    <code>popovertarget</code> nie ma go czym otworzyć, więc
+                    kliknięcie nic nie robi. Bez zgodnego <code>id</code>
+                    przycisk wskazuje donikąd. Oba objawiają się identycznie:
+                    menu się nie pojawia, bez błędu w konsoli.
                   </p>
-                  <label class="form-switch form-switch-square">
-                    <input type="checkbox" class="form-switch-input" checked />
-                    <span class="form-switch-label">Tryb deweloperski</span>
-                  </label>
-                </div>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;!-- ŹLE - brak popover, przycisk nic nie otworzy --&gt;
+&lt;div class="select-search-menu" id="x"&gt;…&lt;/div&gt;
 
-                <!-- Outline -->
-                <div class="w-100">
-                  <p class="text-4 text-muted mb-2">
-                    Konturowy (.form-switch-outline)
+&lt;!-- DOBRZE --&gt;
+&lt;div class="select-search-menu" popover id="x"&gt;…&lt;/div&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="select-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Brak <code>data-value</code> na opcji</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Moduł czyta wartość opcji wyłącznie z atrybutu
+                    <code>data-value</code>, nie z treści elementu. Opcja bez
+                    niego wybierze się wizualnie — podświetli i wstawi
+                    etykietę — ale pole ukryte zostanie puste, więc formularz
+                    wyśle brak wartości.
                   </p>
-                  <label class="form-switch form-switch-outline">
-                    <input type="checkbox" class="form-switch-input" checked />
-                    <span class="form-switch-label">Synchronizacja w tle</span>
-                  </label>
                 </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Domyślny --&gt;
-&lt;label class="form-switch"&gt;
-  &lt;input type="checkbox" class="form-switch-input" checked&gt;
-  &lt;span class="form-switch-label"&gt;Opcja 1&lt;/span&gt;
-&lt;/label&gt;
+              </details>
 
-&lt;!-- Kwadratowy --&gt;
-&lt;label class="form-switch form-switch-square"&gt;
-  &lt;input type="checkbox" class="form-switch-input"&gt;
-  &lt;span class="form-switch-label"&gt;Opcja 2&lt;/span&gt;
-&lt;/label&gt;
+              <details class="accordion-item" name="select-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">3</span>
+                  <span>Kolor przełącznika jest na stałe zielony</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Zaznaczony <code>.form-switch-input</code> zawsze bierze
+                    <code>--success</code> — nie ma modyfikatora koloru ani
+                    zmiennej lokalnej do nadpisania per instancja. Jeśli
+                    potrzebujesz innego koloru (np. czerwonego przełącznika
+                    „usuń dane"), jedyna droga to własna reguła CSS celująca
+                    w konkretną klasę, bo zmiana <code>--success</code>
+                    globalnie zmieni też wszystkie inne miejsca tego koloru
+                    w projekcie.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
 
-&lt;!-- Konturowy --&gt;
-&lt;label class="form-switch form-switch-outline"&gt;
-  &lt;input type="checkbox" class="form-switch-input"&gt;
-  &lt;span class="form-switch-label"&gt;Opcja 3&lt;/span&gt;
-&lt;/label&gt;</code></pre>
-              </div>
+          <!-- ===================================================== -->
+          <!-- 6. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">6. Powiązane strony</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-select.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: select</h5>
+                  <p class="text-4 text-muted m-0">
+                    Oba warianty w kontekście formularza.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-switches.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: switche</h5>
+                  <p class="text-4 text-muted m-0">
+                    Wszystkie warianty obok siebie.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-forms.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Formularze &amp; Walidacja</h5>
+                  <p class="text-4 text-muted m-0">
+                    Pozostałe pola i mechanizm walidacji.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
 
@@ -593,13 +435,11 @@
           <div
             class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
           >
-            <a href="docs-forms.html" class="btn btn-secondary"
-              >➔ Wstecz: Inputy & Walidacja</a
+            <a href="docs-forms.html" class="btn-secondary"
+              >➔ Wstecz: Formularze &amp; Walidacja</a
             >
-            <a
-              href="docs-animations.html"
-              class="btn btn-primary fw-bold hover-spring"
-              >Następny krok: Animacje & Mikrointerakcje ➔</a
+            <a href="docs-animations.html" class="btn-primary fw-bold hover-spring"
+              >Następny krok: Animacje ➔</a
             >
           </div>
         </div>
