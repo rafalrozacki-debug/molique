@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Przyciski & Badges - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Przyciski & Badges - molique Docs","description":"Referencja przycisków molique: kolory, rozmiary, warianty wyglądu, ghost buttons do tabel i globalny efekt hover. Pełne tabele klas, badges i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -15,245 +15,587 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <h1 class="text-11 fw-black mb-3">Przyciski & Badges</h1>
+            <h1 class="text-11 fw-black mb-3">Przyciski &amp; Badges</h1>
             <p class="text-6 text-muted">
-              Wszystkie elementy interaktywne w molique spełniają rygorystyczne
-              normy dostępności B2B (WCAG 2.2 AAA), posiadając wymuszony
-              minimalny obszar klikalny 44x44px.
+              Przycisk składasz z trzech niezależnych decyzji: kolor, rozmiar,
+              wygląd. Ta strona wypisuje wszystkie opcje i tłumaczy, kiedy
+              wolno złamać regułę 44px. Gotowe zestawy są w
+              <a href="examples-buttons.html">przykładach</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: PODSTAWOWE PRZYCISKI -->
+          <!-- ===================================================== -->
+          <!-- 1. ANATOMIA                                           -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">1. Warianty Przycisków</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Anatomia</h2>
             <p class="text-muted mb-4">
-              Używaj klasy bazowej <code>.btn</code> w połączeniu z
-              modyfikatorami kolorów.
+              Bazą jest zawsze <code>.btn</code> — daje kształt, wysokość 44px
+              i obwódkę focusa. Reszta to modyfikatory, które można łączyć, ale
+              <strong>po jednym z każdej grupy</strong>.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Dostępne modyfikatory:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <strong>Rozmiary:</strong> <code>.btn-sm</code>,
-                  <code>.btn-md</code> (domyślny), <code>.btn-lg</code>,
-                  <code>.btn-xl</code>.
-                </li>
-                <li>
-                  <strong>Warianty konturowe:</strong> Dodaj
-                  <code>.btn-outline-*</code> (np.
-                  <code>.btn-outline-primary</code>), aby uzyskać przezroczyste
-                  tło z kolorową ramką.
-                </li>
-              </ul>
-              <hr class="my-3" />
-              <h5 class="fw-bold text-5 mb-2">Wymogi dostępności (B2B):</h5>
-              <p class="text-4 text-muted m-0">
-                Wszystkie standardowe przyciski mają wymuszoną minimalną
-                wysokość
-                <strong>44px</strong>, aby spełniać standardy WCAG 2.2 AAA dla
-                interfejsów dotykowych.
-              </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;button class="btn btn-primary"&gt;Zapisz&lt;/button&gt;
+&lt;button class="btn btn-primary btn-lg"&gt;Większy&lt;/button&gt;
+&lt;button class="btn btn-outline-primary btn-sm"&gt;Obrys, mniejszy&lt;/button&gt;
+
+&lt;!-- .btn działa na dowolnym elemencie --&gt;
+&lt;a href="/cennik" class="btn btn-secondary"&gt;Zobacz cennik&lt;/a&gt;</code></pre>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100 gap-3">
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
                 <button class="btn btn-primary">Primary</button>
                 <button class="btn btn-secondary">Secondary</button>
                 <button class="btn btn-success">Success</button>
                 <button class="btn btn-danger">Danger</button>
-                <button class="btn btn-warning">Warning</button>
+                <button class="btn btn-outline-primary">Outline</button>
+                <button class="btn btn-primary btn-sm">Mały</button>
+                <button class="btn btn-primary btn-lg">Duży</button>
               </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
-&lt;button class="btn btn-secondary"&gt;Secondary&lt;/button&gt;
-&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;</code></pre>
-              </div>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Kolory</h3>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Kiedy</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-primary</code></td>
+                    <td data-label="Kiedy">Główna akcja ekranu. <strong>Jedna na widok.</strong></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-secondary</code></td>
+                    <td data-label="Kiedy">Akcja drugoplanowa: Anuluj, Wstecz.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-success</code></td>
+                    <td data-label="Kiedy">Potwierdzenie, zakończenie procesu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-danger</code></td>
+                    <td data-label="Kiedy">Akcja nieodwracalna: Usuń, Zerwij umowę.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-warning</code></td>
+                    <td data-label="Kiedy">Akcja wymagająca uwagi.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-info</code></td>
+                    <td data-label="Kiedy">Akcja neutralna, informacyjna.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-dark</code></td>
+                    <td data-label="Kiedy">
+                      Kontrast do tła. Odwraca się w dark mode razem z
+                      <code>--dark</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-light</code></td>
+                    <td data-label="Kiedy">Przycisk na ciemnym tle.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Rozmiary</h3>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Do czego</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-xs</code></td>
+                    <td data-label="Do czego">
+                      Bardzo mały. <strong>Schodzi poniżej celu dotykowego</strong> —
+                      tylko tam, gdzie kliknięcie nie jest podstawową drogą.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-sm</code></td>
+                    <td data-label="Do czego">Paski filtrów, akcje w kartach.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-md</code></td>
+                    <td data-label="Do czego">Jawnie zapisany rozmiar domyślny.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-lg</code></td>
+                    <td data-label="Do czego">Formularze kontaktowe, wezwania do działania.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-xl</code></td>
+                    <td data-label="Do czego">Główny przycisk w sekcji hero.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 2: BUTTON GROUPS -->
+          <!-- ===================================================== -->
+          <!-- 2. WARIANTY WYGLĄDU                                   -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              2. Zgrupowane Przyciski (Button Group)
-            </h2>
+            <h2 class="text-8 fw-bold mb-3">2. Warianty wyglądu</h2>
             <p class="text-muted mb-4">
-              Łączy serię przycisków w jedną linię. Idealne do pasków narzędzi
-              (Toolbars) lub przełączników widoku.
+              Zmieniają sposób rysowania przycisku, nie jego znaczenie. Wariant
+              obrysowy ma wersję dla każdego koloru; reszta działa na dowolnym.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Architektura komponentu:</h5>
-              <p class="text-4 text-muted m-0">
-                Grupa przycisków automatycznie usuwa wewnętrzne zaokrąglenia
-                rogów. Dzięki wykorzystaniu zmiennych CSS
-                (<code>--btn-border-width</code>), ramki sąsiadujących
-                przycisków idealnie się nakładają, zapobiegając powstawaniu
-                podwójnych, grubych linii na stykach nawet przy zmianie grubości
-                obramowania.
-              </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Wygląd</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-outline-primary</code></td>
+                    <td data-label="Wygląd">
+                      Sama ramka, tło dopiero na hover. Wariant istnieje dla
+                      każdego koloru:
+                      <code>.btn-outline-secondary</code>,
+                      <code>.btn-outline-success</code>,
+                      <code>.btn-outline-danger</code>,
+                      <code>.btn-outline-warning</code>,
+                      <code>.btn-outline-info</code>,
+                      <code>.btn-outline-dark</code>,
+                      <code>.btn-outline-light</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-outline-soft</code></td>
+                    <td data-label="Wygląd">
+                      Złagodzony obrys: ramka na 30% krycia, tło na hover 10%.
+                      Dokładasz go do wariantu obrysowego.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-3d</code></td>
+                    <td data-label="Wygląd">
+                      Cień „podstawy", który wciska się przy kliknięciu. Kolor
+                      podstawy siedzi w <code>--btn-3d-shadow</code> — przy
+                      kolorze innym niż primary ustaw ją sam.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-glass</code></td>
+                    <td data-label="Wygląd">
+                      Szronione szkło. <strong>Wyłącznie na zdjęciu lub
+                      gradiencie</strong> — na jednolitym tle nie ma czego
+                      rozmywać. Patrz pułapka nr 2.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-glow</code></td>
+                    <td data-label="Wygląd">Poświata narastająca przy najechaniu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-gradient</code></td>
+                    <td data-label="Wygląd">
+                      Tło z przejściem primary → info. Ignoruje klasę koloru.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-shine</code></td>
+                    <td data-label="Wygląd">Refleks przejeżdżający przez przycisk.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-stacked</code></td>
+                    <td data-label="Wygląd">
+                      Ikona nad podpisem zamiast obok — pasek narzędzi, dolna
+                      nawigacja aplikacji.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-text</code></td>
+                    <td data-label="Wygląd">
+                      Etykieta wewnątrz <code>.btn-stacked</code> — mała,
+                      wersalikami. <strong>Nie jest osobnym wariantem
+                      przycisku.</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 gap-4 flex-column align-items-start"
-              >
-                <!-- Grupa standardowa -->
-                <div class="btn-group">
-                  <button class="btn btn-primary">Lewy</button>
-                  <button class="btn btn-primary">Środkowy</button>
-                  <button class="btn btn-primary">Prawy</button>
-                </div>
+            <div class="component-code">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;button class="btn btn-outline-primary btn-outline-soft"&gt;Delikatny obrys&lt;/button&gt;
 
-                <!-- Grupa Outline -->
-                <div class="btn-group">
-                  <button class="btn btn-outline-dark">Dzień</button>
-                  <button class="btn btn-outline-dark is-active">
-                    Tydzień
-                  </button>
-                  <button class="btn btn-outline-dark">Miesiąc</button>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="btn-group"&gt;
-  &lt;button class="btn btn-outline-dark"&gt;Opcja 1&lt;/button&gt;
-  &lt;button class="btn btn-outline-dark"&gt;Opcja 2&lt;/button&gt;
+&lt;button class="btn btn-primary btn-stacked"&gt;
+  &lt;svg&gt;…&lt;/svg&gt;
+  &lt;span class="btn-text"&gt;Zapisz&lt;/span&gt;
+&lt;/button&gt;</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. HOVER                                              -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">3. Efekt hover</h2>
+            <p class="text-muted mb-4">
+              Zamiast oznaczać każdy przycisk osobno, wybierasz efekt
+              <strong>raz dla całego obszaru</strong> — klasą na
+              <code>&lt;body&gt;</code> albo na kontenerze. Wszystkie
+              <code>.btn</code> w środku go dziedziczą.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;body class="btn-hover-spring"&gt;
+  &lt;button class="btn btn-primary"&gt;Dziedziczy sprężynę&lt;/button&gt;
+
+  &lt;!-- Własna klasa hover-* ma pierwszeństwo --&gt;
+  &lt;button class="btn btn-primary hover-scale"&gt;Skaluje się&lt;/button&gt;
+&lt;/body&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Efekt</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-hover-spring</code></td>
+                    <td data-label="Efekt">Powiększenie ze sprężystym wyhamowaniem.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-hover-lift</code></td>
+                    <td data-label="Efekt">Uniesienie do góry.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-hover-glow</code></td>
+                    <td data-label="Efekt">Poświata wokół przycisku.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mt-4">
+              <h5 class="fw-bold text-5 mb-2">Jak działa pierwszeństwo</h5>
+              <p class="text-4 text-muted m-0">
+                Reguła celuje w <code>.btn:not([class*="hover-"])</code>, czyli
+                pomija przyciski mające własną klasę <code>hover-</code>.
+                Dzięki temu wyjątek robisz przez dodanie klasy, a nie przez
+                walkę ze specyficznością. Efekt można też wybrać w
+                <a href="theme-editor.html">edytorze motywu</a>.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. PRZYCISKI AKCJI I GRUPY                            -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">4. Przyciski akcji i grupy</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Ghost buttons</h3>
+            <p class="text-muted mb-3">
+              <code>.btn-action</code> to jedyny przycisk w molique, który
+              <strong>świadomie schodzi poniżej 44px</strong>. Powód jest
+              praktyczny: w tabeli na kilkadziesiąt wierszy pełnowymiarowe
+              przyciski rozpychają wiersze tak, że na ekran wchodzi ich pięć.
+              To wyjątek dopuszczony na gęste zestawienia — nie zwykły przycisk.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="btn-action-group with-dividers"&gt;
+  &lt;button class="btn-action"&gt;Edytuj&lt;/button&gt;
+  &lt;button class="btn-action text-danger"&gt;Usuń&lt;/button&gt;
 &lt;/div&gt;</code></pre>
-              </div>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Grupy przycisków</h3>
+            <p class="text-muted mb-3">
+              Sklejają serię przycisków w jeden pasek — przełącznik widoku,
+              toolbar. Zaokrąglenia wewnętrznych krawędzi znikają same.
+              Bieżącą pozycję oznacz <code>.is-active</code>.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="btn-group"&gt;
+  &lt;button class="btn btn-outline-dark is-active"&gt;Lista&lt;/button&gt;
+  &lt;button class="btn btn-outline-dark"&gt;Kafelki&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-action</code></td>
+                    <td data-label="Co robi">Przycisk bez tła i ramki do gęstych tabel.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-action-group</code></td>
+                    <td data-label="Co robi">Zestawia akcje jednego wiersza obok siebie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.with-dividers</code></td>
+                    <td data-label="Co robi">
+                      Dokłada pionowe kreski między akcjami. Tylko z
+                      <code>.btn-action-group</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.btn-group</code></td>
+                    <td data-label="Co robi">Pasek sklejonych przycisków.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-active</code></td>
+                    <td data-label="Co robi">Wciśnięta pozycja w grupie.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 3: GHOST BUTTONS (B2B) -->
+          <!-- ===================================================== -->
+          <!-- 5. BADGES                                             -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">3. Action Buttons (Ghost)</h2>
+            <h2 class="text-8 fw-bold mb-3">5. Badges</h2>
             <p class="text-muted mb-4">
-              Klasa <code>.btn-action</code> jest przeznaczona do gęstych
-              interfejsów B2B (np. wiersze w tabelach). Zdejmuje tło i zmniejsza
-              padding, zachowując czytelność.
+              Pigułka ze statusem — nieklikalna etykieta przy rekordzie.
+              Kolorem <strong>komunikujesz stan, nie ozdabiasz</strong>:
+              czerwony badge przy każdym wierszu przestaje cokolwiek znaczyć.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Zastosowanie:</h5>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 align-items-center">
+                <span class="badge badge-primary">Primary</span>
+                <span class="badge badge-success">Aktywny</span>
+                <span class="badge badge-warning">Oczekuje</span>
+                <span class="badge badge-danger">Zaległy</span>
+                <span class="badge badge-info">Info</span>
+                <span class="badge badge-secondary">Szkic</span>
+                <span class="badge badge-dark">Archiwum</span>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Typowe użycie</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge</code></td>
+                    <td data-label="Użycie">Baza — kształt, rozmiar, odstępy.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge-primary</code></td>
+                    <td data-label="Użycie">Wyróżnienie neutralne.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge-success</code></td>
+                    <td data-label="Użycie">Aktywny, opłacony, zakończony.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge-warning</code></td>
+                    <td data-label="Użycie">Oczekuje, wymaga uwagi.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge-danger</code></td>
+                    <td data-label="Użycie">Zaległy, odrzucony, błąd.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge-info</code></td>
+                    <td data-label="Użycie">Adnotacja, etap pośredni.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge-secondary</code></td>
+                    <td data-label="Użycie">Szkic, stan nieistotny.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.badge-dark</code></td>
+                    <td data-label="Użycie">Archiwum, zamknięte.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Kiedy zamiast badge użyć kropki</h5>
               <p class="text-4 text-muted m-0">
-                Klasa <code>.btn-action</code> jest wyjątkiem od reguły 44px.
-                Posiada wymuszone <code>min-height: 32px</code>, co pozwala na
-                tworzenie gęstych list danych i tabel w systemach CRM bez
-                niepotrzebnego rozciągania wierszy.
+                Jeśli status jest jeden na wiersz i nie potrzebuje podpisu,
+                <code>.status-dot</code> zajmuje mniej miejsca i nie konkuruje
+                wzrokowo z treścią. Opisany w
+                <a href="docs-components-extra.html">komponentach dodatkowych</a>.
               </p>
             </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100 gap-3 bg-surface">
-                <div class="btn-action-group with-dividers">
-                  <button class="btn-action">Edytuj</button>
-                  <button class="btn-action">Powiel</button>
-                  <button class="btn-action text-danger">Usuń</button>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;button class="btn-action"&gt;Edytuj&lt;/button&gt;
-&lt;button class="btn-action text-danger"&gt;Usuń&lt;/button&gt;</code></pre>
-              </div>
-            </div>
           </section>
 
-          <!-- SEKCJA 4: PRZYCISK KOPIOWANIA -->
+          <!-- ===================================================== -->
+          <!-- 6. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              4. Przycisk Kopiowania do Schowka
-            </h2>
-            <p class="text-muted mb-4">
-              Framework posiada wbudowany skrypt JS do kopiowania treści.
-              Wystarczy dodać klasę
-              <code>.btn-copy</code>.
-            </p>
+            <h2 class="text-8 fw-bold mb-3">6. Pułapki</h2>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Wymagania techniczne:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  Wymaga załadowania głównego skryptu
-                  <code>molique-script.js</code>.
-                </li>
-                <li>
-                  Przycisk <code>.btn-copy</code> musi znajdować się w kodzie
-                  HTML <strong>bezpośrednio przed</strong> elementem, z którego
-                  tekst ma zostać skopiowany (wykorzystuje relację
-                  <code>nextElementSibling</code>).
-                </li>
-              </ul>
-            </div>
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="btn-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.btn-action</code> poza tabelą</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Ten przycisk wygląda schludnie, więc kusi, żeby użyć go
+                    wszędzie. Ale jest <strong>świadomym wyjątkiem od reguły
+                    44px</strong> — dopuszczonym tylko dlatego, że w gęstej
+                    tabeli alternatywa jest gorsza. Użyty w formularzu albo na
+                    stronie ofertowej po prostu łamie cel dotykowy: na telefonie
+                    trudno w niego trafić palcem.
+                  </p>
+                </div>
+              </details>
 
-            <div class="component-showcase">
-              <div
-                class="component-preview flex-column align-items-start w-100"
-              >
-                <div
-                  class="position-relative w-100 p-4 bg-light border rounded-2"
-                >
-                  <button
-                    class="btn-copy"
-                    style="background: var(--primary); border: none"
-                  >
-                    Kopiuj kod rabatowy
-                  </button>
-                  <div class="text-8 fw-black text-primary mt-4">
-                    MOLIQUE2026
+              <details class="accordion-item" name="btn-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span><code>.btn-glass</code> na jednolitym tle</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Efekt szkła polega na rozmyciu tego, co jest
+                    <strong>pod</strong> przyciskiem. Na jednolitym tle nie ma
+                    czego rozmywać — zostaje ledwie widoczny prostokąt. Ten
+                    wariant ma sens wyłącznie na zdjęciu, gradiencie albo
+                    animowanych plamach.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    Dodatkowo jego tło i ramka są zapisane z
+                    <code>!important</code>, żeby wygrać z klasą koloru — więc
+                    <strong>nie nadpiszesz ich zwykłą klasą tła</strong>.
+                    Zmieniaj stylem na elemencie albo nie używaj tego wariantu.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="btn-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span><code>.btn-3d</code> w kolorze innym niż primary</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Kolor „podstawy" pod przyciskiem to
+                    <code>--btn-3d-shadow</code>, domyślnie
+                    <code>--primary-hover</code>. Zielony przycisk dostanie więc
+                    niebieską podstawę i będzie wyglądał na zepsuty. Ustaw
+                    zmienną razem z kolorem.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;button class="btn btn-success btn-3d"
+        style="--btn-3d-shadow: var(--success-hover);"&gt;Zapisz&lt;/button&gt;</code></pre>
                   </div>
                 </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Przycisk musi być bezpośrednio przed elementem z tekstem --&gt;
-&lt;div class="position-relative"&gt;
-  &lt;button class="btn-copy"&gt;Kopiuj&lt;/button&gt;
-  &lt;div&gt;Tekst, który zostanie skopiowany do schowka&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+              </details>
+
+              <details class="accordion-item" name="btn-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Nazwa klasy sklejona ze statusu z bazy</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Odruch przy generowaniu tabeli:
+                    <code>class="badge badge-&lt;?= $status ?&gt;"</code>. Taka
+                    nazwa nie występuje w źródłach jako literał, więc PurgeCSS
+                    jej nie widzi i wycina — po wdrożeniu wszystkie statusy są
+                    bezbarwne. Zmapuj status na literał albo dopisz wzorzec do
+                    safelisty.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>// ŹLE
+'badge badge-' + status
+
+// DOBRZE - mapa literałów, przy okazji waliduje wejście
+const BADGE = { active: 'badge-success', pending: 'badge-warning' };
+BADGE[status] || 'badge-secondary';</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="btn-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>Kilka przycisków <code>.btn-primary</code> obok siebie</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    To nie jest błąd techniczny, tylko utrata informacji.
+                    Primary znaczy „to jest akcja, którą prawdopodobnie chcesz
+                    wykonać". Trzy takie przyciski w jednym miejscu nie mówią
+                    nic. Zostaw jeden, resztę daj jako
+                    <code>.btn-secondary</code> albo obrysowe.
+                  </p>
+                </div>
+              </details>
             </div>
           </section>
 
-          <!-- SEKCJA 5: BADGES -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">5. Badges (Pigułki statusów)</h2>
-            <p class="text-muted mb-4">
-              Używane do oznaczania statusów, nowości lub liczników.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Warianty kolorystyczne:</h5>
-              <p class="text-4 text-muted m-0">
-                Badges obsługują pełną paletę kolorów frameworka:
-                <code>.badge-primary</code>, <code>.badge-success</code>,
-                <code>.badge-warning</code>, <code>.badge-danger</code>,
-                <code>.badge-info</code>, <code>.badge-dark</code>.
-              </p>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100 gap-3">
-                <span class="badge badge-primary">Nowość</span>
-                <span class="badge badge-success">Opłacone</span>
-                <span class="badge badge-danger">Odrzucone</span>
-                <span class="badge badge-warning">Oczekuje</span>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;span class="badge badge-primary"&gt;Nowość&lt;/span&gt;
-&lt;span class="badge badge-success"&gt;Opłacone&lt;/span&gt;</code></pre>
-              </div>
+          <!-- ===================================================== -->
+          <!-- 7. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-5">
+            <h2 class="text-8 fw-bold mb-3">7. Powiązane strony</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-buttons.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: przyciski</h5>
+                  <p class="text-4 text-muted m-0">
+                    Wszystkie warianty w komplecie, gotowe do skopiowania.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-badges.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: badges</h5>
+                  <p class="text-4 text-muted m-0">
+                    Pigułki statusów w kontekście tabel i kart.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-purgecss.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">PurgeCSS &amp; safelista</h5>
+                  <p class="text-4 text-muted m-0">
+                    Dlaczego sklejane nazwy klas znikają po wdrożeniu.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
 
@@ -262,12 +604,10 @@
             class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
           >
             <a href="docs-typography.html" class="btn btn-secondary"
-              >➔ Wstecz: Typografia & Kolory</a
+              >➔ Wstecz: Typografia &amp; Kolory</a
             >
-            <a
-              href="docs-cards.html"
-              class="btn btn-primary fw-bold hover-spring"
-              >Następny krok: Karty & Tabele ➔</a
+            <a href="docs-cards.html" class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Karty ➔</a
             >
           </div>
         </div>

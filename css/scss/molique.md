@@ -120,9 +120,17 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 
 - **Karty:** `.card` > `.card-header` + `.card-body` + `.card-footer`.
   Warianty: `.featured-box`, `.thumb-info` (z `.thumb-info-wrapper`).
-- **Przyciski:** `.btn` + `.btn-primary` (lub `secondary`, `success`,
-  `danger`, `warning`, `dark`). Warianty: `.btn-outline-primary`, `.btn-sm`,
-  `.btn-lg`. Grupowanie: `.btn-group`.
+- **Przyciski:** `.btn` + kolor (`primary`, `secondary`, `success`, `danger`,
+  `warning`, `info`, `dark`, `light`) + rozmiar (`.btn-xs`, `.btn-sm`,
+  `.btn-md`, `.btn-lg`, `.btn-xl`). Obrys: `.btn-outline-<kolor>` dla każdego
+  koloru, plus `.btn-outline-soft` (ramka 30%, hover 10%). Grupowanie:
+  `.btn-group` (bieżąca: `.is-active`).
+- **Przyciski — warianty wyglądu:** `.btn-3d` (wymaga `--btn-3d-shadow`
+  w kolorze przycisku, domyślnie primary), `.btn-glass` (tylko NA ZDJĘCIU —
+  rozmywa to, co pod spodem; tło i ramka z `!important`, więc nie nadpiszesz
+  ich klasą), `.btn-glow`, `.btn-gradient` (primary → info, ignoruje klasę
+  koloru), `.btn-shine`, `.btn-stacked` (ikona nad podpisem; podpis w
+  `.btn-text` — to etykieta, NIE osobny wariant przycisku).
 - **Domyślny hover wszystkich `.btn`:** klasa na `<body>` (lub kontenerze):
   `.btn-hover-spring` / `.btn-hover-lift` / `.btn-hover-glow` — nadaje
   wspólny efekt hover wszystkim `.btn` w środku; przyciski z własną klasą

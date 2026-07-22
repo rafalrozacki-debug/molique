@@ -104,13 +104,63 @@ pierwszej zmianie.
 
 </details>
 
-### Etap 2 — Przepisanie `docs-*` na model referencyjny
+### Etap 2 — Przepisanie `docs-*` na model referencyjny 🔄 W TOKU
 
-19 stron. Sugerowana kolejność: `docs-navbar`, `docs-forms`, `docs-interactive`,
-`docs-cards`, `docs-tables`, reszta.
+Dla każdej strony: przenieść showcase'y do odpowiedniego `examples-*` (jeśli
+tam ich nie ma), zostawić maksymalnie jedno demo, dopisać tabele i sekcję
+pułapek.
 
-Dla każdej: przenieść showcase'y do odpowiedniego `examples-*` (jeśli tam ich
-nie ma), zostawić maksymalnie jedno demo, dopisać tabele i sekcję pułapek.
+#### Stan prac
+
+| Strona | Stan | Klasy (opisane/w CSS) |
+| --- | --- | --- |
+| `docs-navbar` | ✅ | 63/63 |
+| `docs-forms` | ✅ | 17/17 |
+| `docs-interactive` | ✅ | 42/42 |
+| `docs-cards` | ✅ | 23/23 |
+| `docs-tables` | ✅ | 37/37 |
+| `docs-buttons` | ✅ | 46/46 |
+| `docs-layout`, `docs-typography`, `docs-sections`, `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 11 | — |
+| `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
+
+`docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
+to raczej kandydat na generowanie z chunków. `docs.html` jest stroną startową,
+nie referencją komponentu. Obie wymagają osobnej decyzji.
+
+#### Sprawdzona metoda (powtarzać dla każdej strony)
+
+1. **Ustal zakres** — które chunki SCSS należą do tematu strony
+   (`dist/chunks/molique-*.css`, kategorie w `manifest.json`). Uwaga na
+   granice między stronami, żeby nie opisywać tego samego dwa razy.
+2. **Wyciągnij komplet klas** z tych chunków:
+   `grep -oE '\.[a-zA-Z][a-zA-Z0-9_-]*' … | sort -u`. **Odfiltruj artefakty** —
+   regex łapie fragmenty URL-i z SVG (`.w3`, `.org`) i klasy obce
+   (`.btn`, `.card`), które należą do innych modułów.
+3. **Przeczytaj SCSS, nie zgaduj.** Każde twierdzenie o zachowaniu (co wymaga
+   czego, co robi JS, co jest `!important`) potwierdź w źródle. Tak wyszło, że
+   `molique.md` kłamał o mega menu, a `.btn-text` nie jest wariantem przycisku.
+4. **Napisz stronę**: sekcja „co wybrać" na wejściu, mechanizmy prozą, tabele
+   klas, sekcja pułapek w akordeonie, linki do `examples-*` i stron
+   powiązanych, nawigacja dół.
+5. **Test kompletności** — porównaj klasy opisane na stronie
+   (`<code>.x</code>`) z listą z kroku 2. Ma wyjść **zero pominiętych**.
+   Ten test wyłapał realne dziury w `docs-navbar` i `docs-interactive`.
+6. **Sprawdź, czy nic nie zginęło**: usunięte showcase'y muszą istnieć
+   w `examples-*` (`grep -rl 'class="…' src/examples-*.html`).
+7. **Martwe linki**: każdy `href="*.html"` musi wskazywać istniejący plik.
+8. `npm run build` + commit.
+
+#### Ustalenia, które przy okazji wyszły
+
+- Strony `docs-*` **nie mają stopki** — layout admina wypełnia ekran.
+  Kończą się `<script src="js/molique-script.js"></script>`, bez partiali
+  `footer.html` / `scripts.html`.
+- Nagłówek akordeonu z plakietką: etykietę owiń w **jeden** `<span>`,
+  inaczej `gap` rozsunie słowa w środku zdania.
+- W przykładach **nie używać nazw prawdziwych klientów** — do dyspozycji
+  „Molique" i „Briko" (CRM autora).
+- Każda strona po przepisaniu zwykle ujawnia braki w `molique.md` i
+  `llms.txt` — uzupełniać od razu i synchronizować `~/.claude/molique.md`.
 
 ### Etap 3 — Spójność nawigacji ✅ ZROBIONE (wykonany przed Etapem 2)
 
