@@ -154,8 +154,14 @@
 
 .accordion-header {
   display: flex;
-  justify-content: space-between;
+  /* BEZ justify-content: space-between. Strzałka ::after jest kolejnym
+     elementem flex, więc space-between rozpychał WSZYSTKIE dzieci nagłówka
+     na całą szerokość - nagłówek z plakietką i kodem (np. "1  Nakładka plus
+     .navbar-sticky") lądował rozstrzelony i wyśrodkowany. Strzałkę dosuwamy
+     do prawej przez margin-left na niej samej, przez co liczba elementów
+     w nagłówku przestaje mieć znaczenie. */
   align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
   padding: calc(var(--spacing-unit) * 2);
   font-weight: var(--fw-medium);
   color: var(--text-main);
@@ -169,6 +175,8 @@
 
   &::after {
     content: "▼";
+    margin-left: auto;
+    flex-shrink: 0;
     font-size: 0.8rem;
     transition: transform var(--transition-speed) ease;
   }

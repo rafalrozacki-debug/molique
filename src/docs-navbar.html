@@ -17,10 +17,10 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Nawigacja &amp; Menu</h1>
             <p class="text-6 text-muted">
-              Dziewięć komponentów nawigacyjnych, wszystkie bez JavaScriptu do
-              działania. Ta strona wyjaśnia mechanizmy i wypisuje klasy —
-              gotowe bloki do skopiowania znajdziesz w
-              <a href="examples-navbar.html">przykładach</a>.
+              Dziesięć komponentów nawigacyjnych — poza przełącznikiem motywu i
+              powrotem na górę wszystkie działają bez JavaScriptu. Ta strona
+              wyjaśnia mechanizmy i wypisuje klasy; gotowe bloki do skopiowania
+              znajdziesz w <a href="examples-navbar.html">przykładach</a>.
             </p>
           </div>
 
@@ -100,6 +100,12 @@
                     <td data-label="Przykłady">
                       <a href="examples-language-switch.html">language switch</a>
                     </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.theme-switch</code></td>
+                    <td data-label="Do czego">Przełącznik motywu jasny/ciemny.</td>
+                    <td data-label="Na czym stoi">Checkbox + JS</td>
+                    <td data-label="Przykłady"><a href="examples-navbar.html">navbar</a></td>
                   </tr>
                   <tr>
                     <td data-label="Komponent"><code>.scroll-to-top</code></td>
@@ -719,6 +725,138 @@
                 </tbody>
               </table>
             </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Przełącznik motywu</h3>
+            <p class="text-muted mb-3">
+              Suwak light/dark, w praktyce zawsze sąsiad przełącznika języka w
+              navbarze — dlatego opisany tutaj, a nie wśród formularzy. Pod
+              spodem to zwykły <code>&lt;input type="checkbox"&gt;</code>
+              opakowany w <code>&lt;label&gt;</code>, więc klawiatura działa
+              natywnie.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">
+                <code>id="theme-toggle"</code> jest obowiązkowe
+              </h5>
+              <p class="text-4 text-muted m-0">
+                To jedyny komponent w molique, w którym <strong>konkretne
+                <code>id</code> jest częścią kontraktu</strong> —
+                <code>molique-script.js</code> szuka elementu po
+                <code>getElementById('theme-toggle')</code>. Zmienisz je lub
+                zdublujesz, i przełącznik przestanie działać, nie zgłaszając
+                błędu. Z tego samego powodu na jednej stronie może być
+                <strong>tylko jeden</strong>.
+              </p>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;label class="theme-switch" title="Przełącz motyw"&gt;
+  &lt;input type="checkbox" id="theme-toggle" class="theme-switch-input"&gt;
+  &lt;div class="theme-switch-track"&gt;
+    &lt;span class="theme-switch-thumb"&gt;&lt;/span&gt;
+    &lt;div class="theme-icon-wrapper"&gt;
+      &lt;svg class="theme-icon icon-sun"&gt;…&lt;/svg&gt;
+      &lt;svg class="theme-icon icon-moon"&gt;…&lt;/svg&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/label&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.theme-switch</code></td>
+                    <td data-label="Co robi">
+                      Obudowa na <code>&lt;label&gt;</code> — dzięki temu klik w
+                      dowolne miejsce przełącza motyw.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.theme-switch-input</code></td>
+                    <td data-label="Co robi">
+                      Ukryty checkbox trzymający stan. To on musi mieć
+                      <code>id="theme-toggle"</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.theme-switch-track</code></td>
+                    <td data-label="Co robi">Tor suwaka — widoczna pastylka z ramką.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.theme-switch-thumb</code></td>
+                    <td data-label="Co robi">Pływający element, który jeździ po torze.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.theme-icon-wrapper</code></td>
+                    <td data-label="Co robi">Kontener obu ikon wewnątrz toru.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.theme-icon</code></td>
+                    <td data-label="Co robi">Wspólny styl ikony — rozmiar i przejście.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.icon-sun</code></td>
+                    <td data-label="Co robi">Ikona motywu jasnego.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.icon-moon</code></td>
+                    <td data-label="Co robi">Ikona motywu ciemnego.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Co robi skrypt</th>
+                    <th>Szczegół</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Co robi">Zapamiętuje wybór</td>
+                    <td data-label="Szczegół">
+                      Klucz <code>molique-theme</code> w
+                      <code>localStorage</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Co robi">Szanuje ustawienie systemu</td>
+                    <td data-label="Szczegół">
+                      Przy pierwszej wizycie czyta
+                      <code>prefers-color-scheme</code>. Zapisany wybór
+                      użytkownika ma pierwszeństwo.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Co robi">Przełącza motyw</td>
+                    <td data-label="Szczegół">
+                      Ustawia <code>data-theme</code> na
+                      <code>&lt;html&gt;</code> — to jedyne, co odróżnia motywy.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Co robi">Płynne przejście</td>
+                    <td data-label="Szczegół">
+                      View Transitions API robi cross-fade na GPU. Starsze
+                      przeglądarki i <code>prefers-reduced-motion</code>
+                      dostają zmianę natychmiastową.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <!-- ===================================================== -->
@@ -778,8 +916,8 @@
             <div class="accordion mb-4">
               <details class="accordion-item" name="nav-pulapki" open>
                 <summary class="accordion-header">
-                  <span class="badge badge-danger mr-2">1</span>
-                  Nakładka plus <code>.navbar-sticky</code> = nakładka znika
+                  <span class="badge badge-danger">1</span>
+                  <span>Nakładka plus <code>.navbar-sticky</code> = nakładka znika</span>
                 </summary>
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
@@ -804,8 +942,8 @@
 
               <details class="accordion-item" name="nav-pulapki">
                 <summary class="accordion-header">
-                  <span class="badge badge-danger mr-2">2</span>
-                  Treść chowa się pod navbarem nakładkowym
+                  <span class="badge badge-danger">2</span>
+                  <span>Treść chowa się pod navbarem nakładkowym</span>
                 </summary>
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
@@ -823,8 +961,8 @@
 
               <details class="accordion-item" name="nav-pulapki">
                 <summary class="accordion-header">
-                  <span class="badge badge-danger mr-2">3</span>
-                  Checkbox offcanvas wyniesiony poza kontener
+                  <span class="badge badge-danger">3</span>
+                  <span>Checkbox offcanvas wyniesiony poza kontener</span>
                 </summary>
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
@@ -840,8 +978,8 @@
 
               <details class="accordion-item" name="nav-pulapki">
                 <summary class="accordion-header">
-                  <span class="badge badge-danger mr-2">4</span>
-                  <code>.is-active</code> wpisana w markup navbara
+                  <span class="badge badge-danger">4</span>
+                  <span><code>.is-active</code> wpisana w markup navbara</span>
                 </summary>
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
@@ -860,8 +998,8 @@
 
               <details class="accordion-item" name="nav-pulapki">
                 <summary class="accordion-header">
-                  <span class="badge badge-danger mr-2">5</span>
-                  Dropdown przycięty w tabeli lub modalu
+                  <span class="badge badge-danger">5</span>
+                  <span>Dropdown przycięty w tabeli lub modalu</span>
                 </summary>
                 <div class="accordion-body">
                   <p class="text-muted mb-3">

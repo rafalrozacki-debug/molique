@@ -104,6 +104,14 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   alt="">`) — folder zawiera tylko języki oferowane w projekcie; NIGDY
   flagi emoji (nie renderują się na Windowsie) ani zewnętrzny sprite
   z `<use>` (nie działa przy file:// i bywa blokowany przez CORS).
+- **Theme Switch (light/dark):** `<label class="theme-switch">` >
+  `<input type="checkbox" class="theme-switch-input">` + `.theme-switch-track`
+  (z `.theme-switch-thumb` i `.theme-icon-wrapper` > `.theme-icon.icon-sun` /
+  `.theme-icon.icon-moon`). **`id="theme-toggle"` jest OBOWIĄZKOWE** —
+  `molique-script.js` szuka go przez `getElementById`; inne `id` albo drugi
+  taki przełącznik na stronie = cisza, bez błędu. Skrypt zapisuje wybór w
+  `localStorage` pod `molique-theme`, przy pierwszej wizycie czyta
+  `prefers-color-scheme`, a motyw ustawia atrybutem `data-theme` na `<html>`.
 
 ## Komponenty UI & Biznesowe
 
@@ -124,6 +132,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `<form method="dialog">`.
 - **Akordeony:** `<details class="accordion-item" name="grupa">` >
   `<summary class="accordion-header">` + `<div class="accordion-body">`.
+  Nagłówek jest flexem z `gap`, a strzałkę `::after` dosuwa `margin-left: auto`
+  — można więc wstawić kilka elementów (np. `.badge` + tekst) i nadal będą
+  dosunięte do lewej. Zdanie z `<code>` w środku owiń w jeden `<span>`,
+  inaczej `gap` rozsunie je jak osobne elementy flex.
 - **Tabele B2B:** `.table-wrapper` > `<table class="table">`. Warianty:
   `.table-sm`, `.table-lg`, `.table-striped`, `.table-hover`,
   `.table-borderless`. Nagłówki: `.thead-light`, `.thead-dark`,
