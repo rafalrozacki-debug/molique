@@ -186,6 +186,21 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
 - **Asymetria breakpointów w siatce** — rodzic ma progi `md` i `lg`, ale
   odstępy `sm`/`xl` istnieją tylko w opt-in `_utilities-extended.scss`.
   Do rozważenia, czy ujednolicić.
+- **Mikrointerakcje z Pinteresta** (niski priorytet) — autor ma zebrany
+  folder inspiracji do wdrożenia. Zanim cokolwiek powstanie, warto
+  przefiltrować listę przez ograniczenia frameworka, bo one odrzucają dużą
+  część typowych efektów z moodboardów:
+  - animować wolno **wyłącznie** `transform`, `scale`, `translate`
+    i `opacity` — odpada wszystko, co rusza `box-shadow`, `width`,
+    `height`, `top/left` czy `border-radius` (reflow),
+  - każdy ciągły ruch potrzebuje wyjścia przy `prefers-reduced-motion`,
+  - efekt wymagający JS musi trafić do `js/modules/molique-*.js`
+    i wpisu w autoloaderze `molique-script.js`.
+
+  Miejsce docelowe: `css/scss/utilities/_animations.scss` plus demo
+  w `examples-hover-microinteractions.html`. Przepisana strona
+  `docs-animations` wypisze komplet tego, co JUŻ istnieje — dobry punkt
+  wyjścia, żeby odsiać pomysły już pokryte.
 - **„Ludzka" maszyna do pisania** (najniższy priorytet) — wariant
   `.typewriter`, w którym litery pojawiają się w nierównym tempie, jakby
   pisał je człowiek: losowe wahanie odstępu, dłuższa pauza po kropce

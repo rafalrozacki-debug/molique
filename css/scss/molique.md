@@ -50,6 +50,11 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   centrowanie `.top-50` + `.left-50` + `.translate-middle(-x/-y)`.
   Sizing: `.w-25/-50/-75/-100/-auto`, `.mw-100`, `.min-vh-100`.
 - **Bento Grid:** `.bento-grid` > `.bento-col-2`, `.bento-row-2`.
+- **Sekcje:** goły `<section>` ma już domyślny rytm pionowy
+  (`padding-block` = 48px góra i dół). **Nie ma klasy `.section`** — odstęp
+  jest własnością samego znacznika. Nie dopisuj `mb-5 pb-5`; jeśli chcesz
+  inny odstęp, użyj klasy narzędziowej (`.py-4`, `.p-0`), która nadpisze
+  wartość domyślną.
 
 ## Nawigacja (Navbar)
 
@@ -328,9 +333,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Background Video/Image:** `.bg-video-container` > `img.bg-video`
   (plakat) + `video.bg-video`; wariant statyczny `.bg-image-container` >
   `.bg-image` (także `picture.bg-image`) — oba z domyślną nakładką.
-- **Overlay (nakładka na tło):** rodzic `.has-overlay` + `.overlay` z
-  kolorem `.overlay-dark/-primary/-light` (lub `.bg-overlay` = czerń) i
-  kryciem `.overlay-10` do `.overlay-90`.
+- **Overlay (nakładka na tło):** rodzic `.has-overlay` + `.overlay`. Sama
+  `.overlay` daje już przyciemnienie na 50% — kolor
+  (`.overlay-dark/-primary/-light`, `.bg-overlay` = czerń) i krycie
+  (`.overlay-10` do `.overlay-90`) tylko je zmieniają. `.has-overlay` jest
+  OBOWIĄZKOWE: bez niego nakładka szuka kontekstu wyżej i rozlewa się poza
+  sekcję.
 - **Filtry Obrazów:** `.filter-grayscale`, `.filter-blur`, `.filter-none`
   (zdejmuje filtr, np. z `.hover-filter-none` — logo koloruje się na hover).
 - **Obramowania (Borders):** `.border`, `.border-0`, `.border-top`,

@@ -3781,6 +3781,18 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     inset: 0;
     z-index: 0;
     pointer-events: none;
+
+    /* DOMYSLNY SCRIM. Wczesniej sama .overlay nie miala ani koloru, ani
+       krycia, wiec oba uzycia bez kompletu klas wychodzily zle:
+         .overlay                -> niewidoczna (brak tla),
+         .overlay + .overlay-dark -> W PELNI NIEPRZEZROCZYSTA (opacity 1),
+                                     czyli zdjecie znikalo pod plaskim kolorem.
+       Teraz sama .overlay daje uzyteczne przyciemnienie, a klasy kolorow
+       (.overlay-dark/-primary/-light, .bg-overlay) i krycia (.overlay-10..90)
+       nadpisuja te wartosci - stoja dalej w zrodle przy tej samej
+       specyficznosci. */
+    background-color: #1E293B;
+    opacity: 0.5;
   }
 
   /* --- Kolory nakładki --- */
@@ -9033,6 +9045,23 @@ a.list-group-item:hover, button.list-group-item:hover {
     .form-pill {
       min-height: var(--target-size-min, 44px) !important;
     }
+  }
+
+  /* =========================================
+     SEKCJE
+     ========================================= */
+  /* Goly <section> ma sensowny rytm pionowy bez dokladania klas. Nie ma
+     klasy .section - odstep jest wlasnoscia SEMANTYCZNEGO znacznika.
+
+     Wartosc odtwarza dotychczasowy rytm: sekcje mialy "pb-5 mb-5", czyli
+     48px paddingu i 48px marginesu = 96px przerwy. Teraz kazda ma 48px gory
+     I dolu, wiec miedzy dwiema sasiednimi nadal wychodzi 96px.
+
+     Padding, nie margines: tlo sekcji ma obejmowac takze odstep, inaczej
+     kolorowa sekcja mialaby biale pasy. Warstwa base, wiec kazda klasa
+     narzedziowa (.p-0, .py-4) nadpisze to bez walki o specyficznosc. */
+  section {
+    padding-block: calc(var(--spacing-unit) * 6);
   }
 
   /* =========================================

@@ -27,7 +27,7 @@
           <!-- ===================================================== -->
           <!-- 1. NAGŁÓWEK ZE ZDJĘCIEM                               -->
           <!-- ===================================================== -->
-          <section class="mb-5 pb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">1. Nagłówek ze zdjęciem</h2>
             <p class="text-muted mb-4">
               <code>.page-header</code> to sekcja z obrazem tła — sam obraz
@@ -78,14 +78,15 @@
           <!-- ===================================================== -->
           <!-- 2. NAKŁADKI                                           -->
           <!-- ===================================================== -->
-          <section class="mb-5 pb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">2. Nakładki</h2>
             <p class="text-muted mb-4">
               Zdjęcie rzadko jest równomiernie ciemne, więc biały tekst bywa na
               nim nieczytelny w jednym rogu, a w drugim nie. Nakładka to
               warstwa koloru między zdjęciem a treścią. Rozdzielenie na
               <strong>kolor</strong> i <strong>krycie</strong> pozwala dobrać
-              jedno bez ruszania drugiego.
+              jedno bez ruszania drugiego, a sama <code>.overlay</code> ma
+              już użyteczne domyślne: przyciemnienie na 50%.
             </p>
 
             <div class="component-showcase mb-4">
@@ -116,7 +117,9 @@
                     <td data-label="Klasa"><code class="fw-bold">.overlay</code></td>
                     <td data-label="Grupa">Baza</td>
                     <td data-label="Co robi">
-                      Warstwa wypełniająca rodzica. Wymaga
+                      Warstwa wypełniająca rodzica. Sama z siebie daje już
+                      <strong>przyciemnienie na 50%</strong> — klasy koloru
+                      i krycia tylko je zmieniają. Wymaga
                       <code>.has-overlay</code> wyżej.
                     </td>
                   </tr>
@@ -138,8 +141,8 @@
                     <td data-label="Klasa"><code class="fw-bold">.overlay-10</code> – <code class="fw-bold">.overlay-90</code></td>
                     <td data-label="Grupa">Krycie</td>
                     <td data-label="Co robi">
-                      Co dziesięć procent. Bez klasy krycia nakładka jest
-                      niewidoczna — patrz pułapka nr 1.
+                      Co dziesięć procent. Bez żadnej z nich obowiązuje
+                      domyślne 50%.
                     </td>
                   </tr>
                 </tbody>
@@ -161,7 +164,7 @@
           <!-- ===================================================== -->
           <!-- 3. HERO Z WYCIĘCIEM                                   -->
           <!-- ===================================================== -->
-          <section class="mb-5 pb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">3. Hero z wycięciem</h2>
             <p class="text-muted mb-4">
               Układ, w którym treść wchodzi w narożnik zdjęcia — zdjęcie
@@ -230,7 +233,7 @@
           <!-- ===================================================== -->
           <!-- 4. PARALLAX I SEKCJE NAKŁADANE                        -->
           <!-- ===================================================== -->
-          <section class="mb-5 pb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">4. Parallax i sekcje nakładane</h2>
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Parallax</h3>
@@ -316,7 +319,7 @@
           <!-- ===================================================== -->
           <!-- 5. OŚ CZASU                                           -->
           <!-- ===================================================== -->
-          <section class="mb-5 pb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">5. Oś czasu</h2>
             <p class="text-muted mb-4">
               Do historii firmy, etapów projektu, changelogu. Dwa układy:
@@ -419,7 +422,7 @@
           <!-- ===================================================== -->
           <!-- 6. STEPPER                                            -->
           <!-- ===================================================== -->
-          <section class="mb-5 pb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">6. Stepper</h2>
             <p class="text-muted mb-4">
               Oś czasu pokazuje <strong>przeszłość</strong>, stepper —
@@ -477,30 +480,35 @@
           <!-- ===================================================== -->
           <!-- 7. PUŁAPKI                                            -->
           <!-- ===================================================== -->
-          <section class="mb-5 pb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="sec-pulapki" open>
                 <summary class="accordion-header">
                   <span class="badge badge-danger">1</span>
-                  <span>Nakładka bez klasy krycia</span>
+                  <span>Nakładka bez <code>.has-overlay</code> na rodzicu</span>
                 </summary>
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
-                    Kolor i krycie są rozdzielone celowo, ale to znaczy, że
-                    <code>.overlay .overlay-dark</code> bez
-                    <code>.overlay-60</code> jest w pełni przezroczysta —
-                    czyli niewidoczna. Wygląda to jak „nakładka nie działa",
-                    choć element jest na miejscu.
+                    Nakładka jest pozycjonowana bezwzględnie, więc szuka
+                    najbliższego przodka z własnym kontekstem. Bez
+                    <code>.has-overlay</code> znajdzie coś wyżej — w
+                    skrajnym przypadku całą stronę — i rozleje się poza sekcję.
+                    Ta klasa daje też <code>overflow: hidden</code>, żeby
+                    zaokrąglone rogi kontenera obcięły nakładkę.
                   </p>
                   <div class="component-code">
                     <button class="btn-copy">Kopiuj</button>
-                    <pre><code>&lt;!-- ŹLE - brak krycia, nakładka niewidoczna --&gt;
-&lt;div class="overlay overlay-dark"&gt;&lt;/div&gt;
+                    <pre><code>&lt;!-- ŹLE - nakładka ucieknie poza sekcję --&gt;
+&lt;div class="page-header"&gt;
+  &lt;div class="overlay"&gt;&lt;/div&gt;
+&lt;/div&gt;
 
 &lt;!-- DOBRZE --&gt;
-&lt;div class="overlay overlay-dark overlay-60"&gt;&lt;/div&gt;</code></pre>
+&lt;div class="page-header has-overlay"&gt;
+  &lt;div class="overlay"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
                   </div>
                 </div>
               </details>
@@ -565,7 +573,7 @@
           <!-- ===================================================== -->
           <!-- 8. POWIĄZANE                                          -->
           <!-- ===================================================== -->
-          <section class="mb-5">
+          <section>
             <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
             <div class="grid-md-cols-3 gap-3">
               <a href="examples-hero-sections.html" class="card hover-shadow">

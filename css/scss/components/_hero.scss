@@ -33,6 +33,18 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
+
+    /* DOMYSLNY SCRIM. Wczesniej sama .overlay nie miala ani koloru, ani
+       krycia, wiec oba uzycia bez kompletu klas wychodzily zle:
+         .overlay                -> niewidoczna (brak tla),
+         .overlay + .overlay-dark -> W PELNI NIEPRZEZROCZYSTA (opacity 1),
+                                     czyli zdjecie znikalo pod plaskim kolorem.
+       Teraz sama .overlay daje uzyteczne przyciemnienie, a klasy kolorow
+       (.overlay-dark/-primary/-light, .bg-overlay) i krycia (.overlay-10..90)
+       nadpisuja te wartosci - stoja dalej w zrodle przy tej samej
+       specyficznosci. */
+    background-color: #1E293B;
+    opacity: 0.5;
   }
 
   /* --- Kolory nakładki --- */
