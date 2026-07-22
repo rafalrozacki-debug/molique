@@ -168,6 +168,19 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
 - Każda strona po przepisaniu zwykle ujawnia braki w `molique.md` i
   `llms.txt` — uzupełniać od razu i synchronizować `~/.claude/molique.md`.
 
+### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
+
+- **Wizualny konfigurator `bg-blobs`** — strona w rodzaju `theme-editor.html`,
+  na której klika się kolory (`--blob-1`, `--blob-2`), tempo
+  (`--blob-speed`) i tło wariantu (`--blobs-deep-bg`), a wychodzi gotowy
+  `style="…"` do skopiowania. Komponent jest już w całości sterowany
+  zmiennymi, więc taki edytor nie wymaga zmian w CSS — wystarczy UI
+  ustawiające zmienne na podglądzie, dokładnie jak
+  `js/modules/molique-theme-editor.js`.
+- **Asymetria breakpointów w siatce** — rodzic ma progi `md` i `lg`, ale
+  odstępy `sm`/`xl` istnieją tylko w opt-in `_utilities-extended.scss`.
+  Do rozważenia, czy ujednolicić.
+
 ### Etap 3 — Spójność nawigacji ✅ ZROBIONE (wykonany przed Etapem 2)
 
 Wyciągnięty do `src/partials/docs-sidebar.html`; aktywną pozycję nadaje z URL

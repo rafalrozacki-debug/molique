@@ -344,7 +344,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   (jak `.navbar-pill`) — dzięki temu biały tekst działa na nim bez sprawdzania
   motywu. Kolor przez `--blobs-deep-bg` (domyślnie `#0F172A`); nie używaj tam
   `var(--bg-body)` ani `var(--dark)`, bo odwracają się w dark mode.
-  Typowo pod `.bg-glass` — szkło musi mieć
+  Sterowanie **zmiennymi, nie klasami** (kolor i czas to wartości ciągłe):
+  `--blob-1` / `--blob-2` (kolory plam) i `--blob-speed` (cykl pierwszej;
+  druga liczy swój jako `×1.3`, więc jedna wartość przyspiesza obie
+  i zachowuje rozjazd cykli). Typowo pod `.bg-glass` — szkło musi mieć
   co rozmywać. Kształt plam jest statyczny (`border-radius` nie jest
   animowalny bez reflow), ruch daje wyłącznie `transform` z obrotem.
   Animacja wyłącza się przy `prefers-reduced-motion`.

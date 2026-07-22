@@ -203,6 +203,9 @@ export const COMPONENT = {
   '--position': ['Before/After', 'internal', 'Pozycja suwaka w procentach. Ustawiana przez <code>js/modules/molique-before-after.js</code>.'],
 
   '--blobs-deep-bg':    ['Animacje', 'api', 'Tło wariantu <code>.bg-blobs-deep</code>. Literalna wartość, bo ten wariant jest ciemny <strong>zawsze</strong> — także w motywie jasnym, żeby biały tekst był na nim czytelny bez sprawdzania motywu.'],
+  '--blob-1':           ['Animacje', 'api', 'Kolor pierwszej plamy w <code>.bg-blobs</code> (lewy górny róg). Domyślnie primary z kryciem 50%.'],
+  '--blob-2':           ['Animacje', 'api', 'Kolor drugiej plamy (prawy dolny róg). Domyślnie info z kryciem 40%.'],
+  '--blob-speed':       ['Animacje', 'api', 'Czas pełnego cyklu pierwszej plamy. Druga liczy swój jako <code>×1.3</code>, więc zmiana tej jednej wartości przyspiesza obie i <strong>zachowuje rozjazd cykli</strong> — bez niego ruch szybko zacząłby się powtarzać.'],
   '--blob-opacity':     ['Animacje', 'internal', 'Bazowe krycie plam w <code>.bg-blobs</code>. Klatki animacji pulsują <strong>względem</strong> tej wartości (<code>calc()</code>), dzięki czemu wariant <code>.bg-blobs-deep</code> może podnieść poziom bazowy bez przepisywania animacji.'],
   '--hover-scale':      ['Animacje', 'api', 'Docelowe powiększenie dla <code>.hover-scale</code>.'],
   '--hover-y':          ['Animacje', 'api', 'Docelowe uniesienie w pionie dla efektów hover.'],

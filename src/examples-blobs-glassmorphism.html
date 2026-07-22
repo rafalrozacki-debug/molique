@@ -200,6 +200,91 @@
 &lt;div class="bg-blobs bg-blobs-deep" style="--blobs-deep-bg: #1a103d"&gt;…&lt;/div&gt;</code></pre>
               </div>
             </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-5">
+              Własne kolory i tempo
+            </h3>
+            <p class="text-muted mb-4">
+              Komponent sterowany jest zmiennymi, nie klasami — kolor i czas to
+              wartości ciągłe, więc każda klasa byłaby arbitralnym punktem na
+              skali. Wystarczy <code>style</code> na kontenerze.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 p-0">
+                <div
+                  class="bg-blobs bg-blobs-deep w-100 position-relative d-flex align-items-center justify-content-center"
+                  style="
+                    height: 320px;
+                    overflow: hidden;
+                    --blobs-deep-bg: #1a103d;
+                    --blob-1: rgba(168, 85, 247, 0.75);
+                    --blob-2: rgba(236, 72, 153, 0.6);
+                    --blob-speed: 5s;
+                  "
+                >
+                  <div
+                    class="card bg-glass border-0 p-5 text-center"
+                    style="max-width: 400px; z-index: 10"
+                  >
+                    <h3 class="fw-bold text-white m-0">Własna paleta</h3>
+                    <p class="text-white opacity-75 mt-2 mb-0">
+                      Fiolet i róż, dwa razy szybciej.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="bg-blobs bg-blobs-deep" style="
+       --blobs-deep-bg: #1a103d;
+       --blob-1: rgba(168, 85, 247, 0.75);
+       --blob-2: rgba(236, 72, 153, 0.6);
+       --blob-speed: 5s;"&gt;
+  &lt;div class="card bg-glass text-white"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper mt-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Zmienna</th>
+                    <th>Domyślnie</th>
+                    <th>Steruje</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--blob-1</code></td>
+                    <td data-label="Domyślnie">primary, krycie 50%</td>
+                    <td data-label="Steruje">Kolor plamy w lewym górnym rogu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--blob-2</code></td>
+                    <td data-label="Domyślnie">info, krycie 40%</td>
+                    <td data-label="Steruje">Kolor plamy w prawym dolnym rogu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--blob-speed</code></td>
+                    <td data-label="Domyślnie"><code>10s</code></td>
+                    <td data-label="Steruje">
+                      Cykl pierwszej plamy. Druga liczy swój jako
+                      <code>×1.3</code>, więc jedna wartość przyspiesza obie i
+                      zachowuje rozjazd cykli.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--blobs-deep-bg</code></td>
+                    <td data-label="Domyślnie"><code>#0F172A</code></td>
+                    <td data-label="Steruje">
+                      Tło wariantu <code>.bg-blobs-deep</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <!-- Nawigacja dół -->

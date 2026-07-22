@@ -223,7 +223,20 @@
   .parallax-bg { position: absolute; top: -20%; left: 0; width: 100%; height: 140%; object-fit: cover; z-index: 0; pointer-events: none; will-change: transform; }
   .parallax-content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-  .bg-blobs { position: relative; overflow: hidden; background-color: var(--bg-surface); z-index: 1; }
+  /* API komponentu na zmiennych, nie na klasach: kolor i czas to wartosci
+     CIAGLE i niesemantyczne, wiec kazda klasa byla by arbitralnym punktem na
+     skali (inaczej niz .stock-bar-success, gdzie nazwa niesie stan).
+     Deklarujemy je na kontenerze, zeby dalo sie nadpisac jednym
+     style="--blob-1: #7c3aed" bez siegania do pseudoelementow. */
+  .bg-blobs {
+    --blob-1: rgba(var(--primary-rgb), 0.5);
+    --blob-2: rgba(var(--info-rgb), 0.4);
+    /* Czas jednej plamy. Druga jedzie wolniej (mnoznik ponizej), zeby cykle
+       sie rozjezdzaly i uklad nie powtarzal sie w oczywisty sposob. */
+    --blob-speed: 10s;
+
+    position: relative; overflow: hidden; background-color: var(--bg-surface); z-index: 1;
+  }
   .bg-blobs::before, .bg-blobs::after {
     content: ''; position: absolute; width: 50vw; height: 50vw; max-width: 600px; max-height: 600px;
     /* Nieregularny, organiczny kształt zamiast koła. Promienie są STATYCZNE -
@@ -241,19 +254,21 @@
     --blob-opacity: 0.4;
     opacity: var(--blob-opacity);
     will-change: transform, opacity; transform: translate3d(0, 0, 0);
-    animation: blobFloat 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    animation: blobFloat var(--blob-speed) infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .bg-blobs::before { background-color: rgba(var(--primary-rgb), 0.5); top: -10%; left: -10%; }
+  .bg-blobs::before { background-color: var(--blob-1); top: -10%; left: -10%; }
   .bg-blobs::after {
-    background-color: rgba(var(--info-rgb), 0.4); bottom: -10%; right: -10%;
+    background-color: var(--blob-2); bottom: -10%; right: -10%;
     /* Lustrzany obrys, żeby obie plamy nie były tym samym kształtem. */
     border-radius: 63% 37% 42% 58% / 62% 55% 45% 38%;
     /* OSOBNE klatki, nie te same z opoznieniem: wczesniej obie plamy jechaly
        rownolegle w te sama strone, co czytalo sie jako wspolne kolysanie
        zamiast niezaleznego dryfu. */
     animation-name: blobFloatAlt;
-    animation-duration: 13s;
-    animation-delay: -6s;
+    /* 1.3x wolniej od pierwszej plamy. Mnoznik, a nie sztywna wartosc - dzieki
+       temu zmiana --blob-speed przyspiesza obie, zachowujac rozjazd cykli. */
+    animation-duration: calc(var(--blob-speed) * 1.3);
+    animation-delay: calc(var(--blob-speed) * -0.6);
   }
   @keyframes blobFloat {
     0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
@@ -284,11 +299,13 @@
   .bg-blobs-deep {
     --blobs-deep-bg: #0F172A;
     background-color: var(--blobs-deep-bg);
-    /* Plamy mocniejsze, bo na ciemnym tle rozmyte kolory szybko gasną.
-       Ustawiamy poziom BAZOWY - klatki pulsują względem niego. */
+    /* Mocniejsze krycie kolorow, bo na ciemnym tle rozmyte barwy gasna.
+       Nadpisujemy --blob-1/--blob-2, wiec wlasny kolor podany w style="..."
+       na tym samym elemencie i tak wygra (kolejnosc deklaracji inline). */
+    --blob-1: rgba(var(--primary-rgb), 0.75);
+    --blob-2: rgba(var(--info-rgb), 0.65);
+    /* Poziom BAZOWY krycia - klatki pulsują względem niego. */
     &::before, &::after { --blob-opacity: 0.6; }
-    &::before { background-color: rgba(var(--primary-rgb), 0.75); }
-    &::after  { background-color: rgba(var(--info-rgb), 0.65); }
   }
 
   /* =========================================
