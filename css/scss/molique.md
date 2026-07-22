@@ -158,9 +158,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   Kolejność paneli MUSI odpowiadać kolejności inputów — CSS łączy je po
   pozycji, nie po nazwie. Wariant `.tabs-pill` z `.tabs-pill-indicator`
   (szerokość liczy `--tab-count`).
-  **Znane ograniczenie:** `.tab-input` ma `display: none`, co usuwa pole
-  z kolejności tabulacji — zakładek nie da się przełączyć klawiaturą.
-  Do treści krytycznej używaj czegoś innego.
+  `.tab-input` ukryty techniką `clip` (jak `.sr-only`, NIE
+  `display: none`), więc grupa zostaje obsługiwana strzałkami z
+  klawiatury.
 - **Akordeony:** `<details class="accordion-item" name="grupa">` >
   `<summary class="accordion-header">` + `<div class="accordion-body">`.
   Nagłówek jest flexem z `gap`, a strzałkę `::after` dosuwa `margin-left: auto`

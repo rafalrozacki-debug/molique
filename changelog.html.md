@@ -64,6 +64,60 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Zakładki dostępne z klawiatury
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>.tab-input</code> miał
+                    <code>display: none</code></strong> — to nie tylko chowa
+                    element wizualnie, ale usuwa go z kolejności tabulacji
+                    i z drzewa dostępności. Zakładek nie dało się przełączyć
+                    klawiaturą ani odczytać czytnikiem ekranu, mimo że
+                    framework deklaruje zgodność z WCAG 2.2 AAA.
+                  </li>
+                  <li>
+                    Ukrycie zamienione na technikę <code>clip</code> — tę
+                    samą, na której stoi <code>.sr-only</code>. Element
+                    zostaje niewidoczny, ale <strong>fokusowalny</strong>:
+                    grupa radio odzyskuje natywną obsługę strzałkami, a
+                    obwódka focusa trafia na widoczną etykietę
+                    <code>.tab-label</code>.
+                  </li>
+                  <li>
+                    <strong>Nic w markupie się nie zmienia</strong> — ta sama
+                    struktura <code>.tabs</code> /
+                    <code>.tab-input</code> / <code>.tab-label</code>, tylko
+                    poprawione zachowanie pod spodem.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Nawigacja wykresów (<code>.chart-nav</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Segmentowany przełącznik zakresu na ukrytych polach radio
+                    — bez JavaScriptu. Komponent był opisany w słownikach i
+                    użyty w markupie trzech stron od pierwszego wydania, ale
+                    reguła CSS nigdy nie powstała; teraz działa.
+                  </li>
+                  <li>
+                    Radio ukryte techniką <code>clip</code>, nie
+                    <code>display: none</code> — ta sama zasada co w
+                    poprawce zakładek powyżej, więc grupa jest od razu
+                    dostępna z klawiatury.
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-primary mx-2 text-3">Nowość</span>

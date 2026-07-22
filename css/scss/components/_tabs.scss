@@ -12,6 +12,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  /* Punkt odniesienia dla ukrytych inputow (position: absolute nizej).
+     Bez tego pozycjonowalyby sie wzgledem okna - niewidoczne i tak, ale
+     lepiej trzymac je w obrebie komponentu. */
+  position: relative;
 }
 
 .tabs-header {
@@ -21,8 +25,22 @@
   margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
+/* UKRYCIE ZACHOWUJACE FOKUSOWALNOSC.
+   Wczesniej bylo tu display:none, ktore wyrzuca pole z kolejnosci tabulacji
+   I z drzewa dostepnosci - zakladek nie dalo sie wtedy przelaczyc klawiatura
+   ani odczytac czytnikiem ekranu. Technika clip (ta sama co w .sr-only)
+   ukrywa wizualnie, ale zostawia element dostepnym: grupa radio odzyskuje
+   natywna obsluge strzalkami. */
 .tab-input {
-  display: none; 
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .tab-label {
@@ -54,6 +72,14 @@
     color: var(--primary);
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
+  }
+
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(#{$i}):focus-visible ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
   }
 }
 

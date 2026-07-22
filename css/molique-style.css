@@ -5359,6 +5359,10 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    /* Punkt odniesienia dla ukrytych inputow (position: absolute nizej).
+       Bez tego pozycjonowalyby sie wzgledem okna - niewidoczne i tak, ale
+       lepiej trzymac je w obrebie komponentu. */
+    position: relative;
   }
   .tabs-header {
     display: flex;
@@ -5366,8 +5370,22 @@
     border-bottom: 1px solid var(--border-color);
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
+  /* UKRYCIE ZACHOWUJACE FOKUSOWALNOSC.
+     Wczesniej bylo tu display:none, ktore wyrzuca pole z kolejnosci tabulacji
+     I z drzewa dostepnosci - zakladek nie dalo sie wtedy przelaczyc klawiatura
+     ani odczytac czytnikiem ekranu. Technika clip (ta sama co w .sr-only)
+     ukrywa wizualnie, ale zostawia element dostepnym: grupa radio odzyskuje
+     natywna obsluge strzalkami. */
   .tab-input {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
   .tab-label {
     padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
@@ -5394,6 +5412,13 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(1):focus-visible ~ .tabs-header .tab-label:nth-of-type(1) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
+  }
   .tab-input:nth-of-type(2):checked ~ .tabs-content .tab-pane:nth-of-type(2) {
     display: block;
   }
@@ -5401,6 +5426,13 @@
     color: var(--primary);
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
+  }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(2):focus-visible ~ .tabs-header .tab-label:nth-of-type(2) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
   }
   .tab-input:nth-of-type(3):checked ~ .tabs-content .tab-pane:nth-of-type(3) {
     display: block;
@@ -5410,6 +5442,13 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(3):focus-visible ~ .tabs-header .tab-label:nth-of-type(3) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
+  }
   .tab-input:nth-of-type(4):checked ~ .tabs-content .tab-pane:nth-of-type(4) {
     display: block;
   }
@@ -5417,6 +5456,13 @@
     color: var(--primary);
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
+  }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(4):focus-visible ~ .tabs-header .tab-label:nth-of-type(4) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
   }
   .tab-input:nth-of-type(5):checked ~ .tabs-content .tab-pane:nth-of-type(5) {
     display: block;
@@ -5426,6 +5472,13 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(5):focus-visible ~ .tabs-header .tab-label:nth-of-type(5) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
+  }
   .tab-input:nth-of-type(6):checked ~ .tabs-content .tab-pane:nth-of-type(6) {
     display: block;
   }
@@ -5433,6 +5486,13 @@
     color: var(--primary);
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
+  }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(6):focus-visible ~ .tabs-header .tab-label:nth-of-type(6) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
   }
   .tab-input:nth-of-type(7):checked ~ .tabs-content .tab-pane:nth-of-type(7) {
     display: block;
@@ -5442,6 +5502,13 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(7):focus-visible ~ .tabs-header .tab-label:nth-of-type(7) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
+  }
   .tab-input:nth-of-type(8):checked ~ .tabs-content .tab-pane:nth-of-type(8) {
     display: block;
   }
@@ -5449,6 +5516,13 @@
     color: var(--primary);
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
+  }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(8):focus-visible ~ .tabs-header .tab-label:nth-of-type(8) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
   }
   .tab-input:nth-of-type(9):checked ~ .tabs-content .tab-pane:nth-of-type(9) {
     display: block;
@@ -5458,6 +5532,13 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(9):focus-visible ~ .tabs-header .tab-label:nth-of-type(9) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
+  }
   .tab-input:nth-of-type(10):checked ~ .tabs-content .tab-pane:nth-of-type(10) {
     display: block;
   }
@@ -5465,6 +5546,13 @@
     color: var(--primary);
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
+  }
+  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
+     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  .tab-input:nth-of-type(10):focus-visible ~ .tabs-header .tab-label:nth-of-type(10) {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: -2px;
+    border-radius: calc(var(--border-radius) * 0.5);
   }
   /* =========================================
      4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik — Zero JS)
