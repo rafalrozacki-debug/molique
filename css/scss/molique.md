@@ -348,10 +348,14 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   asynchronicznie pobiera mikro-moduły z `js/modules/` (np.
   `molique-carousel.js`, `molique-lightbox.js`) tylko wtedy, gdy komponent
   istnieje na stronie.
-- **Nazwy plików JS zawsze z prefiksem `molique-`** — zarówno rdzeń
-  (`molique-script.js`), jak i każdy moduł (`js/modules/molique-*.js`).
-  Dzięki temu skrypty synchronizujące framework do projektu mogą podmieniać
-  wyłącznie pliki molique, nie ruszając kodu użytkownika.
+- **Nazwy plików zawsze z prefiksem `molique-`** — dotyczy WSZYSTKIEGO, co
+  trafia do cudzego projektu: rdzeń (`molique-script.js`), moduły JS
+  (`js/modules/molique-*.js`), bundle CSS (`css/molique-style*.css`) oraz
+  chunki konfiguratora (`dist/chunks/molique-*.css`). Dzięki temu skrypty
+  synchronizujące framework mogą podmieniać wyłącznie pliki molique, nie
+  ruszając kodu użytkownika. Nazwę pliku chunka nadaje `tools/gen-chunks.js`
+  i wpisuje ją do manifestu — konfigurator czyta ją stamtąd, więc nie ma
+  drugiego miejsca do zaktualizowania.
 - **Vanilla JS:** całkowity zakaz używania jQuery.
 - **NIGDY nie sklejaj nazw klas dynamicznie** (`'toast-' + type`,
   `` `col-span-${n}` ``). Taka nazwa nie istnieje w źródle jako literał, więc

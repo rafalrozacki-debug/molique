@@ -5,7 +5,12 @@
  * w manifescie: rozmiar, warstwa, kategoria, opis i WYKRYTE ZALEZNOSCI.
  *
  * Uruchomienie:  node tools/gen-chunks.js
- * Wyjscie:       dist/chunks/*.css  +  dist/chunks/manifest.json
+ * Wyjscie:       dist/chunks/molique-*.css  +  dist/chunks/manifest.json
+ *
+ * Prefiks molique- w nazwach plikow jest ta sama konwencja co w js/modules/:
+ * skrypt synchronizujacy framework do cudzego projektu ma podmieniac WYLACZNIE
+ * pliki molique i nie ruszac kodu uzytkownika. Chunki laduja u niego w projekcie
+ * (konfigurator paczki je pobiera), wiec dotyczy ich dokladnie tak samo.
  *
  * Dlaczego chunki mozna sklejac w dowolnej kolejnosci: molique deklaruje
  * kolejnosc warstw z gory (@layer reset, base, ... ), wiec o precedencji
@@ -29,6 +34,10 @@ const sassJs = path.join(root, 'node_modules', 'sass', 'sass.js');
 const tmpDir = path.join(root, '.chunktmp');
 
 const LAYERS = '@layer reset, base, layout, components, modules, utilities;';
+
+// Nazwa pliku chunka. ID zostaje bez prefiksu - na nim opieraja sie kategorie,
+// wykrywanie zaleznosci i stan zaznaczenia w konfiguratorze.
+const fileOf = (id) => 'molique-' + id + '.css';
 
 /* ---------- 1. Definicja chunkow ---------- */
 
@@ -97,14 +106,19 @@ function descOf(file) {
 
 fs.rmSync(tmpDir, { recursive: true, force: true });
 fs.mkdirSync(tmpDir, { recursive: true });
+// Czyscimy katalog wyjsciowy, zeby po zmianie konwencji nazw nie zostawaly
+// osierocone pliki z poprzedniego przebiegu (np. bez prefiksu molique-).
+fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 
 const gzip = (s) => zlib.gzipSync(Buffer.from(s, 'utf8')).length;
 
 // Jeden plik wejsciowy na chunk...
 for (const c of chunks) {
+  // Nazwa pliku wejsciowego decyduje o nazwie wyjsciowej (sass w trybie
+  // katalogowym), wiec prefiks nadajemy juz tutaj.
   fs.writeFileSync(
-    path.join(tmpDir, c.id + '.scss'),
+    path.join(tmpDir, 'molique-' + c.id + '.scss'),
     // Jawna sciezka wzgledna, a NIE samo "root" - inaczej plik wejsciowy
     // .chunktmp/root.scss zaimportowalby sam siebie (Sass szuka najpierw
     // w katalogu importujacego) i sass zglasza "Module loop".
@@ -122,7 +136,7 @@ execFileSync(
 );
 
 for (const c of chunks) {
-  const css = fs.readFileSync(path.join(outDir, c.id + '.css'), 'utf8');
+  const css = fs.readFileSync(path.join(outDir, fileOf(c.id)), 'utf8');
   c.bytes = Buffer.byteLength(css, 'utf8');
   c.gzip = gzip(css);
   c.desc = descOf(c.file);
@@ -183,7 +197,7 @@ const manifest = {
   layerOrder: ['reset', 'base', 'layout', 'components', 'modules', 'utilities'],
   chunks: chunks.map((c) => ({
     id: c.id, label: c.label, desc: c.desc, cat: c.cat, layer: c.layer,
-    mandatory: c.mandatory, file: c.id + '.css', bytes: c.bytes, gzip: c.gzip, deps: c.deps,
+    mandatory: c.mandatory, file: fileOf(c.id), bytes: c.bytes, gzip: c.gzip, deps: c.deps,
   })),
 };
 

@@ -120,7 +120,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 ## 3. ARCHITEKTURA JAVASCRIPT
 - **Autoloader:** Główny plik `molique-script.js` skanuje DOM i asynchronicznie pobiera mikro-moduły z `js/modules/` (np. `carousel.js`, `lightbox.js`) tylko wtedy, gdy komponent istnieje na stronie.
 - **Vanilla JS:** Całkowity zakaz używania jQuery.
-- **Nazwy plików JS zawsze z prefiksem `molique-`** — rdzeń (`molique-script.js`) i każdy moduł (`js/modules/molique-*.js`). Pozwala skryptom synchronizującym podmieniać wyłącznie pliki frameworka.
+- **Nazwy plików zawsze z prefiksem `molique-`** — dotyczy wszystkiego, co trafia do cudzego projektu: rdzeń (`molique-script.js`), moduły JS (`js/modules/molique-*.js`), bundle CSS (`css/molique-style*.css`) i chunki konfiguratora (`dist/chunks/molique-*.css`). Pozwala skryptom synchronizującym podmieniać wyłącznie pliki frameworka. Nazwę chunka nadaje `tools/gen-chunks.js` i wpisuje do manifestu — konfigurator czyta ją stamtąd.
 - **NIGDY nie sklejaj nazw klas dynamicznie** (`'toast-' + type`, `` `col-span-${n}` ``) — taka nazwa nie istnieje w źródle jako literał, więc nie widzi jej PurgeCSS ani generator safelisty. Używaj mapy literałów: `const T = { success: 'toast-success', … }` + `T[type] || T.info`.
 - **Stany zawsze jako `.is-*`** (`is-active`, `is-hidden`, `is-selected`) — konwencja, na której opiera się pattern w safeliście.
 
