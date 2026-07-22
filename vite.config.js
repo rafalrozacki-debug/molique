@@ -47,15 +47,27 @@ logger.warnOnce = (msg, opts) => {
 // Pliki z korzenia repo, które muszą być pobieralne spod adresu strony.
 // llms.txt MUSI leżeć dokładnie w /llms.txt - na tym polega cała konwencja
 // (agent AI pobiera go z korzenia domeny), więc nie może wylądować w podfolderze.
-const rootFiles = ['llms.txt', 'purgecss.safelist.cjs', 'LICENSE', 'NOTICE'];
+// Favicony muszą leżeć w korzeniu: przeglądarki i czytniki manifestu pytają
+// o nie po nazwie, a site.webmanifest odwołuje się do ikon względem SIEBIE.
+const rootFiles = [
+  'llms.txt', 'purgecss.safelist.cjs', 'LICENSE', 'NOTICE',
+  'favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png',
+  'apple-touch-icon.png', 'android-chrome-192x192.png',
+  'android-chrome-512x512.png', 'site.webmanifest',
+];
 const outDir = resolve(__dirname, '_site');
 
 // Własny mini-plugin zamiast static-copy: ta wtyczka dla pojedynczych plików
 // z dest:'.' liczy cel na źródło i wywala build (EINVAL: src and dest are same).
 function copyRootFiles() {
+  // Typy binarne MUSZĄ być rozpoznane: domyślne text/plain sprawia, że
+  // przeglądarka w trybie dev odrzuca ikonę i favicon się nie pokazuje.
   const mime = (name) =>
     name.endsWith('.txt') ? 'text/plain; charset=utf-8'
     : name.endsWith('.cjs') ? 'text/javascript; charset=utf-8'
+    : name.endsWith('.ico') ? 'image/x-icon'
+    : name.endsWith('.png') ? 'image/png'
+    : name.endsWith('.webmanifest') ? 'application/manifest+json; charset=utf-8'
     : 'text/plain; charset=utf-8';
 
   return {
