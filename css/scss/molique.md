@@ -78,7 +78,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `--navbar-pill-padding-x` (32px) / `--navbar-pill-padding-x-scrolled` (16px).
 - **Offcanvas (Mobile):** oparte na Checkbox Hack
   (`.navbar-offcanvas-toggle:checked`).
-- **Mega Menu:** `.mega-menu` > `.mega-menu-content` (rozwijane na hover).
+- **Mega Menu:** `<details class="mega-menu" name="grupa">` >
+  `<summary class="navbar-item mega-menu-trigger">` + `.mega-menu-content`
+  (w środku `.mega-menu-group` z `.mega-menu-col-title` i `.mega-menu-link`,
+  opcjonalnie `.mega-menu-featured`). Otwiera się **klikiem**, nie na hover —
+  to natywny `<details>`, więc działa z klawiatury i bez JS. Na mobile ta sama
+  struktura degraduje się do akordeonu w offcanvas. Atrybut `name` wyklucza
+  wzajemnie kilka mega menu w jednym pasku.
 - **Dropdown (navbar):** `<details class="dropdown">` >
   `<summary class="dropdown-toggle">` + `.dropdown-menu`.
 - **Dropdown Popover (poza navbarem — top layer):** dowolny
