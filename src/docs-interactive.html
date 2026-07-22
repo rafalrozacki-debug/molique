@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Interakcje - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Modale, Tabs & Akordeony - molique Docs","description":"Referencja komponentów interaktywnych molique: natywny dialog, akordeony i zakładki bez JavaScriptu, toasty, tooltipy i menu kontekstowe. Tabele klas, API i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -15,62 +15,214 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <h1 class="text-11 fw-black mb-3">Modale, Tabs & Akordeony</h1>
+            <h1 class="text-11 fw-black mb-3">Modale, Tabs &amp; Akordeony</h1>
             <p class="text-6 text-muted">
-              Większość frameworków wymaga ciężkich bibliotek JS do obsługi tych
-              komponentów. W molique używamy natywnych tagów HTML5
-              (<code>&lt;dialog&gt;</code>,
-              <code>&lt;details&gt;</code>) oraz nowoczesnego CSS.
-              <strong>Zero JavaScriptu.</strong>
+              Komponenty, na które inne frameworki wydają setki kilobajtów
+              JavaScriptu. Tutaj robi to przeglądarka: natywny
+              <code>&lt;dialog&gt;</code>, <code>&lt;details&gt;</code> i
+              ukryte pola radio. Gotowe bloki są w
+              <a href="examples-modals.html">przykładach</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: NATYWNE MODALE -->
+          <!-- ===================================================== -->
+          <!-- 1. ILE JS-a POTRZEBUJE KAŻDY                          -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              1. Natywne Modale (&lt;dialog&gt;)
-            </h2>
+            <h2 class="text-8 fw-bold mb-3">1. Ile JavaScriptu potrzebuje każdy</h2>
             <p class="text-muted mb-4">
-              Używamy tagu <code>&lt;dialog&gt;</code>. Przeglądarka sama dba o
-              przyciemnienie tła (<code>::backdrop</code>), focus trap oraz
-              zamykanie klawiszem ESC. Animacje wejścia/wyjścia obsługuje CSS
-              <code>@starting-style</code>.
+              To najważniejsza tabela na tej stronie. Cztery z siedmiu
+              komponentów nie potrzebują skryptu wcale — działają, nawet gdy JS
+              się nie załaduje.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Zarządzanie modalem:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <strong>Otwieranie:</strong> Wymaga jednej linijki JS na
-                  przycisku:
-                  <code
-                    >onclick="document.getElementById('id-modala').showModal()"</code
-                  >.
-                </li>
-                <li>
-                  <strong>Zamykanie (Zero JS):</strong> Umieść przycisk
-                  zamykający wewnątrz tagu
-                  <code>&lt;form method="dialog"&gt;</code>. Przeglądarka
-                  zamknie modal natywnie.
-                </li>
-                <li>
-                  <strong>Zamykanie w tło:</strong> Główny skrypt
-                  <code>molique-script.js</code> zawiera globalną funkcję, która
-                  automatycznie zamyka każdy modal po kliknięciu poza jego
-                  obszarem.
-                </li>
-              </ul>
-              <hr class="my-3" />
-              <h5 class="fw-bold text-5 mb-2">Warianty:</h5>
-              <p class="text-4 text-muted m-0">
-                Domyślny modal (<code>.modal-dialog</code>) pojawia się na
-                środku ekranu. Dodanie klasy <code>.modal-context</code> zmienia
-                go w wąski panel boczny (na desktopie) lub dolny panel (Bottom
-                Sheet) na urządzeniach mobilnych.
-              </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Komponent</th>
+                    <th>Mechanizm</th>
+                    <th>JavaScript</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Komponent"><code>.accordion-item</code></td>
+                    <td data-label="Mechanizm"><code>&lt;details&gt;</code></td>
+                    <td data-label="JavaScript"><span class="badge badge-success">zero</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.tabs</code></td>
+                    <td data-label="Mechanizm">Ukryte <code>input[type="radio"]</code></td>
+                    <td data-label="JavaScript"><span class="badge badge-success">zero</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.tooltip-element</code></td>
+                    <td data-label="Mechanizm">Atrybut <code>data-tooltip</code> + CSS</td>
+                    <td data-label="JavaScript"><span class="badge badge-success">zero</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.grid-expand</code></td>
+                    <td data-label="Mechanizm">Animowany <code>grid-template-rows</code></td>
+                    <td data-label="JavaScript"><span class="badge badge-success">zero</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.popover-context</code></td>
+                    <td data-label="Mechanizm">Popover API + Anchor Positioning</td>
+                    <td data-label="JavaScript">
+                      <span class="badge badge-warning">tylko odbicie</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.modal-dialog</code></td>
+                    <td data-label="Mechanizm">Natywny <code>&lt;dialog&gt;</code></td>
+                    <td data-label="JavaScript">
+                      <span class="badge badge-warning">jedna linijka</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.toast</code></td>
+                    <td data-label="Mechanizm">Popover API</td>
+                    <td data-label="JavaScript"><span class="badge badge-danger">wymagany</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. MODALE                                             -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">2. Modale</h2>
+            <p class="text-muted mb-4">
+              Podstawą jest natywny <code>&lt;dialog&gt;</code>. Przeglądarka
+              daje za darmo cztery rzeczy, które w bibliotekach JS są osobnym
+              kodem: przyciemnione tło (<code>::backdrop</code>),
+              <strong>pułapkę focusa</strong> (Tab nie ucieka za modal),
+              zamykanie klawiszem Esc i wyniesienie do top layer, więc żaden
+              <code>z-index</code> ani <code>overflow</code> go nie przykryje.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Czynność</th>
+                    <th>Jak</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Czynność">Otwarcie</td>
+                    <td data-label="Jak">
+                      <code>.showModal()</code> na elemencie. To jedyne miejsce,
+                      gdzie modal wymaga JS-a — <strong>użyj
+                      <code>.showModal()</code>, nie <code>.show()</code></strong>,
+                      patrz pułapka nr 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Czynność">Zamknięcie przyciskiem</td>
+                    <td data-label="Jak">
+                      Przycisk w <code>&lt;form method="dialog"&gt;</code>.
+                      Przeglądarka zamyka sama — zero skryptu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Czynność">Zamknięcie kliknięciem w tło</td>
+                    <td data-label="Jak">
+                      Obsługuje <code>molique-script.js</code> globalnie, dla
+                      każdego modala na stronie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Czynność">Zamknięcie klawiszem Esc</td>
+                    <td data-label="Jak">Natywne. Nic nie trzeba robić.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;button onclick="document.getElementById('okno').showModal()"&gt;Otwórz&lt;/button&gt;
+
+&lt;dialog id="okno" class="modal-dialog"&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-header"&gt;Tytuł&lt;/div&gt;
+    &lt;div class="card-body"&gt;Treść…&lt;/div&gt;
+    &lt;div class="card-footer"&gt;
+      &lt;!-- Natywne zamykanie, bez JS --&gt;
+      &lt;form method="dialog"&gt;
+        &lt;button class="btn btn-secondary"&gt;Zamknij&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-dialog</code></td>
+                    <td data-label="Co robi">
+                      Okno na środku ekranu. Wariant podstawowy.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-sm</code></td>
+                    <td data-label="Co robi">Węższe okno — krótkie komunikaty.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-context</code></td>
+                    <td data-label="Co robi">
+                      Panel boczny na desktopie, a na telefonie panel wysuwany
+                      od dołu (bottom sheet). Ten sam markup.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-confirm</code></td>
+                    <td data-label="Co robi">
+                      Okno potwierdzenia — wyśrodkowana ikona i dwa przyciski.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-confirm-icon</code></td>
+                    <td data-label="Co robi">
+                      Duża ikona nad pytaniem. Kolor nadaj klasą tekstową, np.
+                      <code>.text-danger</code> przy usuwaniu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-action-list</code></td>
+                    <td data-label="Co robi">Pionowa lista akcji w panelu bocznym.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-action-btn</code></td>
+                    <td data-label="Co robi">Pojedyncza akcja na liście.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-divider</code></td>
+                    <td data-label="Co robi">Separator grup akcji.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.modal-close-btn</code></td>
+                    <td data-label="Co robi">
+                      Krzyżyk w rogu. Umieść go w
+                      <code>&lt;form method="dialog"&gt;</code>, żeby działał bez
+                      skryptu.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div class="component-showcase">
@@ -79,491 +231,523 @@
                   class="btn btn-primary hover-spring"
                   onclick="document.getElementById('demoModal').showModal()"
                 >
-                  Otwórz standardowy Modal
+                  Otwórz modal
                 </button>
-                <button
-                  class="btn btn-secondary hover-spring ml-md-2 mt-2 mt-md-0"
-                  onclick="document.getElementById('contextModal').showModal()"
-                >
-                  Otwórz Context Modal (B2B)
-                </button>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Przycisk otwierający --&gt;
-&lt;button onclick="document.getElementById('demoModal').showModal()"&gt;Otwórz&lt;/button&gt;
-
-&lt;!-- Struktura Modala --&gt;
-&lt;dialog id="demoModal" class="modal-dialog"&gt;
-  &lt;div class="card"&gt;
-    &lt;div class="card-header"&gt;Tytuł&lt;/div&gt;
-    &lt;div class="card-body"&gt;Treść modala...&lt;/div&gt;
-    &lt;div class="card-footer"&gt;
-      &lt;!-- Natywne zamykanie bez JS! --&gt;
-      &lt;form method="dialog"&gt;
-        &lt;button class="btn btn-secondary"&gt;Zamknij&lt;/button&gt;
-      &lt;/form&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/dialog&gt;</code></pre>
               </div>
             </div>
           </section>
 
-          <!-- SEKCJA 2: AKORDEONY -->
+          <!-- ===================================================== -->
+          <!-- 3. AKORDEONY                                          -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">2. Akordeony (FAQ)</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Akordeony</h2>
             <p class="text-muted mb-4">
-              Zbudowane na tagach <code>&lt;details&gt;</code> i
-              <code>&lt;summary&gt;</code>. Działają w 100% bez JavaScriptu.
+              Każda pozycja to <code>&lt;details&gt;</code>. Rozwijanie,
+              obsługa klawiatury i wyszukiwanie tekstu w zwiniętej treści
+              (Ctrl+F otwiera właściwą sekcję) są natywne.
+            </p>
+            <p class="text-muted mb-4">
+              Żeby otwarta była <strong>tylko jedna</strong> pozycja naraz,
+              nadaj wszystkim ten sam atrybut <code>name</code> — przeglądarka
+              zajmie się resztą, dokładnie jak przy grupie pól radio.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Grupowanie paneli:</h5>
-              <p class="text-4 text-muted m-0">
-                Aby akordeon zachowywał się klasycznie (otwarcie jednego panelu
-                automatycznie zamyka pozostałe), wystarczy dodać do wszystkich
-                tagów <code>&lt;details&gt;</code> ten sam atrybut
-                <code>name</code> (np. <code>name="faq"</code>). To natywna
-                funkcja HTML.
-              </p>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="accordion w-100">
-                  <details class="accordion-item" name="docs-faq">
-                    <summary class="accordion-header">
-                      Jak zainstalować framework?
-                    </summary>
-                    <div class="accordion-body">
-                      Wystarczy podpiąć plik molique-style.css w sekcji head.
-                    </div>
-                  </details>
-                  <details class="accordion-item" name="docs-faq">
-                    <summary class="accordion-header">
-                      Czy potrzebuję jQuery?
-                    </summary>
-                    <div class="accordion-body">
-                      Absolutnie nie! Framework działa bez żadnych zewnętrznych
-                      bibliotek.
-                    </div>
-                  </details>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="accordion"&gt;
-  &lt;!-- Atrybut name="faq" grupuje akordeony --&gt;
-  &lt;details class="accordion-item" name="faq"&gt;
-    &lt;summary class="accordion-header"&gt;Pytanie 1&lt;/summary&gt;
-    &lt;div class="accordion-body"&gt;Odpowiedź 1&lt;/div&gt;
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="accordion"&gt;
+  &lt;details class="accordion-item" name="faq" open&gt;
+    &lt;summary class="accordion-header"&gt;Pytanie pierwsze&lt;/summary&gt;
+    &lt;div class="accordion-body"&gt;Odpowiedź…&lt;/div&gt;
   &lt;/details&gt;
-  
   &lt;details class="accordion-item" name="faq"&gt;
-    &lt;summary class="accordion-header"&gt;Pytanie 2&lt;/summary&gt;
-    &lt;div class="accordion-body"&gt;Odpowiedź 2&lt;/div&gt;
+    &lt;summary class="accordion-header"&gt;Pytanie drugie&lt;/summary&gt;
+    &lt;div class="accordion-body"&gt;Odpowiedź…&lt;/div&gt;
   &lt;/details&gt;
 &lt;/div&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 3: ZAKŁADKI (TABS) -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">3. Zakładki (Tabs)</h2>
-            <p class="text-muted mb-4">
-              Wykorzystujemy tzw. Radio Hack. Ukryte inputy typu radio sterują
-              widocznością paneli za pomocą czystego CSS.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Struktura komponentu:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  Każda zakładka wymaga ukrytego inputa
-                  <code>.tab-input</code> z unikalnym ID.
-                </li>
-                <li>
-                  Wszystkie inputy w jednej grupie zakładek muszą mieć ten sam
-                  atrybut
-                  <code>name</code>.
-                </li>
-                <li>
-                  Etykiety <code>.tab-label</code> muszą być połączone z
-                  inputami za pomocą atrybutu <code>for="unikalne-id"</code>.
-                </li>
-                <li>
-                  Kolejność paneli <code>.tab-pane</code> musi odpowiadać
-                  kolejności inputów w kodzie HTML.
-                </li>
-              </ul>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="tabs w-100">
-                  <input
-                    type="radio"
-                    name="demo-tabs"
-                    id="tab-1"
-                    class="tab-input"
-                    checked
-                  />
-                  <input
-                    type="radio"
-                    name="demo-tabs"
-                    id="tab-2"
-                    class="tab-input"
-                  />
-
-                  <div class="tabs-header">
-                    <label for="tab-1" class="tab-label">Opis</label>
-                    <label for="tab-2" class="tab-label">Specyfikacja</label>
-                  </div>
-                  <div
-                    class="tabs-content p-4 border border-top-0 bg-surface rounded-bottom"
-                  >
-                    <div class="tab-pane">
-                      To jest treść pierwszej zakładki. Działa błyskawicznie.
-                    </div>
-                    <div class="tab-pane">
-                      A to specyfikacja techniczna w drugiej zakładce.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="tabs"&gt;
-  &lt;!-- Ukryte inputy sterujące --&gt;
-  &lt;input type="radio" name="my-tabs" id="tab-1" class="tab-input" checked&gt;
-  &lt;input type="radio" name="my-tabs" id="tab-2" class="tab-input"&gt;
-  
-  &lt;!-- Nagłówki (Labele połączone z inputami) --&gt;
-  &lt;div class="tabs-header"&gt;
-    &lt;label for="tab-1" class="tab-label"&gt;Zakładka 1&lt;/label&gt;
-    &lt;label for="tab-2" class="tab-label"&gt;Zakładka 2&lt;/label&gt;
-  &lt;/div&gt;
-  
-  &lt;!-- Treść --&gt;
-  &lt;div class="tabs-content"&gt;
-    &lt;div class="tab-pane"&gt;Treść 1&lt;/div&gt;
-    &lt;div class="tab-pane"&gt;Treść 2&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Na czym</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.accordion</code></td>
+                    <td data-label="Na czym"><code>&lt;div&gt;</code></td>
+                    <td data-label="Co robi">Obudowa grupy — ramka i zaokrąglenie całości.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.accordion-item</code></td>
+                    <td data-label="Na czym"><code>&lt;details&gt;</code></td>
+                    <td data-label="Co robi">Pojedyncza pozycja.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.accordion-header</code></td>
+                    <td data-label="Na czym"><code>&lt;summary&gt;</code></td>
+                    <td data-label="Co robi">
+                      Klikalny pasek ze strzałką. Zmieści kilka elementów obok
+                      siebie (np. plakietkę i tekst) — zostaną przy lewej.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.accordion-body</code></td>
+                    <td data-label="Na czym"><code>&lt;div&gt;</code></td>
+                    <td data-label="Co robi">Rozwijana treść.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="mt-5 pt-4 border-top">
-              <h5 class="fw-bold text-5 mb-3">
-                Wariant: Segmented Control (suwający pill)
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">
+                Rozwijanie czegokolwiek innego: <code>.grid-expand</code>
               </h5>
               <p class="text-4 text-muted mb-3">
-                Dodaj klasę <code>.tabs-pill</code> obok <code>.tabs</code>
-                oraz <code>style="--tab-count: N;"</code> (liczba zakładek).
-                W środku <code>.tabs-header</code> dodaj pusty
-                <code>&lt;div class="tabs-pill-indicator"&gt;&lt;/div&gt;</code>
-                — suwanie wskaźnika i kolor aktywnej etykiety dzieją się same,
-                czystym CSS (<code>:has()</code>, zero JS).
+                Animowanie <code>height</code> od zera do „ile wyjdzie" jest
+                niemożliwe w czystym CSS — <code>height: auto</code> nie da się
+                animować. Sztuczka polega na animowaniu
+                <code>grid-template-rows</code> od <code>0fr</code> do
+                <code>1fr</code>. Przydaje się wszędzie tam, gdzie
+                <code>&lt;details&gt;</code> nie pasuje: rozwijany wiersz
+                tabeli, „pokaż więcej" pod opisem.
               </p>
+              <p class="text-4 text-muted mb-3">
+                Trzy elementy: <code>.grid-expand</code> to animowany kontener,
+                <code>.grid-expand-inner</code> owija treść (bez niego nie ma
+                czego ściskać), a <code>.is-open</code> przełącza stan —
+                dodajesz i zdejmujesz ją sam, np. przy zaznaczeniu checkboxa.
+              </p>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="grid-expand is-open"&gt;
+  &lt;div class="grid-expand-inner"&gt;Treść, która się rozwija&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
 
-              <div class="component-showcase">
-                <div class="component-preview w-100">
-                  <div
-                    class="tabs tabs-pill w-100"
-                    style="--tab-count: 3; max-width: 420px"
-                  >
-                    <input
-                      type="radio"
-                      name="demo-tabs-pill"
-                      id="pill-tab-1"
-                      class="tab-input"
-                      checked
-                    />
-                    <input
-                      type="radio"
-                      name="demo-tabs-pill"
-                      id="pill-tab-2"
-                      class="tab-input"
-                    />
-                    <input
-                      type="radio"
-                      name="demo-tabs-pill"
-                      id="pill-tab-3"
-                      class="tab-input"
-                    />
+          <!-- ===================================================== -->
+          <!-- 4. ZAKŁADKI                                           -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">4. Zakładki</h2>
+            <p class="text-muted mb-4">
+              Zakładki to <strong>grupa pól radio w przebraniu</strong>. Ukryty
+              <code>input[type="radio"]</code> trzyma stan, a widoczna zakładka
+              to <code>&lt;label&gt;</code> wskazujący na niego. Ponieważ tylko
+              jedno pole radio w grupie może być zaznaczone, wzajemne
+              wykluczanie dostajesz za darmo — i, co ważniejsze, obsługę
+              strzałkami z klawiatury.
+            </p>
 
-                    <div class="tabs-header">
-                      <div class="tabs-pill-indicator"></div>
-                      <label for="pill-tab-1" class="tab-label">Dzień</label>
-                      <label for="pill-tab-2" class="tab-label">Tydzień</label>
-                      <label for="pill-tab-3" class="tab-label">Miesiąc</label>
-                    </div>
-                    <div
-                      class="tabs-content p-4 border rounded-2 mt-3 bg-surface"
-                    >
-                      <div class="tab-pane">
-                        Statystyki z ostatniego dnia.
-                      </div>
-                      <div class="tab-pane">
-                        Statystyki z ostatniego tygodnia.
-                      </div>
-                      <div class="tab-pane">
-                        Statystyki z ostatniego miesiąca.
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="component-code">
-                  <button class="btn-copy">Kopiuj</button>
-                  <pre><code>&lt;div class="tabs tabs-pill" style="--tab-count: 3;"&gt;
-  &lt;input type="radio" name="my-pill-tabs" id="pt-1" class="tab-input" checked&gt;
-  &lt;input type="radio" name="my-pill-tabs" id="pt-2" class="tab-input"&gt;
-  &lt;input type="radio" name="my-pill-tabs" id="pt-3" class="tab-input"&gt;
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="tabs"&gt;
+  &lt;!-- Stan: wszystkie inputy MUSZĄ mieć wspólne name --&gt;
+  &lt;input type="radio" name="moje-tabs" id="tab-1" class="tab-input" checked&gt;
+  &lt;input type="radio" name="moje-tabs" id="tab-2" class="tab-input"&gt;
 
   &lt;div class="tabs-header"&gt;
-    &lt;!-- Suwający wskaźnik — zawsze pusty div, bez treści --&gt;
-    &lt;div class="tabs-pill-indicator"&gt;&lt;/div&gt;
-    &lt;label for="pt-1" class="tab-label"&gt;Dzień&lt;/label&gt;
-    &lt;label for="pt-2" class="tab-label"&gt;Tydzień&lt;/label&gt;
-    &lt;label for="pt-3" class="tab-label"&gt;Miesiąc&lt;/label&gt;
+    &lt;label for="tab-1" class="tab-label"&gt;Pierwsza&lt;/label&gt;
+    &lt;label for="tab-2" class="tab-label"&gt;Druga&lt;/label&gt;
   &lt;/div&gt;
 
   &lt;div class="tabs-content"&gt;
-    &lt;div class="tab-pane"&gt;Treść 1&lt;/div&gt;
-    &lt;div class="tab-pane"&gt;Treść 2&lt;/div&gt;
-    &lt;div class="tab-pane"&gt;Treść 3&lt;/div&gt;
+    &lt;div class="tab-pane"&gt;Treść pierwszej&lt;/div&gt;
+    &lt;div class="tab-pane"&gt;Treść drugiej&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
-                </div>
-              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tabs</code></td>
+                    <td data-label="Co robi">Obudowa komponentu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tab-input</code></td>
+                    <td data-label="Co robi">
+                      Ukryte pole radio trzymające stan. Wspólne
+                      <code>name</code> w obrębie jednego kompletu zakładek.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tabs-header</code></td>
+                    <td data-label="Co robi">Pasek z zakładkami.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tab-label</code></td>
+                    <td data-label="Co robi">
+                      Widoczna zakładka. <code>for</code> musi wskazywać
+                      <code>id</code> odpowiedniego pola.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tabs-content</code></td>
+                    <td data-label="Co robi">Kontener paneli.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tab-pane</code></td>
+                    <td data-label="Co robi">
+                      Panel treści. <strong>Kolejność paneli musi odpowiadać
+                      kolejności pól radio</strong> — patrz pułapka nr 3.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tabs-pill</code></td>
+                    <td data-label="Co robi">
+                      Wariant wyglądu: zakładki jako pastylki zamiast
+                      podkreślenia.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tabs-pill-indicator</code></td>
+                    <td data-label="Co robi">
+                      Jeżdżące tło aktywnej pastylki. Szerokość liczy zmienna
+                      <code>--tab-count</code> — ustaw ją na liczbę zakładek.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 4: TOASTY -->
+          <!-- ===================================================== -->
+          <!-- 5. TOASTY                                             -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">4. Powiadomienia (Toasts)</h2>
+            <h2 class="text-8 fw-bold mb-3">5. Toasty</h2>
             <p class="text-muted mb-4">
-              Jedyny komponent w tej sekcji wymagający JS. Toasty stackują się
-              automatycznie i posiadają animowany pasek postępu.
+              Jedyny komponent na tej stronie, który <strong>wymaga
+              JavaScriptu</strong> — powiadomienie z natury pojawia się w
+              reakcji na zdarzenie, więc nie ma go w HTML-u. Nie budujesz
+              markupu sam; wywołujesz funkcję.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">
-                Opcje skryptu MoliqueToast.show():
-              </h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <code>message</code> — Treść powiadomienia (obsługuje HTML).
-                </li>
-                <li>
-                  <code>type</code> — Wariant kolorystyczny:
-                  <code>success</code>, <code>danger</code>,
-                  <code>warning</code>, <code>info</code>.
-                </li>
-                <li>
-                  <code>position</code> — Miejsce wyświetlania:
-                  <code>top-right</code>, <code>top-left</code>,
-                  <code>bottom-right</code>, <code>bottom-left</code>,
-                  <code>top-center</code>, <code>bottom-center</code>. Na
-                  urządzeniach mobilnych toasty zawsze zajmują pełną szerokość.
-                </li>
-                <li>
-                  <code>duration</code> — Czas wyświetlania w milisekundach
-                  (domyślnie 4000).
-                </li>
-              </ul>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>MoliqueToast.show({
+  message: 'Zapisano zmiany',
+  type: 'success',        // success | danger | warning | info
+  position: 'top-right',  // top-left | top-center | top-right
+                          // bottom-left | bottom-center | bottom-right
+  duration: 4000          // ms
+});</code></pre>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100 gap-2">
-                <button
-                  class="btn btn-success"
-                  onclick="
-                    MoliqueToast.show({
-                      message: 'Zapisano pomyślnie!',
-                      type: 'success',
-                      position: 'top-right',
-                    })
-                  "
-                >
-                  Sukces (Góra-Prawo)
-                </button>
-                <button
-                  class="btn btn-danger"
-                  onclick="
-                    MoliqueToast.show({
-                      message: 'Wystąpił błąd serwera.',
-                      type: 'danger',
-                      position: 'bottom-center',
-                    })
-                  "
-                >
-                  Błąd (Dół-Środek)
-                </button>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wymaga pliku molique-script.js --&gt;
-&lt;script&gt;
-  MoliqueToast.show({ 
-    message: 'Zapisano pomyślnie!', 
-    type: 'success', 
-    position: 'top-right', 
-    duration: 4000 
-  });
-&lt;/script&gt;</code></pre>
-              </div>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Parametr</th>
+                    <th>Domyślnie</th>
+                    <th>Uwagi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Parametr"><code>message</code></td>
+                    <td data-label="Domyślnie"><code>'Powiadomienie'</code></td>
+                    <td data-label="Uwagi">Treść komunikatu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Parametr"><code>type</code></td>
+                    <td data-label="Domyślnie"><code>'info'</code></td>
+                    <td data-label="Uwagi">
+                      Nieznana wartość cicho wraca do <code>info</code> zamiast
+                      wywalić stronę.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Parametr"><code>position</code></td>
+                    <td data-label="Domyślnie"><code>'top-right'</code></td>
+                    <td data-label="Uwagi">
+                      Kontener dla danego rogu powstaje sam przy pierwszym
+                      użyciu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Parametr"><code>duration</code></td>
+                    <td data-label="Domyślnie"><code>4000</code></td>
+                    <td data-label="Uwagi">Czas w milisekundach.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </section>
 
-          <!-- SEKCJA 5: TOOLTIPY -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">5. Tooltipy (Dymki podpowiedzi)</h2>
-            <p class="text-muted mb-4">
-              Zbudowane w 100% w CSS. Idealne do wyjaśniania trudnych pojęć w
-              systemach B2B.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
             <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Jak używać:</h5>
+              <h5 class="fw-bold text-5 mb-2">Klasy toastów a PurgeCSS</h5>
               <p class="text-4 text-muted m-0">
-                Wystarczy dodać klasę <code>.tooltip-element</code> do dowolnego
-                elementu tekstowego oraz umieścić treść podpowiedzi w atrybucie
-                <code>data-tooltip</code>. CSS automatycznie wygeneruje dymek i
-                strzałkę za pomocą pseudoelementów.
+                Klasy <code>.toast-success</code>,
+                <code>.toast-top-right</code> i pozostałe nie występują w Twoim
+                HTML-u — dokłada je skrypt. PurgeCSS uzna je za martwe i
+                wytnie, przez co powiadomienia stracą styl. Dlatego molique
+                dostarcza gotową safelistę; szczegóły w
+                <a href="docs-purgecss.html">PurgeCSS &amp; safelista</a>.
               </p>
             </div>
 
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface justify-content-center py-5"
-              >
-                <p class="text-6 m-0">
-                  Nasz system oblicza
-                  <span
-                    class="tooltip-element text-primary fw-bold"
-                    data-tooltip="Powierzchnia Użytkowa Mieszkalna"
-                    >PUM</span
-                  >
-                  automatycznie na podstawie projektu.
-                </p>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;span class="tooltip-element" data-tooltip="Treść podpowiedzi"&gt;
-  Najedź na mnie
-&lt;/span&gt;</code></pre>
-              </div>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.toast-container</code></td>
+                    <td data-label="Co robi">Kontener rogu ekranu; tworzy go skrypt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.toast</code></td>
+                    <td data-label="Co robi">Pojedyncze powiadomienie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.toast-progress</code></td>
+                    <td data-label="Co robi">
+                      Pasek odliczający do zniknięcia. Animacja
+                      <code>toastProgressAnim</code> też musi być na safeliście.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa">
+                      <code class="fw-bold">.toast-success</code>,
+                      <code class="fw-bold">.toast-danger</code>,
+                      <code class="fw-bold">.toast-warning</code>,
+                      <code class="fw-bold">.toast-info</code>
+                    </td>
+                    <td data-label="Co robi">Kolory wg parametru <code>type</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa">
+                      <code class="fw-bold">.toast-top-left</code>,
+                      <code class="fw-bold">.toast-top-center</code>,
+                      <code class="fw-bold">.toast-top-right</code>,
+                      <code class="fw-bold">.toast-bottom-left</code>,
+                      <code class="fw-bold">.toast-bottom-center</code>,
+                      <code class="fw-bold">.toast-bottom-right</code>
+                    </td>
+                    <td data-label="Co robi">Sześć pozycji wg parametru <code>position</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-closing</code></td>
+                    <td data-label="Co robi">Stan znikania; nadaje go skrypt.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 6: ANCHORED CONTEXT MENU -->
+          <!-- ===================================================== -->
+          <!-- 6. TOOLTIPY I MENU KONTEKSTOWE                        -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              6. Przyklejone Menu Kontekstowe (Anchor Popover)
-            </h2>
-            <p class="text-muted mb-4">
-              Małe menu rozwijane, które "przykleja się" do przycisku, który je
-              wywołał. Wykorzystuje najnowszy standard
-              <strong>CSS Anchor Positioning</strong> oraz Popover API — samo
-              pozycjonowanie i animacje to czysty CSS.
-            </p>
+            <h2 class="text-8 fw-bold mb-3">6. Tooltipy i menu kontekstowe</h2>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Jak to połączyć?</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  <strong>Przycisk:</strong> Musi posiadać atrybut
-                  <code>popovertarget="id-menu"</code> oraz unikalną nazwę
-                  kotwicy w stylach:
-                  <code>style="anchor-name: --moj-przycisk;"</code>.
-                </li>
-                <li>
-                  <strong>Menu:</strong> Musi posiadać atrybut
-                  <code>popover</code>, odpowiednie ID oraz odwołanie do kotwicy
-                  w stylach:
-                  <code>style="position-anchor: --moj-przycisk;"</code>.
-                </li>
-                <li>
-                  <strong>Inteligentne odwracanie (auto-flip):</strong> Jeśli
-                  przycisk znajduje się blisko dolnej krawędzi ekranu, menu
-                  samo pojawi się nad nim zamiast pod nim. Obsługuje to
-                  mikro-moduł <code>js/modules/molique-context-menu.js</code>,
-                  doładowywany automatycznie przez autoloader w
-                  <code>molique-script.js</code> — nie wymaga żadnej
-                  dodatkowej konfiguracji.
-                </li>
-              </ul>
+            <h3 class="text-6 fw-bold mb-2 mt-4">Tooltip</h3>
+            <p class="text-muted mb-3">
+              Treść siedzi w atrybucie <code>data-tooltip</code>, a dymek rysuje
+              CSS. Zero skryptu i zero dodatkowych elementów w drzewie.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;span class="tooltip-element" data-tooltip="Wyjaśnienie"&gt;Najedź&lt;/span&gt;</code></pre>
             </div>
 
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface justify-content-center py-5"
-                style="min-height: 250px"
-              >
-                <!-- PRZYCISK (Kotwica) -->
-                <button
-                  class="btn btn-secondary"
-                  popovertarget="ctxMenu1"
-                  style="anchor-name: --btn-ctx-1"
-                >
-                  Opcje pliku ⚙️
-                </button>
+            <h3 class="text-6 fw-bold mb-2 mt-4">Menu kontekstowe</h3>
+            <p class="text-muted mb-3">
+              Małe menu, które przykleja się do przycisku wywołującego. Stoi na
+              Popover API i Anchor Positioning, więc trafia do top layer — nie
+              przytnie go ani <code>overflow</code> tabeli, ani karta.
+              JavaScript robi tu tylko jedno: sprawdza, czy menu nie wyszłoby
+              poza dolną krawędź okna, i wtedy odbija je nad przycisk
+              (<code>.is-flipped</code>).
+            </p>
 
-                <!-- MENU KONTEKSTOWE (Przyklejone do kotwicy) -->
-                <div
-                  id="ctxMenu1"
-                  popover
-                  class="popover-context"
-                  style="position-anchor: --btn-ctx-1"
-                >
-                  <ul class="popover-action-list">
-                    <li>
-                      <button class="popover-action-btn">👁️ Podgląd</button>
-                    </li>
-                    <li>
-                      <button class="popover-action-btn">✏️ Zmień nazwę</button>
-                    </li>
-                    <li>
-                      <button class="popover-action-btn">⬇️ Pobierz</button>
-                    </li>
-                    <hr class="modal-divider my-1" />
-                    <li>
-                      <button class="popover-action-btn text-danger">
-                        🗑️ Usuń plik
-                      </button>
-                    </li>
-                  </ul>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tooltip-element</code></td>
+                    <td data-label="Co robi">
+                      Element z dymkiem. Wymaga atrybutu
+                      <code>data-tooltip</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.popover-context</code></td>
+                    <td data-label="Co robi">
+                      Menu z atrybutem <code>popover</code> i własnym
+                      <code>id</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.popover-action-btn</code></td>
+                    <td data-label="Co robi">Pozycja menu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-flipped</code></td>
+                    <td data-label="Co robi">
+                      Menu odbite nad przycisk przy braku miejsca. Nadaje je JS.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="int-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.show()</code> zamiast <code>.showModal()</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Obie metody otwierają <code>&lt;dialog&gt;</code>, ale
+                    tylko <code>.showModal()</code> robi z niego modal. Po
+                    <code>.show()</code> nie ma przyciemnionego tła, Esc nie
+                    zamyka, a focus swobodnie ucieka na treść pod spodem — dla
+                    osoby korzystającej z klawiatury okno jest wtedy pułapką bez
+                    wyjścia.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>okno.show();       // ŹLE - zwykłe okienko bez tła i bez Esc
+okno.showModal();  // DOBRZE</code></pre>
+                  </div>
                 </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- 1. Przycisk wywołujący (Definiuje nazwę kotwicy) --&gt;
-&lt;button popovertarget="menu1" style="anchor-name: --btn1;" class="btn btn-secondary"&gt;
-  Opcje
-&lt;/button&gt;
+              </details>
 
-&lt;!-- 2. Menu Kontekstowe (Przykleja się do kotwicy) --&gt;
-&lt;div id="menu1" popover class="popover-context" style="position-anchor: --btn1;"&gt;
-  &lt;ul class="popover-action-list"&gt;
-    &lt;li&gt;&lt;button class="popover-action-btn"&gt;Edytuj&lt;/button&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;button class="popover-action-btn text-danger"&gt;Usuń&lt;/button&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+              <details class="accordion-item" name="int-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Przycisk zamykający poza <code>&lt;form method="dialog"&gt;</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    To ten formularz zamyka modal natywnie. Przycisk postawiony
+                    obok niego nie zrobi nic, dopóki nie dopiszesz mu obsługi w
+                    JS. Dotyczy też krzyżyka
+                    <code>.modal-close-btn</code> w rogu.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="int-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Rozjechana kolejność zakładek i paneli</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    CSS łączy pole radio z panelem <strong>po pozycji</strong>,
+                    a nie po nazwie — trzecie zaznaczone pole pokazuje trzeci
+                    <code>.tab-pane</code>. Wstawienie panelu w innej kolejności
+                    niż inputów albo dorzucenie czegoś między nie sprawi, że
+                    zakładki będą pokazywać cudzą treść.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    Drugi wariant tego samego błędu: dwa komplety zakładek na
+                    jednej stronie z tym samym <code>name</code>. Kliknięcie w
+                    jednym przełącza oba.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="int-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Toasty bez stylu po włączeniu PurgeCSS</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Klasyczny objaw: lokalnie wszystko działa, a po wdrożeniu
+                    powiadomienia to białe prostokąty bez koloru, z paskiem
+                    postępu stojącym w miejscu. Powód jest zawsze ten sam —
+                    klasy <code>toast-*</code> dokłada JS, więc PurgeCSS ich nie
+                    widzi w plikach i usuwa. Podłącz dostarczoną safelistę.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="int-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>Animowanie <code>height</code> zamiast <code>.grid-expand</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>height: auto</code> nie jest animowalne, więc typowe
+                    obejście to mierzenie wysokości w JS i wpisywanie jej w
+                    piksele. Poza dodatkowym kodem powoduje to przeliczanie
+                    układu strony przy każdej klatce. <code>.grid-expand</code>
+                    animuje <code>grid-template-rows</code> i nie wymaga
+                    znajomości docelowej wysokości.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-5">
+            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-modals.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: modale</h5>
+                  <p class="text-4 text-muted m-0">
+                    Okna potwierdzenia, panele boczne, bottom sheet.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-tabs.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: zakładki</h5>
+                  <p class="text-4 text-muted m-0">
+                    Warianty wyglądu, w tym pastylki.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-purgecss.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">PurgeCSS &amp; safelista</h5>
+                  <p class="text-4 text-muted m-0">
+                    Dlaczego toasty tracą styl po wdrożeniu.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
 
@@ -572,52 +756,34 @@
             class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
           >
             <a href="docs-cards.html" class="btn btn-secondary"
-              >➔ Wstecz: Karty & Tabele</a
+              >➔ Wstecz: Karty &amp; Tabele</a
             >
             <a
               href="docs-components-extra.html"
               class="btn btn-primary fw-bold hover-spring"
-              >Następny krok: Karuzele, Lightbox, Filtry ➔</a
+              >Następny krok: Karuzele &amp; Lightbox ➔</a
             >
           </div>
         </div>
       </main>
     </div>
 
-    <!-- Modale demonstracyjne -->
+    <!-- MODAL DEMO -->
     <dialog id="demoModal" class="modal-dialog">
-      <div class="card border-0">
-        <div
-          class="card-header d-flex justify-content-between align-items-center"
-        >
-          <h3 class="h5 m-0">Standardowy Modal</h3>
-          <form method="dialog">
-            <button class="modal-close-btn">&times;</button>
-          </form>
-        </div>
-        <div class="card-body">
-          <p>Wyśrodkowany na ekranie. Idealny do komunikatów i potwierdzeń.</p>
-        </div>
-      </div>
-    </dialog>
-
-    <dialog id="contextModal" class="modal-dialog modal-context">
-      <div class="card border-0">
+      <div class="card">
         <div class="card-header">
-          <h3 class="fw-bold">Opcje projektu</h3>
-          <form method="dialog">
-            <button class="modal-close-btn">&times;</button>
-          </form>
+          <h4 class="m-0">Standardowy modal</h4>
         </div>
         <div class="card-body">
-          <ul class="modal-action-list">
-            <li><button class="modal-action-btn">📄 Generuj umowę</button></li>
-            <li>
-              <button class="modal-action-btn text-danger">
-                🗑️ Usuń projekt
-              </button>
-            </li>
-          </ul>
+          <p class="text-muted m-0">
+            Naciśnij Esc albo kliknij poza oknem — jedno i drugie zamyka je bez
+            dopisywania czegokolwiek.
+          </p>
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+          <form method="dialog">
+            <button class="btn btn-secondary">Zamknij</button>
+          </form>
         </div>
       </div>
     </dialog>
