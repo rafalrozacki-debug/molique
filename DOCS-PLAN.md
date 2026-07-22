@@ -122,7 +122,8 @@ pułapek.
 | `docs-buttons` | ✅ | 46/46 |
 | `docs-layout` | ✅ | 70/70 rodzin |
 | `docs-typography` | ✅ | 67/67 rodzin |
-| `docs-sections`, `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 9 | — |
+| `docs-sections` | ✅ | 41/41 |
+| `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 8 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -185,6 +186,16 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
 - **Asymetria breakpointów w siatce** — rodzic ma progi `md` i `lg`, ale
   odstępy `sm`/`xl` istnieją tylko w opt-in `_utilities-extended.scss`.
   Do rozważenia, czy ujednolicić.
+- **„Ludzka" maszyna do pisania** (najniższy priorytet) — wariant
+  `.typewriter`, w którym litery pojawiają się w nierównym tempie, jakby
+  pisał je człowiek: losowe wahanie odstępu, dłuższa pauza po kropce
+  i przecinku, sporadyczna literówka cofana backspace'em.
+  **Wykonalne bez problemu:** efekt jest już sterowany z
+  `js/modules/molique-text-effects.js`, więc to zmiana w module, nie w CSS —
+  obecna wersja używa stałego interwału, wystarczy zastąpić go
+  `setTimeout` z losowanym opóźnieniem. Uwaga na dwie rzeczy: `aria-hidden`
+  na animowanym tekście plus pełna treść dla czytnika ekranu, oraz
+  `prefers-reduced-motion` (wtedy od razu cały tekst).
 
 ### Etap 3 — Spójność nawigacji ✅ ZROBIONE (wykonany przed Etapem 2)
 

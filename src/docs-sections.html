@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Sekcje & Hero - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Sekcje, Hero & Timeline - molique Docs","description":"Referencja sekcji molique: nagłówki stron z nakładką, hero z wycięciem, parallax na scroll-driven animations, oś czasu i stepper. Tabele klas i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -15,721 +15,583 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <h1 class="text-11 fw-black mb-3">Sekcje, Hero & Timeline</h1>
+            <h1 class="text-11 fw-black mb-3">Sekcje, Hero &amp; Timeline</h1>
             <p class="text-6 text-muted">
-              Komponenty strukturalne do budowy landing page'y i stron
-              korporacyjnych. Zoptymalizowane pod kątem wydajności (GPU
-              Parallax) i czytelności.
+              Elementy, z których składa się strona ofertowa: nagłówek ze
+              zdjęciem, nakładka pod tekst, parallax i osie czasu. Gotowe bloki:
+              <a href="examples-hero-sections.html">przykłady hero</a> i
+              <a href="examples-timeline.html">oś czasu</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: HERO & BREADCRUMBS -->
+          <!-- ===================================================== -->
+          <!-- 1. NAGŁÓWEK ZE ZDJĘCIEM                               -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">1. Hero Section & Breadcrumbs</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Nagłówek ze zdjęciem</h2>
             <p class="text-muted mb-4">
-              Sekcja powitalna z nakładką (Overlay) zapewniającą czytelność
-              tekstu na zdjęciach. Zintegrowana z nawigacją okruszkową
-              (Breadcrumbs).
+              <code>.page-header</code> to sekcja z obrazem tła — sam obraz
+              podajesz przez <code>background-image</code>, bo pochodzi z
+              treści, nie z frameworka. Klasa dba tylko o kadrowanie:
+              wypełnienie, wyśrodkowanie, brak powtarzania.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">
-                Dostępne modyfikatory nakładki (Overlay):
-              </h5>
-              <p class="text-4 text-muted mb-3">
-                Aby nakładka zadziałała, kontener nadrzędny musi posiadać klasę
-                <code>.has-overlay</code>. Sam element nakładki wymaga klasy
-                <code>.overlay</code> oraz klas definiujących kolor i
-                przezroczystość.
-              </p>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <strong>Kolory:</strong> <code>.bg-overlay</code> (domyślny
-                  czarny), <code>.overlay-dark</code>,
-                  <code>.overlay-primary</code>, <code>.overlay-light</code>.
-                </li>
-                <li>
-                  <strong>Przezroczystość:</strong> Od
-                  <code>.overlay-10</code> (10% widoczności) do
-                  <code>.overlay-90</code> (90% widoczności) ze skokiem co 10.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100 p-0">
-                <section
-                  class="page-header has-overlay text-white py-5 w-100"
-                  style="
-                    background-image: url(&quot;https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop&quot;);
-                  "
-                >
-                  <!-- Nakładka przyciemniająca (80% czerni) -->
-                  <div class="overlay bg-overlay overlay-80"></div>
-
-                  <div
-                    class="container text-center position-relative z-10 py-4"
-                  >
-                    <h1 class="text-11 fw-bold m-0 text-white">Budowa Domów</h1>
-
-                    <nav
-                      aria-label="breadcrumb"
-                      class="d-flex justify-content-center mt-3"
-                    >
-                      <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item">
-                          <a href="#" class="text-white opacity-75">Start</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                          <a href="#" class="text-white opacity-75">Oferta</a>
-                        </li>
-                        <li
-                          class="breadcrumb-item is-active text-white"
-                          aria-current="page"
-                        >
-                          Budowa Domów
-                        </li>
-                      </ol>
-                    </nav>
-                  </div>
-                </section>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;section class="page-header has-overlay" style="background-image: url('bg.jpg');"&gt;
-  &lt;!-- Nakładka przyciemniająca --&gt;
-  &lt;div class="overlay bg-overlay overlay-80"&gt;&lt;/div&gt;
-
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;header class="page-header has-overlay p-5"
+        style="background-image: url(zdjecie.jpg)"&gt;
+  &lt;div class="overlay overlay-dark overlay-60"&gt;&lt;/div&gt;
   &lt;div class="container position-relative z-10"&gt;
-    &lt;h1 class="text-white"&gt;Tytuł Strony&lt;/h1&gt;
-
-    &lt;!-- Breadcrumbs --&gt;
-    &lt;nav aria-label="breadcrumb"&gt;
-      &lt;ol class="breadcrumb"&gt;
-        &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Start&lt;/a&gt;&lt;/li&gt;
-        &lt;li class="breadcrumb-item is-active"&gt;Aktualna strona&lt;/li&gt;
-      &lt;/ol&gt;
-    &lt;/nav&gt;
+    &lt;h1 class="text-white"&gt;Tytuł strony&lt;/h1&gt;
   &lt;/div&gt;
-&lt;/section&gt;</code></pre>
-              </div>
+&lt;/header&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.page-header</code></td>
+                    <td data-label="Co robi">
+                      Kadrowanie obrazu tła: <code>cover</code>, wyśrodkowany,
+                      bez powtarzania.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.has-overlay</code></td>
+                    <td data-label="Co robi">
+                      Na rodzicu. Przygotowuje kontekst pod nakładkę — bez niej
+                      nakładka nie ma się do czego odnieść.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 2: PARALLAX GPU -->
+          <!-- ===================================================== -->
+          <!-- 2. NAKŁADKI                                           -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">2. Płynny Parallax (GPU)</h2>
+            <h2 class="text-8 fw-bold mb-3">2. Nakładki</h2>
             <p class="text-muted mb-4">
-              Wydajny efekt paralaksy oparty na akceleracji sprzętowej. Zapewnia
-              płynność 60 FPS nawet na starszych urządzeniach mobilnych.
+              Zdjęcie rzadko jest równomiernie ciemne, więc biały tekst bywa na
+              nim nieczytelny w jednym rogu, a w drugim nie. Nakładka to
+              warstwa koloru między zdjęciem a treścią. Rozdzielenie na
+              <strong>kolor</strong> i <strong>krycie</strong> pozwala dobrać
+              jedno bez ruszania drugiego.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Wymagania techniczne:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  Wymaga załadowania głównego skryptu
-                  <code>molique-script.js</code>.
-                </li>
-                <li>
-                  Obraz tła (<code>.parallax-bg</code>) musi być fizycznie
-                  wyższy niż kontener (np. 140% wysokości), aby miał przestrzeń
-                  do przesuwania się podczas scrollowania.
-                </li>
-                <li>
-                  Treść wewnątrz kontenera musi znajdować się w bloku
-                  <code>.parallax-content</code>, aby zawsze pozostawała na
-                  wierzchu.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
+            <div class="component-showcase mb-4">
               <div class="component-preview w-100 p-0">
-                <div class="parallax-container w-100" style="height: 300px">
-                  <img
-                    src="img/futuristic-bg.webp"
-                    alt="Tło"
-                    class="parallax-bg"
-                  />
-                  <div class="parallax-content flex-column text-center">
-                    <h2 class="text-9 fw-bold text-white m-0">
-                      Przewiń stronę
-                    </h2>
-                    <p class="text-white opacity-75 mt-2">
-                      Tło przesuwa się z inną prędkością
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="parallax-container" style="height: 400px;"&gt;
-  &lt;img src="tlo.jpg" alt="Tło" class="parallax-bg"&gt;
-  &lt;div class="parallax-content"&gt;
-    &lt;h2 class="text-white"&gt;Treść na parallaxie&lt;/h2&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 3: TIMELINE -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">3. Oś czasu (Timeline)</h2>
-            <p class="text-muted mb-4">
-              Komponent do prezentacji procesów, historii firmy lub etapów
-              realizacji.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Dostępne warianty:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <code>.timeline</code> — Wariant domyślny. Wyświetla małe
-                  kropki na osi.
-                </li>
-                <li>
-                  <code>.timeline-large</code> — Wariant powiększony. Wymaga
-                  dodania wewnątrz elementu
-                  <code>&lt;div class="timeline-badge"&gt;</code>, w którym
-                  można umieścić ikonę lub tekst.
-                </li>
-                <li>
-                  <code>.timeline-numbered</code> — Wariant z automatyczną
-                  numeracją. CSS samodzielnie zlicza elementy i wstawia kolejne
-                  cyfry (1, 2, 3...) wewnątrz kółek. Nie wymaga wpisywania
-                  numerów w HTML.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface gap-5 align-items-start"
-              >
-                <!-- Wariant z Ikonami -->
-                <div class="flex-grow-1">
-                  <p class="text-4 text-muted mb-4">
-                    Wariant z Ikonami (.timeline-large)
-                  </p>
-                  <ul class="timeline timeline-large m-0">
-                    <li class="timeline-item">
-                      <div class="timeline-badge">A</div>
-                      <h4 class="fw-bold mb-1">Zielony zakątek</h4>
-                      <p class="text-muted text-4 m-0">
-                        Inwestycja otoczona zielenią.
-                      </p>
-                    </li>
-                    <li class="timeline-item">
-                      <div class="timeline-badge">B</div>
-                      <h4 class="fw-bold mb-1">Bezpieczeństwo</h4>
-                      <p class="text-muted text-4 m-0">
-                        Teren ogrodzony i monitorowany.
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- Wariant Numerowany -->
-                <div class="flex-grow-1">
-                  <p class="text-4 text-muted mb-4">
-                    Automatyczna Numeracja (.timeline-numbered)
-                  </p>
-                  <ul class="timeline timeline-numbered m-0">
-                    <li class="timeline-item">
-                      <h4 class="fw-bold mb-1">Wybierasz mieszkanie</h4>
-                      <p class="text-muted text-4 m-0">
-                        Przeglądasz ofertę i wybierasz lokal.
-                      </p>
-                    </li>
-                    <li class="timeline-item">
-                      <h4 class="fw-bold mb-1">Podpisujesz umowę</h4>
-                      <p class="text-muted text-4 m-0">
-                        Finalizujemy formalności.
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wariant Numerowany (CSS sam wstawia 1, 2, 3...) --&gt;
-&lt;ul class="timeline timeline-numbered"&gt;
-  &lt;li class="timeline-item"&gt;
-    &lt;h4&gt;Krok pierwszy&lt;/h4&gt;
-    &lt;p&gt;Opis kroku&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li class="timeline-item"&gt;
-    &lt;h4&gt;Krok drugi&lt;/h4&gt;
-    &lt;p&gt;Opis kroku&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 4: STACKING SECTIONS -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              4. Stacking Sections (Przyklejone sekcje)
-            </h2>
-            <p class="text-muted mb-4">
-              Efekt "układania kart" podczas scrollowania. Każda kolejna sekcja
-              najeżdża na poprzednią i przykleja się do góry ekranu.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Dostępne warianty:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  <strong>Domyślny:</strong> Użyj kontenera
-                  <code>.stacking-container</code>. Sekcje przyklejają się
-                  płynnie w miarę przewijania strony przez użytkownika.
-                </li>
-                <li>
-                  <strong>Magnetyczny (Snap):</strong> Użyj kontenera
-                  <code>.stacking-container-snap</code>. Kontener przejmuje
-                  scrollowanie i wymusza "przeskakiwanie" (Scroll Snap) idealnie
-                  do krawędzi każdej kolejnej sekcji. Zero JS!
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100 p-0 bg-surface">
-                <!-- Symulacja wariantu Snap w małym oknie (dla dokumentacji) -->
                 <div
-                  class="stacking-container-snap w-100"
-                  style="height: 400px"
+                  class="has-overlay position-relative d-flex align-items-center justify-content-center bg-dark"
+                  style="height: 180px"
                 >
-                  <section
-                    class="section-stacked bg-light"
-                    style="min-height: 400px"
-                  >
-                    <div class="container text-center">
-                      <h2 class="text-9 fw-black m-0">Krok 1: Strategia</h2>
-                      <p class="text-muted mt-2">Przewiń w dół (Scrolluj)</p>
-                    </div>
-                  </section>
-                  <section
-                    class="section-stacked bg-primary text-white"
-                    style="min-height: 400px"
-                  >
-                    <div class="container text-center">
-                      <h2 class="text-9 fw-black m-0">Krok 2: Wdrożenie</h2>
-                      <p class="opacity-75 mt-2">
-                        Sekcja magnetycznie wskakuje na miejsce!
-                      </p>
-                    </div>
-                  </section>
-                  <section
-                    class="section-stacked bg-dark text-white"
-                    style="min-height: 400px"
-                  >
-                    <div class="container text-center">
-                      <h2 class="text-9 fw-black m-0">Krok 3: Sukces</h2>
-                    </div>
-                  </section>
+                  <div class="overlay overlay-primary overlay-60"></div>
+                  <span class="position-relative z-10 text-white fw-bold text-6">
+                    overlay-primary + overlay-60
+                  </span>
                 </div>
               </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wariant z magnetycznym przeskakiwaniem (Snap) --&gt;
-&lt;div class="stacking-container-snap"&gt;
-  &lt;section class="section-stacked bg-light"&gt;
-    &lt;h2&gt;Sekcja 1&lt;/h2&gt;
-  &lt;/section&gt;
-  &lt;section class="section-stacked bg-primary text-white"&gt;
-    &lt;h2&gt;Sekcja 2&lt;/h2&gt;
-  &lt;/section&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Grupa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.overlay</code></td>
+                    <td data-label="Grupa">Baza</td>
+                    <td data-label="Co robi">
+                      Warstwa wypełniająca rodzica. Wymaga
+                      <code>.has-overlay</code> wyżej.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.overlay-dark</code></td>
+                    <td data-label="Grupa">Kolor</td>
+                    <td data-label="Co robi">
+                      Przyciemnienie. Dalej: <code>.overlay-light</code>,
+                      <code>.overlay-primary</code>. Czysta czerń to
+                      <code>.bg-overlay</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.bg-overlay</code></td>
+                    <td data-label="Grupa">Kolor</td>
+                    <td data-label="Co robi">Nakładka w czerni, bez odcienia motywu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.overlay-10</code> – <code class="fw-bold">.overlay-90</code></td>
+                    <td data-label="Grupa">Krycie</td>
+                    <td data-label="Co robi">
+                      Co dziesięć procent. Bez klasy krycia nakładka jest
+                      niewidoczna — patrz pułapka nr 1.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Treść musi być nad nakładką</h5>
+              <p class="text-4 text-muted m-0">
+                Nakładka leży <strong>na</strong> zdjęciu, ale też na wszystkim
+                innym w środku. Treść trzeba więc podnieść:
+                <code>.position-relative</code> plus <code>.z-10</code>.
+                Pominięcie tego daje efekt „tekst przygaszony razem ze
+                zdjęciem" — najczęstsza pomyłka przy hero.
+              </p>
             </div>
           </section>
 
-          <!-- SEKCJA 5: HERO CUTOUT SYSTEM -->
+          <!-- ===================================================== -->
+          <!-- 3. HERO Z WYCIĘCIEM                                   -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">5. Hero Cutout System</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Hero z wycięciem</h2>
             <p class="text-muted mb-4">
-              Zaawansowany efekt wklęsłych narożników. Kontener z treścią
-              "wycina" dziurę w zdjęciu w tle, zachowując idealne zaokrąglenia.
+              Układ, w którym treść wchodzi w narożnik zdjęcia — zdjęcie
+              wygląda, jakby miało wycięty róg. Efekt jest
+              <strong>wyłącznie desktopowy</strong>: na wąskim ekranie nie ma
+              gdzie wycinać, więc bloki układają się jeden pod drugim.
             </p>
 
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Wymagania strukturalne:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  Główny kontener musi mieć klasę
-                  <code>.hero-with-cutout</code> oraz zawierać tag
-                  <code>&lt;img&gt;</code>.
-                </li>
-                <li>
-                  Kontener wycinający musi mieć klasę
-                  <code>.cutout-wrapper</code> oraz klasę kierunkową (np.
-                  <code>.cutout-md-br</code> dla prawego dolnego rogu).
-                </li>
-                <li>
-                  Zmienna <code>--cutout-bg</code> musi odpowiadać kolorowi tła
-                  kontenera wycinającego (domyślnie
-                  <code>var(--bg-surface)</code>).
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100 p-0">
-                <section
-                  class="hero-with-cutout w-100"
-                  style="min-height: 400px; --cutout-bg: var(--bg-body)"
-                >
-                  <img src="img/futuristic-bg.webp" alt="Tło" />
-
-                  <!-- Wycięcie w prawym dolnym rogu -->
-                  <div class="cutout-wrapper cutout-md-br w-100 w-md-50">
-                    <div class="p-4">
-                      <h2 class="text-9 fw-black m-0">Zbuduj to z molique</h2>
-                      <p class="text-muted mt-2">
-                        Ten biały kontener idealnie wycina zdjęcie pod spodem!
-                      </p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;section class="hero-with-cutout" style="--cutout-bg: var(--bg-body);"&gt;
-  &lt;img src="foto.jpg" alt="Tło"&gt;
-  
-  &lt;!-- Wycięcie w prawym dolnym rogu (.cutout-md-br) --&gt;
-  &lt;div class="cutout-wrapper cutout-md-br w-100 w-md-50"&gt;
-    &lt;div class="p-4"&gt;
-      &lt;h2&gt;Tytuł&lt;/h2&gt;
-    &lt;/div&gt;
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="hero-with-cutout"&gt;
+  &lt;img src="zdjecie.jpg" alt=""&gt;
+  &lt;div class="cutout-wrapper cutout-md-bl p-5"&gt;
+    &lt;h2&gt;Treść w wycięciu&lt;/h2&gt;
   &lt;/div&gt;
-&lt;/section&gt;</code></pre>
-              </div>
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hero-with-cutout</code></td>
+                    <td data-label="Co robi">Obudowa: zdjęcie plus blok treści.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.cutout-wrapper</code></td>
+                    <td data-label="Co robi">
+                      Blok wchodzący w zdjęcie. Tło bierze z
+                      <code>--cutout-bg</code>; ustaw je na kolor sekcji, bo
+                      inaczej wycięcie nie zlewa się z tłem strony.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.cutout-md-bl</code></td>
+                    <td data-label="Co robi">
+                      Który róg zdjęcia zostaje wycięty:
+                      <code>bl</code> — lewy dolny. Dalej:
+                      <code>.cutout-md-br</code>, <code>.cutout-md-tl</code>,
+                      <code>.cutout-md-tr</code>. Przedrostek
+                      <code>md</code> mówi wprost, że efekt zaczyna się od
+                      tabletu.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Promień łuku</h5>
+              <p class="text-4 text-muted m-0">
+                Wielkość wycięcia ustawia <code>--cutout-radius</code>
+                (domyślnie 32px). Ta sama zmienna steruje iluzją wycięcia
+                w nagłówku panelu admina — patrz
+                <a href="docs-admin.html">Panel Admina</a>.
+              </p>
             </div>
           </section>
 
-          <!-- SEKCJA: ZAAWANSOWANA OŚ CZASU (LABELED TIMELINE) -->
+          <!-- ===================================================== -->
+          <!-- 4. PARALLAX I SEKCJE NAKŁADANE                        -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              Zaawansowana Oś Czasu (Labeled Timeline)
-            </h2>
-            <p class="text-muted mb-4">
-              W przeciwieństwie do klasycznej osi czasu (opartej na
-              pseudo-elementach i tagach <code>&lt;ul&gt;</code>), wariant
-              <code>.timeline-labeled</code> wykorzystuje
-              <strong>CSS Grid</strong>. Jest to idealne rozwiązanie dla
-              systemów ERP/CRM, gdzie po lewej stronie musimy umieścić datę lub
-              godzinę operacji.
-            </p>
+            <h2 class="text-8 fw-bold mb-3">4. Parallax i sekcje nakładane</h2>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Zasady architektury:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  Używaj tagów <code>&lt;div&gt;</code> zamiast list
-                  (<code>&lt;ul&gt;</code>).
-                </li>
-                <li>
-                  Struktura wymaga 3 elementów wewnątrz
-                  <code>.timeline-item</code>: <strong>label</strong> (lewa),
-                  <strong>separator</strong> (środek) oraz
-                  <strong>content</strong> (prawa).
-                </li>
-                <li>
-                  Na urządzeniach mobilnych siatka automatycznie przenosi datę
-                  nad treść, oszczędzając miejsce.
-                </li>
-                <li>
-                  Kolor kropki zmienisz klasami narzędziowymi:
-                  <code>.node-primary</code>, <code>.node-success</code>,
-                  <code>.node-danger</code>.
-                </li>
-              </ul>
+            <h3 class="text-6 fw-bold mb-2 mt-4">Parallax</h3>
+            <p class="text-muted mb-3">
+              Tło przesuwające się wolniej niż treść. Ruchem steruje
+              <strong>pozycja przewijania, nie zdarzenie <code>scroll</code>
+              w JS</strong> — dzięki temu animacja liczy się poza wątkiem
+              głównym i nie klatkuje przy ciężkiej stronie.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="parallax-container"&gt;
+  &lt;img class="parallax-bg" src="zdjecie.jpg" alt=""&gt;
+  &lt;div class="parallax-content"&gt;
+    &lt;h2&gt;Treść na wierzchu&lt;/h2&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
             </div>
 
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface justify-content-center"
-              >
-                <!-- KONTENER PREZENTACYJNY -->
-                <div class="w-100" style="max-width: 600px">
-                  <div class="timeline timeline-labeled">
-                    <!-- ELEMENT 1 (Sukces) -->
-                    <div class="timeline-item">
-                      <div class="timeline-label">
-                        <div class="fw-bold text-dark">30.06.2026</div>
-                        <div class="text-muted">16:44</div>
-                      </div>
-                      <div class="timeline-separator">
-                        <div class="timeline-node node-success"></div>
-                        <div class="timeline-line"></div>
-                      </div>
-                      <div class="timeline-content">
-                        <div class="d-flex align-items-center gap-2 m-b-1">
-                          <span class="fw-bold text-4 text-dark"
-                            >Rafał Różacki</span
-                          >
-                          <span class="text-muted text-3"
-                            >FV 15874/06/2026</span
-                          >
-                        </div>
-                        <div class="text-4 d-flex flex-column gap-1">
-                          <div>
-                            <span class="text-muted">- Cement 25kg</span>
-                            <span class="text-success fw-medium"
-                              >+100 szt.</span
-                            >
-                          </div>
-                          <div>
-                            <span class="text-muted"
-                              >- Kabel YDY 3x2,5 mm²</span
-                            >
-                            <span class="text-success fw-medium">+250 mb.</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+            <h3 class="text-6 fw-bold mb-2 mt-4">Sekcje nakładane</h3>
+            <p class="text-muted mb-3">
+              Kolejne sekcje wjeżdżają na poprzednie jak talia kart. Stoi to na
+              <code>position: sticky</code>, więc działa bez skryptu.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="stacking-container"&gt;
+  &lt;section class="section-stacked"&gt;Pierwsza&lt;/section&gt;
+  &lt;section class="section-stacked"&gt;Druga wjeżdża na pierwszą&lt;/section&gt;
+&lt;/div&gt;</code></pre>
+            </div>
 
-                    <!-- ELEMENT 2 (Ostrzeżenie/Błąd) -->
-                    <div class="timeline-item">
-                      <div class="timeline-label">
-                        <div class="fw-bold text-dark">30.06.2026</div>
-                        <div class="text-muted">12:21</div>
-                      </div>
-                      <div class="timeline-separator">
-                        <div class="timeline-node node-danger"></div>
-                        <div class="timeline-line"></div>
-                      </div>
-                      <div class="timeline-content">
-                        <div class="d-flex align-items-center gap-2 m-b-1">
-                          <span class="fw-bold text-4 text-dark">John Doe</span>
-                          <span class="text-muted text-3">WZ 5002/2026</span>
-                        </div>
-                        <div class="text-4 d-flex flex-column gap-1">
-                          <div>
-                            <span class="text-muted"
-                              >- Pustak ceramiczny 25 cm</span
-                            >
-                            <span class="text-danger fw-medium"
-                              >-1200 szt.</span
-                            >
-                          </div>
-                          <div>
-                            <span class="text-muted"
-                              >- Stal zbrojeniowa fi 12</span
-                            >
-                            <span class="text-danger fw-medium">-2000 kg</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.parallax-container</code></td>
+                    <td data-label="Co robi">Obudowa; przycina wystające tło.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.parallax-bg</code></td>
+                    <td data-label="Co robi">
+                      Obraz w tle. Celowo wyższy niż kontener — musi mieć zapas
+                      na przesuwanie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.parallax-content</code></td>
+                    <td data-label="Co robi">Treść nad tłem.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.stacking-container</code></td>
+                    <td data-label="Co robi">Obudowa sekcji nakładanych.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.stacking-container-snap</code></td>
+                    <td data-label="Co robi">
+                      Wariant z przyciąganiem: przewijanie zatrzymuje się na
+                      pełnej sekcji. Wymaga własnej wysokości i przewijania.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.section-stacked</code></td>
+                    <td data-label="Co robi">Pojedyncza sekcja w talii.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.bg-gradient-corners</code></td>
+                    <td data-label="Co robi">
+                      Delikatna łuna w narożnikach sekcji — tło bez zdjęcia.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-                    <!-- ELEMENT 3 (Ostatni - brak linii) -->
-                    <div class="timeline-item">
-                      <div class="timeline-label">
-                        <div class="fw-bold text-dark">29.06.2026</div>
-                        <div class="text-muted">7:15</div>
-                      </div>
-                      <div class="timeline-separator">
-                        <div class="timeline-node"></div>
-                        <div class="timeline-line"></div>
-                      </div>
-                      <div class="timeline-content">
-                        <div class="d-flex align-items-center gap-2 m-b-1">
-                          <span class="fw-bold text-4 text-dark"
-                            >System ERP</span
-                          >
-                          <span class="text-muted text-3"
-                            >Automatyczna inwentaryzacja</span
-                          >
-                        </div>
-                        <div class="text-4 text-muted">
-                          Zakończono proces weryfikacji stanów magazynowych.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="timeline timeline-labeled"&gt;
-  
-  &lt;!-- Pojedynczy wpis --&gt;
-  &lt;div class="timeline-item"&gt;
-    
-    &lt;!-- 1. Lewa kolumna (Data) --&gt;
-    &lt;div class="timeline-label"&gt;
-      &lt;div class="fw-bold text-dark"&gt;30.06.2026&lt;/div&gt;
-      &lt;div class="text-muted"&gt;16:44&lt;/div&gt;
-    &lt;/div&gt;
-    
-    &lt;!-- 2. Środkowa kolumna (Kropka i linia) --&gt;
+          <!-- ===================================================== -->
+          <!-- 5. OŚ CZASU                                           -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">5. Oś czasu</h2>
+            <p class="text-muted mb-4">
+              Do historii firmy, etapów projektu, changelogu. Dwa układy:
+              podstawowy z treścią po jednej stronie osi i
+              <code>.timeline-labeled</code> z datami w osobnej kolumnie.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;ul class="timeline timeline-labeled"&gt;
+  &lt;li class="timeline-item"&gt;
+    &lt;div class="timeline-label"&gt;2026&lt;/div&gt;
     &lt;div class="timeline-separator"&gt;
-      &lt;!-- Dodaj klasę node-success lub node-danger dla koloru --&gt;
       &lt;div class="timeline-node node-success"&gt;&lt;/div&gt;
       &lt;div class="timeline-line"&gt;&lt;/div&gt;
     &lt;/div&gt;
-    
-    &lt;!-- 3. Prawa kolumna (Treść) --&gt;
-    &lt;div class="timeline-content"&gt;
-      &lt;div class="fw-bold text-dark"&gt;Rafał Różacki&lt;/div&gt;
-      &lt;div class="text-muted"&gt;Przyjęcie towaru na magazyn.&lt;/div&gt;
-    &lt;/div&gt;
-    
-  &lt;/div&gt;
+    &lt;div class="timeline-content"&gt;Opis wydarzenia&lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
 
-&lt;/div&gt;</code></pre>
-              </div>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline</code></td>
+                    <td data-label="Co robi">Obudowa osi.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-item</code></td>
+                    <td data-label="Co robi">Pojedyncze wydarzenie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-content</code></td>
+                    <td data-label="Co robi">Treść wydarzenia.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-badge</code></td>
+                    <td data-label="Co robi">Znacznik na osi w układzie podstawowym.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-large</code></td>
+                    <td data-label="Co robi">Wariant z większymi odstępami.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-numbered</code></td>
+                    <td data-label="Co robi">Numeruje wydarzenia automatycznie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-labeled</code></td>
+                    <td data-label="Co robi">
+                      Układ z datami w osobnej kolumnie po lewej. Wymaga
+                      trzech bloków w każdym wydarzeniu — patrz kod wyżej.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-label</code></td>
+                    <td data-label="Co robi">Kolumna z datą. Szerokość: <code>--timeline-label-width</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-separator</code></td>
+                    <td data-label="Co robi">Kolumna środkowa: kropka i linia.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-node</code></td>
+                    <td data-label="Co robi">
+                      Kropka. Kolor przez <code>.node-primary</code>,
+                      <code>.node-success</code>, <code>.node-danger</code>
+                      albo zmienną <code>--timeline-dot-color</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.timeline-line</code></td>
+                    <td data-label="Co robi">Pionowa linia łącząca wydarzenia.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Zmienne osi</h5>
+              <p class="text-4 text-muted m-0">
+                <code>--timeline-spacing</code> (odstęp między wydarzeniami),
+                <code>--timeline-dot-size</code>,
+                <code>--timeline-dot-color</code>,
+                <code>--timeline-line-color</code>,
+                <code>--timeline-label-width</code>. Klasy
+                <code>.node-*</code> są skrótem na najczęstsze kolory kropki;
+                do dowolnego użyj zmiennej.
+              </p>
             </div>
           </section>
 
-          <!-- SEKCJA: BACKGROUND VIDEO -->
+          <!-- ===================================================== -->
+          <!-- 6. STEPPER                                            -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              Wydajne Wideo w Tle (Background Video)
-            </h2>
+            <h2 class="text-8 fw-bold mb-3">6. Stepper</h2>
             <p class="text-muted mb-4">
-              Zoptymalizowany, akcelerowany przez GPU komponent do wyświetlania
-              wideo w tle sekcji (np. Hero). Szanuje zasady dostępności (A11y) i
-              nie obciąża procesora.
+              Oś czasu pokazuje <strong>przeszłość</strong>, stepper —
+              <strong>postęp w procesie</strong>: zamówienie, wdrożenie,
+              formularz wieloetapowy. Stąd dwa stany, których oś czasu nie ma.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">
-                Złote zasady optymalizacji (Wymagane!):
-              </h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0 mb-3"
-              >
-                <li>
-                  <strong>Brak Audio:</strong> Ścieżka dźwiękowa musi być
-                  fizycznie usunięta z pliku wideo przed wgraniem na serwer
-                  (oszczędność wagi).
-                </li>
-                <li>
-                  <strong>Rozdzielczość:</strong> Używaj maksymalnie 720p
-                  (1280x720). Wideo w tle jest przykryte overlayem, więc 1080p
-                  to marnowanie transferu.
-                </li>
-                <li>
-                  <strong>Dwa formaty:</strong> Zawsze dostarczaj plik
-                  <code>.webm</code> (dla nowoczesnych przeglądarek) oraz
-                  <code>.mp4</code> (jako fallback dla starszych urządzeń
-                  Apple).
-                </li>
-              </ul>
-
-              <h5 class="fw-bold text-5 mb-2">
-                Dostępność (A11y) i Wydajność:
-              </h5>
-              <p class="text-4 text-muted m-0">
-                Komponent automatycznie ukrywa wideo i wyświetla statyczny
-                obrazek (poster), jeśli użytkownik ma włączoną opcję
-                <strong>"Ogranicz ruch" (prefers-reduced-motion)</strong> w
-                systemie operacyjnym. Dodatkowo, wideo jest renderowane na
-                dedykowanej warstwie GPU (<code>transform: translateZ(0)</code
-                >), co gwarantuje płynne scrollowanie strony w 60 FPS.
-              </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="stepper stepper-numbered"&gt;
+  &lt;div class="step is-completed"&gt;Koszyk&lt;/div&gt;
+  &lt;div class="step is-active"&gt;Dostawa&lt;/div&gt;
+  &lt;div class="step"&gt;Płatność&lt;/div&gt;
+&lt;/div&gt;</code></pre>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100 p-0 border-0">
-                <!-- KONTENER PREZENTACYJNY -->
-                <section
-                  class="bg-video-container rounded-2"
-                  style="min-height: 400px; display: flex; align-items: center"
-                >
-                  <!-- 1. FALLBACK IMAGE (Plakat) -->
-                  <!-- Używamy placeholdera jako przykładu -->
-                  <img
-                    src="https://placehold.co/1280x720/1e293b/1e293b"
-                    alt="Tło"
-                    class="bg-video"
-                    style="z-index: -3"
-                  />
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.stepper</code></td>
+                    <td data-label="Co robi">Obudowa kroków.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.stepper-numbered</code></td>
+                    <td data-label="Co robi">Numeruje kroki zamiast rysować kropki.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.step</code></td>
+                    <td data-label="Co robi">Pojedynczy krok.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.step-line</code></td>
+                    <td data-label="Co robi">Łącznik między krokami.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-active</code></td>
+                    <td data-label="Co robi">Krok bieżący. Powinien być jeden.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-completed</code></td>
+                    <td data-label="Co robi">Krok zakończony — wszystkie przed bieżącym.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-                  <!-- 2. WIDEO -->
-                  <!-- Atrybuty autoplay, loop, muted i playsinline są BEZWZGLĘDNIE WYMAGANE! -->
-                  <video
-                    class="bg-video"
-                    autoplay
-                    loop
-                    muted
-                    playsinline
-                    poster="https://placehold.co/1280x720/1e293b/1e293b"
-                  >
-                    <!-- Przykładowe wideo (zastąp własnym) -->
-                    <source
-                      src="https://www.w3schools.com/html/mov_bbb.mp4"
-                      type="video/mp4"
-                    />
-                  </video>
+          <!-- ===================================================== -->
+          <!-- 7. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
 
-                  <!-- 3. TREŚĆ HERO -->
-                  <div
-                    class="container position-relative text-white z-index-1 text-center"
-                  >
-                    <h2 class="text-9 fw-black mb-3">Przyszłość B2B</h2>
-                    <p
-                      class="text-6 opacity-75 mb-4 mx-auto"
-                      style="max-width: 600px"
-                    >
-                      Zbuduj swój system szybciej i wydajniej dzięki nowoczesnej
-                      architekturze.
-                    </p>
-                    <button
-                      class="btn btn-primary btn-lg border-radius-2 shadow-lg"
-                    >
-                      Rozpocznij
-                    </button>
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="sec-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Nakładka bez klasy krycia</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Kolor i krycie są rozdzielone celowo, ale to znaczy, że
+                    <code>.overlay .overlay-dark</code> bez
+                    <code>.overlay-60</code> jest w pełni przezroczysta —
+                    czyli niewidoczna. Wygląda to jak „nakładka nie działa",
+                    choć element jest na miejscu.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;!-- ŹLE - brak krycia, nakładka niewidoczna --&gt;
+&lt;div class="overlay overlay-dark"&gt;&lt;/div&gt;
+
+&lt;!-- DOBRZE --&gt;
+&lt;div class="overlay overlay-dark overlay-60"&gt;&lt;/div&gt;</code></pre>
                   </div>
-                </section>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;section class="bg-video-container" style="min-height: 70vh; display: flex; align-items: center;"&gt;
-  
-  &lt;!-- 1. FALLBACK IMAGE (Plakat) --&gt;
-  &lt;img src="img/hero-poster.jpg" alt="Tło" class="bg-video" style="z-index: -3;"&gt;
+                </div>
+              </details>
 
-  &lt;!-- 2. WIDEO (Zoptymalizowane atrybuty) --&gt;
-  &lt;video class="bg-video" autoplay loop muted playsinline poster="img/hero-poster.jpg"&gt;
-    &lt;source src="video/hero-bg.webm" type="video/webm"&gt;
-    &lt;source src="video/hero-bg.mp4" type="video/mp4"&gt;
-  &lt;/video&gt;
+              <details class="accordion-item" name="sec-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Treść pod nakładką zamiast nad nią</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Nakładka przykrywa wszystko w środku rodzica, także tekst i
+                    przyciski. Objaw: napis wygląda na przygaszony razem ze
+                    zdjęciem, a przycisk nie reaguje na kliknięcie, bo warstwa
+                    jest nad nim. Treść podnieś przez
+                    <code>.position-relative</code> i <code>.z-10</code>.
+                  </p>
+                </div>
+              </details>
 
-  &lt;!-- 3. TREŚĆ HERO --&gt;
-  &lt;div class="container position-relative text-white z-index-1"&gt;
-    &lt;h1 class="text-10 fw-black mb-3"&gt;Tytuł Sekcji&lt;/h1&gt;
-    &lt;p class="text-6 opacity-75 mb-4"&gt;Opis sekcji hero na tle wideo.&lt;/p&gt;
-    &lt;button class="btn btn-primary btn-lg"&gt;Akcja&lt;/button&gt;
-  &lt;/div&gt;
-  
-&lt;/section&gt;</code></pre>
-              </div>
+              <details class="accordion-item" name="sec-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Sprawdzanie wycięcia na wąskim oknie</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.cutout-md-*</code> działa dopiero od tabletu — na
+                    telefonie bloki układają się jeden pod drugim, bo w wąskiej
+                    kolumnie nie ma czego wycinać. To zamierzone, nie usterka.
+                    Przedrostek <code>md</code> w nazwie mówi o tym wprost.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    Druga rzecz: <code>.cutout-wrapper</code> bierze tło z
+                    <code>--cutout-bg</code>. Jeśli sekcja ma inne tło niż
+                    domyślne, ustaw tę zmienną — inaczej wycięcie odcina się
+                    prostokątem w innym kolorze.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="sec-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Oś czasu użyta do procesu</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.timeline</code> nie ma stanów — każde wydarzenie
+                    wygląda tak samo, bo opisuje przeszłość. Do pokazania,
+                    gdzie użytkownik jest teraz, służy
+                    <code>.stepper</code> ze stanami
+                    <code>.is-active</code> i <code>.is-completed</code>.
+                    Oznaczanie „bieżącego" wydarzenia na osi czasu wymagałoby
+                    dopisywania własnego CSS.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-5">
+            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-hero-sections.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: hero</h5>
+                  <p class="text-4 text-muted m-0">
+                    Gotowe nagłówki, wycięcia i nakładki.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-timeline.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: oś czasu</h5>
+                  <p class="text-4 text-muted m-0">
+                    Warianty osi i steppera.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-layout.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Grid &amp; Layout</h5>
+                  <p class="text-4 text-muted m-0">
+                    Siatka, na której układasz te sekcje.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
 
@@ -737,13 +599,11 @@
           <div
             class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
           >
-            <a href="docs-layout.html" class="btn btn-secondary"
-              >➔ Wstecz: Grid & Layout</a
+            <a href="docs-navbar.html" class="btn-secondary"
+              >➔ Wstecz: Nawigacja &amp; Menu</a
             >
-            <a
-              href="docs-typography.html"
-              class="btn btn-primary fw-bold hover-spring"
-              >Następny krok: Typografia & Kolory ➔</a
+            <a href="docs-typography.html" class="btn-primary fw-bold hover-spring"
+              >Następny krok: Typografia &amp; Kolory ➔</a
             >
           </div>
         </div>
