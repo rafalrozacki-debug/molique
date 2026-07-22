@@ -34,7 +34,12 @@
 
   .component-code {
     position: relative;
-    background-color: #1e293b;
+    background-color: var(--code-bg);
+    /* Ramka, bo .component-code bywa uzywany SAMODZIELNIE (bez otoczki
+       .component-showcase, ktora niosla obramowanie) - bez niej blok kodu
+       nie ma zadnej krawedzi. */
+    border: 1px solid var(--code-border);
+    border-radius: var(--border-radius);
     margin: 0;
     padding: 0;
     /* Zabezpieczenie przed rozsadzaniem przez długi kod */
@@ -46,11 +51,19 @@
       /* Wymuszenie scrollowania w poziomie dla długich linii kodu */
       overflow-x: auto;
       max-width: 100%;
-      color: #e2e8f0;
+      color: var(--code-text);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.875rem;
       line-height: 1.6;
     }
+  }
+
+  /* Wewnatrz showcase'u obramowanie niesie juz .component-showcase, a blok
+     kodu przylega do podgladu - zostaje sama kreska rozdzielajaca. */
+  .component-showcase > .component-code {
+    border: 0;
+    border-top: 1px solid var(--code-border);
+    border-radius: 0;
   }
 
   .btn-copy {

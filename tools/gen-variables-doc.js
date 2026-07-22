@@ -140,6 +140,26 @@ for (const [name, [group]] of Object.entries(GLOBAL).map(([k, v]) => [k, v])) {
   if (!GROUPS.some((g) => g.id === group)) problems.push(`GLOBAL: ${name} wskazuje na nieistniejaca grupe "${group}"`);
 }
 
+// Liczby w PROZIE strony (naglowki sekcji, opis meta, zdanie o dark mode) sa
+// pisane recznie, wiec cichnie rozjezdzaja sie po dodaniu zmiennej. Tabele
+// generujemy, ale zdania - nie; ta kontrola pilnuje wlasnie ich.
+const pagePath = path.join(root, 'src', 'docs-variables.html');
+if (fs.existsSync(pagePath)) {
+  const page = fs.readFileSync(pagePath, 'utf8');
+  const darkCount = Object.keys(GLOBAL).filter((n) => dark.has(n)).length;
+  const expected = [
+    [String(light.size) + ' zmiennych motywu', 'liczba zmiennych motywu w opisie strony'],
+    ['>' + light.size + '<', 'plakietka z liczba zmiennych motywu'],
+    [String(component.size) + ' zmiennych komponentów', 'liczba zmiennych komponentow w opisie'],
+    ['podmienia ' + darkCount + ' z ' + light.size, 'zdanie o dark mode'],
+  ];
+  for (const [needle, what] of expected) {
+    if (!page.includes(needle)) {
+      problems.push(`docs-variables.html: nieaktualna ${what} - brak "${needle}"`);
+    }
+  }
+}
+
 if (problems.length) {
   console.error('\nGenerator zmiennych PRZERWANY - dokumentacja rozjechala sie ze zrodlem:\n');
   for (const p of problems) console.error('  - ' + p);

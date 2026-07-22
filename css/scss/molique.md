@@ -76,6 +76,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `--navbar-pill-bg` / `--navbar-pill-color` (nad hero),
   `--navbar-pill-bg-scrolled` / `--navbar-pill-color-scrolled` (po scrollu),
   `--navbar-pill-padding-x` (32px) / `--navbar-pill-padding-x-scrolled` (16px).
+  Na mobile panel offcanvas przejmuje `--navbar-pill-bg` (inaczej białe linki
+  wariantu lądowały na jasnym `--bg-surface`); w `.navbar-transparent`, który
+  nie ma czym pomalować panelu, linki wracają tam do `--text-main`.
 - **Offcanvas (Mobile):** oparte na Checkbox Hack
   (`.navbar-offcanvas-toggle:checked`).
 - **Mega Menu:** `<details class="mega-menu" name="grupa">` >

@@ -71,6 +71,13 @@
     --btn-text-light: var(--light);
     --btn-text-dark: var(--dark);
     --card-bg-subtle: rgba(var(--dark-rgb), 0.03);
+    /* BLOKI KODU. Ciemne w OBU motywach (tak wygląda kod wszędzie), ale
+       wartość NIE może być zahardkodowana: w dark mode --bg-surface to
+       dokładnie #1E293B, więc blok kodu zlewał się z tłem strony w jeden
+       prostokąt. W ciemnym motywie schodzimy poniżej tła powierzchni. */
+    --code-bg: #1E293B;
+    --code-text: #E2E8F0;
+    --code-border: rgba(255, 255, 255, 0.12);
     /* Spacing (1 jednostka = 8px) */
     --spacing-unit: 8px;
     /* Grid */
@@ -181,6 +188,9 @@
     --body-rgb: 15, 23, 42;
     --bg-surface-rgb: 30, 41, 59;
     --sidebar-rgb: 15, 23, 42;
+    /* Ciemniej niż --bg-surface (#1E293B) i niż --bg-body (#0F172A),
+       żeby blok kodu odcinał się od obu. */
+    --code-bg: #060B16;
   }
   /**
    * molique - Fonty (@font-face)
@@ -3330,6 +3340,21 @@
     .navbar-offcanvas-toggle:checked ~ .navbar-toggle span:nth-child(3) {
       top: 19px;
       transform: rotate(-135deg);
+    }
+    /* WARIANTY NAKŁADKOWE A PANEL OFFCANVAS.
+       Oba warianty wymuszają jasny kolor linków, bo nad zdjęciem hero leżą na
+       ciemnym tle. Ta sama reguła obowiązywała jednak także w panelu mobilnym,
+       który ma tło --bg-surface — efekt: białe linki na białym panelu, menu
+       praktycznie niewidoczne. Każdy wariant domykamy inaczej, bo tylko
+       pastylka ma czym pomalować panel. */
+    /* Pastylka: panel przejmuje jej ciemne tło, linki zostają jasne. */
+    .navbar-pill .navbar-menu-offcanvas {
+      background-color: var(--navbar-pill-bg);
+    }
+    /* Transparent: brak własnego tła panelu, więc na czas menu mobilnego
+       linki wracają do koloru motywu (panel zostaje na --bg-surface). */
+    .navbar-transparent .navbar-menu-offcanvas .navbar-item {
+      color: var(--text-main);
     }
   }
   /* =========================================
@@ -7225,7 +7250,12 @@
     }
     .component-code {
       position: relative;
-      background-color: #1e293b;
+      background-color: var(--code-bg);
+      /* Ramka, bo .component-code bywa uzywany SAMODZIELNIE (bez otoczki
+         .component-showcase, ktora niosla obramowanie) - bez niej blok kodu
+         nie ma zadnej krawedzi. */
+      border: 1px solid var(--code-border);
+      border-radius: var(--border-radius);
       margin: 0;
       padding: 0;
       /* Zabezpieczenie przed rozsadzaniem przez długi kod */
@@ -7237,10 +7267,17 @@
       /* Wymuszenie scrollowania w poziomie dla długich linii kodu */
       overflow-x: auto;
       max-width: 100%;
-      color: #e2e8f0;
+      color: var(--code-text);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.875rem;
       line-height: 1.6;
+    }
+    /* Wewnatrz showcase'u obramowanie niesie juz .component-showcase, a blok
+       kodu przylega do podgladu - zostaje sama kreska rozdzielajaca. */
+    .component-showcase > .component-code {
+      border: 0;
+      border-top: 1px solid var(--code-border);
+      border-radius: 0;
     }
     .btn-copy {
       position: absolute;

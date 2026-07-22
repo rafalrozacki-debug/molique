@@ -355,4 +355,22 @@
   .navbar-offcanvas-toggle:checked ~ .navbar-toggle span:nth-child(3) {
     top: 19px; transform: rotate(-135deg);
   }
+
+  /* WARIANTY NAKŁADKOWE A PANEL OFFCANVAS.
+     Oba warianty wymuszają jasny kolor linków, bo nad zdjęciem hero leżą na
+     ciemnym tle. Ta sama reguła obowiązywała jednak także w panelu mobilnym,
+     który ma tło --bg-surface — efekt: białe linki na białym panelu, menu
+     praktycznie niewidoczne. Każdy wariant domykamy inaczej, bo tylko
+     pastylka ma czym pomalować panel. */
+
+  /* Pastylka: panel przejmuje jej ciemne tło, linki zostają jasne. */
+  .navbar-pill .navbar-menu-offcanvas {
+    background-color: var(--navbar-pill-bg);
+  }
+
+  /* Transparent: brak własnego tła panelu, więc na czas menu mobilnego
+     linki wracają do koloru motywu (panel zostaje na --bg-surface). */
+  .navbar-transparent .navbar-menu-offcanvas .navbar-item {
+    color: var(--text-main);
+  }
 }

@@ -64,6 +64,9 @@ export const GLOBAL = {
   '--card-bg-subtle': ['surfaces', 'Ledwie widoczne tło (3% koloru kontrastowego) — nagłówki tabel, stopki kart, bloki kodu.'],
   '--btn-text-light': ['surfaces', 'Kolor napisu na przyciskach z ciemnym tłem.'],
   '--btn-text-dark':  ['surfaces', 'Kolor napisu na przyciskach z jasnym tłem (warning, light).'],
+  '--code-bg':        ['surfaces', 'Tło bloków kodu (<code>.component-code</code>). Ciemne w obu motywach, ale w dark mode schodzi <strong>poniżej</strong> <code>--bg-surface</code> — inaczej blok zlewałby się z tłem strony.'],
+  '--code-text':      ['surfaces', 'Kolor tekstu w blokach kodu.'],
+  '--code-border':    ['surfaces', 'Obramowanie bloku kodu. Potrzebne, gdy <code>.component-code</code> stoi samodzielnie, bez otoczki <code>.component-showcase</code>.'],
 
   /* --- rgb --- */
   '--primary-rgb':   ['rgb', 'Kanały <code>--primary</code>. Używane m.in. przez <code>--focus-ring-color</code> i tła <code>-subtle</code>.'],
