@@ -153,6 +153,14 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Modale (Natywne):** `<dialog class="modal-dialog">` (lub
   `.modal-context` dla bocznego/dolnego panelu). Zamykanie:
   `<form method="dialog">`.
+- **Zakładki:** `.tabs` > ukryte `input.tab-input[type=radio]` (wspólne `name`)
+  + `.tabs-header` > `label.tab-label` + `.tabs-content` > `.tab-pane`.
+  Kolejność paneli MUSI odpowiadać kolejności inputów — CSS łączy je po
+  pozycji, nie po nazwie. Wariant `.tabs-pill` z `.tabs-pill-indicator`
+  (szerokość liczy `--tab-count`).
+  **Znane ograniczenie:** `.tab-input` ma `display: none`, co usuwa pole
+  z kolejności tabulacji — zakładek nie da się przełączyć klawiaturą.
+  Do treści krytycznej używaj czegoś innego.
 - **Akordeony:** `<details class="accordion-item" name="grupa">` >
   `<summary class="accordion-header">` + `<div class="accordion-body">`.
   Nagłówek jest flexem z `gap`, a strzałkę `::after` dosuwa `margin-left: auto`
@@ -381,7 +389,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.chart-area` / `.chart-pie`.
 - **Lejki:** `.chart-funnel` (pionowy), `.chart-pipeline` (poziomy),
   `.chart-funnel-true` (klasyczny trapezowy).
-- **Nawigacja Wykresów:** `.chart-nav` > `.chart-nav-item`.
+- **Nawigacja Wykresów (segmentowany przełącznik zakresu):**
+  `.chart-nav` > `<label class="chart-nav-item">` >
+  `<input type="radio" name="…">` + `<span class="nav-label">`.
+  Stan trzyma radio, więc przełączanie działa **bez JS**. Radio jest ukryte
+  techniką `clip` (nie `display: none`), dzięki czemu **grupa zostaje
+  obsługiwana strzałkami z klawiatury**, a obwódka focusa trafia na
+  `.nav-label`.
 
 ## Architektura JavaScript
 

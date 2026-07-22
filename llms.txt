@@ -119,7 +119,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 - **Przekazywanie danych:** Wartości przekazywane z backendu TYLKO przez zmienne CSS: `style="--val: 75%;"`.
 - **Struktura:** `.r-chart-wrapper` (dodaj `.chart-micro` dla małych wykresów) > `.chart-sparkline` / `.chart-radial` / `.chart-heatmap` / `.chart-area` / `.chart-pie`.
 - **Lejki:** `.chart-funnel` (pionowy), `.chart-pipeline` (poziomy), `.chart-funnel-true` (klasyczny trapezowy).
-- **Nawigacja Wykresów:** `.chart-nav` > `.chart-nav-item`.
+- **Nawigacja Wykresów (segmentowany przełącznik zakresu):** `.chart-nav` > `<label class="chart-nav-item">` > `<input type="radio" name="…">` + `<span class="nav-label">`. Stan trzyma radio, przełączanie bez JS. Radio ukryte techniką `clip` (NIE `display: none`), więc grupa zostaje obsługiwana strzałkami z klawiatury; obwódka focusa trafia na `.nav-label`.
 
 ## 3. ARCHITEKTURA JAVASCRIPT
 - **Autoloader:** Główny plik `molique-script.js` skanuje DOM i asynchronicznie pobiera mikro-moduły z `js/modules/` (np. `carousel.js`, `lightbox.js`) tylko wtedy, gdy komponent istnieje na stronie.

@@ -298,3 +298,70 @@
   opacity: 0.5;
   margin-bottom: calc(var(--spacing-unit) * 2);
 }
+/* =========================================
+   NAWIGACJA WYKRESU (segmentowany przelacznik zakresu)
+   =========================================
+   Komponent byl od pierwszego commita opisany w slownikach i uzyty w markupie
+   trzech stron, ale regula CSS nigdy nie powstala. Markup czekal gotowy:
+   .chart-nav > .chart-nav-item (label) > input[type=radio] + .nav-label
+
+   Stan trzyma radio, wiec przelaczanie dziala bez JS. Radio jest UKRYTE
+   TECHNIKA CLIP, a nie display:none - to istotna roznica, bo display:none
+   wyrzuca pole z kolejnosci tabulacji i z drzewa dostepnosci. Przy tej
+   technice grupa radio zostaje obslugiwana strzalkami z klawiatury. */
+.chart-nav {
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  background-color: var(--card-bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+}
+
+.chart-nav-item {
+  cursor: pointer;
+
+  /* Ukrycie zachowujace fokusowalnosc (ta sama technika co .sr-only). */
+  input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .nav-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--target-size-min);
+    padding: 0 calc(var(--spacing-unit) * 2);
+    border-radius: calc(var(--border-radius) * 0.75);
+    color: var(--text-muted);
+    font-weight: var(--fw-medium);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    transition: background-color var(--transition-speed),
+                color var(--transition-speed);
+  }
+
+  &:hover .nav-label { color: var(--text-main); }
+
+  /* Zaznaczony zakres. Radio jest bezposrednim rodzenstwem etykiety. */
+  input:checked + .nav-label {
+    background-color: var(--bg-surface);
+    color: var(--primary);
+    font-weight: var(--fw-bold);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Obwodka focusa musi trafic na ETYKIETE, bo samo radio jest niewidoczne. */
+  input:focus-visible + .nav-label {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
+  }
+}
