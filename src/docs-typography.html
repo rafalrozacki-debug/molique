@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Typografia & Kolory - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Typografia & Kolory - molique Docs","description":"Referencja typografii molique: płynna skala clamp(), wagi fontów, kolory tekstu i tła, warianty subtle, efekty tekstowe i knockout. Pełne tabele klas i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -15,275 +15,597 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <h1 class="text-11 fw-black mb-3">Typografia & Kolory</h1>
+            <h1 class="text-11 fw-black mb-3">Typografia &amp; Kolory</h1>
             <p class="text-6 text-muted">
-              Molique wykorzystuje płynną typografię opartą na funkcji <code>clamp()</code> i skali
-              Major Third. Oznacza to, że nagłówki automatycznie i płynnie rosną wraz z szerokością
-              ekranu. Zero Media Queries dla fontów!
+              Skala rozmiarów jest <strong>płynna</strong> — rozmiary rosną
+              razem z szerokością okna, bez media queries. Ta strona wypisuje
+              całą skalę, wagi, kolory i efekty tekstowe. Gotowe zestawienia:
+              <a href="examples-typography.html">przykłady</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: NAGŁÓWKI -->
+          <!-- ===================================================== -->
+          <!-- 1. SKALA ROZMIARÓW                                    -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">1. Płynne Nagłówki (Fluid Typography)</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Skala rozmiarów</h2>
             <p class="text-muted mb-4">
-              Używaj standardowych tagów <code>&lt;h1&gt;</code> do <code>&lt;h6&gt;</code>. Zmienne
-              CSS same zadbają o odpowiedni rozmiar na telefonie i na monitorze 4K.
+              Każdy rozmiar to <code>clamp()</code>: wartość minimalna, płynna
+              i maksymalna. Tekst nie przeskakuje na progach, tylko rośnie
+              stopniowo — dlatego w całym frameworku nie ma ani jednego media
+              query dla fontów.
+            </p>
+            <p class="text-muted mb-4">
+              Punktem odniesienia jest <strong><code>.text-3</code></strong> —
+              rozmiar akapitu. Wszystko poniżej to metadane, wszystko powyżej
+              to nagłówki i hero.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Jak to działa?</h5>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 flex-column align-items-start">
+                <span class="text-10 fw-black">Hero</span>
+                <span class="text-8 fw-bold">Nagłówek H1</span>
+                <span class="text-6 fw-bold">Nagłówek H3</span>
+                <span class="text-3">Tekst akapitu (baza)</span>
+                <span class="text-1 text-muted">Metadane</span>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Odpowiada</th>
+                    <th>Do czego</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-xs</code></td>
+                    <td data-label="Odpowiada">10px</td>
+                    <td data-label="Do czego">Dopiski prawne. Najmniejszy rozmiar w systemie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-sm</code></td>
+                    <td data-label="Odpowiada">11px</td>
+                    <td data-label="Do czego">Mikrocopy, podpisy pod grafiką.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-1</code>, <code class="fw-bold">.text-2</code></td>
+                    <td data-label="Odpowiada">12–13px</td>
+                    <td data-label="Do czego">Metadane, daty w osi czasu, etykiety.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-3</code></td>
+                    <td data-label="Odpowiada">baza</td>
+                    <td data-label="Do czego">
+                      <strong>Rozmiar akapitu.</strong> To samo co
+                      <code>.text-base</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-base</code></td>
+                    <td data-label="Odpowiada">baza</td>
+                    <td data-label="Do czego">
+                      Powrót do rozmiaru bazowego — przydaje się wewnątrz
+                      elementu, który skalę zmienił.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-4</code> – <code class="fw-bold">.text-8</code></td>
+                    <td data-label="Odpowiada">H5 → H1</td>
+                    <td data-label="Do czego">
+                      Nagłówki. <code>.text-8</code> odpowiada H1,
+                      <code>.text-4</code> — H5.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-9</code> – <code class="fw-bold">.text-12</code></td>
+                    <td data-label="Odpowiada">do 9rem</td>
+                    <td data-label="Do czego">Hero, wielkie liczby, strona 404.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Rozmiar to nie to samo co znaczenie</h5>
               <p class="text-4 text-muted m-0">
-                Framework używa funkcji <code>clamp(min, val, max)</code> opartej na skali
-                <strong>Major Third</strong>. Oznacza to, że np. nagłówek H1 płynnie rośnie od
-                2.44rem na telefonach do 3.05rem na dużych ekranach. Nie musisz pisać absolutnie
-                żadnych Media Queries dla fontów! Dodatkowo zastosowano nowoczesną właściwość
-                <code>text-wrap: balance</code>, która zapobiega powstawaniu tzw. "sierot"
-                (pojedynczych słów w nowej linii).
+                Znaczniki <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code> mają
+                własne rozmiary i <strong>nie potrzebują klas</strong>. Klas
+                <code>.text-*</code> używaj, gdy chcesz zmienić
+                <em>wygląd</em>, nie hierarchię — np. dać H2 rozmiar H4, bo
+                stoi w wąskiej kolumnie. Nigdy odwrotnie: nie wybieraj
+                <code>&lt;h3&gt;</code> zamiast <code>&lt;h1&gt;</code>
+                dlatego, że jest mniejszy.
               </p>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview flex-column align-items-start w-100">
-                <h1>Nagłówek H1 (Hero)</h1>
-                <h2>Nagłówek H2 (Sekcja)</h2>
-                <h3>Nagłówek H3 (Karta)</h3>
-                <h4>Nagłówek H4</h4>
-                <h5>Nagłówek H5</h5>
-                <h6>Nagłówek H6</h6>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;h1&gt;Nagłówek H1 (Hero)&lt;/h1&gt;
-&lt;h2&gt;Nagłówek H2 (Sekcja)&lt;/h2&gt;
-&lt;h3&gt;Nagłówek H3 (Karta)&lt;/h3&gt;</code></pre>
-              </div>
             </div>
           </section>
 
-          <!-- SEKCJA 2: STEROWANIE TEKSTEM -->
+          <!-- ===================================================== -->
+          <!-- 2. WAGI I KRÓJ                                        -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">2. Sterowanie Tekstem (Utilities)</h2>
-            <p class="text-muted mb-4">
-              Zestaw klas narzędziowych do precyzyjnej kontroli nad rozmiarem, wagą, wyrównaniem i
-              transformacją tekstu.
-            </p>
+            <h2 class="text-8 fw-bold mb-3">2. Wagi i krój</h2>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Dostępne modyfikatory:</h5>
-              <ul class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2">
-                <li>
-                  <strong>Rozmiar:</strong> Skala od <code>.text-1</code> (0.75rem) do
-                  <code>.text-12</code> (do 9rem). Tekst bazowy (rozmiar akapitu) to
-                  <code>.text-3</code>; poniżej niego leżą <code>.text-1</code> i
-                  <code>.text-2</code>, a <code>.text-4</code>&ndash;<code>.text-8</code>
-                  odpowiadają nagłówkom H5&ndash;H1.
-                </li>
-                <li>
-                  <strong>Mikrocopy:</strong> <code>.text-sm</code> (11px) i
-                  <code>.text-xs</code> (10px) - jeszcze mniejsze niż
-                  <code>.text-1</code>, do podpisów i dopisków prawnych.
-                </li>
-                <li>
-                  <strong>Waga:</strong> <code>.fw-light</code>, <code>.fw-normal</code>,
-                  <code>.fw-medium</code>, <code>.fw-bold</code>, <code>.fw-black</code>.
-                </li>
-                <li>
-                  <strong>Wyrównanie:</strong> <code>.text-start</code>, <code>.text-center</code>,
-                  <code>.text-end</code>, <code>.text-justify</code>. Dostępne również warianty
-                  responsywne (np. <code>.text-md-center</code>).
-                </li>
-                <li>
-                  <strong>Transformacja:</strong> <code>.text-uppercase</code>,
-                  <code>.text-lowercase</code>, <code>.text-capitalize</code>.
-                </li>
-              </ul>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Waga</th>
+                    <th>Do czego</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.fw-light</code></td>
+                    <td data-label="Waga">300</td>
+                    <td data-label="Do czego">Tekst drugoplanowy, podpisy.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.fw-normal</code></td>
+                    <td data-label="Waga">400</td>
+                    <td data-label="Do czego">Domyślna waga tekstu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.fw-medium</code></td>
+                    <td data-label="Waga">500</td>
+                    <td data-label="Do czego">Lekkie wyróżnienie: etykiety, pozycje menu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.fw-bold</code></td>
+                    <td data-label="Waga">700</td>
+                    <td data-label="Do czego">Nagłówki, wyróżnienia w tekście.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.fw-black</code></td>
+                    <td data-label="Waga">900</td>
+                    <td data-label="Do czego">Hero, duże liczby w dashboardzie.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview flex-column align-items-stretch w-100 gap-4">
-                <!-- Wyrównanie i Transformacja -->
-                <div class="grid-cols-1 grid-md-cols-2 gap-4 w-100">
-                  <div class="p-3 bg-surface border rounded-2">
-                    <p class="text-center text-uppercase fw-bold m-0">Wyśrodkowany i Uppercase</p>
-                  </div>
-                  <div class="p-3 bg-surface border rounded-2">
-                    <p class="text-end text-capitalize fw-bold m-0">do prawej i capitalize</p>
-                  </div>
-                </div>
-
-                <!-- Skala rozmiarów i wag -->
-                <div class="p-4 bg-surface border rounded-2 w-100">
-                  <div
-                    class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2"
-                  >
-                    <span class="text-1 fw-light">.text-1 .fw-light</span>
-                    <span class="text-muted text-1">0.75rem (12px)</span>
-                  </div>
-                  <div
-                    class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2"
-                  >
-                    <span class="text-3 fw-normal">.text-3 .fw-normal</span>
-                    <span class="text-muted text-1">14&ndash;15px (Baza)</span>
-                  </div>
-                  <div
-                    class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2"
-                  >
-                    <span class="text-5 fw-medium">.text-5 .fw-medium</span>
-                    <span class="text-muted text-1">do 1.28rem (H4)</span>
-                  </div>
-                  <div
-                    class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2"
-                  >
-                    <span class="text-8 fw-bold">.text-8 .fw-bold</span>
-                    <span class="text-muted text-1">do 2.5rem (H1)</span>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between">
-                    <span class="text-11 fw-black">.text-11 .fw-black</span>
-                    <span class="text-muted text-1">do 6.5rem (Hero)</span>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wyrównanie i transformacja --&gt;
-&lt;p class="text-center text-uppercase"&gt;Tekst&lt;/p&gt;
-
-&lt;!-- Responsywne wyrównanie (do lewej na mobile, środek na desktopie) --&gt;
-&lt;p class="text-start text-md-center"&gt;Tekst&lt;/p&gt;
-
-&lt;!-- Rozmiar i waga --&gt;
-&lt;h2 class="text-8 fw-black"&gt;Duży, gruby nagłówek&lt;/h2&gt;
-&lt;p class="text-2 fw-light"&gt;Mały, cienki tekst&lt;/p&gt;</code></pre>
-              </div>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-uppercase</code></td>
+                    <td data-label="Co robi">
+                      WERSALIKI. Także <code>.text-lowercase</code> i
+                      <code>.text-capitalize</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-decoration-none</code></td>
+                    <td data-label="Co robi">
+                      Zdejmuje podkreślenie — typowo z linku, który ma wyglądać
+                      jak przycisk.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-decoration-underline</code></td>
+                    <td data-label="Co robi">Dodaje podkreślenie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-decoration-line-through</code></td>
+                    <td data-label="Co robi">Przekreślenie — np. stara cena.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-start</code></td>
+                    <td data-label="Co robi">
+                      Wyrównanie: <code>.text-center</code>,
+                      <code>.text-end</code>, <code>.text-justify</code> oraz
+                      warianty <code>.text-md-start</code>,
+                      <code>.text-md-center</code>,
+                      <code>.text-md-end</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 3: KOLORY -->
+          <!-- ===================================================== -->
+          <!-- 3. KOLORY                                             -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">3. Kolory Tekstu i Tła</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Kolory</h2>
             <p class="text-muted mb-4">
-              Zestaw klas narzędziowych do szybkiego stylowania elementów.
+              Trzy rodziny o wspólnym schemacie nazw:
+              <code>text-</code> na tekst, <code>bg-</code> na tło,
+              <code>border-</code> na ramkę. Do tego warianty
+              <code>-subtle</code> (przygaszone tło) i <code>-hover</code>
+              (zmiana po najechaniu).
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">⚙️ Automatyczny kontrast:</h5>
-              <p class="text-4 text-muted mb-3">
-                Użycie klas tła (np. <code>.bg-primary</code>, <code>.bg-dark</code>) automatycznie
-                zmienia kolor tekstu wewnątrz kontenera na odpowiedni (jasny lub ciemny), aby
-                spełnić wymogi dostępności (WCAG).
-              </p>
-              <hr class="my-3" />
-              <h5 class="fw-bold text-5 mb-2">🎨 Własne kolory:</h5>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 flex-wrap">
+                <span class="badge badge-primary">primary</span>
+                <span class="p-2 rounded-2 bg-success-subtle text-success">success-subtle</span>
+                <span class="p-2 rounded-2 bg-danger text-white">bg-danger</span>
+                <span class="p-2 rounded-2 bg-warning-subtle text-warning">warning-subtle</span>
+                <span class="text-muted p-2">text-muted</span>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Rodzina</th>
+                    <th>Warianty</th>
+                    <th>Uwagi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.text-primary</code></td>
+                    <td data-label="Warianty">
+                      <code>.text-secondary</code>, <code>.text-success</code>,
+                      <code>.text-danger</code>, <code>.text-warning</code>,
+                      <code>.text-info</code>, <code>.text-dark</code>,
+                      <code>.text-light</code>, <code>.text-white</code>
+                    </td>
+                    <td data-label="Uwagi">
+                      <code>.text-dark</code> i <code>.text-light</code>
+                      <strong>odwracają się</strong> w dark mode — patrz
+                      pułapka nr 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.text-main</code></td>
+                    <td data-label="Warianty"><code>.text-muted</code></td>
+                    <td data-label="Uwagi">
+                      Kolory semantyczne treści: główny i przygaszony. Zwykle
+                      lepszy wybór niż <code>.text-dark</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.bg-primary</code></td>
+                    <td data-label="Warianty">
+                      <code>.bg-secondary</code>, <code>.bg-success</code>,
+                      <code>.bg-danger</code>, <code>.bg-warning</code>,
+                      <code>.bg-info</code>, <code>.bg-dark</code>,
+                      <code>.bg-light</code>, <code>.bg-body</code>,
+                      <code>.bg-surface</code>, <code>.bg-transparent</code>
+                    </td>
+                    <td data-label="Uwagi">Tła pełne, w pełnym nasyceniu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina"><code class="fw-bold">.bg-primary-subtle</code></td>
+                    <td data-label="Warianty">
+                      <code>.bg-secondary-subtle</code>,
+                      <code>.bg-success-subtle</code>,
+                      <code>.bg-danger-subtle</code>,
+                      <code>.bg-warning-subtle</code>,
+                      <code>.bg-info-subtle</code>,
+                      <code>.bg-dark-subtle</code>,
+                      <code>.bg-light-subtle</code>,
+                      <code>.bg-body-subtle</code>,
+                      <code>.bg-surface-subtle</code>,
+                      <code>.bg-white-subtle</code>
+                    </td>
+                    <td data-label="Uwagi">
+                      Tło na kilku procentach krycia — pod tekst w tym samym
+                      kolorze. Typowe dla plakietek statusu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Rodzina">
+                      <code class="fw-bold">.text-hover-*</code>,
+                      <code class="fw-bold">.bg-hover-*</code>,
+                      <code class="fw-bold">.border-hover-*</code>
+                    </td>
+                    <td data-label="Warianty">
+                      Każda rodzina ma dziesięć kolorów:
+                      <code>primary</code>, <code>secondary</code>,
+                      <code>success</code>, <code>danger</code>,
+                      <code>warning</code>, <code>info</code>,
+                      <code>dark</code>, <code>light</code>,
+                      <code>surface</code>, <code>body</code> — np.
+                      <code>.text-hover-primary</code>,
+                      <code>.bg-hover-danger</code>,
+                      <code>.border-hover-success</code>.
+                    </td>
+                    <td data-label="Uwagi">
+                      Schemat <strong><code>CO-hover-KOLOR</code></strong>, nie
+                      odwrotnie. Nie dokładaj ich do <code>.btn</code> — patrz
+                      pułapka nr 3.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Kiedy <code>-subtle</code></h5>
               <p class="text-4 text-muted m-0">
-                Aby zmienić paletę, nadpisz zmienne w swoim pliku <code>custom.css</code> (np.
-                <code>:root { --primary: #ff0000; }</code>). Klasy narzędziowe automatycznie
-                zaadaptują nowy kolor.
+                Pełne <code>.bg-danger</code> krzyczy i wymaga białego tekstu.
+                <code>.bg-danger-subtle</code> daje delikatne tło, na którym
+                działa <code>.text-danger</code> — czytelniej w tabeli, gdzie
+                takich oznaczeń jest kilkadziesiąt. Pełnego koloru używaj tam,
+                gdzie naprawdę chcesz przyciągnąć wzrok.
               </p>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="grid-auto w-100 gap-3">
-                  <div class="bg-primary p-3 rounded-2 text-center fw-bold">.bg-primary</div>
-                  <div class="bg-secondary p-3 rounded-2 text-center fw-bold">.bg-secondary</div>
-                  <div class="bg-success p-3 rounded-2 text-center fw-bold">.bg-success</div>
-                  <div class="bg-danger p-3 rounded-2 text-center fw-bold">.bg-danger</div>
-                  <div class="bg-warning p-3 rounded-2 text-center fw-bold">.bg-warning</div>
-                  <div class="bg-dark p-3 rounded-2 text-center fw-bold">.bg-dark</div>
-                </div>
-
-                <div class="w-100 mt-4 p-4 bg-surface border rounded-2">
-                  <p class="text-primary fw-bold m-0">.text-primary</p>
-                  <p class="text-success fw-bold m-0">.text-success</p>
-                  <p class="text-danger fw-bold m-0">.text-danger</p>
-                  <p class="text-muted fw-bold m-0">.text-muted</p>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Tła z automatycznym kontrastem tekstu --&gt;
-&lt;div class="bg-primary"&gt;Niebieskie tło, biały tekst&lt;/div&gt;
-&lt;div class="bg-warning"&gt;Żółte tło, ciemny tekst&lt;/div&gt;
-
-&lt;!-- Kolory samego tekstu --&gt;
-&lt;p class="text-danger"&gt;Tekst błędu&lt;/p&gt;
-&lt;p class="text-muted"&gt;Szary tekst pomocniczy&lt;/p&gt;</code></pre>
-              </div>
             </div>
           </section>
 
-          <!-- SEKCJA 4: EFEKTY TEKSTOWE -->
+          <!-- ===================================================== -->
+          <!-- 4. EFEKTY TEKSTOWE                                    -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">4. Efekty Tekstowe (GPU Accelerated)</h2>
+            <h2 class="text-8 fw-bold mb-3">4. Efekty tekstowe</h2>
             <p class="text-muted mb-4">
-              Nowoczesne mikrointerakcje tekstowe, które nie obciążają procesora. Idealne do
-              wyróżniania kluczowych słów w nagłówkach.
+              Wszystkie animują wyłącznie właściwości liczone przez kartę
+              graficzną. Trzy z nich wymagają danych z markupu — bez nich nie
+              mają czego pokazać.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Wyzwalanie efektów:</h5>
-              <ul class="list-icons list-icons-check list-icons-success text-4 text-muted m-0">
-                <li>
-                  <strong>Hover:</strong> Efekty domyślnie aktywują się po najechaniu kursorem
-                  myszy.
-                </li>
-                <li>
-                  <strong>Wymuszenie (Active):</strong> Możesz na stałe włączyć efekt (np. dla
-                  aktywnego linku w menu lub wyróżnionego słowa w nagłówku Hero), dodając do
-                  elementu klasę <code>.is-active</code>.
-                </li>
-              </ul>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Efekt</th>
+                    <th>Wymaga</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-underline</code></td>
+                    <td data-label="Efekt">Podkreślenie wjeżdżające od lewej.</td>
+                    <td data-label="Wymaga"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-underline-center</code></td>
+                    <td data-label="Efekt">To samo, ale rozchodzi się od środka.</td>
+                    <td data-label="Wymaga"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-highlight</code></td>
+                    <td data-label="Efekt">
+                      Zakreślacz przesuwający się pod tekstem przy najechaniu.
+                    </td>
+                    <td data-label="Wymaga"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-text-wipe</code></td>
+                    <td data-label="Efekt">Kolor przemywający tekst od lewej.</td>
+                    <td data-label="Wymaga"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-gradient-animated</code></td>
+                    <td data-label="Efekt">Gradient przesuwający się w literach.</td>
+                    <td data-label="Wymaga">
+                      Kolory: <code>--gradient-color-1</code>,
+                      <code>-2</code>, <code>-3</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-clip-bg</code></td>
+                    <td data-label="Efekt">
+                      Zdjęcie widoczne przez kształt liter.
+                    </td>
+                    <td data-label="Wymaga">
+                      <code>--clip-img</code> — <strong>bez niej litery są
+                      puste</strong>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.typewriter</code></td>
+                    <td data-label="Efekt">Tekst wystukiwany znak po znaku.</td>
+                    <td data-label="Wymaga">
+                      Moduł <code>molique-text-effects.js</code> (auto-ładowany).
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview flex-column align-items-start w-100 gap-4">
-                <div>
-                  <p class="text-4 text-muted mb-1">Highlight Draw (Zakreślacz)</p>
-                  <h3 class="text-9 fw-black m-0">
-                    Zbuduj to z <span class="text-highlight is-active">molique</span>
-                  </h3>
-                </div>
+            <h3 class="text-6 fw-bold mb-2 mt-4">Tekst wycinający tło</h3>
+            <p class="text-muted mb-3">
+              Litery działają jak okno na zdjęcie pod spodem. Efekt nie polega
+              na przycinaniu tła do liter, tylko na
+              <code>mix-blend-mode</code>: kontener ma zdjęcie, a napis kolor,
+              który tryb mieszania zamienia w przezroczystość. Dlatego
+              <strong>kolory w tych klasach są literalne i nie wolno ich
+              zmieniać</strong> — to one uruchamiają mechanizm.
+            </p>
 
-                <div>
-                  <p class="text-4 text-muted mb-1">
-                    Text Color Wipe (Wypełnienie kolorem na hover)
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="bg-knockout-wrapper" style="background-image: url(zdjecie.jpg)"&gt;
+  &lt;h2 class="text-knockout-light text-12 fw-black text-center"&gt;MOLIQUE&lt;/h2&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.bg-knockout-wrapper</code></td>
+                    <td data-label="Co robi">
+                      Kontener ze zdjęciem. Obraz podajesz przez
+                      <code>background-image</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-knockout-light</code></td>
+                    <td data-label="Co robi">
+                      Białe tło, litery przezroczyste. Na jasne zdjęcia.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.text-knockout-dark</code></td>
+                    <td data-label="Co robi">
+                      Czarne tło, litery przezroczyste. Na ciemne zdjęcia.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">5. Pułapki</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="typo-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.text-dark</code> na zdjęciu</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>--dark</code> to <strong>kolor kontrastowy do
+                    tła</strong>, nie „ciemny". W dark mode odwraca się na
+                    jasny — razem z nim <code>.text-dark</code>. Na elemencie
+                    leżącym na zdjęciu, którego tło się nie zmienia, daje to
+                    biały tekst na jasnym zdjęciu.
                   </p>
-                  <h3 class="text-9 fw-black m-0 hover-text-wipe cursor-pointer">
-                    Najedź na mnie myszką
-                  </h3>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;!-- ŹLE - w dark mode tekst zniknie na zdjęciu --&gt;
+&lt;p class="text-dark"&gt;Podpis na zdjęciu&lt;/p&gt;
+
+&lt;!-- DOBRZE - kolor niezależny od motywu --&gt;
+&lt;p class="text-white"&gt;Podpis na zdjęciu&lt;/p&gt;</code></pre>
+                  </div>
+                  <p class="text-4 text-muted mt-3 m-0">
+                    Do zwykłej treści używaj <code>.text-main</code> i
+                    <code>.text-muted</code> — one są semantyczne i mają się
+                    odwracać.
+                  </p>
                 </div>
+              </details>
 
-                <div>
-                  <p class="text-4 text-muted mb-1">Animated Underline (Scale-X)</p>
-                  <a href="#" class="text-6 fw-bold text-main hover-underline">
-                    Płynne podkreślenie linku
-                  </a>
+              <details class="accordion-item" name="typo-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Dobór znacznika według rozmiaru</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Wybieranie <code>&lt;h3&gt;</code> zamiast
+                    <code>&lt;h1&gt;</code>, bo „za duże", psuje strukturę
+                    dokumentu: czytniki ekranu budują z nagłówków spis treści,
+                    a wyszukiwarki czytają z nich hierarchię. Znacznik dobieraj
+                    według <strong>znaczenia</strong>, rozmiar ustaw klasą
+                    <code>.text-*</code>.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;!-- ŹLE - zaniżony poziom dla wyglądu --&gt;
+&lt;h3&gt;Tytuł strony&lt;/h3&gt;
+
+&lt;!-- DOBRZE - poziom zostaje, zmienia się rozmiar --&gt;
+&lt;h1 class="text-6"&gt;Tytuł strony&lt;/h1&gt;</code></pre>
+                  </div>
                 </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Efekt zakreślacza (dodaj klasę .is-active lub zadziała na :hover) --&gt;
-&lt;span class="text-highlight is-active"&gt;Wyróżniony tekst&lt;/span&gt;
+              </details>
 
-&lt;!-- Wypełnianie kolorem od lewej do prawej --&gt;
-&lt;h3 class="hover-text-wipe"&gt;Najedź na mnie&lt;/h3&gt;
+              <details class="accordion-item" name="typo-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Odwrócona nazwa klasy hover</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Schemat to <strong><code>CO-hover-KOLOR</code></strong>:
+                    <code>text-hover-primary</code>,
+                    <code>bg-hover-danger</code>,
+                    <code>border-hover-success</code>. Zapis odwrotny
+                    (<code>hover-text-primary</code>) nie zadziała — takie
+                    klasy istniały w starszych wydaniach i zostały usunięte
+                    w 1.7.0 właśnie dlatego, że łamały schemat.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    Osobna sprawa: <strong>nie dokładaj tych klas do
+                    <code>.btn</code></strong>. Przycisk ma własny kolor hover
+                    z wariantu, więc obie reguły ze sobą konkurują. Zmień
+                    <code>--primary-hover</code>.
+                  </p>
+                </div>
+              </details>
 
-&lt;!-- Płynne podkreślenie linku --&gt;
-&lt;a href="#" class="hover-underline"&gt;Link z podkreśleniem&lt;/a&gt;</code></pre>
-              </div>
+              <details class="accordion-item" name="typo-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Zmiana kolorów w klasach knockout</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    W <code>.text-knockout-light</code> i
+                    <code>-dark</code> kolory są literalne (biały/czarny) i
+                    <strong>to one uruchamiają efekt</strong> — tryb mieszania
+                    zamienia jeden z nich w przezroczystość. Podmiana na kolor
+                    marki sprawia, że litery przestają być oknem na zdjęcie
+                    i robią się zwykłym napisem.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-5">
+            <h2 class="text-8 fw-bold mb-3">6. Powiązane strony</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-typography.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: typografia</h5>
+                  <p class="text-4 text-muted m-0">
+                    Cała skala i palety w jednym miejscu.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-variables.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Zmienne CSS</h5>
+                  <p class="text-4 text-muted m-0">
+                    Wartości skali, wag i całej palety.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-text-effects.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: efekty tekstowe</h5>
+                  <p class="text-4 text-muted m-0">
+                    Gradient, maszyna do pisania, knockout.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
 
           <!-- Nawigacja dół -->
-          <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
-            <a href="docs-layout.html" class="btn btn-secondary">➔ Wstecz: Grid & Layout</a>
-            <a href="docs-buttons.html" class="btn btn-primary fw-bold hover-spring"
-              >Następny krok: Przyciski & Badges ➔</a
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-sections.html" class="btn-secondary"
+              >➔ Wstecz: Sekcje, Hero &amp; Timeline</a
+            >
+            <a href="docs-buttons.html" class="btn-primary fw-bold hover-spring"
+              >Następny krok: Przyciski &amp; Badges ➔</a
             >
           </div>
         </div>
@@ -293,5 +615,3 @@
     <script src="js/molique-script.js"></script>
   </body>
 </html>
-
-

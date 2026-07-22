@@ -121,7 +121,8 @@ pułapek.
 | `docs-tables` | ✅ | 37/37 |
 | `docs-buttons` | ✅ | 46/46 |
 | `docs-layout` | ✅ | 70/70 rodzin |
-| `docs-typography`, `docs-sections`, `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 10 | — |
+| `docs-typography` | ✅ | 67/67 rodzin |
+| `docs-sections`, `docs-animations`, `docs-charts`, `docs-select`, `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 9 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -151,6 +152,10 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
    `sed -E 's/-(auto|100|75|50|25|1[0-2]|[0-9])$/-N/'` — inaczej test każe
    wypisywać `.col-span-1` … `.col-span-12` osobno i strona robi się
    nieczytelna. Dokumentuj rodzinę z zakresem, nie każdy jej element.
+   Rodziny bywają też **kolorowe**, nie tylko numeryczne (`docs-typography`:
+   `.bg-hover-primary` … `-body`) — wtedy dołóż drugie zwinięcie:
+   `s/^(\.(text|bg|border)-hover)-(primary|secondary|success|danger|warning|info|dark|light|surface|body)$/\1-N/`.
+   Na samej stronie wypisz komplet kolorów raz, w kolumnie „warianty".
 6. **Sprawdź, czy nic nie zginęło**: usunięte showcase'y muszą istnieć
    w `examples-*` (`grep -rl 'class="…' src/examples-*.html`).
 7. **Martwe linki**: każdy `href="*.html"` musi wskazywać istniejący plik.
