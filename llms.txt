@@ -40,7 +40,9 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 - **Modale (Natywne):** `<dialog class="modal-dialog">` (lub `.modal-context` dla bocznego/dolnego panelu). Zamykanie: `<form method="dialog">`.
 - **Akordeony:** `<details class="accordion-item" name="grupa">` > `<summary class="accordion-header">` + `<div class="accordion-body">`. Nagłówek to flex z `gap`, strzałkę `::after` dosuwa `margin-left: auto` — kilka elementów (np. `.badge` + tekst) zostaje przy lewej. Zdanie z `<code>` w środku owiń w jeden `<span>`, inaczej `gap` rozsunie je jak osobne elementy flex.
 - **Tabele B2B:** `.table-wrapper` > `<table class="table">`. Warianty: `.table-sm`, `.table-lg`, `.table-striped`, `.table-hover`, `.table-borderless`. Nagłówki: `.thead-light`, `.thead-dark`, `.thead-primary` (oraz rozmiary `.thead-sm`, `.thead-lg`).
-- **Tabele Mobile:** Dodaj `.table-cards` do `<table>`. Wymaga atrybutu `data-label="Nazwa"` w każdym `<td>`.
+- **Tabele Mobile:** Dodaj `.table-cards` do `<table>`. Wymaga atrybutu `data-label="Nazwa"` w każdym `<td>` — CSS bierze etykiety WYŁĄCZNIE stąd, nie odczyta ich z `<th>`. Wariant `.table-cards-always` robi to samo na każdej szerokości.
+- **List Group:** `.list-group` > `.list-group-item` (bieżąca: `.is-active`). Pionowa lista pozycji do klikania.
+- **Liczniki:** `.counter` > `.counter-value` + `.counter-title`. Wartość docelowa to TREŚĆ `.counter-value`; `js/modules/molique-counters.js` (auto-ładowany) dolicza do niej po wejściu w widok. Bez JS liczba i tak widoczna, bez animacji.
 - **Data Rows (Grid CRM):** `.data-row` > divy z danymi + `.data-row-actions`.
 - **Compact Data Rows (List Items):** `.data-row-compact` > `.row-icon` + `.row-content` (z `.row-title` i `.row-details`) + `.row-actions`.
 - **Pricing Tables:** `.pricing-table` (dodaj `.is-featured` dla wyróżnienia) > `.pricing-header` + `.pricing-features`.

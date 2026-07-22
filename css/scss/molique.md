@@ -144,11 +144,21 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.table-borderless`. Nagłówki: `.thead-light`, `.thead-dark`,
   `.thead-primary` (oraz rozmiary `.thead-sm`, `.thead-lg`).
 - **Tabele Mobile:** dodaj `.table-cards` do `<table>`. Wymaga atrybutu
-  `data-label="Nazwa"` w każdym `<td>`.
+  `data-label="Nazwa"` w każdym `<td>` — CSS bierze etykiety WYŁĄCZNIE stąd,
+  nie potrafi ich odczytać z `<th>`. Wariant `.table-cards-always` robi to
+  samo na każdej szerokości (wąskie kolumny dashboardu).
 - **Data Rows (Grid CRM):** `.data-row` > divy z danymi +
   `.data-row-actions`.
-- **Compact Data Rows (List Items):** `.data-row-compact` > `.row-icon` +
+- **Compact Data Rows (List Items):** `.data-row-compact` > `.row-icon`
+  (opcjonalnie z `.icon-square` — kwadratowe tło pod ikoną) +
   `.row-content` (z `.row-title` i `.row-details`) + `.row-actions`.
+- **List Group:** `.list-group` > `.list-group-item` (pozycja bieżąca:
+  `.is-active`). Pionowa lista pozycji do klikania — menu ustawień, wybór
+  z listy.
+- **Liczniki:** `.counter` > `.counter-value` + `.counter-title`. Wartość
+  docelowa to TREŚĆ `.counter-value`; `js/modules/molique-counters.js`
+  (auto-ładowany przy tej klasie) dolicza do niej po wejściu w widok. Bez JS
+  liczba i tak jest widoczna, tylko bez animacji.
 - **Pricing Tables:** `.pricing-table` (dodaj `.is-featured` dla
   wyróżnienia) > `.pricing-header` + `.pricing-features`.
 - **Progress Bars:** `.progress` > `.progress-bar` (szerokość w
