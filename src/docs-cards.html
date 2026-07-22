@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Karty - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Karty - molique Docs","description":"Referencja kart molique: karta klasyczna, featured box, karty obrazkowe thumb-info, referencje i wciąganie na hero. Tabele klas, efekty hover i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -15,444 +15,572 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <h1 class="text-11 fw-black mb-3">Karty (Cards)</h1>
+            <h1 class="text-11 fw-black mb-3">Karty</h1>
             <p class="text-6 text-muted">
-              Karty w molique są zbudowane na Flexboxie. Oznacza to, że jeśli
-              umieścisz je w Gridzie, zawsze będą miały równą wysokość, a ich
-              stopki (footers) automatycznie wyrównają się do samego dołu.
+              Cztery rodzaje kart o różnym przeznaczeniu plus komplet efektów
+              hover. Gotowe układy znajdziesz w
+              <a href="examples-cards.html">przykładach</a>; tabele danych
+              opisuje osobna strona
+              <a href="docs-tables.html">Tabele &amp; Listy</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: BAZOWA KARTA -->
+          <!-- ===================================================== -->
+          <!-- 1. KTÓRA KARTA                                        -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">1. Klasyczna Karta</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Która karta</h2>
             <p class="text-muted mb-4">
-              Składa się z kontenera <code>.card</code> oraz opcjonalnych
-              elementów: <code>.card-header</code>, <code>.card-body</code> i
-              <code>.card-footer</code>.
+              Wszystkie cztery to zwykłe pudełka z ramką i cieniem — różni je
+              przeznaczenie i to, co dokładają od siebie.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Architektura Flexbox:</h5>
-              <p class="text-4 text-muted m-0">
-                Karty w molique są zbudowane na module Flexbox. Jeśli umieścisz
-                kilka kart wewnątrz siatki (np. <code>.grid-auto</code>), zawsze
-                będą miały równą wysokość. Dodatkowo, klasa
-                <code>.card-footer</code> posiada właściwość
-                <code>margin-top: auto</code>, dzięki czemu stopki we wszystkich
-                kartach w rzędzie automatycznie wyrównają się do samego dołu,
-                niezależnie od ilości tekstu w <code>.card-body</code>.
-              </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Do czego</th>
+                    <th>Co dokłada od siebie</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.card</code></td>
+                    <td data-label="Do czego">
+                      Uniwersalny pojemnik: panel dashboardu, formularz, treść
+                      modala.
+                    </td>
+                    <td data-label="Co dokłada">Nic — czysta powierzchnia.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.featured-box</code></td>
+                    <td data-label="Do czego">
+                      Prezentacja cechy albo usługi na stronie ofertowej.
+                    </td>
+                    <td data-label="Co dokłada">
+                      Grubą górną ramkę i miejsce na ikonę.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.thumb-info</code></td>
+                    <td data-label="Do czego">Portfolio, galeria, kafelki kategorii.</td>
+                    <td data-label="Co dokłada">
+                      Zdjęcie w tle i nakładkę z tytułem pojawiającą się po
+                      najechaniu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial</code></td>
+                    <td data-label="Do czego">Opinia klienta.</td>
+                    <td data-label="Co dokłada">
+                      Układ pod cytat, ocenę i autora z awatarem.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div class="component-showcase">
               <div class="component-preview w-100">
                 <div class="grid-auto w-100 gap-4">
-                  <div class="card shadow-sm">
-                    <div class="card-header">Tytuł Karty</div>
+                  <div class="card">
+                    <div class="card-header fw-bold">Nagłówek</div>
                     <div class="card-body">
-                      <p class="m-0">
-                        To jest standardowa karta. Flexbox wewnątrz dba o to, by
-                        treść ładnie się układała.
+                      <p class="text-muted m-0">
+                        Treść karty. Nagłówek i stopka są opcjonalne.
                       </p>
                     </div>
-                    <div class="card-footer d-flex justify-content-end">
-                      <button class="btn btn-primary btn-sm">Akcja</button>
-                    </div>
+                    <div class="card-footer text-muted text-2">Stopka</div>
                   </div>
-
-                  <div class="card shadow-sm">
-                    <div class="card-header">Karta z długim tekstem</div>
-                    <div class="card-body">
-                      <p class="m-0">
-                        Ta karta ma więcej tekstu. Zauważ, że stopka w karcie
-                        obok automatycznie zjechała w dół, aby obie karty miały
-                        identyczną wysokość w Gridzie!
-                      </p>
-                    </div>
-                    <div class="card-footer d-flex justify-content-end">
-                      <button class="btn btn-primary btn-sm">Akcja</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="card shadow-sm"&gt;
-  &lt;div class="card-header"&gt;Tytuł Karty&lt;/div&gt;
-  &lt;div class="card-body"&gt;
-    &lt;p&gt;Treść karty...&lt;/p&gt;
-  &lt;/div&gt;
-  &lt;div class="card-footer"&gt;
-    &lt;button class="btn btn-primary"&gt;Akcja&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 2: FEATURED BOX -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">2. Featured Box</h2>
-            <p class="text-muted mb-4">
-              Specjalny wariant karty przeznaczony do prezentacji cech produktu
-              lub usług. Posiada grubą górną ramkę i miejsce na ikonę.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Modyfikacje wizualne:</h5>
-              <p class="text-4 text-muted m-0">
-                Domyślnie górna ramka przyjmuje kolor główny (Primary). Możesz
-                to łatwo zmienić, nadpisując kolor obramowania w atrybucie
-                style:
-                <code>style="border-top-color: var(--success);"</code>.
-              </p>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="grid-auto w-100 gap-4">
                   <div class="featured-box">
-                    <div class="featured-box-icon">🚀</div>
-                    <h4 class="text-7 fw-bold mb-2">Wydajność</h4>
-                    <p class="text-muted m-0">
-                      Framework jest ekstremalnie lekki, co przekłada się na
-                      błyskawiczne ładowanie stron.
-                    </p>
-                  </div>
-
-                  <div
-                    class="featured-box"
-                    style="border-top-color: var(--success)"
-                  >
-                    <div class="featured-box-icon bg-success text-white">✓</div>
-                    <h4 class="text-7 fw-bold mb-2">Skuteczność</h4>
-                    <p class="text-muted m-0">
-                      Zbudujesz interfejs 3x szybciej niż pisząc własny CSS od
-                      zera.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="featured-box"&gt;
-  &lt;div class="featured-box-icon"&gt;🚀&lt;/div&gt;
-  &lt;h4 class="fw-bold"&gt;Wydajność&lt;/h4&gt;
-  &lt;p class="text-muted"&gt;Opis cechy...&lt;/p&gt;
-&lt;/div&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 3: KARTY Z OBRAZEM (THUMB INFO) -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">3. Karty Obrazkowe (Thumb Info)</h2>
-            <p class="text-muted mb-4">
-              Karty z tłem obrazkowym i płynnie pojawiającą się nakładką
-              (overlay) po najechaniu myszką. Idealne do portfolio i galerii.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Dostępne warianty układu:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <code>.thumb-info-center</code> — Tekst wyśrodkowany na
-                  pełnym, ciemnym tle.
-                </li>
-                <li>
-                  <code>.thumb-info-bottom</code> — Tekst wyrównany do dołu na
-                  tle gradientowym (od czerni do przezroczystości).
-                </li>
-                <li>
-                  <code>.thumb-info-light</code> — Jasna nakładka (85% bieli) z
-                  ciemnym tekstem.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="grid-auto w-100 gap-4">
-                  <!-- Wariant Center -->
-                  <a href="#" class="thumb-info thumb-info-center shadow-sm">
-                    <img
-                      src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600"
-                      alt="Projekt"
-                    />
-                    <div class="thumb-info-wrapper">
-                      <span class="text-10 mb-2">🔍</span>
-                      <h4 class="thumb-info-title text-6 fw-bold">
-                        Powiększ zdjęcie
-                      </h4>
-                    </div>
-                  </a>
-
-                  <!-- Wariant Bottom -->
-                  <a href="#" class="thumb-info thumb-info-bottom shadow-sm">
-                    <img
-                      src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600"
-                      alt="Projekt"
-                    />
-                    <div class="thumb-info-wrapper">
-                      <span class="badge badge-primary mb-2 align-self-start"
-                        >Nowość</span
-                      >
-                      <h4 class="thumb-info-title text-7 fw-bold m-0">
-                        Aplikacja Mobilna
-                      </h4>
-                    </div>
-                  </a>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wariant z tekstem na środku --&gt;
-&lt;a href="#" class="thumb-info thumb-info-center"&gt;
-  &lt;img src="image.jpg" alt="Foto"&gt;
-  &lt;div class="thumb-info-wrapper"&gt;
-    &lt;h4 class="thumb-info-title"&gt;Tytuł&lt;/h4&gt;
-  &lt;/div&gt;
-&lt;/a&gt;
-
-&lt;!-- Wariant z tekstem na dole (gradient) --&gt;
-&lt;a href="#" class="thumb-info thumb-info-bottom"&gt;
-  &lt;img src="image.jpg" alt="Foto"&gt;
-  &lt;div class="thumb-info-wrapper"&gt;
-    &lt;h4 class="thumb-info-title"&gt;Tytuł&lt;/h4&gt;
-  &lt;/div&gt;
-&lt;/a&gt;</code></pre>
-              </div>
-            </div>
-          </section>
-
-          <!-- SEKCJA 4: KARTY INTERAKTYWNE (GPU) -->
-          <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">4. Karty Interaktywne (GPU)</h2>
-            <p class="text-muted mb-4">
-              Połącz klasę <code>.card</code> z naszymi nowymi narzędziami
-              animacji, aby uzyskać efekty Premium bez obciążania procesora.
-            </p>
-
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Wymagania techniczne:</h5>
-              <ul
-                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
-              >
-                <li>
-                  Klasy <code>.hover-spring</code> oraz
-                  <code>.hover-gpu-shadow</code> działają w 100% w CSS i mogą
-                  być łączone na jednym elemencie.
-                </li>
-                <li>
-                  Klasa <code>.tilt-card</code> wymaga załadowania skryptu
-                  <code>js/modules/molique-tilt.js</code> oraz jego inicjalizacji.
-                  Skrypt automatycznie wyłącza efekt na urządzeniach dotykowych,
-                  aby oszczędzać baterię.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div class="component-preview w-100">
-                <div class="grid-auto w-100 gap-4">
-                  <div
-                    class="card p-4 text-center hover-gpu-shadow hover-spring cursor-pointer"
-                  >
-                    <div class="text-9 mb-2">🪀</div>
-                    <h4 class="fw-bold">Spring Hover</h4>
+                    <div class="featured-box-icon">⚡</div>
+                    <h4 class="fw-bold text-5 mb-2">Featured box</h4>
                     <p class="text-muted text-4 m-0">
-                      .hover-spring + .hover-gpu-shadow
+                      Gruba górna ramka w kolorze akcentu.
                     </p>
                   </div>
-
-                  <div
-                    class="card p-4 text-center tilt-card cursor-pointer bg-dark text-white"
-                  >
-                    <div class="text-9 mb-2">🧊</div>
-                    <h4 class="fw-bold">3D Tilt (JS)</h4>
-                    <p class="text-white opacity-50 text-4 m-0">.tilt-card</p>
-                  </div>
                 </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Karta sprężysta z cieniem GPU --&gt;
-&lt;div class="card hover-gpu-shadow hover-spring"&gt;...&lt;/div&gt;
-
-&lt;!-- Karta z efektem wychylenia 3D (wymaga tilt.js) --&gt;
-&lt;div class="card tilt-card"&gt;...&lt;/div&gt;</code></pre>
               </div>
             </div>
           </section>
 
-          <!-- SEKCJA 5: REFERENCJE (TESTIMONIALS) -->
+          <!-- ===================================================== -->
+          <!-- 2. KARTA KLASYCZNA                                    -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">5. Referencje (Testimonials)</h2>
+            <h2 class="text-8 fw-bold mb-3">2. Karta klasyczna</h2>
             <p class="text-muted mb-4">
-              Gotowy komponent do prezentacji opinii klientów. Zawiera miejsce
-              na ocenę gwiazdkową, cytat oraz awatar autora.
+              Trzy strefy, wszystkie opcjonalne. Sama <code>.card</code> jest
+              kompletna — nagłówek i stopkę dokładasz tylko, gdy masz co w nich
+              umieścić.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Pro-Tip: Slider Referencji</h5>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="card"&gt;
+  &lt;div class="card-header"&gt;Tytuł&lt;/div&gt;
+  &lt;div class="card-body"&gt;Treść…&lt;/div&gt;
+  &lt;div class="card-footer"&gt;Akcje&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.card</code></td>
+                    <td data-label="Co robi">
+                      Powierzchnia <code>--bg-surface</code>, ramka,
+                      zaokrąglenie i cień. Przycina zawartość, więc obrazek na
+                      całą szerokość sam dostaje zaokrąglone rogi.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.card-header</code></td>
+                    <td data-label="Co robi">
+                      Pasek tytułowy z linią oddzielającą.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.card-body</code></td>
+                    <td data-label="Co robi">
+                      Główna treść z paddingiem. Bez niej treść przykleja się
+                      do krawędzi — patrz pułapka nr 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.card-footer</code></td>
+                    <td data-label="Co robi">
+                      Stopka na przyciski i metadane; przygaszone tło.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Karta jako treść modala</h5>
               <p class="text-4 text-muted m-0">
-                Pojedyncze referencje świetnie wyglądają w siatce, ale jeszcze
-                lepiej sprawdzają się jako karuzela. Wystarczy, że umieścisz
-                komponent <code>.testimonial</code> wewnątrz
-                <code>.carousel-slide</code>, a otrzymasz w pełni responsywny,
-                dotykowy slider opinii klientów!
+                Wewnątrz <code>&lt;dialog class="modal-dialog"&gt;</code> to
+                właśnie <code>.card</code> nadaje oknu nagłówek, treść i pasek
+                przycisków. Nie ma osobnych klas modala na te strefy — patrz
+                <a href="docs-interactive.html">Modale, Tabs &amp; Akordeony</a>.
               </p>
             </div>
+          </section>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100 bg-surface">
-                <div
-                  class="testimonial mx-auto shadow-sm"
-                  style="max-width: 600px"
-                >
-                  <div class="testimonial-stars">★★★★★</div>
-                  <p class="testimonial-quote">
-                    "Molique całkowicie zmieniło sposób, w jaki buduję strony
-                    internetowe. Jest lżejszy od Bootstrapa i daje więcej
-                    kontroli."
-                  </p>
-                  <div class="testimonial-author">
-                    <img
-                      src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop"
-                      class="testimonial-avatar"
-                      alt="Klient"
-                    />
-                    <div class="text-start">
-                      <p class="testimonial-name">Anna Nowak</p>
-                      <p class="testimonial-role">CEO r-sample</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="testimonial"&gt;
-  &lt;div class="testimonial-stars"&gt;★★★★★&lt;/div&gt;
-  &lt;p class="testimonial-quote"&gt;"Świetny framework!"&lt;/p&gt;
-  
+          <!-- ===================================================== -->
+          <!-- 3. FEATURED BOX I KARTY OBRAZKOWE                     -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">3. Featured box i karty obrazkowe</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Featured box</h3>
+            <p class="text-muted mb-3">
+              Karta pod pojedynczą cechę produktu. Ikona i gruba górna ramka
+              robią z niej element rytmicznie powtarzalny — trzy albo cztery
+              obok siebie w siatce.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="featured-box"&gt;
+  &lt;div class="featured-box-icon"&gt;⚡&lt;/div&gt;
+  &lt;h4&gt;Szybkość&lt;/h4&gt;
+  &lt;p&gt;Opis cechy…&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Karty obrazkowe</h3>
+            <p class="text-muted mb-3">
+              Zdjęcie z nakładką, która wjeżdża po najechaniu.
+              <strong>Wymagają dwóch poziomów</strong>:
+              <code>.thumb-info</code> obudowuje całość i przycina zdjęcie, a
+              <code>.thumb-info-wrapper</code> w środku trzyma sam obrazek.
+              Bez tego drugiego nie ma czego skalować przy najechaniu.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;a href="#" class="thumb-info"&gt;
+  &lt;span class="thumb-info-wrapper"&gt;
+    &lt;img src="zdjecie.jpg" alt=""&gt;
+  &lt;/span&gt;
+  &lt;span class="thumb-info-title"&gt;Nazwa realizacji&lt;/span&gt;
+&lt;/a&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Komponent</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.featured-box</code></td>
+                    <td data-label="Komponent">Featured box</td>
+                    <td data-label="Co robi">Karta z akcentową ramką u góry.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.featured-box-icon</code></td>
+                    <td data-label="Komponent">Featured box</td>
+                    <td data-label="Co robi">Okrągłe pole na ikonę lub emoji.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.thumb-info</code></td>
+                    <td data-label="Komponent">Karta obrazkowa</td>
+                    <td data-label="Co robi">Obudowa; przycina zdjęcie i trzyma nakładkę.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.thumb-info-wrapper</code></td>
+                    <td data-label="Komponent">Karta obrazkowa</td>
+                    <td data-label="Co robi">
+                      Warstwa ze zdjęciem — to ona skaluje się przy najechaniu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.thumb-info-title</code></td>
+                    <td data-label="Komponent">Karta obrazkowa</td>
+                    <td data-label="Co robi">Podpis na nakładce.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.thumb-info-bottom</code></td>
+                    <td data-label="Komponent">Karta obrazkowa</td>
+                    <td data-label="Co robi">Wariant: podpis przy dolnej krawędzi.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.thumb-info-center</code></td>
+                    <td data-label="Komponent">Karta obrazkowa</td>
+                    <td data-label="Co robi">Wariant: podpis na środku.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.thumb-info-light</code></td>
+                    <td data-label="Komponent">Karta obrazkowa</td>
+                    <td data-label="Co robi">
+                      Jaśniejsza nakładka — pod ciemne zdjęcia.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. REFERENCJE                                         -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">4. Referencje</h2>
+            <p class="text-muted mb-4">
+              Opinia klienta: cytat, ocena i autor. Ocena to
+              <code>.testimonial-stars</code>, czyli ten sam mechanizm co
+              <code>.star-rating</code> w sklepie — wartość podajesz zmienną
+              <code>--rating</code>, nie klasą.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="testimonial"&gt;
+  &lt;div class="testimonial-stars" style="--rating: 5;"&gt;&lt;/div&gt;
+  &lt;p class="testimonial-quote"&gt;Wdrożenie poszło sprawniej, niż zakładaliśmy.&lt;/p&gt;
   &lt;div class="testimonial-author"&gt;
-    &lt;img src="avatar.jpg" class="testimonial-avatar" alt="Autor"&gt;
-    &lt;div class="text-start"&gt;
-      &lt;p class="testimonial-name"&gt;Jan Kowalski&lt;/p&gt;
-      &lt;p class="testimonial-role"&gt;Dyrektor&lt;/p&gt;
+    &lt;img class="testimonial-avatar" src="avatar.jpg" alt=""&gt;
+    &lt;div&gt;
+      &lt;div class="testimonial-name"&gt;Anna Kowalska&lt;/div&gt;
+      &lt;div class="testimonial-role"&gt;Dyrektor operacyjna&lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
-              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial</code></td>
+                    <td data-label="Co robi">Obudowa opinii.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial-stars</code></td>
+                    <td data-label="Co robi">
+                      Ocena. Sterowana zmienną <code>--rating</code> (0–5,
+                      ułamki wypełniają gwiazdkę częściowo).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial-quote</code></td>
+                    <td data-label="Co robi">Treść wypowiedzi.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial-author</code></td>
+                    <td data-label="Co robi">Stopka: awatar plus dane osoby.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial-avatar</code></td>
+                    <td data-label="Co robi">Zdjęcie autora, przycięte do koła.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial-name</code></td>
+                    <td data-label="Co robi">Imię i nazwisko.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.testimonial-role</code></td>
+                    <td data-label="Co robi">Stanowisko lub firma.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Kilka opinii obok siebie</h5>
+              <p class="text-4 text-muted m-0">
+                Wrzuć referencje do <code>.carousel</code> — dostaniesz suwak z
+                przewijaniem dotykowym bez pisania czegokolwiek. Szczegóły w
+                <a href="docs-components-extra.html">Karuzele &amp; Lightbox</a>.
+              </p>
             </div>
           </section>
 
-          <!-- SEKCJA 6: TABELE CENOWE (PRICING TABLES) -->
+          <!-- ===================================================== -->
+          <!-- 5. EFEKTY I WCIĄGANIE NA HERO                         -->
+          <!-- ===================================================== -->
           <section class="mb-5 pb-5">
-            <h2 class="text-8 fw-bold mb-3">
-              6. Tabele Cenowe (Pricing Tables)
-            </h2>
-            <p class="text-muted mb-4">
-              Kompletny komponent do prezentacji pakietów i cenników.
+            <h2 class="text-8 fw-bold mb-3">5. Efekty i wciąganie na hero</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Hover</h3>
+            <p class="text-muted mb-3">
+              Efekty ruszają wyłącznie <code>transform</code> i
+              <code>opacity</code>, więc liczy je karta graficzna i nie
+              powodują przeliczania układu strony. Można je łączyć na jednym
+              elemencie.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Opcje komponentu:</h5>
-              <ul
-                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
-              >
-                <li>
-                  <strong>Wyróżnienie:</strong> Dodaj klasę
-                  <code>.is-featured</code> do głównego kontenera, aby
-                  powiększyć kartę i automatycznie dodać tasiemkę "Popularne".
-                </li>
-                <li>
-                  <strong>Niedostępne funkcje:</strong> Dodaj klasę
-                  <code>.is-disabled</code> do elementu
-                  <code>&lt;li&gt;</code> na liście funkcji, aby go przekreślić
-                  i wyszarzyć.
-                </li>
-              </ul>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Efekt</th>
+                    <th>Wymaga JS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-spring</code></td>
+                    <td data-label="Efekt">Sprężyste odbicie przy najechaniu.</td>
+                    <td data-label="Wymaga JS"><span class="badge badge-success">nie</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-gpu-shadow</code></td>
+                    <td data-label="Efekt">
+                      Cień narastający bez animowania <code>box-shadow</code>.
+                    </td>
+                    <td data-label="Wymaga JS"><span class="badge badge-success">nie</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-scale</code></td>
+                    <td data-label="Efekt">Powiększenie. Siłę ustala <code>--hover-scale</code>.</td>
+                    <td data-label="Wymaga JS"><span class="badge badge-success">nie</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-shadow</code></td>
+                    <td data-label="Efekt">Uniesienie z cieniem. Wysokość: <code>--hover-y</code>.</td>
+                    <td data-label="Wymaga JS"><span class="badge badge-success">nie</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.hover-tilt</code></td>
+                    <td data-label="Efekt">Stałe wychylenie 3D przy najechaniu.</td>
+                    <td data-label="Wymaga JS"><span class="badge badge-success">nie</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tilt-card</code></td>
+                    <td data-label="Efekt">
+                      Wychylenie podążające za kursorem. Na dotyku moduł sam się
+                      wyłącza — oszczędza baterię.
+                    </td>
+                    <td data-label="Wymaga JS"><span class="badge badge-warning">tak</span></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100 bg-surface">
-                <div
-                  class="grid-cols-1 grid-md-cols-3 gap-4 align-items-center w-100"
-                >
-                  <!-- Pakiet Basic -->
-                  <div class="pricing-table">
-                    <div class="pricing-header">
-                      <div class="pricing-title">Basic</div>
-                      <div class="pricing-price">49<span>zł / msc</span></div>
-                    </div>
-                    <ul class="pricing-features">
-                      <li>1 Projekt</li>
-                      <li>5 GB Powierzchni</li>
-                      <li class="is-disabled">Wsparcie 24/7</li>
-                    </ul>
-                    <button class="btn btn-outline-primary w-100">
-                      Wybierz
-                    </button>
-                  </div>
+            <h3 class="text-6 fw-bold mb-2 mt-4">Wciąganie na sekcję powyżej</h3>
+            <p class="text-muted mb-3">
+              Klasyczny układ strony ofertowej: karta nachodzi na dolną krawędź
+              hero. To ujemny margines górny — <code>.overlap-container</code>
+              daje wartość domyślną, a warianty pozwalają dobrać ją do wysokości
+              karty.
+            </p>
 
-                  <!-- Pakiet Pro (Wyróżniony) -->
-                  <div class="pricing-table is-featured">
-                    <div class="pricing-header">
-                      <div class="pricing-title text-primary">Pro</div>
-                      <div class="pricing-price">99<span>zł / msc</span></div>
-                    </div>
-                    <ul class="pricing-features">
-                      <li>Nielimitowane Projekty</li>
-                      <li>50 GB Powierzchni</li>
-                      <li>Wsparcie 24/7</li>
-                    </ul>
-                    <button class="btn btn-primary w-100 hover-spring">
-                      Wybierz Pro
-                    </button>
-                  </div>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.overlap-container</code></td>
+                    <td data-label="Co robi">
+                      Wciąga element w górę. Na mobile przesunięcie jest
+                      mniejsze, żeby karta nie zasłoniła nagłówka hero.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.overlap-up-50</code></td>
+                    <td data-label="Co robi">Wciągnięcie o ok. 50px.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.overlap-up-100</code></td>
+                    <td data-label="Co robi">Wciągnięcie o ok. 100px.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.overlap-up-150</code></td>
+                    <td data-label="Co robi">Wciągnięcie o ok. 150px — pod wysokie karty.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-                  <!-- Pakiet Enterprise -->
-                  <div class="pricing-table">
-                    <div class="pricing-header">
-                      <div class="pricing-title">Enterprise</div>
-                      <div class="pricing-price">199<span>zł / msc</span></div>
-                    </div>
-                    <ul class="pricing-features">
-                      <li>Wszystko z Pro</li>
-                      <li>Dedykowany serwer</li>
-                      <li>SLA 99.9%</li>
-                    </ul>
-                    <button class="btn btn-outline-primary w-100">
-                      Kontakt
-                    </button>
+          <!-- ===================================================== -->
+          <!-- 6. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-5 pb-5">
+            <h2 class="text-8 fw-bold mb-3">6. Pułapki</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="card-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Treść wrzucona prosto w <code>.card</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Sama <code>.card</code> nie ma paddingu — to celowe, bo
+                    dzięki temu obrazek albo tabela mogą dochodzić do samych
+                    krawędzi. Tekst wrzucony bezpośrednio przykleja się jednak
+                    do ramki. Owiń go w <code>.card-body</code> albo dodaj
+                    karcie klasę odstępu, np. <code>.p-4</code>.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;!-- ŹLE - tekst przy samej ramce --&gt;
+&lt;div class="card"&gt;Treść&lt;/div&gt;
+
+&lt;!-- DOBRZE --&gt;
+&lt;div class="card"&gt;&lt;div class="card-body"&gt;Treść&lt;/div&gt;&lt;/div&gt;
+&lt;div class="card p-4"&gt;Treść&lt;/div&gt;</code></pre>
                   </div>
                 </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wyróżniona tabela cenowa --&gt;
-&lt;div class="pricing-table is-featured"&gt;
-  &lt;div class="pricing-header"&gt;
-    &lt;div class="pricing-title text-primary"&gt;Pro&lt;/div&gt;
-    &lt;div class="pricing-price"&gt;99&lt;span&gt;zł / msc&lt;/span&gt;&lt;/div&gt;
-  &lt;/div&gt;
-  &lt;ul class="pricing-features"&gt;
-    &lt;li&gt;Nielimitowane Projekty&lt;/li&gt;
-    &lt;li class="is-disabled"&gt;Brak ukrytych opłat&lt;/li&gt;
-  &lt;/ul&gt;
-  &lt;button class="btn btn-primary w-100"&gt;Wybierz&lt;/button&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+              </details>
+
+              <details class="accordion-item" name="card-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Karta obrazkowa bez <code>.thumb-info-wrapper</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Obrazek wstawiony prosto w <code>.thumb-info</code> wyświetli
+                    się poprawnie, więc błąd łatwo przeoczyć — po prostu nic się
+                    nie dzieje po najechaniu. Skalowana jest warstwa
+                    <code>.thumb-info-wrapper</code>, a nie sam
+                    <code>&lt;img&gt;</code>; bez niej nie ma czego animować.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="card-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Ocena sklejona z nazwy klasy</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Kuszące jest wygenerowanie w szablonie
+                    <code>class="stars-4"</code>. Taka nazwa nie istnieje w
+                    źródłach jako literał, więc nie widzi jej ani PurgeCSS, ani
+                    wyszukiwarka w edytorze. Ocena jedzie zmienną, właśnie po to,
+                    żeby wartość z backendu nie tworzyła nowych klas.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>&lt;!-- ŹLE --&gt;
+&lt;div class="testimonial-stars stars-&lt;?= $ocena ?&gt;"&gt;
+
+&lt;!-- DOBRZE --&gt;
+&lt;div class="testimonial-stars" style="--rating: &lt;?= $ocena ?&gt;;"&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="card-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Karta wciągnięta na hero chowa się pod nim</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.overlap-container</code> podnosi element ujemnym
+                    marginesem i nadaje mu <code>z-index</code>, ale jeśli
+                    sekcja hero ma własny kontekst nakładania (np. przez
+                    <code>position</code> i wyższy <code>z-index</code>), karta
+                    wjedzie pod nią. Trzymaj się skali z
+                    <a href="docs-variables.html">zmiennych <code>--z-index-*</code></a>
+                    zamiast wpisywać własne liczby.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-5">
+            <h2 class="text-8 fw-bold mb-3">7. Powiązane strony</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-cards.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: karty</h5>
+                  <p class="text-4 text-muted m-0">
+                    Gotowe układy kart, portfolio i referencji.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-tables.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Tabele &amp; Listy</h5>
+                  <p class="text-4 text-muted m-0">
+                    Tabele B2B i wiersze danych.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-animations.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Animacje</h5>
+                  <p class="text-4 text-muted m-0">
+                    Pełna lista efektów hover i wejścia.
+                  </p>
+                </div>
+              </a>
             </div>
           </section>
 
@@ -461,12 +589,12 @@
             class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
           >
             <a href="docs-buttons.html" class="btn btn-secondary"
-              >➔ Wstecz: Przyciski & Badges</a
+              >➔ Wstecz: Przyciski &amp; Badges</a
             >
             <a
               href="docs-tables.html"
               class="btn btn-primary fw-bold hover-spring"
-              >Następny krok: Tabele ➔</a
+              >Następny krok: Tabele &amp; Listy ➔</a
             >
           </div>
         </div>
@@ -474,6 +602,5 @@
     </div>
 
     <script src="js/molique-script.js"></script>
-    <script src="js/modules/molique-tilt.js"></script>
   </body>
 </html>
