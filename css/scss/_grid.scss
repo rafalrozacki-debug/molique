@@ -54,6 +54,26 @@
     }
   }
 
+  /* Siatka responsywna domyślnie JEDNOKOLUMNOWA poniżej swojego progu.
+     Bez tej reguły .grid-md-cols-12 istniało wyłącznie w media query, więc na
+     telefonie element nie był gridem w ogóle. Dzieci układały się wtedy jako
+     bloki - wizualnie na pełną szerokość, czyli POPRAWNIE - ale gap przestawał
+     działać (wymaga grid/flex) i odstępy znikały tylko na mobile. Trudny do
+     wyłapania błąd, bo desktop wyglądał dobrze.
+
+     Dzięki temu wystarczy `class="grid-md-cols-12"`; dopisywanie
+     `grid-cols-1` przestaje być potrzebne. Reguły z media queries są dalej
+     w źródle przy tej samej specyficzności, więc od progu normalnie wygrywają.
+
+     UWAGA: celowo TYLKO -md-. Wariant .grid-lg-cols-* nie istnieje w tym
+     frameworku (choć .col-lg-span-* i .offset-lg-* owszem - asymetria do
+     rozważenia osobno). Dopisanie go tutaj sprawiłoby, że nieistniejąca klasa
+     zaczyna częściowo działać i maskuje własny brak. */
+  [class*="grid-md-cols-"] {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
   @include mq(md) {
     @for $i from 1 through $grid-columns {
       .grid-md-cols-#{$i} {

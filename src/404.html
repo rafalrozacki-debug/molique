@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Strona nie znaleziona (404) | Nazwa Twojej Firmy</title>
+    <title>Strona nie znaleziona (404) - molique</title>
 
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#0284C7" />
@@ -23,48 +23,58 @@
     />
     <link
       rel="preload"
-      href="fonts/inter-v20-latin_latin-ext-700.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
       href="fonts/poppins-v24-latin_latin-ext-700.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
-    <link rel="stylesheet" href="css/flex-ui.css" />
 
-    <style>
-      /* Dodatkowy szybki styl tylko dla tej strony, by wyśrodkować idealnie w pionie */
-      .page-404-wrapper {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: var(--light);
-      }
-    </style>
+    <link rel="stylesheet" href="css/molique-style.css" />
   </head>
-  <body>
-    <main class="page-404-wrapper text-center px-3">
-      <div class="text-12 fw-black text-primary" style="font-size: 8rem; line-height: 1">404</div>
+  <body class="bg-body">
+    <!--
+      STRONA 404 — DO SKOPIOWANIA DO WŁASNEGO PROJEKTU
 
-      <h1 class="text-9 fw-bold mt-4 mb-3">Ups! Zabłądziliśmy.</h1>
-      <p class="text-7 text-muted mb-5 max-w-600 mx-auto">
-        Strona, której szukasz, została przeniesiona, usunięta lub nigdy nie istniała. Bez obaw,
-        najlepsze rzeczy wciąż na Ciebie czekają.
-      </p>
+      Zbudowana wyłącznie z klas molique, bez ani jednej linijki własnego CSS.
+      Żeby użyć jej u siebie, podmień trzy rzeczy:
 
-      <div class="d-flex flex-wrap justify-content-center gap-3">
-        <a href="/" class="btn btn-primary btn-lg fw-bold">Wróć na stronę główną</a>
-        <a href="/kontakt" class="btn btn-outline-dark btn-lg fw-bold">Skontaktuj się z nami</a>
+        1. <title> i treść nagłówka na swoje,
+        2. dwa linki na dole (strona główna + drugie sensowne miejsce,
+           np. /kontakt zamiast dokumentacji),
+        3. favicony w <head> na własne.
+
+      Gdzie wgrać plik: na GitHub Pages i Netlify wystarczy 404.html w korzeniu
+      — serwer użyje go automatycznie. Na Apache dopisz do .htaccess
+      "ErrorDocument 404 /404.html", a na nginx "error_page 404 /404.html;".
+    -->
+    <main
+      class="min-vh-100 d-flex flex-column justify-content-center align-items-center text-center p-4"
+    >
+      <div class="container">
+        <div class="grid-cols-1 grid-md-cols-12">
+          <div class="col-md-span-8 col-md-start-3">
+            <p class="text-12 fw-black text-primary m-0">404</p>
+
+            <h1 class="text-8 fw-bold mt-3 mb-3">Tej strony tu nie ma</h1>
+
+            <p class="text-5 text-muted mb-5">
+              Adres jest błędny albo strona została przeniesiona. Poniżej dwa
+              miejsca, z których łatwo wrócić na właściwy tor.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+              <a href="index.html" class="btn btn-primary btn-lg fw-bold">
+                Strona główna
+              </a>
+              <a href="docs.html" class="btn btn-outline-dark btn-lg fw-bold">
+                Dokumentacja
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
-    <script src="js/script.js" defer></script>
+    <script src="js/molique-script.js"></script>
   </body>
 </html>

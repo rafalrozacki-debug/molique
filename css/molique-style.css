@@ -687,6 +687,25 @@
       display: grid;
       grid-template-columns: repeat(12, 1fr);
     }
+    /* Siatka responsywna domyślnie JEDNOKOLUMNOWA poniżej swojego progu.
+       Bez tej reguły .grid-md-cols-12 istniało wyłącznie w media query, więc na
+       telefonie element nie był gridem w ogóle. Dzieci układały się wtedy jako
+       bloki - wizualnie na pełną szerokość, czyli POPRAWNIE - ale gap przestawał
+       działać (wymaga grid/flex) i odstępy znikały tylko na mobile. Trudny do
+       wyłapania błąd, bo desktop wyglądał dobrze.
+
+       Dzięki temu wystarczy `class="grid-md-cols-12"`; dopisywanie
+       `grid-cols-1` przestaje być potrzebne. Reguły z media queries są dalej
+       w źródle przy tej samej specyficzności, więc od progu normalnie wygrywają.
+
+       UWAGA: celowo TYLKO -md-. Wariant .grid-lg-cols-* nie istnieje w tym
+       frameworku (choć .col-lg-span-* i .offset-lg-* owszem - asymetria do
+       rozważenia osobno). Dopisanie go tutaj sprawiłoby, że nieistniejąca klasa
+       zaczyna częściowo działać i maskuje własny brak. */
+    [class*=grid-md-cols-] {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
     @media (min-width: 768px) {
       .grid-md-cols-1 {
         display: grid;
@@ -1396,7 +1415,20 @@
     /* =========================================
        1. BAZOWY PRZYCISK (.btn)
        ========================================= */
-    .btn {
+    /* Kolory muszą być zadeklarowane PRZED blokiem bazowym, bo buduje on z nich
+       listę selektorów (patrz niżej). */
+    /* IMPLIKACJA .btn — sam .btn-primary wystarczy, bez dopisywania .btn.
+       Listę budujemy z mapy kolorów, więc nowy kolor dostaje bazę automatycznie;
+       ręczna lista rozjechałaby się przy pierwszym dodanym wariancie.
+
+       CELOWO NIE OBEJMUJE:
+       - modyfikatorów wyglądu (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
+         .btn-glow, .btn-stacked, .btn-outline-soft) i rozmiarów (.btn-sm itd.) —
+         to dodatki do przycisku, nie przyciski,
+       - .btn-action, który ŚWIADOMIE łamie regułę 44px na gęste tabele,
+       - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* —
+         mają prefiks btn-, ale przyciskami nie są. */
+    .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark {
       --btn-border-width: 1px;
       display: inline-flex;
       align-items: center;
@@ -1414,7 +1446,7 @@
       transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
       /* Focus Ring dla dostępności */
     }
-    .btn:focus-visible {
+    .btn:focus-visible, .btn-primary:focus-visible, .btn-outline-primary:focus-visible, .btn-secondary:focus-visible, .btn-outline-secondary:focus-visible, .btn-success:focus-visible, .btn-outline-success:focus-visible, .btn-danger:focus-visible, .btn-outline-danger:focus-visible, .btn-warning:focus-visible, .btn-outline-warning:focus-visible, .btn-info:focus-visible, .btn-outline-info:focus-visible, .btn-light:focus-visible, .btn-outline-light:focus-visible, .btn-dark:focus-visible, .btn-outline-dark:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: 2px;
     }

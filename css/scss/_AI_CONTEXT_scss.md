@@ -9401,9 +9401,38 @@ a.list-group-item:hover, button.list-group-item:hover {
   /* =========================================
      1. BAZOWY PRZYCISK (.btn)
      ========================================= */
-  .btn {
-    --btn-border-width: 1px; 
-    
+  /* Kolory muszą być zadeklarowane PRZED blokiem bazowym, bo buduje on z nich
+     listę selektorów (patrz niżej). */
+  $theme-colors: (
+    "primary": var(--primary),
+    "secondary": var(--secondary),
+    "success": var(--success),
+    "danger": var(--danger),
+    "warning": var(--warning),
+    "info": var(--info),
+    "light": var(--light),
+    "dark": var(--dark)
+  );
+
+  /* IMPLIKACJA .btn — sam .btn-primary wystarczy, bez dopisywania .btn.
+     Listę budujemy z mapy kolorów, więc nowy kolor dostaje bazę automatycznie;
+     ręczna lista rozjechałaby się przy pierwszym dodanym wariancie.
+
+     CELOWO NIE OBEJMUJE:
+     - modyfikatorów wyglądu (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
+       .btn-glow, .btn-stacked, .btn-outline-soft) i rozmiarów (.btn-sm itd.) —
+       to dodatki do przycisku, nie przyciski,
+     - .btn-action, który ŚWIADOMIE łamie regułę 44px na gęste tabele,
+     - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* —
+       mają prefiks btn-, ale przyciskami nie są. */
+  $btn-base-selectors: ".btn";
+  @each $name, $color in $theme-colors {
+    $btn-base-selectors: "#{$btn-base-selectors}, .btn-#{$name}, .btn-outline-#{$name}";
+  }
+
+  #{$btn-base-selectors} {
+    --btn-border-width: 1px;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -9429,19 +9458,8 @@ a.list-group-item:hover, button.list-group-item:hover {
   /* =========================================
      2. WARIANTY KOLORYSTYCZNE (Pętla SCSS)
      ========================================= */
-  $theme-colors: (
-    "primary": var(--primary),
-    "secondary": var(--secondary),
-    "success": var(--success),
-    "danger": var(--danger),
-    "warning": var(--warning),
-    "info": var(--info),
-    "light": var(--light),
-    "dark": var(--dark)
-  );
-
   @each $name, $color in $theme-colors {
-    
+
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-#{$name} {
       background-color: #{$color};
@@ -10101,6 +10119,26 @@ $poppins: (
       display: grid;
       grid-template-columns: repeat(#{$i}, 1fr);
     }
+  }
+
+  /* Siatka responsywna domyślnie JEDNOKOLUMNOWA poniżej swojego progu.
+     Bez tej reguły .grid-md-cols-12 istniało wyłącznie w media query, więc na
+     telefonie element nie był gridem w ogóle. Dzieci układały się wtedy jako
+     bloki - wizualnie na pełną szerokość, czyli POPRAWNIE - ale gap przestawał
+     działać (wymaga grid/flex) i odstępy znikały tylko na mobile. Trudny do
+     wyłapania błąd, bo desktop wyglądał dobrze.
+
+     Dzięki temu wystarczy `class="grid-md-cols-12"`; dopisywanie
+     `grid-cols-1` przestaje być potrzebne. Reguły z media queries są dalej
+     w źródle przy tej samej specyficzności, więc od progu normalnie wygrywają.
+
+     UWAGA: celowo TYLKO -md-. Wariant .grid-lg-cols-* nie istnieje w tym
+     frameworku (choć .col-lg-span-* i .offset-lg-* owszem - asymetria do
+     rozważenia osobno). Dopisanie go tutaj sprawiłoby, że nieistniejąca klasa
+     zaczyna częściowo działać i maskuje własny brak. */
+  [class*="grid-md-cols-"] {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   @include mq(md) {

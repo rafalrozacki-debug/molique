@@ -61,6 +61,66 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Mniej klas do pisania: implikacje w gridzie i przyciskach
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>.grid-md-cols-*</code> jest domyślnie
+                    siatką jednokolumnową</strong> poniżej swojego progu, więc
+                    <code>class="grid-md-cols-12"</code> wystarczy. Wcześniej
+                    trzeba było dopisywać <code>grid-cols-1</code>, a jego brak
+                    dawał podstępny objaw: układ wyglądał dobrze, ale
+                    <code>gap</code> przestawał działać na telefonie — element
+                    nie był wtedy gridem w ogóle.
+                  </li>
+                  <li>
+                    <strong>Klasa koloru przycisku implikuje
+                    <code>.btn</code></strong> — <code>class="btn-primary"</code>
+                    zamiast <code>class="btn btn-primary"</code>. Dotyczy
+                    kolorów i ich odmian obrysowych. Modyfikatory rozmiaru i
+                    wyglądu bazy nie niosą (to dodatki, nie przyciski), a
+                    <code>.btn-action</code> celowo jej nie dziedziczy, bo
+                    świadomie łamie regułę 44px.
+                  </li>
+                  <li>
+                    <strong>Nic nie przestaje działać.</strong> Dotychczasowy
+                    zapis <code>class="btn btn-primary"</code> i
+                    <code>class="grid-cols-1 grid-md-cols-12"</code> jest nadal
+                    poprawny — nowe reguły tylko dokładają zachowanie domyślne.
+                    Koszt: +740 B w module przycisków, +62 B w siatce.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Strona 404 była niestylowana
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>404.html</code> ładowała <code>css/flex-ui.css</code>
+                    — plik po dawnej nazwie frameworka, który nie istnieje od
+                    miesięcy. Używała też dwóch klas spoza molique
+                    (<code>.page-404-wrapper</code>,
+                    <code>.max-w-600</code>) i martwego
+                    <code>js/script.js</code>. Efekt: strona bez żadnych stylów.
+                  </li>
+                  <li>
+                    Przepisana wyłącznie na klasy molique, bez ani jednej
+                    linijki własnego CSS. Służy jednocześnie jako strona 404
+                    tego serwisu i szablon do skopiowania — w komentarzu na
+                    górze pliku jest lista rzeczy do podmiany oraz konfiguracja
+                    dla Apache i nginx.
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-danger mx-2 text-3">Zmiana</span>

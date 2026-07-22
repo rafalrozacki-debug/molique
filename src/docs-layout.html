@@ -184,11 +184,25 @@
 
             <div class="component-code mb-4">
               <button class="btn-copy">Kopiuj</button>
-              <pre><code>&lt;!-- Mobile: jedna kolumna. Desktop: 8 + 4 --&gt;
-&lt;div class="grid-cols-1 grid-md-cols-12 gap-4"&gt;
+              <pre><code>&lt;!-- Mobile: jedna kolumna (domyślnie). Desktop: 8 + 4 --&gt;
+&lt;div class="grid-md-cols-12 gap-4"&gt;
   &lt;article class="col-md-span-8"&gt;Treść&lt;/article&gt;
   &lt;aside class="col-md-span-4"&gt;Sidebar&lt;/aside&gt;
 &lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">
+                <code>grid-cols-1</code> nie jest potrzebne
+              </h5>
+              <p class="text-4 text-muted m-0">
+                Każda klasa <code>.grid-md-cols-*</code> jest
+                <strong>domyślnie siatką jednokolumnową</strong> poniżej swojego
+                progu — dopisywanie <code>.grid-cols-1</code> nic nie zmienia.
+                Wcześniej było konieczne i jego brak dawał podstępny objaw:
+                układ wyglądał dobrze, ale <code>gap</code> przestawał działać
+                na telefonie, bo element nie był wtedy gridem.
+              </p>
             </div>
 
             <div class="table-wrapper mb-4">
@@ -537,12 +551,12 @@
                   <div class="component-code">
                     <button class="btn-copy">Kopiuj</button>
                     <pre><code>&lt;!-- ŹLE - col-span-12 działa też na telefonie --&gt;
-&lt;div class="grid-cols-1 grid-md-cols-12"&gt;
+&lt;div class="grid-md-cols-12"&gt;
   &lt;div class="col-span-12 col-md-span-8"&gt;…&lt;/div&gt;
 &lt;/div&gt;
 
 &lt;!-- DOBRZE - na mobile pełna szerokość wychodzi sama --&gt;
-&lt;div class="grid-cols-1 grid-md-cols-12"&gt;
+&lt;div class="grid-md-cols-12"&gt;
   &lt;div class="col-md-span-8"&gt;…&lt;/div&gt;
 &lt;/div&gt;</code></pre>
                   </div>

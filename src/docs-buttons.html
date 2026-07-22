@@ -30,19 +30,38 @@
           <section class="mb-5 pb-5">
             <h2 class="text-8 fw-bold mb-3">1. Anatomia</h2>
             <p class="text-muted mb-4">
-              Bazą jest zawsze <code>.btn</code> — daje kształt, wysokość 44px
-              i obwódkę focusa. Reszta to modyfikatory, które można łączyć, ale
+              Kształt, wysokość 44px i obwódkę focusa daje baza
+              <code>.btn</code> — ale <strong>klasa koloru implikuje ją
+              sama</strong>, więc <code>.btn-primary</code> wystarczy. Reszta
+              to modyfikatory, które można łączyć, ale
               <strong>po jednym z każdej grupy</strong>.
             </p>
 
             <div class="component-code mb-4">
               <button class="btn-copy">Kopiuj</button>
-              <pre><code>&lt;button class="btn btn-primary"&gt;Zapisz&lt;/button&gt;
-&lt;button class="btn btn-primary btn-lg"&gt;Większy&lt;/button&gt;
-&lt;button class="btn btn-outline-primary btn-sm"&gt;Obrys, mniejszy&lt;/button&gt;
+              <pre><code>&lt;button class="btn-primary"&gt;Zapisz&lt;/button&gt;
+&lt;button class="btn-primary btn-lg"&gt;Większy&lt;/button&gt;
+&lt;button class="btn-outline-primary btn-sm"&gt;Obrys, mniejszy&lt;/button&gt;
 
-&lt;!-- .btn działa na dowolnym elemencie --&gt;
-&lt;a href="/cennik" class="btn btn-secondary"&gt;Zobacz cennik&lt;/a&gt;</code></pre>
+&lt;!-- Działa na dowolnym elemencie --&gt;
+&lt;a href="/cennik" class="btn-secondary"&gt;Zobacz cennik&lt;/a&gt;
+
+&lt;!-- Sam .btn nadal potrzebny, gdy nie podajesz koloru --&gt;
+&lt;button class="btn"&gt;Neutralny&lt;/button&gt;</code></pre>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Czego implikacja nie obejmuje</h5>
+              <p class="text-4 text-muted m-0">
+                Bazę niosą wyłącznie klasy <strong>koloru</strong>
+                (<code>.btn-primary</code> … <code>.btn-dark</code>) i ich
+                odmiany obrysowe. Modyfikatory rozmiaru
+                (<code>.btn-lg</code>) i wyglądu (<code>.btn-3d</code>,
+                <code>.btn-glass</code>) to dodatki — same z siebie przycisku
+                nie tworzą. Osobnym przypadkiem jest
+                <code>.btn-action</code>, który celowo nie dziedziczy bazy, bo
+                łamie regułę 44px.
+              </p>
             </div>
 
             <div class="component-showcase mb-4">

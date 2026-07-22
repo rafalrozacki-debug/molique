@@ -33,7 +33,11 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Smart Grid (Auto):** `.grid-auto`, `.grid-auto-sm`, `.grid-auto-lg`
   (automatycznie układa kolumny).
 - **Sztywny Grid:** rodzic `.grid-cols-1` do `12`. Dzieci `.col-span-1`
-  do `12` (patrz Złota Zasada Grida wyżej).
+  do `12` (patrz Złota Zasada Grida wyżej). Wariant responsywny
+  `.grid-md-cols-*` jest **domyślnie siatką jednokolumnową poniżej progu**,
+  więc `class="grid-md-cols-12"` wystarczy — dopisywanie `grid-cols-1` nic
+  nie zmienia. Uwaga: `.grid-lg-cols-*` NIE istnieje (choć `.col-lg-span-*`
+  i `.offset-lg-*` owszem).
 - **Offsety (Grid):** `.col-start-1` do `12` LUB klasyczne `.offset-1`
   do `11` (oraz warianty `-md-`, `-lg-`). Przesuwanie elementów w siatce.
 - **Flexbox:** `.d-flex`, `.flex-column`, `.align-items-center`,
@@ -120,11 +124,15 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 
 - **Karty:** `.card` > `.card-header` + `.card-body` + `.card-footer`.
   Warianty: `.featured-box`, `.thumb-info` (z `.thumb-info-wrapper`).
-- **Przyciski:** `.btn` + kolor (`primary`, `secondary`, `success`, `danger`,
+- **Przyciski:** kolor (`.btn-primary`, `secondary`, `success`, `danger`,
   `warning`, `info`, `dark`, `light`) + rozmiar (`.btn-xs`, `.btn-sm`,
-  `.btn-md`, `.btn-lg`, `.btn-xl`). Obrys: `.btn-outline-<kolor>` dla każdego
-  koloru, plus `.btn-outline-soft` (ramka 30%, hover 10%). Grupowanie:
-  `.btn-group` (bieżąca: `.is-active`).
+  `.btn-md`, `.btn-lg`, `.btn-xl`). **Klasa koloru implikuje `.btn`** — nie
+  trzeba pisać `class="btn btn-primary"`, wystarczy `class="btn-primary"`.
+  Samo `.btn` dopisz tylko dla przycisku bez koloru. Implikacja obejmuje
+  wyłącznie kolory i ich odmiany obrysowe; modyfikatory rozmiaru i wyglądu
+  bazy NIE niosą. Obrys: `.btn-outline-<kolor>` dla każdego koloru, plus
+  `.btn-outline-soft` (ramka 30%, hover 10%). Grupowanie: `.btn-group`
+  (bieżąca: `.is-active`).
 - **Przyciski — warianty wyglądu:** `.btn-3d` (wymaga `--btn-3d-shadow`
   w kolorze przycisku, domyślnie primary), `.btn-glass` (tylko NA ZDJĘCIU —
   rozmywa to, co pod spodem; tło i ramka z `!important`, więc nie nadpiszesz

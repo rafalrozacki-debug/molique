@@ -11,7 +11,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 
 ### Layout & Grid
 - **Smart Grid (Auto):** `.grid-auto`, `.grid-auto-sm`, `.grid-auto-lg`. (Automatycznie układa kolumny).
-- **- **Sztywny Grid:** Rodzic: `.grid-cols-1` do `12`. Dzieci: `.col-span-1` do `12`.
+- **Sztywny Grid:** Rodzic `.grid-cols-1` do `12`. Dzieci `.col-span-1` do `12`. Wariant `.grid-md-cols-*` jest DOMYSLNIE siatka jednokolumnowa ponizej progu, wiec `class="grid-md-cols-12"` wystarczy — dopisywanie `grid-cols-1` nic nie zmienia. `.grid-lg-cols-*` NIE istnieje (choc `.col-lg-span-*` i `.offset-lg-*` owszem).
 - **ZŁOTA ZASADA GRIDA (RWD):** Na urządzeniach mobilnych (w `.grid-cols-1`) **NIGDY nie używaj klas `.col-span-*`**. Elementy domyślnie zajmują 100% szerokości. Używaj WYŁĄCZNIE klas z prefiksem `-md-` (np. `.col-md-span-6`), aby definiować układ dla desktopu! Użycie `.col-span-12` na mobile rozsadzi ekran.
 - **Offsety (Grid):** `.col-start-1` do `12` LUB klasyczne `.offset-1` do `11` (oraz warianty `-md-`, `-lg-`). Pozwala na przesuwanie elementów w siatce.
 - **Flexbox:** `.d-flex`, `.flex-column`, `.align-items-center`, `.justify-content-between`, `.gap-1` do `.gap-5`. Pojedyncze dziecko: `.align-self-start/-end/-center/-stretch`.
@@ -34,7 +34,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 
 ### Komponenty UI & Biznesowe
 - **Karty:** `.card` > `.card-header` + `.card-body` + `.card-footer`. Warianty: `.featured-box`, `.thumb-info` (z `.thumb-info-wrapper`).
-- **Przyciski:** `.btn` + kolor (`primary`, `secondary`, `success`, `danger`, `warning`, `info`, `dark`, `light`) + rozmiar (`.btn-xs`, `.btn-sm`, `.btn-md`, `.btn-lg`, `.btn-xl`). Obrys: `.btn-outline-<kolor>` dla każdego koloru + `.btn-outline-soft` (ramka 30%, hover 10%). Grupowanie: `.btn-group` (bieżąca: `.is-active`). Domyślny hover wszystkich `.btn`: klasa `.btn-hover-spring`/`-lift`/`-glow` na `<body>` (przyciski z własną `hover-*` mają pierwszeństwo).
+- **Przyciski:** kolor (`.btn-primary`, `secondary`, `success`, `danger`, `warning`, `info`, `dark`, `light`) + rozmiar (`.btn-xs`, `.btn-sm`, `.btn-md`, `.btn-lg`, `.btn-xl`). **KLASA KOLORU IMPLIKUJE `.btn`** — wystarczy `class="btn-primary"`, nie trzeba `class="btn btn-primary"`; samo `.btn` dopisz tylko dla przycisku bez koloru. Implikacja obejmuje WYŁĄCZNIE kolory i ich odmiany obrysowe — modyfikatory rozmiaru i wyglądu bazy NIE niosą, a `.btn-action` celowo jej nie dziedziczy. Obrys: `.btn-outline-<kolor>` dla każdego koloru + `.btn-outline-soft` (ramka 30%, hover 10%). Grupowanie: `.btn-group` (bieżąca: `.is-active`). Domyślny hover wszystkich `.btn`: klasa `.btn-hover-spring`/`-lift`/`-glow` na `<body>` (przyciski z własną `hover-*` mają pierwszeństwo).
 - **Przyciski — warianty wyglądu:** `.btn-3d` (wymaga `--btn-3d-shadow` w kolorze przycisku, domyślnie primary), `.btn-glass` (tylko NA ZDJĘCIU — rozmywa to, co pod spodem; tło i ramka z `!important`, nie nadpiszesz klasą), `.btn-glow`, `.btn-gradient` (primary → info, ignoruje klasę koloru), `.btn-shine`, `.btn-stacked` (ikona nad podpisem; podpis w `.btn-text` — etykieta, NIE osobny wariant).
 - **Ghost Buttons (Tabele):** `.btn-action` (np. do akcji Edytuj/Usuń). Grupowanie z separatorami: `.btn-action-group.with-dividers`.
 - **Badges:** `.badge` + `.badge-primary` (lub inne kolory).
