@@ -339,9 +339,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.rounded-circle`, `.rounded-pill`, `.rounded-top-0`,
   `.rounded-bottom-0`.
 - **Animowane plamy w tle:** `.bg-blobs` — dwie rozmyte, organiczne plamy
-  (primary + info) unoszące się w tle kontenera. Wariant `.bg-blobs-deep`
-  ma ciemniejsze tło (`--bg-body` zamiast `--bg-surface`) i mocniej wysycone
-  plamy; oba podążają za motywem. Typowo pod `.bg-glass` — szkło musi mieć
+  (primary + info) unoszące się w tle kontenera. Tło podąża za motywem.
+  Wariant `.bg-blobs-deep` jest **ZAWSZE CIEMNY**, także w motywie jasnym
+  (jak `.navbar-pill`) — dzięki temu biały tekst działa na nim bez sprawdzania
+  motywu. Kolor przez `--blobs-deep-bg` (domyślnie `#0F172A`); nie używaj tam
+  `var(--bg-body)` ani `var(--dark)`, bo odwracają się w dark mode.
+  Typowo pod `.bg-glass` — szkło musi mieć
   co rozmywać. Kształt plam jest statyczny (`border-radius` nie jest
   animowalny bez reflow), ruch daje wyłącznie `transform` z obrotem.
   Animacja wyłącza się przy `prefers-reduced-motion`.

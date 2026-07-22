@@ -255,14 +255,18 @@
     .bg-blobs::before, .bg-blobs::after { animation: none; }
   }
 
-  /* Wariant głębszy: tło schodzi z --bg-surface na --bg-body (ciemniejsze
-     w OBU motywach) i plamy są mocniej wysycone. Nadal podąża za motywem -
-     to nie jest odpowiednik "zawsze ciemnego" navbara-pastylki. */
+  /* Wariant ZAWSZE CIEMNY - tak jak .navbar-pill, i z tego samego powodu:
+     ma być pewnym podkładem pod biały tekst niezależnie od motywu strony.
+     Wartość jest literalna, NIE var(--bg-body) ani var(--dark): te zmienne
+     odwracają się w dark mode, więc w motywie jasnym tło zrobiłoby się jasne
+     i biały tekst by zniknął. Podmiana przez style="--blobs-deep-bg: #123". */
   .bg-blobs-deep {
-    background-color: var(--bg-body);
-    &::before, &::after { opacity: 0.55; }
-    &::before { background-color: rgba(var(--primary-rgb), 0.7); }
-    &::after  { background-color: rgba(var(--info-rgb), 0.6); }
+    --blobs-deep-bg: #0F172A;
+    background-color: var(--blobs-deep-bg);
+    /* Plamy mocniejsze, bo na ciemnym tle rozmyte kolory szybko gasną. */
+    &::before, &::after { opacity: 0.6; }
+    &::before { background-color: rgba(var(--primary-rgb), 0.75); }
+    &::after  { background-color: rgba(var(--info-rgb), 0.65); }
   }
 
   /* =========================================
