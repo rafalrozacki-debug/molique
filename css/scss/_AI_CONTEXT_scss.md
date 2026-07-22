@@ -10132,11 +10132,10 @@ $poppins: (
      `grid-cols-1` przestaje być potrzebne. Reguły z media queries są dalej
      w źródle przy tej samej specyficzności, więc od progu normalnie wygrywają.
 
-     UWAGA: celowo TYLKO -md-. Wariant .grid-lg-cols-* nie istnieje w tym
-     frameworku (choć .col-lg-span-* i .offset-lg-* owszem - asymetria do
-     rozważenia osobno). Dopisanie go tutaj sprawiłoby, że nieistniejąca klasa
-     zaczyna częściowo działać i maskuje własny brak. */
-  [class*="grid-md-cols-"] {
+     Dotyczy obu progów - także .grid-lg-cols-*, które ma tu swój odpowiednik
+     dla dzieci (.col-lg-span-*, .offset-lg-*). */
+  [class*="grid-md-cols-"],
+  [class*="grid-lg-cols-"] {
     display: grid;
     grid-template-columns: 1fr;
   }
@@ -10144,6 +10143,18 @@ $poppins: (
   @include mq(md) {
     @for $i from 1 through $grid-columns {
       .grid-md-cols-#{$i} {
+        display: grid;
+        grid-template-columns: repeat(#{$i}, 1fr);
+      }
+    }
+  }
+
+  /* Wariant lg. Musi stać PO bloku md, żeby przy obu klasach naraz
+     (np. "grid-md-cols-2 grid-lg-cols-4") wygrywał od progu lg - obie mają
+     tę samą specyficzność, więc decyduje kolejność w źródle. */
+  @include mq(lg) {
+    @for $i from 1 through $grid-columns {
+      .grid-lg-cols-#{$i} {
         display: grid;
         grid-template-columns: repeat(#{$i}, 1fr);
       }

@@ -110,7 +110,9 @@ function itemHtml(c) {
     : '';
   const note = c.mandatory
     ? '<span class="text-1 text-primary d-block">zawsze w paczce</span>'
-    : '';
+    : c.optIn
+      ? '<span class="text-1 text-warning d-block">dodatkowy - poza presetem „Wszystko"</span>'
+      : '';
   return `
     <div class="p-2 border rounded-2" data-row="${c.id}">
       <label class="d-flex align-items-center gap-2"
@@ -202,7 +204,11 @@ function bind() {
   $('#builder-list').addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-cat]');
     if (!btn) return;
-    const ids = manifest.chunks.filter((c) => c.cat === btn.dataset.cat && !c.mandatory).map((c) => c.id);
+    // optIn pomijamy tak samo jak w presecie "Wszystko" - moduł dodatkowy ma
+    // wejść do paczki wyłącznie przez świadome kliknięcie w jego checkbox.
+    const ids = manifest.chunks
+      .filter((c) => c.cat === btn.dataset.cat && !c.mandatory && !c.optIn)
+      .map((c) => c.id);
     const allOn = ids.every((id) => selected.has(id));
     if (allOn) ids.forEach((id) => selected.delete(id));
     else selected = withDeps([...selected, ...ids]);
@@ -212,7 +218,11 @@ function bind() {
   document.querySelectorAll('[data-preset]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const p = PRESETS[btn.dataset.preset];
-      selected = p ? withDeps(p.ids) : withDeps(manifest.chunks.map((c) => c.id));
+      // Brak wpisu w PRESETS = przycisk "Wszystko". Moduły optIn zostają poza
+      // nim celowo - są ciężkie i potrzebne rzadko.
+      selected = p
+        ? withDeps(p.ids)
+        : withDeps(manifest.chunks.filter((c) => !c.optIn).map((c) => c.id));
       syncUI();
     });
   });

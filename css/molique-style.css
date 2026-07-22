@@ -698,11 +698,10 @@
        `grid-cols-1` przestaje być potrzebne. Reguły z media queries są dalej
        w źródle przy tej samej specyficzności, więc od progu normalnie wygrywają.
 
-       UWAGA: celowo TYLKO -md-. Wariant .grid-lg-cols-* nie istnieje w tym
-       frameworku (choć .col-lg-span-* i .offset-lg-* owszem - asymetria do
-       rozważenia osobno). Dopisanie go tutaj sprawiłoby, że nieistniejąca klasa
-       zaczyna częściowo działać i maskuje własny brak. */
-    [class*=grid-md-cols-] {
+       Dotyczy obu progów - także .grid-lg-cols-*, które ma tu swój odpowiednik
+       dla dzieci (.col-lg-span-*, .offset-lg-*). */
+    [class*=grid-md-cols-],
+    [class*=grid-lg-cols-] {
       display: grid;
       grid-template-columns: 1fr;
     }
@@ -752,6 +751,59 @@
         grid-template-columns: repeat(11, 1fr);
       }
       .grid-md-cols-12 {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+      }
+    }
+    /* Wariant lg. Musi stać PO bloku md, żeby przy obu klasach naraz
+       (np. "grid-md-cols-2 grid-lg-cols-4") wygrywał od progu lg - obie mają
+       tę samą specyficzność, więc decyduje kolejność w źródle. */
+    @media (min-width: 992px) {
+      .grid-lg-cols-1 {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+      }
+      .grid-lg-cols-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-lg-cols-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid-lg-cols-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .grid-lg-cols-5 {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .grid-lg-cols-6 {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .grid-lg-cols-7 {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+      }
+      .grid-lg-cols-8 {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+      }
+      .grid-lg-cols-9 {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+      }
+      .grid-lg-cols-10 {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+      }
+      .grid-lg-cols-11 {
+        display: grid;
+        grid-template-columns: repeat(11, 1fr);
+      }
+      .grid-lg-cols-12 {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
       }

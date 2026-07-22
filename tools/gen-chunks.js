@@ -52,6 +52,11 @@ const core = [
   { id: 'layout',    file: 'layout',    layer: 'layout',    cat: 'Layout',   mandatory: false, label: 'Layout: sekcje, flex, pozycjonowanie' },
   { id: 'buttons',   file: 'buttons',   layer: 'components',cat: 'Podstawy', mandatory: false, label: 'Przyciski' },
   { id: 'utilities', file: 'utilities', layer: 'utilities', cat: 'Utilities',mandatory: false, label: 'Klasy narzedziowe' },
+  // optIn = poza presetem "Wszystko" i poza zaznaczaniem calej kategorii.
+  // Ten modul generuje odstepy dla PIECIU progow (sm/md/lg/xl + baza), wiec
+  // sam wazy tyle, co kilka komponentow. Wlaczasz go swiadomie albo wcale -
+  // dlatego nie moze wjechac do paczki przy kliknieciu "zaznacz wszystko".
+  { id: 'utilities-extended', file: 'utilities-extended', layer: 'utilities', cat: 'Utilities', mandatory: false, optIn: true, label: 'Odstepy na wszystkich progach (sm/lg/xl)' },
 ];
 
 // Kategoria wg nazwy pliku komponentu (dla UI konfiguratora).
@@ -197,7 +202,8 @@ const manifest = {
   layerOrder: ['reset', 'base', 'layout', 'components', 'modules', 'utilities'],
   chunks: chunks.map((c) => ({
     id: c.id, label: c.label, desc: c.desc, cat: c.cat, layer: c.layer,
-    mandatory: c.mandatory, file: fileOf(c.id), bytes: c.bytes, gzip: c.gzip, deps: c.deps,
+    mandatory: c.mandatory, optIn: c.optIn === true,
+    file: fileOf(c.id), bytes: c.bytes, gzip: c.gzip, deps: c.deps,
   })),
 };
 

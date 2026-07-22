@@ -33,11 +33,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Smart Grid (Auto):** `.grid-auto`, `.grid-auto-sm`, `.grid-auto-lg`
   (automatycznie układa kolumny).
 - **Sztywny Grid:** rodzic `.grid-cols-1` do `12`. Dzieci `.col-span-1`
-  do `12` (patrz Złota Zasada Grida wyżej). Wariant responsywny
-  `.grid-md-cols-*` jest **domyślnie siatką jednokolumnową poniżej progu**,
-  więc `class="grid-md-cols-12"` wystarczy — dopisywanie `grid-cols-1` nic
-  nie zmienia. Uwaga: `.grid-lg-cols-*` NIE istnieje (choć `.col-lg-span-*`
-  i `.offset-lg-*` owszem).
+  do `12` (patrz Złota Zasada Grida wyżej). Warianty responsywne
+  `.grid-md-cols-*` i `.grid-lg-cols-*` są **domyślnie siatką jednokolumnową
+  poniżej swojego progu**, więc `class="grid-md-cols-12"` wystarczy —
+  dopisywanie `grid-cols-1` nic nie zmienia.
 - **Offsety (Grid):** `.col-start-1` do `12` LUB klasyczne `.offset-1`
   do `11` (oraz warianty `-md-`, `-lg-`). Przesuwanie elementów w siatce.
 - **Flexbox:** `.d-flex`, `.flex-column`, `.align-items-center`,
