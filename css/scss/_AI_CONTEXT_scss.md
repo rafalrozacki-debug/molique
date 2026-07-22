@@ -7608,13 +7608,44 @@ a.list-group-item:hover, button.list-group-item:hover {
   .bg-blobs { position: relative; overflow: hidden; background-color: var(--bg-surface); z-index: 1; }
   .bg-blobs::before, .bg-blobs::after {
     content: ''; position: absolute; width: 50vw; height: 50vw; max-width: 600px; max-height: 600px;
-    border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.4;
+    /* Nieregularny, organiczny kształt zamiast koła. Promienie są STATYCZNE -
+       border-radius nie jest animowalny bez reflow, więc ruch daje wyłącznie
+       transform. Sam kształt pod blurem 80px byłby jednak ledwo czytelny,
+       dlatego w animacji doszedł obrót: obracająca się nieregularna plama
+       zmienia obrys w czasie, czego idealne koło nie potrafi. */
+    border-radius: 42% 58% 63% 37% / 45% 38% 62% 55%;
+    filter: blur(80px); z-index: -1; opacity: 0.4;
     will-change: transform; transform: translate3d(0, 0, 0);
     animation: blobFloat 15s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
   }
   .bg-blobs::before { background-color: rgba(var(--primary-rgb), 0.5); top: -10%; left: -10%; }
-  .bg-blobs::after { background-color: rgba(var(--info-rgb), 0.4); bottom: -10%; right: -10%; animation-delay: -7.5s; }
-  @keyframes blobFloat { 0% { transform: translate3d(0, 0, 0) scale(1); } 100% { transform: translate3d(10%, 15%, 0) scale(1.1); } }
+  .bg-blobs::after {
+    background-color: rgba(var(--info-rgb), 0.4); bottom: -10%; right: -10%; animation-delay: -7.5s;
+    /* Lustrzany obrys, żeby obie plamy nie były tym samym kształtem. */
+    border-radius: 63% 37% 42% 58% / 62% 55% 45% 38%;
+  }
+  @keyframes blobFloat {
+    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+    100% { transform: translate3d(10%, 15%, 0) scale(1.1) rotate(35deg); }
+  }
+
+  /* A11y: plamy to duży, ciągły ruch w tle - z dodanym obrotem tym bardziej.
+     Przy prefers-reduced-motion zostaje sam statyczny, organiczny kształt.
+     Globalna reguła w tym pliku wycisza tylko przejścia widoku, więc tę
+     animację trzeba zatrzymać osobno. */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-blobs::before, .bg-blobs::after { animation: none; }
+  }
+
+  /* Wariant głębszy: tło schodzi z --bg-surface na --bg-body (ciemniejsze
+     w OBU motywach) i plamy są mocniej wysycone. Nadal podąża za motywem -
+     to nie jest odpowiednik "zawsze ciemnego" navbara-pastylki. */
+  .bg-blobs-deep {
+    background-color: var(--bg-body);
+    &::before, &::after { opacity: 0.55; }
+    &::before { background-color: rgba(var(--primary-rgb), 0.7); }
+    &::after  { background-color: rgba(var(--info-rgb), 0.6); }
+  }
 
   /* =========================================
      6. ANIMACJE RAMEK (Border Effects)
@@ -11208,6 +11239,13 @@ $poppins: (
 ## Plik: `_utilities-extended.scss`
 
 ```scss
+// molique - Odstepy (padding/margin) na progach sm, lg i xl
+//
+// Modul OPT-IN: nie wchodzi do domyslnego bundla ani do presetu "Wszystko"
+// w konfiguratorze. Generuje komplet odstepow razy trzy dodatkowe progi, wiec
+// wazy tyle, co kilka komponentow - wlaczasz go swiadomie albo wcale.
+// Rdzen ma odstepy bazowe i wariant -md-; to jest rozszerzenie ponad to.
+
 @use 'variables' as *;
 @use 'mixins' as *;
 @use 'sass:meta';

@@ -338,6 +338,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Zaokrąglenia (Radius):** `.rounded-0` do `.rounded-5`,
   `.rounded-circle`, `.rounded-pill`, `.rounded-top-0`,
   `.rounded-bottom-0`.
+- **Animowane plamy w tle:** `.bg-blobs` — dwie rozmyte, organiczne plamy
+  (primary + info) unoszące się w tle kontenera. Wariant `.bg-blobs-deep`
+  ma ciemniejsze tło (`--bg-body` zamiast `--bg-surface`) i mocniej wysycone
+  plamy; oba podążają za motywem. Typowo pod `.bg-glass` — szkło musi mieć
+  co rozmywać. Kształt plam jest statyczny (`border-radius` nie jest
+  animowalny bez reflow), ruch daje wyłącznie `transform` z obrotem.
+  Animacja wyłącza się przy `prefers-reduced-motion`.
 - **Inne Helpery:** `.grid-expand` (płynny akordeon), `.parallax-container`
   (Scroll-Driven), `.bg-gradient-corners` (łuna), `.stacking-container` >
   `.section-stacked`, `.embed-responsive` (do wideo z YT/Vimeo).
