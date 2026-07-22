@@ -160,6 +160,33 @@ if (fs.existsSync(pagePath)) {
   }
 }
 
+// EDYTOR MOTYWU a pary --x / --x-rgb.
+// Kontrolka koloru, ktorej odpowiada zmienna -rgb w :root, MUSI wyliczac te
+// pare przez data-te-rgb. Inaczej uzytkownik zmienia kolor, a przezroczystosci
+// zostaja w starym - dokladnie pulapka nr 2 z docs-variables. Tak wlasnie
+// rozjechal sie --bg-surface, gdy dosla --bg-surface-rgb.
+const editorPath = path.join(root, 'src', 'theme-editor.html');
+if (fs.existsSync(editorPath)) {
+  const editor = fs.readFileSync(editorPath, 'utf8');
+  for (const m of editor.matchAll(/<input[^>]*data-te-var="(--[\w-]+)"[^>]*>/g)) {
+    const [tag, name] = m;
+    if (!tag.includes('data-te-type="color"')) continue;
+    // Nazwa pary bywa skrocona: --bg-body -> --body-rgb, --sidebar-bg -> --sidebar-rgb.
+    const candidates = [
+      name + '-rgb',
+      name.replace(/^--bg-/, '--') + '-rgb',
+      name.replace(/-bg$/, '') + '-rgb',
+    ];
+    const pair = candidates.find((c) => light.has(c));
+    if (pair && !tag.includes(`data-te-rgb="${pair}"`)) {
+      problems.push(
+        `theme-editor.html: kontrolka ${name} nie wylicza pary ${pair} ` +
+        `(brak data-te-rgb) - przezroczystosci zostana w starym kolorze`
+      );
+    }
+  }
+}
+
 if (problems.length) {
   console.error('\nGenerator zmiennych PRZERWANY - dokumentacja rozjechala sie ze zrodlem:\n');
   for (const p of problems) console.error('  - ' + p);
