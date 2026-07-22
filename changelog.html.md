@@ -64,6 +64,43 @@
             <div class="timeline-content">
               <div class="card p-4">
                 <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Zmiana</span>
+                  Usunięte <code>.hover-text-primary</code> i
+                  <code>.hover-bg-light</code>
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Łamały schemat nazw.</strong> W molique kolory na
+                    hover nazywają się <code>CO-hover-KOLOR</code>:
+                    <code>text-hover-primary</code>,
+                    <code>bg-hover-danger</code>,
+                    <code>border-hover-success</code>. Te dwie klasy miały
+                    człony odwrotnie i były jedynymi takimi w całym
+                    frameworku.
+                  </li>
+                  <li>
+                    <strong>Były duplikatami.</strong> Odpowiedniki
+                    <code>.text-hover-primary</code> i
+                    <code>.bg-hover-light</code> istnieją w palecie i dodatkowo
+                    mają <code>transition</code>, którego wersje usunięte nie
+                    miały — migracja jest więc drobnym ulepszeniem, nie tylko
+                    porządkiem.
+                  </li>
+                  <li>
+                    <strong>Co zrobić:</strong> zamień
+                    <code>hover-text-primary</code> na
+                    <code>text-hover-primary</code>. Klasa
+                    <code>.hover-bg-light</code> nie była używana nigdzie w
+                    projekcie. Pozostałe klasy <code>hover-*</code>
+                    (<code>.hover-scale</code>, <code>.hover-shadow</code>,
+                    <code>.hover-border-draw</code> i reszta) <strong>nie
+                    zmieniają się</strong> — one opisują efekt, nie kolor.
+                  </li>
+                </ul>
+
+                <h3
                   class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-primary mx-2 text-3">Nowość</span>
@@ -1677,17 +1714,17 @@
             <h6 class="fw-bold mb-3 text-main">Wprowadzenie</h6>
             <a
               href="docs.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Getting Started</a
             >
             <a
               href="docs-roadmap.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Roadmapa</a
             >
             <a
               href="docs-classes.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Spis Klas (Cheat Sheet)</a
             >
           </div>
@@ -1696,22 +1733,22 @@
             <h6 class="fw-bold mb-3 text-main">Komponenty</h6>
             <a
               href="docs-buttons.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Przyciski &amp; Badges</a
             >
             <a
               href="docs-forms.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Formularze</a
             >
             <a
               href="docs-cards.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Karty</a
             >
             <a
               href="docs-charts.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Wykresy</a
             >
           </div>
@@ -1720,17 +1757,17 @@
             <h6 class="fw-bold mb-3 text-main">Moduły</h6>
             <a
               href="docs-eshop.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Sklep Internetowy</a
             >
             <a
               href="docs-blog.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Blog &amp; Artykuły</a
             >
             <a
               href="docs-admin.html"
-              class="d-block text-muted hover-text-primary text-decoration-none mb-2"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Panel Admina</a
             >
           </div>
