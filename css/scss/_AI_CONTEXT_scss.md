@@ -7615,7 +7615,7 @@ a.list-group-item:hover, button.list-group-item:hover {
     --blob-2: rgba(var(--info-rgb), 0.4);
     /* Czas jednej plamy. Druga jedzie wolniej (mnoznik ponizej), zeby cykle
        sie rozjezdzaly i uklad nie powtarzal sie w oczywisty sposob. */
-    --blob-speed: 10s;
+    --blob-speed: 7s;
 
     position: relative; overflow: hidden; background-color: var(--bg-surface); z-index: 1;
   }
