@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Roadmapa rozwoju - molique Framework","description":"Publiczna roadmapa frameworka CSS molique - pilne poprawki, nowe komponenty i usprawnienia zebrane w jednym miejscu."}'></include>
+  </head>
+  <body>
+    <!-- ==========================================
+         NAVBAR
+         ========================================== -->
+<include src="partials/navbar.html"></include>
+
+    <!-- ==========================================
+         HERO
+         ========================================== -->
+    <header
+      class="position-relative"
+      style="
+        background:
+          linear-gradient(rgba(8, 12, 24, 0.82), rgba(8, 12, 24, 0.92)),
+          url(&quot;img/futuristic-bg.webp&quot;) center/cover;
+      "
+    >
+      <div class="container py-5">
+        <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
+          <span class="badge badge-primary mb-3">Backlog pomysłów</span>
+          <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
+            Roadmapa rozwoju
+          </h1>
+          <p
+            class="text-6 animate fade-in-up delay-100"
+            style="color: rgba(255, 255, 255, 0.75)"
+          >
+            molique to żywy projekt — poniżej pełna lista pomysłów, poprawek i
+            nowych komponentów, które czekają na wdrożenie. Pogrupowane
+            tematycznie, żeby łatwiej było znaleźć to, co Cię interesuje.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         STATY
+         ========================================== -->
+    <section class="py-5 bg-body">
+      <div class="container">
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12 col-md-span-6 stat-card text-center">
+            <div class="stat-value">41</div>
+            <div class="stat-title">Pomysłów na liście</div>
+          </div>
+          <div class="col-span-12 col-md-span-6 stat-card text-center">
+            <div class="stat-value">11</div>
+            <div class="stat-title">Kategorii tematycznych</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SZYBKA NAWIGACJA PO KATEGORIACH
+         ========================================== -->
+    <section class="py-4">
+      <div class="container" style="max-width: 900px">
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+          <a href="#architektura" class="btn btn-sm btn-outline-primary"
+            >🧱 Architektura</a
+          >
+          <a href="#nawigacja" class="btn btn-sm btn-outline-primary"
+            >🧭 Nawigacja</a
+          >
+          <a href="#formularze" class="btn btn-sm btn-outline-primary"
+            >📝 Formularze</a
+          >
+          <a href="#przyciski" class="btn btn-sm btn-outline-primary"
+            >🔘 Przyciski</a
+          >
+          <a href="#komponenty" class="btn btn-sm btn-outline-primary"
+            >🧩 Komponenty</a
+          >
+          <a href="#feedback" class="btn btn-sm btn-outline-primary"
+            >💬 Feedback</a
+          >
+          <a href="#efekty" class="btn btn-sm btn-outline-primary">✨ Efekty</a>
+          <a href="#wykresy" class="btn btn-sm btn-outline-primary"
+            >📊 Wykresy</a
+          >
+          <a href="#sklep" class="btn btn-sm btn-outline-primary">🛒 Sklep</a>
+          <a href="#admin" class="btn btn-sm btn-outline-primary">🛠️ Admin</a>
+          <a href="#dx" class="btn btn-sm btn-outline-primary">🧑‍💻 Narzędzia</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         LISTA KATEGORII
+         ========================================== -->
+    <main class="py-5 bg-body">
+      <div class="container" style="max-width: 900px">
+        <!-- 1. ARCHITEKTURA I DYSTRYBUCJA -->
+        <section id="architektura">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-dark text-3">Architektura</span>
+            Architektura i dystrybucja
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Wariant <code>molique-nano</code></strong> — maksymalnie
+                odchudzona dystrybucja frameworka: sam fundament (reset, grid,
+                typografia, przyciski) dla projektów, które nie potrzebują
+                pełnego zestawu komponentów.
+              </li>
+              <li>
+                <strong>Pełne rozbicie SCSS na wyłączalne moduły</strong> —
+                każdy komponent jako w pełni niezależny plik, który można
+                pominąć przy kompilacji bez ryzyka błędów zależności — pełna
+                kontrola nad wagą końcowego pliku CSS.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 2. NAWIGACJA I GRUPOWANIE ELEMENTÓW -->
+        <section id="nawigacja">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-secondary text-3">Layout</span>
+            Nawigacja i grupowanie elementów
+            <span class="badge badge-secondary text-3 ml-auto">3</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Uniwersalna klasa <code>sticky</code></strong> —
+                przeniesienie mechanizmu przyklejania z samego navbara na
+                dowolny element strony (np. filtry w sklepie, podsumowanie
+                koszyka, spis treści artykułu).
+              </li>
+              <li>
+                <strong>Uniwersalny mechanizm <code>.group</code></strong> —
+                rozszerzenie logiki znanej z <code>.btn-group</code> /
+                <code>.input-group</code> (płynne łączenie krawędzi sąsiednich
+                elementów) na awatary, ikony i badge'e.
+              </li>
+              <li>
+                <strong>Nowe warianty breadcrumb</strong> — dodatkowe style
+                okruszków nawigacyjnych, np. ze skróconą ścieżką na mobile lub z
+                ikonami pomiędzy poziomami.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 3. FORMULARZE I POLA -->
+        <section id="formularze">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-primary text-3">Nowość</span>
+            Formularze i pola
+            <span class="badge badge-secondary text-3 ml-auto">6</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Checkboxy i radio jako pastylki</strong> — warianty z
+                ikoną i podpisem, klikalne jako całe „kafelki" zamiast małych
+                kwadracików i kółek — wygodniejsze na ekranach dotykowych.
+              </li>
+              <li>
+                <strong>Domyślna animacja zaznaczania</strong> — płynne
+                przejście przy zaznaczaniu checkboxa/radio włączone od razu w
+                bazowym stylu, bez potrzeby dodatkowych klas.
+              </li>
+              <li>
+                <strong>Limit znaków i maskowanie danych</strong> — licznik
+                pozostałych znaków w polu tekstowym oraz gotowe maski dla
+                typowych formatów (telefon, karta płatnicza, kod pocztowy, numer
+                rachunku bankowego).
+              </li>
+              <li>
+                <strong>Wskaźnik siły hasła</strong> — pasek lub etykieta
+                pokazująca na żywo, jak silne jest wpisywane hasło.
+              </li>
+              <li>
+                <strong>Nowe typy pól</strong> — input na tagi (dodawane
+                „pastylkami"), pole e-mail z podpowiedziami domen, wybór
+                użytkownika/osoby z listy.
+              </li>
+              <li>
+                <strong>Input na jednorazowy kod (OTP)</strong> — osobne pola na
+                pojedyncze cyfry z automatycznym przeskakiwaniem do kolejnego
+                pola po wpisaniu znaku.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. PRZYCISKI -->
+        <section id="przyciski">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-primary text-3">Nowość</span>
+            Przyciski
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Licznik, ikona lub kropka na przycisku</strong> — jeden
+                uniwersalny mechanizm nakładki: liczba (np. powiadomień), ikona
+                (np. plus) albo sama kropka sygnalizująca nowość.
+              </li>
+              <li>
+                <strong>Rozwijany przycisk telefonu</strong> — na desktopie
+                pokazuje samą ikonę słuchawki i rozwija się w pełny numer po
+                najechaniu; na mobile numer widoczny jest od razu, bo tam nie ma
+                stanu hover.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 5. NOWE KOMPONENTY -->
+        <section id="komponenty">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-success text-3">Komponent</span>
+            Nowe komponenty
+            <span class="badge badge-secondary text-3 ml-auto">7</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Modal na pół ekranu</strong> — wariant panelu bocznego
+                lub dolnego zajmującego dokładnie połowę wysokości/szerokości
+                ekranu, na wzór okien znanych z Google Tag Managera.
+              </li>
+              <li>
+                <strong>Rozbudowane warianty tooltipa</strong> — w tym wersja
+                zachowująca się jak mini-modal, z własnym tytułem i przyciskami
+                akcji — najlepiej oparta o te same style co
+                <code>.modal-dialog</code>.
+              </li>
+              <li>
+                <strong>Ramka karty w kolorze nagłówka/stopki</strong> — gdy
+                nagłówek lub stopka karty ma nadany kolor (np.
+                <code>.bg-primary</code>), cała karta automatycznie dostaje
+                obramowanie w tym samym odcieniu.
+              </li>
+              <li>
+                <strong>Komponent: Listy</strong> — w tym warianty checklist z
+                odhaczanymi pozycjami.
+              </li>
+              <li>
+                <strong>Komponent: Galeria</strong> — siatka miniatur z
+                powiększaniem, spójna wizualnie z istniejącym Lightboxem.
+              </li>
+              <li>
+                <strong>Komponent: Cytaty</strong> — stylizowany blockquote z
+                opcjonalnym podpisem autora i źródła.
+              </li>
+              <li>
+                <strong>Tabele w kilku rozmiarach</strong> — rozszerzenie
+                istniejących <code>.table-sm</code> / <code>.table-lg</code> o
+                dodatkowe warianty gęstości danych.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 6. FEEDBACK I STATUSY -->
+        <section id="feedback">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-info text-3">Feedback</span>
+            Feedback i statusy
+            <span class="badge badge-secondary text-3 ml-auto">3</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Różne rodzaje toastów</strong> — w tym wariant, który
+                nie znika automatycznie i wymaga ręcznego zamknięcia przez
+                użytkownika.
+              </li>
+              <li>
+                <strong>Pulsujący napis</strong> — tekst pulsujący analogicznie
+                do <code>.status-ping</code> — do sprawdzenia, czy da się
+                zsynchronizować obie animacje w czasie.
+              </li>
+              <li>
+                <strong>Onboarding</strong> — lekki komponent do prowadzenia
+                nowego użytkownika krok po kroku po interfejsie: podświetlenie
+                elementu plus dymek z opisem.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 7. EFEKTY, ANIMACJE I TYPOGRAFIA -->
+        <section id="efekty">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-warning text-dark text-3">Efekt</span>
+            Efekty, animacje i typografia
+            <span class="badge badge-secondary text-3 ml-auto">8</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Filtry graficzne</strong> — <code>brightness</code>,
+                <code>contrast</code>, <code>grayscale</code>,
+                <code>sepia</code>, <code>saturate</code> jako gotowe klasy;
+                przydatne też jako stan „przed hover" (np. czarno-białe zdjęcie,
+                które nabiera koloru po najechaniu).
+              </li>
+              <li>
+                <strong>Nakładka gradientowa pod tekst na zdjęciu</strong> —
+                gotowa klasa z <code>linear-gradient</code> zapewniająca
+                czytelność napisu na tle zdjęcia bez ręcznego dobierania
+                przezroczystości.
+              </li>
+              <li>
+                <strong>Rozszerzona skala kolorów</strong> — więcej odcieni i
+                wariantów w palecie barw systemowych.
+              </li>
+              <li>
+                <strong>Animacja pisanego tekstu</strong>
+                — kolejne litery pojawiają się kolejno, jakby były ręcznie
+                pisane.
+              </li>
+              <li>
+                <strong>Tekst jako sam obrys</strong> — wariant typograficzny z
+                samym konturem liter, bez wypełnienia.
+              </li>
+              <li>
+                <strong>Maskowanie CSS</strong> — wykorzystanie
+                <code>mask-image</code> / <code>clip-path</code> do przycinania
+                obrazów i bloków w niestandardowe kształty.
+              </li>
+              <li>
+                <strong>Ujednolicenie animacji obramowania</strong> —
+                przeniesienie animowanej ramki, która dziś działa tylko przy
+                <code>.file-upload-animated</code>, do wspólnej biblioteki
+                efektów <code>.hover-border-*</code>, żeby można jej było użyć
+                na dowolnym elemencie.
+              </li>
+              <li>
+                <span class="badge badge-secondary text-3">Do zbadania</span>
+                Czy da się w czystym CSS płynnie zmienić kolor czcionki w
+                miejscu, w którym zmienia się tło pod spodem (np. tekst na
+                granicy dwóch sekcji o różnych kolorach)?
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 8. WYKRESY I DANE -->
+        <section id="wykresy">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-info text-3">Data Viz</span>
+            Wykresy i dane
+            <span class="badge badge-secondary text-3 ml-auto">4</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Wykres prędkościomierza</strong> — wskazówka na wygiętej
+                skali, np. do prezentowania jednej zbiorczej oceny lub wyniku.
+              </li>
+              <li>
+                <strong>Kołowy progress bar</strong> — okrągły odpowiednik
+                istniejącego, liniowego <code>.progress</code>.
+              </li>
+              <li>
+                <strong>Gradient od dołu na wykresach</strong> — możliwość
+                dodania zanikającego wypełnienia pod linią na wykresach
+                warstwowych (<code>.chart-area</code>).
+              </li>
+              <li>
+                <strong>Różne rodzaje steppera</strong> — dodatkowe warianty
+                wizualne obok istniejących <code>.stepper</code> i
+                <code>.stepper-numbered</code>.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 9. SKLEP INTERNETOWY -->
+        <section id="sklep">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-success text-3">Sklep</span>
+            Sklep internetowy
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong
+                  >Hover na przycisku „Dodaj do koszyka" powiększa zdjęcie
+                  produktu</strong
+                >
+                — na liście produktów najechanie na przycisk akcji dodatkowo
+                skaluje miniaturkę, wzmacniając reakcję wizualną.
+              </li>
+              <li>
+                <strong>Animacja dodawania do koszyka</strong> — krótka animacja
+                produktu „lecącego" w stronę ikony koszyka po kliknięciu.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 10. PANEL ADMINA -->
+        <section id="admin">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-secondary text-3">Admin</span>
+            Panel admina
+            <span class="badge badge-secondary text-3 ml-auto">1</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Górny pasek (topbar)</strong> — dodatkowy poziomy pasek
+                nad <code>.admin-nav</code>, np. na szybkie akcje, wyszukiwarkę
+                lub powiadomienia.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 11. DOKUMENTACJA I NARZĘDZIA -->
+        <section id="dx" class="mb-0">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-dark text-3">DX</span>
+            Dokumentacja i narzędzia
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Ikony: przegląd podejść w dokumentacji</strong> — osobna
+                sekcja porównująca rozwiązania CSS-only, wymagające JS oraz
+                fallbacki, z jasną rekomendacją, kiedy użyć którego.
+              </li>
+              <li>
+                <strong>Wtyczka do VS Code</strong> — podpowiedzi i
+                autouzupełnianie klas molique bezpośrednio w edytorze.
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="bg-surface border-top pt-5 pb-4">
+      <div class="container">
+        <div class="grid-auto gap-4 mb-5">
+          <div>
+            <a href="index.html" class="navbar-brand text-main d-block mb-2"
+              >molique<span class="text-primary">.</span></a
+            >
+            <p class="m-0 text-muted" style="opacity: 0.8">
+              Lekki framework CSS zbudowany na natywnym HTML5 i najnowszym CSS.
+              Zero JavaScriptu tam, gdzie się da.
+            </p>
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Wprowadzenie</h6>
+            <a
+              href="docs.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Getting Started</a
+            >
+            <a
+              href="docs-roadmap.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Roadmapa</a
+            >
+            <a
+              href="docs-classes.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Spis Klas (Cheat Sheet)</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Komponenty</h6>
+            <a
+              href="docs-buttons.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Przyciski &amp; Badges</a
+            >
+            <a
+              href="docs-forms.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Formularze</a
+            >
+            <a
+              href="docs-cards.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Karty</a
+            >
+            <a
+              href="docs-charts.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Wykresy</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Moduły</h6>
+            <a
+              href="docs-eshop.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Sklep Internetowy</a
+            >
+            <a
+              href="docs-blog.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Blog &amp; Artykuły</a
+            >
+            <a
+              href="docs-admin.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Panel Admina</a
+            >
+          </div>
+        </div>
+
+        <hr style="border-color: var(--border-color)" />
+
+        <div
+          class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-3"
+        >
+          <p class="text-muted m-0 text-4">
+            &copy; <span id="footer-year"></span> molique. Framework CSS dla
+            B2B.
+          </p>
+          <p class="text-muted m-0 text-4">Wersja 1.5.1</p>
+        </div>
+      </div>
+    </footer>
+
+    <button class="scroll-to-top" aria-label="Wróć na górę">↑</button>
+
+    <script>
+      document.getElementById("footer-year").textContent =
+        new Date().getFullYear();
+    </script>
+    <script src="js/molique-script.js" defer></script>
+  </body>
+</html>

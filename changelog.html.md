@@ -455,22 +455,12 @@
                     stronie startowej i Spisie klas) jest teraz na wszystkich
                     stronach dokumentacji — spójny wygląd w całości.
                   </li>
-                </ul>
-
-                <h3
-                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
-                >
-                  <span class="badge badge-danger mx-2 text-3"
-                    >Zmiana łamiąca</span
-                  >
-                  Usunięta strona Roadmapa
-                </h3>
-                <ul class="text-secondary mb-0">
                   <li>
-                    <code>docs-roadmap.html</code> została usunięta wraz ze
-                    wszystkimi linkami do niej (navbar, stopka, sidebar
-                    dokumentacji, strona startowa, przykłady mega menu).
-                    Bezpośrednie odnośniki do tego adresu przestają działać.
+                    <strong>Roadmapa zniknęła tylko z drzewka
+                    dokumentacji</strong> — nie linkuje do niej już sidebar
+                    referencji komponentów, bo to strona ogłoszeń, nie
+                    dokumentacja API. Sama strona i linki w navbarze/stopce
+                    zostają bez zmian.
                   </li>
                 </ul>
               </div>
@@ -1930,6 +1920,11 @@
               href="docs.html"
               class="d-block text-muted text-hover-primary text-decoration-none mb-2"
               >Getting Started</a
+            >
+            <a
+              href="docs-roadmap.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Roadmapa</a
             >
             <a
               href="docs-classes.html"

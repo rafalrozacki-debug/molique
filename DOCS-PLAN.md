@@ -402,16 +402,19 @@ do nich dwudziestej pozycji byłoby pracą do wyrzucenia w tym etapie. Rozjazd
 naprawiony przy okazji: sześć stron nie linkowało do Spisu klas ani Roadmapy,
 `docs.html` gubiło blog, a `docs-tables.html` wypadło z osiemnastu menu.
 
-Update: `docs-roadmap.html` usunięta na życzenie użytkownika ("roadmapa
-musi wylecieć z dokumentacji") — więc uwaga o brakującym layoucie admina
-stała się nieaktualna. Usunięto stronę oraz wszystkie 8 miejsc, które do
-niej linkowały: `partials/navbar.html`, `partials/footer.html`,
-`partials/docs-sidebar.html`, `docs.html` (poprawiony też link
-"Następny krok" → `docs-variables.html`), trzy kopie mega menu w
-`examples-mega-menu/navbar/select.html` oraz jedna z dwóch wzmianek w
-`changelog.html` (własna kopia stopki tej strony — druga wzmianka to
-historyczny wpis o pierwotnym dodaniu roadmapy, zostawiony bez zmian,
-plus dopisany nowy wpis o usunięciu).
+Update: pierwsza interpretacja "roadmapa musi wylecieć z dokumentacji"
+(usunięcie strony + wszystkich 8 linków w całym serwisie) była za
+szeroka — użytkownik doprecyzował, że chodziło **wyłącznie** o link
+w sidebarze dokumentacji (`partials/docs-sidebar.html`, kategoria
+"Wprowadzenie"). Strona żyje dalej pod `docs-roadmap.html` i zostaje
+linkowana z navbara, stopki i przykładów mega menu — tak jak
+`changelog.html`, jest traktowana jako strona ogłoszeń/zasobów, a nie
+część drzewka dokumentacji API. Wszystko poza sidebarem przywrócone
+z historii gita (`git show`/`git checkout` na commicie sprzed
+usunięcia), więc bajtowo identyczne z wersją przed pomyłką — poza samą
+`docs-roadmap.html`, do której użytkownik miał kopię zapasową na
+produkcji (molique.rozacki.com) na wypadek, gdyby historia gita
+zawiodła.
 
 ---
 
