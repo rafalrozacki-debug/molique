@@ -248,7 +248,7 @@
               </table>
             </div>
 
-            <div class="p-4 bg-surface border rounded-2">
+            <div class="p-4 bg-surface border rounded-2 mb-4">
               <h5 class="fw-bold text-5 mb-2">Zmienne odstępów w komórkach</h5>
               <p class="text-4 text-muted m-0">
                 <code>--table-padding-x</code>, <code>--table-padding-y</code>,
@@ -259,6 +259,34 @@
                 spójnie.
               </p>
             </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Wyszukiwarka na żywo</h3>
+            <p class="text-muted mb-3">
+              Atrybut <code>data-search-target</code> na dowolnym polu
+              tekstowym filtruje wiersze wskazanej tabeli w locie, bez
+              przeładowania i bez pisania JS.
+            </p>
+            <div class="component-code">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;input type="text" class="input" placeholder="Szukaj…"
+       data-search-target="#klienciBody"&gt;
+
+&lt;table class="table"&gt;
+  &lt;tbody id="klienciBody"&gt;
+    &lt;tr&gt;&lt;td&gt;Molique&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Briko&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <p class="text-muted text-4 mt-3 mb-0">
+              <code>data-search-target</code> wskazuje <code>id</code>
+              elementu z wierszami (zwykle <code>&lt;tbody&gt;</code>) —
+              moduł porównuje wpisany tekst z całą treścią każdego
+              <code>&lt;tr&gt;</code>. Wiersz z klasą
+              <code>.cheat-sheet-category</code> traktuje jako nagłówek
+              sekcji i chowa go automatycznie, gdy żaden wiersz pod nim nie
+              pasuje do wyszukiwania — reszta tabel może tę klasę zignorować.
+            </p>
           </section>
 
           <!-- ===================================================== -->

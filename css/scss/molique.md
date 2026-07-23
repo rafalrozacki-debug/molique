@@ -423,8 +423,30 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Karuzele:** `.carousel` > `.carousel-track` > `.carousel-slide`.
   Wariant: `.carousel-bg-sync`.
 - **Lightbox:** `<a href="duze.jpg" data-lightbox data-gallery="galeria">`.
-- **Inne:** `.before-after-slider`, `.btn-magnetic`, `.speed-dial`,
-  `.share-bar` (z `data-network="native"`), `.scroll-to-top`.
+- **Przed / Po:** `.before-after-slider` > `.img-after` (warstwa spodnia,
+  ustala wysokość) + `.img-before` (przycinana `clip-path` wg zmiennej
+  `--position`) + `.slider-control` (niewidoczny `input[range]`, realny
+  sterownik) + `.slider-line`/`.slider-handle` (wizualne). Oba zdjęcia
+  powinny mieć te same proporcje, inaczej `.img-before` się rozciąga.
+- **Przycisk magnetyczny:** `.btn-magnetic` — zero CSS, cały efekt to
+  inline `transform` z JS na `mousemove`. Aktywny tylko przy
+  `(pointer: fine)` (nie na dotyku).
+- **Speed Dial:** `.speed-dial` (zawsze `position: fixed; bottom/right:
+  30px`, bez wariantu rogu) > `.speed-dial-main` + `.speed-dial-actions`
+  > `.speed-dial-action`. Rozwija się na `:hover` LUB `:focus-within` —
+  zero JS.
+- **Udostępnianie:** `.share-bar` > `.share-btn[data-network]` (facebook /
+  twitter / linkedin / whatsapp / native — `native` to Web Share API,
+  bez wsparcia kończy się blokującym `alert()`).
+- **Powrót na górę:** `.scroll-to-top` (też zawsze `bottom/right: 30px`
+  — **kolizja z `.speed-dial`** na tej samej stronie, patrz pułapka w
+  `docs-widgets.html`) + `.is-visible` (nadaje rdzeń `molique-script.js`
+  po 400px scrolla, nie osobny moduł).
+- **Wyszukiwarka tabeli:** dowolny `input[data-search-target="#id"]`
+  filtruje wiersze `#id` na żywo (`js/modules/molique-table-search.js`,
+  auto-ładowany po `data-search-target`). Wiersz `.cheat-sheet-category`
+  chowa się automatycznie, gdy nic pod nim nie pasuje — reszta tabel
+  ignoruje tę klasę bezpiecznie.
 
 ## Wykresy (Data Viz — Progressive Enhancement)
 

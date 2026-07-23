@@ -115,7 +115,12 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 ### Widgety (Opt-in)
 - **Karuzele:** `.carousel` > `.carousel-track` > `.carousel-slide`. Wariant: `.carousel-bg-sync`.
 - **Lightbox:** `<a href="duze.jpg" data-lightbox data-gallery="galeria">`.
-- **Inne:** `.before-after-slider`, `.btn-magnetic`, `.speed-dial`, `.share-bar` (z `data-network="native"`), `.scroll-to-top`.
+- **Przed / Po:** `.before-after-slider` > `.img-after` (spodnia warstwa, ustala wysokość) + `.img-before` (przycinana `clip-path` wg `--position`) + `.slider-control` (niewidoczny `input[range]`) + `.slider-line`/`.slider-handle`. Zdjęcia powinny mieć te same proporcje.
+- **Przycisk magnetyczny:** `.btn-magnetic` — zero CSS, efekt to inline `transform` z JS na `mousemove`. Tylko `(pointer: fine)`.
+- **Speed Dial:** `.speed-dial` (zawsze `bottom/right: 30px`, bez wariantu rogu) > `.speed-dial-main` + `.speed-dial-actions` > `.speed-dial-action`. Rozwija na `:hover`/`:focus-within` — zero JS.
+- **Udostępnianie:** `.share-bar` > `.share-btn[data-network]` (facebook/twitter/linkedin/whatsapp/native — native to Web Share API, brak wsparcia = blokujący `alert()`).
+- **Powrót na górę:** `.scroll-to-top` (też `bottom/right: 30px` — KOLIDUJE z `.speed-dial` na tej samej stronie) + `.is-visible` (nadaje rdzeń molique-script.js po 400px scrolla).
+- **Wyszukiwarka tabeli:** `input[data-search-target="#id"]` filtruje wiersze `#id` na żywo (auto-ładowany moduł). `.cheat-sheet-category` chowa się automatycznie, gdy nic pod nią nie pasuje.
 
 ### Wykresy (Data Viz - Progressive Enhancement)
 - **Zasada:** Wykresy budowane w HTML/CSS/SVG jako fallback.

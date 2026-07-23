@@ -129,7 +129,8 @@ pułapek.
 | `docs-eshop` | ✅ | 27/27 |
 | `docs-blog` | ✅ | 21/21 |
 | `docs-admin` | ✅ | 26/26 |
-| `docs-widgets`, `docs-components-extra` | ⬜ zostało 2 | — |
+| `docs-widgets` | ✅ | 15/15 |
+| `docs-components-extra` | ⬜ zostało 1 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -244,6 +245,20 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
   tej samej stronie z innym demo używającym selektorów zależnych od tego
   przodka** — bezpieczniej trzymać taki przełącznik statycznym (kod +
   tabela, bez żywego podpięcia), tak jak ostatecznie zrobiono.
+- `docs-widgets`: strona ładowała nieistniejący plik
+  `css/molique-style-contact.css` (martwy link `<link>` w `<head>`, bez
+  odpowiadającej mu sekcji na stronie ani pliku SCSS gdziekolwiek w
+  repo) — usunięty. Znaleziono realną kolizję CSS: `.speed-dial` i
+  `.scroll-to-top` mają identyczne domyślne współrzędne
+  (`position: fixed; bottom/right: 30px`), więc użyte razem na jednej
+  stronie nakładają się dokładnie na sobie — udokumentowane jako pułapka
+  nr 1. Przy ustalaniu zakresu wyszło też, że `molique-table-search.js`
+  (`data-search-target`, filtrowanie wierszy na żywo) nie było
+  udokumentowane NIGDZIE w modelu referencyjnym, nawet na już gotowym
+  `docs-tables.html` — dopisane tam jako mały patch (mechanizm jest
+  ogólnego przeznaczenia, mimo że jego jedyne realne użycie w repo to
+  wyszukiwarka w `docs-classes.html`, stąd wspierana, ale opcjonalna
+  klasa `.cheat-sheet-category`).
 
 ### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
 

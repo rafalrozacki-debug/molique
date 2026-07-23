@@ -1,13 +1,12 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Widgety - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Widgety (Opt-in) - molique Docs","description":"Referencja pięciu niezależnych widgetów molique: suwak Przed/Po, przyciski magnetyczne, Speed Dial, udostępnianie i powrót na górę. Klasy, wymagane pliki i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
     <link rel="stylesheet" href="css/molique-style-before-after.css" />
     <link rel="stylesheet" href="css/molique-style-speed-dial.css" />
     <link rel="stylesheet" href="css/molique-style-share.css" />
-    <link rel="stylesheet" href="css/molique-style-contact.css" />
   </head>
   <body>
 <include src="partials/navbar.html"></include>
@@ -21,40 +20,74 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Widgety (Opt-in)</h1>
             <p class="text-6 text-muted">
-              Widgety to niezależne, zaawansowane moduły. Wymagają załadowania
-              dedykowanego pliku CSS. Logiki JS nie dołączasz ręcznie —
-              <code>molique-script.js</code> wykrywa widget na stronie i sam
-              dociąga odpowiedni moduł z <code>js/modules/</code>.
+              Pięć niezależnych, zaawansowanych widgetów. Trzy wymagają
+              osobnego pliku CSS (u góry tej strony) — logiki JS nigdy nie
+              dołączasz ręcznie: <code>molique-script.js</code> wykrywa
+              widget po klasie na stronie i sam dociąga właściwy moduł z
+              <code>js/modules/</code>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: BEFORE / AFTER -->
+          <!-- ===================================================== -->
+          <!-- 1. CO WYBRAĆ                                          -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">1. Suwak Przed / Po (Before & After)</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Co wybrać</h2>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Widget</th>
+                    <th>Kiedy</th>
+                    <th>Wymaga pliku CSS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Widget"><code>.before-after-slider</code></td>
+                    <td data-label="Kiedy">Metamorfozy, projekty, retusz — porównanie dwóch zdjęć.</td>
+                    <td data-label="CSS"><code>molique-style-before-after.css</code></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Widget"><code>.btn-magnetic</code></td>
+                    <td data-label="Kiedy">Przycisk CTA, który ma „przyciągać" kursor na desktopie.</td>
+                    <td data-label="CSS">Żaden — sam JS.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Widget"><code>.speed-dial</code></td>
+                    <td data-label="Kiedy">Pływający przycisk akcji z kilkoma skrótami (FAB).</td>
+                    <td data-label="CSS"><code>molique-style-speed-dial.css</code></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Widget"><code>.share-bar</code></td>
+                    <td data-label="Kiedy">Udostępnianie artykułu w social media.</td>
+                    <td data-label="CSS"><code>molique-style-share.css</code></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Widget"><code>.scroll-to-top</code></td>
+                    <td data-label="Kiedy">Powrót na górę długiej strony.</td>
+                    <td data-label="CSS">Żaden — komponent rdzenia.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. PRZED / PO                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Suwak Przed / Po</h2>
             <p class="text-muted mb-4">
-              Idealny do prezentacji metamorfoz, projektów architektonicznych czy retuszu zdjęć.
+              Ukryty <code>&lt;input type="range"&gt;</code> na całej
+              powierzchni widgetu steruje zmienną CSS <code>--position</code>
+              — to ona przesuwa linię, uchwyt i przycina zdjęcie „przed"
+              przez <code>clip-path</code>. Natywny range daje obsługę
+              klawiaturą (strzałki) bez dopisywania czegokolwiek.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Wymagania techniczne:</h5>
-              <ul class="list-icons list-icons-check list-icons-success text-4 text-muted m-0">
-                <li>
-                  Wymaga załadowania pliku stylów: <code>css/molique-style-before-after.css</code>.
-                </li>
-                <li>
-                  Logika JS dociągana automatycznie
-                  (<code>js/modules/molique-before-after.js</code>) — wystarczy
-                  <code>js/molique-script.js</code> na stronie.
-                </li>
-                <li>
-                  Oba zdjęcia (przed i po) powinny mieć identyczne proporcje (np. 16:9) i rozmiary,
-                  aby suwak działał perfekcyjnie.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
+            <div class="component-showcase mb-4">
               <div class="component-preview w-100 bg-surface">
                 <div
                   class="before-after-slider mx-auto"
@@ -77,82 +110,102 @@
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wymaga: molique-style-before-after.css --&gt;
-&lt;div class="before-after-slider"&gt;
-  &lt;img src="after.jpg" class="before-after-img img-after" alt="Po"&gt;
-  &lt;img src="before.jpg" class="before-after-img img-before" alt="Przed"&gt;
+                <pre><code>&lt;div class="before-after-slider"&gt;
+  &lt;img src="po.jpg" class="before-after-img img-after" alt="Po"&gt;
+  &lt;img src="przed.jpg" class="before-after-img img-before" alt="Przed"&gt;
   &lt;input type="range" class="slider-control" min="0" max="100" value="50"&gt;
   &lt;div class="slider-line"&gt;&lt;/div&gt;
   &lt;div class="slider-handle"&gt;&lt;/div&gt;
 &lt;/div&gt;</code></pre>
               </div>
             </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.before-after-slider</code></td>
+                    <td data-label="Co robi">Obudowa. Nośnik zmiennej <code>--position</code> (domyślnie 50%).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.img-after</code></td>
+                    <td data-label="Co robi">Zdjęcie „po" — warstwa spodnia, w normalnym przepływie (ustala wysokość widgetu).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.img-before</code></td>
+                    <td data-label="Co robi">Zdjęcie „przed" — warstwa wierzchnia, przycinana <code>clip-path</code> według <code>--position</code>. Kolejność klas w HTML jest dowolna — o warstwach decyduje <code>z-index</code>, nie kolejność w DOM.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.slider-control</code></td>
+                    <td data-label="Co robi">Niewidoczny <code>input[type=range]</code> na całej powierzchni — realny sterownik.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.slider-line</code> / <code>.slider-handle</code></td>
+                    <td data-label="Co robi">Czysto wizualne — podążają za <code>--position</code>, nie przechwytują kliknięć (<code>pointer-events: none</code>).</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
-          <!-- SEKCJA 2: MAGNETIC BUTTONS -->
+          <!-- ===================================================== -->
+          <!-- 3. PRZYCISK MAGNETYCZNY                               -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">2. Przyciski Magnetyczne</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Przycisk magnetyczny</h2>
             <p class="text-muted mb-4">
-              Przycisk "przyciąga się" do kursora myszy, gdy ten znajdzie się w jego pobliżu.
+              Dodaj <code>.btn-magnetic</code> do dowolnego elementu —
+              podąża za kursorem w promieniu najechania. Klasa nie ma
+              żadnego własnego CSS: cały efekt to inline
+              <code>style="transform: translate(…)"</code> ustawiany przez
+              JS przy każdym <code>mousemove</code>.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Zasada działania:</h5>
-              <p class="text-4 text-muted m-0">
-                Wystarczy dodać klasę <code>.btn-magnetic</code> do dowolnego elementu. Skrypt
-                automatycznie wykrywa urządzenia dotykowe (telefony/tablety) i wyłącza na nich ten
-                efekt, aby oszczędzać baterię i zapobiegać błędom UX. Działa tylko na urządzeniach
-                ze wskaźnikiem (myszką).
-              </p>
-            </div>
-
-            <div class="component-showcase">
+            <div class="component-showcase mb-4">
               <div class="component-preview w-100 justify-content-center py-5">
-                <button class="btn btn-primary btn-lg btn-magnetic shadow-lg">
+                <button class="btn-primary btn-lg btn-magnetic shadow-lg">
                   Najedź na mnie myszką
                 </button>
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wystarczy dodać klasę .btn-magnetic --&gt;
-&lt;button class="btn btn-primary btn-magnetic"&gt;
+                <pre><code>&lt;button class="btn-primary btn-magnetic"&gt;
   Przycisk magnetyczny
 &lt;/button&gt;</code></pre>
               </div>
             </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Tylko urządzenia ze wskaźnikiem</h5>
+              <p class="text-4 text-muted m-0">
+                Skrypt sprawdza <code>matchMedia('(pointer: fine)')</code> i
+                na dotyku (telefon, tablet) w ogóle nie podpina nasłuchu —
+                przycisk zachowuje się zwyczajnie, bez śladu efektu.
+              </p>
+            </div>
           </section>
 
-          <!-- SEKCJA 3: SPEED DIAL -->
+          <!-- ===================================================== -->
+          <!-- 4. SPEED DIAL                                         -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">3. Speed Dial Menu</h2>
+            <h2 class="text-8 fw-bold mb-3">4. Speed Dial</h2>
             <p class="text-muted mb-4">
-              Pływający przycisk akcji (FAB), który po najechaniu lub kliknięciu rozwija dodatkowe
-              opcje.
+              Pływający przycisk akcji (FAB) z ukrytymi skrótami. Rozwija się
+              na <code>:hover</code> CAŁEGO widgetu LUB gdy dowolne jego
+              dziecko dostanie focus (np. po kliknięciu głównego przycisku)
+              — działa więc myszką, dotykiem i klawiaturą.
+              <strong>Zero JavaScriptu.</strong>
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Wymagania techniczne:</h5>
-              <ul class="list-icons list-icons-check list-icons-success text-4 text-muted m-0">
-                <li>
-                  Wymaga załadowania pliku stylów: <code>css/molique-style-speed-dial.css</code>.
-                </li>
-                <li>
-                  Domyślnie komponent pozycjonuje się w prawym dolnym rogu ekranu (<code
-                    >position: fixed</code
-                  >). W poniższym demie użyłem pozycjonowania absolutnego wyłącznie w celach
-                  prezentacyjnych.
-                </li>
-              </ul>
-            </div>
-
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface position-relative"
-                style="height: 300px"
-              >
-                <!-- Speed Dial umieszczony relatywnie dla celów demonstracji -->
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface position-relative" style="height: 300px">
                 <div class="speed-dial" style="position: absolute; bottom: 30px; right: 30px">
                   <div class="speed-dial-actions">
                     <button class="speed-dial-action" aria-label="Napisz maila">✉️</button>
@@ -164,49 +217,63 @@
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wymaga: molique-style-speed-dial.css --&gt;
+                <pre><code>&lt;!-- Domyślnie position: fixed; bottom/right: 30px --&gt;
 &lt;div class="speed-dial"&gt;
   &lt;div class="speed-dial-actions"&gt;
-    &lt;button class="speed-dial-action"&gt;✉️&lt;/button&gt;
-    &lt;button class="speed-dial-action"&gt;📞&lt;/button&gt;
-    &lt;button class="speed-dial-action"&gt;💬&lt;/button&gt;
+    &lt;button class="speed-dial-action" aria-label="Napisz maila"&gt;✉️&lt;/button&gt;
+    &lt;button class="speed-dial-action" aria-label="Zadzwoń"&gt;📞&lt;/button&gt;
   &lt;/div&gt;
   &lt;button class="speed-dial-main"&gt;+&lt;/button&gt;
 &lt;/div&gt;</code></pre>
               </div>
             </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.speed-dial</code></td>
+                    <td data-label="Co robi"><code>position: fixed</code> w prawym dolnym rogu — na stałe, bez klasy do zmiany rogu (patrz pułapka nr 1).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.speed-dial-main</code></td>
+                    <td data-label="Co robi">Główny okrągły przycisk 56px.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.speed-dial-actions</code></td>
+                    <td data-label="Co robi">Kontener skrótów — domyślnie niewidoczny (<code>opacity: 0; visibility: hidden</code>).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.speed-dial-action</code></td>
+                    <td data-label="Co robi">Pojedynczy skrót, okrągły 44px.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
-          <!-- SEKCJA 4: SHARE WIDGET -->
+          <!-- ===================================================== -->
+          <!-- 5. UDOSTĘPNIANIE                                      -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">4. Widget Udostępniania (Share)</h2>
+            <h2 class="text-8 fw-bold mb-3">5. Widget udostępniania</h2>
             <p class="text-muted mb-4">
-              Pasek z przyciskami do udostępniania treści w Social Mediach.
+              Pasek przycisków social media. Wartość
+              <code>data-network</code> decyduje o zachowaniu —
+              <code>facebook</code>/<code>twitter</code>/<code>linkedin</code>/<code>whatsapp</code>
+              otwierają popup z linkiem sharera, <code>native</code>
+              wywołuje systemowe okno udostępniania (Web Share API).
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Natywne udostępnianie (Web Share API):</h5>
-              <p class="text-4 text-muted m-0">
-                Przycisk z atrybutem <code>data-network="native"</code> wykorzystuje nowoczesne Web
-                Share API. Na urządzeniach mobilnych (iOS/Android) wywołuje on natywne, systemowe
-                okienko udostępniania, dokładnie takie samo, jakie pojawia się w aplikacjach
-                systemowych.
-              </p>
-            </div>
-
-            <div class="component-showcase">
+            <div class="component-showcase mb-4">
               <div class="component-preview w-100 justify-content-center">
-                <div
-                  class="share-bar"
-                  style="
-                    position: relative;
-                    transform: none;
-                    left: auto;
-                    top: auto;
-                    flex-direction: row;
-                  "
-                >
+                <div class="share-bar" style="position: relative; transform: none; left: auto; top: auto; flex-direction: row;">
                   <button class="share-btn" data-network="facebook">f</button>
                   <button class="share-btn" data-network="twitter">t</button>
                   <button class="share-btn" data-network="linkedin">in</button>
@@ -216,66 +283,186 @@
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wymaga: molique-style-share.css --&gt;
-&lt;div class="share-bar"&gt;
+                <pre><code>&lt;div class="share-bar"&gt;
   &lt;button class="share-btn" data-network="facebook"&gt;f&lt;/button&gt;
   &lt;button class="share-btn" data-network="twitter"&gt;t&lt;/button&gt;
-  &lt;button class="share-btn" data-network="linkedin"&gt;in&lt;/button&gt;
-  &lt;button class="share-btn" data-network="whatsapp"&gt;w&lt;/button&gt;
   &lt;button class="share-btn" data-network="native"&gt;📤&lt;/button&gt;
 &lt;/div&gt;</code></pre>
               </div>
             </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa / atrybut</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.share-bar</code></td>
+                    <td data-label="Co robi">Obudowa. Domyślnie pozycjonowana jako pływający pionowy pasek — w demie wyżej nadpisana inline stylem na poziomy, w kontekście.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.share-btn</code></td>
+                    <td data-label="Co robi">Pojedynczy przycisk. To on, nie <code>.share-bar</code>, jest selektorem, który uruchamia autoloader.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">data-network</code></td>
+                    <td data-label="Co robi"><code>facebook</code> / <code>twitter</code> / <code>linkedin</code> / <code>whatsapp</code> / <code>native</code>. Inna wartość — przycisk nic nie zrobi.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
-          <!-- SEKCJA 5: SCROLL TO TOP -->
+          <!-- ===================================================== -->
+          <!-- 6. POWRÓT NA GÓRĘ                                     -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">5. Powrót na górę (Scroll to Top)</h2>
+            <h2 class="text-8 fw-bold mb-3">6. Powrót na górę</h2>
             <p class="text-muted mb-4">
-              Pływający przycisk pojawiający się po przewinięciu strony w dół.
+              Jeden przycisk, dodawany raz na końcu <code>&lt;body&gt;</code>.
+              Widoczność i przewijanie obsługuje rdzeń
+              <code>molique-script.js</code> na stałe (jak przełącznik
+              sidebara w panelu admina) — nie ma osobnego modułu do
+              rejestrowania.
             </p>
 
-            <!-- BLOK INSTRUKCJI -->
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <h5 class="fw-bold text-5 mb-3">Zasada działania:</h5>
-              <p class="text-4 text-muted m-0">
-                Wymaga wbudowanego skryptu JS (<code>molique-script.js</code>), który nasłuchuje
-                zdarzenia scroll i dodaje klasę <code>.is-visible</code> po przewinięciu 400px w
-                dół. Przycisk wykorzystuje natywną właściwość CSS
-                <code>scroll-behavior: smooth</code> do płynnego powrotu na górę.
-              </p>
-            </div>
-
-            <div class="component-showcase">
-              <div
-                class="component-preview w-100 bg-surface position-relative"
-                style="height: 200px"
-              >
-                <!-- Przycisk wymuszony jako widoczny dla celów demonstracji -->
-                <button
-                  class="scroll-to-top is-visible position-absolute"
-                  style="bottom: 20px; right: 20px"
-                >
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface position-relative" style="height: 200px">
+                <button class="scroll-to-top is-visible position-absolute" style="bottom: 20px; right: 20px">
                   ↑
                 </button>
                 <p class="text-muted text-center w-100">
-                  Przycisk domyślnie pojawia się w prawym dolnym rogu ekranu.
+                  Wymuszona klasa <code>.is-visible</code> — normalnie
+                  dochodzi po przewinięciu 400px.
                 </p>
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Przycisk umieszczony na samym końcu body --&gt;
-&lt;button class="scroll-to-top" aria-label="Wróć na górę"&gt;↑&lt;/button&gt;</code></pre>
+                <pre><code>&lt;button class="scroll-to-top" aria-label="Wróć na górę"&gt;↑&lt;/button&gt;</code></pre>
               </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.scroll-to-top</code></td>
+                    <td data-label="Co robi"><code>position: fixed</code>, prawy dolny róg. Niewidoczny, dopóki nie dostanie <code>.is-visible</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-visible</code></td>
+                    <td data-label="Co robi">Nadaje ją skrypt po przewinięciu strony o ponad 400px. Klik: <code>window.scrollTo({ top: 0, behavior: 'smooth' })</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="widgets-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.speed-dial</code> i <code>.scroll-to-top</code> na tej samej stronie</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Oba mają identyczne domyślne współrzędne —
+                    <code>position: fixed; bottom: 30px; right: 30px;</code>
+                    — więc użyte razem wylądują dokładnie jeden na drugim
+                    (<code>.scroll-to-top</code> na wierzchu, wyższy
+                    <code>z-index</code>). Jeśli potrzebujesz obu, przesuń
+                    jeden z nich własnym <code>style</code> lub regułą CSS,
+                    np. <code>bottom: 100px</code>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="widgets-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">2</span>
+                  <span>Zdjęcia o różnych proporcjach w suwaku Przed/Po</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Wysokość widgetu ustala <code>.img-after</code>
+                    (<code>height: auto</code>, naturalne proporcje).
+                    <code>.img-before</code> ma wymuszone
+                    <code>height: 100%</code> — jeśli jego proporcje są inne
+                    niż zdjęcia „po", zostanie rozciągnięty lub ściśnięty
+                    względem oryginału.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="widgets-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">3</span>
+                  <span>Brak Web Share API kończy się natywnym <code>alert()</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Przycisk <code>data-network="native"</code> na
+                    przeglądarce bez wsparcia (starsze desktopowe Chrome,
+                    Firefox) pokazuje blokujący
+                    <code>alert('Twoja przeglądarka nie wspiera…')</code>
+                    zamiast po cichu się ukryć albo przełączyć na inną opcję.
+                    Jeśli target to głównie desktop, rozważ pominięcie tego
+                    przycisku na rzecz konkretnych sieci.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-before-after.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: Przed / Po</h5>
+                  <p class="text-4 text-muted m-0">Kilka wariantów obok siebie.</p>
+                </div>
+              </a>
+              <a href="examples-speed-dial.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: Speed Dial</h5>
+                  <p class="text-4 text-muted m-0">FAB w realnym kontekście strony.</p>
+                </div>
+              </a>
+              <a href="examples-share-widget.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: udostępnianie</h5>
+                  <p class="text-4 text-muted m-0">Pełny pasek z każdą siecią.</p>
+                </div>
+              </a>
             </div>
           </section>
 
           <!-- Nawigacja dół -->
           <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
-            <a href="docs-animations.html" class="btn btn-secondary"
-              >➔ Wstecz: Animacje & Mikrointerakcje</a
+            <a href="docs-animations.html" class="btn-secondary"
+              >➔ Wstecz: Animacje &amp; Mikrointerakcje</a
             >
-            <a href="docs-eshop.html" class="btn btn-primary fw-bold hover-spring"
+            <a href="docs-eshop.html" class="btn-primary fw-bold hover-spring"
               >Następny krok: Sklep Internetowy ➔</a
             >
           </div>
@@ -287,5 +474,3 @@
     <script src="js/molique-script.js"></script>
   </body>
 </html>
-
-
