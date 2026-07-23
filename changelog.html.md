@@ -356,7 +356,7 @@
                   >
                   Martwy skrypt i odnajdywalność zasobów
                 </h3>
-                <ul class="text-secondary mb-0">
+                <ul class="text-secondary mb-4">
                   <li>
                     <strong>Usunięty martwy
                     <code>js/molique-script-widgets.js</code></strong> — 7 stron
@@ -371,6 +371,61 @@
                     a to adres, spod którego pobierają go agenty AI. Doszły też
                     linki w menu „Zasoby", sekcja „Dla deweloperów" na stronie
                     głównej i „Zmniejsz paczkę" na stronie pobierania.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Karuzela Background Sync nie zmieniała tła
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Atrybut <code>data-bg</code> był udokumentowany i obecny w
+                    markupie przykładów od pierwszego wydania, ale żadna linia
+                    JS go nie czytała — <code>.carousel-bg-sync</code>
+                    renderowała się bez tła, mimo gotowego CSS czekającego na
+                    <code>background-image</code>.
+                  </li>
+                  <li>
+                    Naprawione w <code>molique-carousel.js</code>: ten sam
+                    <code>IntersectionObserver</code>, który podświetla kropki
+                    paginacji, teraz też ustawia tło kontenera na
+                    <code>data-bg</code> aktualnie widocznego slajdu.
+                  </li>
+                  <li>
+                    <strong>Nic w markupie się nie zmienia</strong> — ten sam,
+                    już udokumentowany atrybut <code>data-bg</code> teraz
+                    faktycznie działa.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Lightbox: brak nawigacji klawiaturą mimo deklaracji
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    Dokumentacja twierdziła, że lightbox „natywnie obsługuje
+                    nawigację klawiaturą (strzałki, ESC)" — w rzeczywistości
+                    <code>molique-lightbox.js</code> nie miał ani jednego
+                    nasłuchu <code>keydown</code>. Użytkownik klawiatury, który
+                    otworzył zdjęcie, nie miał jak zamknąć modala.
+                  </li>
+                  <li>
+                    Naprawione: <kbd>Esc</kbd> zamyka, <kbd>←</kbd>/<kbd>→</kbd>
+                    przełącza zdjęcie. Focus przy otwarciu przechodzi na
+                    przycisk zamknięcia i wraca do klikniętej miniatury po
+                    zamknięciu — standardowe zachowanie modala. Dołożono też
+                    brakujące <code>aria-label</code> na przyciskach nawigacji
+                    i zamknięcia.
                   </li>
                 </ul>
               </div>

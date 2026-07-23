@@ -190,7 +190,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Pricing Tables:** `.pricing-table` (dodaj `.is-featured` dla
   wyróżnienia) > `.pricing-header` + `.pricing-features`.
 - **Progress Bars:** `.progress` > `.progress-bar` (szerokość w
-  `style="width: X%"`).
+  `style="width: X%"`). UWAGA: `.progress-bar` (i `.progress-bar-reading`,
+  patrz Widgety) animują `width` przez `transition` — świadome odstępstwo
+  od reguły GPU-only, nieszkodliwe przy pojedynczym pasku.
 - **Timeline:** `.timeline` (warianty: `.timeline-large`,
   `.timeline-numbered`) > `.timeline-item`.
 - **Labeled Timeline (daty po lewej):** `.timeline.timeline-labeled` >
@@ -420,9 +422,31 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 
 ## Widgety (Opt-in)
 
-- **Karuzele:** `.carousel` > `.carousel-track` > `.carousel-slide`.
-  Wariant: `.carousel-bg-sync`.
-- **Lightbox:** `<a href="duze.jpg" data-lightbox data-gallery="galeria">`.
+- **Karuzele:** `.carousel` > `.carousel-track` > `.carousel-slide`
+  (szerokość slajdu przez własny `min-width`). Strzałki opcjonalne
+  (`.carousel-nav.carousel-prev/-next`); kropki (`.carousel-dots` >
+  `.carousel-dot.is-active`) generuje skrypt SAM, gdy slajdów >1 i nie ma
+  ich jeszcze w markupie. Wariant `.carousel-bg-sync` (+ dziecko
+  `.carousel-bg-overlay`) zmienia tło kontenera na `data-bg` aktualnie
+  widocznego `.carousel-slide` — ten sam `IntersectionObserver`, który
+  podświetla kropki. Strzałki w tym wariancie widoczne tylko na hover.
+- **Lightbox:** `<a href="duze.jpg" data-lightbox data-gallery="galeria">` —
+  to WSZYSTKO, co piszesz. Skrypt sam dokleja na końcu `<body>` cały modal
+  (`.lightbox-overlay` > `.lightbox-top-bar` z `.lightbox-counter` +
+  `.lightbox-close`, `.lightbox-nav.lightbox-prev/-next`,
+  `.lightbox-content`) — nie pisz tych klas ręcznie. Nawigacja: klik,
+  swipe/drag, oraz klawiatura wewnątrz otwartego modala (`←`/`→` zmiana
+  zdjęcia, `Esc` zamyka; focus wchodzi na `.lightbox-close` i wraca do
+  klikniętej miniatury po zamknięciu).
+- **Filtry Portfolio:** `.nav-filters` (lista przycisków `data-filter`,
+  `"all"` = wszystkie) MUSI mieć kontener z `.filter-item` (atrybut
+  `data-category`) jako bezpośredniego `nextElementSibling` — skrypt szuka
+  go dokładnie tak, nic pomiędzy. Stan nadaje skrypt: `.is-hidden`
+  (`display:none`) na niepasujących, `.is-animated` (wejściowa animacja)
+  na dopiero co pokazanych.
+- **Pasek czytania:** `.progress-container-fixed` > `.progress-bar-reading`,
+  umieszczone zaraz po otwarciu `<body>`. Obsługa na stałe w rdzeniu
+  `molique-script.js` (razem z sticky navbarem), nie w autoloaderze modułów.
 - **Przed / Po:** `.before-after-slider` > `.img-after` (warstwa spodnia,
   ustala wysokość) + `.img-before` (przycinana `clip-path` wg zmiennej
   `--position`) + `.slider-control` (niewidoczny `input[range]`, realny

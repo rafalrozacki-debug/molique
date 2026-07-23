@@ -104,7 +104,11 @@ pierwszej zmianie.
 
 </details>
 
-### Etap 2 — Przepisanie `docs-*` na model referencyjny 🔄 W TOKU
+### Etap 2 — Przepisanie `docs-*` na model referencyjny ✅ ZAMKNIĘTE (17/17)
+
+Wszystkie 17 stron pasujących do modelu referencyjnego przepisane.
+`docs-classes.html` i `docs.html` zostają osobnym, jeszcze nierozstrzygniętym
+przypadkiem (patrz niżej).
 
 Dla każdej strony: przenieść showcase'y do odpowiedniego `examples-*` (jeśli
 tam ich nie ma), zostawić maksymalnie jedno demo, dopisać tabele i sekcję
@@ -130,7 +134,7 @@ pułapek.
 | `docs-blog` | ✅ | 21/21 |
 | `docs-admin` | ✅ | 26/26 |
 | `docs-widgets` | ✅ | 15/15 |
-| `docs-components-extra` | ⬜ zostało 1 | — |
+| `docs-components-extra` | ✅ | 27/27 |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -170,6 +174,13 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
    (`href="examples-X.html"`) pasuje do grepa, choć strona wcale nie ma tej
    klasy w treści. Sprawdź `grep -c 'class="nazwa'`, nie samo `grep -rl`.
 7. **Martwe linki**: każdy `href="*.html"` musi wskazywać istniejący plik.
+   Osobno: **łańcuch nawigacji dół-strony** (Wstecz/Następny) musi
+   wskazywać na FAKTYCZNYCH sąsiadów z `partials/docs-sidebar.html`, nie
+   tylko na istniejące pliki — plik-do-którego-linkujesz może istnieć, ale
+   być złym sąsiadem (znaleziono tak 4 zerwane linki naraz przy
+   `docs-components-extra`). Szybki skrypt:
+   `awk '/Nawigacja dół/,/<\/div>[[:space:]]*$/' src/docs-X.html | grep -oE 'href="[^"]*"'`
+   na całej sekwencji stron, porównane z kolejnością w sidebarze.
 8. `npm run build` + commit.
 
 #### Ustalenia, które przy okazji wyszły
@@ -259,6 +270,40 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
   ogólnego przeznaczenia, mimo że jego jedyne realne użycie w repo to
   wyszukiwarka w `docs-classes.html`, stąd wspierana, ale opcjonalna
   klasa `.cheat-sheet-category`).
+- `docs-components-extra` (ostatnia strona Etapu 2): dwa realne bugi w
+  kodzie, nie tylko w dokumentacji. (1) Wariant karuzeli „Background Sync"
+  (`.carousel-bg-sync` + `data-bg`) był reklamowany na tej stronie i na
+  `examples-carousel.html`, ale ZERO linii JS w repo czytało `data-bg` —
+  CSS czekał gotowy na `background-image`, którego nikt nigdy nie
+  ustawiał. Po pytaniu użytkownika (opcja: dokończyć) dopisano logikę w
+  `molique-carousel.js`, wykorzystując już istniejący
+  `IntersectionObserver` (ten sam, co podświetla kropki) — zweryfikowane
+  w Playwright na realnej stronie. (2) Stara wersja strony twierdziła, że
+  lightbox „natywnie obsługuje nawigację klawiaturą (strzałki, ESC)" — w
+  całym `molique-lightbox.js` nie było ani jednego nasłuchu `keydown`.
+  Realna pułapka klawiaturowa (modal bez możliwości zamknięcia bez
+  myszy). Naprawione: `keydown` na `Esc`/`←`/`→`, focus na
+  `.lightbox-close` przy otwarciu, powrót focusu do triggera przy
+  zamknięciu, plus brakujące `aria-label` na przyciskach — też
+  zweryfikowane w Playwright. Przy ustalaniu zakresu znaleziono też, że
+  `.progress-bar`/`.progress-bar-reading` (z sekcji "Widgety") animują
+  `width`, nie `transform` — ten sam wzorzec co `.funnel-stage`
+  wcześniej, potraktowany tak samo: udokumentowane jako świadomy wyjątek
+  od reguły GPU-only, nie zmieniane bez pytania.
+  **Audyt łańcucha nawigacji dół-strony:** przy weryfikacji sąsiadów tej
+  (ostatniej) strony wyszło na jaw, że cały łańcuch 18 stron miał cztery
+  zerwane linki nagromadzone z różnych wcześniejszych sesji (nie tylko z
+  tego przepisywania) — `docs-navbar` pomijał `docs-sections`,
+  `docs-interactive` pomijał `docs-tables`, a sama
+  `docs-components-extra` (w wersji, którą właśnie pisano) omyłkowo
+  celowała w `docs-forms` zamiast w faktycznego sąsiada `docs-charts`.
+  Zamiast łatać pojedynczo, przeliczono CAŁY łańcuch (`docs-layout` →
+  … → `docs-purgecss`, 18 stron) skryptem porównującym każdy `href` z
+  prawdziwą kolejnością w `partials/docs-sidebar.html` i naprawiono
+  wszystkie cztery naraz. Wniosek: przy każdej kolejnej zmianie
+  wpływającej na sąsiedztwo stron (nowa strona, zmiana kolejności w
+  sidebarze) warto powtórzyć ten sam skrypt zamiast ufać pojedynczym
+  linkom.
 
 ### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
 

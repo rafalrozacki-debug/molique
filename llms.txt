@@ -48,7 +48,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 - **Data Rows (Grid CRM):** `.data-row` > divy z danymi + `.data-row-actions`.
 - **Compact Data Rows (List Items):** `.data-row-compact` > `.row-icon` + `.row-content` (z `.row-title` i `.row-details`) + `.row-actions`.
 - **Pricing Tables:** `.pricing-table` (dodaj `.is-featured` dla wyróżnienia) > `.pricing-header` + `.pricing-features`.
-- **Progress Bars:** `.progress` > `.progress-bar` (szerokość w `style="width: X%"`).
+- **Progress Bars:** `.progress` > `.progress-bar` (szerokość w `style="width: X%"`). UWAGA: `.progress-bar`/`.progress-bar-reading` animują `width` (transition) — świadome odstępstwo od reguły GPU-only.
 - **Timeline:** `.timeline` (warianty: `.timeline-large`, `.timeline-numbered`) > `.timeline-item`.
 - **Labeled Timeline (Z datami po lewej):** `.timeline.timeline-labeled` > `.timeline-item` > `.timeline-label` + `.timeline-separator` (z `.timeline-node` i `.timeline-line`) + `.timeline-content`.
 - **Stepper:** `.stepper` (wariant: `.stepper-numbered`) > `.step` (dodaj `.is-active` lub `.is-completed`).
@@ -113,8 +113,10 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 - **Inne Helpery:** `.grid-expand` (płynny akordeon), `.parallax-container` (Scroll-Driven), `.bg-gradient-corners` (łuna), `.stacking-container` > `.section-stacked`, `.embed-responsive` (do wideo z YT/Vimeo).
 
 ### Widgety (Opt-in)
-- **Karuzele:** `.carousel` > `.carousel-track` > `.carousel-slide`. Wariant: `.carousel-bg-sync`.
-- **Lightbox:** `<a href="duze.jpg" data-lightbox data-gallery="galeria">`.
+- **Karuzele:** `.carousel` > `.carousel-track` > `.carousel-slide` (szerokość przez własny `min-width`). Strzałki opcjonalne; kropki `.carousel-dots`/`.carousel-dot.is-active` generuje skrypt sam gdy slajdów >1. Wariant `.carousel-bg-sync` (+ `.carousel-bg-overlay`) zmienia tło na `data-bg` widocznego slajdu przez ten sam `IntersectionObserver`; strzałki widoczne tylko na hover.
+- **Lightbox:** `<a href="duze.jpg" data-lightbox data-gallery="galeria">` — to wszystko, co piszesz. Skrypt sam buduje cały modal (`.lightbox-overlay`/`.lightbox-close`/`.lightbox-nav`/…) na końcu `<body>` — nie pisz tych klas ręcznie. Klawiatura w otwartym modalu: `←`/`→` zmiana zdjęcia, `Esc` zamyka, focus na `.lightbox-close` przy otwarciu i powrót do triggera po zamknięciu.
+- **Filtry Portfolio:** `.nav-filters` (przyciski `data-filter`, `"all"` = wszystkie) wymaga kontenera `.filter-item`/`data-category` jako bezpośredniego `nextElementSibling` — nic pomiędzy. Skrypt nadaje `.is-hidden`/`.is-animated`.
+- **Pasek czytania:** `.progress-container-fixed` > `.progress-bar-reading`, zaraz po `<body>`. Obsługa na stałe w rdzeniu `molique-script.js`, nie w autoloaderze.
 - **Przed / Po:** `.before-after-slider` > `.img-after` (spodnia warstwa, ustala wysokość) + `.img-before` (przycinana `clip-path` wg `--position`) + `.slider-control` (niewidoczny `input[range]`) + `.slider-line`/`.slider-handle`. Zdjęcia powinny mieć te same proporcje.
 - **Przycisk magnetyczny:** `.btn-magnetic` — zero CSS, efekt to inline `transform` z JS na `mousemove`. Tylko `(pointer: fine)`.
 - **Speed Dial:** `.speed-dial` (zawsze `bottom/right: 30px`, bez wariantu rogu) > `.speed-dial-main` + `.speed-dial-actions` > `.speed-dial-action`. Rozwija na `:hover`/`:focus-within` — zero JS.

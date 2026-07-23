@@ -4,11 +4,19 @@
 document.querySelectorAll('.carousel').forEach(carousel => {
   const track = carousel.querySelector('.carousel-track');
   if (!track) return;
-  
+
   const slides = Array.from(track.querySelectorAll('.carousel-slide'));
   const btnPrev = carousel.querySelector('.carousel-prev');
   const btnNext = carousel.querySelector('.carousel-next');
-  
+  const isBgSync = carousel.classList.contains('carousel-bg-sync');
+
+  // Tlo pierwszego slajdu ustawiamy od razu - inaczej pierwsza klatka
+  // jest pusta, zanim IntersectionObserver zdazy cokolwiek zaobserwowac.
+  if (isBgSync && slides[0]) {
+    const firstBg = slides[0].getAttribute('data-bg');
+    if (firstBg) carousel.style.backgroundImage = `url("${firstBg}")`;
+  }
+
   let dotsContainer = carousel.querySelector('.carousel-dots');
   if (!dotsContainer && slides.length > 1) {
     dotsContainer = document.createElement('div');
@@ -31,13 +39,21 @@ document.querySelectorAll('.carousel').forEach(carousel => {
   if (btnNext) btnNext.addEventListener('click', () => track.scrollBy({ left: slides[0].clientWidth, behavior: 'smooth' }));
   if (btnPrev) btnPrev.addEventListener('click', () => track.scrollBy({ left: -slides[0].clientWidth, behavior: 'smooth' }));
 
-  if (dots.length > 0) {
+  if (dots.length > 0 || isBgSync) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const slideIndex = slides.indexOf(entry.target);
-          dots.forEach(dot => dot.classList.remove('is-active'));
-          if (dots[slideIndex]) dots[slideIndex].classList.add('is-active');
+
+          if (dots.length > 0) {
+            dots.forEach(dot => dot.classList.remove('is-active'));
+            if (dots[slideIndex]) dots[slideIndex].classList.add('is-active');
+          }
+
+          if (isBgSync) {
+            const bg = entry.target.getAttribute('data-bg');
+            if (bg) carousel.style.backgroundImage = `url("${bg}")`;
+          }
         }
       });
     }, { root: track, threshold: 0.6 });
