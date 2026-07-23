@@ -1,7 +1,7 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Panel Admina - molique Docs"}'></include>
+    <include src="partials/head.html" locals='{"title":"Panel Admina - molique Docs","description":"Referencja panelu admina molique: layout z sidebarem, przełącznik szerokości, nawigacja z rozwijanym submenu (drzewko / drill-down), Bottom Nav na mobile i nagłówek Faux Cutout. Klasy, warianty i pułapki."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -17,43 +17,33 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Panel Admina (Dashboard)</h1>
             <p class="text-6 text-muted">
-              Dedykowany moduł do budowy systemów CRM, ERP i paneli B2B. Wymaga
-              załadowania pliku
-              <code>molique-style-admin.css</code>.
+              Kompletny szkielet do CRM, ERP i paneli B2B — layout z
+              sidebarem, nawigacja z rozwijanym drzewkiem i nagłówek
+              „Faux Cutout". Wymaga osobnego pliku
+              <code>molique-style-admin.css</code> — ta strona (jak każda
+              strona dokumentacji) sama w sobie jest jego żywym przykładem.
+              Pełny układ jest w
+              <a href="examples-admin-layout.html">przykładach</a>.
             </p>
           </div>
 
-          <!-- SEKCJA 1: LAYOUT -->
+          <!-- ===================================================== -->
+          <!-- 1. STRUKTURA LAYOUTU                                  -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-4">1. Układ (Layout) i Bottom Nav</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Struktura layoutu</h2>
             <p class="text-muted mb-4">
-              Moduł dostarcza klasę <code>.admin-layout</code>, która dzieli
-              ekran na <code>.admin-sidebar</code> oraz
-              <code>.admin-main</code>. Na urządzeniach mobilnych sidebar
-              automatycznie zamienia się w wygodny pasek nawigacji na dole
-              ekranu (Bottom Nav).
+              Trzy klasy dzielą ekran na sidebar i treść.
+              <code>.admin-layout</code> to CSS Grid o dwóch kolumnach —
+              szerokość sidebara steruje zmienną, więc warianty rozmiaru
+              (niżej) nie wymagają osobnych reguł grida.
             </p>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100 bg-surface">
-                <div class="w-100 p-4 border rounded-2 bg-body text-center">
-                  <p class="m-0 fw-bold">
-                    Zmniejsz okno przeglądarki, aby zobaczyć transformację paska
-                    bocznego w Bottom Nav!
-                  </p>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Podstawowa struktura panelu --&gt;
-&lt;div class="admin-layout"&gt;
-  
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="admin-layout"&gt;
   &lt;aside class="admin-sidebar"&gt;
-    &lt;!-- .admin-brand dopasowuje logo (obrazek, SVG lub tekst) do szerokości
-         sidebara. Dodaj .admin-logo-compact, aby logo automatycznie
-         zwijało się do plakietki z ikoną w trybach -sm/-md i na mobile --&gt;
     &lt;a href="#" class="admin-brand admin-logo-compact"&gt;Logo&lt;/a&gt;
-
     &lt;ul class="admin-nav"&gt;
       &lt;li&gt;&lt;a href="#" class="admin-nav-link is-active"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href="#" class="admin-nav-link"&gt;Klienci&lt;/a&gt;&lt;/li&gt;
@@ -61,123 +51,592 @@
   &lt;/aside&gt;
 
   &lt;main class="admin-main"&gt;
-    &lt;!-- Główna treść panelu --&gt;
+    &lt;!-- Treść panelu --&gt;
   &lt;/main&gt;
-
 &lt;/div&gt;</code></pre>
-              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-layout</code></td>
+                    <td data-label="Co robi">
+                      Grid dwóch kolumn. Poniżej 768px kolumny znikają —
+                      sidebar przechodzi w poziomy pasek na dole ekranu
+                      (Bottom Nav), <code>.admin-main</code> zajmuje całą
+                      szerokość.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-sidebar</code></td>
+                    <td data-label="Co robi">
+                      <code>position: sticky</code> na desktopie,
+                      <code>position: fixed</code> (dół ekranu) na mobile.
+                      Tło zawsze ciemne, niezależnie od motywu jasny/ciemny —
+                      patrz pułapka nr 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-main</code></td>
+                    <td data-label="Co robi">Kolumna treści. <code>overflow-x: hidden</code> — szerokie tabele wymagają własnego <code>.table-wrapper</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-brand</code></td>
+                    <td data-label="Co robi">Logo w sidebarze — mieści obrazek, SVG lub tekst, nigdy nie rozsadza szerokości.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.sidebar-md</code> / <code>.sidebar-sm</code></td>
+                    <td data-label="Co robi">
+                      Na <code>.admin-layout</code>. Zwężają sidebar: <code>-md</code>
+                      = ikona nad małym podpisem, <code>-sm</code> = same
+                      ikony. Zwykle nadawane przez JS przełącznika (sekcja 2),
+                      ale działają też jako stała klasa w markupie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-layout-floating</code></td>
+                    <td data-label="Co robi">Odsuwa sidebar i treść od krawędzi okna, zaokrągla oba rogi. Na mobile odstęp znika automatycznie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-logo-hide</code> / <code>.admin-logo-compact</code></td>
+                    <td data-label="Co robi">
+                      Zachowanie logo w <code>-md</code>/<code>-sm</code> i na
+                      mobile: całkowite ukrycie albo zwinięcie do kwadratowej
+                      plakietki 32×32px.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.fade-bottom</code></td>
+                    <td data-label="Co robi">
+                      Opt-in na <code>.admin-sidebar</code> lub
+                      <code>.admin-main</code> — gradient zanikania na dole
+                      przewijanego obszaru zamiast ostrego ucięcia. Pełna
+                      lista zmiennych w
+                      <a href="docs-variables.html">referencji zmiennych</a>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Sterowanie zmiennymi, nie tylko klasami</h5>
+              <p class="text-4 text-muted m-0">
+                Kolory sidebara (<code>--sidebar-bg</code>,
+                <code>--sidebar-text</code>…), promienie w wariancie floating
+                i wysokość gradientu <code>.fade-bottom</code> to zmienne CSS
+                — pełny opis każdej jest w
+                <a href="docs-variables.html">referencji zmiennych</a>, sekcja
+                „Panel admina" i „Sidebar panelu admina".
+              </p>
             </div>
           </section>
 
-          <!-- SEKCJA 2: STEPPER -->
+          <!-- ===================================================== -->
+          <!-- 2. PRZEŁĄCZNIK SZEROKOŚCI                             -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-4">2. Stepper (Pasek postępu)</h2>
+            <h2 class="text-8 fw-bold mb-3">2. Przełącznik szerokości sidebara</h2>
             <p class="text-muted mb-4">
-              Idealny do wieloetapowych formularzy. Dostępny w dwóch wariantach:
-              klasycznym (grube paski) oraz numerowanym (kółka połączone linią).
+              Jeden przycisk cyklicznie przełącza sidebar między trzema
+              szerokościami: pełną → <code>.sidebar-md</code> →
+              <code>.sidebar-sm</code> → z powrotem pełną. Ikona hamburgera
+              morfuje się do strzałki w takt zmian, a wybór zapamiętuje się
+              w <code>localStorage</code> między wizytami.
             </p>
 
-            <div class="component-showcase">
-              <div class="component-preview flex-column w-100 bg-surface gap-5">
-                <!-- Wariant 1: Klasyczny -->
-                <div class="w-100">
-                  <p class="text-4 text-muted mb-3">
-                    Wariant klasyczny (Domyślny)
-                  </p>
-                  <div class="stepper w-100">
-                    <div class="step is-active">Krok 1: Wymiary</div>
-                    <div class="step">Krok 2: Konstrukcja</div>
-                    <div class="step">Krok 3: Dach</div>
-                  </div>
-                </div>
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Logika mieszka w rdzeniu, nie w autoloaderze</h5>
+              <p class="text-4 text-muted m-0">
+                W przeciwieństwie do większości interaktywnych komponentów,
+                obsługa <code>#molique-sidebar-toggle</code> nie jest
+                osobnym, leniwie ładowanym modułem — siedzi na stałe w
+                <code>molique-script.js</code>. Wystarczy dodać przycisk o
+                właściwym ID do markupu, bez rejestrowania czegokolwiek.
+              </p>
+            </div>
 
-                <!-- Wariant 2: Numerowany -->
-                <div class="w-100">
-                  <p class="text-4 text-muted mb-3">
-                    Wariant numerowany (.stepper-numbered)
-                  </p>
-                  <div class="stepper stepper-numbered w-100">
-                    <div class="step is-completed">
-                      <div class="step-line"></div>
-                      Wymiary
-                    </div>
-                    <div class="step is-active">
-                      <div class="step-line"></div>
-                      Konstrukcja
-                    </div>
-                    <div class="step">
-                      <div class="step-line"></div>
-                      Dach
-                    </div>
-                    <div class="step">
-                      <div class="step-line"></div>
-                      Podsumowanie
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;div class="stepper"&gt;
-  &lt;div class="step is-active"&gt;Krok 1: Wymiary&lt;/div&gt;
-  &lt;div class="step"&gt;Krok 2: Konstrukcja&lt;/div&gt;
-  &lt;div class="step"&gt;Krok 3: Dach&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-              </div>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;!-- Zwykle na dole .admin-nav, w osobnym bloku dociskanym do spodu --&gt;
+&lt;ul class="admin-nav admin-nav-bottom"&gt;
+  &lt;li&gt;
+    &lt;button type="button" id="molique-sidebar-toggle" class="admin-nav-link"&gt;
+      &lt;span class="sidebar-toggle-icon"&gt;
+        &lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;
+      &lt;/span&gt;
+      &lt;span class="nav-text"&gt;Zwiń panel&lt;/span&gt;
+    &lt;/button&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
 
-              <div class="component-code">
-                <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wariant Numerowany --&gt;
-&lt;div class="stepper stepper-numbered"&gt;
-  
-  &lt;!-- Krok ukończony (is-completed koloruje linię) --&gt;
-  &lt;div class="step is-completed"&gt;
-    &lt;div class="step-line"&gt;&lt;/div&gt;
-    Wymiary
-  &lt;/div&gt;
-  
-  &lt;!-- Krok aktywny --&gt;
-  &lt;div class="step is-active"&gt;
-    &lt;div class="step-line"&gt;&lt;/div&gt;
-    Konstrukcja
-  &lt;/div&gt;
-  
-  &lt;!-- Krok przyszły --&gt;
-  &lt;div class="step"&gt;
-    &lt;div class="step-line"&gt;&lt;/div&gt;
-    Dach
-  &lt;/div&gt;
-  
-&lt;/div&gt;</code></pre>
-              </div>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa / atrybut</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">#molique-sidebar-toggle</code></td>
+                    <td data-label="Co robi">
+                      ID, nie klasa — <code>molique-script.js</code> szuka go
+                      przez <code>getElementById</code>-owy
+                      <code>querySelector</code>. Musi być
+                      <strong>dokładnie ten</strong> identyfikator i
+                      wystąpić tylko raz na stronie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.sidebar-toggle-icon</code></td>
+                    <td data-label="Co robi">
+                      Wymaga dokładnie <strong>trzech</strong> pustych
+                      <code>&lt;span&gt;</code> w środku — CSS pozycjonuje je
+                      przez <code>:nth-child</code>, żeby uzyskać trzy
+                      różne kształty (hamburger / linie asymetryczne /
+                      strzałka).
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </section>
 
-          <!-- SEKCJA 3: STATUS DOTS -->
+          <!-- ===================================================== -->
+          <!-- 3. NAWIGACJA — LINKI                                  -->
+          <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-4">3. Kropki Statusu (Status Dots)</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Nawigacja — linki</h2>
             <p class="text-muted mb-4">
-              Lekki komponent do oznaczania stanu projektów lub leadów. Można
-              połączyć go z klasą
-              <code>.status-ping</code> z modułu animacji.
+              Płaska lista linków. Na desktopie kolumna, poniżej 768px
+              poziomy pasek (Bottom Nav) — ten sam markup, zero warunków w
+              HTML.
             </p>
 
-            <div class="component-showcase">
-              <div class="component-preview w-100 bg-surface gap-4">
-                <span class="status-dot status-draft">Szkic</span>
-                <span class="status-dot status-pending">Oczekuje</span>
-                <span class="status-dot status-done">Zakończone</span>
-                <span class="status-dot status-done status-ping">Live</span>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav</code></td>
+                    <td data-label="Co robi">Na <code>&lt;ul&gt;</code>. Kolumna na desktopie, poziomy pasek na mobile.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-link</code></td>
+                    <td data-label="Co robi">
+                      Na <code>&lt;a&gt;</code> (lub <code>&lt;button&gt;</code>
+                      dla akcji, jak w sekcji 2). Dziecko
+                      <code>.nav-text</code> jest opcjonalne, ale wymagane,
+                      jeśli chcesz, żeby podpis chował się w
+                      <code>.sidebar-sm</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-link.is-active</code></td>
+                    <td data-label="Co robi">Bieżąca pozycja — tło <code>--primary</code>. Wpisz ręcznie lub podepnij <code>molique-admin-nav-active.js</code> (niżej).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-divider</code></td>
+                    <td data-label="Co robi">Pozioma linia rozdzielająca grupy linków. Znika na mobile.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-bottom</code></td>
+                    <td data-label="Co robi">
+                      Na osobnym <code>&lt;ul class="admin-nav"&gt;</code> —
+                      <code>margin-top: auto</code> dociska go do samego dołu
+                      sidebara (np. link „Ustawienia" albo przełącznik z
+                      sekcji 2). Ukryty na mobile.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.mobile-only-nav-item</code></td>
+                    <td data-label="Co robi">Pozycja widoczna WYŁĄCZNIE w Bottom Nav — zduplikowany link spoza pięciu głównych ikon (patrz sekcja 5).</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mt-4">
+              <h5 class="fw-bold text-5 mb-2">Aktywna pozycja z adresu URL</h5>
+              <p class="text-4 text-muted m-0">
+                Sidebar bez submenu (jak ten po lewej na tej stronie) może
+                zamiast ręcznego <code>.is-active</code> użyć modułu
+                <code>js/modules/molique-admin-nav-active.js</code>
+                (auto-ładowany przy <code>.admin-nav</code>) — nadaje klasę
+                każdemu <code>.admin-nav-link</code> wskazującemu bieżący
+                URL, także zdublowanemu w pasku mobilnym. Aktywności nie
+                wpisuj do współdzielonego partiala na sztywno — sidebar bywa
+                jedną stroną dla wielu podstron.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. SUBMENU — DRZEWKO / DRILL-DOWN                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Submenu — drzewko / drill-down</h2>
+            <p class="text-muted mb-4">
+              Rozwijana grupa linków na natywnym
+              <code>&lt;details&gt;</code>. Ten sam markup renderuje się na
+              trzy różne sposoby zależnie od szerokości sidebara — bez
+              żadnych wariantów w HTML.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Kontekst</th>
+                    <th>Zachowanie</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Kontekst">Sidebar pełny (bez modyfikatora)</td>
+                    <td data-label="Zachowanie">Klasyczne drzewko — lista wysuwa się pod pozycją, reszta sidebara przesuwa się w dół.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Kontekst"><code>.sidebar-md</code> / <code>.sidebar-sm</code></td>
+                    <td data-label="Zachowanie">Drill-down: submenu przykrywa CAŁY sidebar (poniżej logo), <code>&lt;summary&gt;</code> zamienia się w pasek „Cofnij".</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Kontekst">Mobile (Bottom Nav, &lt;768px)</td>
+                    <td data-label="Zachowanie">Ten sam drill-down, ale jako pełnoekranowa nakładka wjeżdżająca od dołu.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;details class="admin-nav-submenu"&gt;
+  &lt;summary class="admin-nav-link"&gt;
+    &lt;span class="nav-text"&gt;Finanse&lt;/span&gt;
+  &lt;/summary&gt;
+  &lt;div class="admin-nav-submenu-list"&gt;
+    &lt;a href="#" class="admin-nav-submenu-link"&gt;Faktury&lt;/a&gt;
+    &lt;a href="#" class="admin-nav-submenu-link is-active"&gt;Płatności&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/details&gt;</code></pre>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview justify-content-center" style="background-image: none; background-color: var(--bg-body);">
+                <nav style="width: 220px; background-color: var(--sidebar-bg); border-radius: var(--border-radius); padding: calc(var(--spacing-unit) * 2);">
+                  <ul class="admin-nav">
+                    <li><a href="#" class="admin-nav-link"><span class="nav-text">Dashboard</span></a></li>
+                    <li>
+                      <details class="admin-nav-submenu" open>
+                        <summary class="admin-nav-link is-active">
+                          <span class="nav-text">Finanse</span>
+                        </summary>
+                        <div class="admin-nav-submenu-list">
+                          <a href="#" class="admin-nav-submenu-link">Faktury</a>
+                          <a href="#" class="admin-nav-submenu-link is-active">Płatności</a>
+                        </div>
+                      </details>
+                    </li>
+                    <li><a href="#" class="admin-nav-link"><span class="nav-text">Klienci</span></a></li>
+                  </ul>
+                </nav>
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;span class="status-dot status-draft"&gt;Szkic&lt;/span&gt;
-&lt;span class="status-dot status-pending"&gt;Oczekuje&lt;/span&gt;
-&lt;span class="status-dot status-done"&gt;Zakończone&lt;/span&gt;
-
-&lt;!-- Z pulsującą animacją --&gt;
-&lt;span class="status-dot status-done status-ping"&gt;Live&lt;/span&gt;</code></pre>
+                <pre><code>&lt;!-- Stan startowy: BEZ atrybutu open, patrz pułapka nr 3 --&gt;
+&lt;details class="admin-nav-submenu"&gt;…&lt;/details&gt;</code></pre>
               </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-submenu</code></td>
+                    <td data-label="Co robi">Na <code>&lt;details&gt;</code>. Otwieranie obsługuje natywny mechanizm — CSS i JS tylko doczepiają wygląd i animacje.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-submenu-list</code></td>
+                    <td data-label="Co robi">Bezpośrednie dziecko <code>&lt;details&gt;</code>, obok <code>&lt;summary&gt;</code> — nie zagnieżdżaj głębiej, reguły celują w <code>:scope &gt;</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-submenu-link</code></td>
+                    <td data-label="Co robi">Pojedynczy link w submenu. Wariant <code>.is-active</code> jak w linkach głównych.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mt-4">
+              <h5 class="fw-bold text-5 mb-2">Moduł JS: <code>molique-admin-nav.js</code></h5>
+              <p class="text-4 text-muted m-0">
+                Auto-ładowany przy <code>.admin-nav-submenu</code>. Podświetla
+                aktywną gałąź z adresu URL, na mobile nie pozwala jej
+                auto-rozwinąć się przy wejściu na stronę, animuje wyjazd
+                drill-downu (natywny <code>&lt;details&gt;</code> chowa
+                treść natychmiast, więc moduł dokleja na czas animacji
+                klasę <code>.is-closing</code> i dopiero po jej końcu
+                zdejmuje <code>open</code>), zamyka na <kbd>Esc</kbd> i —
+                <strong>tylko na urządzeniach mobilnych</strong> — otwarcie
+                jednego submenu zamyka pozostałe.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. MOBILE: BOTTOM NAV I „WIĘCEJ"                      -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Mobile: Bottom Nav i „Więcej"</h2>
+            <p class="text-muted mb-4">
+              Poniżej 768px sidebar znika, a <code>.admin-nav</code> staje
+              się poziomym paskiem ikon na dole ekranu. Gdy pozycji jest
+              więcej niż mieści się w pasku, nadmiar chowa się pod osobnym
+              przyciskiem „Więcej" — checkbox hack, nie
+              <code>&lt;details&gt;</code>, żeby nie kolidować z submenu
+              z sekcji 4.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;input type="checkbox" id="more-toggle" class="mobile-more-toggle"&gt;
+&lt;label for="more-toggle" class="admin-nav-link mobile-more-label"&gt;
+  &lt;span class="nav-text"&gt;Więcej&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;div class="admin-nav-dropdown-menu"&gt;
+  &lt;a href="#" class="admin-nav-link"&gt;Ustawienia&lt;/a&gt;
+  &lt;a href="#" class="admin-nav-link"&gt;Wyloguj&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.mobile-more-toggle</code></td>
+                    <td data-label="Co robi">Ukryty checkbox — stan trzyma przeglądarka, zero JS.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.mobile-more-label</code></td>
+                    <td data-label="Co robi"><code>&lt;label for="…"&gt;</code> wskazujący checkbox. Widoczny WYŁĄCZNIE na mobile — na desktopie się chowa.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-nav-dropdown-menu</code></td>
+                    <td data-label="Co robi">
+                      Na desktopie: <code>display: contents</code> — linki
+                      wewnątrz zachowują się, jakby leżały bezpośrednio w
+                      <code>.admin-nav</code>. Na mobile: szuflada wysuwana
+                      od dołu po zaznaczeniu checkboxa.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. DASHBOARD HEADER                                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Nagłówek Faux Cutout</h2>
+            <p class="text-muted mb-4">
+              Nagłówek strony z iluzją wycięcia wokół bloku akcji — efekt
+              osiągnięty dwoma narożnikami z <code>radial-gradient</code>,
+              bez SVG i bez masek. Pełny, żywy przykład jest na stronie
+              <a href="examples-admin-layout.html">Layout Admina</a>.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;div class="dashboard-header"&gt;
+  &lt;div&gt;
+    &lt;h1&gt;Witaj, Anno!&lt;/h1&gt;
+    &lt;p&gt;Oto podsumowanie Twojego dnia.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="dashboard-header-actions"&gt;
+    &lt;button class="btn-primary"&gt;Nowe zlecenie&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.dashboard-header</code></td>
+                    <td data-label="Co robi">Rząd: tytuł po lewej, blok akcji po prawej. Na mobile: kolumna, wycięcie znika.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.dashboard-header-actions</code></td>
+                    <td data-label="Co robi">
+                      Blok z pozornym wycięciem w górnym lewym i dolnym
+                      prawym rogu. Kolor wycięcia to zmienna
+                      <code>--cutout-bg</code> — patrz pułapka nr 4.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="admin-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Sidebar nie odwraca się w dark mode</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    <code>--sidebar-bg</code>, <code>--sidebar-text</code> i
+                    <code>--sidebar-highlight-rgb</code> mają jedną, stałą
+                    wartość — sidebar jest ciemny zawsze, niezależnie od
+                    motywu strony. To celowe (kontrast z jasną treścią), ale
+                    oznacza, że nie możesz go rozjaśnić przez przełącznik
+                    light/dark — tylko przez nadpisanie tych zmiennych
+                    bezpośrednio.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="admin-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">2</span>
+                  <span>Dwa <code>#molique-sidebar-toggle</code> na stronie</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Skrypt bierze pierwszy element o tym ID przez
+                    <code>querySelector</code>. Drugi przycisk o tym samym
+                    ID (nieprawidłowy HTML, ale przeglądarka go wyrenderuje)
+                    zostanie martwy — nic się nie stanie po kliknięciu.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="admin-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">3</span>
+                  <span>Submenu z atrybutem <code>open</code> na stałe w markupie</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Na desktopie w sidebarze pełnym to tylko rozwinięte
+                    drzewko — nieszkodliwe. Ale <code>molique-admin-nav.js</code>
+                    świadomie zamyka taki <code>&lt;details open&gt;</code>
+                    na starcie, jeśli akurat jesteś na widoku mobilnym: bez
+                    tego wejście na dowolną podstronę otwierałoby
+                    pełnoekranowy drill-down zamiast treści. Nie ustawiaj
+                    <code>open</code> ręcznie, żeby oznaczyć „to jest
+                    aktywna sekcja" — to robi <code>.is-active</code> na
+                    <code>&lt;summary&gt;</code>, nie atrybut <code>open</code>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="admin-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">4</span>
+                  <span><code>--cutout-bg</code> niedopasowany do tła za nagłówkiem</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Wycięcie w <code>.dashboard-header-actions</code> to
+                    gradient od koloru <code>--cutout-bg</code> do
+                    przezroczystości — jeśli nie zgadza się on dokładnie z
+                    realnym tłem pod spodem (np. w wariancie
+                    <code>.admin-layout-floating</code>, gdzie tło treści to
+                    <code>--bg-surface</code>, a nie <code>--bg-body</code>),
+                    zamiast niewidocznego wycięcia zobaczysz kwadratową
+                    plamę w rogu.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="admin-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">5</span>
+                  <span>Lejki (<code>.chart-funnel</code>) też wymagają tego bundla</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Mimo że to komponent wykresu, <code>.chart-funnel</code>,
+                    <code>.chart-pipeline</code> i
+                    <code>.chart-funnel-true</code> fizycznie mieszkają w
+                    <code>molique-style-admin.css</code>, nie w rdzeniu —
+                    reszta wykresów (<code>.chart-sparkline</code>,
+                    <code>.chart-radial</code>…) działa bez tego pliku, lejki
+                    nie. Pełna referencja lejków jest w
+                    <a href="docs-charts.html">dokumentacji wykresów</a>.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-admin-layout.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Przykłady: Layout Admina</h5>
+                  <p class="text-4 text-muted m-0">Pełny panel z nagłówkiem Faux Cutout.</p>
+                </div>
+              </a>
+              <a href="docs-variables.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Referencja zmiennych</h5>
+                  <p class="text-4 text-muted m-0">Pełne API zmiennych sidebara i layoutu.</p>
+                </div>
+              </a>
+              <a href="docs-charts.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Wykresy</h5>
+                  <p class="text-4 text-muted m-0">Lejki, sparkline, radial i pozostałe typy.</p>
+                </div>
+              </a>
             </div>
           </section>
 
@@ -185,10 +644,12 @@
           <div
             class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
           >
-            <a href="docs-blog.html" class="btn btn-secondary"
+            <a href="docs-blog.html" class="btn-secondary"
               >➔ Wstecz: Blog &amp; Artykuły</a
             >
-            <div></div>
+            <a href="docs-purgecss.html" class="btn-primary fw-bold hover-spring"
+              >Następny krok: Purge / Rozmiar CSS ➔</a
+            >
           </div>
         </div>
       </main>

@@ -158,7 +158,6 @@ export const COMPONENT = {
   '--navbar-pill-padding-x':         ['Navbar', 'api', 'Odsunięcie pastylki od krawędzi okna nad hero.'],
   '--navbar-pill-padding-x-scrolled':['Navbar', 'api', 'Odsunięcie pastylki po zescrollowaniu — mniejsze, pasek dochodzi do krawędzi.'],
 
-  '--sidebar-width':         ['Panel admina', 'internal', '<strong>Wpis historyczny</strong> z <code>_admin.scss</code>. Layout używa <code>--sidebar-width-lg/-md/-sm</code>; ta zmienna nie steruje już szerokością.'],
   '--current-sidebar-width': ['Panel admina', 'internal', 'Aktualnie obowiązująca szerokość sidebara. Przełączana klasami <code>.sidebar-md</code> / <code>.sidebar-sm</code>.'],
   '--sidebar-radius':        ['Panel admina', 'api', 'Zaokrąglenie sidebara w wariancie <code>.admin-layout-floating</code>.'],
   '--layout-gap':            ['Panel admina', 'api', 'Przerwa między sidebarem a treścią w wariancie floating.'],

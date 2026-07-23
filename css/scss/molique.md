@@ -256,10 +256,25 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   (domyślnie `--bg-surface`), wysokość przez `--fade-height` (80px).
   Na `.admin-sidebar` i `.admin-main` kolor dobiera się automatycznie,
   a na mobile gradient sidebara sam się wyłącza.
-- **Admin Sidebar:** klasy szerokości: `.sidebar-md`, `.sidebar-sm`. Logo:
-  `.admin-brand` (mieści dowolną treść — obrazek, SVG, tekst — w szerokości
-  sidebara). Warianty responsywne, aktywne domyślnie w `.sidebar-sm`,
-  `.sidebar-md` i na mobile: `.admin-logo-hide`, `.admin-logo-compact`.
+- **Admin Sidebar:** klasy szerokości: `.sidebar-md`, `.sidebar-sm` (na
+  `.admin-layout`). Logo: `.admin-brand` (mieści dowolną treść — obrazek,
+  SVG, tekst — w szerokości sidebara). Warianty responsywne, aktywne
+  domyślnie w `.sidebar-sm`, `.sidebar-md` i na mobile: `.admin-logo-hide`,
+  `.admin-logo-compact`.
+- **Admin Sidebar — przełącznik szerokości:** `<button id="molique-sidebar-toggle" class="admin-nav-link">`
+  (ID, nie klasa — skrypt szuka dokładnie tego identyfikatora, jeden na
+  stronę) + `.sidebar-toggle-icon` z dokładnie trzema pustymi `<span>` w
+  środku (morfujący hamburger → linie asymetryczne → strzałka, sterowany
+  `:nth-child`). Klik cyklicznie przełącza `.admin-layout` między pełnym /
+  `.sidebar-md` / `.sidebar-sm`, zapamiętując wybór w `localStorage`
+  (`molique-sidebar-state`). Logika siedzi na stałe w rdzeniu
+  `molique-script.js`, NIE w autoloaderze modułów. PUŁAPKA: jeśli na tej
+  samej stronie jest też przykładowe (nie-realne) `.admin-nav-submenu[open]`
+  poza właściwym sidebarem, przełączenie na `.sidebar-md`/`.sidebar-sm`
+  włącza dla niego globalny selektor drill-downu i zamienia je w
+  pełnoekranowy, niewidzialny overlay blokujący kliknięcia w całej stronie —
+  stąd na `docs-admin.html` demo przełącznika jest celowo statyczne
+  (bez podpięcia realnego ID), a nie żywe.
 - **Admin Header (Faux Cutout):** `.dashboard-header` > lewa strona +
   `.dashboard-header-actions`. Tworzy iluzję wycięcia w nagłówku.
 - **Admin Nav:** `.admin-nav` > `.admin-nav-link`. Submenu:
@@ -270,7 +285,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   pełnoekranowy drill-down z paskiem „Cofnij". Aktywność ogarnia moduł
   `js/modules/molique-admin-nav.js` (auto-ładowany po `.admin-nav-submenu`):
   podświetla aktywną pozycję z URL bez `[open]`, nie pozwala aktywnej
-  gałęzi auto-rozwinąć się na mobile i wyklucza wzajemnie otwarte submenu.
+  gałęzi auto-rozwinąć się na mobile i wyklucza wzajemnie otwarte submenu
+  (tylko na mobile — na desktopie w `-sm`/`-md` może być otwarte tylko
+  jedno naraz z innego powodu: drugie i tak przykryłoby pierwsze).
   Aktywności NIE oznaczaj przez `open` (na mobile auto-otworzyłoby panel) —
   moduł robi to z adresu.
 - **Admin Nav — aktywność płaskich linków:** sidebar bez submenu (np. wspólny

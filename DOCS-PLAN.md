@@ -128,7 +128,8 @@ pułapek.
 | `docs-select` | ✅ | 23/23 |
 | `docs-eshop` | ✅ | 27/27 |
 | `docs-blog` | ✅ | 21/21 |
-| `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 3 | — |
+| `docs-admin` | ✅ | 26/26 |
+| `docs-widgets`, `docs-components-extra` | ⬜ zostało 2 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -203,6 +204,46 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
   mężczyznę — kopiuj-wklej z szablonu). Znaleziono też zepsuty łańcuch
   nawigacji dół-strony: `docs-admin.html` prowadził "Wstecz" prosto do
   `docs-eshop.html`, pomijając `docs-blog.html` — naprawione.
+- `docs-admin`: strona przed przepisaniem dokumentowała `.stepper` i
+  `.status-dot` — to komponenty RDZENIA (`components/_stepper.scss`,
+  `components/_status-dots.scss`, ładowane przez `_components.scss` do
+  `molique-style.css`), nie mają nic wspólnego z modułem admina i nie
+  wymagają `molique-style-admin.css`. Ustalenie zakresu (krok 1 metody)
+  ujawniło też, że stary `css/scss/_admin.scss` (~300 linii) był całkowicie
+  martwy — jedyne wczytanie było zakomentowane w `molique-style.scss`, a
+  cała jego treść dawno przeniosła się do `layout/_admin-layout.scss` +
+  `components/_admin-sidebar.scss` + `components/_admin-nav.scss` (layout/
+  sidebar/nav) i osobnych plików rdzenia (`.form-switch` →
+  `components/_form-switch.scss`, `.btn-action` → `_buttons.scss`,
+  `.data-row` → `components/_data-rows.scss`). Usunięty za zgodą
+  użytkownika; wymusiło to też usunięcie martwego wpisu `--sidebar-width`
+  z `tools/variables-doc.data.js` i przeliczenie licznika (61 → 60) w
+  `docs-variables.html`. Nowo odkryty, w pełni zbudowany, ale NIGDZIE
+  wcześniej nieużywany mechanizm: przełącznik szerokości sidebara
+  (`#molique-sidebar-toggle` + `.sidebar-toggle-icon`, cykl pełny →
+  `.sidebar-md` → `.sidebar-sm`, `localStorage`) — logika siedziała gotowa
+  w rdzeniu `molique-script.js` od dawna, ale żaden plik w repo nigdy nie
+  dodał przycisku o tym ID do markupu. Znaleziono też, że `.chart-funnel`/
+  `.chart-pipeline`/`.chart-funnel-true` fizycznie mieszkają w
+  `components/_chart-funnel.scss`, ładowanym WYŁĄCZNIE przez
+  `molique-style-admin.scss` — reszta wykresów w rdzeniu działa bez tego
+  pliku, lejki nie; dopisano to jako pułapkę zarówno w `docs-admin.html`,
+  jak i (do zrobienia przy następnej wizycie na tamtej stronie) warto
+  dopisać wzmiankę w `docs-charts.html`.
+  **Metodologiczna nauka:** pierwsza wersja strony miała żywy, realnie
+  podpięty przycisk `#molique-sidebar-toggle` (świadomie sterujący
+  PRAWDZIWYM layoutem tej strony dokumentacji — chwytliwy pomysł). Test
+  w Playwright wykrył realny błąd: kliknięcie przełącznika włączało
+  globalny selektor CSS drill-downu (`.sidebar-md .admin-nav-submenu[open]`),
+  który złapał też osobne, statyczne demo `.admin-nav-submenu[open]` w
+  sekcji niżej — mimo że to demo nie leżało w prawdziwym sidebarze, i tak
+  było jego potomkiem przez wspólny `.admin-layout`. Zamieniało się w
+  pełnoekranowy, niewidzialny overlay blokujący kliknięcia na całej
+  stronie. Wniosek na przyszłość: **żywe demo, które przełącza klasę na
+  wspólnym przodku (tu: `.admin-layout`), nigdy nie powinno współistnieć na
+  tej samej stronie z innym demo używającym selektorów zależnych od tego
+  przodka** — bezpieczniej trzymać taki przełącznik statycznym (kod +
+  tabela, bez żywego podpięcia), tak jak ostatecznie zrobiono.
 
 ### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
 
