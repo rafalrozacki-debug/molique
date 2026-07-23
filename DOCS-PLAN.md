@@ -127,7 +127,8 @@ pułapek.
 | `docs-charts` | ✅ | 31/31 |
 | `docs-select` | ✅ | 23/23 |
 | `docs-eshop` | ✅ | 27/27 |
-| `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 4 | — |
+| `docs-blog` | ✅ | 21/21 |
+| `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 3 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -188,7 +189,20 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
   dwie martwe klasy bez żadnego CSS (`.cart-item-title`, `.cart-item-price`)
   i błąd `.badge-danger` użyty bez bazowej `.badge` (w przeciwieństwie do
   `.btn`, kolor odznaki NIE implikuje klasy bazowej) — poprawione przy
-  teście kompletności w obie strony.
+  teście kompletności w obie strony. Późniejszy bug zgłoszony przez
+  użytkownika: w wariancie `-left`/`-right` ostatnia miniatura "znikała" —
+  `.product-gallery-thumbs` dziedziczył `flex-wrap: wrap` z reguły
+  domyślnej, a w układzie kolumnowym otwierało to niechcianą drugą kolumnę
+  poza widocznym paskiem. Naprawa: `flex-wrap: nowrap` w wariancie
+  kolumnowym.
+- `docs-blog`: `.day`/`.month` to dwie pary klas potomnych o tej samej
+  nazwie, ale różnym wyglądzie, zależnie od rodzica (`.post-date-badge` vs
+  `.post-date`) — pierwszy taki przypadek w projekcie, udokumentowany jako
+  osobna pułapka. Przy okazji poprawiono niezgodność rodzaju gramatycznego
+  w przykładowej notce autora strony ("Ekspertka"/"Pasjonatka" opisujące
+  mężczyznę — kopiuj-wklej z szablonu). Znaleziono też zepsuty łańcuch
+  nawigacji dół-strony: `docs-admin.html` prowadził "Wstecz" prosto do
+  `docs-eshop.html`, pomijając `docs-blog.html` — naprawione.
 
 ### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
 

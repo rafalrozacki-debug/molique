@@ -313,8 +313,20 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
     zmienne `--star-size`/`--star-color`/`--star-bg`).
   - Swatche: `.product-swatches` > `.swatch` (kolor przez inline
     `style="background-color:…"`, `.is-active` = obwódka `--primary`).
-- **Blog:** `.post-card` (z `.post-date-badge`), `.blog-post` (widok
-  listy), `.simple-post-list` (sidebar), `.author-box`.
+- **Blog:** `.post-card` (siatka) + `.post-date-badge` (data pływająca na
+  zdjęciu, wymaga `.post-image-wrapper` jako rodzica — to on ma
+  `position: relative`, bez niego badge kotwiczy się do złego przodka).
+  `.blog-post` (klasyczna lista) + `.post-date` (kalendarzowa kolumna).
+  UWAGA: `.post-date-badge` i `.post-date` zawierają te same klasy potomne
+  `.day`/`.month`, ale z DWOMA różnymi zestawami stylów — poza tymi dwoma
+  rodzicami `.day`/`.month` nie mają żadnego CSS. `.simple-post-list`
+  (widget sidebara) > `.post-image` + `.post-info` + `.post-meta-date` —
+  wszystkie trzy stylowane WYŁĄCZNIE w tym kontekście; rozmiar miniatury
+  przez `--post-thumb-size` (domyślnie 60px). `.post-meta-date` to NIE to
+  samo co `.post-meta` (rząd linków z ikonami w karcie/liście) — podobna
+  nazwa, zero wspólnego kodu. `.author-box` > `.author-avatar` +
+  `.author-info` (rodzic dla `.author-name`/`.author-role`/`.author-bio`,
+  też działających tylko w jej środku).
 
 ## Typografia & Kolory
 
