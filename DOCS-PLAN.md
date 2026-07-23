@@ -361,8 +361,47 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   gdy trafiał w padding wokół tekstu. Naprawa: `pointer-events: none` na
   tych elementach. Zweryfikowane `elementFromPoint()` dokładnie na
   środku ikony (najbardziej "oczywisty" cel drop) — trafia w input.
+- **Zdublowane logo usunięte z sidebarów** — `.admin-brand` w
+  `partials/docs-sidebar.html` (1 plik, wspólny partial) i osobno w 58
+  stronach `examples-*.html` (każda miała własną, zaszytą kopię markupu
+  sidebara — zero shared partiala) powielało logo, które już na stałe
+  siedzi w globalnym navbarze. Usunięcie z docs zweryfikowane pod kątem
+  `$admin-brand-block-height` w `_admin-nav.scss` (rezerwuje miejsce na
+  logo w drill-downie `-sm`/`-md` — ale docs-sidebar nigdy nie dostaje
+  tych klas, bo nigdzie nie ma przycisku `#molique-sidebar-toggle`, więc
+  bez ryzyka pustej luki). Wszystkie 58 plików examples usunięte
+  skryptem Node (dopasowanie dokładnego, bajtowo identycznego bloku
+  3 linii + pusta linia — potwierdzone przez `sort -u` na wyciągniętych
+  blokach ze wszystkich plików przed usunięciem), w tym
+  `examples-admin-layout.html` — mimo że ta strona SAMA dokumentuje
+  `.admin-brand`, jej WŁASNY sidebar był tak samo zdublowany z navbarem
+  jak wszędzie indziej, więc usunięcie było poprawne i tam. Nietknięty
+  został wyłącznie fragment kodu w `&lt;pre&gt;&lt;code&gt;` na tej
+  stronie (`href="#"`, inne formatowanie — nie pasował do wzorca) — to
+  właściwy przykład uczący, jak zbudować własny panel bez osobnego
+  navbara, gdzie logo faktycznie musi zostać.
+- **`.grid-expand` + `.form-switch` jako collapse bez JS** — nowy
+  wyzwalacz w `_grid-expand.scss`:
+  `.form-switch:has(.form-switch-input:checked) + .grid-expand`. Switch
+  MUSI być rodzeństwem `.grid-expand`, nie zawierać go w tym samym
+  `<label>` (inaczej klik w odsłoniętej treści dodatkowo przełącza
+  switch — `<label>` przekazuje kliknięcia do swojego inputa). Reużywa
+  w 100% istniejącego mechanizmu `.grid-expand` (ten sam, co już stał za
+  `.is-open` i `details[open]`) — jedna nowa linia CSS, zero nowych klas
+  do nauczenia się. Zweryfikowane w Playwright przez porównanie geometrii
+  (`getBoundingClientRect()` treści względem kontenera, nie samo
+  `boundingBox()` dziecka — to drugie nie uwzględnia przycięcia przez
+  `overflow:hidden` rodzica i dawało mylące wyniki). Udokumentowane w
+  `docs-interactive.html` (gdzie mieszka `.grid-expand`, z tabelą trzech
+  wyzwalaczy i nową pułapką nr 6) oraz linkiem zwrotnym z
+  `docs-select.html` (gdzie mieszka `.form-switch`).
 
-### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
+### Do zrobienia później
+- **Przejrzeć `docs-roadmap.html` i odhaczyć zrobione pozycje** — spora
+  część listy (41 pomysłów) mogła się już zdezaktualizować w toku tej
+  sesji (np. `.chart-nav`, grid-lg-cols, implikacje w przyciskach/gridzie
+  i sporo innych rzeczy zrobionych po drodze). Poproszone przez
+  użytkownika, jeszcze nie zrobione.
 - **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez
   użytkownika na później, poza tym, co już naprawiono przy
   `docs-components-extra` (Background Sync, klawiatura w lightboksie).

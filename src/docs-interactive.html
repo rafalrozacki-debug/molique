@@ -318,15 +318,60 @@
                 tabeli, „pokaż więcej" pod opisem.
               </p>
               <p class="text-4 text-muted mb-3">
-                Trzy elementy: <code>.grid-expand</code> to animowany kontener,
+                Dwa elementy: <code>.grid-expand</code> to animowany kontener,
                 <code>.grid-expand-inner</code> owija treść (bez niego nie ma
-                czego ściskać), a <code>.is-open</code> przełącza stan —
-                dodajesz i zdejmujesz ją sam, np. przy zaznaczeniu checkboxa.
+                czego ściskać). Otwiera się na trzy sposoby — wybierz jeden,
+                zależnie od tego, co steruje rozwinięciem.
               </p>
-              <div class="component-code">
+              <div class="table-wrapper mb-3">
+                <table class="table table-sm table-hover table-cards">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Wyzwalacz</th>
+                      <th>Kiedy</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td data-label="Wyzwalacz"><code>.is-open</code></td>
+                      <td data-label="Kiedy">Dodajesz i zdejmujesz klasę sam — np. z własnego JS.</td>
+                    </tr>
+                    <tr>
+                      <td data-label="Wyzwalacz"><code>details[open]</code></td>
+                      <td data-label="Kiedy"><code>.grid-expand</code> leży wewnątrz natywnego <code>&lt;details&gt;</code> — zero JS.</td>
+                    </tr>
+                    <tr>
+                      <td data-label="Wyzwalacz"><code>.form-switch + .grid-expand</code></td>
+                      <td data-label="Kiedy">Przełącznik iOS-style tuż przed kontenerem (rodzeństwo, nie zagnieżdżenie) — zero JS.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="component-code mb-3">
                 <button class="btn-copy">Kopiuj</button>
                 <pre><code>&lt;div class="grid-expand is-open"&gt;
   &lt;div class="grid-expand-inner"&gt;Treść, która się rozwija&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+              <p class="text-4 text-muted mb-3">
+                Trzeci wariant — switch (pełny opis w
+                <a href="docs-select.html">dokumentacji formularzy</a>)
+                odsłaniający pole poniżej, częsty wzorzec w formularzach
+                ("Wysyłać powiadomienia?" → pole adresu e-mail):
+              </p>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;label class="form-switch"&gt;
+  &lt;input type="checkbox" class="form-switch-input"&gt;
+  &lt;span class="form-switch-label"&gt;Wysyłać powiadomienia e-mail&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Rodzeństwo switcha, NIE w tym samym &lt;label&gt; -&gt;
+     klik w treści poniżej nie przełączałby wtedy switcha --&gt;
+&lt;div class="grid-expand"&gt;
+  &lt;div class="grid-expand-inner"&gt;
+    &lt;input type="email" class="input" placeholder="Adres e-mail"&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
               </div>
             </div>
@@ -713,6 +758,25 @@ okno.showModal();  // DOBRZE</code></pre>
                     układu strony przy każdej klatce. <code>.grid-expand</code>
                     animuje <code>grid-template-rows</code> i nie wymaga
                     znajomości docelowej wysokości.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="int-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">6</span>
+                  <span><code>.grid-expand</code> wewnątrz <code>&lt;label class="form-switch"&gt;</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Wariant „switch odsłania treść" wymaga, żeby
+                    <code>.grid-expand</code> był <strong>rodzeństwem</strong>
+                    <code>.form-switch</code>, nie jego dzieckiem. Cały
+                    <code>&lt;label&gt;</code> przekazuje kliknięcia do
+                    swojego <code>&lt;input&gt;</code> — wstawienie
+                    <code>.grid-expand</code> do środka sprawia, że klik
+                    gdziekolwiek w odsłoniętej treści (np. w polu formularza)
+                    dodatkowo przełącza switch.
                   </p>
                 </div>
               </details>

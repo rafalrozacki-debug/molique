@@ -424,7 +424,15 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   co rozmywać. Kształt plam jest statyczny (`border-radius` nie jest
   animowalny bez reflow), ruch daje wyłącznie `transform` z obrotem.
   Animacja wyłącza się przy `prefers-reduced-motion`.
-- **Inne Helpery:** `.grid-expand` (płynny akordeon), `.parallax-container`
+- **Grid Expand (płynny akordeon):** `.grid-expand` > `.grid-expand-inner`
+  (owija treść, bez niego nie ma czego ściskać przez `overflow:hidden`).
+  Animuje `grid-template-rows: 0fr → 1fr` — jedyny sposób na płynne
+  „height: auto" w czystym CSS. Trzy wyzwalacze: `.is-open` (ręcznie,
+  np. z JS), `details[open]` (wewnątrz natywnego `<details>`), oraz
+  `.form-switch:has(.form-switch-input:checked) + .grid-expand` (switch
+  TUŻ PRZED jako rodzeństwo, nie w tym samym `<label>` — inaczej klik
+  w odsłoniętej treści dodatkowo przełącza switch). Wszystkie zero-JS.
+- **Inne Helpery:** `.parallax-container`
   (Scroll-Driven), `.bg-gradient-corners` (łuna), `.stacking-container` >
   `.section-stacked`, `.embed-responsive` (do wideo z YT/Vimeo).
 

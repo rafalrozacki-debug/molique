@@ -16,9 +16,14 @@
   & > .grid-expand-inner {
     overflow: hidden;
   }
-  
+
+  // Trzeci wyzwalacz: .form-switch tuz PRZED .grid-expand jako rodzenstwo,
+  // nie zagniezdzenie - dzieki temu klik gdziekolwiek w odslonietej tresci
+  // nie przelacza switcha, co nastapiloby, gdyby siedziala w tym samym
+  // <label>.
   &.is-open,
-  details[open] & {
+  details[open] &,
+  .form-switch:has(.form-switch-input:checked) + & {
     grid-template-rows: 1fr;
   }
 }
