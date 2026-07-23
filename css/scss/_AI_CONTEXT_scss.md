@@ -2787,9 +2787,13 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
    i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
    buttona jedną parą atrybutów. */
 .dropdown-menu[popover] {
-  /* Reset domyślnych stylów UA popovera (position:fixed + inset:0 +
-     margin:auto centruje na ekranie) */
-  position: absolute;
+  /* position: fixed, nie absolute - patrz pelny opis w
+     _form-select-search.scss przy .select-search-menu. W skrocie: popover
+     zagniezdzony w otwartym <dialog>, z position:absolute, liczyl anchor()
+     poprawnie, ale renderowal sie wzgledem dokumentu zamiast viewportu -
+     przy duzym przewinieciu strony ladowal daleko poza ekranem. fixed ma
+     containing block = viewport niezaleznie od promocji do top layer. */
+  position: fixed;
   inset: auto;
   top: anchor(bottom);
   left: anchor(left);
@@ -3424,12 +3428,15 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
        na Esc i klik poza menu obsługuje natywnie light dismiss.
 
        Kotwica: NIEJAWNA, nie nazwana - jak w .select-search-menu (patrz
-       komentarz tam). Parowanie popovertarget+id (Chrome 133+) samo tworzy
-       relację element-do-elementu; "auto" tylko włącza jej użycie przez
-       anchor(). Nazwany --custom-select-trigger + anchor-scope, użyte tu
-       wcześniej, mogły w kontekście <dialog> rozwiązać się do NIEWŁAŚCIWEGO
-       przycisku na stronie. */
-    position: absolute;
+       komentarz tam, razem z pelnym opisem zdiagnozowanego bledu). Parowanie
+       popovertarget+id (Chrome 133+) samo tworzy relację element-do-elementu;
+       "auto" tylko włącza jej użycie przez anchor().
+
+       position: FIXED, nie absolute - z tego samego powodu co w
+       .select-search-menu: w <dialog> position:absolute liczylo anchor()
+       poprawnie, ale renderowalo sie wzgledem dokumentu zamiast viewportu,
+       co przy duzym scrollY dawalo popover daleko poza ekranem. */
+    position: fixed;
     position-anchor: auto;
     /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
     inset: auto;
@@ -3623,15 +3630,20 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 
        Kotwica: NIEJAWNA, nie nazwana. Parowanie popovertarget+id (Chrome 133+)
        samo tworzy relację element-do-elementu miedzy przyciskiem a menu -
-       "auto" tylko wlacza jej uzycie przez anchor(). Wczesniejsza wersja
-       uzywala nazwanej --select-search-trigger + anchor-scope do izolacji
-       instancji, ale ten sam custom-ident na kazdym przycisku na stronie
-       mogl (poza scope, np. gdy trigger i menu siedza w oddzielnych top-layer
-       kontekstach jak <dialog>) rozwiazac sie do NIEWLASCIWEGO przycisku -
-       objaw: otwarcie selecta w modalu przewijalo strone do innej, dalekiej
-       instancji tego komponentu. Niejawna kotwica nie ma tego trybu awarii,
-       bo nie ma nazwy do pomylenia. */
-    position: absolute;
+       "auto" tylko wlacza jej uzycie przez anchor().
+
+       POSITION: FIXED, nie absolute. Zweryfikowane w Playwright (Chromium 149):
+       ten popover, zagniezdzony w otwartym <dialog>, z position:absolute liczyl
+       anchor() poprawnie (top: 409px), ale renderowal sie WZGLEDEM DOKUMENTU,
+       nie viewportu - przy scrollY: 3772 dawalo to realna pozycje y: -3358px
+       (poza ekranem, mimo poprawnie obliczonego top). Do tego natywny .focus()
+       na polu wyszukiwania (w JS), widzac element "niewidoczny", uruchamial
+       plynne przewijanie strony w strone tej blednej pozycji - to byl faktyczny
+       objaw zgloszenia (strona skacze do innego selecta na stronie).
+       position: fixed ma containing block = viewport niezaleznie od promocji
+       do top layer, wiec obie usterki znikaja razem. Druga polowa naprawy:
+       focus({ preventScroll: true }) w molique-select.js. */
+    position: fixed;
     position-anchor: auto;
     /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
     inset: auto;

@@ -73,7 +73,7 @@ document.addEventListener('toggle', (e) => {
   if (e.newState !== 'open') return;
 
   const searchInput = menu.querySelector('.select-search-input');
-  if (searchInput) searchInput.focus();
+  if (searchInput) searchInput.focus({ preventScroll: true });
 }, true);
 
 // Stary markup <details> (bez atrybutu [popover] na menu) nie ma natywnego

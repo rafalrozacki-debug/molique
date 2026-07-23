@@ -99,9 +99,13 @@
    i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
    buttona jedną parą atrybutów. */
 .dropdown-menu[popover] {
-  /* Reset domyślnych stylów UA popovera (position:fixed + inset:0 +
-     margin:auto centruje na ekranie) */
-  position: absolute;
+  /* position: fixed, nie absolute - patrz pelny opis w
+     _form-select-search.scss przy .select-search-menu. W skrocie: popover
+     zagniezdzony w otwartym <dialog>, z position:absolute, liczyl anchor()
+     poprawnie, ale renderowal sie wzgledem dokumentu zamiast viewportu -
+     przy duzym przewinieciu strony ladowal daleko poza ekranem. fixed ma
+     containing block = viewport niezaleznie od promocji do top layer. */
+  position: fixed;
   inset: auto;
   top: anchor(bottom);
   left: anchor(left);

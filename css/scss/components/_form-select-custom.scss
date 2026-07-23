@@ -66,12 +66,15 @@
        na Esc i klik poza menu obsługuje natywnie light dismiss.
 
        Kotwica: NIEJAWNA, nie nazwana - jak w .select-search-menu (patrz
-       komentarz tam). Parowanie popovertarget+id (Chrome 133+) samo tworzy
-       relację element-do-elementu; "auto" tylko włącza jej użycie przez
-       anchor(). Nazwany --custom-select-trigger + anchor-scope, użyte tu
-       wcześniej, mogły w kontekście <dialog> rozwiązać się do NIEWŁAŚCIWEGO
-       przycisku na stronie. */
-    position: absolute;
+       komentarz tam, razem z pelnym opisem zdiagnozowanego bledu). Parowanie
+       popovertarget+id (Chrome 133+) samo tworzy relację element-do-elementu;
+       "auto" tylko włącza jej użycie przez anchor().
+
+       position: FIXED, nie absolute - z tego samego powodu co w
+       .select-search-menu: w <dialog> position:absolute liczylo anchor()
+       poprawnie, ale renderowalo sie wzgledem dokumentu zamiast viewportu,
+       co przy duzym scrollY dawalo popover daleko poza ekranem. */
+    position: fixed;
     position-anchor: auto;
     /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
     inset: auto;
