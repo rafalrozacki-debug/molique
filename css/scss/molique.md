@@ -286,12 +286,14 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   a w wariantach wąskich (`-sm`/`-md`) oraz w Bottom Nav na mobile —
   pełnoekranowy drill-down z paskiem „Cofnij". Aktywność ogarnia moduł
   `js/modules/molique-admin-nav.js` (auto-ładowany po `.admin-nav-submenu`):
-  podświetla aktywną pozycję z URL bez `[open]`, nie pozwala aktywnej
-  gałęzi auto-rozwinąć się na mobile i wyklucza wzajemnie otwarte submenu
-  (tylko na mobile — na desktopie w `-sm`/`-md` może być otwarte tylko
-  jedno naraz z innego powodu: drugie i tak przykryłoby pierwsze).
-  Aktywności NIE oznaczaj przez `open` (na mobile auto-otworzyłoby panel) —
-  moduł robi to z adresu.
+  podświetla aktywną pozycję z URL i **na desktopie sam otwiera gałąź, w
+  której leży bieżąca strona** (`details.open = true`), ale na mobile od
+  razu ją zamyka — więc drill-down nigdy nie wjeżdża sam przy wejściu na
+  stronę, a drzewko na szerokim sidebarze zawsze pokazuje, gdzie jesteś.
+  Wyklucza też wzajemnie otwarte submenu (tylko na mobile — na desktopie
+  w `-sm`/`-md` może być otwarte tylko jedno naraz z innego powodu: drugie
+  i tak przykryłoby pierwsze). Aktywności NIE oznaczaj przez `open` w
+  markupie — moduł ustala to sam z adresu URL, niezależnie od viewportu.
 - **Admin Nav — aktywność płaskich linków:** sidebar bez submenu (np. wspólny
   dla wielu podstron) obsługuje `js/modules/molique-admin-nav-active.js`
   (auto-ładowany przy `.admin-nav`): nadaje `.is-active` każdemu

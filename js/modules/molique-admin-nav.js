@@ -75,7 +75,14 @@ function initAdminNav() {
         hasActive = true;
       }
     });
-    if (hasActive) summary.classList.add('is-active');
+    if (hasActive) {
+      summary.classList.add('is-active');
+      // Na desktopie (drzewko) galaz z biezaca strona ma sie rozwinac sama -
+      // bez tego uzytkownik ladowalby strone i nie widzial, gdzie w menu jest.
+      // Krok 2 nizej i tak zamknie to zaraz na mobile (drill-down), wiec nie
+      // trzeba tu warunku na viewport.
+      details.open = true;
+    }
 
     // 2. Na mobile nie auto-rozwijaj drill-downu na starcie. Jeśli markup
     //    renderuje <details open> dla aktywnej gałęzi, zachowujemy wskazanie

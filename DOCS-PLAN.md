@@ -305,7 +305,56 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
   sidebarze) warto powtórzyć ten sam skrypt zamiast ufać pojedynczym
   linkom.
 
+### Unifikacja sidebara dokumentacji (po Etapie 2)
+
+Zgłoszenie użytkownika: `docs.html` i `docs-classes.html` miały
+`.admin-layout-floating`, pozostałe 19 stron `docs-*.html` — zwykły
+`.admin-layout`. Do tego: sidebar dokumentacji (~21 linków w 8
+kategoriach, same linki tekstowe bez ikon) był zbyt długi.
+
+- **Floating ujednolicony wszędzie** (21/21 stron) — zwykły find/replace
+  na wrapperze, zweryfikowany grepem przed i po.
+- **`partials/docs-sidebar.html` przebudowany na rozwijane kategorie**:
+  6 z 8 kategorii (te z 2+ pozycjami) to teraz `<details class="admin-nav-submenu">`
+  — dokładnie ten sam komponent, który wcześniej (przy `docs-admin`) miał
+  zero realnych użyć w całym repo. To pierwsze prawdziwe wdrożenie.
+  Kategorie z JEDNĄ pozycją (Wykresy & Dane, Build & optymalizacja)
+  celowo zostały płaskimi linkami — accordion na jeden element to zbędny
+  dodatkowy klik.
+- **`molique-admin-nav.js` rozszerzony**: gałąź z aktywną stroną teraz
+  sama się otwiera na desktopie (`details.open = true` przy `hasActive`),
+  nie tylko podświetla. Istniejący krok „na mobile nie auto-rozwijaj"
+  uruchamia się zaraz potem i poprawnie cofa to na wąskich viewportach —
+  jeden warunek za drugim, bez rozgałęzienia po typie urządzenia.
+- Zweryfikowane w Playwright na 1400px (dokładnie 1 z 6 gałęzi otwarta,
+  właściwa position sidebara przez floating) i na 390px (szuflada
+  „Więcej" + zagnieżdżony pełnoekranowy drill-down wewnątrz niej —
+  kombinacja NIGDY wcześniej nie testowana empirycznie, bo submenu nie
+  miało żadnego realnego użycia; działa poprawnie, „Cofnij" zamyka).
+  Zrzuty ekranu potwierdziły też stronę wizualną.
+- **Obserwacja, nie zgłoszony problem**: na mobile (`@media max-width:768px`)
+  wyzwalacz kategorii nie ma widocznej strzałki (CSS jawnie ją ukrywa w
+  tym kontekście — pre-istniejące zachowanie komponentu, nie coś
+  wprowadzonego teraz). Wizualnie kategoria-do-rozwinięcia i zwykły link
+  wyglądają identycznie w szufladzie „Więcej", różni je tylko to, że tap
+  w kategorię idzie głębiej zamiast nawigować. Może być warte dodania
+  jakiegoś wskaźnika później, jeśli okaże się mylące w praktyce.
+
 ### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
+
+- **Dokończyć `.file-upload`** — czysty CSS, ZERO JS w całym repo:
+  klik działa (niewidoczny input na całej karcie), ale drag&drop nie daje
+  żadnego feedbacku (nawet natywne „otwórz jako nową kartę" nie
+  odpala się — input po cichu łapie plik i nic z nim nie robi) i klasa
+  `.file-upload-name` do pokazania nazwy pliku nigdy nie jest ustawiana.
+  Potrzebny nasłuch `change` (+ ewentualnie własny `drop` dla pewności)
+  pokazujący wybrany plik. Zgłoszone przez użytkownika, odłożone na
+  osobny follow-up.
+- **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez
+  użytkownika na później, poza tym, co już naprawiono przy
+  `docs-components-extra` (Background Sync, klawiatura w lightboksie).
+  Konkretny zakres jeszcze nieustalony — do doprecyzowania, gdy użytkownik
+  wróci do tematu.
 
 - **Wizualny konfigurator `bg-blobs`** — strona w rodzaju `theme-editor.html`,
   na której klika się kolory (`--blob-1`, `--blob-2`), tempo
