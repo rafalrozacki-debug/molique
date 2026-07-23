@@ -3368,9 +3368,6 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   .custom-select {
     position: relative;
     width: 100%;
-    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
-       żeby wiele .custom-select na jednej stronie nie "podpinało się" nawzajem. */
-    anchor-scope: --custom-select-trigger;
 
     /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
        (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
@@ -3399,8 +3396,6 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     border-radius: var(--border-radius);
     cursor: pointer;
     transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-    /* Punkt zaczepienia dla .custom-select-dropdown (CSS Anchor Positioning) */
-    anchor-name: --custom-select-trigger;
 
     .icon-chevron {
       transition: transform var(--transition-speed);
@@ -3427,11 +3422,15 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
        dzięki temu NIE jest przycinany przez overflow przodków (np. przewijany
        .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
        na Esc i klik poza menu obsługuje natywnie light dismiss.
-       Pozycję względem przycisku ustala CSS Anchor Positioning (Chrome 125+,
-       Safari 26+). position-anchor MUSI być ustawiony — bez niego
-       anchor()/anchor-size() nie mają się do czego odnieść. */
+
+       Kotwica: NIEJAWNA, nie nazwana - jak w .select-search-menu (patrz
+       komentarz tam). Parowanie popovertarget+id (Chrome 133+) samo tworzy
+       relację element-do-elementu; "auto" tylko włącza jej użycie przez
+       anchor(). Nazwany --custom-select-trigger + anchor-scope, użyte tu
+       wcześniej, mogły w kontekście <dialog> rozwiązać się do NIEWŁAŚCIWEGO
+       przycisku na stronie. */
     position: absolute;
-    position-anchor: --custom-select-trigger;
+    position-anchor: auto;
     /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
     inset: auto;
     /* Przyklejamy górę popovera do dołu przycisku (anchor) */
@@ -3584,9 +3583,6 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   .select-search {
     position: relative;
     width: 100%;
-    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
-       żeby wiele .select-search na jednej stronie nie "podpinało się" nawzajem. */
-    anchor-scope: --select-search-trigger;
 
     /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
        (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
@@ -3610,8 +3606,6 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     cursor: pointer;
     user-select: none;
     background-color: var(--bg-surface);
-    /* Punkt zaczepienia dla .select-search-menu (CSS Anchor Positioning) */
-    anchor-name: --select-search-trigger;
 
     &::after {
       content: "▼";
@@ -3625,9 +3619,20 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki —
        dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
        .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
-       na Esc i klik poza menu obsługuje natywnie light dismiss. */
+       na Esc i klik poza menu obsługuje natywnie light dismiss.
+
+       Kotwica: NIEJAWNA, nie nazwana. Parowanie popovertarget+id (Chrome 133+)
+       samo tworzy relację element-do-elementu miedzy przyciskiem a menu -
+       "auto" tylko wlacza jej uzycie przez anchor(). Wczesniejsza wersja
+       uzywala nazwanej --select-search-trigger + anchor-scope do izolacji
+       instancji, ale ten sam custom-ident na kazdym przycisku na stronie
+       mogl (poza scope, np. gdy trigger i menu siedza w oddzielnych top-layer
+       kontekstach jak <dialog>) rozwiazac sie do NIEWLASCIWEGO przycisku -
+       objaw: otwarcie selecta w modalu przewijalo strone do innej, dalekiej
+       instancji tego komponentu. Niejawna kotwica nie ma tego trybu awarii,
+       bo nie ma nazwy do pomylenia. */
     position: absolute;
-    position-anchor: --select-search-trigger;
+    position-anchor: auto;
     /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
     inset: auto;
     top: anchor(bottom);
