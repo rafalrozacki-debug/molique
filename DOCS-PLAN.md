@@ -340,16 +340,19 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   w kategorię idzie głębiej zamiast nawigować. Może być warte dodania
   jakiegoś wskaźnika później, jeśli okaże się mylące w praktyce.
 
-### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
+### Zrobione follow-upy
 
-- **Dokończyć `.file-upload`** — czysty CSS, ZERO JS w całym repo:
-  klik działa (niewidoczny input na całej karcie), ale drag&drop nie daje
-  żadnego feedbacku (nawet natywne „otwórz jako nową kartę" nie
-  odpala się — input po cichu łapie plik i nic z nim nie robi) i klasa
-  `.file-upload-name` do pokazania nazwy pliku nigdy nie jest ustawiana.
-  Potrzebny nasłuch `change` (+ ewentualnie własny `drop` dla pewności)
-  pokazujący wybrany plik. Zgłoszone przez użytkownika, odłożone na
-  osobny follow-up.
+- **`.file-upload` dokończony** — brakujący `js/modules/molique-file-upload.js`
+  dopisany: nasłuch `change` na ukrytym input, nadpisuje (lub dopisuje,
+  jeśli nie istnieje w markupie) `.file-upload-name` nazwą wybranego
+  pliku. Klik i natywne przeciągnięcie pliku i tak już działały (sam
+  input to niewidoczna, rozciągnięta na całą kartę strefa) — brakowało
+  wyłącznie potwierdzenia efektu. Zweryfikowane w Playwright
+  (`setInputFiles`, ten sam sygnał `change` co przy realnym drop) na
+  dwóch niezależnych instancjach na jednej stronie. Dopisane do
+  `docs-forms.html` (już gotowej strony referencyjnej) i do słowników.
+
+### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
 - **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez
   użytkownika na później, poza tym, co już naprawiono przy
   `docs-components-extra` (Background Sync, klawiatura w lightboksie).

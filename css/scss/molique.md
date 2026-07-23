@@ -230,7 +230,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.custom-select-dropdown` z atrybutem `popover` i unikalnym `id`
   (z `.custom-select-category` i `.custom-select-option`).
 - **File Upload:** `.file-upload` (wariant: `.file-upload-animated`) >
-  `input[type="file"]`.
+  niewidoczny `input[type="file"]` rozciągnięty na całą strefę
+  (`position: absolute; opacity: 0`) — klik i przeciągnięcie pliku
+  działają więc natywnie, bez własnego kodu drag & drop. Auto-ładowany
+  `js/modules/molique-file-upload.js` (selektor `.file-upload`) nasłuchuje
+  `change` i nadpisuje `.file-upload-name` nazwą wybranego pliku —
+  element jest opcjonalny w markupie, moduł dopisze go sam po pierwszym
+  wyborze, jeśli go nie znajdzie.
 
 ## Feedback & Statusy
 

@@ -460,6 +460,33 @@
                     zostają bez zmian.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  File Upload: wybór pliku nie dawał żadnego potwierdzenia
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <code>.file-upload</code> to niewidoczny
+                    <code>input[type="file"]</code> rozciągnięty na całą
+                    kartę — klik i natywne przeciągnięcie pliku działały,
+                    ale w całym repozytorium nie było ani linijki JS
+                    reagującej na wybór. Efekt: po upuszczeniu zdjęcia
+                    nic się nie działo (nawet przeglądarkowe „otwórz jako
+                    nową kartę" nie odpalało się — input po cichu
+                    przechwytywał plik).
+                  </li>
+                  <li>
+                    Dodany <code>molique-file-upload.js</code>: nasłuch
+                    <code>change</code> nadpisuje (lub dopisuje, jeśli nie
+                    ma go w markupie) <code>.file-upload-name</code> nazwą
+                    wybranego pliku.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>

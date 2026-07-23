@@ -374,8 +374,8 @@
             <p class="text-muted mb-3">
               Natywne <code>&lt;input type="file"&gt;</code> jest niestylowalne i
               w każdej przeglądarce inne. Komponent przykrywa je strefą
-              upuszczania — samo pole zostaje w środku, więc obsługa i
-              dostępność są nadal natywne.
+              upuszczania — samo pole zostaje w środku, więc obsługa,
+              przeciąganie pliku i dostępność są nadal natywne.
             </p>
             <div class="component-code mb-4">
               <button class="btn-copy">Kopiuj</button>
@@ -384,6 +384,18 @@
   &lt;div class="file-upload-icon"&gt;📄&lt;/div&gt;
   &lt;p class="file-upload-name"&gt;Przeciągnij plik lub kliknij&lt;/p&gt;
 &lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Nazwa pliku podmienia się sama</h5>
+              <p class="text-4 text-muted m-0">
+                Auto-ładowany moduł <code>js/modules/molique-file-upload.js</code>
+                nasłuchuje zdarzenia <code>change</code> na ukrytym polu — po
+                wyborze (klikiem lub przeciągnięciem) nadpisuje treść
+                <code>.file-upload-name</code> nazwą pliku. Elementu nie
+                musisz dodawać ręcznie: jeśli go nie ma w markupie, moduł
+                dopisze go sam po pierwszym wyborze pliku.
+              </p>
             </div>
 
             <div class="table-wrapper">
@@ -455,7 +467,7 @@
                   <tr>
                     <td data-label="Klasa"><code class="fw-bold">.file-upload-name</code></td>
                     <td data-label="Komponent">Wybór pliku</td>
-                    <td data-label="Co robi">Miejsce na podpis lub nazwę wybranego pliku.</td>
+                    <td data-label="Co robi">Podpis, który JS nadpisuje nazwą wybranego pliku. Opcjonalny w markupie — bez niego moduł dopisze go sam.</td>
                   </tr>
                 </tbody>
               </table>

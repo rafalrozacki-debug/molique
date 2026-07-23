@@ -301,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: '.btn-magnetic', file: 'modules/molique-magnetic.js', init: 'initMagneticButtons' },
     { selectors: '.share-btn', file: 'modules/molique-share.js', init: 'initShare' },
     { selectors: '.before-after-slider', file: 'modules/molique-before-after.js', init: 'initBeforeAfter' },
+    { selectors: '.file-upload', file: 'modules/molique-file-upload.js', init: 'initFileUpload' },
     { selectors: 'input[data-search-target]', file: 'modules/molique-table-search.js', init: 'initTableSearch' },
     { selectors: '.popover-context', file: 'modules/molique-context-menu.js', init: 'initContextMenu' },
     { selectors: '.admin-nav-submenu', file: 'modules/molique-admin-nav.js', init: 'initAdminNav' },
