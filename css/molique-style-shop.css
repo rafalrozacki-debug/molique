@@ -320,4 +320,104 @@
     border-color: var(--border-color) !important;
     box-shadow: none;
   }
+  /* =========================================
+     GALERIA PRODUKTU (Zdjecie glowne + miniatury)
+     =========================================
+     Struktura odtworzona z molique-shop.js, gdzie logika JS istniala od dawna
+     (klik w miniature podmienia glowne zdjecie), ale komponent nigdy nie
+     dostal CSS ani markupu wzorcowego - byl martwym kodem.
+
+     .gallery-thumb to <button>, nie <a>/<div>: dziala z klawiatury (Tab, Enter)
+     bez dopisywania czegokolwiek, tak jak reszta interaktywnych elementow
+     frameworka. Stan aktywny/przygaszony (.is-active / .opacity-50) nadaje
+     JS - .opacity-50 to gotowa klasa narzedziowa, nie nowa. */
+  .product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1.5);
+  }
+  /* Warianty umiejscowienia miniatur. Domyslnie (bez modyfikatora) sa rzedem
+     POD zdjeciem - dziala wszedzie, w tym na mobile.
+
+     .product-gallery-left / -right ustawiaja je kolumna OBOK zdjecia, ale
+     TYLKO od `md` w gore - kolumna miniatur obok duzego zdjecia nie miesci
+     sie sensownie na waskim ekranie, wiec ponizej progu obie odmiany
+     wracaja do domyslnego ukladu (rzad pod spodem), zgodnie z reszta
+     frameworka (mobile = jedna kolumna).
+
+     Kolejnosc w DOM zostaje ZAWSZE taka sama - najpierw .product-gallery-main,
+     potem .product-gallery-thumbs. .product-gallery-left przestawia tylko
+     kolejnosc WIZUALNA przez `order`, zeby markup nie musial sie zmieniac
+     miedzy wariantami (ten sam powod co --tab-count czy inne modyfikatory
+     ustawiane bez przepisywania HTML). */
+  @media (min-width: 768px) {
+    .product-gallery-left,
+    .product-gallery-right {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+    .product-gallery-left .product-gallery-thumbs,
+    .product-gallery-right .product-gallery-thumbs {
+      flex-direction: column;
+    }
+    .product-gallery-left .product-gallery-main,
+    .product-gallery-right .product-gallery-main {
+      flex: 1;
+      /* Bez tego flex-item nie kurczy sie ponizej szerokosci swojej
+         tresci (domyslne min-width: auto) i potrafi rozepchac uklad. */
+      min-width: 0;
+    }
+  }
+  @media (min-width: 768px) {
+    .product-gallery-left .product-gallery-thumbs {
+      order: -1;
+    }
+  }
+  .product-gallery-main {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    background-color: var(--bg-surface);
+    aspect-ratio: 1/1;
+  }
+  .product-gallery-main img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-gallery-thumbs {
+    display: flex;
+    gap: calc(var(--spacing-unit) * 1);
+    flex-wrap: wrap;
+  }
+  .gallery-thumb {
+    /* Reset stylow przegladarki dla <button> */
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: calc(var(--border-radius) * 0.75);
+    border: 2px solid transparent;
+    transition: border-color var(--transition-speed), opacity var(--transition-speed);
+  }
+  .gallery-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .gallery-thumb:hover {
+    border-color: var(--border-color);
+  }
+  .gallery-thumb.is-active {
+    border-color: var(--primary);
+  }
+  .gallery-thumb:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
+  }
 }

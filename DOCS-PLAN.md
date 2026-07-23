@@ -126,7 +126,8 @@ pułapek.
 | `docs-animations` | ✅ | 26/26 |
 | `docs-charts` | ✅ | 31/31 |
 | `docs-select` | ✅ | 23/23 |
-| `docs-eshop`, `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 5 | — |
+| `docs-eshop` | ✅ | 27/27 |
+| `docs-blog`, `docs-admin`, `docs-widgets`, `docs-components-extra` | ⬜ zostało 4 | — |
 | `docs-classes`, `docs.html` | ⚠️ osobny przypadek | patrz niżej |
 
 `docs-classes` to spis ~1120 klas — model referencyjny do niego nie pasuje,
@@ -179,6 +180,15 @@ nie referencją komponentu. Obie wymagają osobnej decyzji.
   „Molique" i „Briko" (CRM autora).
 - Każda strona po przepisaniu zwykle ujawnia braki w `molique.md` i
   `llms.txt` — uzupełniać od razu i synchronizować `~/.claude/molique.md`.
+- `docs-eshop`: `.product-gallery` był martwym kodem — `molique-shop.js`
+  miał gotową logikę przełączania miniatur od dawna, ale CSS i markup nigdy
+  nie powstały. Zaprojektowany od zera przy przepisywaniu strony (razem
+  z wariantami `.product-gallery-left`/`-right`), tym samym trybem co
+  wcześniej `.chart-nav`. Przy okazji znaleziono w starej wersji strony
+  dwie martwe klasy bez żadnego CSS (`.cart-item-title`, `.cart-item-price`)
+  i błąd `.badge-danger` użyty bez bazowej `.badge` (w przeciwieństwie do
+  `.btn`, kolor odznaki NIE implikuje klasy bazowej) — poprawione przy
+  teście kompletności w obie strony.
 
 ### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
 

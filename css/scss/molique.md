@@ -289,12 +289,30 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   nie `<details>`.
 - **E-commerce:**
   - Karta: `.product-card` (dodaj `.product-list-view` do rodzica dla
-    widoku poziomego).
-  - Koszyk: `.cart-item` z kontrolerem `.qty-input`.
-  - Kafelki wyboru: `.selection-tile` (wariant:
-    `.selection-tile-animated`).
-  - Gwiazdki: `.star-rating` (sterowane przez `style="--rating: 4.5;"`).
-  - Swatche: `.product-swatches` > `.swatch`.
+    widoku poziomego — na kontenerze OTACZAJĄCYM karty, nie na karcie).
+  - Galeria produktu: `.product-gallery` > `.product-gallery-main` (zdjęcie
+    główne, `aspect-ratio: 1/1`) + `.product-gallery-thumbs` >
+    `.gallery-thumb` (`<button>`, wymaga `<img data-large="…">` — stąd
+    `js/modules/molique-shop.js`, auto-ładowany przy `.product-gallery`,
+    bierze duże zdjęcie przy kliknięciu). Moduł tylko podpina listenery,
+    NIE ustawia stanu startowego — pierwszą miniaturę oznacz ręcznie
+    `.is-active`, resztę `.opacity-50` (gotowa klasa narzędziowa). Warianty
+    umiejscowienia: `.product-gallery-left` / `-right` — kolumna miniatur
+    obok zdjęcia, ale TYLKO od `md` w górę (poniżej: domyślny rząd pod
+    spodem, jak przy gridzie). Kolejność w DOM stała, `-left` przestawia
+    tylko wizualnie przez `order`.
+  - Koszyk: `.cart-item` z kontrolerem `.qty-input` > dokładnie dwa
+    `.qty-btn` (JS bierze `:first-child`/`:last-child` jako minus/plus) +
+    jeden `.qty-val` (`type="number"`, wymaga `min`, opcjonalnie `max` —
+    stąd JS czyta granice).
+  - Kafelki wyboru: `.selection-tile` > input ukryty (nie
+    `display:none`) + `.tile-content` jako BEZPOŚREDNI sąsiad (selektor
+    `:checked + .tile-content`). Wariant `.selection-tile-animated`
+    współpracuje z `.hover-border-trace`/`-2` na `.tile-content`.
+  - Gwiazdki: `.star-rating` (sterowane przez `style="--rating: 4.5;"`,
+    zmienne `--star-size`/`--star-color`/`--star-bg`).
+  - Swatche: `.product-swatches` > `.swatch` (kolor przez inline
+    `style="background-color:…"`, `.is-active` = obwódka `--primary`).
 - **Blog:** `.post-card` (z `.post-date-badge`), `.blog-post` (widok
   listy), `.simple-post-list` (sidebar), `.author-box`.
 
