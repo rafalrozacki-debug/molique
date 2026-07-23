@@ -359,6 +359,12 @@
     .product-gallery-left .product-gallery-thumbs,
     .product-gallery-right .product-gallery-thumbs {
       flex-direction: column;
+      /* Bez tego dziedziczy flex-wrap: wrap z reguly bazowej. W ukladzie
+         kolumnowym przegladarka potrafi otworzyc "druga kolumne" miniatur
+         (cross-axis wrap), ktora renderuje sie poza widocznym pasem -
+         ostatnia miniatura wyglada wtedy jakby znikla, mimo poprawnego
+         adresu obrazka. */
+      flex-wrap: nowrap;
     }
     .product-gallery-left .product-gallery-main,
     .product-gallery-right .product-gallery-main {
