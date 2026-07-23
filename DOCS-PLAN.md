@@ -351,6 +351,16 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   (`setInputFiles`, ten sam sygnał `change` co przy realnym drop) na
   dwóch niezależnych instancjach na jednej stronie. Dopisane do
   `docs-forms.html` (już gotowej strony referencyjnej) i do słowników.
+  **Drugi, realny bug znaleziony przez użytkownika przy testowaniu
+  poprawki:** na `.file-upload-animated` klik działał, ale drag & drop
+  nie — `.file-upload-icon, h4, p, .file-upload-name` miały
+  `position: relative; z-index: 2`, czyli DOKŁADNIE ten sam z-index co
+  input, a leżą PO nim w DOM — wygrywały stacking i przechwytywały
+  wskaźnik dokładnie tam, gdzie wzrokowo celuje użytkownik przeciągający
+  plik (ikona/tekst na środku karty). Klik "działał" tylko przypadkowo,
+  gdy trafiał w padding wokół tekstu. Naprawa: `pointer-events: none` na
+  tych elementach. Zweryfikowane `elementFromPoint()` dokładnie na
+  środku ikony (najbardziej "oczywisty" cel drop) — trafia w input.
 
 ### Pomysły odłożone na później (poza zakresem przebudowy dokumentacji)
 - **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez

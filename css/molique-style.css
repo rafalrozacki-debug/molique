@@ -2658,6 +2658,13 @@
     .file-upload-animated .file-upload-icon, .file-upload-animated h4, .file-upload-animated p, .file-upload-animated .file-upload-name {
       position: relative;
       z-index: 2;
+      /* Bez tego te elementy (ten sam z-index co input, ale PO nim
+         w DOM - wygrywaja stacking) przechwytywaly klik i drop dokladnie
+         tam, gdzie wzrokowo celuje uzytkownik: na ikonie/tekscie na
+         srodku karty. Klik "dzialal" tylko przypadkiem, gdy trafil w
+         padding wokol nich - drop na sam srodek trafial zawsze w blok
+         tekstu, nigdy w input pod spodem. */
+      pointer-events: none;
     }
     @keyframes marchingAnts {
       0% {
