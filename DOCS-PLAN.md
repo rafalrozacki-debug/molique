@@ -402,8 +402,16 @@ do nich dwudziestej pozycji byłoby pracą do wyrzucenia w tym etapie. Rozjazd
 naprawiony przy okazji: sześć stron nie linkowało do Spisu klas ani Roadmapy,
 `docs.html` gubiło blog, a `docs-tables.html` wypadło z osiemnastu menu.
 
-Uwaga na przyszłość: `docs-roadmap.html` nadal nie ma layoutu admina ani
-sidebara — jeśli ma go dostać, to osobne zadanie.
+Update: `docs-roadmap.html` usunięta na życzenie użytkownika ("roadmapa
+musi wylecieć z dokumentacji") — więc uwaga o brakującym layoucie admina
+stała się nieaktualna. Usunięto stronę oraz wszystkie 8 miejsc, które do
+niej linkowały: `partials/navbar.html`, `partials/footer.html`,
+`partials/docs-sidebar.html`, `docs.html` (poprawiony też link
+"Następny krok" → `docs-variables.html`), trzy kopie mega menu w
+`examples-mega-menu/navbar/select.html` oraz jedna z dwóch wzmianek w
+`changelog.html` (własna kopia stopki tej strony — druga wzmianka to
+historyczny wpis o pierwotnym dodaniu roadmapy, zostawiony bez zmian,
+plus dopisany nowy wpis o usunięciu).
 
 ---
 
