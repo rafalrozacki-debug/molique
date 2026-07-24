@@ -395,8 +395,48 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   `docs-interactive.html` (gdzie mieszka `.grid-expand`, z tabelą trzech
   wyzwalaczy i nową pułapką nr 6) oraz linkiem zwrotnym z
   `docs-select.html` (gdzie mieszka `.form-switch`).
+- **Anti-FOUC dla motywu i szerokości admin-sidebara** — zgłoszone przez
+  użytkownika jako "przeskakiwanie" sidebara przy przeładowaniu strony
+  (skurczony do `-md`/`-sm` sidebar chwilę migał pełną szerokością `lg`,
+  zanim się zwężał). Przyczyna: `molique-theme` i `molique-sidebar-state`
+  z `localStorage` były odczytywane wyłącznie w `molique-script.js` na
+  `DOMContentLoaded` — czyli PO pierwszym renderze przeglądarki. Ten sam
+  mechanizm dotyczył też motywu (jasny migający przed ciemnym), więc
+  naprawiono oba naraz. Fix dwuczęściowy: (1) synchroniczny inline
+  `<script>` w `partials/head.html`, zaraz po viewport meta (przed
+  `<title>`) — czyta oba klucze i ustawia `data-theme` + klasę
+  `sidebar-md`/`sidebar-sm` na `<html>`, zanim cokolwiek się narysuje;
+  (2) `layout/_admin-layout.scss` dostał lustrzane reguły
+  `:root.sidebar-md &`/`:root.sidebar-sm &` obok istniejących
+  `&.sidebar-md`/`&.sidebar-sm`, bo w chwili pierwszego malowania klasa
+  siedzi tylko na `<html>`, nie jeszcze na `.admin-layout`. Istniejąca
+  logika w `molique-script.js` (klik przełącznika, zapis do
+  `localStorage`) pozostała bez zmian — fix jest czysto addytywny.
+  Zweryfikowane w Playwright NAJMOCNIEJSZYM możliwym testem: symulacja
+  powracającego użytkownika (`localStorage` ustawiony przez
+  `context.addInitScript`) + całkowite zablokowanie `molique-script.js`
+  (`page.route(...).abort()`) — mimo to strona wyrenderowała się od razu
+  ze zwężonym (100px, `-md`) sidebarem i ciemnym motywem, dowodząc, że
+  poprawka działa niezależnie od tego, czy/kiedy główny skrypt się
+  wykona. Napotkane po drodze: sprawdzenie najpierw złego bundla
+  (`css/molique-style.css` zamiast `css/molique-style-admin.css`, do
+  którego faktycznie kompiluje się `_admin-layout.scss`) oraz ten sam
+  artefakt Sass co wcześniej przy `_grid-expand.scss` (komentarz `/* */`
+  przed listą selektorów z `&` tworzył pusty blok w wyjściowym CSS —
+  naprawione przez `//`).
 
 ### Do zrobienia później
+- **i18n: `posthtml-include` + `posthtml-expressions`** — użytkownik sam
+  zarządza tłumaczeniami (nie klient), więc odpada wariant CMS/WP.
+  Rozważano dwie opcje: ten duet vs. `posthtml-i18n`. Wybrano duet, bo
+  `posthtml-expressions` jest już transitywną zależnością
+  `posthtml-include` (v2.0.1) i już realnie napędza `{{ title }}` /
+  `<if condition="description">` w `partials/head.html` — zero nowej
+  zależności, tylko szersze użycie istniejącego mechanizmu. `posthtml-i18n`
+  odrzucony po sprawdzeniu przez npm registry API: v0.0.1, jedno
+  wydanie (2024-01-10), jeden maintainer, opis z literówką — zbyt
+  niedojrzały. Potwierdzone przez użytkownika, ale jawnie odłożone na
+  "następny etap" — NIE zaczynać implementacji bez wyraźnej prośby.
 - **Przejrzeć `docs-roadmap.html` i odhaczyć zrobione pozycje** — spora
   część listy (41 pomysłów) mogła się już zdezaktualizować w toku tej
   sesji (np. `.chart-nav`, grid-lg-cols, implikacje w przyciskach/gridzie

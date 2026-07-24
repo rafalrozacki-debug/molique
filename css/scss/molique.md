@@ -123,6 +123,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   taki przełącznik na stronie = cisza, bez błędu. Skrypt zapisuje wybór w
   `localStorage` pod `molique-theme`, przy pierwszej wizycie czyta
   `prefers-color-scheme`, a motyw ustawia atrybutem `data-theme` na `<html>`.
+  **Anti-FOUC:** odczyt z `localStorage` i ustawienie `data-theme` na `<html>`
+  dzieje się TAKŻE synchronicznie w `<head>` (patrz niżej, Admin Sidebar —
+  anti-FOUC) — bez tego motyw najpierw mignąłby jasny, zanim
+  `molique-script.js` zdążyłby go zmienić po `DOMContentLoaded`.
 
 ## Komponenty UI & Biznesowe
 
@@ -283,6 +287,31 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   pełnoekranowy, niewidzialny overlay blokujący kliknięcia w całej stronie —
   stąd na `docs-admin.html` demo przełącznika jest celowo statyczne
   (bez podpięcia realnego ID), a nie żywe.
+- **Admin Sidebar — anti-FOUC (zapobieganie "skakaniu" przy przeładowaniu):**
+  problem: `molique-theme` i `molique-sidebar-state` z `localStorage` były
+  odczytywane wyłącznie w `molique-script.js` na `DOMContentLoaded`, czyli
+  PO pierwszym renderze — powracający użytkownik z zapisanym `sidebar-md`/
+  `-sm` widział więc na ułamek sekundy pełny sidebar (`lg`), zanim się
+  skurczył (analogicznie: jasny motyw migający przed ciemnym). Rozwiązanie
+  jest DWUCZĘŚCIOWE i musi zostać skopiowane razem przy integracji frameworka
+  w nowym projekcie:
+  1. `partials/head.html` (a w skompilowanym HTML: sam initial `<head>`,
+     jak najwyżej, zaraz po viewport meta) dostaje mały **synchroniczny**
+     inline `<script>` (bez `defer`/`async`/`module` — musi wykonać się
+     zanim przeglądarka narysuje cokolwiek), który czyta oba klucze
+     `localStorage` i ustawia `data-theme` oraz klasę `sidebar-md`/
+     `sidebar-sm` bezpośrednio na `<html>` (`document.documentElement`),
+     zanim `<body>` w ogóle istnieje.
+  2. `layout/_admin-layout.scss` dostaje lustrzane reguły
+     `:root.sidebar-md &`/`:root.sidebar-sm &` obok istniejących
+     `&.sidebar-md`/`&.sidebar-sm` — bo w chwili pierwszego malowania klasa
+     jest jeszcze tylko na `<html>` (krok 1), a nie na `.admin-layout`
+     (tę drugą nadaje dopiero `molique-script.js` po `DOMContentLoaded`,
+     dla obsługi kliku przełącznika). Bez tej reguły CSS-owej sam
+     zapis do `localStorage` w kroku 1 nic by nie dał.
+  Istniejąca logika w `molique-script.js` (obsługa kliku, zapis do
+  `localStorage`) zostaje BEZ ZMIAN — ten mechanizm jest czysto addytywny,
+  tylko odczytuje to, co tamten zapisuje, i to wcześniej.
 - **Admin Header (Faux Cutout):** `.dashboard-header` > lewa strona +
   `.dashboard-header-actions`. Tworzy iluzję wycięcia w nagłówku.
 - **Admin Nav:** `.admin-nav` > `.admin-nav-link`. Submenu:

@@ -27,6 +27,16 @@
     &.sidebar-md { --current-sidebar-width: var(--sidebar-width-md); }
     &.sidebar-sm { --current-sidebar-width: var(--sidebar-width-sm); }
 
+    // Zapobiega FOUC: te same reguly co wyzej, ale zaczepione o klase na
+    // <html> - ja ustawia synchroniczny inline-skrypt w <head> (patrz
+    // partials/head.html), zanim przegladarka zdazy cokolwiek narysowac.
+    // .admin-layout wciaz dostaje swoja WLASNA klase pozniej, w
+    // molique-script.js (do obslugi kliku) - ta regula tylko zapewnia,
+    // ze wlasciwa szerokosc jest gotowa juz na pierwszej klatce, zamiast
+    // "skakac" z pelnej (lg) po DOMContentLoaded.
+    :root.sidebar-md & { --current-sidebar-width: var(--sidebar-width-md); }
+    :root.sidebar-sm & { --current-sidebar-width: var(--sidebar-width-sm); }
+
     /* WARIANT FLOATING (Odsunięty od krawędzi) */
     &.admin-layout-floating {
       --layout-gap: calc(var(--spacing-unit) * 3);

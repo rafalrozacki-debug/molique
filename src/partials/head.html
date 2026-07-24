@@ -1,6 +1,28 @@
 <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Zapobiega FOUC (flash of unstyled content): ustawia motyw i
+         szerokosc sidebara PRZED pierwszym renderowaniem, zamiast czekac
+         na DOMContentLoaded w molique-script.js (ktory i tak dalej
+         obsluguje klikniecia/przelaczanie - ten skrypt tylko odczytuje juz
+         zapisany stan). Musi byc synchroniczny (bez defer/async/module) i
+         jak najwyzej w <head>, zanim przegladarka narysuje cokolwiek. -->
+    <script>
+      (function () {
+        try {
+          var html = document.documentElement;
+          var savedTheme = localStorage.getItem('molique-theme');
+          var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          html.setAttribute('data-theme', savedTheme || (systemDark ? 'dark' : 'light'));
+
+          var savedSidebar = localStorage.getItem('molique-sidebar-state');
+          if (savedSidebar === 'sidebar-md' || savedSidebar === 'sidebar-sm') {
+            html.classList.add(savedSidebar);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <title>{{ title }}</title>
     <if condition="description"><meta name="description" content="{{ description }}" />
     </if><meta name="robots" content="index, follow" />
