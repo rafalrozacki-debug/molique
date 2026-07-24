@@ -431,6 +431,35 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   towarzyszącym skrypcie. Wpis dodany też do `changelog.html` (kategoria
   „Poprawki", w bieżącym wydaniu v1.7.0) i `changelog.html.md`
   zregenerowany.
+- **`<hr>` znikał jako kropka wewnątrz kart** — zgłoszone przez użytkownika
+  zrzutem ekranu z zewnętrznego projektu klienckiego (retusz zdjęć,
+  konsument frameworka), gdzie `<hr>` w `.card-body` renderował się jako
+  box 2×2 px zamiast pełnej linii. Przyczyna: molique nigdy nie stylował
+  `<hr>` — polegał wyłącznie na domyślnym stylu przeglądarki
+  (`margin-inline: auto`, myślany do centrowania w zwykłym block flow).
+  `.card-body` jest jednak `display: flex; flex-direction: column` od
+  zawsze, a `<hr>` jako jej BEZPOŚREDNIE dziecko staje się flex-itemem —
+  auto-marginesy w osi poprzecznej flexboksa mają pierwszeństwo przed
+  `align-items: stretch` i zjadają całą wolną przestrzeń, kurcząc element
+  do prawie zera. Naprawione bazowym stylem w `_base.scss`
+  (`width: 100%; margin-inline: 0; border-top: 1px solid
+  var(--border-color)`), analogicznie do punktowej poprawki, która już raz
+  rozwiązała ten sam problem lokalnie w `.modal-divider`
+  (`_modal-context.scss`) — teraz zgeneralizowane na każdy `<hr>`.
+  Zweryfikowane w Playwright: dokładna reprodukcja zrzutu użytkownika
+  (`.card.bg-dark > .card-body > hr`) daje pełną szerokość zamiast 2×2 px,
+  a istniejące użycia (`.modal-divider`, zwykły `<hr>` poza flexem w
+  `examples-text-effects.html`) bez regresji.
+- **`.form-floating` w karcie dublował odstęp** — zgłoszone przez
+  użytkownika przy okazji powyższego: `.card-body` ma domyślnie `gap`, więc
+  `.form-floating` jako jej bezpośrednie dziecko dostawał odstęp podwójnie
+  (gap + własny `margin-bottom`). Naprawione regułą `.card-body >
+  .form-floating { margin-bottom: 0; }` w `_form-groups.scss` — margines
+  poza `.card-body` (np. kilka pól wprost w `<form>` bez wrappera flex, jak
+  w `docs-forms.html`) działa bez zmian. Zweryfikowane w Playwright:
+  identyczny odstęp 16px w obu kontekstach. Oba fixy w tym samym commicie,
+  bo dotyczą tego samego mechanizmu (flex `gap` + własny margines/margines
+  potomka dublujące się nawzajem) i tej samej rozmowy z użytkownikiem.
 
 ### Do zrobienia później
 - **i18n: `posthtml-include` + `posthtml-expressions`** — użytkownik sam

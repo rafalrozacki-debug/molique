@@ -500,6 +500,23 @@
       text-wrap: pretty;
       max-width: 75ch;
     }
+    /* Reset domyślnego stylu przeglądarki. Bez tego UA-owy
+       "border-style: inset" + "margin-inline: auto" rozjeżdża się jako
+       BEZPOŚREDNIE dziecko flexa (np. .card-body, każdy .d-flex.flex-column):
+       auto-marginesy w osi poprzecznej flexboksa mają pierwszeństwo przed
+       align-items:stretch i "zjadają" całą wolną przestrzeń zamiast
+       rozciągnąć element, więc linia kurczy się do prawie zerowej szerokości
+       (widać ją jako kropkę). Ten sam problem już raz naprawiono lokalnie w
+       .modal-divider (_modal-context.scss) - to jest ta sama poprawka
+       zgeneralizowana na wszystkie <hr>. */
+    hr {
+      width: 100%;
+      flex-shrink: 0;
+      margin-block: calc(var(--spacing-unit) * 2);
+      margin-inline: 0;
+      border: 0;
+      border-top: 1px solid var(--border-color);
+    }
     /* =========================================
        KONTENERY
        ========================================= */
@@ -2362,6 +2379,14 @@
     .form-floating .input {
       padding-top: 1.625rem;
       padding-bottom: 0.625rem;
+    }
+    /* .card-body ma wlasny flex gap (spacing miedzy dziecmi) - wlasny
+       margin-bottom .form-floating wyzej dublowalby ten odstep (gap +
+       margines = podwojna przerwa). Margines wyzej zostaje bez zmian dla
+       pozostalych kontekstow (np. kilka .form-floating wprost w <form> bez
+       .d-flex) - tam to on jedyny odpowiada za odstep miedzy polami. */
+    .card-body > .form-floating {
+      margin-bottom: 0;
     }
   }
   @layer components {

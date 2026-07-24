@@ -54,7 +54,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 - **Stepper:** `.stepper` (wariant: `.stepper-numbered`) > `.step` (dodaj `.is-active` lub `.is-completed`).
 
 ### Formularze (Zero JS Validation)
-- **Floating Labels:** `.form-floating` > `input.input[placeholder=" "]` + `label` + `.feedback-invalid`.
+- **Floating Labels:** `.form-floating` > `input.input[placeholder=" "]` + `label` + `.feedback-invalid`. Własny `margin-bottom` zeruje się jako bezpośrednie dziecko `.card-body` (ten ma gap) — poza `.card-body` działa normalnie.
 - **Switche:** `<label class="form-switch">` > `<input type="checkbox" class="form-switch-input">` + `<span class="form-switch-label">`. Warianty: `.form-switch-square`, `.form-switch-outline`.
 - **Input Groups:** `.input-group` > `.input-group-text` + `.input` + `.btn`. (Automatycznie łączy elementy w gładki prostokąt).
 - **Zaawansowane Inputy:** `.input-range`, `.input-color`, `input[type="date"].input`, `input[type="number"].input` (bez natywnego spinnera — do krokowania służy `.qty-input` z przyciskami `+` / `-`, klawiatura i scroll).
@@ -107,6 +107,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 - **Background Video/Image:** `.bg-video-container` > `img.bg-video` (plakat) + `video.bg-video`; wariant statyczny `.bg-image-container` > `.bg-image` (także `picture.bg-image`) — oba z domyślną nakładką.
 - **Overlay (nakładka na tło):** rodzic `.has-overlay` + `.overlay`. Sama `.overlay` daje już przyciemnienie na 50% — kolor (`.overlay-dark/-primary/-light`, `.bg-overlay` = czerń) i krycie (`.overlay-10` do `.overlay-90`) tylko je zmieniają. `.has-overlay` OBOWIĄZKOWE: bez niego nakładka szuka kontekstu wyżej i rozlewa się poza sekcję.
 - **Sekcje:** goły `<section>` ma już domyślny rytm pionowy (`padding-block` = 48px góra i dół). NIE ma klasy `.section` — odstęp jest własnością znacznika. Nie dopisuj `mb-5 pb-5`; własny odstęp nadaj klasą narzędziową (`.py-4`, `.p-0`), która nadpisze domyślną.
+- **Separator:** goły `<hr>`, zero klas — pełna szerokość, `border-top: 1px solid var(--border-color)`, `margin-block` 16px. Reset celowy: domyślny `<hr>` przeglądarki ma `margin-inline: auto`, co jako bezpośrednie dziecko dowolnego flexa (np. `.card-body`) kurczy go do prawie zera (auto-marginesy w osi poprzecznej wygrywają z `align-items: stretch`) — wygląda jak kropka. `width: 100%` + `margin-inline: 0` eliminuje to na stałe.
 - **Filtry Obrazów:** `.filter-grayscale`, `.filter-blur`, `.filter-none` (zdejmuje filtr, np. z `.hover-filter-none`).
 - **Obramowania (Borders):** `.border`, `.border-0`, `.border-top`, `.border-bottom`, `.border-start`, `.border-end`.
 - **Zaokrąglenia (Radius):** `.rounded-0` do `.rounded-5`, `.rounded-circle`, `.rounded-pill`, `.rounded-top-0`, `.rounded-bottom-0`.

@@ -55,6 +55,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   jest własnością samego znacznika. Nie dopisuj `mb-5 pb-5`; jeśli chcesz
   inny odstęp, użyj klasy narzędziowej (`.py-4`, `.p-0`), która nadpisze
   wartość domyślną.
+- **Separator:** goły `<hr>`, zero klas — pełna szerokość, `border-top: 1px
+  solid var(--border-color)`, `margin-block` = 16px. Reset jest CELOWY, nie
+  kosmetyczny: domyślny `<hr>` przeglądarki ma `margin-inline: auto`, co
+  jako BEZPOŚREDNIE dziecko dowolnego flexa (np. `.card-body`) kurczy go do
+  prawie zera (auto-marginesy w osi poprzecznej flexboksa wygrywają z
+  `align-items: stretch`) — wygląda jak kropka zamiast linii. `width: 100%`
+  + `margin-inline: 0` w bazie eliminuje to raz na zawsze.
 
 ## Nawigacja (Navbar)
 
@@ -208,7 +215,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 ## Formularze (Zero JS Validation)
 
 - **Floating Labels:** `.form-floating` > `input.input[placeholder=" "]` +
-  `label` + `.feedback-invalid`.
+  `label` + `.feedback-invalid`. Ma własny `margin-bottom` (odstęp między
+  polami w zwykłym bloku bez wrappera flex) — ale jako BEZPOŚREDNIE dziecko
+  `.card-body` (ten ma domyślnie `gap`) margines się zeruje, żeby nie
+  dublować odstępu z gapem. Poza `.card-body` margines działa normalnie.
 - **Switche:** `<label class="form-switch">` >
   `<input type="checkbox" class="form-switch-input">` +
   `<span class="form-switch-label">`. Warianty: `.form-switch-square`,

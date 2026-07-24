@@ -560,6 +560,70 @@
                     strona i tak renderuje się od razu poprawnie.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  <code>&lt;hr&gt;</code> znikał w kartach — wyglądał jak kropka
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Molique nigdy nie stylował <code>&lt;hr&gt;</code> —
+                    element polegał wyłącznie na domyślnym stylu przeglądarki,
+                    który m.in. wyśrodkowuje go przez
+                    <code>margin-inline: auto</code>. Jako
+                    <strong>bezpośrednie dziecko dowolnego flexa</strong>
+                    (najczęściej <code>.card-body</code>, który jest
+                    <code>flex-direction: column</code> od zawsze) te
+                    auto-marginesy w osi poprzecznej mają pierwszeństwo przed
+                    <code>align-items: stretch</code> i „zjadają" całą wolną
+                    przestrzeń — linia kurczyła się do prawie zerowej
+                    szerokości, widoczna jako pojedyncza kropka pośrodku karty.
+                  </li>
+                  <li>
+                    Naprawione dodaniem bazowego stylu w
+                    <code>_base.scss</code>: <code>width: 100%</code>,
+                    <code>margin-inline: 0</code>,
+                    <code>border-top: 1px solid var(--border-color)</code>.
+                    Zero auto-marginesów, więc problem znika w każdym
+                    kontekście — nie tylko w kartach.
+                  </li>
+                  <li>
+                    <strong>Ten sam błąd był już raz naprawiony punktowo</strong>
+                    w <code>.modal-divider</code> — ta poprawka go generalizuje
+                    na wszystkie <code>&lt;hr&gt;</code> w projekcie, bez
+                    dotykania markupu.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  <code>.form-floating</code> w karcie dublował odstęp
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <code>.form-floating</code> ma własny
+                    <code>margin-bottom</code> (potrzebny, gdy kilka pól stoi
+                    wprost w zwykłym bloku bez wrappera flex). Ale
+                    <code>.card-body</code> ma domyślnie <code>gap</code> —
+                    jako jego bezpośrednie dziecko pole dostawało odstęp
+                    <strong>podwójnie</strong> (gap + własny margines), więc
+                    odległość do kolejnego pola/przycisku była dwa razy
+                    większa niż między innymi elementami tej samej karty.
+                  </li>
+                  <li>
+                    Naprawione regułą <code>.card-body &gt; .form-floating {
+                    margin-bottom: 0; }</code> — poza <code>.card-body</code>
+                    margines działa dokładnie jak dotychczas.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>
