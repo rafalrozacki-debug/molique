@@ -481,6 +481,41 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   Udokumentowana na `docs-layout.html` (tabela w sekcji 5, przykład kodu,
   pułapka nr 5 o wymogu bezpośredniego, wyśrodkowanego rodzica — technika
   nie działa poprawnie zagnieżdżona głębiej, np. w `.card-body`).
+- **Przegląd `docs-roadmap.html` względem realnego stanu frameworka** —
+  poproszone przez użytkownika ("Zróbmy roadmapę"). Zlecone agentowi
+  Explore (zamiast zgadywać z pamięci): audyt każdej z 41 pozycji listy
+  względem faktycznego kodu w `css/scss/` i `js/`, z werdyktem
+  ZROBIONE/CZĘŚCIOWO/NIE ZROBIONE i konkretnym dowodem (nazwa klasy/pliku)
+  dla każdej. Wynik:
+  - **8 pozycji w pełni zrobionych, usunięte z listy**: cała kategoria
+    "Architektura i dystrybucja" (`molique-nano` jako preset w
+    `src/builder.js`, pełny system niezależnych chunków SCSS z
+    `tools/gen-chunks.js`), `.position-sticky` uniwersalny,
+    `.selection-tile` (pastylkowe checkboxy/radio), `.typewriter`,
+    maskowanie CSS (`mask-image`/`clip-path` już szeroko używane),
+    `.chart-radial` (kołowy progress) i gradient pod `.chart-area`.
+    Usunięcie całej kategorii Architektura wymagało też usunięcia jej
+    przycisku z szybkiej nawigacji kategorii na górze strony oraz
+    renumeracji komentarzy HTML pozostałych 10 sekcji.
+  - **6 pozycji doprecyzowanych** (częściowo zrobione, więc opis
+    przepisany na to, co realnie brakuje, zamiast usuwać): domyślna
+    animacja zaznaczania (jest `transition` koloru, brak czegoś
+    bardziej wyrazistego), checklist z odhaczanymi pozycjami (jest
+    tylko dekoracyjna ikona w `.list-icons-check`), galeria spięta z
+    Lightboxem (`.product-gallery` i Lightbox działają osobno),
+    generyczny cytat w artykule (`.testimonial` to komponent
+    marketingowy, nie blockquote do bloga), spięcie
+    `.file-upload-animated` ze wspólną biblioteką `.hover-border-*`
+    (biblioteka już istnieje, ale ten komponent ma nadal własną,
+    osobną implementację), pasek nad `.admin-nav` (`.topbar` i
+    `.dashboard-header` istnieją, ale żaden nie jest tym konkretnie).
+  - Zweryfikowane skryptem liczącym rzeczywiste `<li>` w każdej sekcji
+    względem liczby w badge'u — 10/10 kategorii zgodnych, suma = nowa
+    wartość na stat-card (32 pomysły, 10 kategorii, z 41/11). Playwright
+    potwierdził też, że wszystkie kotwice szybkiej nawigacji nadal
+    prowadzą do istniejących sekcji (żadnej martwej po usunięciu
+    Architektury).
+  - Wpis w `changelog.html` (kategoria "Ulepszenie").
 
 ### Do zrobienia później
 - **i18n: `posthtml-include` + `posthtml-expressions`** — użytkownik sam
@@ -494,11 +529,6 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   wydanie (2024-01-10), jeden maintainer, opis z literówką — zbyt
   niedojrzały. Potwierdzone przez użytkownika, ale jawnie odłożone na
   "następny etap" — NIE zaczynać implementacji bez wyraźnej prośby.
-- **Przejrzeć `docs-roadmap.html` i odhaczyć zrobione pozycje** — spora
-  część listy (41 pomysłów) mogła się już zdezaktualizować w toku tej
-  sesji (np. `.chart-nav`, grid-lg-cols, implikacje w przyciskach/gridzie
-  i sporo innych rzeczy zrobionych po drodze). Poproszone przez
-  użytkownika, jeszcze nie zrobione.
 - **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez
   użytkownika na później, poza tym, co już naprawiono przy
   `docs-components-extra` (Background Sync, klawiatura w lightboksie).

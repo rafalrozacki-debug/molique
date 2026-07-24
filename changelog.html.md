@@ -664,6 +664,44 @@
                     <code>docs-layout.html</code>.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Ulepszenie</span>
+                  Roadmapa odchudzona z pozycji zrealizowanych przy okazji
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>8 pomysłów</strong> zostało zrealizowanych po
+                    drodze, przy okazji innych prac, i zniknęło z listy —
+                    m.in. cała kategoria „Architektura i dystrybucja"
+                    (<code>molique-nano</code> jako preset w konfiguratorze,
+                    pełny system niezależnych chunków SCSS), uniwersalna
+                    <code>.position-sticky</code>, pastylkowe checkboxy/radio
+                    (<code>.selection-tile</code>), animacja pisania tekstu
+                    (<code>.typewriter</code>), maskowanie CSS
+                    (<code>mask-image</code>/<code>clip-path</code>, szeroko
+                    już wykorzystywane) oraz kołowy progress bar i gradient
+                    pod linią wykresu obszarowego (oba w
+                    <code>.chart-radial</code>/<code>.chart-area</code>).
+                  </li>
+                  <li>
+                    <strong>6 kolejnych pozycji doprecyzowanych</strong>, bo
+                    okazały się częściowo zrobione — opis zmieniony z
+                    „zbuduj X od zera" na to, co realnie brakuje (np. checklist
+                    z odhaczanymi pozycjami zamiast dekoracyjnych ikon w
+                    <code>.list-icons</code>, spięcie <code>.file-upload-animated</code>
+                    ze wspólną biblioteką <code>.hover-border-*</code>, która
+                    już istnieje).
+                  </li>
+                  <li>
+                    Staty na górze strony zaktualizowane (32 pomysły w 10
+                    kategoriach, z 41/11), audyt wykonany pozycja po pozycji
+                    względem realnego stanu <code>css/scss/</code> i
+                    <code>js/</code>, nie z pamięci.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>
