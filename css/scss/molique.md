@@ -49,6 +49,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   przypięcie do krawędzi `.top-0/.bottom-0/.left-0/.right-0/.inset-0`;
   centrowanie `.top-50` + `.left-50` + `.translate-middle(-x/-y)`.
   Sizing: `.w-25/-50/-75/-100/-auto`, `.mw-100`, `.min-vh-100`.
+- **Breakout (Full-bleed na mobile):** `.breakout-mobile` — wyrywa element
+  z paddingu `.container` poniżej 768px, aż do krawędzi ekranu (karuzele,
+  galerie, hero w treści). Na desktopie bez efektu. Technika viewport
+  centering (`width: 100vw` + `margin-left: 50%` + `translateX(-50%)`)
+  liczy się względem BEZPOŚREDNIEGO rodzica — musi nim być element
+  wyśrodkowany w oknie jak `.container` (`margin-inline: auto`), inaczej
+  (np. zagnieżdżone w `.card-body`) wynik jest przesunięty/przycięty.
 - **Bento Grid:** `.bento-grid` > `.bento-col-2`, `.bento-row-2`.
 - **Sekcje:** goły `<section>` ma już domyślny rytm pionowy
   (`padding-block` = 48px góra i dół). **Nie ma klasy `.section`** — odstęp

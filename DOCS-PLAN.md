@@ -460,6 +460,27 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   identyczny odstęp 16px w obu kontekstach. Oba fixy w tym samym commicie,
   bo dotyczą tego samego mechanizmu (flex `gap` + własny margines/margines
   potomka dublujące się nawzajem) i tej samej rozmowy z użytkownikiem.
+- **Nowa klasa `.breakout-mobile` (full-bleed na mobile)** — poproszona
+  wprost przez użytkownika ("klasa do powiększania kontenerów na mobile"),
+  doprecyzowana przez `AskUserQuestion` (trzy opcje: full-bleed/breakout na
+  wybranym elemencie vs zmniejszenie paddingu całego `.container` vs
+  większy `max-width` kontenera — wybrano pierwszą, rekomendowaną).
+  Implementacja: technika viewport centering (`width: 100vw` +
+  `margin-left: 50%` + `transform: translateX(-50%)`) w
+  `@media (max-width: 767px)` (`mq(sm, max)` — UWAGA, nie `mq(md, max)`,
+  ten drugi w tym projekcie oznacza "poniżej `lg`", czyli 991px, przez
+  Bootstrapową konwencję nazw `$breakpoint-XX-max` = "największa szerokość
+  wciąż w zakresie XX", czyli jeden piksel przed KOLEJNYM breakpointem —
+  pomyłka złapana i poprawiona przed commitem). Dodana do
+  `utilities/_helpers.scss` (`@layer utilities`, więc wygrywa z
+  `components` przez samą kolejność warstw, bez potrzeby `!important`).
+  Zweryfikowana w Playwright: mobile 375px → element 0–375px (pełna
+  szerokość viewportu, `scrollWidth === clientWidth`, brak poziomego
+  scrolla dzięki istniejącej tarczy `overflow-x: clip` na `html`); desktop
+  1300px → zero efektu, element zostaje w normalnym paddingu kontenera.
+  Udokumentowana na `docs-layout.html` (tabela w sekcji 5, przykład kodu,
+  pułapka nr 5 o wymogu bezpośredniego, wyśrodkowanego rodzica — technika
+  nie działa poprawnie zagnieżdżona głębiej, np. w `.card-body`).
 
 ### Do zrobienia później
 - **i18n: `posthtml-include` + `posthtml-expressions`** — użytkownik sam

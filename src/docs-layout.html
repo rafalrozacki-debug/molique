@@ -440,6 +440,17 @@
                     </td>
                   </tr>
                   <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.breakout-mobile</code></td>
+                    <td data-label="Grupa">Szerokość</td>
+                    <td data-label="Co robi">
+                      Wyrywa element z paddingu <code>.container</code> na
+                      mobile (poniżej 768px), aż do krawędzi ekranu —
+                      karuzele, galerie, zdjęcia hero w treści artykułu.
+                      Na desktopie bez efektu. Zero konfiguracji, nie musi
+                      znać wartości paddingu rodzica.
+                    </td>
+                  </tr>
+                  <tr>
                     <td data-label="Klasa"><code class="fw-bold">.text-center</code></td>
                     <td data-label="Grupa">Tekst</td>
                     <td data-label="Co robi">
@@ -460,11 +471,23 @@
               </table>
             </div>
 
-            <div class="component-code">
+            <div class="component-code mb-4">
               <button class="btn-copy">Kopiuj</button>
               <pre><code>&lt;!-- Element idealnie na środku rodzica --&gt;
 &lt;div class="position-relative" style="height: 200px"&gt;
   &lt;span class="position-absolute top-50 left-50 translate-middle"&gt;Środek&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="component-code">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;!-- Karuzela dotyka krawędzi ekranu na mobile, wraca do
+     szerokości .container na desktopie --&gt;
+&lt;div class="container"&gt;
+  &lt;p&gt;Zwykły akapit z marginesem...&lt;/p&gt;
+  &lt;div class="carousel breakout-mobile"&gt;
+    &lt;!-- ... --&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</code></pre>
             </div>
           </section>
@@ -617,6 +640,29 @@
                     (adres URL, numer konta) rozpycha więc kolumnę i wywołuje
                     poziomy pasek przewijania całej strony. Na obrazki
                     wystarczy <code>.mw-100</code>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span><code>.breakout-mobile</code> zagnieżdżony za głęboko</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Technika opiera się na tym, że <code>margin-left: 50%</code>
+                    liczy się względem szerokości <strong>bezpośredniego
+                    rodzica</strong>, a ten musi być wyśrodkowany w oknie tak
+                    jak <code>.container</code> (czyli mieć
+                    <code>margin-inline: auto</code>). Element działa poprawnie
+                    jako bezpośrednie dziecko <code>.container</code> — ale
+                    wsadzony głębiej, np. w <code>.card-body</code> wewnątrz
+                    kontenera, liczy się względem szerokości karty, nie okna,
+                    i ląduje przesunięty/przycięty zamiast dotykać krawędzi
+                    ekranu. Przenieś klasę na najbliższy poziom
+                    <code>.container</code> albo owiń problematyczny element
+                    dodatkowym <code>&lt;div&gt;</code> bezpośrednio w nim.
                   </p>
                 </div>
               </details>

@@ -217,5 +217,28 @@
   .z-index-1 { z-index: 1 !important; }
   .z-index-2 { z-index: 2 !important; }
   .z-index-3 { z-index: 3 !important; }
-  
+
+  /* =========================================
+     9. FULL-BLEED / BREAKOUT (Mobile)
+     ========================================= */
+  /* Wyrywa element z paddingu .container na mobile, az do krawedzi ekranu -
+     typowo karuzele, galerie zdjec, zdjecia hero wewnatrz tresci artykulu.
+     Dziala TYLKO ponizej md (768px): .container ma tam padding-inline
+     (patrz _base.scss), a na md+ jest juz z zamierzenia wezszy niz viewport,
+     wiec breakout tam tylko psulby uklad.
+
+     Technika "viewport centering" (width: 100vw + margin-left: 50% +
+     translateX(-50%)) dziala niezaleznie od realnej wartosci paddingu
+     rodzica - nie trzeba go znac ani przeliczac, dziala nawet gdy ktos
+     nadpisze padding .container klasa narzedziowa. html ma juz globalnie
+     overflow-x: clip (patrz _base.scss) - dzieki temu 100vw nie rozsadza
+     ukladu poziomym scrollem, nawet gdy strona ma widoczny pasek przewijania
+     (bez tej tarczy 100vw liczy sie WRAZ z szerokoscia scrollbara). */
+  @include mq(sm, max) {
+    .breakout-mobile {
+      width: 100vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+  }
 }

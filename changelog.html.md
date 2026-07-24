@@ -627,6 +627,43 @@
                     margines działa dokładnie jak dotychczas.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Full-bleed na mobile (<code>.breakout-mobile</code>)
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    Nowa klasa narzędziowa: wyrywa element z paddingu
+                    <code>.container</code> na mobile (poniżej 768px), aż do
+                    krawędzi ekranu — typowy przypadek to karuzela, galeria
+                    zdjęć albo zdjęcie hero wewnątrz tekstu artykułu, które ma
+                    dotykać brzegów telefonu, podczas gdy reszta treści
+                    zachowuje normalny margines. Na desktopie bez efektu.
+                  </li>
+                  <li>
+                    Technika „viewport centering" (<code>width: 100vw</code> +
+                    <code>margin-left: 50%</code> +
+                    <code>translateX(-50%)</code>) działa niezależnie od
+                    realnej wartości paddingu rodzica — nie trzeba jej znać
+                    ani przeliczać. Globalna tarcza
+                    <code>overflow-x: clip</code> na <code>html</code>
+                    (obecna w molique od zawsze) zapobiega poziomemu
+                    scrollowi, który <code>100vw</code> zwykle wywołuje przy
+                    widocznym pasku przewijania.
+                  </li>
+                  <li>
+                    <strong>Wymaga bezpośredniego rodzica wyśrodkowanego w
+                    oknie</strong> (jak <code>.container</code>) — działa
+                    poprawnie jako jego bezpośrednie dziecko, ale zagnieżdżone
+                    głębiej (np. w <code>.card-body</code>) liczy się względem
+                    szerokości karty, nie okna, i wychodzi
+                    przesunięte/przycięte. Opisane jako pułapka nr 5 na
+                    <code>docs-layout.html</code>.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>
