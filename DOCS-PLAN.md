@@ -516,19 +516,97 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
     prowadzą do istniejących sekcji (żadnej martwej po usunięciu
     Architektury).
   - Wpis w `changelog.html` (kategoria "Ulepszenie").
+- **i18n: mechanizm + pilotaż EN/DE** — użytkownik poprosił o wersje
+  językowe, zastrzegając że tłumaczenie musi zrobić Claude ("średnio z
+  angielskim i niemieckim"). Architektura (`posthtml-include` +
+  `posthtml-expressions`) była już potwierdzona wcześniej, ale wybór
+  KONKRETNEGO mechanizmu — szablon+słownik `{{ t.klucz }}` vs. pełne
+  zduplikowane pliki — zapadł dopiero przy realnym planowaniu: 88 gotowych
+  stron HTML to zbyt duża powierzchnia, żeby retrofitować w system kluczy
+  tłumaczeń od zera. Wybrano **duplikację plików + bezpośrednie tłumaczenie
+  treści**, zostawiając `posthtml-expressions` do tego, do czego już
+  służy: parametryzacji WSPÓLNYCH partiali (navbar, head), nie treści stron.
+  Przed implementacją: `EnterPlanMode` (auto-wyszedł bez zapisanego planu —
+  najwyraźniej błąd/quirk harnessu), więc plan przedstawiony zwykłą
+  wiadomością + `AskUserQuestion` (zakres: architektura + pilotaż teraz,
+  reszta 86 stron później; changelog/roadmapa TEŻ mają być tłumaczone w
+  przyszłości, wbrew mojej rekomendacji "zostaw tylko PL" — decyzja
+  użytkownika, zanotowana do zrobienia niżej).
+
+  **Konwencja:** płaskie sufiksy, nie podfoldery — `docs.html` (PL,
+  domyślny), `docs.en.html`, `docs.de.html`. Podfoldery (`/en/`)
+  złamałyby wszystkie względne ścieżki w całym serwisie (`base: './'`,
+  linki między ~88 stronami); sufiksy nic nie psują, a Vite już
+  automatycznie wykrywa każdy `.html` w `src/` jako osobne wejście builda
+  (`readdirSync` w `vite.config.js`) — nowy plik językowy nie wymaga
+  żadnej zmiany w konfiguracji discovery.
+
+  **Mechanizm (`vite.config.js`, funkcja `computeI18nLocals`):** liczy z
+  SAMEJ NAZWY PLIKU (nie z treści), które warianty językowe istnieją na
+  dysku (`existsSync`), i wstrzykuje `__lang`, `__isPl/__isEn/__isDe`,
+  `__altPl/__altEn/__altDe`, `__hasEn/__hasDe`,
+  `__langLabel`/`__langFlag` do `posthtmlExpressionsOptions.locals` — więc
+  te zmienne są dostępne we WSZYSTKICH `<include>` danej strony
+  jednocześnie (`head.html` dla hreflang, `navbar.html` dla przełącznika)
+  bez przekazywania czegokolwiek ręcznie per strona. `partials/head.html`
+  dostał `<link rel="alternate" hreflang="...">` (+ `x-default`),
+  `partials/navbar.html` — dynamiczny `{{ __langFlag }}`/`{{ __langLabel }}`
+  na przycisku i `<if condition="__hasEn">`/`<if condition="__hasDe">`
+  wokół pozycji w rozwijanym menu, żeby CAŁKOWICIE znikały (nie prowadziły
+  do 404), gdy dana strona nie ma jeszcze tłumaczenia. Zero nowego JS —
+  wszystko w 100% statyczne z buildu, zgodnie z złotą zasadą "natywne
+  HTML/CSS nad JS".
+
+  **Pułapka złapana przed commitem (poważna, warta zapamiętania):**
+  `posthtml-expressions` interpoluje WSZYSTKIE `{{ }}` w całym dokumencie
+  w jednym przebiegu (`placeholders.js`), zanim w ogóle usunie gałęzie
+  `<if>` o fałszywym warunku — więc `{{ __altEn }}` musi być poprawną,
+  zdefiniowaną wartością (string) NAWET gdy `__hasEn=false` i ta gałąź i
+  tak zostanie wyrzucona chwilę później. Wartość `null` wywalała cały
+  build (`ReferenceError: '__altEn' is not defined`, `strictMode`
+  domyślnie `true`) na WSZYSTKICH 86 stronach spoza pilotażu, mimo że
+  `<if>` by ją i tak ukrył. Zdiagnozowane minimalną reprodukcją w
+  `node -e` (bez tego można by długo szukać w 88-stronicowym buildzie).
+  Naprawione fallbackiem `__altEn: hasEn ? altEnFile : altPl` (zamiast
+  `null`) — semantycznie sensowny (nieistniejące tłumaczenie linkuje do
+  polskiego oryginału) i zawsze poprawny string.
+
+  **Przetłumaczone w pilotażu:** `partials/navbar.html` (+ `.en.html`/
+  `.de.html` — duży plik, 630 linii, mega menu z ~14 kategoriami),
+  `partials/footer.html`, `partials/scripts.html` (aria-label),
+  `partials/docs-sidebar.html` (linki do stron spoza pilotażu CELOWO
+  zostają PL — stopniowa migracja, nie zerwany link), `index.html`,
+  `docs.html`. Kod w blokach `<pre><code>` przetłumaczony tam, gdzie są to
+  komentarze/etykiety czytelne dla człowieka (np. `Witaj w molique!` →
+  `Welcome to molique!`), nazwy klas/zmiennych CSS bez zmian (to
+  działający kod, nie proza). Nazwy języków w przełączniku
+  ("Polski"/"English"/"Deutsch") NIE są tłumaczone między wariantami —
+  to nazwy własne języków, standard w każdym language switcherze (jak
+  Wikipedia), więc te 3 linie są bajtowo identyczne w navbar.html/.en/.de.
+
+  **Zweryfikowane w Playwright:** `lang` na `<html>`, etykieta i flaga w
+  przycisku przełącznika, komplet `hreflang` (self + alternates +
+  x-default), poprawny `checked`-stan (ptaszek) w menu — na wszystkich 6
+  kombinacjach (index/docs × pl/en/de) ORAZ na stronie spoza pilotażu
+  (`examples-carousel.html`: przełącznik pokazuje WYŁĄCZNIE Polski, zero
+  martwych linków, hreflang tylko self+x-default) — potwierdza płynną
+  degradację. Zero błędów JS. Zrzuty ekranu: niemiecki hero + otwarte menu
+  przełącznika, angielski `docs.en.html` z automatycznie rozwiniętą
+  aktywną gałęzią sidebara (potwierdza, że `molique-admin-nav.js` działa
+  identycznie na przetłumaczonych stronach, bez zmian w tym module).
 
 ### Do zrobienia później
-- **i18n: `posthtml-include` + `posthtml-expressions`** — użytkownik sam
-  zarządza tłumaczeniami (nie klient), więc odpada wariant CMS/WP.
-  Rozważano dwie opcje: ten duet vs. `posthtml-i18n`. Wybrano duet, bo
-  `posthtml-expressions` jest już transitywną zależnością
-  `posthtml-include` (v2.0.1) i już realnie napędza `{{ title }}` /
-  `<if condition="description">` w `partials/head.html` — zero nowej
-  zależności, tylko szersze użycie istniejącego mechanizmu. `posthtml-i18n`
-  odrzucony po sprawdzeniu przez npm registry API: v0.0.1, jedno
-  wydanie (2024-01-10), jeden maintainer, opis z literówką — zbyt
-  niedojrzały. Potwierdzone przez użytkownika, ale jawnie odłożone na
-  "następny etap" — NIE zaczynać implementacji bez wyraźnej prośby.
+- **i18n: kontynuacja tłumaczenia pozostałych stron** — pilotaż (navbar,
+  footer, `index.html`, `docs.html`) gotowy i działający; zostało ~86 stron
+  (21 `docs-*.html`, 58 `examples-*.html`, reszta: `download.html`,
+  `blog.html`, `404.html`, `starter.html`, `theme-editor.html`,
+  `builder.html`). Użytkownik potwierdził, że `changelog.html` i
+  `docs-roadmap.html` TEŻ mają zostać przetłumaczone (wbrew mojej
+  rekomendacji "zostaw tylko PL, bo zmieniają się co sesję" — świadoma
+  decyzja użytkownika, licząca się z kosztem utrzymania 3 wersji). Kolejność
+  priorytetowa do ustalenia z użytkownikiem, gdy wróci do tematu — naturalny
+  kandydat na start: reszta stron `docs-*.html` (najwyższa wartość
+  merytoryczna, najmniej stron).
 - **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez
   użytkownika na później, poza tym, co już naprawiono przy
   `docs-components-extra` (Background Sync, klawiatura w lightboksie).

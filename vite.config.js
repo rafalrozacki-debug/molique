@@ -1,5 +1,5 @@
 import { defineConfig, normalizePath, createLogger } from 'vite';
-import { resolve, dirname } from 'node:path';
+import { resolve, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readdirSync, existsSync, copyFileSync, readFileSync } from 'node:fs';
 import posthtml from 'posthtml';
@@ -93,6 +93,60 @@ function copyRootFiles() {
   };
 }
 
+// i18n: konwencja plaskich sufiksow, nie podfolderow (/en/, /de/) - te
+// zlamalyby wszystkie wzgledne sciezki (base: './', css/…, linki miedzy
+// stronami) w calym serwisie. "docs.html" (PL, domyslny, brak sufiksu),
+// "docs.en.html", "docs.de.html" - Vite i tak juz auto-wykrywa kazdy plik
+// .html w src/ jako osobne wejscie (patrz `input` wyzej), wiec nowy plik
+// jezykowy nie wymaga zadnej zmiany w konfiguracji.
+//
+// Ta funkcja liczy z NAZWY PLIKU (nie z tresci strony) komplet zmiennych
+// potrzebnych partiali head.html (hreflang) i navbar.html (przelacznik
+// jezyka) - policzone RAZ w buildzie, wiec zadna z ~88 stron nie musi
+// recznie przekazywac tych danych przez <include locals='...'>. Odpowiedniki
+// jezykowe strony, ktorych jeszcze nie ma na dysku, dostaja __hasEn/__hasDe
+// = false - head.html/navbar.html uzywaja <if condition="__hasEn"> zeby
+// nie renderowac hreflang/pozycji przelacznika do nieistniejacego pliku.
+//
+// PULAPKA (zlapana przy pierwszym buildzie): posthtml-expressions
+// interpoluje WSZYSTKIE {{ }} w calym dokumencie w jednym przebiegu PRZED
+// usunieciem galezi <if> o falszywym warunku - wiec {{ __altEn }} musi byc
+// poprawna, zdefiniowana wartoscia (string) NAWET gdy __hasEn=false i ta
+// galaz i tak zostanie wyrzucona. Wartosc null/undefined wywala caly build
+// (ReferenceError w strictMode), mimo ze <if> by ja i tak ukryl - dlatego
+// fallback do __altPl (bezpieczny, zawsze istnieje), nie do null.
+const LOCALE_META = {
+  pl: { label: 'PL', flag: 'pl' },
+  en: { label: 'EN', flag: 'gb' },
+  de: { label: 'DE', flag: 'de' },
+};
+
+function computeI18nLocals(filename) {
+  const file = basename(filename);
+  const match = file.match(/^(.+?)(?:\.(en|de))?\.html$/);
+  const base = match[1];
+  const locale = match[2] || 'pl';
+  const altPl = `${base}.html`;
+  const altEnFile = `${base}.en.html`;
+  const altDeFile = `${base}.de.html`;
+  const hasEn = existsSync(resolve(srcDir, altEnFile));
+  const hasDe = existsSync(resolve(srcDir, altDeFile));
+
+  return {
+    __lang: locale,
+    __langLabel: LOCALE_META[locale].label,
+    __langFlag: LOCALE_META[locale].flag,
+    __isPl: locale === 'pl',
+    __isEn: locale === 'en',
+    __isDe: locale === 'de',
+    __altPl: altPl,
+    __altEn: hasEn ? altEnFile : altPl,
+    __altDe: hasDe ? altDeFile : altPl,
+    __hasEn: hasEn,
+    __hasDe: hasDe,
+  };
+}
+
 // Mini-plugin: rozwija <include src="partials/…"> w czasie builda (posthtml +
 // posthtml-include). Własny zamiast vite-plugin-posthtml (porzucony, wywala się
 // na nowym Node). order:'pre' — include musi rozwinąć się ZANIM Vite czyta
@@ -109,8 +163,13 @@ function moliqueInclude() {
             // Domyślne locals dla posthtml-expressions: description='' sprawia,
             // że warunek <if condition="description"> na stronach bez opisu jest
             // falsy (pomija <meta description>) zamiast rzucać ReferenceError.
-            // Strony z opisem nadpisują to swoim locals.
-            posthtmlExpressionsOptions: { locals: { description: '' } },
+            // Strony z opisem nadpisują to swoim locals. i18n locals (patrz
+            // computeI18nLocals) liczone z nazwy pliku, dostępne we WSZYSTKICH
+            // <include> tej strony (head.html, navbar.html), bez przekazywania
+            // ich ręcznie.
+            posthtmlExpressionsOptions: {
+              locals: { description: '', ...computeI18nLocals(ctx.filename) },
+            },
           }),
         ]).process(html, {
           from: ctx.filename,

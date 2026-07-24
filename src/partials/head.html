@@ -28,6 +28,15 @@
     </if><meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0284C7" />
 
+    <!-- i18n: warianty jezykowe tej strony. __altEn/__altDe sa null, gdy
+         plik-tlumaczenie jeszcze nie istnieje w src/ (patrz computeI18nLocals
+         w vite.config.js) - wtedy <if> pomija dany hreflang, zamiast wskazywac
+         wyszukiwarce na nieistniejacy adres. -->
+    <link rel="alternate" hreflang="pl" href="{{ __altPl }}" />
+    <if condition="__hasEn"><link rel="alternate" hreflang="en" href="{{ __altEn }}" />
+    </if><if condition="__hasDe"><link rel="alternate" hreflang="de" href="{{ __altDe }}" />
+    </if><link rel="alternate" hreflang="x-default" href="{{ __altPl }}" />
+
     <!-- Favicony. Ścieżki WZGLĘDNE, tak jak reszta zasobów (vite base: './') —
          strona ma działać spod dowolnego katalogu hostingu, a build jest
          płaski, więc te same odwołania są poprawne z każdej podstrony. -->

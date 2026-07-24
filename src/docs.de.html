@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Dokumentation - molique Framework"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <span class="badge badge-primary mb-3">v1.2.0 (molique 2026)</span>
+            <h1 class="text-11 fw-black mb-3">Erste Schritte</h1>
+            <p class="text-6 text-muted">
+              Lernen Sie molique kennen – ein ultraleichtes, rigoros
+              optimiertes B2B-CSS-Framework. Gebaut auf nativen Cascade Layers
+              (@layer), ohne Spezifitätskämpfe und mit einem intelligenten
+              JS-Autoloader.
+            </p>
+          </div>
+
+          <!-- CTA: Theme Editor -->
+          <div
+            class="card p-4 mb-5 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3"
+          >
+            <div>
+              <h3 class="text-5 fw-bold m-0 mb-1">🎨 Theme Editor</h3>
+              <p class="text-muted m-0">
+                Wählen Sie Farben, Typografie, Rundungen und Sidebar live aus
+                und kopieren Sie dann den fertigen <code>:root</code>-Block in
+                Ihr Projekt.
+              </p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 flex-shrink-0">
+              <a
+                href="theme-editor.html"
+                class="btn btn-primary fw-bold hover-spring"
+                >Theme-Editor öffnen ➔</a
+              >
+              <a href="download.html" class="btn btn-outline-primary fw-bold"
+                >Herunterladen ⬇</a
+              >
+            </div>
+          </div>
+
+          <!-- SEKCJA 1: STARTER TEMPLATE -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              1. Start-Vorlage (Boilerplate)
+            </h2>
+            <p class="text-muted mb-4">
+              Kopieren Sie den folgenden HTML-Code, um loszulegen. Er enthält
+              optimiertes Laden von Schriftarten (Variable Fonts) sowie die
+              zentrale Kerndatei.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-3">Wichtige Hinweise:</h5>
+              <ul
+                class="list-icons list-icons-check list-icons-success text-4 text-muted m-0"
+              >
+                <li>
+                  Die Datei <code>molique-script.js</code> muss das Attribut
+                  <code>defer</code> haben, damit sie das Rendern der Seite
+                  nicht blockiert.
+                </li>
+                <li>
+                  <code>&lt;link rel="preload"&gt;</code>-Tags verhindern
+                  Textsprünge (FOUT/FOIT) beim Laden benutzerdefinierter
+                  Schriftarten.
+                </li>
+              </ul>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="de"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Mein molique-Projekt&lt;/title&gt;
+
+  &lt;!-- Preload Variable Fonts --&gt;
+  &lt;link rel="preload" href="fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin&gt;
+  &lt;link rel="preload" href="fonts/poppins-variable.woff2" as="font" type="font/woff2" crossorigin&gt;
+
+  &lt;!-- Haupt-Framework-Styles --&gt;
+  &lt;link rel="stylesheet" href="css/molique-style.css"&gt;
+  &lt;!-- Ihre Overrides (optional) --&gt;
+  &lt;link rel="stylesheet" href="css/custom.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1 class="text-9 fw-black"&gt;Willkommen bei molique!&lt;/h1&gt;
+
+  &lt;!-- Hauptskript (Autoloader) --&gt;
+  &lt;script src="js/molique-script.js" defer&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 2: STRUKTURA PLIKÓW I AUTOLOADER -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              2. Dateistruktur und JS-Autoloader
+            </h2>
+            <p class="text-muted mb-4">
+              Das Framework wurde für extreme Performance entwickelt. Wir
+              laden keinen Code, den Sie nicht verwenden.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-3">
+                Wie funktioniert DOM-basiertes Lazy Loading?
+              </h5>
+              <p class="text-4 text-muted m-0">
+                In der HTML-Datei binden Sie <strong>nur eine</strong>
+                JavaScript-Datei ein: <code>molique-script.js</code>. Diese
+                Datei scannt die Seitenstruktur. Erkennt sie z. B. die Klasse
+                <code>.carousel</code>, lädt sie automatisch und asynchron die
+                Datei <code>js/modules/molique-carousel.js</code> nach. So
+                lädt jede Unterseite nur die tatsächlich benötigten Bytes.
+              </p>
+            </div>
+          </section>
+
+          <!-- SEKCJA 3: KONFIGURACJA ZMIENNYCH -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              3. Variablen konfigurieren
+            </h2>
+            <p class="text-muted mb-4">
+              Das gesamte Framework basiert auf CSS-Variablen (Custom
+              Properties). Um das Erscheinungsbild an Ihre Marke anzupassen,
+              genügt es, den <code>:root</code>-Block in Ihrer eigenen Datei
+              <code>custom.css</code> zu überschreiben. Kein Neukompilieren
+              von Sass nötig!
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>/* Ihre custom.css-Datei */
+:root {
+  /* Wichtigste Markenfarben */
+  --primary: #f97316;
+  --primary-hover: #ea580c;
+  --primary-rgb: 249, 115, 22;
+
+  /* Eckenradius für alle Komponenten */
+  --border-radius: 8px;
+
+  /* B2B-Barrierefreiheit erzwingen (klickbarer Bereich) */
+  --target-size-min: 44px;
+}</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 4: ARCHITEKTURA WARSTW -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Layer-Architektur (@layer)</h2>
+            <p class="text-muted mb-4">
+              Das Framework nutzt native CSS-Layer. Das bedeutet, dass
+              Utility-Klassen immer gegenüber Komponenten gewinnen, ohne das
+              toxische <code>!important</code> zu verwenden.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview">
+                <div class="card p-4 bg-dark text-white w-100">
+                  <h3 class="m-0">Eine Karte hat standardmäßig den Hintergrund --bg-surface</h3>
+                  <p class="m-0 mt-2 opacity-75">
+                    Aber die Klasse .bg-dark gewinnt dank des Layers @layer utilities!
+                  </p>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Die Klasse .bg-dark überschreibt den Kartenhintergrund ohne !important --&gt;
+&lt;div class="card p-4 bg-dark text-white"&gt;
+  &lt;h3&gt;Eine Karte hat standardmäßig den Hintergrund --bg-surface&lt;/h3&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 5: WYBÓR MODUŁÓW -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. CSS-Module auswählen</h2>
+            <p class="text-muted mb-4">
+              Molique ist modular. Die Hauptstile laden Sie immer, aber
+              fortgeschrittene Komponenten (Shop, Blog, Admin-Panel) haben
+              eigene, unabhängige CSS-Dateien.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;head&gt;
+  &lt;!-- 1. Framework-Kern (erforderlich) --&gt;
+  &lt;link rel="stylesheet" href="css/molique-style.css"&gt;
+
+  &lt;!-- 2. Optionale Module (nur dort laden, wo Sie sie brauchen) --&gt;
+  &lt;link rel="stylesheet" href="css/molique-style-admin.css"&gt;
+  &lt;link rel="stylesheet" href="css/molique-style-shop.css"&gt;
+  &lt;link rel="stylesheet" href="css/molique-style-blog.css"&gt;
+&lt;/head&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- SEKCJA 6: KOMPATYBILNOŚĆ -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Anforderungen und Kompatibilität</h2>
+            <p class="text-muted mb-4">
+              Das Framework nutzt die neuesten W3C-Standards. Wir
+              unterstützen den Internet Explorer nicht.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-3">Verwendete Technologien:</h5>
+              <ul
+                class="list-unstyled text-4 text-muted m-0 d-flex flex-column gap-2"
+              >
+                <li>
+                  <strong>CSS Cascade Layers (<code>@layer</code>):</strong>
+                  Vollständige Unterstützung in Chrome 99+, Safari 15.4+,
+                  Firefox 97+.
+                </li>
+                <li>
+                  <strong>Relationaler Selektor (<code>:has()</code>):</strong>
+                  Vollständige Unterstützung in Chrome 105+, Safari 15.4+,
+                  Firefox 121+.
+                </li>
+                <li>
+                  <strong>Scroll-Driven Animations:</strong> (z. B. Parallax)
+                  Laufen nativ in Chrome 115+. In älteren Browsern startet das
+                  Framework automatisch einen leichten JavaScript-Fallback.
+                </li>
+                <li>
+                  <strong>Native Modale (<code>&lt;dialog&gt;</code>):</strong>
+                  Vollständige Unterstützung in allen modernen Browsern.
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <div></div>
+            <a
+              href="docs-roadmap.html"
+              class="btn btn-primary fw-bold hover-spring"
+            >
+              Nächster Schritt: Roadmap ➔
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

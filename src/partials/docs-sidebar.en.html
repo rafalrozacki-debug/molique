@@ -1,0 +1,122 @@
+<aside class="admin-sidebar">
+        <!-- Bez .admin-brand - logo molique jest już na stałe w navbarze
+             u góry (partials/navbar.html), powielanie go tutaj byłoby
+             zbędne. UWAGA: $admin-brand-block-height w _admin-nav.scss
+             rezerwuje miejsce na logo w drill-downie wariantów -sm/-md,
+             ale docs-sidebar nigdy nie dostaje tych klas (brak przycisku
+             #molique-sidebar-toggle na żadnej stronie docs-*), więc ta
+             ścieżka CSS tu nie działa i nie zostaje po niej pusta luka. -->
+
+        <!-- Aktywnej pozycji NIE oznaczamy w markupie - ten sidebar jest wspólny
+             dla wszystkich stron dokumentacji. Klasę .is-active nadaje z adresu
+             URL moduł js/modules/molique-admin-nav-active.js (auto-ładowany
+             przy .admin-nav) dla płaskich linków, a molique-admin-nav.js dla
+             gałęzi .admin-nav-submenu niżej - ten drugi też otwiera na desktopie
+             gałąź, w której leży bieżąca strona. -->
+
+        <!-- PILOTAZ i18n: tylko docs.html ma dzis warianty EN/DE, wiec
+             pozostale linki celowo wskazuja na strony polskie (jedyne, jakie
+             istnieja) - stopniowa migracja, nie zerwany link. -->
+        <ul class="admin-nav">
+          <li class="mobile-only-nav-item">
+            <a href="docs.en.html" class="admin-nav-link"><span class="nav-text">Home</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-layout.html" class="admin-nav-link"><span class="nav-text">Layout</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-buttons.html" class="admin-nav-link"><span class="nav-text">Components</span></a>
+          </li>
+          <li class="mobile-only-nav-item">
+            <a href="docs-charts.html" class="admin-nav-link"><span class="nav-text">Charts</span></a>
+          </li>
+
+          <input type="checkbox" id="docs-mobile-more" class="mobile-more-toggle" />
+          <label for="docs-mobile-more" class="admin-nav-link mobile-more-label">
+            <span class="nav-text">More</span>
+          </label>
+
+          <div class="admin-nav-dropdown-menu">
+          <li>
+            <details class="admin-nav-submenu">
+              <summary class="admin-nav-link"><span class="nav-text">Getting Started</span></summary>
+              <div class="admin-nav-submenu-list">
+                <a href="docs.en.html" class="admin-nav-submenu-link">Getting Started</a>
+                <a href="docs-variables.html" class="admin-nav-submenu-link">CSS Variables</a>
+                <a href="docs-classes.html" class="admin-nav-submenu-link">Class Reference (Cheat Sheet)</a>
+              </div>
+            </details>
+          </li>
+
+          <li>
+            <details class="admin-nav-submenu">
+              <summary class="admin-nav-link"><span class="nav-text">Layout &amp; Basics</span></summary>
+              <div class="admin-nav-submenu-list">
+                <a href="docs-layout.html" class="admin-nav-submenu-link">Grid &amp; Layout</a>
+                <a href="docs-navbar.html" class="admin-nav-submenu-link">Navigation &amp; Menu</a>
+                <a href="docs-sections.html" class="admin-nav-submenu-link">Sections, Hero &amp; Timeline</a>
+                <a href="docs-typography.html" class="admin-nav-submenu-link">Typography &amp; Colors</a>
+              </div>
+            </details>
+          </li>
+
+          <li>
+            <details class="admin-nav-submenu">
+              <summary class="admin-nav-link"><span class="nav-text">UI Components</span></summary>
+              <div class="admin-nav-submenu-list">
+                <a href="docs-buttons.html" class="admin-nav-submenu-link">Buttons &amp; Badges</a>
+                <a href="docs-cards.html" class="admin-nav-submenu-link">Cards</a>
+                <a href="docs-tables.html" class="admin-nav-submenu-link">Tables &amp; Lists</a>
+                <a href="docs-interactive.html" class="admin-nav-submenu-link">Modals, Tabs &amp; Accordions</a>
+                <a href="docs-components-extra.html" class="admin-nav-submenu-link">Carousels &amp; Lightbox</a>
+              </div>
+            </details>
+          </li>
+
+          <div class="docs-nav-title">Charts &amp; Data</div>
+          <li>
+            <a href="docs-charts.html" class="admin-nav-link"
+              >Charts (Data Viz)</a
+            >
+          </li>
+
+          <li>
+            <details class="admin-nav-submenu">
+              <summary class="admin-nav-link"><span class="nav-text">Forms</span></summary>
+              <div class="admin-nav-submenu-list">
+                <a href="docs-forms.html" class="admin-nav-submenu-link">Inputs &amp; Validation</a>
+                <a href="docs-select.html" class="admin-nav-submenu-link">Searchable Select &amp; Switches</a>
+              </div>
+            </details>
+          </li>
+
+          <li>
+            <details class="admin-nav-submenu">
+              <summary class="admin-nav-link"><span class="nav-text">Effects &amp; Widgets</span></summary>
+              <div class="admin-nav-submenu-list">
+                <a href="docs-animations.html" class="admin-nav-submenu-link">Animations &amp; Micro-interactions</a>
+                <a href="docs-widgets.html" class="admin-nav-submenu-link">Widgets (Speed Dial, Share)</a>
+              </div>
+            </details>
+          </li>
+
+          <li>
+            <details class="admin-nav-submenu">
+              <summary class="admin-nav-link"><span class="nav-text">Advanced Modules</span></summary>
+              <div class="admin-nav-submenu-list">
+                <a href="docs-eshop.html" class="admin-nav-submenu-link">Online Store</a>
+                <a href="docs-blog.html" class="admin-nav-submenu-link">Blog &amp; Articles</a>
+                <a href="docs-admin.html" class="admin-nav-submenu-link">Admin Panel (Dashboard)</a>
+              </div>
+            </details>
+          </li>
+
+          <div class="docs-nav-title">Build &amp; Optimization</div>
+          <li>
+            <a href="docs-purgecss.html" class="admin-nav-link"
+              >PurgeCSS &amp; safelist</a
+            >
+          </li>
+        </div>
+        </ul>
+      </aside>

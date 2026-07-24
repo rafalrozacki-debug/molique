@@ -702,6 +702,62 @@
                     <code>js/</code>, nie z pamięci.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  i18n: pilotaż wersji EN/DE tej strony
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Przełącznik języka w navbarze przestał być
+                    dekoracją</strong> — dotąd linki w
+                    <code>.language-switch-menu</code> były
+                    <code>href="#"</code>. Teraz strona startowa i
+                    „Getting Started" mają realne wersje angielską i
+                    niemiecką, a przełącznik prowadzi między nimi.
+                  </li>
+                  <li>
+                    <strong>Konwencja plaskich sufiksów</strong>, nie
+                    podfolderów: <code>docs.html</code> (PL, domyślny),
+                    <code>docs.en.html</code>, <code>docs.de.html</code>.
+                    Podfoldery (<code>/en/</code>) złamałyby wszystkie
+                    względne ścieżki w całym serwisie
+                    (<code>base: './'</code>); sufiksy nic nie psują, a Vite
+                    już automatycznie wykrywa każdy <code>.html</code> w
+                    <code>src/</code> jako osobne wejście builda.
+                  </li>
+                  <li>
+                    <strong>Zero ręcznej konfiguracji per strona:</strong>
+                    <code>vite.config.js</code> liczy z samej nazwy pliku
+                    (<code>computeI18nLocals</code>), które warianty językowe
+                    istnieją na dysku, i wstrzykuje gotowe zmienne
+                    (<code>__hasEn</code>, <code>__altEn</code>…) do
+                    <strong>wszystkich</strong> <code>&lt;include&gt;</code>
+                    tej strony naraz — <code>head.html</code> (hreflang) i
+                    <code>navbar.html</code> (przełącznik) korzystają z tych
+                    samych, raz policzonych danych.
+                  </li>
+                  <li>
+                    <strong>Płynna degradacja</strong> dla pozostałych ~86
+                    stron bez tłumaczenia: przełącznik pokazuje tylko Polski
+                    (angielska/niemiecka pozycja znika zamiast prowadzić do
+                    404), a <code>hreflang</code> w <code>&lt;head&gt;</code>
+                    zawiera tylko istniejące warianty + <code>x-default</code>.
+                  </li>
+                  <li>
+                    <strong>Pułapka złapana przed commitem:</strong>
+                    <code>posthtml-expressions</code> interpoluje
+                    <em>wszystkie</em> <code>{{ }}</code> w dokumencie w
+                    jednym przebiegu, zanim usunie gałęzie
+                    <code>&lt;if&gt;</code> o fałszywym warunku — wartość
+                    <code>null</code> dla nieistniejącego tłumaczenia wywalała
+                    cały build (<code>ReferenceError</code>), mimo że
+                    <code>&lt;if&gt;</code> i tak by ją ukrył. Naprawione
+                    fallbackiem do strony polskiej zamiast <code>null</code>.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>

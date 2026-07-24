@@ -129,6 +129,13 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   alt="">`) — folder zawiera tylko języki oferowane w projekcie; NIGDY
   flagi emoji (nie renderują się na Windowsie) ani zewnętrzny sprite
   z `<use>` (nie działa przy file:// i bywa blokowany przez CORS).
+  **Realne tłumaczenie treści (referencyjna implementacja):** ten komponent
+  bywa tylko dekoracyjny (`href="#"`) — pełne, DZIAŁAJĄCE wpięcie w i18n
+  (płaskie pliki `page.html`/`page.en.html`/`page.de.html`, auto-hreflang,
+  ukrywanie języków bez tłumaczenia danej strony) jest opisane w
+  `DOCS-PLAN.md` tego repo i zaimplementowane w jego `vite.config.js`
+  (`computeI18nLocals`) — punkt wyjścia, jeśli trzeba to samo zbudować od
+  zera w innym projekcie na `posthtml-include`/`posthtml-expressions`.
 - **Theme Switch (light/dark):** `<label class="theme-switch">` >
   `<input type="checkbox" class="theme-switch-input">` + `.theme-switch-track`
   (z `.theme-switch-thumb` i `.theme-icon-wrapper` > `.theme-icon.icon-sun` /
