@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"PurgeCSS & Safelist - molique Docs","description":"Wie man ungenutztes CSS sicher aus molique entfernt. Schritt-fur-Schritt-Anleitung, fertige Konfigurationen fur HTML, Vite und WordPress sowie eine Safelist fur von JS hinzugefugte Klassen."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">PurgeCSS &amp; Safelist</h1>
+            <p class="text-6 text-muted">
+              Wie Sie ungenutztes CSS sicher aus molique entfernen. Eine
+              Schritt-für-Schritt-Anleitung — von der Installation bis zur
+              Prüfung, dass nichts kaputtgegangen ist.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 0. CZY NA PEWNO TEGO POTRZEBUJESZ                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              0. Fangen Sie hier an: Vielleicht brauchen Sie das gar nicht
+            </h2>
+            <p class="text-muted mb-4">
+              PurgeCSS entfernt CSS-Regeln, die es in Ihren Dateien nicht
+              gefunden hat. Es ist wirksam, birgt aber ein Risiko.
+              <strong>Bevor Sie es aktivieren</strong>, prüfen Sie einen
+              einfacheren Weg — molique ist in separate Dateien aufgeteilt,
+              und es genügt, die nicht zu laden, die Sie nicht nutzen. Das
+              ist eine Reduktion <strong>ohne jedes Risiko</strong>.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Datei</th>
+                    <th>Größe</th>
+                    <th>Wann Sie sie brauchen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>molique-style.css</code></td>
+                    <td>~278 KB</td>
+                    <td><span class="badge badge-danger">Immer</span> Der Framework-Kern.</td>
+                  </tr>
+                  <tr>
+                    <td><code>molique-style-admin.css</code></td>
+                    <td>~50 KB</td>
+                    <td>Nur beim Bau eines Admin-Panels.</td>
+                  </tr>
+                  <tr>
+                    <td><code>molique-style-shop.css</code></td>
+                    <td>~10 KB</td>
+                    <td>Nur für einen Shop (Produktkarten, Warenkorb).</td>
+                  </tr>
+                  <tr>
+                    <td><code>molique-style-blog.css</code></td>
+                    <td>~7 KB</td>
+                    <td>Nur für Blog und Artikel.</td>
+                  </tr>
+                  <tr>
+                    <td><code>molique-style-docs.css</code></td>
+                    <td>~8 KB</td>
+                    <td>Nur für Dokumentationsseiten.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Eine einfache Regel</h5>
+              <p class="text-4 text-muted m-0">
+                Entfernen Sie zuerst die Module, die Sie nicht nutzen. Erst
+                wenn das nicht ausreicht, greifen Sie zu PurgeCSS. Die
+                Reihenfolge zählt: Das eine ist kostenlos, das andere kostet
+                Aufmerksamkeit.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 1. DLACZEGO SAFELISTA                                 -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              1. Warum molique eine Safelist braucht
+            </h2>
+            <p class="text-muted mb-4">
+              PurgeCSS liest Ihre Dateien und behält nur die Klassen, die es
+              darin gefunden hat. Das Problem: <strong>ein Teil der
+              molique-Klassen kommt in keiner Datei vor</strong> — JavaScript
+              fügt sie erst im Browser hinzu (z. B. beim Klick auf ein
+              Akkordeon oder wenn eine Benachrichtigung erscheint). PurgeCSS
+              sieht sie nicht und entfernt sie also — und die Komponente
+              funktioniert nicht mehr.
+            </p>
+            <p class="text-muted mb-4">
+              Eine <strong>Safelist</strong> ist eine „Das nicht
+              anfassen"-Liste. molique liefert sie fertig mit, Sie müssen
+              sie nicht selbst schreiben.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Was ohne Safelist kaputtgeht</th>
+                    <th>Symptom</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>.is-active</code> und andere Zustände</td>
+                    <td>Der aktive Tab, Schritt oder Menüpunkt hebt sich nicht hervor.</td>
+                  </tr>
+                  <tr>
+                    <td><code>toast-*</code></td>
+                    <td>Benachrichtigungen erscheinen ohne Stil (weißes Rechteck).</td>
+                  </tr>
+                  <tr>
+                    <td><code>lightbox-*</code></td>
+                    <td>Das Vergrößern von Fotos sieht aus wie nacktes HTML.</td>
+                  </tr>
+                  <tr>
+                    <td><code>@keyframes toastProgressAnim</code></td>
+                    <td>Die Countdown-Leiste in einer Benachrichtigung steht still.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-3">Was es kostet (gemessen)</h5>
+              <ul class="list-icons list-icons-check list-icons-success text-4 text-muted m-0">
+                <li>
+                  <strong>Ohne PurgeCSS:</strong> 278 KB — alles funktioniert.
+                </li>
+                <li>
+                  <strong>PurgeCSS + Safelist:</strong> 68 KB
+                  (<strong>−75%</strong>) — alles funktioniert weiterhin.
+                </li>
+                <li>
+                  <strong>PurgeCSS ohne Safelist:</strong> 53 KB — kleiner,
+                  aber
+                  <span class="text-danger fw-bold">die vier oben genannten Dinge sind kaputt</span>.
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. INSTRUKCJA KROK PO KROKU                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Schritt-für-Schritt-Anleitung</h2>
+
+            <!-- KROK 1 -->
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Schritt 1</span>
+              PurgeCSS installieren
+            </h3>
+            <p class="text-muted mb-3">
+              Im Terminal, im Verzeichnis Ihres Projekts:
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>npm install --save-dev purgecss</code></pre>
+            </div>
+
+            <!-- KROK 2 -->
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Schritt 2</span>
+              Die Safelist-Datei finden
+            </h3>
+            <p class="text-muted mb-3">
+              Im molique-Paket, neben <code>css/</code> und
+              <code>js/</code>, liegt die Datei
+              <code>purgecss.safelist.cjs</code>. Kopieren Sie sie in das
+              Root-Verzeichnis Ihres Projekts — dorthin, wo Ihre
+              <code>package.json</code> liegt.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>ihr-projekt/
+├── package.json
+├── purgecss.safelist.cjs   ← hier
+├── css/
+│   └── molique-style.css
+└── index.html</code></pre>
+            </div>
+
+            <!-- KROK 3 -->
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Schritt 3</span>
+              Die Konfigurationsdatei erstellen
+            </h3>
+            <p class="text-muted mb-3">
+              Erstellen Sie im Root-Verzeichnis
+              <code>purgecss.config.js</code> und fügen Sie den folgenden
+              Inhalt ein. Das ist eine vollständige, funktionierende
+              Konfiguration — nichts muss ergänzt werden.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>const molique = require('./purgecss.safelist.cjs');
+
+module.exports = {
+  // Wo PurgeCSS nach Klassennamen suchen soll.
+  content: [
+    './**/*.html',
+    './js/**/*.js',
+  ],
+
+  // Welche CSS-Datei wir kuerzen.
+  css: ['./css/molique-style.css'],
+
+  // Wo das Ergebnis gespeichert wird.
+  output: './css/molique-style.purged.css',
+
+  // Die "Nicht anfassen"-Liste - ohne sie funktionieren Komponenten nicht mehr.
+  safelist: molique.runtime,
+
+  // Ungenutzte Animationen entfernen (sicher dank der Safelist).
+  keyframes: true,
+
+  // NICHT auf true setzen - auf den CSS-Variablen steht das ganze Theme.
+  variables: false,
+};</code></pre>
+            </div>
+
+            <!-- KROK 4 -->
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Schritt 4</span>
+              Ausführen
+            </h3>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>npx purgecss --config purgecss.config.js</code></pre>
+            </div>
+            <p class="text-muted mb-3">
+              Es entsteht die Datei
+              <code>css/molique-style.purged.css</code>. Tauschen Sie in
+              Ihrem HTML den Verweis darauf aus:
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;link rel="stylesheet" href="css/molique-style.purged.css"&gt;</code></pre>
+            </div>
+
+            <!-- KROK 5 -->
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Schritt 5</span>
+              Prüfen, dass nichts kaputtgegangen ist
+            </h3>
+            <p class="text-muted mb-3">
+              Öffnen Sie die Seite und klicken Sie sich durch alles, was
+              JavaScript verwendet. Diese Liste fängt praktisch jedes
+              Problem ab:
+            </p>
+            <div class="p-4 bg-surface border rounded-2">
+              <ul class="list-icons list-icons-check list-icons-success text-4 text-muted m-0">
+                <li>Akkordeon und Tabs aufklappen — funktioniert die Animation?</li>
+                <li>Ein Modal und aufklappbare Menüs in der Navbar öffnen.</li>
+                <li>Auf ein Foto in der Galerie klicken (Lightbox).</li>
+                <li>Eine Benachrichtigung auslösen — hat sie Farbe und eine Countdown-Leiste?</li>
+                <li>Zu einer anderen Unterseite wechseln — hebt sich die aktive Menüposition hervor?</li>
+                <li>Zwischen hellem/dunklem Theme wechseln.</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. GOTOWE KONFIGURACJE                                -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Fertige Konfigurationen</h2>
+            <p class="text-muted mb-4">
+              Wählen Sie Ihre Umgebung. Sie unterscheiden sich hauptsächlich
+              darin, wo PurgeCSS nach Klassennamen sucht
+              (<code>content</code>).
+            </p>
+
+            <div class="tabs tabs-pill" style="--tab-count: 3">
+              <input type="radio" name="cfg-tabs" id="cfg-1" class="tab-input" checked />
+              <input type="radio" name="cfg-tabs" id="cfg-2" class="tab-input" />
+              <input type="radio" name="cfg-tabs" id="cfg-3" class="tab-input" />
+
+              <div class="tabs-header">
+                <div class="tabs-pill-indicator"></div>
+                <label for="cfg-1" class="tab-label">Reines HTML</label>
+                <label for="cfg-2" class="tab-label">Vite</label>
+                <label for="cfg-3" class="tab-label">WordPress</label>
+              </div>
+
+              <div class="tabs-content mt-3">
+                <!-- HTML -->
+                <div class="tab-pane">
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>const molique = require('./purgecss.safelist.cjs');
+
+module.exports = {
+  content: ['./**/*.html', './js/**/*.js'],
+  css: ['./css/molique-style.css'],
+  output: './css/molique-style.purged.css',
+  safelist: molique.runtime,
+  keyframes: true,
+  variables: false,
+};</code></pre>
+                  </div>
+                </div>
+
+                <!-- VITE -->
+                <div class="tab-pane">
+                  <p class="text-4 text-muted mb-3">
+                    Installieren Sie
+                    <code>@fullhuman/postcss-purgecss</code> und fügen Sie
+                    es als PostCSS-Plugin hinzu. Purge läuft nur beim
+                    Produktions-Build.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>// postcss.config.cjs
+const purgecss = require('@fullhuman/postcss-purgecss').default;
+const molique = require('./purgecss.safelist.cjs');
+
+module.exports = {
+  plugins: [
+    ...(process.env.NODE_ENV === 'production'
+      ? [
+          purgecss({
+            content: ['./index.html', './src/**/*.{html,js}'],
+            safelist: molique.runtime,
+            keyframes: true,
+            variables: false,
+          }),
+        ]
+      : []),
+  ],
+};</code></pre>
+                  </div>
+                </div>
+
+                <!-- WORDPRESS -->
+                <div class="tab-pane">
+                  <p class="text-4 text-muted mb-3">
+                    <strong>Hinweis:</strong> In WordPress liegt ein
+                    Großteil der Klassen in der <em>Datenbank</em>
+                    (Beitragsinhalte, ACF-Felder, Blöcke), nicht in Dateien.
+                    PurgeCSS sieht sie nicht. Scannen Sie deshalb Ihre
+                    PHP-Templates und lesen Sie
+                    <strong>unbedingt</strong> Abschnitt 4 unten.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>const molique = require('./purgecss.safelist.cjs');
+
+module.exports = {
+  content: [
+    './wp-content/themes/mein-theme/**/*.php',
+    './wp-content/plugins/mein-plugin/**/*.php',
+    './wp-content/themes/mein-theme/js/**/*.js',
+  ],
+  css: ['./wp-content/themes/mein-theme/css/molique-style.css'],
+  output: './wp-content/themes/mein-theme/css/molique-style.purged.css',
+
+  // In PHP zusammengesetzte Klassen sind unsichtbar - siehe Abschnitt 4.
+  safelist: molique.merge('status', 'grid'),
+
+  keyframes: true,
+  variables: false,
+};</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. KLASY SKLADANE DYNAMICZNIE                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              4. Wenn das Backend Klassennamen zusammensetzt
+            </h2>
+            <p class="text-muted mb-4">
+              Das ist die häufigste Ursache für „bei mir ist die Hälfte der
+              Stile verschwunden". Wenn Sie einen Klassennamen aus
+              Fragmenten aufbauen, steht er in der Datei nie vollständig —
+              PurgeCSS sieht nur die Bruchstücke und entfernt die Regel.
+            </p>
+
+            <div class="grid grid-cols-1 grid-md-cols-2 gap-4 mb-4">
+              <div class="p-4 border rounded-2" style="border-color: var(--danger)">
+                <h5 class="fw-bold text-5 mb-2 text-danger">So sieht das Problem aus</h5>
+                <div class="component-code m-0">
+                  <pre><code>&lt;span class="badge badge-&lt;?= $status ?&gt;"&gt;</code></pre>
+                </div>
+                <p class="text-3 text-muted mt-3 m-0">
+                  In der Datei steht nur <code>badge-</code>. Der Name
+                  <code>badge-success</code> kommt nirgends vor, also
+                  verschwindet die Regel.
+                </p>
+              </div>
+              <div class="p-4 border rounded-2" style="border-color: var(--success)">
+                <h5 class="fw-bold text-5 mb-2 text-success">Die Lösung</h5>
+                <div class="component-code m-0">
+                  <pre><code>safelist: molique.merge('status')</code></pre>
+                </div>
+                <p class="text-3 text-muted mt-3 m-0">
+                  Behält die gesamte <code>badge-*</code>-Familie, sodass
+                  jeder Wert aus der Datenbank funktioniert.
+                </p>
+              </div>
+            </div>
+
+            <p class="text-muted mb-3">
+              Aktivieren Sie <strong>nur die Gruppen, die Sie tatsächlich
+              nutzen</strong> — jede behält mehr CSS:
+            </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Gruppe</th>
+                    <th>Umfasst</th>
+                    <th>Aktivieren, wenn Sie zusammensetzen…</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>'status'</code></td>
+                    <td><code>badge-</code>, <code>status-</code>, <code>stock-bar-</code>, <code>overlay-</code>, <code>opacity-</code></td>
+                    <td>Status aus der Datenbank, Deckkraftstufen</td>
+                  </tr>
+                  <tr>
+                    <td><code>'grid'</code></td>
+                    <td><code>col-</code>, <code>offset-</code>, <code>grid-cols-</code></td>
+                    <td>Spaltenbreiten aus einem CMS-Feld</td>
+                  </tr>
+                  <tr>
+                    <td><code>'colors'</code></td>
+                    <td><code>bg-</code>, <code>text-</code>, <code>border-</code></td>
+                    <td>im Panel gewählte Farben</td>
+                  </tr>
+                  <tr>
+                    <td><code>'spacing'</code></td>
+                    <td><code>m-</code>, <code>p-</code>, <code>gap-</code></td>
+                    <td>in einer Schleife erzeugte Abstände</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>safelist: molique.runtime                      // Minimum
+safelist: molique.merge('status')              // + Status aus der DB
+safelist: molique.merge('status', 'grid')      // + Spalten aus dem CMS
+safelist: molique.all                          // alles (am sichersten)</code></pre>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Eine bessere Lösung, wenn möglich</h5>
+              <p class="text-4 text-muted m-0">
+                Statt den Namen zusammenzusetzen, schreiben Sie die
+                vollständigen Klassen im Code aus und wählen eine davon aus
+                — dann sieht PurgeCSS sie und Sie brauchen keine
+                zusätzliche Gruppe:
+                <code>$map = ['ok' =&gt; 'badge-success', 'err' =&gt; 'badge-danger'];</code>
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. CZEGO NIE ROBIC                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Was Sie nicht tun sollten</h2>
+            <div class="p-4 bg-surface border rounded-2">
+              <ul class="list-icons list-icons-cross list-icons-danger text-4 text-muted m-0">
+                <li>
+                  <strong>Setzen Sie nicht
+                  <code>variables: true</code></strong> — das entfernt die
+                  CSS-Variablen, auf denen das gesamte Theme steht (Farben,
+                  Dark Mode, Rundungen). Die Seite verliert ihr Aussehen.
+                </li>
+                <li>
+                  <strong>Lassen Sie die Safelist nicht weg</strong> in der
+                  Annahme, „hier nutzt wohl nichts JS". Akkordeons,
+                  Benachrichtigungen und Menü-Hervorhebung tun es.
+                </li>
+                <li>
+                  <strong>Vergessen Sie <code>js/</code> nicht in
+                  <code>content</code></strong> — wenn Ihr eigenes Skript
+                  Klassen hinzufügt, muss PurgeCSS diese Datei sehen.
+                </li>
+                <li>
+                  <strong>Überschreiben Sie nicht das ursprüngliche
+                  CSS</strong> mit dem Purge-Ergebnis. Speichern Sie in eine
+                  neue Datei, damit Sie zurückkönnen.
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. DIAGNOSTYKA                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Etwas ist kaputt — was prüfen</h2>
+            <p class="text-muted mb-4">
+              Klappen Sie das Symptom auf, das bei Ihnen auftritt.
+            </p>
+
+            <div class="accordion">
+              <details class="accordion-item" name="purge-faq">
+                <summary class="accordion-header">
+                  Eine Komponente sieht aus wie nacktes HTML (kein Stil)
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-2">
+                    Höchstwahrscheinlich fehlt die Safelist oder ist nicht
+                    eingebunden. Prüfen Sie in der Konfiguration, ob Sie
+                    <code>safelist: molique.runtime</code> haben und ob der
+                    Pfad zu <code>purgecss.safelist.cjs</code> korrekt ist.
+                  </p>
+                  <p class="text-muted m-0">
+                    Schnelltest: Suchen Sie im resultierenden CSS nach dem
+                    Begriff <code>lightbox-overlay</code>. Fehlt er — hat
+                    die Safelist nicht funktioniert.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="purge-faq">
+                <summary class="accordion-header">
+                  Farben und Theme sind durcheinandergeraten
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Sie haben <code>variables: true</code>. Ändern Sie es
+                    auf <code>false</code> und bauen Sie erneut. Das
+                    molique-Theme basiert auf CSS-Variablen — ihre
+                    Entfernung nimmt die gesamte Palette mit.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="purge-faq">
+                <summary class="accordion-header">
+                  Status aus der Datenbank haben keine Farben
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Das Backend setzt den Klassennamen zusammen. Fügen Sie
+                    die Gruppe hinzu:
+                    <code>safelist: molique.merge('status')</code>. Details
+                    in Abschnitt 4.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="purge-faq">
+                <summary class="accordion-header">
+                  Die aktive Position im Menü hebt sich nicht hervor
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Die Zustandsklassen <code>.is-*</code> sind
+                    herausgefallen. Sie werden von
+                    <code>molique.runtime</code> abgedeckt — prüfen Sie, ob
+                    die Safelist eingebunden ist und Sie sie nicht mit einer
+                    eigenen Liste überschreiben.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="purge-faq">
+                <summary class="accordion-header">
+                  Der Gewinn ist minimal (die Datei ist kaum kleiner geworden)
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Wahrscheinlich verwenden Sie <code>molique.all</code>
+                    oder zu viele Gruppen. Gehen Sie zurück auf
+                    <code>molique.runtime</code> und fügen Sie Gruppen
+                    einzeln hinzu, wobei Sie nach jeder prüfen, ob alles
+                    noch funktioniert.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- NAWIGACJA -->
+          <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+            <a href="docs-admin.html" class="btn btn-secondary">
+              ➔ Zurück: Admin-Panel
+            </a>
+            <a href="download.html" class="btn btn-primary fw-bold hover-spring">
+              molique herunterladen ➔
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

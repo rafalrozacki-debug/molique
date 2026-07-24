@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Roadmap - molique Framework","description":"Die oeffentliche Roadmap des molique CSS-Frameworks - anstehende Korrekturen, neue Komponenten und Verbesserungen an einem Ort."}'></include>
+  </head>
+  <body>
+    <!-- ==========================================
+         NAVBAR
+         ========================================== -->
+<include src="partials/navbar.de.html"></include>
+
+    <!-- ==========================================
+         HERO
+         ========================================== -->
+    <header
+      class="position-relative"
+      style="
+        background:
+          linear-gradient(rgba(8, 12, 24, 0.82), rgba(8, 12, 24, 0.92)),
+          url(&quot;img/futuristic-bg.webp&quot;) center/cover;
+      "
+    >
+      <div class="container py-5">
+        <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
+          <span class="badge badge-primary mb-3">Backlog an Ideen</span>
+          <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
+            Entwicklungs-Roadmap
+          </h1>
+          <p
+            class="text-6 animate fade-in-up delay-100"
+            style="color: rgba(255, 255, 255, 0.75)"
+          >
+            molique ist ein lebendiges Projekt — unten finden Sie die
+            vollständige Liste von Ideen, Korrekturen und neuen Komponenten,
+            die auf ihre Umsetzung warten. Thematisch gruppiert, damit Sie
+            leichter finden, was Sie interessiert.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         STATY
+         ========================================== -->
+    <section class="py-5 bg-body">
+      <div class="container">
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12 col-md-span-6 stat-card text-center">
+            <div class="stat-value">32</div>
+            <div class="stat-title">Ideen auf der Liste</div>
+          </div>
+          <div class="col-span-12 col-md-span-6 stat-card text-center">
+            <div class="stat-value">10</div>
+            <div class="stat-title">Themenkategorien</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SZYBKA NAWIGACJA PO KATEGORIACH
+         ========================================== -->
+    <section class="py-4">
+      <div class="container" style="max-width: 900px">
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+          <a href="#nawigacja" class="btn btn-sm btn-outline-primary"
+            >🧭 Navigation</a
+          >
+          <a href="#formularze" class="btn btn-sm btn-outline-primary"
+            >📝 Formulare</a
+          >
+          <a href="#przyciski" class="btn btn-sm btn-outline-primary"
+            >🔘 Buttons</a
+          >
+          <a href="#komponenty" class="btn btn-sm btn-outline-primary"
+            >🧩 Komponenten</a
+          >
+          <a href="#feedback" class="btn btn-sm btn-outline-primary"
+            >💬 Feedback</a
+          >
+          <a href="#efekty" class="btn btn-sm btn-outline-primary">✨ Effekte</a>
+          <a href="#wykresy" class="btn btn-sm btn-outline-primary"
+            >📊 Diagramme</a
+          >
+          <a href="#sklep" class="btn btn-sm btn-outline-primary">🛒 Shop</a>
+          <a href="#admin" class="btn btn-sm btn-outline-primary">🛠️ Admin</a>
+          <a href="#dx" class="btn btn-sm btn-outline-primary">🧑‍💻 Tools</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         LISTA KATEGORII
+         ========================================== -->
+    <main class="py-5 bg-body">
+      <div class="container" style="max-width: 900px">
+        <!-- 1. NAWIGACJA I GRUPOWANIE ELEMENTÓW -->
+        <section id="nawigacja">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-secondary text-3">Layout</span>
+            Navigation und Gruppierung von Elementen
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Universeller <code>.group</code>-Mechanismus</strong>
+                — Erweiterung der von <code>.btn-group</code> /
+                <code>.input-group</code> bekannten Logik (nahtloses
+                Verschmelzen der Kanten benachbarter Elemente) auf Avatare,
+                Icons und Badges.
+              </li>
+              <li>
+                <strong>Neue Breadcrumb-Varianten</strong> — zusätzliche
+                Stile für die Navigationsbrotkrümel, z. B. mit gekürztem
+                Pfad auf Mobilgeräten oder mit Icons zwischen den Ebenen.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 2. FORMULARZE I POLA -->
+        <section id="formularze">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-primary text-3">Neu</span>
+            Formulare und Felder
+            <span class="badge badge-secondary text-3 ml-auto">5</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Ausdrucksstärkere Auswahl-Animation</strong> — heute
+                hat eine Checkbox/Radio nur einen sanften Übergang von
+                Hintergrund- und Rahmenfarbe (<code>transition</code>);
+                künftig etwas Auffälligeres, z. B. ein gezeichnetes
+                Häkchen oder ein dezenter Pop-Effekt beim Auswählen —
+                weiterhin ohne zusätzliche Klassen.
+              </li>
+              <li>
+                <strong>Zeichenlimit und Datenmasken</strong> — ein Zähler
+                für verbleibende Zeichen in einem Textfeld sowie fertige
+                Masken für gängige Formate (Telefon, Zahlungskarte,
+                Postleitzahl, Kontonummer).
+              </li>
+              <li>
+                <strong>Anzeige der Passwortstärke</strong> — eine Leiste
+                oder Beschriftung, die live zeigt, wie stark das eingegebene
+                Passwort ist.
+              </li>
+              <li>
+                <strong>Neue Feldtypen</strong> — ein Tag-Eingabefeld
+                (hinzugefügt als „Pillen"), ein E-Mail-Feld mit
+                Domänenvorschlägen, eine Personen-/Benutzerauswahl aus einer
+                Liste.
+              </li>
+              <li>
+                <strong>Eingabe für Einmalcode (OTP)</strong> — separate
+                Felder für einzelne Ziffern mit automatischem Sprung zum
+                nächsten Feld nach Eingabe eines Zeichens.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 3. PRZYCISKI -->
+        <section id="przyciski">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-primary text-3">Neu</span>
+            Buttons
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Zähler, Icon oder Punkt auf einem Button</strong> —
+                ein universeller Overlay-Mechanismus: eine Zahl (z. B. für
+                Benachrichtigungen), ein Icon (z. B. ein Plus) oder einfach
+                ein Punkt, der auf etwas Neues hinweist.
+              </li>
+              <li>
+                <strong>Ein ausklappbarer Telefon-Button</strong> — auf dem
+                Desktop zeigt er nur ein Hörer-Icon und klappt beim Hover
+                zur vollständigen Nummer auf; auf Mobilgeräten ist die
+                Nummer sofort sichtbar, da es dort keinen Hover-Zustand
+                gibt.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. NOWE KOMPONENTY -->
+        <section id="komponenty">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-success text-3">Komponente</span>
+            Neue Komponenten
+            <span class="badge badge-secondary text-3 ml-auto">7</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Ein halbseitiges Modal</strong> — eine Variante des
+                Seiten- oder unteren Panels, die genau die Hälfte der
+                Bildschirmhöhe/-breite einnimmt, ähnlich den aus dem Google
+                Tag Manager bekannten Fenstern.
+              </li>
+              <li>
+                <strong>Erweiterte Tooltip-Varianten</strong> — darunter
+                eine Version, die sich wie ein Mini-Modal verhält, mit
+                eigenem Titel und Aktions-Buttons — idealerweise auf
+                denselben Stilen wie <code>.modal-dialog</code> aufgebaut.
+              </li>
+              <li>
+                <strong>Automatischer Kartenrahmen in der Farbe von
+                Header/Footer</strong> — wenn Header oder Footer einer
+                Karte eine Farbe zugewiesen bekommt (z. B.
+                <code>.bg-primary</code>), erhält die gesamte Karte
+                automatisch einen Rahmen im selben Farbton.
+              </li>
+              <li>
+                <strong>Ein echter Checklist mit abhakbaren
+                Einträgen</strong> — <code>.list-icons-check</code> zeigt
+                heute nur dekorativ ein Häkchen-Icon neben jedem Eintrag; es
+                fehlt eine Variante, bei der ein Klick tatsächlich den
+                Zustand „erledigt" umschaltet (auf Checkbox-Basis, ähnlich
+                <code>.selection-tile</code>, aber in Listenform).
+              </li>
+              <li>
+                <strong>Ein generisches Galerie-Raster, verknüpft mit der
+                Lightbox</strong> — heute funktionieren
+                <code>.product-gallery</code> (Hauptfoto + Reihe von
+                Miniaturbildern) und die Lightbox als zwei getrennte
+                Komponenten; es fehlt eine „Miniaturbild-Raster"-Variante,
+                die sich direkt in der Lightbox öffnet, zur Verwendung
+                außerhalb eines Produktkontexts (z. B. eine
+                Projekt-Galerie, ein Portfolio).
+              </li>
+              <li>
+                <strong>Ein generisches Zitat im Artikelinhalt</strong> —
+                <code>.testimonial</code> liefert bereits eine stilisierte
+                „Kundenbewertung" mit Autor und Avatar, aber das ist eine
+                Komponente für Marketing-Bereiche, nicht zum Einfügen mitten
+                in einen Blogtext. Es fehlt eine leichtere
+                <code>&lt;blockquote&gt;</code>-Variante unter
+                <code>_blog.scss</code>.
+              </li>
+              <li>
+                <strong>Tabellen in mehreren Größen</strong> — Erweiterung
+                der vorhandenen <code>.table-sm</code> /
+                <code>.table-lg</code> um zusätzliche
+                Dichte-Varianten für Daten.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 5. FEEDBACK I STATUSY -->
+        <section id="feedback">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-info text-3">Feedback</span>
+            Feedback und Status
+            <span class="badge badge-secondary text-3 ml-auto">3</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Verschiedene Toast-Arten</strong> — darunter eine
+                Variante, die nicht automatisch verschwindet und vom
+                Benutzer manuell geschlossen werden muss.
+              </li>
+              <li>
+                <strong>Pulsierender Text</strong> — Text, der analog zu
+                <code>.status-ping</code> pulsiert — zu prüfen, ob sich
+                beide Animationen zeitlich synchronisieren lassen.
+              </li>
+              <li>
+                <strong>Onboarding</strong> — eine leichtgewichtige
+                Komponente, um neue Benutzer Schritt für Schritt durch die
+                Oberfläche zu führen: Hervorhebung eines Elements plus einer
+                Beschreibungsblase.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 6. EFEKTY, ANIMACJE I TYPOGRAFIA -->
+        <section id="efekty">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-warning text-dark text-3">Effekt</span>
+            Effekte, Animationen und Typografie
+            <span class="badge badge-secondary text-3 ml-auto">6</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Grafische Filter</strong> — <code>brightness</code>,
+                <code>contrast</code>, <code>sepia</code>,
+                <code>saturate</code> als fertige Klassen (heute gibt es nur
+                <code>.filter-grayscale</code> und
+                <code>.filter-blur</code>); auch nützlich als
+                „Vor-Hover"-Zustand (z. B. ein Schwarz-Weiß-Foto, das beim
+                Hover Farbe annimmt).
+              </li>
+              <li>
+                <strong>Ein Gradienten-Overlay für Text auf einem
+                Bild</strong> — eine fertige Klasse mit
+                <code>linear-gradient</code>, die die Lesbarkeit von Text
+                auf einem Fotohintergrund sicherstellt, ohne die
+                Transparenz manuell abzustimmen.
+              </li>
+              <li>
+                <strong>Eine erweiterte Farbskala</strong> — mehr
+                Farbtöne und Varianten in der System-Farbpalette.
+              </li>
+              <li>
+                <strong>Text als reiner Umriss</strong> — eine
+                typografische Variante mit nur der Buchstabenkontur, ohne
+                Füllung.
+              </li>
+              <li>
+                <strong>Verbindung von <code>.file-upload-animated</code>
+                mit der gemeinsamen Bibliothek
+                <code>.hover-border-*</code></strong> — die Bibliothek
+                (<code>.hover-border-draw/-trace/-draw-2/-trace-2</code>)
+                existiert bereits, aber <code>.file-upload-animated</code>
+                hat weiterhin eine eigene, separate Implementierung der
+                animierten Umrandung („Marching Ants"), die diesen
+                Mechanismus nicht nutzt.
+              </li>
+              <li>
+                <span class="badge badge-secondary text-3">Zu untersuchen</span>
+                Lässt sich in purem CSS die Schriftfarbe an der Stelle
+                sanft ändern, an der sich der Hintergrund darunter ändert
+                (z. B. Text an der Grenze zweier Abschnitte mit
+                unterschiedlichen Farben)?
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 7. WYKRESY I DANE -->
+        <section id="wykresy">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-info text-3">Data Viz</span>
+            Diagramme und Daten
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Ein Tacho-Diagramm</strong> — ein Zeiger auf einer
+                gebogenen Skala, z. B. zur Darstellung einer einzelnen
+                Gesamtbewertung oder eines Ergebnisses.
+              </li>
+              <li>
+                <strong>Weitere Stepper-Varianten</strong> — zusätzliche
+                visuelle Varianten neben dem vorhandenen
+                <code>.stepper</code> und <code>.stepper-numbered</code>.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 8. SKLEP INTERNETOWY -->
+        <section id="sklep">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-success text-3">Shop</span>
+            Online-Shop
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong
+                  >Hover auf dem Button „In den Warenkorb" vergrößert das
+                  Produktfoto</strong
+                >
+                — heute wird die Vergrößerung
+                (<code>.product-image-wrapper:hover</code>) beim Hover über
+                das Foto selbst ausgelöst; die Idee ist eine zusätzliche
+                Verstärkung der Reaktion speziell beim Hover über den
+                Aktions-Button, nicht nur über die Miniaturansicht.
+              </li>
+              <li>
+                <strong>Eine Animation beim Hinzufügen zum Warenkorb</strong>
+                — eine kurze Animation des Produkts, das nach dem Klick zum
+                Warenkorb-Icon „fliegt".
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 9. PANEL ADMINA -->
+        <section id="admin">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-secondary text-3">Admin</span>
+            Admin-Panel
+            <span class="badge badge-secondary text-3 ml-auto">1</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Eine Leiste über <code>.admin-nav</code></strong>
+                (Schnellaktionen, Suche, Benachrichtigungen) — im Framework
+                gibt es bereits <code>.topbar</code> (Kontext der
+                Marketing-Navbar) und <code>.dashboard-header</code> (eine
+                Leiste innerhalb des Panel-Inhalts), aber keines von beiden
+                ist als Leiste direkt über der Admin-Sidebar
+                dokumentiert/angepasst.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 10. DOKUMENTACJA I NARZĘDZIA -->
+        <section id="dx" class="mb-0">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-dark text-3">DX</span>
+            Dokumentation und Tools
+            <span class="badge badge-secondary text-3 ml-auto">2</span>
+          </h2>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong>Icons: Überblick über die Ansätze in der
+                Dokumentation</strong> — ein eigener Abschnitt, der
+                CSS-only-Lösungen, JS-abhängige Lösungen und Fallbacks
+                vergleicht, mit einer klaren Empfehlung, wann welche zu
+                verwenden ist.
+              </li>
+              <li>
+                <strong>Eine VS-Code-Erweiterung</strong> — Hinweise und
+                Autovervollständigung für molique-Klassen direkt im Editor.
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="bg-surface border-top pt-5 pb-4">
+      <div class="container">
+        <div class="grid-auto gap-4 mb-5">
+          <div>
+            <a href="index.de.html" class="navbar-brand text-main d-block mb-2"
+              >molique<span class="text-primary">.</span></a
+            >
+            <p class="m-0 text-muted" style="opacity: 0.8">
+              Ein schlankes CSS-Framework auf Basis von nativem HTML5 und
+              modernem CSS. Wo immer möglich ohne JavaScript.
+            </p>
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Einstieg</h6>
+            <a
+              href="docs.de.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Erste Schritte</a
+            >
+            <a
+              href="docs-roadmap.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Roadmap</a
+            >
+            <a
+              href="docs-classes.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Klassenübersicht (Cheat Sheet)</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Komponenten</h6>
+            <a
+              href="docs-buttons.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Buttons &amp; Badges</a
+            >
+            <a
+              href="docs-forms.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Formulare</a
+            >
+            <a
+              href="docs-cards.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Karten</a
+            >
+            <a
+              href="docs-charts.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Diagramme</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Module</h6>
+            <a
+              href="docs-eshop.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Online-Shop</a
+            >
+            <a
+              href="docs-blog.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Blog &amp; Artikel</a
+            >
+            <a
+              href="docs-admin.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Admin-Panel</a
+            >
+          </div>
+        </div>
+
+        <hr style="border-color: var(--border-color)" />
+
+        <div
+          class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-3"
+        >
+          <p class="text-muted m-0 text-4">
+            &copy; <span id="footer-year"></span> molique. Ein
+            CSS-Framework für B2B.
+          </p>
+          <p class="text-muted m-0 text-4">Version 1.5.1</p>
+        </div>
+      </div>
+    </footer>
+
+    <button class="scroll-to-top" aria-label="Nach oben">↑</button>
+
+    <script>
+      document.getElementById("footer-year").textContent =
+        new Date().getFullYear();
+    </script>
+    <script src="js/molique-script.js" defer></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-# Plik zrodlowy: `changelog.html`
+# Plik zrodlowy: src/changelog.html
 
 ```html
 <!doctype html>
@@ -756,6 +756,51 @@
                     cały build (<code>ReferenceError</code>), mimo że
                     <code>&lt;if&gt;</code> i tak by ją ukrył. Naprawione
                     fallbackiem do strony polskiej zamiast <code>null</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  i18n: 19 z 21 stron <code>docs-*.html</code> po angielsku i niemiecku
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Kontynuacja pilotażu</strong> — tym samym
+                    mechanizmem i konwencjami co wyżej przetłumaczono kolejne
+                    19 stron referencyjnych:
+                    <code>docs-variables</code>, <code>docs-select</code>,
+                    <code>docs-widgets</code>, <code>docs-blog</code>,
+                    <code>docs-roadmap</code>, <code>docs-purgecss</code>,
+                    <code>docs-cards</code>, <code>docs-typography</code>,
+                    <code>docs-sections</code>, <code>docs-animations</code>,
+                    <code>docs-tables</code>, <code>docs-forms</code>,
+                    <code>docs-eshop</code>, <code>docs-charts</code>,
+                    <code>docs-admin</code>, <code>docs-layout</code>,
+                    <code>docs-components-extra</code>,
+                    <code>docs-buttons</code>, <code>docs-interactive</code>.
+                    Świadomie odłożone: <code>docs-navbar.html</code> (1072
+                    linii) i <code>docs-classes.html</code> (2325 linii) —
+                    dwie strony wyraźnie większe od reszty razem wziętej.
+                  </li>
+                  <li>
+                    <strong><code>docs-variables.html</code> jako przypadek
+                    specjalny:</strong> trzy tabele zmiennych są
+                    auto-generowane przez <code>tools/gen-variables-doc.js</code>
+                    i odtwarzane przed każdym buildem — ręczne tłumaczenie ich
+                    treści zostałoby cicho nadpisane. Statyczna proza strony
+                    przetłumaczona normalnie; trzy generowane
+                    <code>&lt;include&gt;</code> zostają po polsku, z notatką
+                    wyjaśniającą dlaczego.
+                  </li>
+                  <li>
+                    <strong>Sidebar dokumentacji zaktualizowany:</strong>
+                    <code>docs-sidebar.en.html</code>/<code>.de.html</code>
+                    linkują teraz do przetłumaczonych wariantów wszędzie poza
+                    dwiema odłożonymi stronami — degradacja do polskiej wersji
+                    tam, gdzie tłumaczenia jeszcze nie ma, pozostaje
+                    udokumentowana komentarzem w plikach.
                   </li>
                 </ul>
               </div>

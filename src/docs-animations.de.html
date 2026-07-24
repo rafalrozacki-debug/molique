@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Animationen & Mikrointeraktionen - molique Docs","description":"Referenz fur molique Animationen: Observer-gesteuerte Eintritte, Scroll-Driven Animations, Hover-Mikrointeraktionen, Rahmeneffekte und Ken Burns. Die GPU-Regel, Reduced Motion und Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Animationen &amp; Mikrointeraktionen</h1>
+            <p class="text-6 text-muted">
+              Alles auf dieser Seite bewegt ausschließlich
+              <code>transform</code> und <code>opacity</code> — das ist
+              keine Vorliebe, sondern eine Voraussetzung für Flüssigkeit.
+              Abschnitt 1 erklärt, warum. Fertige Effekte:
+              <a href="examples-hover-microinteractions.html">Mikrointeraktionen</a>
+              und <a href="examples-reveal-animations.html">Eintritts-Animationen</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. ZASADA GPU                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Warum nur zwei Eigenschaften</h2>
+            <p class="text-muted mb-4">
+              Der Browser zeichnet ein Bild in drei Schritten: Er berechnet
+              das <strong>Layout</strong> (wo alles ist), <strong>malt</strong>
+              Pixel und <strong>setzt</strong> Ebenen zusammen. Die
+              animierte Eigenschaft entscheidet, wie viel davon sechzigmal
+              pro Sekunde wiederholt werden muss.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Sie animieren</th>
+                    <th>Was neu berechnet werden muss</th>
+                    <th>Folge</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Sie animieren">
+                      <code>width</code>, <code>height</code>,
+                      <code>top</code>, <code>margin</code>
+                    </td>
+                    <td data-label="Was">Layout der gesamten Seite, Malen, Zusammensetzen</td>
+                    <td data-label="Folge">
+                      <span class="badge badge-danger">verboten</span>
+                      Die Größenänderung eines Elements verschiebt
+                      Nachbarelemente, der Browser berechnet das Layout
+                      also neu.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Sie animieren">
+                      <code>box-shadow</code>, <code>background-color</code>,
+                      <code>border-radius</code>
+                    </td>
+                    <td data-label="Was">Malen und Zusammensetzen</td>
+                    <td data-label="Folge">
+                      <span class="badge badge-warning">vermeiden</span>
+                      Das Layout bleibt, aber die Pixel müssen neu gemalt
+                      werden.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Sie animieren">
+                      <code>transform</code>, <code>opacity</code>
+                    </td>
+                    <td data-label="Was">Nur Zusammensetzen</td>
+                    <td data-label="Folge">
+                      <span class="badge badge-success">erlaubt</span>
+                      Das erledigt die GPU, ohne Beteiligung des
+                      Haupt-Threads.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Wie man das umgeht, wenn es wirklich noetig ist</h5>
+              <p class="text-4 text-muted m-0">
+                Ein Schatten, der wachsen soll, entsteht durch eine
+                <strong>zweite Ebene mit einem fertigen Schatten</strong>
+                und das Animieren ihrer Deckkraft — so funktioniert
+                <code>.hover-gpu-shadow</code>. Das Ausklappen einer Höhe
+                „bis wohin es eben reicht" erledigt
+                <code>.grid-expand</code>, das
+                <code>grid-template-rows</code> animiert. Die Regel ist
+                also keine Einschränkung der Möglichkeiten, sondern eine
+                Wahl des Wegs.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. ANIMACJE WEJŚCIA                                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Eintritts-Animationen</h2>
+            <p class="text-muted mb-4">
+              Ein Element wartet unsichtbar, und sobald es in den
+              sichtbaren Bereich fährt, erhält es vom Skript die Klasse
+              <code>.is-visible</code> und erscheint sanft. Die Erkennung
+              übernimmt ein Intersection Observer — kein
+              <code>scroll</code>-Event, sodass bei jedem Pixel des
+              Scrollens nichts berechnet wird.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;!-- .animate ist PFLICHT - sie versteckt das Element zu Beginn --&gt;
+&lt;div class="animate fade-in-up"&gt;Faehrt von unten ein&lt;/div&gt;
+
+&lt;!-- Kaskade: aufeinanderfolgende Elemente mit Verzoegerung --&gt;
+&lt;div class="animate fade-in-up"&gt;Erstes&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-100"&gt;Zweites&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-200"&gt;Drittes&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Rolle</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.animate</code></td>
+                    <td data-label="Rolle">Basis</td>
+                    <td data-label="Was sie tut">
+                      Versteckt das Element und bereitet den Übergang vor.
+                      <strong>Ohne sie tut die Richtung nichts</strong> —
+                      siehe Fallstrick Nr. 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.fade-in</code></td>
+                    <td data-label="Rolle">Richtung</td>
+                    <td data-label="Was sie tut">Nur Erscheinen, ohne Bewegung.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.fade-in-up</code></td>
+                    <td data-label="Rolle">Richtung</td>
+                    <td data-label="Was sie tut">
+                      Einfahrt von unten — die häufigste Wahl. Weiter:
+                      <code>.fade-in-down</code>, <code>.fade-in-left</code>,
+                      <code>.fade-in-right</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.zoom-in</code></td>
+                    <td data-label="Rolle">Richtung</td>
+                    <td data-label="Was sie tut">Das Element „naehert sich" durch Vergroesserung von 95 %.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.reveal-blur</code></td>
+                    <td data-label="Rolle">Richtung</td>
+                    <td data-label="Was sie tut">Scharfzeichnen aus der Unschärfe.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.reveal-scale</code></td>
+                    <td data-label="Rolle">Richtung</td>
+                    <td data-label="Was sie tut">Ein stärkerer Eintritt per Skalierung als <code>.zoom-in</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.delay-100</code> – <code class="fw-bold">.delay-500</code></td>
+                    <td data-label="Rolle">Modifikator</td>
+                    <td data-label="Was sie tut">
+                      Verzögerung in 100-ms-Schritten. Zum Aufbau einer
+                      Kaskade in einer Kartenreihe.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.is-visible</code></td>
+                    <td data-label="Rolle">Zustand</td>
+                    <td data-label="Was sie tut">
+                      Wird vom Skript gesetzt, sobald das Element sichtbar
+                      wird. Sie schreiben sie nicht selbst.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Eine Variante ohne JavaScript</h3>
+            <p class="text-muted mb-3">
+              <code>.scroll-reveal</code> macht dasselbe, wird aber von der
+              <strong>Scroll-Position</strong> gesteuert, nicht von einem
+              Skript. Der Fortschritt der Animation entspricht dem
+              sichtbaren Anteil des Elements — Sie können also
+              zurückscrollen, und der Effekt kehrt sich um. Erfordert einen
+              neueren Browser; in einem älteren ist das Element einfach
+              sofort sichtbar.
+            </p>
+            <div class="component-code">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="scroll-reveal"&gt;Erscheint beim Scrollen&lt;/div&gt;</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. MIKROINTERAKCJE                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Mikrointeraktionen</h2>
+            <p class="text-muted mb-4">
+              Eine Reaktion auf Hover. Sie funktionieren alle auf einem
+              beliebigen Element — Karte, Button, Bild — und lassen sich
+              kombinieren.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div class="card p-4 hover-spring hover-gpu-shadow" style="cursor: pointer">
+                  hover-spring + hover-gpu-shadow
+                </div>
+                <div class="card p-4 hover-scale" style="cursor: pointer">
+                  hover-scale
+                </div>
+                <div class="card p-4 hover-tilt" style="cursor: pointer">
+                  hover-tilt
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Effekt</th>
+                    <th>JS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-spring</code></td>
+                    <td data-label="Effekt">Federndes Abprallen.</td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-scale</code></td>
+                    <td data-label="Effekt">
+                      Vergrößerung. Stärke: <code>--hover-scale</code>.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-shadow</code></td>
+                    <td data-label="Effekt">
+                      Anheben mit Schatten. Höhe: <code>--hover-y</code>.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-gpu-shadow</code></td>
+                    <td data-label="Effekt">
+                      Wachsender Schatten <strong>ohne Animation von
+                      <code>box-shadow</code></strong> — eine zweite Ebene
+                      ändert die Deckkraft.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-tilt</code></td>
+                    <td data-label="Effekt">Feste 3D-Neigung.</td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.tilt-card</code></td>
+                    <td data-label="Effekt">
+                      Neigung, die dem Cursor folgt. Auf einem Touch-Gerät
+                      schaltet sich das Modul selbst ab — spart Akku.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-warning">ja</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-filter-none</code></td>
+                    <td data-label="Effekt">
+                      Entfernt beim Hover einen Filter — ein graues Logo,
+                      das unter dem Cursor Farbe erhält.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-opacity-100</code></td>
+                    <td data-label="Effekt">Ein gedämpftes Element erhält volle Deckkraft zurück.</td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.ken-burns</code></td>
+                    <td data-label="Effekt">
+                      Ein langsamer Zoom in ein Foto innerhalb eines
+                      Containers. Funktioniert bei <code>&lt;img&gt;</code>
+                      und <code>.bg-image</code>.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.shake</code></td>
+                    <td data-label="Effekt">
+                      Ein Wackeln — ein Fehlersignal, z. B. bei einem
+                      abgelehnten Formular. Läuft einmal ab.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Rahmeneffekte</h3>
+            <p class="text-muted mb-3">
+              Ein Rahmen, der sich beim Hover zeichnet. Zwei abgerundete
+              Varianten und zwei mit scharfen Ecken — sie unterscheiden
+              sich nicht nur im Aussehen, sondern auch im Mechanismus, was
+              bei der Kombination mit einem Hintergrund wichtig ist.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Aussehen</th>
+                    <th>Mechanismus</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-border-draw</code></td>
+                    <td data-label="Aussehen">Abgerundet, entfaltet sich aus der Mitte.</td>
+                    <td data-label="Mechanismus">
+                      Ein eigenes <code>::before</code> — rührt den
+                      Hintergrund des Elements nicht an.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-border-trace</code></td>
+                    <td data-label="Aussehen">Abgerundet, Licht umläuft die Kontur.</td>
+                    <td data-label="Mechanismus">Ebenfalls <code>::before</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-border-draw-2</code></td>
+                    <td data-label="Aussehen">Scharfe Ecken, Seite für Seite gezeichnet.</td>
+                    <td data-label="Mechanismus">
+                      Vier Gradienten im <code>background-image</code> des
+                      Elements — siehe Fallstrick Nr. 3.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-border-trace-2</code></td>
+                    <td data-label="Aussehen">Scharfe Ecken, Kontur wird umlaufen.</td>
+                    <td data-label="Mechanismus">Wie oben.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Rahmenfarbe</h5>
+              <p class="text-4 text-muted m-0">
+                Alle vier nehmen ihre Farbe aus
+                <code>--hover-border-color</code>, standardmäßig
+                <code>--primary</code>. Setzen Sie sie, wenn das Element
+                bereits die Markenfarbe hat — sonst ist der Rahmen auf
+                einem Hintergrund derselben Farbe unsichtbar.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. DOSTĘPNOŚĆ                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Bewegung und Barrierefreiheit</h2>
+            <p class="text-muted mb-4">
+              Manchen Menschen wird von Animationen schwindlig oder übel —
+              das vestibuläre System reagiert auf Bewegung auf dem
+              Bildschirm genauso wie auf eigene Bewegung. Deshalb haben
+              Betriebssysteme eine Einstellung „Bewegung reduzieren", und
+              der Browser gibt sie als
+              <code>prefers-reduced-motion</code> weiter.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Art der Bewegung</th>
+                    <th>Bei reduzierter Bewegung</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Art">Eine Hover-Reaktion</td>
+                    <td data-label="Bei reduzierter">
+                      Bleibt. Sie ist kurz und wird vom Benutzer ausgelöst.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Art">Eintritts-Animationen</td>
+                    <td data-label="Bei reduzierter">
+                      Das Element erscheint ohne Bewegung.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Art">Kontinuierliche Bewegung im Hintergrund</td>
+                    <td data-label="Bei reduzierter">
+                      <strong>Gestoppt.</strong> Betrifft u. a.
+                      <code>.bg-blobs</code> — die Animation erlischt, die
+                      Form bleibt.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Beim Schreiben eines eigenen Effekts</h5>
+              <p class="text-4 text-muted m-0">
+                Das Framework schaltet Animationen nicht global stumm —
+                das erledigt jede Komponente für sich, denn nicht jede
+                Bewegung muss gestoppt werden. Wenn Sie eine eigene
+                kontinuierliche Animation hinzufügen, ergänzen Sie deren
+                Ausstieg:
+                <code>@media (prefers-reduced-motion: reduce)</code>
+                und <code>animation: none</code>.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Fallstricke</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="anim-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Eine Richtung ohne die Klasse <code>.animate</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.fade-in-up</code> legt nur die
+                    Startverschiebung fest. Es ist <code>.animate</code>,
+                    das das Element versteckt und den Übergang definiert —
+                    ohne sie ist das Element sofort sichtbar und nichts
+                    passiert. Ein irreführendes Symptom, denn die Seite
+                    sieht korrekt aus, nur „ohne Animation".
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>&lt;!-- FALSCH - Basis fehlt --&gt;
+&lt;div class="fade-in-up"&gt;…&lt;/div&gt;
+
+&lt;!-- RICHTIG --&gt;
+&lt;div class="animate fade-in-up"&gt;…&lt;/div&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Eine Eintritts-Animation auf sofort sichtbarem Inhalt</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Eine Hero-Überschrift mit <code>.animate</code> startet
+                    unsichtbar und wartet auf das Skript. Führt JavaScript
+                    nicht aus — ein Fehler in einer anderen Datei, eine
+                    langsame Verbindung, eine Browser-Blockade —
+                    <strong>bleibt der Inhalt dauerhaft unsichtbar</strong>.
+                    Setzen Sie oberhalb des Folds Animation sparsam ein und
+                    lassen Sie die wichtigste Botschaft statisch.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Der <code>-2</code>-Rahmen unsichtbar auf farbigem Hintergrund</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Die Varianten mit scharfen Ecken zeichnen ihre Linien
+                    mit Gradienten im <code>background-image</code> des
+                    Elements. Der <code>background-color</code> bleibt
+                    unberührt, sie funktionieren also technisch — aber die
+                    Linie hat standardmäßig die Farbe
+                    <code>--primary</code>, ist also auf einem
+                    <code>.btn-primary</code>-Button unsichtbar. Setzen Sie
+                    <code>--hover-border-color</code> auf eine
+                    kontrastierende Farbe.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>&lt;button class="btn-primary hover-border-draw-2"
+        style="--hover-border-color: #fff;"&gt;Weisser Rahmen&lt;/button&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Eine Verzögerungskaskade auf einer langen Liste</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Die <code>.delay-*</code>-Klassen enden bei 500 ms,
+                    und das ist kein Versehen. Bei zwanzig Karten mit
+                    wachsender Verzögerung erscheint die letzte nach zwei
+                    Sekunden — für den Benutzer sieht das wie eine
+                    ruckelnde Seite aus, nicht wie ein Effekt. Verwenden
+                    Sie eine Kaskade für drei, vier Elemente in einer
+                    Reihe.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>Animieren einer Eigenschaft außerhalb der beiden erlaubten</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>transition: all</code> sieht harmlos aus, umfasst
+                    aber auch <code>width</code>, <code>height</code> und
+                    <code>box-shadow</code> — zieht also eine
+                    Layout-Neuberechnung durch die Hintertür mit hinein.
+                    Listen Sie Eigenschaften explizit auf. Erfordert der
+                    gewünschte Effekt eine verbotene Eigenschaft, suchen
+                    Sie einen Workaround aus Abschnitt 1: eine
+                    Deckkraft-Ebene statt eines Schattens, ein Grid statt
+                    einer Höhe.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. GDZIE SZUKAĆ RESZTY                                -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Wo Sie den Rest finden</h2>
+            <p class="text-muted mb-4">
+              Ein Teil der Effekte ist dort dokumentiert, wo er thematisch
+              hingehört — damit dieselbe Sache nicht zweimal erklärt wird.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Sie suchen</th>
+                    <th>Wo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Sie suchen">
+                      Farbverlauf in Buchstaben, Schreibmaschine,
+                      Textmarker, Unterstreichungen
+                    </td>
+                    <td data-label="Wo">
+                      <a href="docs-typography.de.html">Typografie &amp; Farben</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Sie suchen">Parallax, gestapelte Abschnitte</td>
+                    <td data-label="Wo">
+                      <a href="docs-sections.de.html">Abschnitte &amp; Hero</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Sie suchen">
+                      Sanftes Ausklappen der Höhe (<code>.grid-expand</code>)
+                    </td>
+                    <td data-label="Wo">
+                      <a href="docs-interactive.html">Modale, Tabs &amp; Akkordeons</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Sie suchen">
+                      Animierte Hintergrund-Blobs (<code>.bg-blobs</code>)
+                    </td>
+                    <td data-label="Wo">
+                      <a href="examples-blobs-glassmorphism.html">Beispiele: Blobs</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Sie suchen">Magnetischer Button, Speed Dial</td>
+                    <td data-label="Wo">
+                      <a href="docs-widgets.de.html">Widgets</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-hover-microinteractions.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Mikrointeraktionen</h5>
+                  <p class="text-4 text-muted m-0">Alle Hover-Effekte zusammen.</p>
+                </div>
+              </a>
+              <a href="examples-reveal-animations.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Eintritts-Animationen</h5>
+                  <p class="text-4 text-muted m-0">Richtungen und Kaskaden.</p>
+                </div>
+              </a>
+              <a href="examples-border-effects.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Rahmeneffekte</h5>
+                  <p class="text-4 text-muted m-0">Die vier Varianten nebeneinander.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-select.de.html" class="btn-secondary"
+              >➔ Zurück: Select &amp; Schalter</a
+            >
+            <a href="docs-widgets.de.html" class="btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Widgets ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

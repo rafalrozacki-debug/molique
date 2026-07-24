@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Karten - molique Docs","description":"Referenz fur molique Karten: die klassische Karte, Featured Box, thumb-info Bildkarten, Referenzen und das Uberlappen auf ein Hero. Klassentabellen, Hover-Effekte und Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Karten</h1>
+            <p class="text-6 text-muted">
+              Vier Kartentypen für unterschiedliche Zwecke plus ein
+              vollständiges Set an Hover-Effekten. Fertige Layouts finden Sie
+              in den <a href="examples-cards.html">Beispielen</a>;
+              Datentabellen behandelt eine separate Seite,
+              <a href="docs-tables.html">Tabellen &amp; Listen</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. KTÓRA KARTA                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Welche Karte</h2>
+            <p class="text-muted mb-4">
+              Alle vier sind einfache Boxen mit Rahmen und Schatten — der
+              Unterschied liegt im Zweck und darin, was jede von sich aus
+              hinzufügt.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Wofür</th>
+                    <th>Was sie hinzufügt</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.card</code></td>
+                    <td data-label="Wofür">
+                      Ein universeller Container: ein Dashboard-Panel, ein
+                      Formular, der Inhalt eines Modals.
+                    </td>
+                    <td data-label="Was sie hinzufügt">Nichts — eine reine Oberfläche.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.featured-box</code></td>
+                    <td data-label="Wofür">
+                      Präsentation eines Merkmals oder einer Dienstleistung
+                      auf einer Angebotsseite.
+                    </td>
+                    <td data-label="Was sie hinzufügt">
+                      Einen dicken oberen Rahmen und Platz für ein Icon.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thumb-info</code></td>
+                    <td data-label="Wofür">Portfolio, Galerie, Kategorie-Kacheln.</td>
+                    <td data-label="Was sie hinzufügt">
+                      Ein Hintergrundfoto und ein Titel-Overlay, das beim
+                      Hover erscheint.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial</code></td>
+                    <td data-label="Wofür">Eine Kundenbewertung.</td>
+                    <td data-label="Was sie hinzufügt">
+                      Ein Layout für Zitat, Bewertung und Autor mit Avatar.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100 gap-4">
+                  <div class="card">
+                    <div class="card-header fw-bold">Header</div>
+                    <div class="card-body">
+                      <p class="text-muted m-0">
+                        Karteninhalt. Header und Footer sind optional.
+                      </p>
+                    </div>
+                    <div class="card-footer text-muted text-2">Footer</div>
+                  </div>
+                  <div class="featured-box">
+                    <div class="featured-box-icon">⚡</div>
+                    <h4 class="fw-bold text-5 mb-2">Featured Box</h4>
+                    <p class="text-muted text-4 m-0">
+                      Ein dicker oberer Rahmen in der Akzentfarbe.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. KARTA KLASYCZNA                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Die klassische Karte</h2>
+            <p class="text-muted mb-4">
+              Drei Bereiche, alle optional. Ein reines <code>.card</code>
+              ist bereits vollständig — Header und Footer fügen Sie nur
+              hinzu, wenn Sie etwas hineinzupacken haben.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="card"&gt;
+  &lt;div class="card-header"&gt;Titel&lt;/div&gt;
+  &lt;div class="card-body"&gt;Inhalt…&lt;/div&gt;
+  &lt;div class="card-footer"&gt;Aktionen&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.card</code></td>
+                    <td data-label="Was sie tut">
+                      Eine <code>--bg-surface</code>-Oberfläche, ein Rahmen,
+                      Rundung und Schatten. Schneidet den Inhalt zu, sodass
+                      ein bildschirmfüllendes Bild von selbst abgerundete
+                      Ecken bekommt.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.card-header</code></td>
+                    <td data-label="Was sie tut">
+                      Eine Titelleiste mit Trennlinie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.card-body</code></td>
+                    <td data-label="Was sie tut">
+                      Der Hauptinhalt mit Innenabstand. Ohne ihn klebt der
+                      Inhalt an den Rändern — siehe Fallstrick Nr. 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.card-footer</code></td>
+                    <td data-label="Was sie tut">
+                      Ein Footer für Buttons und Metadaten; gedämpfter
+                      Hintergrund.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Eine Karte als Modal-Inhalt</h5>
+              <p class="text-4 text-muted m-0">
+                Innerhalb von <code>&lt;dialog class="modal-dialog"&gt;</code>
+                ist es genau <code>.card</code>, das dem Fenster Header,
+                Inhalt und Button-Leiste gibt. Es gibt keine separaten
+                Modal-Klassen für diese Bereiche — siehe
+                <a href="docs-interactive.html">Modale, Tabs &amp; Akkordeons</a>.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. FEATURED BOX I KARTY OBRAZKOWE                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Featured Box und Bildkarten</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Featured Box</h3>
+            <p class="text-muted mb-3">
+              Eine Karte für ein einzelnes Produktmerkmal. Das Icon und der
+              dicke obere Rahmen machen sie zu einem rhythmisch
+              wiederholbaren Element — drei oder vier nebeneinander in einem
+              Raster.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="featured-box"&gt;
+  &lt;div class="featured-box-icon"&gt;⚡&lt;/div&gt;
+  &lt;h4&gt;Geschwindigkeit&lt;/h4&gt;
+  &lt;p&gt;Beschreibung des Merkmals…&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Bildkarten</h3>
+            <p class="text-muted mb-3">
+              Ein Foto mit einem Overlay, das beim Hover einfährt.
+              <strong>Benötigt zwei Ebenen</strong>:
+              <code>.thumb-info</code> umhüllt das Ganze und schneidet das
+              Foto zu, während <code>.thumb-info-wrapper</code> im Inneren
+              nur das Bild hält. Ohne diese zweite Ebene gibt es beim Hover
+              nichts zu skalieren.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;a href="#" class="thumb-info"&gt;
+  &lt;span class="thumb-info-wrapper"&gt;
+    &lt;img src="foto.jpg" alt=""&gt;
+  &lt;/span&gt;
+  &lt;span class="thumb-info-title"&gt;Projektname&lt;/span&gt;
+&lt;/a&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Komponente</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.featured-box</code></td>
+                    <td data-label="Komponente">Featured Box</td>
+                    <td data-label="Was sie tut">Eine Karte mit Akzentrahmen oben.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.featured-box-icon</code></td>
+                    <td data-label="Komponente">Featured Box</td>
+                    <td data-label="Was sie tut">Ein rundes Feld für ein Icon oder Emoji.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thumb-info</code></td>
+                    <td data-label="Komponente">Bildkarte</td>
+                    <td data-label="Was sie tut">Die Hülle; schneidet das Foto zu und hält das Overlay.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thumb-info-wrapper</code></td>
+                    <td data-label="Komponente">Bildkarte</td>
+                    <td data-label="Was sie tut">
+                      Die Ebene mit dem Foto — sie ist es, die beim Hover
+                      skaliert.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thumb-info-title</code></td>
+                    <td data-label="Komponente">Bildkarte</td>
+                    <td data-label="Was sie tut">Die Beschriftung auf dem Overlay.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thumb-info-bottom</code></td>
+                    <td data-label="Komponente">Bildkarte</td>
+                    <td data-label="Was sie tut">Variante: Beschriftung an der unteren Kante.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thumb-info-center</code></td>
+                    <td data-label="Komponente">Bildkarte</td>
+                    <td data-label="Was sie tut">Variante: Beschriftung zentriert.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thumb-info-light</code></td>
+                    <td data-label="Komponente">Bildkarte</td>
+                    <td data-label="Was sie tut">
+                      Ein helleres Overlay — für dunkle Fotos.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. REFERENCJE                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Referenzen</h2>
+            <p class="text-muted mb-4">
+              Kundenbewertung: Zitat, Bewertung und Autor. Die Bewertung ist
+              <code>.testimonial-stars</code>, derselbe Mechanismus wie
+              <code>.star-rating</code> im Shop — den Wert übergeben Sie
+              per Variable <code>--rating</code>, nicht per Klasse.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="testimonial"&gt;
+  &lt;div class="testimonial-stars" style="--rating: 5;"&gt;&lt;/div&gt;
+  &lt;p class="testimonial-quote"&gt;Die Einfuehrung lief reibungsloser als erwartet.&lt;/p&gt;
+  &lt;div class="testimonial-author"&gt;
+    &lt;img class="testimonial-avatar" src="avatar.jpg" alt=""&gt;
+    &lt;div&gt;
+      &lt;div class="testimonial-name"&gt;Anna Kowalska&lt;/div&gt;
+      &lt;div class="testimonial-role"&gt;Betriebsleiterin&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial</code></td>
+                    <td data-label="Was sie tut">Die Hülle der Bewertung.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial-stars</code></td>
+                    <td data-label="Was sie tut">
+                      Die Bewertung. Gesteuert über die Variable
+                      <code>--rating</code> (0–5, Bruchteile füllen einen
+                      Stern teilweise).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial-quote</code></td>
+                    <td data-label="Was sie tut">Der Inhalt der Aussage.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial-author</code></td>
+                    <td data-label="Was sie tut">Der Footer: Avatar plus Personendaten.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial-avatar</code></td>
+                    <td data-label="Was sie tut">Das Foto des Autors, kreisförmig zugeschnitten.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial-name</code></td>
+                    <td data-label="Was sie tut">Vor- und Nachname.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.testimonial-role</code></td>
+                    <td data-label="Was sie tut">Position oder Unternehmen.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Mehrere Bewertungen nebeneinander</h5>
+              <p class="text-4 text-muted m-0">
+                Packen Sie Referenzen in ein <code>.carousel</code> — Sie
+                erhalten einen per Touch scrollbaren Slider, ohne etwas zu
+                schreiben. Details in
+                <a href="docs-components-extra.html">Karussells &amp; Lightbox</a>.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. EFEKTY I WCIĄGANIE NA HERO                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Effekte und Überlappen auf ein Hero</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Hover</h3>
+            <p class="text-muted mb-3">
+              Die Effekte bewegen ausschließlich <code>transform</code> und
+              <code>opacity</code>, werden also von der GPU berechnet und
+              lösen keine Neuberechnung des Seitenlayouts aus. Sie lassen
+              sich auf einem Element kombinieren.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Effekt</th>
+                    <th>Benötigt JS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-spring</code></td>
+                    <td data-label="Effekt">Federndes Abprallen beim Hover.</td>
+                    <td data-label="Benötigt JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-gpu-shadow</code></td>
+                    <td data-label="Effekt">
+                      Wachsender Schatten ohne Animation von <code>box-shadow</code>.
+                    </td>
+                    <td data-label="Benötigt JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-scale</code></td>
+                    <td data-label="Effekt">Vergrößerung. Stärke über <code>--hover-scale</code>.</td>
+                    <td data-label="Benötigt JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-shadow</code></td>
+                    <td data-label="Effekt">Anheben mit Schatten. Höhe: <code>--hover-y</code>.</td>
+                    <td data-label="Benötigt JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.hover-tilt</code></td>
+                    <td data-label="Effekt">Feste 3D-Neigung beim Hover.</td>
+                    <td data-label="Benötigt JS"><span class="badge badge-success">nein</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.tilt-card</code></td>
+                    <td data-label="Effekt">
+                      Neigung, die dem Cursor folgt. Bei Touch schaltet sich
+                      das Modul selbst ab — spart Akku.
+                    </td>
+                    <td data-label="Benötigt JS"><span class="badge badge-warning">ja</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Überlappen auf den Abschnitt darüber</h3>
+            <p class="text-muted mb-3">
+              Ein klassisches Layout einer Angebotsseite: eine Karte
+              überlappt die untere Kante eines Heroes. Das ist ein
+              negativer oberer Rand — <code>.overlap-container</code> gibt
+              einen Standardwert, und die Varianten erlauben, ihn auf die
+              Höhe der Karte abzustimmen.
+            </p>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.overlap-container</code></td>
+                    <td data-label="Was sie tut">
+                      Zieht das Element nach oben. Auf Mobilgeräten ist die
+                      Verschiebung kleiner, damit die Karte die
+                      Hero-Überschrift nicht verdeckt.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.overlap-up-50</code></td>
+                    <td data-label="Was sie tut">Zieht um ca. 50px nach oben.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.overlap-up-100</code></td>
+                    <td data-label="Was sie tut">Zieht um ca. 100px nach oben.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.overlap-up-150</code></td>
+                    <td data-label="Was sie tut">Zieht um ca. 150px nach oben — für hohe Karten.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Fallstricke</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="card-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Inhalt direkt in <code>.card</code> geworfen</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Ein reines <code>.card</code> hat keinen Innenabstand —
+                    das ist beabsichtigt, damit ein Bild oder eine Tabelle
+                    bis an die Ränder reichen können. Direkt eingefügter
+                    Text klebt dadurch am Rahmen. Umhüllen Sie ihn mit
+                    <code>.card-body</code> oder fügen Sie der Karte eine
+                    Abstandsklasse hinzu, z. B. <code>.p-4</code>.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>&lt;!-- FALSCH - Text direkt am Rahmen --&gt;
+&lt;div class="card"&gt;Inhalt&lt;/div&gt;
+
+&lt;!-- RICHTIG --&gt;
+&lt;div class="card"&gt;&lt;div class="card-body"&gt;Inhalt&lt;/div&gt;&lt;/div&gt;
+&lt;div class="card p-4"&gt;Inhalt&lt;/div&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="card-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Bildkarte ohne <code>.thumb-info-wrapper</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Ein direkt in <code>.thumb-info</code> eingefügtes Bild
+                    wird korrekt angezeigt, der Fehler ist also leicht zu
+                    übersehen — beim Hover passiert einfach nichts. Skaliert
+                    wird die Ebene <code>.thumb-info-wrapper</code>, nicht
+                    das <code>&lt;img&gt;</code> selbst; ohne sie gibt es
+                    nichts zu animieren.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="card-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Bewertung im Klassennamen zusammengesetzt</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Es ist verlockend, im Template
+                    <code>class="stars-4"</code> zu generieren. Ein solcher
+                    Name existiert nicht als Literal im Quellcode, weder
+                    PurgeCSS noch die Suche im Editor finden ihn. Die
+                    Bewertung reist per Variable, genau damit ein Wert aus
+                    dem Backend keine neuen Klassen erzeugt.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>&lt;!-- FALSCH --&gt;
+&lt;div class="testimonial-stars stars-&lt;?= $bewertung ?&gt;"&gt;
+
+&lt;!-- RICHTIG --&gt;
+&lt;div class="testimonial-stars" style="--rating: &lt;?= $bewertung ?&gt;;"&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="card-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Eine auf ein Hero gezogene Karte versteckt sich darunter</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.overlap-container</code> hebt das Element per
+                    negativem Rand an und gibt ihm einen
+                    <code>z-index</code>, aber wenn der Hero-Abschnitt einen
+                    eigenen Stacking-Kontext hat (z. B. über
+                    <code>position</code> und einen höheren
+                    <code>z-index</code>), landet die Karte dahinter. Halten
+                    Sie sich an die Skala der
+                    <a href="docs-variables.html"><code>--z-index-*</code>-Variablen</a>,
+                    statt eigene Zahlen einzutragen.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Verwandte Seiten</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-cards.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Karten</h5>
+                  <p class="text-4 text-muted m-0">
+                    Fertige Layouts für Karten, Portfolio und Referenzen.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-tables.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Tabellen &amp; Listen</h5>
+                  <p class="text-4 text-muted m-0">
+                    B2B-Tabellen und Datenzeilen.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-animations.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Animationen</h5>
+                  <p class="text-4 text-muted m-0">
+                    Die vollständige Liste der Hover- und Eintritts-Effekte.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-buttons.html" class="btn btn-secondary"
+              >➔ Zurück: Buttons &amp; Badges</a
+            >
+            <a
+              href="docs-tables.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Tabellen &amp; Listen ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

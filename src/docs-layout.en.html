@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Grid & Layout - molique Docs","description":"molique layout reference: auto-grid on a RAM-style pattern, a rigid 12-column grid, flexbox, positioning and bento grid. Class tables, breakpoints and the golden rule of RWD."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SIDEBAR -->
+      <include src="partials/docs-sidebar.en.html"></include>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Grid &amp; Layout</h1>
+            <p class="text-6 text-muted">
+              Three ways to arrange content, plus a full toolkit for
+              positioning. The single most important thing on this page is
+              the <strong>golden rule of RWD</strong> in the pitfalls
+              section — the most common mistake in the whole framework.
+              Ready-made layouts:
+              <a href="examples-layout.html">examples</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. WHAT TO CHOOSE                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. What to choose</h2>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Tool</th>
+                    <th>When</th>
+                    <th>Who decides the column count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Tool"><code>.grid-auto</code></td>
+                    <td data-label="When">
+                      Repeating tiles: product cards, a service grid, a
+                      portfolio list.
+                    </td>
+                    <td data-label="Who decides">
+                      <strong>The browser.</strong> You provide a minimum tile width.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Tool"><code>.grid-cols-*</code></td>
+                    <td data-label="When">
+                      A designed layout: 8 columns of text + a 4-column sidebar.
+                    </td>
+                    <td data-label="Who decides"><strong>You</strong>, separately at every breakpoint.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Tool"><code>.d-flex</code></td>
+                    <td data-label="When">
+                      A single row of elements: a toolbar, a card header, a
+                      group of buttons.
+                    </td>
+                    <td data-label="Who decides">Not applicable — it's a single axis.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Tool"><code>.bento-grid</code></td>
+                    <td data-label="When">
+                      A mosaic of differently sized tiles — a homepage, a dashboard.
+                    </td>
+                    <td data-label="Who decides">You, via each tile's span.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Two breakpoints, not five</h5>
+              <p class="text-4 text-muted m-0">
+                molique only has <code>md</code> (from 768px) and
+                <code>lg</code> (from 992px). Unprefixed classes work
+                <strong>from zero upward</strong>, i.e. they describe the
+                mobile view. The <code>-md-</code> variant overrides them
+                from tablet width, and <code>-lg-</code> from desktop width.
+                Fewer breakpoints means fewer places for the layout to fall apart.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. AUTO-GRID                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Auto-grid</h2>
+            <p class="text-muted mb-4">
+              The simplest tool and usually the right choice.
+              <strong>You don't declare a column count</strong> — you give a
+              minimum tile width, and the browser fits as many as it can.
+              As the window narrows it reduces the column count on its own,
+              no media queries needed.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="grid-auto"&gt;
+  &lt;div class="card"&gt;…&lt;/div&gt;
+  &lt;div class="card"&gt;…&lt;/div&gt;
+  &lt;div class="card"&gt;…&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Custom minimum width --&gt;
+&lt;div class="grid-auto" style="--grid-min: 240px;"&gt;…&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100">
+                  <div class="card"><div class="card-body">Tile 1</div></div>
+                  <div class="card"><div class="card-body">Tile 2</div></div>
+                  <div class="card"><div class="card-body">Tile 3</div></div>
+                  <div class="card"><div class="card-body">Tile 4</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Tile threshold</th>
+                    <th>What for</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.grid-auto-sm</code></td>
+                    <td data-label="Threshold"><code>200px</code></td>
+                    <td data-label="What for">Icons, small stat tiles.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.grid-auto</code></td>
+                    <td data-label="Threshold"><code>280px</code></td>
+                    <td data-label="What for">The default — cards with text.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.grid-auto-lg</code></td>
+                    <td data-label="Threshold"><code>350px</code></td>
+                    <td data-label="What for">Cards with a photo, articles.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Why it never overflows</h5>
+              <p class="text-4 text-muted m-0">
+                The rule is
+                <code>minmax(min(100%, var(--grid-min)), 1fr)</code>.
+                The <code>min()</code> function is the key here: when the
+                window is narrower than the tile threshold,
+                <code>100%</code> wins and the tile shrinks down to the
+                screen's width. Without it, it would stay at a fixed 280px
+                and overflow off a phone screen.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. 12-COLUMN GRID                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. 12-column grid</h2>
+            <p class="text-muted mb-4">
+              For when the layout should be designed, not calculated. The
+              parent gets the column count, the children get a span. The
+              classes exist in three flavors: unprefixed (mobile), with
+              <code>-md-</code>, and with <code>-lg-</code>.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;!-- Mobile: one column (default). Desktop: 8 + 4 --&gt;
+&lt;div class="grid-md-cols-12 gap-4"&gt;
+  &lt;article class="col-md-span-8"&gt;Content&lt;/article&gt;
+  &lt;aside class="col-md-span-4"&gt;Sidebar&lt;/aside&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">
+                You don't need <code>grid-cols-1</code>
+              </h5>
+              <p class="text-4 text-muted m-0">
+                The <code>.grid-md-cols-*</code> and
+                <code>.grid-lg-cols-*</code> classes are
+                <strong>a single-column grid by default</strong> below their
+                own threshold — adding <code>.grid-cols-1</code> changes
+                nothing. It used to be required, and its absence used to
+                produce a sneaky symptom: the layout looked fine, but
+                <code>gap</code> stopped working on a phone, because the
+                element wasn't a grid at that point.
+              </p>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Family</th>
+                    <th>Range</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.grid</code></td>
+                    <td data-label="Range">—</td>
+                    <td data-label="What it does">Turns on the grid without setting columns.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.grid-cols-*</code></td>
+                    <td data-label="Range">1–12</td>
+                    <td data-label="What it does">
+                      The parent's column count. Variants:
+                      <code>.grid-md-cols-*</code>,
+                      <code>.grid-lg-cols-*</code> — both single-column by
+                      default below their own threshold.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.col-span-*</code></td>
+                    <td data-label="Range">1–12</td>
+                    <td data-label="What it does">
+                      How many columns a child occupies. Variants:
+                      <code>.col-md-span-*</code>, <code>.col-lg-span-*</code>.
+                      <strong>Don't use it on mobile</strong> — see pitfall #1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.col-start-*</code></td>
+                    <td data-label="Range">1–12, <code>auto</code></td>
+                    <td data-label="What it does">
+                      Which column an element starts at. Variants:
+                      <code>.col-md-start-*</code>, <code>.col-lg-start-*</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.offset-*</code></td>
+                    <td data-label="Range">0–11</td>
+                    <td data-label="What it does">
+                      Classic shift by N columns. Variants:
+                      <code>.offset-md-*</code>, <code>.offset-lg-*</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.gap-*</code></td>
+                    <td data-label="Range">0–5</td>
+                    <td data-label="What it does">
+                      Gap between elements. Variant:
+                      <code>.gap-md-*</code>. Also works in flexbox.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">
+                <code>col-start</code> or <code>offset</code>
+              </h5>
+              <p class="text-4 text-muted m-0">
+                They do the same thing two different ways.
+                <code>.col-start-4</code> says "start at the fourth
+                column" — an absolute position, readable when designing a
+                layout. <code>.offset-3</code> says "shift over by three" —
+                more convenient when porting code from Bootstrap. Pick one
+                and stick with it within a project.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. FLEXBOX                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Flexbox</h2>
+            <p class="text-muted mb-4">
+              For a single axis: a bar with a logo and buttons, a card
+              header, a footer with actions. Use a grid for page layout.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.d-flex</code></td>
+                    <td data-label="What it does">Turns on flexbox. Row by default.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.flex-column</code></td>
+                    <td data-label="What it does">
+                      Lays out as a column. Variants:
+                      <code>.flex-md-column</code>, <code>.flex-md-row</code> —
+                      e.g. a column on mobile, a row on desktop.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.flex-wrap</code></td>
+                    <td data-label="What it does">Lets elements wrap onto the next lines.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.justify-content-start</code></td>
+                    <td data-label="What it does">
+                      Distribution along the main axis. Also:
+                      <code>.justify-content-center</code>,
+                      <code>.justify-content-end</code>,
+                      <code>.justify-content-between</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.align-items-center</code></td>
+                    <td data-label="What it does">
+                      Alignment across the cross axis. Also:
+                      <code>.align-items-start</code>,
+                      <code>.align-items-end</code>,
+                      <code>.align-items-stretch</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.align-self-center</code></td>
+                    <td data-label="What it does">
+                      The same, but for <strong>one</strong> child. Also:
+                      <code>.align-self-start</code>,
+                      <code>.align-self-end</code>,
+                      <code>.align-self-stretch</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.d-block</code></td>
+                    <td data-label="What it does">
+                      The other display modes:
+                      <code>.d-inline-block</code>, <code>.d-grid</code>,
+                      <code>.d-none</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.d-md-none</code></td>
+                    <td data-label="What it does">
+                      Visibility depending on width. Also
+                      <code>.d-md-block</code>, <code>.d-md-flex</code> — e.g. a
+                      menu shown only from tablet width up.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. POSITIONING AND SIZES                              -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Positioning and sizes</h2>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Group</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.position-relative</code></td>
+                    <td data-label="Group">Position</td>
+                    <td data-label="What it does">
+                      A reference point for children. Also:
+                      <code>.position-absolute</code>,
+                      <code>.position-fixed</code>,
+                      <code>.position-sticky</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.top-0</code></td>
+                    <td data-label="Group">Edges</td>
+                    <td data-label="What it does">
+                      Pinning to an edge: <code>.bottom-0</code>,
+                      <code>.left-0</code>, <code>.right-0</code>.
+                      <code>.inset-0</code> pins to all of them at once.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.top-50</code></td>
+                    <td data-label="Group">Centering</td>
+                    <td data-label="What it does">
+                      Together with <code>.left-50</code> and
+                      <code>.translate-middle</code> centers an element in
+                      its parent. Individually: <code>.translate-middle-x</code>,
+                      <code>.translate-middle-y</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.z-10</code></td>
+                    <td data-label="Group">Layers</td>
+                    <td data-label="What it does">
+                      Stacking order within a section: <code>.z-0</code>,
+                      <code>.z-20</code>, <code>.z-30</code>. Global
+                      components use the <code>--z-index-*</code> variables
+                      instead — see pitfall #3.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.w-100</code></td>
+                    <td data-label="Group">Width</td>
+                    <td data-label="What it does">
+                      Also <code>.w-25</code>, <code>.w-50</code>,
+                      <code>.w-75</code>, <code>.w-auto</code> and
+                      <code>.w-md-*</code> variants. <code>.mw-100</code>
+                      caps the maximum — a fix for photos pushing the layout out.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.h-100</code></td>
+                    <td data-label="Group">Height</td>
+                    <td data-label="What it does">
+                      Full parent height. <code>.vh-100</code> and
+                      <code>.min-vh-100</code> refer to the window instead.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.breakout-mobile</code></td>
+                    <td data-label="Group">Width</td>
+                    <td data-label="What it does">
+                      Pulls an element out of the <code>.container</code>
+                      padding on mobile (below 768px), all the way to the
+                      screen edge — carousels, galleries, hero photos inside
+                      article content. No effect on desktop. Zero
+                      configuration, doesn't need to know the parent's padding value.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-center</code></td>
+                    <td data-label="Group">Text</td>
+                    <td data-label="What it does">
+                      Content alignment: <code>.text-start</code>,
+                      <code>.text-end</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fade-bottom</code></td>
+                    <td data-label="Group">Effect</td>
+                    <td data-label="What it does">
+                      Content fading at the bottom edge instead of a hard
+                      cutoff. Color: <code>--fade-color</code>, height:
+                      <code>--fade-height</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;!-- An element perfectly centered in its parent --&gt;
+&lt;div class="position-relative" style="height: 200px"&gt;
+  &lt;span class="position-absolute top-50 left-50 translate-middle"&gt;Center&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="component-code">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;!-- The carousel touches the screen edges on mobile, returns to
+     .container width on desktop --&gt;
+&lt;div class="container"&gt;
+  &lt;p&gt;A regular paragraph with margins...&lt;/p&gt;
+  &lt;div class="carousel breakout-mobile"&gt;
+    &lt;!-- ... --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. BENTO GRID                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Bento grid</h2>
+            <p class="text-muted mb-4">
+              A mosaic of differently sized tiles — a layout familiar from
+              product pages and dashboards. The parent sets the grid, and
+              you stretch selected tiles across more columns or rows.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="bento-grid"&gt;
+  &lt;div class="card bento-col-2 bento-row-2"&gt;Big tile&lt;/div&gt;
+  &lt;div class="card"&gt;Small&lt;/div&gt;
+  &lt;div class="card bento-row-2"&gt;Vertical&lt;/div&gt;
+  &lt;div class="card bento-col-2"&gt;Horizontal&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.bento-grid</code></td>
+                    <td data-label="What it does">
+                      The mosaic grid. Density variants:
+                      <code>.bento-grid-3</code>, <code>.bento-grid-4</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.bento-col-2</code></td>
+                    <td data-label="What it does">
+                      A tile spanning two columns. Wider:
+                      <code>.bento-col-3</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.bento-row-2</code></td>
+                    <td data-label="What it does">
+                      A tile spanning two rows. Taller:
+                      <code>.bento-row-3</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PITFALLS                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Pitfalls</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="lay-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>GOLDEN RULE: <code>.col-span-*</code> on mobile</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <strong>The most common mistake in the whole
+                    framework.</strong> Unprefixed classes work from zero
+                    upward, meaning <strong>on the phone too</strong>. The
+                    parent has <code>.grid-cols-1</code> there — a single
+                    column — so <code>.col-span-12</code> tells the child to
+                    take up twelve columns in a grid that only has one. The
+                    layout blows apart.
+                  </p>
+                  <p class="text-muted mb-3">
+                    In a single-column grid, an element takes up the full
+                    width anyway. Declare the span
+                    <strong>only</strong> with the <code>-md-</code> and
+                    <code>-lg-</code> variants.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Copy</button>
+                    <pre><code>&lt;!-- WRONG - col-span-12 also applies on the phone --&gt;
+&lt;div class="grid-md-cols-12"&gt;
+  &lt;div class="col-span-12 col-md-span-8"&gt;…&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- RIGHT - the full width on mobile happens on its own --&gt;
+&lt;div class="grid-md-cols-12"&gt;
+  &lt;div class="col-md-span-8"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>A rigid grid where auto-grid is enough</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    A list of cards doesn't need a designed layout. Writing
+                    <code>grid-cols-1 grid-md-cols-2 grid-lg-cols-3</code>
+                    is three decisions to maintain and three places to get
+                    wrong. <code>.grid-auto</code> gives the same effect
+                    with a single class and also adapts to intermediate
+                    widths you never planned for.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Custom numbers in <code>z-index</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    The <code>.z-0</code>–<code>.z-30</code> classes order
+                    layers <strong>within a single section</strong> — e.g.
+                    content over an overlay on a photo. Don't use them for
+                    global components: the modal, toast, and dropdown have a
+                    fixed hierarchy in the <code>--z-index-*</code>
+                    variables. Writing <code>z-index: 9999</code> there as a
+                    shortcut ends with a modal sitting under the navbar
+                    somewhere else in the site entirely.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    Full scale:
+                    <a href="docs-variables.en.html">CSS Variables</a>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>A photo pushing the grid out</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    A grid item doesn't shrink below the size of its content
+                    by default. A large photo or a long string with no
+                    spaces (a URL, an account number) will push the column
+                    out and trigger a horizontal scrollbar for the whole
+                    page. For images, <code>.mw-100</code> is enough.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="lay-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span><code>.breakout-mobile</code> nested too deep</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    The technique relies on <code>margin-left: 50%</code>
+                    being calculated relative to the width of the
+                    <strong>direct parent</strong>, and that parent needs to
+                    be centered in the window the way <code>.container</code>
+                    is (i.e. have <code>margin-inline: auto</code>). The
+                    element works correctly as a direct child of
+                    <code>.container</code> — but nested deeper, e.g. inside
+                    a <code>.card-body</code> that itself sits inside the
+                    container, it gets calculated relative to the card's
+                    width, not the window's, and ends up shifted/clipped
+                    instead of touching the screen edge. Move the class to
+                    the nearest <code>.container</code> level, or wrap the
+                    problem element in an extra <code>&lt;div&gt;</code>
+                    directly inside it.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. RELATED                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Related pages</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-layout.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: layout</h5>
+                  <p class="text-4 text-muted m-0">
+                    Ready-made page layouts, grids and bento.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-sections.en.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Sections &amp; Hero</h5>
+                  <p class="text-4 text-muted m-0">
+                    Containers, vertical spacing and section headers.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-admin.en.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Admin panel</h5>
+                  <p class="text-4 text-muted m-0">
+                    Sidebar layout — a separate class set.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Bottom navigation -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-variables.en.html" class="btn btn-secondary"
+              >➔ Back: CSS Variables</a
+            >
+            <a href="docs-navbar.html" class="btn btn-primary fw-bold hover-spring"
+              >Next step: Navigation &amp; Menus ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

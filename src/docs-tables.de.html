@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Tabellen & Listen - molique Docs","description":"Referenz zur Datenpräsentation in molique: B2B-Tabellen, die auf Mobilgeräten zu Karten werden, Datenzeilen auf CSS Grid, Icon-Listen und Zähler. Klassentabellen und Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SEITENLEISTE -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Tabellen &amp; Listen</h1>
+            <p class="text-6 text-muted">
+              Vier Wege, eine Liste von Datensätzen zu zeigen — von der klassischen
+              Tabelle bis zur Zeile im Raster. Diese Seite erklärt, was wann
+              die richtige Wahl ist und was jede Variante voraussetzt. Fertige
+              Layouts finden Sie in den
+              <a href="examples-tables.html">Beispielen</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. WAS WÄHLEN                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Was wählen</h2>
+            <p class="text-muted mb-4">
+              Die Wahl läuft auf eine Frage hinaus: Vergleichen Sie Datensätze
+              Spalte für Spalte, oder durchsuchen Sie sie nur.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Komponente</th>
+                    <th>Wann</th>
+                    <th>Worauf basiert es</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Komponente"><code>.table</code></td>
+                    <td data-label="Wann">
+                      Daten, die spaltenweise vergleichbar sind: Berichte, Aufstellungen, Rechnungen.
+                    </td>
+                    <td data-label="Worauf basiert es">
+                      <code>&lt;table&gt;</code> — die Tabellensemantik bleibt erhalten.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.data-row</code></td>
+                    <td data-label="Wann">
+                      Eine Liste von Datensätzen mit Aktionen: Kunden, Projekte, Aufträge.
+                    </td>
+                    <td data-label="Worauf basiert es">CSS Grid</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.data-row-compact</code></td>
+                    <td data-label="Wann">
+                      Eine dichte Liste mit Icon und zwei Textzeilen — Benachrichtigungen,
+                      Dateien, Verlauf.
+                    </td>
+                    <td data-label="Worauf basiert es">Flexbox</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.list-group</code></td>
+                    <td data-label="Wann">
+                      Eine einfache klickbare Liste von Einträgen: Einstellungsmenü, Auswahl aus einer Liste.
+                    </td>
+                    <td data-label="Worauf basiert es">Flexbox</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Warum das keine Geschmacksfrage ist</h5>
+              <p class="text-4 text-muted m-0">
+                <code>&lt;table&gt;</code> trägt Bedeutung: Ein Screenreader
+                kündigt an „Spalte Status, Zeile 3", und der Nutzer kann
+                zellenweise navigieren. Eine aus <code>&lt;div&gt;</code>s
+                gebaute Datensatzliste hat das nicht. Umgekehrt gilt auch: Eine
+                Tabelle, die für ein visuelles Layout verwendet wird, führt den
+                Screenreader in die Irre. Wählen Sie nach den Daten, nicht nach
+                der Optik.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. TABELLEN                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Tabellen</h2>
+            <p class="text-muted mb-4">
+              Eine Tabelle sitzt immer in <code>.table-wrapper</code> — der sorgt
+              für horizontales Scrollen, wenn es mehr Spalten als Platz gibt. Ohne
+              ihn sprengt eine breite Tabelle die ganze Seite.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="table-wrapper"&gt;
+  &lt;table class="table table-hover table-cards"&gt;
+    &lt;thead class="thead-light"&gt;
+      &lt;tr&gt;&lt;th&gt;Kunde&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;!-- data-label ist von .table-cards ERFORDERLICH --&gt;
+        &lt;td data-label="Kunde"&gt;Molique&lt;/td&gt;
+        &lt;td data-label="Status"&gt;&lt;span class="badge badge-success"&gt;Aktiv&lt;/span&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div class="table-wrapper w-100">
+                  <table class="table table-hover table-cards m-0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Kunde</th>
+                        <th>Projekt</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td data-label="Kunde">Molique</td>
+                        <td data-label="Projekt">Onlineshop</td>
+                        <td data-label="Status">
+                          <span class="badge badge-success">Aktiv</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td data-label="Kunde">Briko</td>
+                        <td data-label="Projekt">Kundenpanel</td>
+                        <td data-label="Status">
+                          <span class="badge bg-warning-subtle">Ausstehend</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Gruppe</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-wrapper</code></td>
+                    <td data-label="Gruppe">Struktur</td>
+                    <td data-label="Was sie macht">
+                      Container mit horizontalem Scrollen. Umschließen Sie die Tabelle
+                      <strong>immer</strong> damit.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table</code></td>
+                    <td data-label="Gruppe">Struktur</td>
+                    <td data-label="Was sie macht">Grundstil: Abstände, Linien, Ausrichtung.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-sm</code></td>
+                    <td data-label="Gruppe">Größe</td>
+                    <td data-label="Was sie macht">Kompakt — mehr Zeilen auf dem Bildschirm.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-lg</code></td>
+                    <td data-label="Gruppe">Größe</td>
+                    <td data-label="Was sie macht">Locker — wenige Zeilen, viel Luft.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-striped</code></td>
+                    <td data-label="Gruppe">Aussehen</td>
+                    <td data-label="Was sie macht">Abwechselnder Zeilenhintergrund.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-hover</code></td>
+                    <td data-label="Gruppe">Aussehen</td>
+                    <td data-label="Was sie macht">Hervorhebung der Zeile unter dem Cursor.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-borderless</code></td>
+                    <td data-label="Gruppe">Aussehen</td>
+                    <td data-label="Was sie macht">Ohne Linien — ruhigere Wirkung.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thead-light</code></td>
+                    <td data-label="Gruppe">Kopfzeile</td>
+                    <td data-label="Was sie macht">Gedämpfter Hintergrund (Standardwahl).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thead-dark</code></td>
+                    <td data-label="Gruppe">Kopfzeile</td>
+                    <td data-label="Was sie macht">Dunkle Kopfzeile, heller Text.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thead-primary</code></td>
+                    <td data-label="Gruppe">Kopfzeile</td>
+                    <td data-label="Was sie macht">Kopfzeile in der Markenfarbe.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thead-sm</code></td>
+                    <td data-label="Gruppe">Kopfzeile</td>
+                    <td data-label="Was sie macht">Niedrigere Kopfzeile.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.thead-lg</code></td>
+                    <td data-label="Gruppe">Kopfzeile</td>
+                    <td data-label="Was sie macht">Höhere Kopfzeile.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-cards</code></td>
+                    <td data-label="Gruppe">Mobil</td>
+                    <td data-label="Was sie macht">
+                      Auf dem Smartphone wird jede Zeile zur Karte.
+                      <strong>Erfordert <code>data-label</code></strong> in jedem
+                      <code>&lt;td&gt;</code> — siehe Fallstrick Nr. 1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.table-cards-always</code></td>
+                    <td data-label="Gruppe">Mobil</td>
+                    <td data-label="Was sie macht">
+                      Dasselbe, aber <strong>bei jeder Breite</strong>. Für
+                      schmale Dashboard-Spalten, in denen die Tabelle nie
+                      genug Platz hat.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Abstandsvariablen in Zellen</h5>
+              <p class="text-4 text-muted m-0">
+                <code>--table-padding-x</code>, <code>--table-padding-y</code>,
+                <code>--table-font-size</code> und
+                <code>--table-header-font-size</code> stellen die Größenvarianten ein.
+                Sie überschreiben sie selten direkt — dafür gibt es
+                <code>.table-sm</code> und <code>.table-lg</code>, die das konsistent
+                erledigen.
+              </p>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Live-Suche</h3>
+            <p class="text-muted mb-3">
+              Das Attribut <code>data-search-target</code> an einem beliebigen
+              Textfeld filtert die Zeilen der angegebenen Tabelle live, ohne
+              Neuladen und ohne JS zu schreiben.
+            </p>
+            <div class="component-code">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;input type="text" class="input" placeholder="Suchen…"
+       data-search-target="#kundenBody"&gt;
+
+&lt;table class="table"&gt;
+  &lt;tbody id="kundenBody"&gt;
+    &lt;tr&gt;&lt;td&gt;Molique&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Briko&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <p class="text-muted text-4 mt-3 mb-0">
+              <code>data-search-target</code> zeigt auf die <code>id</code>
+              des Elements mit den Zeilen (meist <code>&lt;tbody&gt;</code>) —
+              das Modul vergleicht den eingegebenen Text mit dem gesamten
+              Inhalt jedes <code>&lt;tr&gt;</code>. Eine Zeile mit der Klasse
+              <code>.cheat-sheet-category</code> behandelt es als
+              Abschnittsüberschrift und blendet sie automatisch aus, sobald
+              keine Zeile darunter zur Suche passt — andere Tabellen können
+              diese Klasse gefahrlos ignorieren.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. DATENZEILEN                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Datenzeilen</h2>
+            <p class="text-muted mb-4">
+              Wenn Datensätze nicht verglichen, sondern nur durchgesehen werden —
+              ist eine Tabelle zu starr. Eine Zeile im Raster bricht sich auf
+              einem schmalen Bildschirm selbst um, ohne dass das Layout
+              umgeschrieben werden muss.
+            </p>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Volle Variante</h3>
+            <p class="text-muted mb-3">
+              Spalten sind gewöhnliche Kinder von <code>.data-row</code> — wie
+              viele Sie einfügen, so viele wird es geben. Der Aktionsblock
+              rückt an den rechten Rand.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="data-row"&gt;
+  &lt;div class="fw-bold"&gt;Projektname&lt;/div&gt;
+  &lt;div class="text-muted"&gt;Parameter&lt;/div&gt;
+  &lt;div&gt;&lt;span class="status-dot status-pending"&gt;Ausstehend&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="data-row-actions"&gt;
+    &lt;button class="btn-action"&gt;Bearbeiten&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Kompakte Variante</h3>
+            <p class="text-muted mb-3">
+              Sie hat einen von vornherein festgelegten Aufbau: Icon, Inhalt in
+              zwei Zeilen, Aktionen. Dadurch sieht eine Liste von
+              Benachrichtigungen oder Dateien überall gleich aus.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="data-row-compact"&gt;
+  &lt;div class="row-icon"&gt;&lt;span class="icon-square"&gt;📄&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="row-content"&gt;
+    &lt;div class="row-title"&gt;Rahmenvertrag.pdf&lt;/div&gt;
+    &lt;div class="row-details"&gt;2,4 MB · gestern&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="row-actions"&gt;
+    &lt;button class="btn-action"&gt;Herunterladen&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Variante</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.data-row</code></td>
+                    <td data-label="Variante">Voll</td>
+                    <td data-label="Was sie macht">Eine Zeile im Raster; Spalten sind ihre Kinder.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.data-row-actions</code></td>
+                    <td data-label="Variante">Voll</td>
+                    <td data-label="Was sie macht">Button-Block, an den rechten Rand gerückt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.data-row-compact</code></td>
+                    <td data-label="Variante">Kompakt</td>
+                    <td data-label="Was sie macht">Zeile mit festgelegtem Aufbau: Icon, Inhalt, Aktionen.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.row-icon</code></td>
+                    <td data-label="Variante">Kompakt</td>
+                    <td data-label="Was sie macht">Platz für ein Icon links.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.icon-square</code></td>
+                    <td data-label="Variante">Kompakt</td>
+                    <td data-label="Was sie macht">Quadratischer Hintergrund hinter dem Icon.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.row-content</code></td>
+                    <td data-label="Variante">Kompakt</td>
+                    <td data-label="Was sie macht">Textspalte; nimmt den freien Platz ein.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.row-title</code></td>
+                    <td data-label="Variante">Kompakt</td>
+                    <td data-label="Was sie macht">Erste Zeile — Name des Datensatzes.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.row-details</code></td>
+                    <td data-label="Variante">Kompakt</td>
+                    <td data-label="Was sie macht">Zweite Zeile — Metadaten, gedämpft.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.row-actions</code></td>
+                    <td data-label="Variante">Kompakt</td>
+                    <td data-label="Was sie macht">Buttons rechts.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. LISTEN UND ZÄHLER                                  -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Listen und Zähler</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Elementliste</h3>
+            <p class="text-muted mb-3">
+              Eine vertikale Liste klickbarer Elemente — Einstellungsmenü,
+              Auswahl aus einer Liste. Der aktuelle Eintrag wird mit
+              <code>.is-active</code> markiert.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="list-group"&gt;
+  &lt;a href="#" class="list-group-item is-active"&gt;Kontoeinstellungen&lt;/a&gt;
+  &lt;a href="#" class="list-group-item"&gt;Benachrichtigungen&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Icon-Listen</h3>
+            <p class="text-muted mb-3">
+              Aufzählungszeichen ersetzt durch ein Icon — typischerweise eine
+              Merkmalsliste bei Preisen. Icon und Farbe wählen Sie über
+              getrennte Klassen, sodass „grüner Haken" und „rotes Kreuz" zwei
+              unabhängige Entscheidungen sind.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;ul class="list-icons list-icons-check list-icons-success"&gt;
+  &lt;li&gt;Unbegrenzte Konten&lt;/li&gt;
+  &lt;li&gt;24/7-Support&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul class="list-unstyled"&gt;…&lt;/ul&gt;   &lt;!-- reine Liste ohne Aufzählungszeichen --&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Zähler</h3>
+            <p class="text-muted mb-3">
+              Eine große Zahl mit Beschriftung — „512 Deployments". Den
+              Zielwert geben Sie als Inhalt von <code>.counter-value</code>
+              an; das Modul <code>js/modules/molique-counters.js</code> zählt
+              danach hoch, sobald das Element ins Sichtfeld scrollt.
+              <strong>Ohne JavaScript ist die Zahl trotzdem sichtbar</strong>,
+              nur ohne Animation.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="counter"&gt;
+  &lt;div class="counter-value"&gt;512&lt;/div&gt;
+  &lt;div class="counter-title"&gt;Deployments&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-group</code></td>
+                    <td data-label="Was sie macht">Hülle für die Elementliste.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-group-item</code></td>
+                    <td data-label="Was sie macht">
+                      Ein einzelner Eintrag. <code>.is-active</code> markiert den aktuellen.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-unstyled</code></td>
+                    <td data-label="Was sie macht">Liste ohne Aufzählungszeichen und Einzug.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-icons</code></td>
+                    <td data-label="Was sie macht">Aufzählungszeichen ersetzt durch ein Icon.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-icons-check</code></td>
+                    <td data-label="Was sie macht">Icon: Haken.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-icons-arrow</code></td>
+                    <td data-label="Was sie macht">Icon: Pfeil.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-icons-cross</code></td>
+                    <td data-label="Was sie macht">Icon: Kreuz.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-icons-success</code></td>
+                    <td data-label="Was sie macht">Icon-Farbe: Grün.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-icons-danger</code></td>
+                    <td data-label="Was sie macht">Icon-Farbe: Rot.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.list-icons-dark</code></td>
+                    <td data-label="Was sie macht">
+                      Icon-Farbe: kontrastierend zum Hintergrund. Ohne Farbklasse
+                      ist das Icon in der Markenfarbe.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.counter</code></td>
+                    <td data-label="Was sie macht">Hülle für den Zähler.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.counter-value</code></td>
+                    <td data-label="Was sie macht">
+                      Die Zahl selbst. Ihre Anwesenheit startet das Hochzähl-Modul.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.counter-title</code></td>
+                    <td data-label="Was sie macht">Beschriftung unter der Zahl.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. FALLSTRICKE                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Fallstricke</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="tbl-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.table-cards</code> ohne <code>data-label</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Auf dem Desktop sieht alles gut aus, daher zeigt sich der
+                    Fehler erst auf dem Smartphone: Die Zeilen werden zu
+                    Karten, aber <strong>ohne Spaltennamen</strong> — es
+                    bleiben nur die Werte übrig, einer unter dem anderen.
+                    „Aktiv 12.400 € 2026-03-01" — und niemand weiß, was was ist.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    CSS nimmt die Beschriftungen ausschließlich aus dem
+                    Attribut — es kann sie nicht aus <code>&lt;th&gt;</code>
+                    lesen. Wenn Sie eine Tabelle in einer Schleife erzeugen,
+                    füllen Sie <code>data-label</code> mit derselben Variable
+                    wie die Kopfzeile.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="tbl-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Tabelle ohne <code>.table-wrapper</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Eine Tabelle bricht ihren Inhalt nicht um, daher sprengt
+                    eine breite Tabelle ihr Elternelement und löst eine
+                    horizontale Bildlaufleiste für die <strong>gesamte
+                    Seite</strong> aus. Das Symptom kann irreführend sein:
+                    „die Seite verschiebt sich auf dem Smartphone", während
+                    der Übeltäter eine Tabelle an ganz anderer Stelle ist.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="tbl-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>In der Tabelle abgeschnittenes Aktionsmenü</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.table-wrapper</code> hat sein eigenes Scrollen,
+                    daher wird ein aufklappbares Menü neben einer Zeile darin
+                    abgeschnitten. Das ist kein Fehler des Wrappers — so
+                    funktioniert <code>overflow</code> nun einmal. Verwenden
+                    Sie die Dropdown-Variante auf Basis der Popover API:
+                    Das Panel landet im Top Layer, außerhalb der Reichweite
+                    des Zuschneidens. Details in der
+                    <a href="docs-navbar.html">Navigation</a>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="tbl-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Eine Tabelle für das Seitenlayout verwendet</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Wenn die „Spalten" nicht Merkmale derselben Art sind,
+                    belügt <code>&lt;table&gt;</code> den Screenreader — er
+                    kündigt Zeilen und Spalten dort an, wo es keine gibt. Für
+                    das Layout dient ein Raster:
+                    <code>.grid-cols-*</code> oder <code>.data-row</code>.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. VERWANDTE SEITEN                                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Verwandte Seiten</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-tables.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Tabellen</h5>
+                  <p class="text-4 text-muted m-0">
+                    Fertige Aufstellungen und Kopfzeilen-Varianten.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-data-rows.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Datenzeilen</h5>
+                  <p class="text-4 text-muted m-0">
+                    Datensatzlisten, kompakte Varianten, Elementlisten.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-admin.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Admin-Panel</h5>
+                  <p class="text-4 text-muted m-0">
+                    Wo diese Komponenten am häufigsten landen.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-cards.html" class="btn btn-secondary"
+              >➔ Zurück: Karten</a
+            >
+            <a
+              href="docs-interactive.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Modale, Tabs &amp; Akkordeons ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

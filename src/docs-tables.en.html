@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Tables & Lists - molique Docs","description":"Data-presentation reference in molique: B2B tables that turn into cards on mobile, data rows on CSS Grid, icon lists and counters. Class tables and pitfalls."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SIDEBAR -->
+      <include src="partials/docs-sidebar.en.html"></include>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Tables &amp; Lists</h1>
+            <p class="text-6 text-muted">
+              Four ways to show a list of records — from a classic table to
+              rows on a grid. This page explains which one to pick and what
+              each of them requires. Ready-made layouts are in the
+              <a href="examples-tables.html">examples</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. WHAT TO CHOOSE                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. What to choose</h2>
+            <p class="text-muted mb-4">
+              The choice comes down to one question: are you comparing
+              records column by column, or just browsing them.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Component</th>
+                    <th>When</th>
+                    <th>What it's built on</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Component"><code>.table</code></td>
+                    <td data-label="When">
+                      Data comparable by columns: reports, statements, invoices.
+                    </td>
+                    <td data-label="What it's built on">
+                      <code>&lt;table&gt;</code> — keeps table semantics.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.data-row</code></td>
+                    <td data-label="When">
+                      A list of records with actions: clients, projects, orders.
+                    </td>
+                    <td data-label="What it's built on">CSS Grid</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.data-row-compact</code></td>
+                    <td data-label="When">
+                      A dense list with an icon and two lines of text — notifications,
+                      files, history.
+                    </td>
+                    <td data-label="What it's built on">Flexbox</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.list-group</code></td>
+                    <td data-label="When">
+                      A simple clickable list of items: settings menu, picking from a list.
+                    </td>
+                    <td data-label="What it's built on">Flexbox</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Why it isn't a matter of taste</h5>
+              <p class="text-4 text-muted m-0">
+                <code>&lt;table&gt;</code> carries meaning: a screen reader
+                announces "column Status, row 3", and the user can
+                navigate cell by cell. A record list built from
+                <code>&lt;div&gt;</code>s has none of that. The reverse is also true: a table
+                used for visual layout misleads the screen reader. Choose
+                based on the data, not the looks.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. TABLES                                             -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Tables</h2>
+            <p class="text-muted mb-4">
+              A table always sits inside <code>.table-wrapper</code> — that's what gives it
+              horizontal scrolling when there are more columns than space. Without
+              it, a wide table pushes the whole page out.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="table-wrapper"&gt;
+  &lt;table class="table table-hover table-cards"&gt;
+    &lt;thead class="thead-light"&gt;
+      &lt;tr&gt;&lt;th&gt;Client&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;!-- data-label is REQUIRED by .table-cards --&gt;
+        &lt;td data-label="Client"&gt;Molique&lt;/td&gt;
+        &lt;td data-label="Status"&gt;&lt;span class="badge badge-success"&gt;Active&lt;/span&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div class="table-wrapper w-100">
+                  <table class="table table-hover table-cards m-0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Client</th>
+                        <th>Project</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td data-label="Client">Molique</td>
+                        <td data-label="Project">Online store</td>
+                        <td data-label="Status">
+                          <span class="badge badge-success">Active</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td data-label="Client">Briko</td>
+                        <td data-label="Project">Client panel</td>
+                        <td data-label="Status">
+                          <span class="badge bg-warning-subtle">Pending</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Group</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-wrapper</code></td>
+                    <td data-label="Group">Structure</td>
+                    <td data-label="What it does">
+                      A container with horizontal scrolling. <strong>Always</strong>
+                      wrap your table in it.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table</code></td>
+                    <td data-label="Group">Structure</td>
+                    <td data-label="What it does">Base style: spacing, lines, alignment.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-sm</code></td>
+                    <td data-label="Group">Size</td>
+                    <td data-label="What it does">Compact — more rows on screen.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-lg</code></td>
+                    <td data-label="Group">Size</td>
+                    <td data-label="What it does">Loose — fewer rows, more breathing room.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-striped</code></td>
+                    <td data-label="Group">Appearance</td>
+                    <td data-label="What it does">Alternating row background.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-hover</code></td>
+                    <td data-label="Group">Appearance</td>
+                    <td data-label="What it does">Highlights the row under the cursor.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-borderless</code></td>
+                    <td data-label="Group">Appearance</td>
+                    <td data-label="What it does">No lines — a calmer look.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.thead-light</code></td>
+                    <td data-label="Group">Header</td>
+                    <td data-label="What it does">Muted background (the default choice).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.thead-dark</code></td>
+                    <td data-label="Group">Header</td>
+                    <td data-label="What it does">Dark header, light text.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.thead-primary</code></td>
+                    <td data-label="Group">Header</td>
+                    <td data-label="What it does">Header in the brand color.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.thead-sm</code></td>
+                    <td data-label="Group">Header</td>
+                    <td data-label="What it does">Shorter header.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.thead-lg</code></td>
+                    <td data-label="Group">Header</td>
+                    <td data-label="What it does">Taller header.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-cards</code></td>
+                    <td data-label="Group">Mobile</td>
+                    <td data-label="What it does">
+                      On a phone every row becomes a card.
+                      <strong>Requires <code>data-label</code></strong> on every
+                      <code>&lt;td&gt;</code> — see pitfall #1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.table-cards-always</code></td>
+                    <td data-label="Group">Mobile</td>
+                    <td data-label="What it does">
+                      Same thing, but <strong>at every width</strong>. For
+                      narrow dashboard columns where the table never has
+                      enough room.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Cell spacing variables</h5>
+              <p class="text-4 text-muted m-0">
+                <code>--table-padding-x</code>, <code>--table-padding-y</code>,
+                <code>--table-font-size</code> and
+                <code>--table-header-font-size</code> tune the size variants.
+                You'll rarely override them directly — that's what
+                <code>.table-sm</code> and <code>.table-lg</code> are for, doing it
+                consistently.
+              </p>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Live search</h3>
+            <p class="text-muted mb-3">
+              The <code>data-search-target</code> attribute on any text
+              field filters the rows of the indicated table on the fly, with no
+              page reload and no JS to write.
+            </p>
+            <div class="component-code">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;input type="text" class="input" placeholder="Search…"
+       data-search-target="#clientsBody"&gt;
+
+&lt;table class="table"&gt;
+  &lt;tbody id="clientsBody"&gt;
+    &lt;tr&gt;&lt;td&gt;Molique&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Briko&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+            <p class="text-muted text-4 mt-3 mb-0">
+              <code>data-search-target</code> points to the <code>id</code>
+              of the element holding the rows (usually <code>&lt;tbody&gt;</code>) —
+              the module compares the typed text against the full content of every
+              <code>&lt;tr&gt;</code>. A row with the class
+              <code>.cheat-sheet-category</code> is treated as a section
+              heading and hides itself automatically once no row below it
+              matches the search — other tables can safely ignore this class.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. DATA ROWS                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Data rows</h2>
+            <p class="text-muted mb-4">
+              When you're not comparing records, just browsing them — a table is
+              too rigid. A row on a grid wraps itself on a narrow screen,
+              with no need to rewrite the layout.
+            </p>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Full variant</h3>
+            <p class="text-muted mb-3">
+              Columns are just plain children of <code>.data-row</code> — however many
+              you insert, that's how many there will be. The actions block gets pushed to the right edge.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="data-row"&gt;
+  &lt;div class="fw-bold"&gt;Project name&lt;/div&gt;
+  &lt;div class="text-muted"&gt;Parameters&lt;/div&gt;
+  &lt;div&gt;&lt;span class="status-dot status-pending"&gt;Pending&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="data-row-actions"&gt;
+    &lt;button class="btn-action"&gt;Edit&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Compact variant</h3>
+            <p class="text-muted mb-3">
+              It has a fixed structure: icon, two lines of content, actions.
+              That way a list of notifications or files looks the same
+              everywhere.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="data-row-compact"&gt;
+  &lt;div class="row-icon"&gt;&lt;span class="icon-square"&gt;📄&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="row-content"&gt;
+    &lt;div class="row-title"&gt;Framework agreement.pdf&lt;/div&gt;
+    &lt;div class="row-details"&gt;2.4 MB · yesterday&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="row-actions"&gt;
+    &lt;button class="btn-action"&gt;Download&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Variant</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.data-row</code></td>
+                    <td data-label="Variant">Full</td>
+                    <td data-label="What it does">A row on a grid; columns are its children.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.data-row-actions</code></td>
+                    <td data-label="Variant">Full</td>
+                    <td data-label="What it does">Button block pushed to the right.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.data-row-compact</code></td>
+                    <td data-label="Variant">Compact</td>
+                    <td data-label="What it does">A row with a fixed structure: icon, content, actions.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.row-icon</code></td>
+                    <td data-label="Variant">Compact</td>
+                    <td data-label="What it does">Slot for an icon on the left.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-square</code></td>
+                    <td data-label="Variant">Compact</td>
+                    <td data-label="What it does">Square background behind the icon.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.row-content</code></td>
+                    <td data-label="Variant">Compact</td>
+                    <td data-label="What it does">Text column; fills the remaining space.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.row-title</code></td>
+                    <td data-label="Variant">Compact</td>
+                    <td data-label="What it does">First line — the record's name.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.row-details</code></td>
+                    <td data-label="Variant">Compact</td>
+                    <td data-label="What it does">Second line — metadata, muted.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.row-actions</code></td>
+                    <td data-label="Variant">Compact</td>
+                    <td data-label="What it does">Buttons on the right.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. LISTS AND COUNTERS                                 -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Lists and counters</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Item list</h3>
+            <p class="text-muted mb-3">
+              A vertical list of clickable elements — settings menu, picking
+              from a list. The current item is marked with <code>.is-active</code>.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="list-group"&gt;
+  &lt;a href="#" class="list-group-item is-active"&gt;Account settings&lt;/a&gt;
+  &lt;a href="#" class="list-group-item"&gt;Notifications&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Icon lists</h3>
+            <p class="text-muted mb-3">
+              Bullets replaced with an icon — typically a feature list in
+              pricing. The icon and its color are chosen with separate
+              classes, so "green checkmark" and "red cross" are two
+              independent decisions.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;ul class="list-icons list-icons-check list-icons-success"&gt;
+  &lt;li&gt;Unlimited accounts&lt;/li&gt;
+  &lt;li&gt;24/7 support&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul class="list-unstyled"&gt;…&lt;/ul&gt;   &lt;!-- just a list with no bullets --&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Counters</h3>
+            <p class="text-muted mb-3">
+              A large number with a caption — "512 deployments". You set the target
+              value as the content of <code>.counter-value</code>; the
+              <code>js/modules/molique-counters.js</code> module counts up to it once
+              the element scrolls into view. <strong>Without JavaScript the number is
+              still visible</strong>, just without the animation.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="counter"&gt;
+  &lt;div class="counter-value"&gt;512&lt;/div&gt;
+  &lt;div class="counter-title"&gt;deployments&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-group</code></td>
+                    <td data-label="What it does">Wrapper for the item list.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-group-item</code></td>
+                    <td data-label="What it does">
+                      A single item. <code>.is-active</code> marks the current one.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-unstyled</code></td>
+                    <td data-label="What it does">A list with no bullets and no indent.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-icons</code></td>
+                    <td data-label="What it does">Bullets replaced with an icon.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-icons-check</code></td>
+                    <td data-label="What it does">Icon: checkmark.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-icons-arrow</code></td>
+                    <td data-label="What it does">Icon: arrow.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-icons-cross</code></td>
+                    <td data-label="What it does">Icon: cross.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-icons-success</code></td>
+                    <td data-label="What it does">Icon color: green.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-icons-danger</code></td>
+                    <td data-label="What it does">Icon color: red.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.list-icons-dark</code></td>
+                    <td data-label="What it does">
+                      Icon color: contrasting with the background. Without a color class the icon
+                      is in the brand color.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.counter</code></td>
+                    <td data-label="What it does">Wrapper for the counter.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.counter-value</code></td>
+                    <td data-label="What it does">
+                      The number itself. Its presence triggers the count-up module.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.counter-title</code></td>
+                    <td data-label="What it does">Caption below the number.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. PITFALLS                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Pitfalls</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="tbl-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.table-cards</code> without <code>data-label</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    On desktop everything looks fine, so the bug only shows up
+                    on a phone: the rows turn into cards, but
+                    <strong>without column names</strong> — you're left with bare
+                    values, one under another. "Active $12,400 2026-03-01" and there's no
+                    telling what is what.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    CSS takes the labels exclusively from the attribute — it can't
+                    read them from <code>&lt;th&gt;</code>. When generating a table in a
+                    loop, fill <code>data-label</code> with the same variable as the
+                    header.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="tbl-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>A table without <code>.table-wrapper</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    A table doesn't wrap its content, so a wide one will push its
+                    parent out and trigger a horizontal scrollbar for the <strong>entire
+                    page</strong>. The symptom can be misleading: "the page shifts on a
+                    phone", while the culprit is a table somewhere else entirely.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="tbl-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>An actions menu clipped inside a table</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.table-wrapper</code> has its own scrolling, so a
+                    dropdown menu next to a row will get clipped inside it. This isn't
+                    a bug in the wrapper — that's just how <code>overflow</code> works.
+                    Use the Popover-API dropdown variant instead: the panel lands in the top
+                    layer, outside the reach of clipping. Details in
+                    <a href="docs-navbar.html">Navigation</a>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="tbl-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>A table used for page layout</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    If the "columns" aren't features of the same kind,
+                    <code>&lt;table&gt;</code> lies to the screen reader —
+                    it announces rows and columns where there are none. Use a
+                    grid for layout instead: <code>.grid-cols-*</code> or
+                    <code>.data-row</code>.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. RELATED                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Related pages</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-tables.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: tables</h5>
+                  <p class="text-4 text-muted m-0">
+                    Ready-made statements and header variants.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-data-rows.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: data rows</h5>
+                  <p class="text-4 text-muted m-0">
+                    Record lists, compact variants, item lists.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-admin.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Admin panel</h5>
+                  <p class="text-4 text-muted m-0">
+                    Where these components most often end up.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Bottom navigation -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-cards.html" class="btn btn-secondary"
+              >➔ Back: Cards</a
+            >
+            <a
+              href="docs-interactive.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Next step: Modals, Tabs &amp; Accordions ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

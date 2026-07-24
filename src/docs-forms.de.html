@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Formulare & Validierung - molique Docs","description":"molique-Formularreferenz: schwebende Labels, JavaScript-freie Validierung über :user-invalid, Checkboxen, Feldgruppen und Datei-Upload. Klassentabellen, CSS-Variablen und strukturelle Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SEITENLEISTE -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Formulare &amp; Validierung</h1>
+            <p class="text-6 text-muted">
+              Formulare für dichte B2B-Oberflächen: eine Klasse für alle
+              Felder, Validierung ohne eine einzige Zeile JavaScript und
+              erzwungene 44px Höhe. Fertige Layouts finden Sie in den
+              <a href="examples-forms-basics.html">Beispielen</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. DREI GRUNDSÄTZE                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Drei Grundsätze</h2>
+            <p class="text-muted mb-4">
+              molique-Formulare unterscheiden sich in drei Punkten von
+              typischen Bibliotheken. Wenn Sie diese drei Dinge verstehen,
+              ist der Rest der Seite nur noch eine Klassenliste.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Grundsatz</th>
+                    <th>Was das in der Praxis bedeutet</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Grundsatz">
+                      <strong>Eine Klasse <code>.input</code></strong>
+                    </td>
+                    <td data-label="Was das bedeutet">
+                      <code>&lt;input&gt;</code>, <code>&lt;select&gt;</code> und
+                      <code>&lt;textarea&gt;</code> erhalten dieselbe Klasse. Es
+                      gibt kein separates <code>.form-select</code> oder
+                      <code>.form-textarea</code>, das man sich merken müsste.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Grundsatz">
+                      <strong>Validierung ohne JS</strong>
+                    </td>
+                    <td data-label="Was das bedeutet">
+                      Fehlermeldungen zeigt allein CSS an, über die
+                      Pseudoklasse <code>:user-invalid</code>. Sie binden kein
+                      Skript ein — siehe Abschnitt 4.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Grundsatz">
+                      <strong>44px Minimum</strong>
+                    </td>
+                    <td data-label="Was das bedeutet">
+                      Jedes Feld und jeder Button hat
+                      <code>min-height: var(--target-size-min)</code> —
+                      Anforderung an das Berührungsziel nach WCAG 2.2 AAA.
+                      Unterschreiten Sie diesen Wert nicht.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface">
+                <div class="w-100" style="max-width: 400px">
+                  <div class="form-floating">
+                    <input
+                      type="text"
+                      class="input"
+                      id="demoName"
+                      placeholder=" "
+                    />
+                    <label for="demoName">Vor- und Nachname</label>
+                  </div>
+                  <div class="form-floating">
+                    <input
+                      type="email"
+                      class="input"
+                      id="valEmail"
+                      placeholder=" "
+                      required
+                    />
+                    <label for="valEmail">Geschäftliche E-Mail (erforderlich)</label>
+                    <div class="feedback-invalid">
+                      Bitte geben Sie eine gültige E-Mail-Adresse ein.
+                    </div>
+                  </div>
+                  <p class="text-2 text-muted m-0">
+                    Gehen Sie in das zweite Feld, tippen Sie etwas ein und
+                    verlassen Sie es — die Meldung erscheint ohne JavaScript.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. DAS FELD UND SEINE VARIANTEN                       -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Das Feld und seine Varianten</h2>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;input type="text" class="input"&gt;
+&lt;select class="input"&gt;…&lt;/select&gt;
+&lt;textarea class="input"&gt;&lt;/textarea&gt;
+
+&lt;input type="text" class="input input-sm"&gt;   &lt;!-- niedriger --&gt;
+&lt;input type="text" class="input input-lg"&gt;   &lt;!-- höher --&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Auf</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.input</code></td>
+                    <td data-label="Auf">input, select, textarea</td>
+                    <td data-label="Was sie macht">
+                      Rahmen, Padding, Abrundung, Fokusring und eine
+                      Mindesthöhe von 44px.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.input-sm</code></td>
+                    <td data-label="Auf"><code>.input</code></td>
+                    <td data-label="Was sie macht">
+                      Niedrigere Variante für dichte Tabellen und Filterleisten.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.input-lg</code></td>
+                    <td data-label="Auf"><code>.input</code></td>
+                    <td data-label="Was sie macht">Höhere Variante — Kontaktformulare, Hero-Bereich.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.input-range</code></td>
+                    <td data-label="Auf"><code>input[type="range"]</code></td>
+                    <td data-label="Was sie macht">
+                      Ein Schieberegler mit einheitlichem Aussehen in jedem Browser.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.input-color</code></td>
+                    <td data-label="Auf"><code>input[type="color"]</code></td>
+                    <td data-label="Was sie macht">
+                      Ein Farbwähler als sauberes Quadrat statt der nativen
+                      Schaltfläche.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.textarea-expandable</code></td>
+                    <td data-label="Auf"><code>&lt;textarea&gt;</code></td>
+                    <td data-label="Was sie macht">
+                      Ein Feld in Höhe einer Zeile, das sich beim Klicken
+                      ausklappt. <strong>Erfordert <code>placeholder=" "</code></strong>
+                      — siehe Fallstrick Nr. 1.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Zahlenfeld ohne Pfeile</h5>
+              <p class="text-4 text-muted m-0">
+                <code>input[type="number"].input</code> hat keinen nativen
+                Spinner — in einer dichten Oberfläche sind diese Pfeile zu
+                klein, um sie zu treffen. Für schrittweises Erhöhen dient die
+                Komponente <code>.qty-input</code> mit den Buttons
+                <code>+</code>&nbsp;/&nbsp;<code>−</code>, die auch Tastatur
+                und Scrollen unterstützt.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. SCHWEBENDE LABELS                                  -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Schwebende Labels</h2>
+            <p class="text-muted mb-4">
+              Das Label sitzt im Feld und wandert nach oben, sobald das Feld
+              nicht leer ist. Das spart vertikalen Platz — bei einem
+              Formular mit zwölf Feldern ist das ein Unterschied von einer
+              ganzen Bildschirmhöhe beim Scrollen.
+            </p>
+            <p class="text-muted mb-4">
+              Der Mechanismus basiert auf der Frage „ist der Platzhalter
+              sichtbar?". Die Pseudoklasse <code>:placeholder-shown</code> ist
+              genau dann wahr, wenn das Feld leer ist — CSS hat keine andere
+              Möglichkeit, das zu prüfen. Daher die beiden unüblichen
+              Anforderungen unten.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="form-floating"&gt;
+  &lt;!-- placeholder=" " mit einem Leerzeichen — ohne das kehrt das Label nicht zurück --&gt;
+  &lt;input type="text" class="input" id="name" placeholder=" "&gt;
+  &lt;!-- label MUSS NACH dem Input stehen: CSS verbindet sie über einen Geschwister-Selektor --&gt;
+  &lt;label for="name"&gt;Vor- und Nachname&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Anforderung</th>
+                    <th>Warum</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Anforderung">
+                      Feld im Container <code>.form-floating</code>
+                    </td>
+                    <td data-label="Warum">Gibt dem Label einen Bezugspunkt zur Positionierung.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Anforderung">
+                      <code>placeholder=" "</code> (mit Leerzeichen)
+                    </td>
+                    <td data-label="Warum">
+                      Ein leerer <code>placeholder=""</code> zählt nicht als
+                      angezeigt, sodass das Label dauerhaft oben bliebe.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Anforderung">
+                      <code>&lt;label&gt;</code> nach dem Input
+                    </td>
+                    <td data-label="Warum">
+                      Die Regel lautet <code>.input:not(:placeholder-shown) ~ label</code>.
+                      Der Geschwister-Selektor wirkt nur nach vorne — ein Label
+                      über dem Feld würde nie getroffen.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. VALIDIERUNG OHNE JS                                -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Validierung ohne JavaScript</h2>
+            <p class="text-muted mb-4">
+              Die gesamte Validierung stützt sich auf <code>:user-invalid</code>.
+              Der Unterschied zum älteren <code>:invalid</code> ist
+              grundlegend: <code>:invalid</code> ist bereits ab dem Laden der
+              Seite wahr, sodass ein leeres Pflichtformular rot aufleuchtet,
+              bevor der Nutzer überhaupt etwas getan hat.
+              <code>:user-invalid</code> greift erst,
+              <strong>nachdem der Nutzer das Feld betreten, falsche Daten
+              eingegeben und es wieder verlassen hat</strong>.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="form-floating"&gt;
+  &lt;input type="email" class="input" id="email" placeholder=" " required&gt;
+  &lt;label for="email"&gt;Geschäftliche E-Mail&lt;/label&gt;
+
+  &lt;!-- Geschwister des Inputs. CSS zeigt sie selbst, wenn nötig --&gt;
+  &lt;div class="feedback-invalid"&gt;Ungültige E-Mail-Adresse.&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Element</th>
+                    <th>Rolle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Element"><code>required</code>, <code>type</code>, <code>pattern</code></td>
+                    <td data-label="Rolle">
+                      Gewöhnliche HTML-Attribute. Sie definieren, was als
+                      Fehler gilt — dafür schreiben Sie keine Regeln.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">.feedback-invalid</code></td>
+                    <td data-label="Rolle">
+                      Die Fehlermeldung. Standardmäßig verborgen; wird von der
+                      Regel <code>.input:user-invalid ~ .feedback-invalid</code>
+                      angezeigt, muss also <strong>ein Geschwister des Feldes
+                      sein und danach stehen</strong>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Was ist mit Meldungen vom Server</h5>
+              <p class="text-4 text-muted m-0">
+                <code>:user-invalid</code> behandelt ausschließlich Regeln,
+                die der Browser kennt. Fehler vom Backend (Login bereits
+                vergeben, ungültiger Rabattcode) rendern Sie weiterhin selbst
+                — schreiben Sie einfach <code>.feedback-invalid</code> aus und
+                geben Sie ihr Sichtbarkeit, da das Feld formal nicht ungültig
+                ist.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. WEITERE STEUERELEMENTE                             -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Weitere Steuerelemente</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Checkboxen und Radios</h3>
+            <p class="text-muted mb-3">
+              Native Steuerelemente sehen in jedem Browser anders aus, daher
+              schaltet molique ihr Erscheinungsbild über
+              <code>appearance: none</code> ab und zeichnet ein eigenes.
+              Das Häkchen ist ein SVG-Icon, das als Data-URI in CSS
+              eingebettet ist — keine zusätzlichen Dateien, keine
+              Icon-Fonts. Das Tastaturverhalten bleibt nativ, da das Element
+              darunter weiterhin ein gewöhnlicher <code>&lt;input&gt;</code>
+              ist.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="form-check"&gt;
+  &lt;input class="form-check-input" type="checkbox" id="zustimmung"&gt;
+  &lt;label class="form-check-label" for="zustimmung"&gt;Ich akzeptiere die AGB&lt;/label&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Feldgruppen</h3>
+            <p class="text-muted mb-3">
+              Verklebt ein Feld mit Text, Icon oder Button zu einem glatten
+              Rechteck — die inneren Ecken runden sich automatisch ab,
+              unabhängig von der Reihenfolge der Elemente.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="input-group"&gt;
+  &lt;span class="input-group-text"&gt;https://&lt;/span&gt;
+  &lt;input type="text" class="input" placeholder="seiten-adresse"&gt;
+  &lt;button class="btn btn-primary"&gt;Prüfen&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Dateiauswahl</h3>
+            <p class="text-muted mb-3">
+              Das native <code>&lt;input type="file"&gt;</code> lässt sich
+              nicht stylen und sieht in jedem Browser anders aus. Die
+              Komponente legt eine Drop-Zone darüber — das Feld selbst bleibt
+              darin, sodass Bedienung, Datei-Drag-and-Drop und Barrierefreiheit
+              weiterhin nativ funktionieren.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="file-upload"&gt;
+  &lt;input type="file" name="dokument"&gt;
+  &lt;div class="file-upload-icon"&gt;📄&lt;/div&gt;
+  &lt;p class="file-upload-name"&gt;Datei hierher ziehen oder klicken&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Der Dateiname ersetzt sich selbst</h5>
+              <p class="text-4 text-muted m-0">
+                Das automatisch geladene Modul
+                <code>js/modules/molique-file-upload.js</code> lauscht auf das
+                <code>change</code>-Ereignis am versteckten Feld — nach der
+                Auswahl (per Klick oder Drag) überschreibt es den Inhalt von
+                <code>.file-upload-name</code> mit dem Dateinamen. Das Element
+                müssen Sie nicht manuell hinzufügen: Fehlt es im Markup, fügt
+                das Modul es nach der ersten Dateiauswahl selbst ein.
+              </p>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Komponente</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.form-check</code></td>
+                    <td data-label="Komponente">Checkbox / Radio</td>
+                    <td data-label="Was sie macht">Hülle: setzt Steuerelement und Beschreibung in eine Zeile.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.form-check-input</code></td>
+                    <td data-label="Komponente">Checkbox / Radio</td>
+                    <td data-label="Was sie macht">
+                      Das Steuerelement selbst. Derselbe Stil für
+                      <code>checkbox</code> und <code>radio</code> — die Form
+                      ergibt sich aus dem Typ.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.form-check-label</code></td>
+                    <td data-label="Komponente">Checkbox / Radio</td>
+                    <td data-label="Was sie macht">
+                      Die Beschreibung. Klickbar, vergrößert also das Berührungsziel.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.form-floating</code></td>
+                    <td data-label="Komponente">Schwebendes Label</td>
+                    <td data-label="Was sie macht">Feldcontainer mit Label im Inneren (Abschnitt 3).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.feedback-invalid</code></td>
+                    <td data-label="Komponente">Validierung</td>
+                    <td data-label="Was sie macht">Fehlermeldung (Abschnitt 4).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.input-group</code></td>
+                    <td data-label="Komponente">Feldgruppe</td>
+                    <td data-label="Was sie macht">Verklebt ein Feld mit Zusätzen zu einem Rechteck.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.input-group-text</code></td>
+                    <td data-label="Komponente">Feldgruppe</td>
+                    <td data-label="Was sie macht">Nicht klickbarer Zusatz: Einheit, Präfix, Icon.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.file-upload</code></td>
+                    <td data-label="Komponente">Dateiauswahl</td>
+                    <td data-label="Was sie macht">Drop-Zone rund um das native Feld.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.file-upload-animated</code></td>
+                    <td data-label="Komponente">Dateiauswahl</td>
+                    <td data-label="Was sie macht">Variante mit animiertem Rand, der auf Hover reagiert.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.file-upload-icon</code></td>
+                    <td data-label="Komponente">Dateiauswahl</td>
+                    <td data-label="Was sie macht">Icon in der Mitte der Zone.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.file-upload-name</code></td>
+                    <td data-label="Komponente">Dateiauswahl</td>
+                    <td data-label="Was sie macht">Beschriftung, die JS mit dem Namen der gewählten Datei überschreibt. Im Markup optional — ohne sie fügt das Modul sie selbst ein.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. VARIABLEN                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Variablen</h2>
+            <div class="table-wrapper mb-3">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Variable</th>
+                    <th>Standard</th>
+                    <th>Steuert</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--input-border-width</code></td>
+                    <td data-label="Standard"><code>1px</code></td>
+                    <td data-label="Steuert">Rahmendicke der Felder.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--input-padding-y</code></td>
+                    <td data-label="Standard"><code>calc(var(--spacing-unit) * 1.25)</code></td>
+                    <td data-label="Steuert">
+                      Vertikales Padding. Die Varianten <code>-sm</code> und
+                      <code>-lg</code> überschreiben es selbst.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--textarea-rows-expanded</code></td>
+                    <td data-label="Standard"><code>6</code></td>
+                    <td data-label="Steuert">
+                      Auf wie viele Zeilen sich
+                      <code>.textarea-expandable</code> ausklappt.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--target-size-min</code></td>
+                    <td data-label="Standard"><code>44px</code></td>
+                    <td data-label="Steuert">Mindesthöhe von Feldern und Buttons.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--focus-ring-color</code></td>
+                    <td data-label="Standard">primary, 25 % Deckkraft</td>
+                    <td data-label="Steuert">Fokusring bei Tastaturfokus auf dem Feld.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-4 text-muted m-0">
+              Vollständige Liste: <a href="docs-variables.de.html">CSS-Variablen</a>.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. FALLSTRICKE                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Fallstricke</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="form-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Fehlendes <code>placeholder=" "</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Der häufigste Fehler auf dieser Seite und betrifft
+                    <strong>zwei</strong> Komponenten: schwebende Labels und
+                    das ausklappbare Textarea. Beide fragen CSS
+                    <code>:placeholder-shown</code>, also „ist das Feld
+                    leer?". Ohne Platzhalter lautet die Antwort immer „nein" —
+                    das Label bleibt oben, und das Textarea klappt nie zusammen.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>&lt;!-- FALSCH - ein leerer Platzhalter zählt nicht als angezeigt --&gt;
+&lt;input class="input" placeholder=""&gt;
+&lt;input class="input"&gt;
+
+&lt;!-- RICHTIG - ein Leerzeichen darin --&gt;
+&lt;input class="input" placeholder=" "&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="form-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Label über statt unter dem Feld</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Der Reflex schlägt vor, <code>&lt;label&gt;</code> vor
+                    <code>&lt;input&gt;</code> zu schreiben — so sieht ein
+                    normales Formular aus. Bei schwebenden Labels funktioniert
+                    das nicht: Die Regel nutzt den Geschwister-Selektor
+                    <code>~</code>, der nur nach vorne wirkt. Visuell landet
+                    das Label trotzdem am richtigen Platz, da CSS es
+                    positioniert.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    Dasselbe gilt für <code>.feedback-invalid</code> — eine
+                    Meldung vor dem Feld wird nie angezeigt.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="form-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>Verwendung von <code>:invalid</code> statt <code>:user-invalid</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>:invalid</code> ist sofort nach dem Laden der Seite
+                    wahr, sodass ein Registrierungsformular den Nutzer mit
+                    einem vollständigen Satz roter Felder begrüßt, bevor
+                    dieser überhaupt geklickt hat. Das wirkt wie eine kaputte
+                    Seite. <code>:user-invalid</code> wartet auf Interaktion —
+                    und genau das nutzt molique.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="form-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Zu geringe Feldhöhe</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Verlockend bei einem dichten CRM: <code>height: 32px</code>
+                    auf <code>.input</code>, dann passen mehr Zeilen hinein.
+                    Das verletzt das 44px-Berührungsziel, wodurch das Feld auf
+                    dem Smartphone mit dem Finger schwer zu treffen ist. Wenn
+                    Sie es wirklich enger brauchen, verwenden Sie
+                    <code>.input-sm</code> — es verringert das Padding,
+                    behält aber die untere Grenze bei.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. VERWANDTE SEITEN                                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Verwandte Seiten</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="docs-select.de.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Select &amp; Switches</h5>
+                  <p class="text-4 text-muted m-0">
+                    Durchsuchbare Listen, Multi Select, Umschalter.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-forms-basics.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Formulare</h5>
+                  <p class="text-4 text-muted m-0">
+                    Fertige Layouts, Feldgruppen, Upload, Checkboxen.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-variables.de.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">CSS-Variablen</h5>
+                  <p class="text-4 text-muted m-0">
+                    Vollständige Variablenreferenz, einschließlich Formularfelder.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-charts.html" class="btn btn-secondary"
+              >➔ Zurück: Diagramme &amp; Daten</a
+            >
+            <a
+              href="docs-select.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Select &amp; Switches ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

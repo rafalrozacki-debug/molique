@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Animations & Micro-interactions - molique Docs","description":"Reference for molique animations: observer-driven entrances, scroll-driven animations, hover micro-interactions, border effects, and Ken Burns. The GPU rule, reduced motion, and pitfalls."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.en.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Animations &amp; Micro-interactions</h1>
+            <p class="text-6 text-muted">
+              Everything on this page moves only <code>transform</code> and
+              <code>opacity</code> — this isn't a preference, it's a
+              condition for smoothness. Section 1 explains why. Ready-made
+              effects:
+              <a href="examples-hover-microinteractions.html">micro-interactions</a>
+              and <a href="examples-reveal-animations.html">entrance animations</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. ZASADA GPU                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Why only two properties</h2>
+            <p class="text-muted mb-4">
+              The browser draws a frame in three steps: it computes
+              <strong>layout</strong> (where everything is),
+              <strong>paints</strong> pixels, and <strong>composites</strong>
+              layers. The animated property decides how much of that has to
+              repeat sixty times a second.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>You animate</th>
+                    <th>What has to recompute</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="You animate">
+                      <code>width</code>, <code>height</code>,
+                      <code>top</code>, <code>margin</code>
+                    </td>
+                    <td data-label="What has to">Layout of the whole page, painting, compositing</td>
+                    <td data-label="Result">
+                      <span class="badge badge-danger">forbidden</span>
+                      Resizing one element shifts its neighbors, so the
+                      browser recomputes layout from scratch.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="You animate">
+                      <code>box-shadow</code>, <code>background-color</code>,
+                      <code>border-radius</code>
+                    </td>
+                    <td data-label="What has to">Painting and compositing</td>
+                    <td data-label="Result">
+                      <span class="badge badge-warning">avoid</span>
+                      Layout stays put, but the pixels have to be repainted.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="You animate">
+                      <code>transform</code>, <code>opacity</code>
+                    </td>
+                    <td data-label="What has to">Compositing only</td>
+                    <td data-label="Result">
+                      <span class="badge badge-success">allowed</span>
+                      The GPU handles it, with no involvement from the main
+                      thread.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">How to work around this when you really need to</h5>
+              <p class="text-4 text-muted m-0">
+                A shadow that's supposed to grow is done with a
+                <strong>second layer holding a ready-made shadow</strong>
+                and animating its opacity — that's how
+                <code>.hover-gpu-shadow</code> works. Expanding a height "to
+                however much it takes" is handled by
+                <code>.grid-expand</code>, animating
+                <code>grid-template-rows</code>. So the rule isn't a limit
+                on what's possible, just a choice of approach.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. ANIMACJE WEJŚCIA                                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Entrance animations</h2>
+            <p class="text-muted mb-4">
+              An element waits invisible, and once it scrolls into view, a
+              script gives it the <code>.is-visible</code> class and it
+              smoothly appears. Detection is handled by an intersection
+              observer — not a <code>scroll</code> event, so nothing gets
+              computed on every pixel of scrolling.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;!-- .animate is REQUIRED - it's what hides the element at the start --&gt;
+&lt;div class="animate fade-in-up"&gt;Slides in from the bottom&lt;/div&gt;
+
+&lt;!-- Cascade: successive elements with a delay --&gt;
+&lt;div class="animate fade-in-up"&gt;First&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-100"&gt;Second&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-200"&gt;Third&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Role</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.animate</code></td>
+                    <td data-label="Role">Base</td>
+                    <td data-label="What it does">
+                      Hides the element and sets up the transition.
+                      <strong>Without it, the direction does nothing</strong>
+                      — see pitfall #1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fade-in</code></td>
+                    <td data-label="Role">Direction</td>
+                    <td data-label="What it does">Just a fade-in, no movement.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fade-in-up</code></td>
+                    <td data-label="Role">Direction</td>
+                    <td data-label="What it does">
+                      Slides in from below — the most common choice. Also:
+                      <code>.fade-in-down</code>, <code>.fade-in-left</code>,
+                      <code>.fade-in-right</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.zoom-in</code></td>
+                    <td data-label="Role">Direction</td>
+                    <td data-label="What it does">The element "arrives" by scaling up from 95%.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.reveal-blur</code></td>
+                    <td data-label="Role">Direction</td>
+                    <td data-label="What it does">Sharpens from a blur.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.reveal-scale</code></td>
+                    <td data-label="Role">Direction</td>
+                    <td data-label="What it does">A stronger scale entrance than <code>.zoom-in</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.delay-100</code> – <code class="fw-bold">.delay-500</code></td>
+                    <td data-label="Role">Modifier</td>
+                    <td data-label="What it does">
+                      A delay in steps of 100 ms. For building a cascade
+                      across a row of cards.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.is-visible</code></td>
+                    <td data-label="Role">State</td>
+                    <td data-label="What it does">
+                      Set by the script once the element scrolls into view.
+                      You don't write it yourself.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">A JavaScript-free variant</h3>
+            <p class="text-muted mb-3">
+              <code>.scroll-reveal</code> does the same thing, but driven by
+              <strong>scroll position</strong>, not a script. The
+              animation's progress matches how much of the element is
+              visible, so you can scroll back up and the effect reverses.
+              Requires a newer browser; in an older one, the element is
+              simply visible right away.
+            </p>
+            <div class="component-code">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="scroll-reveal"&gt;Appears as you scroll&lt;/div&gt;</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. MIKROINTERAKCJE                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Micro-interactions</h2>
+            <p class="text-muted mb-4">
+              A reaction to hovering. They all work on any element — a
+              card, a button, an image — and can be combined.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div class="card p-4 hover-spring hover-gpu-shadow" style="cursor: pointer">
+                  hover-spring + hover-gpu-shadow
+                </div>
+                <div class="card p-4 hover-scale" style="cursor: pointer">
+                  hover-scale
+                </div>
+                <div class="card p-4 hover-tilt" style="cursor: pointer">
+                  hover-tilt
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Effect</th>
+                    <th>JS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-spring</code></td>
+                    <td data-label="Effect">A springy bounce.</td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-scale</code></td>
+                    <td data-label="Effect">
+                      Enlargement. Strength: <code>--hover-scale</code>.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-shadow</code></td>
+                    <td data-label="Effect">
+                      Lift with a shadow. Height: <code>--hover-y</code>.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-gpu-shadow</code></td>
+                    <td data-label="Effect">
+                      A growing shadow <strong>without animating
+                      <code>box-shadow</code></strong> — a second layer
+                      changes opacity.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-tilt</code></td>
+                    <td data-label="Effect">A fixed 3D tilt.</td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.tilt-card</code></td>
+                    <td data-label="Effect">
+                      A tilt that follows the cursor. On a touch device the
+                      module disables itself — saves battery.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-warning">yes</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-filter-none</code></td>
+                    <td data-label="Effect">
+                      Removes a filter on hover — a gray logo that gains
+                      color under the cursor.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-opacity-100</code></td>
+                    <td data-label="Effect">A dimmed element regains full opacity.</td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.ken-burns</code></td>
+                    <td data-label="Effect">
+                      A slow zoom into a photo inside a container. Works on
+                      <code>&lt;img&gt;</code> and <code>.bg-image</code>.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.shake</code></td>
+                    <td data-label="Effect">
+                      A shake — an error signal, e.g. for a rejected form.
+                      Plays once.
+                    </td>
+                    <td data-label="JS"><span class="badge badge-success">no</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Border effects</h3>
+            <p class="text-muted mb-3">
+              A border that draws itself on hover. Two rounded variants and
+              two with sharp corners — they differ not just in look but in
+              mechanism, which matters when combining them with a
+              background.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Look</th>
+                    <th>Mechanism</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-border-draw</code></td>
+                    <td data-label="Look">Rounded, unfolds from the center.</td>
+                    <td data-label="Mechanism">
+                      Its own <code>::before</code> — doesn't touch the
+                      element's background.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-border-trace</code></td>
+                    <td data-label="Look">Rounded, a light traces the outline.</td>
+                    <td data-label="Mechanism">Also a <code>::before</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-border-draw-2</code></td>
+                    <td data-label="Look">Sharp corners, drawn side by side.</td>
+                    <td data-label="Mechanism">
+                      Four gradients in the element's
+                      <code>background-image</code> — see pitfall #3.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-border-trace-2</code></td>
+                    <td data-label="Look">Sharp corners, the outline is traced.</td>
+                    <td data-label="Mechanism">Same as above.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Border color</h5>
+              <p class="text-4 text-muted m-0">
+                All four take their color from
+                <code>--hover-border-color</code>, defaulting to
+                <code>--primary</code>. Set it when the element already has
+                the brand color — otherwise the border will be invisible
+                against a background of the same color.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. DOSTĘPNOŚĆ                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Motion and accessibility</h2>
+            <p class="text-muted mb-4">
+              Some people get dizzy or nauseous from animation — the
+              vestibular system reacts to motion on screen the same way it
+              reacts to motion of the body. That's why operating systems
+              have a "reduce motion" setting, and the browser passes it
+              through as <code>prefers-reduced-motion</code>.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Type of motion</th>
+                    <th>With reduced motion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Type">A hover response</td>
+                    <td data-label="With reduced">
+                      Stays. It's short and triggered by the user.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Type">Entrance animations</td>
+                    <td data-label="With reduced">
+                      The element appears with no motion.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Type">Continuous background motion</td>
+                    <td data-label="With reduced">
+                      <strong>Stopped.</strong> Applies to
+                      <code>.bg-blobs</code>, among others — the animation
+                      stops, the shape stays.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Writing your own effect</h5>
+              <p class="text-4 text-muted m-0">
+                The framework doesn't mute animations globally — each
+                component does it for itself, since not every motion needs
+                to be stopped. When adding your own continuous animation,
+                write its escape hatch:
+                <code>@media (prefers-reduced-motion: reduce)</code>
+                and <code>animation: none</code>.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Pitfalls</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="anim-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>A direction without the <code>.animate</code> class</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.fade-in-up</code> only sets the starting offset.
+                    It's <code>.animate</code> that hides the element and
+                    defines the transition — without it, the element is
+                    visible right away and nothing happens. A misleading
+                    symptom, since the page looks correct, just "without
+                    the animation."
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Copy</button>
+                    <pre><code>&lt;!-- WRONG - missing the base --&gt;
+&lt;div class="fade-in-up"&gt;…&lt;/div&gt;
+
+&lt;!-- RIGHT --&gt;
+&lt;div class="animate fade-in-up"&gt;…&lt;/div&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>An entrance animation on content that's visible right away</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    A hero heading with <code>.animate</code> starts
+                    invisible and waits for the script. If JavaScript
+                    doesn't run — an error in another file, a slow
+                    connection, a browser block — <strong>the content stays
+                    invisible permanently</strong>. Above the fold, use
+                    animation sparingly, and leave your most important
+                    message static.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>The <code>-2</code> border invisible on a colored background</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    The sharp-corner variants draw their lines with
+                    gradients in the element's <code>background-image</code>.
+                    The <code>background-color</code> is untouched, so they
+                    technically work — but the line defaults to
+                    <code>--primary</code>, which is invisible on a
+                    <code>.btn-primary</code> button. Set
+                    <code>--hover-border-color</code> to a contrasting color.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Copy</button>
+                    <pre><code>&lt;button class="btn-primary hover-border-draw-2"
+        style="--hover-border-color: #fff;"&gt;White border&lt;/button&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>A delay cascade on a long list</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    The <code>.delay-*</code> classes end at 500 ms, and
+                    that's not an oversight. With twenty cards and an
+                    increasing delay, the last one appears after two
+                    seconds — to the user it looks like a stuttering page,
+                    not an effect. Use a cascade for three or four elements
+                    in a single row.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="anim-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>Animating a property outside the pair</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>transition: all</code> looks innocent, but it also
+                    covers <code>width</code>, <code>height</code>, and
+                    <code>box-shadow</code> — pulling in a layout
+                    recalculation through the back door. List properties
+                    explicitly. When an effect you need requires a
+                    forbidden property, look for a workaround from section
+                    1: an opacity layer instead of a shadow, a grid instead
+                    of a height.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. GDZIE SZUKAĆ RESZTY                                -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Where to find the rest</h2>
+            <p class="text-muted mb-4">
+              Some effects are documented where they belong thematically —
+              so the same thing isn't explained twice.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Looking for</th>
+                    <th>Where</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Looking for">
+                      A gradient in letters, a typewriter, a highlighter,
+                      underlines
+                    </td>
+                    <td data-label="Where">
+                      <a href="docs-typography.en.html">Typography &amp; Colors</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Looking for">Parallax, stacked sections</td>
+                    <td data-label="Where">
+                      <a href="docs-sections.en.html">Sections &amp; Hero</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Looking for">
+                      Smooth height expansion (<code>.grid-expand</code>)
+                    </td>
+                    <td data-label="Where">
+                      <a href="docs-interactive.html">Modals, Tabs &amp; Accordions</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Looking for">
+                      Animated background blobs (<code>.bg-blobs</code>)
+                    </td>
+                    <td data-label="Where">
+                      <a href="examples-blobs-glassmorphism.html">Examples: blobs</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Looking for">Magnetic button, speed dial</td>
+                    <td data-label="Where">
+                      <a href="docs-widgets.en.html">Widgets</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-hover-microinteractions.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: micro-interactions</h5>
+                  <p class="text-4 text-muted m-0">All the hover effects together.</p>
+                </div>
+              </a>
+              <a href="examples-reveal-animations.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: entrance animations</h5>
+                  <p class="text-4 text-muted m-0">Directions and cascades.</p>
+                </div>
+              </a>
+              <a href="examples-border-effects.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: border effects</h5>
+                  <p class="text-4 text-muted m-0">The four variants side by side.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-select.en.html" class="btn-secondary"
+              >➔ Back: Select &amp; Switches</a
+            >
+            <a href="docs-widgets.en.html" class="btn-primary fw-bold hover-spring"
+              >Next step: Widgets ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

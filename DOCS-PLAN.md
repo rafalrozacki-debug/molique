@@ -595,18 +595,57 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   aktywną gałęzią sidebara (potwierdza, że `molique-admin-nav.js` działa
   identycznie na przetłumaczonych stronach, bez zmian w tym module).
 
+- **i18n: przetłumaczono 19 z 21 stron `docs-*.html`** (plus pilotażowe
+  `docs.html`) — dwie fale kontynuacji po pilotażu, wg tego samego
+  mechanizmu i tych samych konwencji (patrz wpis pilotażu wyżej):
+  `docs-variables`, `docs-select`, `docs-widgets`, `docs-blog`,
+  `docs-roadmap`, `docs-purgecss`, `docs-cards`, `docs-typography`,
+  `docs-sections`, `docs-animations`, `docs-tables`, `docs-forms`,
+  `docs-eshop`, `docs-charts`, `docs-admin`, `docs-layout`,
+  `docs-components-extra`, `docs-buttons`, `docs-interactive`. Świadomie
+  odłożone na później: `docs-navbar.html` (1072 linii) i
+  `docs-classes.html` (2325 linii) — decyzja użytkownika przy
+  przeglądzie postępu w połowie drugiej fali (12 normalnych stron teraz,
+  2 duże później), żeby nie ciągnąć bez zatrzymania wyjątkowo dużego
+  zadania.
+
+  **Przypadek specjalny — `docs-variables.html`:** trzy tabele zmiennych
+  są auto-generowane przez `tools/gen-variables-doc.js` z
+  `tools/variables-doc.data.js` i odtwarzane przed każdym buildem
+  (`prebuild`). Ręczne tłumaczenie ich treści zostałoby cicho nadpisane
+  przy następnym buildzie. Zamiast tego: cała statyczna proza strony
+  przetłumaczona normalnie, a trzy `<include>` z generowanymi tabelami
+  zostają w PL, z dopisaną notatką tuż przed każdym ("ta tabela referencyjna
+  jest generowana automatycznie i dostępna tylko po polsku; nazwy i
+  wartości zmiennych nie wymagają tłumaczenia w żadną stronę").
+
+  **`docs-sidebar.en.html`/`.de.html` zaktualizowane** — wszystkie linki do
+  przetłumaczonych stron wskazują teraz na `.en.html`/`.de.html`; jedyne
+  dwa linki nadal wskazujące PL to `docs-navbar.html` i
+  `docs-classes.html` (celowe, udokumentowane komentarzem w pliku —
+  stopniowa migracja, nie zerwany link). Wewnętrzne linki "powiązane
+  strony"/nawigacja góra-dół na każdej nowo przetłumaczonej stronie
+  zaktualizowane analogicznie: strony już przetłumaczone w danej fali
+  (lub wcześniej) linkują do `.en.html`/`.de.html`, pozostałe zostają PL.
+
+  **Zweryfikowane:** pełny `npm run build` (24 nowe pliki dla drugiej
+  fali, zero błędów), Playwright na serwerze `vite preview` —
+  `html[lang]`, komplet `hreflang`, etykieta/flaga przełącznika, liczba
+  linków w sidebarze na wszystkich 9 stronach drugiej fali × 2 języki
+  (92/92 sprawdzeń OK), plus kontrola płynnej degradacji na
+  nieprzetłumaczonej stronie (`docs-navbar.html`: przełącznik pokazuje
+  wyłącznie PL) i pełnego przełącznika na przetłumaczonej (3 pozycje).
+
 ### Do zrobienia później
-- **i18n: kontynuacja tłumaczenia pozostałych stron** — pilotaż (navbar,
-  footer, `index.html`, `docs.html`) gotowy i działający; zostało ~86 stron
-  (21 `docs-*.html`, 58 `examples-*.html`, reszta: `download.html`,
-  `blog.html`, `404.html`, `starter.html`, `theme-editor.html`,
-  `builder.html`). Użytkownik potwierdził, że `changelog.html` i
-  `docs-roadmap.html` TEŻ mają zostać przetłumaczone (wbrew mojej
-  rekomendacji "zostaw tylko PL, bo zmieniają się co sesję" — świadoma
-  decyzja użytkownika, licząca się z kosztem utrzymania 3 wersji). Kolejność
-  priorytetowa do ustalenia z użytkownikiem, gdy wróci do tematu — naturalny
-  kandydat na start: reszta stron `docs-*.html` (najwyższa wartość
-  merytoryczna, najmniej stron).
+- **i18n: `docs-navbar.html` i `docs-classes.html`** — dwie bardzo duże
+  strony referencyjne (1072 i 2325 linii), świadomie odłożone przez
+  użytkownika. Po nich zostają wyłącznie: ~58 stron `examples-*.html`,
+  `download.html`, `blog.html`, `404.html`, `starter.html`,
+  `theme-editor.html`, `builder.html`, oraz `changelog.html` i
+  `docs-roadmap.html` (użytkownik potwierdził, że mają zostać
+  przetłumaczone mimo kosztu utrzymania 3 wersji przy każdej zmianie —
+  świadoma decyzja, nadpisująca moją rekomendację "zostaw tylko PL").
+  Kolejność priorytetowa do ustalenia z użytkownikiem, gdy wróci do tematu.
 - **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez
   użytkownika na później, poza tym, co już naprawiono przy
   `docs-components-extra` (Background Sync, klawiatura w lightboksie).

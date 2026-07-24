@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Blog & Artikel - molique Docs","description":"Referenz fur die Blog-Komponenten von molique: Beitragskarte im Raster, klassisches Listenlayout, Sidebar-Widget fur Artikellisten und Autorenbereich. Klassen, Varianten und Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+    <link rel="stylesheet" href="css/molique-style-blog.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Blog &amp; Artikel</h1>
+            <p class="text-6 text-muted">
+              Vier Komponenten für Nachrichtenportale und Unternehmensblogs —
+              vom Artikelraster bis zum Autorenbereich. Sie benötigen die
+              separate Datei <code>molique-style-blog.css</code>.
+              Vollständige Layouts finden Sie in den Beispielen:
+              <a href="examples-blog-posts.html">Beiträge</a>,
+              <a href="examples-blog-sidebar.html">Sidebar</a>,
+              <a href="examples-author-box.html">Autor</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. CO WYBRAĆ                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Was wählen</h2>
+            <p class="text-muted mb-4">
+              Vier unabhängige Komponenten — keine benötigt die anderen.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Komponente</th>
+                    <th>Wann</th>
+                    <th>Basiert auf</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Komponente"><code>.post-card</code></td>
+                    <td data-label="Wann">Artikelraster — Blog-Startseite, Kategorie.</td>
+                    <td data-label="Basiert auf">Flexbox</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.blog-post</code></td>
+                    <td data-label="Wann">Klassische Liste von Beiträgen untereinander — Archiv, Suchergebnisse.</td>
+                    <td data-label="Basiert auf">Flexbox</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.simple-post-list</code></td>
+                    <td data-label="Wann">Widget „Neueste Beiträge" in der Sidebar oder im Footer.</td>
+                    <td data-label="Basiert auf">Flexbox</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.author-box</code></td>
+                    <td data-label="Wann">Autoren-Block — meist ganz unten im Artikelinhalt.</td>
+                    <td data-label="Basiert auf">Flexbox</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. KARTA WPISU                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Beitragskarte (Post Card)</h2>
+            <p class="text-muted mb-4">
+              Eine Karte für ein Raster, mit einem über dem Bild schwebenden
+              Datum und einem Meta-Bereich (Autor, Kategorie) über dem Titel.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface justify-content-center">
+                <article class="post-card w-100" style="max-width: 350px">
+                  <a href="#" class="post-image-wrapper">
+                    <div class="post-date-badge">
+                      <span class="day">24</span>
+                      <span class="month">Mai</span>
+                    </div>
+                    <img
+                      src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop"
+                      alt="Miniaturansicht"
+                    />
+                  </a>
+                  <div class="post-content">
+                    <div class="post-meta">
+                      <span>👤 <a href="#">Admin</a></span>
+                      <span>📁 <a href="#">Technologie</a></span>
+                    </div>
+                    <a href="#" class="post-title"
+                      >Wie optimiert man eine Seite für Core Web Vitals?</a
+                    >
+                    <p class="text-muted text-4 m-0 mt-2">
+                      Ein kurzer Einstieg in den Artikel, der zum Klicken und
+                      Weiterlesen einlädt...
+                    </p>
+                    <a href="#" class="btn-action mt-3 align-self-start text-primary fw-bold p-0"
+                      >Weiterlesen ➔</a
+                    >
+                  </div>
+                </article>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;article class="post-card"&gt;
+  &lt;a href="#" class="post-image-wrapper"&gt;
+    &lt;div class="post-date-badge"&gt;
+      &lt;span class="day"&gt;24&lt;/span&gt;
+      &lt;span class="month"&gt;Mai&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;img src="foto.jpg" alt="Miniaturansicht"&gt;
+  &lt;/a&gt;
+  &lt;div class="post-content"&gt;
+    &lt;div class="post-meta"&gt;
+      &lt;span&gt;👤 Admin&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;a href="#" class="post-title"&gt;Artikeltitel&lt;/a&gt;
+    &lt;p&gt;Anrisstext...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-card</code></td>
+                    <td data-label="Was sie tut">Die Hülle. <code>height: 100%</code> — richtet sich im Raster an der höchsten Karte der Reihe aus.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-image-wrapper</code></td>
+                    <td data-label="Was sie tut">
+                      Auf einem <code>&lt;a&gt;</code>.
+                      <code>position: relative</code> — der Anker für
+                      <code>.post-date-badge</code>. Das Bild hat eine feste
+                      Höhe von 240px, unabhängig vom Seitenverhältnis des
+                      Originals.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-date-badge</code></td>
+                    <td data-label="Was sie tut">
+                      Absolut positioniert in der oberen linken Ecke.
+                      <strong>Muss</strong> innerhalb von
+                      <code>.post-image-wrapper</code> liegen — siehe
+                      Fallstrick unten.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-content</code></td>
+                    <td data-label="Was sie tut">Der Rest der Karte unter dem Bild. <code>flex-grow: 1</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-meta</code></td>
+                    <td data-label="Was sie tut">Eine Zeile mit Metadaten (Autor, Kategorie…) über dem Titel. Nicht zu verwechseln mit <code>.post-meta-date</code> aus dem Sidebar-Widget — siehe Fallstrick unten.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-title</code></td>
+                    <td data-label="Was sie tut">Der Titel. Wechselt beim Hover zu <code>--primary</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. KLASYCZNY WPIS (LIST VIEW)                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Klassischer Beitrag (List View)</h2>
+            <p class="text-muted mb-4">
+              Das traditionelle Blog-Archiv-Layout — ein großes,
+              kalenderartiges Datum links vom Bild. Unterhalb des
+              <code>sm</code>-Breakpoints springt das Datum über das Bild,
+              das Layout wird vertikal.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;article class="blog-post"&gt;
+  &lt;div class="post-date"&gt;
+    &lt;span class="month"&gt;Mai&lt;/span&gt;
+    &lt;span class="day"&gt;24&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;div class="flex-grow-1"&gt;
+    &lt;a href="#" class="blog-post-image"&gt;&lt;img src="foto.jpg" alt=""&gt;&lt;/a&gt;
+    &lt;div class="post-meta"&gt;...&lt;/div&gt;
+    &lt;a href="#" class="post-title"&gt;Beitragstitel&lt;/a&gt;
+    &lt;p&gt;Anrisstext...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.blog-post</code></td>
+                    <td data-label="Was sie tut">
+                      Eine Zeile. Trennlinie darunter, der letzte Beitrag in
+                      der Liste hat keine (<code>:last-child</code>).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-date</code></td>
+                    <td data-label="Was sie tut">
+                      Eine 55px breite Kalenderspalte. Enthält
+                      <code>.month</code> und <code>.day</code> — dieselben
+                      Namen wie in <code>.post-date-badge</code>, aber mit
+                      <strong>anderem Aussehen</strong>: Hier ist der Monat
+                      ein oberer Balken in <code>--primary</code>, der Tag
+                      eine weiße Karte darunter. Siehe Fallstrick unten.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.blog-post-image</code></td>
+                    <td data-label="Was sie tut">Das Bild über dem Titel, ohne schwebendes Datum. Freie Höhe (<code>height: auto</code>).</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. MAŁA LISTA (SIDEBAR WIDGET)                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Kompakte Beitragsliste (Sidebar Widget)</h2>
+            <p class="text-muted mb-4">
+              Eine kompakte Liste mit Miniaturbildern — „Neueste Beiträge" in
+              der Sidebar oder im Footer.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;ul class="simple-post-list"&gt;
+  &lt;li&gt;
+    &lt;img src="thumb.jpg" class="post-image" alt="Miniaturansicht"&gt;
+    &lt;div class="post-info"&gt;
+      &lt;a href="#"&gt;Artikeltitel&lt;/a&gt;
+      &lt;span class="post-meta-date"&gt;24. Mai 2026&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse / Variable</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.simple-post-list</code></td>
+                    <td data-label="Was sie tut">Auf einem <code>&lt;ul&gt;</code>. Setzt die Listendarstellung zurück, gepunkteter Trenner zwischen den Einträgen.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-image</code></td>
+                    <td data-label="Was sie tut">
+                      Die Miniaturansicht. AUSSCHLIESSLICH innerhalb von
+                      <code>.simple-post-list</code> gestylt — außerhalb
+                      davon ist es ein gewöhnliches <code>&lt;img&gt;</code>
+                      ohne jegliche Regeln.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">--post-thumb-size</code></td>
+                    <td data-label="Was sie tut">Größe der Miniaturansicht (Standard 60px). Setzen Sie <code>style="--post-thumb-size: 48px;"</code> auf <code>.simple-post-list</code> oder ein einzelnes <code>&lt;li&gt;</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-info</code></td>
+                    <td data-label="Was sie tut">Die Spalte für Titel + Datum, nur innerhalb von <code>.simple-post-list</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.post-meta-date</code></td>
+                    <td data-label="Was sie tut">Ein kleines Datum unter dem Titel. Nicht zu verwechseln mit <code>.post-meta</code> aus Karte und klassischem Beitrag — eine andere Klasse, ein anderes Aussehen.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. SEKCJA AUTORA                                      -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Autorenbereich (Author Box)</h2>
+            <p class="text-muted mb-4">
+              Ein Block unter dem Artikel. Unterhalb des
+              <code>sm</code>-Breakpoints zentriert sich das Layout und wird
+              vertikal (Avatar über dem Text).
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface">
+                <div class="author-box w-100 shadow-sm">
+                  <img
+                    src="https://media.rozacki.com/img/avatar.webp"
+                    alt="Autor: Rafał Różacki"
+                    class="author-avatar"
+                  />
+                  <div class="author-info">
+                    <h4 class="author-name">Rafał Różacki</h4>
+                    <div class="author-role">molique-Ersteller</div>
+                    <p class="author-bio">
+                      Full-Stack-WordPress-Experte mit langjähriger
+                      Erfahrung. Begeistert von Minimalismus und
+                      Performance in CSS. In seiner Freizeit entwirft er
+                      weitere Komponenten für das Framework.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="author-box"&gt;
+  &lt;img src="avatar.jpg" alt="Autor" class="author-avatar"&gt;
+  &lt;div class="author-info"&gt;
+    &lt;h4 class="author-name"&gt;Vollstaendiger Name&lt;/h4&gt;
+    &lt;div class="author-role"&gt;Rolle&lt;/div&gt;
+    &lt;p class="author-bio"&gt;Autorenbeschreibung...&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.author-box</code></td>
+                    <td data-label="Was sie tut">Die Hülle. Auf Mobilgeräten: <code>flex-direction: column</code>, zentriert.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.author-avatar</code></td>
+                    <td data-label="Was sie tut">Ein runder 80×80px-Avatar, <code>object-fit: cover</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.author-info</code></td>
+                    <td data-label="Was sie tut">Die Textspalte. Übergeordnetes Element für <code>.author-name</code>, <code>.author-role</code>, <code>.author-bio</code> — sie funktionieren nur in ihrem Inneren.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Fallstricke</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="blog-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.day</code> / <code>.month</code> sehen in jedem Kontext anders aus</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Dieselben Klassennamen haben in Sass ZWEI verschiedene
+                    Stile, je nach Elternelement: innerhalb von
+                    <code>.post-date-badge</code> (schwebendes Datum auf
+                    einem Foto) ist der Tag eine große Zahl über einem
+                    kleinen Monat; innerhalb von <code>.post-date</code>
+                    (klassische Liste) ist der Monat ein oberer Balken in der
+                    Farbe <code>--primary</code>, der Tag eine weiße Karte
+                    darunter. Außerhalb beider Kontexte verwendet — haben sie
+                    keinerlei Stil.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="blog-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">2</span>
+                  <span><code>.post-date-badge</code> außerhalb von <code>.post-image-wrapper</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Das Datum ist <code>position: absolute</code>
+                    positioniert und verankert sich am nächsten Vorfahren mit
+                    <code>position: relative</code> — dieser Vorfahre ist
+                    <code>.post-image-wrapper</code>. Anderswo platziert,
+                    klebt es an einem weiter entfernten Vorfahren oder an der
+                    gesamten Seite statt an der Ecke des Bildes.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="blog-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">3</span>
+                  <span><code>.post-meta</code> und <code>.post-meta-date</code> sind nicht dieselbe Klasse</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Täuschend ähnliche Namen, kein gemeinsamer Code.
+                    <code>.post-meta</code> (Karte, klassischer Beitrag) ist
+                    eine Zeile mit Links und Icons. <code>.post-meta-date</code>
+                    (Sidebar-Widget) ist ein einzelner, kleiner Datumstext.
+                    Das eine gegen das andere auszutauschen ergibt visuell
+                    kein 1:1-Ergebnis.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">7. Verwandte Seiten</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-blog-posts.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Beiträge</h5>
+                  <p class="text-4 text-muted m-0">Kartenraster und klassische Liste nebeneinander.</p>
+                </div>
+              </a>
+              <a href="examples-blog-sidebar.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Blog-Sidebar</h5>
+                  <p class="text-4 text-muted m-0">Das Widget für die neuesten Beiträge im Sidebar-Kontext.</p>
+                </div>
+              </a>
+              <a href="examples-author-box.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Autorenbereich</h5>
+                  <p class="text-4 text-muted m-0">Die Author Box unter einem vollständigen Artikel.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-eshop.html" class="btn-secondary"
+              >➔ Zurück: Online-Shop</a
+            >
+            <a
+              href="docs-admin.html"
+              class="btn-primary fw-bold hover-spring"
+              >Letzter Schritt: Admin-Panel ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

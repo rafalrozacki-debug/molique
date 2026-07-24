@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Karussells & Lightbox - molique Docs","description":"Referenz für ein auf nativem scroll-snap basierendes Karussell, die Background-Sync-Variante, die Lightbox-Galerie, Portfolio-Filter, Fortschrittsbalken und eine Leseleiste. Klassen, JS-Mechanismen und Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="progress-container-fixed">
+      <div class="progress-bar-reading"></div>
+    </div>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SEITENLEISTE -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Karussells &amp; Lightbox</h1>
+            <p class="text-6 text-muted">
+              Sechs Komponenten für Medien und Fortschrittsanzeigen. Das
+              Karussell basiert auf nativem <code>scroll-snap</code> —
+              flüssig bei Touch-Bedienung, ohne Bibliotheken wie Slick oder
+              Swiper. Die Leiste ganz oben auf dieser Seite ist ein
+              lebendiges Beispiel der Leseleiste — scrollen Sie, um sie zu sehen.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. WAS WÄHLEN                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Was wählen</h2>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Komponente</th>
+                    <th>Wann</th>
+                    <th>Worauf basiert es</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Komponente"><code>.carousel</code></td>
+                    <td data-label="Wann">Mehrere Karten/Folien zum horizontalen Durchblättern.</td>
+                    <td data-label="Worauf basiert es"><code>scroll-snap</code> + JS (Pfeile, Punkte)</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.carousel-bg-sync</code></td>
+                    <td data-label="Wann">Ein Hero mit vollflächigem Hintergrund, der pro Folie wechselt.</td>
+                    <td data-label="Worauf basiert es">Dasselbe wie das Karussell + <code>IntersectionObserver</code></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>[data-lightbox]</code></td>
+                    <td data-label="Wann">Vollbild-Vergrößerung von Fotos aus einer Miniaturgalerie.</td>
+                    <td data-label="Worauf basiert es">JS baut das gesamte Modal — Sie schreiben nur Attribute</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.nav-filters</code></td>
+                    <td data-label="Wann">Filtern eines Elementrasters (Portfolio, Galerie) ohne Neuladen.</td>
+                    <td data-label="Worauf basiert es">JS + Zustandsklassen (<code>.is-hidden</code>)</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.progress</code></td>
+                    <td data-label="Wann">Ein einzelner Fortschrittsbalken mit statischem Wert (Fähigkeiten, Statistiken).</td>
+                    <td data-label="Worauf basiert es">Reines CSS, Wert über <code>style="width:…"</code></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.progress-container-fixed</code></td>
+                    <td data-label="Wann">Ein LESE-Fortschrittsbalken für die gesamte Seite, oben fixiert.</td>
+                    <td data-label="Worauf basiert es">Der Kern <code>molique-script.js</code>, lauscht auf Scroll</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. KARUSSELL                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Karussell</h2>
+            <p class="text-muted mb-4">
+              Die Breite einer einzelnen Folie legen Sie selbst über CSS
+              fest (<code>min-width: 100%</code> — eine Folie pro
+              Bildschirm, <code>50%</code> — zwei gleichzeitig usw.). Das
+              Skript ergänzt den Rest: Es erzeugt Paginierungspunkte
+              (sofern es mehr als eine Folie gibt und Sie keine eigenen
+              bereitstellen), steuert die Pfeile und hebt den aktiven Punkt
+              über <code>IntersectionObserver</code> hervor.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface">
+                <div class="carousel w-100 mx-auto" style="max-width: 600px">
+                  <button class="carousel-nav carousel-prev" aria-label="Vorherige">‹</button>
+                  <button class="carousel-nav carousel-next" aria-label="Nächste">›</button>
+                  <div class="carousel-track">
+                    <div class="carousel-slide px-2" style="min-width: 100%">
+                      <div class="card shadow-sm border-0">
+                        <div class="card-body text-center py-5 bg-primary text-white rounded-2">
+                          <h3 class="fw-bold m-0">Folie 1</h3>
+                          <p class="opacity-75 m-0 mt-2">Wischen Sie oder verwenden Sie die Pfeile</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="carousel-slide px-2" style="min-width: 100%">
+                      <div class="card shadow-sm border-0">
+                        <div class="card-body text-center py-5 bg-dark text-white rounded-2">
+                          <h3 class="fw-bold m-0">Folie 2</h3>
+                          <p class="opacity-75 m-0 mt-2">Natives scroll-snap in Aktion</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="carousel-slide px-2" style="min-width: 100%">
+                      <div class="card shadow-sm border-0">
+                        <div class="card-body text-center py-5 bg-success text-white rounded-2">
+                          <h3 class="fw-bold m-0">Folie 3</h3>
+                          <p class="opacity-75 m-0 mt-2">Die Punkte unten aktualisieren sich von selbst</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="carousel"&gt;
+  &lt;button class="carousel-nav carousel-prev"&gt;‹&lt;/button&gt;
+  &lt;button class="carousel-nav carousel-next"&gt;›&lt;/button&gt;
+
+  &lt;div class="carousel-track"&gt;
+    &lt;!-- min-width steuert, wie viele Folien gleichzeitig sichtbar sind --&gt;
+    &lt;div class="carousel-slide" style="min-width: 100%;"&gt;
+      &lt;div class="card"&gt;Inhalt der Folie 1&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="carousel-slide" style="min-width: 100%;"&gt;
+      &lt;div class="card"&gt;Inhalt der Folie 2&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- .carousel-dots erzeugt sich von selbst darunter --&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.carousel</code></td>
+                    <td data-label="Was sie macht">Hülle. <code>position: relative</code> — Anker für die Pfeile.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.carousel-track</code></td>
+                    <td data-label="Was sie macht"><code>overflow-x: auto; scroll-snap-type: x mandatory;</code> — der eigentliche Scroll-Mechanismus.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.carousel-slide</code></td>
+                    <td data-label="Was sie macht"><code>scroll-snap-align: start</code>. Breite — Ihre Sache, über <code>min-width</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.carousel-nav</code> / <code>-prev</code> / <code>-next</code></td>
+                    <td data-label="Was sie macht">Die runden Pfeile. Optional — das Karussell funktioniert auch ohne sie per Geste/Scroll.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.carousel-dots</code> / <code>.carousel-dot</code></td>
+                    <td data-label="Was sie macht">
+                      Wird vom Skript automatisch erzeugt, wenn es mehr als
+                      eine Folie gibt und noch kein
+                      <code>.carousel-dots</code> im Markup vorhanden ist.
+                      Der aktive Punkt erhält <code>.is-active</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. HERO-KARUSSELL (BG-SYNC)                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Hero-Karussell (Background Sync)</h2>
+            <p class="text-muted mb-4">
+              Eine Variante, bei der sich der Hintergrund des gesamten
+              Containers fließend zusammen mit der gerade sichtbaren Folie
+              ändert — derselbe <code>IntersectionObserver</code>, der die
+              Punkte hervorhebt, setzt auch das
+              <code>background-image</code> des Containers anhand des
+              <code>data-bg</code> der aktiven Folie.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 p-0">
+                <div class="carousel carousel-bg-sync w-100" style="height: 400px">
+                  <div class="carousel-bg-overlay"></div>
+                  <button class="carousel-nav carousel-prev" style="z-index: 4">‹</button>
+                  <button class="carousel-nav carousel-next" style="z-index: 4">›</button>
+                  <div class="carousel-track h-100">
+                    <div
+                      class="carousel-slide d-flex align-items-center justify-content-center"
+                      style="min-width: 100%"
+                      data-bg="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop"
+                    >
+                      <h2 class="text-11 fw-black text-white position-relative z-10">Architektur</h2>
+                    </div>
+                    <div
+                      class="carousel-slide d-flex align-items-center justify-content-center"
+                      style="min-width: 100%"
+                      data-bg="https://images.unsplash.com/photo-1541888087425-41132243407e?q=80&w=1000&auto=format&fit=crop"
+                    >
+                      <h2 class="text-11 fw-black text-white position-relative z-10">Konstruktion</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="carousel carousel-bg-sync"&gt;
+  &lt;div class="carousel-bg-overlay"&gt;&lt;/div&gt;
+
+  &lt;div class="carousel-track"&gt;
+    &lt;!-- data-bg definiert den Hintergrund DIESER konkreten Folie --&gt;
+    &lt;div class="carousel-slide" data-bg="img/folie1.jpg"&gt;
+      &lt;h2&gt;Überschrift 1&lt;/h2&gt;
+    &lt;/div&gt;
+    &lt;div class="carousel-slide" data-bg="img/folie2.jpg"&gt;
+      &lt;h2&gt;Überschrift 2&lt;/h2&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse / Attribut</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.carousel-bg-sync</code></td>
+                    <td data-label="Was sie macht">Ein Modifikator auf <code>.carousel</code>. Setzt eine Mindesthöhe und bereitet den Hintergrund für <code>background-image</code> vor.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">data-bg</code></td>
+                    <td data-label="Was sie macht">
+                      An jedem <code>.carousel-slide</code> — die Adresse
+                      des Hintergrundfotos für DIESE Folie. Ohne dieses
+                      Attribut ändert sich der Hintergrund beim Wechsel zu
+                      dieser Folie einfach nicht (der vorherige bleibt).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.carousel-bg-overlay</code></td>
+                    <td data-label="Was sie macht">Eine halbtransparente Überlagerung über dem Hintergrund — sorgt für Textlesbarkeit.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mt-4">
+              <h5 class="fw-bold text-5 mb-2">Pfeile nur bei Hover</h5>
+              <p class="text-4 text-muted m-0">
+                In dieser Variante sind die Navigationspfeile unsichtbar,
+                bis sich der Cursor über dem Karussell befindet — passend
+                zum vollflächigen, „aufgeräumten" Charakter des
+                Hero-Abschnitts. Bei Touch-Bedienung bleiben sie unsichtbar
+                (Navigation ist dann eine Wischgeste).
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. LIGHTBOX                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Lightbox-Galerie</h2>
+            <p class="text-muted mb-4">
+              Das gesamte Modal (Hintergrund, Zähler, Pfeile,
+              Schließen-Button) baut das Skript selbst bei der ersten
+              Verwendung — <strong>Sie schreiben</strong> keine der
+              <code>.lightbox-*</code>-Klassen von Hand. Ihr Markup besteht
+              ausschließlich aus Links mit zwei Datenattributen.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;!-- data-lightbox aktiviert das Skript, data-gallery gruppiert Fotos --&gt;
+&lt;a href="gross-1.jpg" data-lightbox data-gallery="referenzen"&gt;
+  &lt;img src="miniatur-1.jpg" alt="Foto 1"&gt;
+&lt;/a&gt;
+&lt;a href="gross-2.jpg" data-lightbox data-gallery="referenzen"&gt;
+  &lt;img src="miniatur-2.jpg" alt="Foto 2"&gt;
+&lt;/a&gt;</code></pre>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface">
+                <div class="grid-auto w-100 gap-3">
+                  <a href="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200" data-lightbox data-gallery="demo-gallery" class="hover-gpu-shadow hover-spring">
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=400" alt="Miniatur 1" class="w-100 rounded-2" style="aspect-ratio: 4/3; object-fit: cover" />
+                  </a>
+                  <a href="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200" data-lightbox data-gallery="demo-gallery" class="hover-gpu-shadow hover-spring">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400" alt="Miniatur 2" class="w-100 rounded-2" style="aspect-ratio: 4/3; object-fit: cover" />
+                  </a>
+                  <a href="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1200" data-lightbox data-gallery="demo-gallery" class="hover-gpu-shadow hover-spring">
+                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=400" alt="Miniatur 3" class="w-100 rounded-2" style="aspect-ratio: 4/3; object-fit: cover" />
+                  </a>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;a href="foto.jpg" data-lightbox&gt;
+  &lt;img src="miniatur.jpg" alt="…"&gt;
+&lt;/a&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Attribut</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">data-lightbox</code></td>
+                    <td data-label="Was sie macht">An einem <code>&lt;a&gt;</code>. Aktiviert das Skript; das <code>href</code> des Links ist das Foto in voller Größe.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">data-gallery</code></td>
+                    <td data-label="Was sie macht">Verbindet Links mit demselben Wert zu einer Galerie mit Zähler und Pfeilen. Ohne dieses Attribut ist jeder Link eine eigene, einelementige „Galerie".</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">Navigation: Maus, Touch, Tastatur</h5>
+              <p class="text-4 text-muted m-0">
+                Pfeile auf dem Bildschirm, Wischgesten bei Touch-Bedienung
+                sowie — innerhalb des geöffneten Modals —
+                <kbd>←</kbd>/<kbd>→</kbd> zum Wechseln des Fotos und
+                <kbd>Esc</kbd> zum Schließen. Beim Öffnen springt der Fokus
+                auf den Schließen-Button und kehrt nach dem Schließen zur
+                angeklickten Miniatur zurück.
+              </p>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Struktur des generierten Modals</h3>
+            <p class="text-muted mb-3">
+              Sie schreiben diese Klassen nicht in Ihr eigenes HTML (siehe
+              Fallstrick Nr. 2), aber sie sind nützlich, wenn Sie das
+              Aussehen des Modals mit eigenem CSS überschreiben möchten.
+            </p>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was das ist</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.lightbox-overlay</code></td>
+                    <td data-label="Was das ist">Der gesamte dunkle Hintergrund des Modals.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.lightbox-content</code></td>
+                    <td data-label="Was das ist">Die Hülle um das vergrößerte Foto.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.lightbox-top-bar</code></td>
+                    <td data-label="Was das ist">Die obere Leiste mit Zähler und Schließen-Button.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.lightbox-counter</code></td>
+                    <td data-label="Was das ist">Der Text „2 / 5". Verborgen, wenn die Galerie nur ein Foto enthält.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.lightbox-close</code></td>
+                    <td data-label="Was das ist">Der ×-Button in der oberen rechten Ecke.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.lightbox-nav</code> / <code>-prev</code> / <code>-next</code></td>
+                    <td data-label="Was das ist">Die Pfeile an den Seiten. Ebenfalls verborgen bei einer einelementigen Galerie.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. PORTFOLIO-FILTER                                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Portfolio-Filter</h2>
+            <p class="text-muted mb-4">
+              Ein Menü, das ein Elementraster ohne Neuladen der Seite und
+              ohne Serveranfragen filtert — reine Klassenmanipulation im DOM.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview flex-column w-100 bg-surface">
+                <ul class="nav-filters w-100">
+                  <li><button class="is-active" data-filter="all">Alle</button></li>
+                  <li><button data-filter="www">Webseiten</button></li>
+                  <li><button data-filter="ads">Werbung</button></li>
+                </ul>
+                <div class="grid-cols-1 grid-md-cols-3 gap-3 w-100 mt-4">
+                  <div class="card p-4 text-center filter-item" data-category="www">Webseite 1</div>
+                  <div class="card p-4 text-center filter-item" data-category="ads">Werbung 1</div>
+                  <div class="card p-4 text-center filter-item" data-category="www">Webseite 2</div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Filtermenü --&gt;
+&lt;ul class="nav-filters"&gt;
+  &lt;li&gt;&lt;button class="is-active" data-filter="all"&gt;Alle&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button data-filter="www"&gt;Webseiten&lt;/button&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Element-Container - MUSS direkt nach dem Menü stehen, siehe Fallstrick Nr. 1 --&gt;
+&lt;div class="grid-auto"&gt;
+  &lt;div class="filter-item" data-category="www"&gt;Projekt 1&lt;/div&gt;
+  &lt;div class="filter-item" data-category="ads"&gt;Projekt 2&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse / Attribut</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.nav-filters</code></td>
+                    <td data-label="Was sie macht">An einem <code>&lt;ul&gt;</code>. Buttons darin — beliebig viele.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">data-filter</code></td>
+                    <td data-label="Was sie macht">An jedem Button. Der Wert <code>"all"</code> zeigt alles, ein anderer nur die passende Kategorie.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.filter-item</code> / <code>data-category</code></td>
+                    <td data-label="Was sie macht">An jedem gefilterten Element. Der Wert von <code>data-category</code> wird mit dem <code>data-filter</code> des geklickten Buttons verglichen.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.is-hidden</code> / <code>.is-animated</code></td>
+                    <td data-label="Was sie macht">
+                      Wird vom Skript vergeben. <code>.is-hidden</code>
+                      verbirgt ein nicht passendes Element
+                      (<code>display: none</code>);
+                      <code>.is-animated</code> spielt ein kurzes
+                      „Einspringen" für passende Elemente ab.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. FORTSCHRITTSBALKEN                                 -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Fortschrittsbalken</h2>
+            <p class="text-muted mb-4">
+              Ein statischer Balken zur Darstellung eines Werts —
+              Fähigkeiten, Statistiken, Ressourcennutzung. Null JS.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview flex-column align-items-stretch w-100 bg-surface gap-4">
+                <div class="w-100" style="max-width: 500px">
+                  <div class="progress-label">
+                    <span>Projektfortschritt</span>
+                    <span>85%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar" style="width: 85%"></div>
+                  </div>
+                  <div class="progress-label mt-4">
+                    <span>SEO-Optimierung</span>
+                    <span>60%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" style="width: 60%"></div>
+                  </div>
+                  <div class="progress-label mt-4">
+                    <span>Serverauslastung</span>
+                    <span class="text-danger">92%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar bg-danger" style="width: 92%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="progress-label"&gt;
+  &lt;span&gt;Projektfortschritt&lt;/span&gt;
+  &lt;span&gt;85%&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="progress"&gt;
+  &lt;div class="progress-bar bg-success" style="width: 85%;"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.progress</code></td>
+                    <td data-label="Was sie macht">Die Bahn des Balkens — dünn, abgerundet, <code>overflow: hidden</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.progress-bar</code></td>
+                    <td data-label="Was sie macht">
+                      Die Füllung. Breite über
+                      <code>style="width: X%"</code>. Farbe — eine beliebige
+                      Hintergrundklasse (<code>.bg-success</code>, <code>.bg-danger</code>…).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.progress-label</code></td>
+                    <td data-label="Was sie macht">Eine Zeile Beschriftung + Wert über dem Balken. Optional.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. LESELEISTE                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Leseleiste</h2>
+            <p class="text-muted mb-4">
+              Eine dünne, am oberen Bildschirmrand fixierte Leiste, die mit
+              dem Scrollen wächst. Diejenige ganz oben auf dieser Seite ist
+              echt — die Steuerung sitzt fest im Kern
+              <code>molique-script.js</code> (wie der
+              Sidebar-Umschalter im Admin-Panel), nicht in einem separaten
+              Modul.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;!-- Gleich nach dem Öffnen von &lt;body&gt;, vor dem restlichen Inhalt --&gt;
+&lt;div class="progress-container-fixed"&gt;
+  &lt;div class="progress-bar-reading"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.progress-container-fixed</code></td>
+                    <td data-label="Was sie macht"><code>position: fixed</code>, oben am Bildschirm, über der Navigation. Für sich genommen unsichtbar (transparenter Hintergrund).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.progress-bar-reading</code></td>
+                    <td data-label="Was sie macht">Der eigentliche Balken. Breite wird in <code>requestAnimationFrame</code> proportional zur Scroll-Position aktualisiert.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. FALLSTRICKE                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Fallstricke</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="extra-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Der <code>.filter-item</code>-Container an der falschen DOM-Position</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Das Skript sucht die zu filternden Elemente über
+                    <code>navFilters.nextElementSibling</code> — der
+                    Container mit den <code>.filter-item</code>s muss ein
+                    <strong>direktes</strong> Geschwister von
+                    <code>.nav-filters</code> im Code sein, unmittelbar
+                    danach. Fügen Sie etwas dazwischen ein (z. B. einen
+                    Beschreibungsabsatz), hören die Buttons auf, überhaupt
+                    etwas zu filtern — ohne Fehler in der Konsole.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">2</span>
+                  <span>Manuelles Schreiben von <code>.lightbox-*</code>-Klassen</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Das gesamte Lightbox-Modal
+                    (<code>.lightbox-overlay</code>,
+                    <code>.lightbox-content</code>, Buttons…) erzeugt das
+                    Skript beim ersten Klick auf
+                    <code>[data-lightbox]</code> und hängt es an das Ende
+                    von <code>&lt;body&gt;</code> an. Diese Struktur von
+                    Hand im HTML zu schreiben bringt nichts — und wenn Sie
+                    zufällig etwas anderem die Klasse
+                    <code>.lightbox-overlay</code> geben, hält das Skript
+                    dies für ein bereits vorhandenes Modal und beginnt, es
+                    zu ergänzen.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">3</span>
+                  <span><code>.progress-bar</code> und <code>.progress-bar-reading</code> animieren <code>width</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Beide Komponenten durchlaufen einen
+                    <code>transition</code> auf der Eigenschaft
+                    <code>width</code> — bequem (Breite ist ein
+                    natürliches Maß für einen Prozentsatz), aber das ist
+                    eine der wenigen bewussten Ausnahmen von der Regel
+                    „nur <code>transform</code>/<code>opacity</code>
+                    animieren" in diesem Framework: Bei sehr häufigen
+                    Aktualisierungen (Leseleiste bei schnellem Scrollen)
+                    kann das mehr Frames kosten als das Äquivalent über
+                    <code>transform: scaleX()</code>. In der Praxis ist der
+                    Effekt bei einem einzelnen Balken nicht wahrnehmbar —
+                    das lohnt sich erst zu bedenken, wenn viele animierte
+                    Balken gleichzeitig auf einem Bildschirm sind.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">4</span>
+                  <span>Eine Folie ohne <code>data-bg</code> in der Background-Sync-Variante</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Hat eine bestimmte <code>.carousel-slide</code> kein
+                    Attribut <code>data-bg</code>, leert der Wechsel zu ihr
+                    den Hintergrund NICHT — das Bild der vorherigen Folie
+                    bleibt bestehen. Möchten Sie bewusst einen leeren
+                    Hintergrund bei einer Folie, setzen Sie
+                    <code>data-bg=""</code> explizit, statt das Attribut wegzulassen.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 9. VERWANDTE SEITEN                                   -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">9. Verwandte Seiten</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-carousel.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Karussells</h5>
+                  <p class="text-4 text-muted m-0">Beide Varianten im vollen Kontext.</p>
+                </div>
+              </a>
+              <a href="examples-lightbox.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Lightbox</h5>
+                  <p class="text-4 text-muted m-0">Eine größere Miniaturgalerie.</p>
+                </div>
+              </a>
+              <a href="examples-portfolio-filters.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Portfolio-Filter</h5>
+                  <p class="text-4 text-muted m-0">Mehr Kategorien und Elemente.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+            <a href="docs-interactive.html" class="btn-secondary"
+              >➔ Zurück: Modale &amp; Tabs</a
+            >
+            <a href="docs-charts.de.html" class="btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Diagramme &amp; Daten ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Skripte -->
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

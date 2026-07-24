@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Typography & Colors - molique Docs","description":"Reference for molique typography: the fluid clamp() scale, font weights, text and background colors, subtle variants, text effects, and knockout. Full class tables and pitfalls."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.en.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Typography &amp; Colors</h1>
+            <p class="text-6 text-muted">
+              The size scale is <strong>fluid</strong> — sizes grow with the
+              window width, no media queries. This page lists the entire
+              scale, weights, colors, and text effects. Ready-made
+              showcases: <a href="examples-typography.html">examples</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. SKALA ROZMIARÓW                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. The size scale</h2>
+            <p class="text-muted mb-4">
+              Every size is a <code>clamp()</code>: a minimum, a fluid, and
+              a maximum value. Text doesn't jump at breakpoints, it grows
+              gradually — that's why there isn't a single font media query
+              anywhere in the framework.
+            </p>
+            <p class="text-muted mb-4">
+              The reference point is <strong><code>.text-3</code></strong>
+              — the paragraph size. Everything below is metadata, everything
+              above is headings and hero text.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 flex-column align-items-start">
+                <span class="text-10 fw-black">Hero</span>
+                <span class="text-8 fw-bold">Heading H1</span>
+                <span class="text-6 fw-bold">Heading H3</span>
+                <span class="text-3">Paragraph text (base)</span>
+                <span class="text-1 text-muted">Metadata</span>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Matches</th>
+                    <th>For what</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-xs</code></td>
+                    <td data-label="Matches">10px</td>
+                    <td data-label="For what">Legal notes. The smallest size in the system.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-sm</code></td>
+                    <td data-label="Matches">11px</td>
+                    <td data-label="For what">Microcopy, captions under graphics.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-1</code>, <code class="fw-bold">.text-2</code></td>
+                    <td data-label="Matches">12–13px</td>
+                    <td data-label="For what">Metadata, timeline dates, labels.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-3</code></td>
+                    <td data-label="Matches">base</td>
+                    <td data-label="For what">
+                      <strong>The paragraph size.</strong> The same as
+                      <code>.text-base</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-base</code></td>
+                    <td data-label="Matches">base</td>
+                    <td data-label="For what">
+                      Resets back to the base size — useful inside an
+                      element that already changed the scale.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-4</code> – <code class="fw-bold">.text-8</code></td>
+                    <td data-label="Matches">H5 → H1</td>
+                    <td data-label="For what">
+                      Headings. <code>.text-8</code> matches H1,
+                      <code>.text-4</code> matches H5.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-9</code> – <code class="fw-bold">.text-12</code></td>
+                    <td data-label="Matches">up to 9rem</td>
+                    <td data-label="For what">Hero text, huge numbers, the 404 page.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Size is not the same as meaning</h5>
+              <p class="text-4 text-muted m-0">
+                <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code> tags already
+                have their own sizes and <strong>don't need
+                classes</strong>. Use <code>.text-*</code> classes when you
+                want to change <em>appearance</em>, not hierarchy — e.g.
+                giving an H2 the size of an H4 because it sits in a narrow
+                column. Never the other way around: don't pick
+                <code>&lt;h3&gt;</code> over <code>&lt;h1&gt;</code> just
+                because it's smaller.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. WAGI I KRÓJ                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Weights and typeface</h2>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Weight</th>
+                    <th>For what</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fw-light</code></td>
+                    <td data-label="Weight">300</td>
+                    <td data-label="For what">Secondary text, captions.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fw-normal</code></td>
+                    <td data-label="Weight">400</td>
+                    <td data-label="For what">The default text weight.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fw-medium</code></td>
+                    <td data-label="Weight">500</td>
+                    <td data-label="For what">A light emphasis: labels, menu items.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fw-bold</code></td>
+                    <td data-label="Weight">700</td>
+                    <td data-label="For what">Headings, in-text emphasis.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.fw-black</code></td>
+                    <td data-label="Weight">900</td>
+                    <td data-label="For what">Hero text, large dashboard numbers.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-uppercase</code></td>
+                    <td data-label="What it does">
+                      UPPERCASE. Also <code>.text-lowercase</code> and
+                      <code>.text-capitalize</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-decoration-none</code></td>
+                    <td data-label="What it does">
+                      Removes the underline — typically from a link meant to
+                      look like a button.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-decoration-underline</code></td>
+                    <td data-label="What it does">Adds an underline.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-decoration-line-through</code></td>
+                    <td data-label="What it does">Strikethrough — e.g. an old price.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-start</code></td>
+                    <td data-label="What it does">
+                      Alignment: <code>.text-center</code>,
+                      <code>.text-end</code>, <code>.text-justify</code>, plus
+                      the <code>.text-md-start</code>,
+                      <code>.text-md-center</code>,
+                      <code>.text-md-end</code> variants.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. KOLORY                                             -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Colors</h2>
+            <p class="text-muted mb-4">
+              Three families with a shared naming scheme:
+              <code>text-</code> for text, <code>bg-</code> for
+              background, <code>border-</code> for a border. Plus
+              <code>-subtle</code> (a dimmed background) and
+              <code>-hover</code> (change on hover) variants.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 flex-wrap">
+                <span class="badge badge-primary">primary</span>
+                <span class="p-2 rounded-2 bg-success-subtle text-success">success-subtle</span>
+                <span class="p-2 rounded-2 bg-danger text-white">bg-danger</span>
+                <span class="p-2 rounded-2 bg-warning-subtle text-warning">warning-subtle</span>
+                <span class="text-muted p-2">text-muted</span>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Family</th>
+                    <th>Variants</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.text-primary</code></td>
+                    <td data-label="Variants">
+                      <code>.text-secondary</code>, <code>.text-success</code>,
+                      <code>.text-danger</code>, <code>.text-warning</code>,
+                      <code>.text-info</code>, <code>.text-dark</code>,
+                      <code>.text-light</code>, <code>.text-white</code>
+                    </td>
+                    <td data-label="Notes">
+                      <code>.text-dark</code> and <code>.text-light</code>
+                      <strong>flip</strong> in dark mode — see pitfall #1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.text-main</code></td>
+                    <td data-label="Variants"><code>.text-muted</code></td>
+                    <td data-label="Notes">
+                      Semantic content colors: primary and dimmed. Usually a
+                      better choice than <code>.text-dark</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.bg-primary</code></td>
+                    <td data-label="Variants">
+                      <code>.bg-secondary</code>, <code>.bg-success</code>,
+                      <code>.bg-danger</code>, <code>.bg-warning</code>,
+                      <code>.bg-info</code>, <code>.bg-dark</code>,
+                      <code>.bg-light</code>, <code>.bg-body</code>,
+                      <code>.bg-surface</code>, <code>.bg-transparent</code>
+                    </td>
+                    <td data-label="Notes">Full backgrounds, at full saturation.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family"><code class="fw-bold">.bg-primary-subtle</code></td>
+                    <td data-label="Variants">
+                      <code>.bg-secondary-subtle</code>,
+                      <code>.bg-success-subtle</code>,
+                      <code>.bg-danger-subtle</code>,
+                      <code>.bg-warning-subtle</code>,
+                      <code>.bg-info-subtle</code>,
+                      <code>.bg-dark-subtle</code>,
+                      <code>.bg-light-subtle</code>,
+                      <code>.bg-body-subtle</code>,
+                      <code>.bg-surface-subtle</code>,
+                      <code>.bg-white-subtle</code>
+                    </td>
+                    <td data-label="Notes">
+                      A background at a few percent opacity — for text in
+                      the same color. Typical for status badges.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Family">
+                      <code class="fw-bold">.text-hover-*</code>,
+                      <code class="fw-bold">.bg-hover-*</code>,
+                      <code class="fw-bold">.border-hover-*</code>
+                    </td>
+                    <td data-label="Variants">
+                      Each family has ten colors:
+                      <code>primary</code>, <code>secondary</code>,
+                      <code>success</code>, <code>danger</code>,
+                      <code>warning</code>, <code>info</code>,
+                      <code>dark</code>, <code>light</code>,
+                      <code>surface</code>, <code>body</code> — e.g.
+                      <code>.text-hover-primary</code>,
+                      <code>.bg-hover-danger</code>,
+                      <code>.border-hover-success</code>.
+                    </td>
+                    <td data-label="Notes">
+                      The scheme is <strong><code>WHAT-hover-COLOR</code></strong>,
+                      not the other way around. Don't add them to
+                      <code>.btn</code> — see pitfall #3.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">When to use <code>-subtle</code></h5>
+              <p class="text-4 text-muted m-0">
+                A full <code>.bg-danger</code> shouts and requires white
+                text. <code>.bg-danger-subtle</code> gives a gentle
+                background against which <code>.text-danger</code> works —
+                more readable in a table with dozens of such markers. Use
+                the full color where you really want to grab attention.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. EFEKTY TEKSTOWE                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Text effects</h2>
+            <p class="text-muted mb-4">
+              They all animate only properties computed by the GPU. Three of
+              them need data from the markup — without it they have nothing
+              to show.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Effect</th>
+                    <th>Requires</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-underline</code></td>
+                    <td data-label="Effect">An underline sliding in from the left.</td>
+                    <td data-label="Requires"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-underline-center</code></td>
+                    <td data-label="Effect">The same, but spreading from the center.</td>
+                    <td data-label="Requires"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-highlight</code></td>
+                    <td data-label="Effect">
+                      A highlighter marker sliding under the text on hover.
+                    </td>
+                    <td data-label="Requires"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.hover-text-wipe</code></td>
+                    <td data-label="Effect">A color washing over the text from the left.</td>
+                    <td data-label="Requires"><span class="text-muted">—</span></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-gradient-animated</code></td>
+                    <td data-label="Effect">A gradient sliding across the letters.</td>
+                    <td data-label="Requires">
+                      Colors: <code>--gradient-color-1</code>,
+                      <code>-2</code>, <code>-3</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-clip-bg</code></td>
+                    <td data-label="Effect">
+                      A photo visible through the shape of the letters.
+                    </td>
+                    <td data-label="Requires">
+                      <code>--clip-img</code> — <strong>without it, the
+                      letters are empty</strong>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.typewriter</code></td>
+                    <td data-label="Effect">Text typed out character by character.</td>
+                    <td data-label="Requires">
+                      The <code>molique-text-effects.js</code> module (auto-loaded).
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Text cutting through a background</h3>
+            <p class="text-muted mb-3">
+              The letters act as a window onto the photo underneath. The
+              effect doesn't rely on clipping the background to the letters
+              — it uses <code>mix-blend-mode</code>: the container has the
+              photo, and the text has a color that the blend mode turns
+              into transparency. That's why <strong>the colors in these
+              classes are literal and must not be changed</strong> — they're
+              what drives the mechanism.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="bg-knockout-wrapper" style="background-image: url(photo.jpg)"&gt;
+  &lt;h2 class="text-knockout-light text-12 fw-black text-center"&gt;MOLIQUE&lt;/h2&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.bg-knockout-wrapper</code></td>
+                    <td data-label="What it does">
+                      The container with the photo. Pass the image via
+                      <code>background-image</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-knockout-light</code></td>
+                    <td data-label="What it does">
+                      A white background, transparent letters. For light photos.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.text-knockout-dark</code></td>
+                    <td data-label="What it does">
+                      A black background, transparent letters. For dark photos.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Pitfalls</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="typo-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>.text-dark</code> on a photo</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>--dark</code> is the color that
+                    <strong>contrasts with the background</strong>, not
+                    "dark." In dark mode it flips to light — and
+                    <code>.text-dark</code> along with it. Used on an
+                    element sitting on a photo, whose background doesn't
+                    change, this gives white text on a light photo.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Copy</button>
+                    <pre><code>&lt;!-- WRONG - in dark mode the text disappears on the photo --&gt;
+&lt;p class="text-dark"&gt;Caption on a photo&lt;/p&gt;
+
+&lt;!-- RIGHT - a color independent of the theme --&gt;
+&lt;p class="text-white"&gt;Caption on a photo&lt;/p&gt;</code></pre>
+                  </div>
+                  <p class="text-4 text-muted mt-3 m-0">
+                    For regular content, use <code>.text-main</code> and
+                    <code>.text-muted</code> — they're semantic and are
+                    meant to flip.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="typo-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Choosing a tag by its size</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Picking <code>&lt;h3&gt;</code> over
+                    <code>&lt;h1&gt;</code> because it's "too big" breaks the
+                    document structure: screen readers build a table of
+                    contents from headings, and search engines read the
+                    hierarchy from them. Pick the tag by
+                    <strong>meaning</strong>, set the size with a
+                    <code>.text-*</code> class.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Copy</button>
+                    <pre><code>&lt;!-- WRONG - a lower level just for the look --&gt;
+&lt;h3&gt;Page title&lt;/h3&gt;
+
+&lt;!-- RIGHT - the level stays, the size changes --&gt;
+&lt;h1 class="text-6"&gt;Page title&lt;/h1&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="typo-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>An inverted hover class name</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    The scheme is <strong><code>WHAT-hover-COLOR</code></strong>:
+                    <code>text-hover-primary</code>,
+                    <code>bg-hover-danger</code>,
+                    <code>border-hover-success</code>. The reversed order
+                    (<code>hover-text-primary</code>) won't work — such
+                    classes existed in older releases and were removed in
+                    1.7.0 precisely because they broke the scheme.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    A separate issue: <strong>don't add these classes to
+                    <code>.btn</code></strong>. A button has its own hover
+                    color from its variant, so the two rules compete.
+                    Change <code>--primary-hover</code> instead.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="typo-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Changing colors in knockout classes</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    In <code>.text-knockout-light</code> and
+                    <code>-dark</code>, the colors are literal
+                    (white/black), and <strong>they're what drives the
+                    effect</strong> — the blend mode turns one of them into
+                    transparency. Swapping it for a brand color means the
+                    letters stop being a window onto the photo and become
+                    plain text instead.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Related pages</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-typography.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: typography</h5>
+                  <p class="text-4 text-muted m-0">
+                    The whole scale and palettes in one place.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-variables.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">CSS Variables</h5>
+                  <p class="text-4 text-muted m-0">
+                    Values for the scale, weights, and the whole palette.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-text-effects.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: text effects</h5>
+                  <p class="text-4 text-muted m-0">
+                    Gradient, typewriter, knockout.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-sections.html" class="btn-secondary"
+              >➔ Back: Sections, Hero &amp; Timeline</a
+            >
+            <a href="docs-buttons.html" class="btn-primary fw-bold hover-spring"
+              >Next step: Buttons &amp; Badges ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

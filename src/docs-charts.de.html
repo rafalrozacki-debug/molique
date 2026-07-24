@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Diagramme (Data Viz) - molique Docs","description":"molique-Diagrammreferenz: Sparkline, Radial Bar, Heatmap, Flächendiagramm und Tortendiagramm in reinem CSS/SVG, Conversion-Trichter, Statistikkarten und Bereichsnavigation. Klassentabellen, Mechanismen und Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SEITENLEISTE -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Diagramme (Data Viz)</h1>
+            <p class="text-6 text-muted">
+              Diagramme, gebaut in reinem CSS und SVG — ohne Bibliothek, ohne
+              JavaScript für das eigentliche Zeichnen. Daten kommen über eine
+              einzige Variable herein, <code>--val</code>. Fertige
+              Zusammenstellungen:
+              <a href="examples-charts-basic.html">Beispiele</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. EINE VARIABLE, ÜBERALL                             -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Eine Variable, überall</h2>
+            <p class="text-muted mb-4">
+              Jedes Diagramm liest seinen Wert aus <code>--val</code> — Sie
+              setzen ihn per Inline-Style, aus einer Vorlage auf der
+              Backend-Seite. Das Framework kennt Ihre Daten nicht;
+              <strong>die Umrechnung von Zahlen in Prozente und Winkel ist
+              Ihre Aufgabe</strong>, CSS zeichnet nur.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Warum keine JS-Bibliothek</h5>
+              <p class="text-4 text-muted m-0">
+                Ein reines CSS-Diagramm wird <strong>im selben Frame wie der
+                Rest der Seite</strong> gerendert — es gibt kein Flackern
+                nach dem Muster „zuerst leerer Container, dann per Skript
+                nachgeladenes Diagramm" (CLS). Braucht ein Projekt
+                interaktive Diagramme mit Tooltips und Zoom, sind diese
+                Klassen ein guter Fallback für die Ladezeit dieser
+                Bibliothek — kein Ersatz dafür.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. SPARKLINE UND RADIAL BAR                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Sparkline und Radial Bar</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Sparkline</h3>
+            <p class="text-muted mb-3">
+              Balken in einer Reihe — ein Trend neben einer Zahl in einer
+              Statistikkarte. Jeder Balken ist ein eigenes Element mit
+              eigenem <code>--val</code> als Prozentsatz der Höhe.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="r-chart-wrapper chart-micro"&gt;
+  &lt;div class="chart-sparkline"&gt;
+    &lt;div class="sparkline-bar" style="--val: 40%"&gt;&lt;/div&gt;
+    &lt;div class="sparkline-bar" style="--val: 65%"&gt;&lt;/div&gt;
+    &lt;div class="sparkline-bar" style="--val: 50%"&gt;&lt;/div&gt;
+    &lt;div class="sparkline-bar" style="--val: 90%"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Radial Bar</h3>
+            <p class="text-muted mb-3">
+              Ein Ring, der sich bis zu einem vorgegebenen Prozentsatz füllt
+              — ein einzelner KPI-Indikator. Eine flüssige Füllanimation
+              erfordert die Registrierung der Variable über CSS Houdini
+              (<code>@property</code>); ohne das kann der Browser einen
+              Prozentwert innerhalb eines Verlaufs nicht animieren.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="chart-radial" style="--val: 72%"&gt;
+  &lt;span class="radial-value"&gt;72%&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Komponente</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.r-chart-wrapper</code></td>
+                    <td data-label="Komponente">Basis</td>
+                    <td data-label="Was sie macht">
+                      Ein 200px hoher Container. Die Variante
+                      <code>.chart-micro</code> gibt feste 80×40px für
+                      Karten und Tabellen.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-sparkline</code></td>
+                    <td data-label="Komponente">Sparkline</td>
+                    <td data-label="Was sie macht">Die Balkenreihe.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.sparkline-bar</code></td>
+                    <td data-label="Komponente">Sparkline</td>
+                    <td data-label="Was sie macht">
+                      Ein einzelner Balken. Höhe: <code>--val</code>
+                      als Prozentsatz.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-radial</code></td>
+                    <td data-label="Komponente">Radial Bar</td>
+                    <td data-label="Was sie macht">
+                      Der Ring. Füllstand: <code>--val</code>
+                      als Prozentsatz.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.radial-value</code></td>
+                    <td data-label="Komponente">Radial Bar</td>
+                    <td data-label="Was sie macht">Die Zahl in der Mitte des Rings.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. HEATMAP UND FLÄCHENDIAGRAMM                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Heatmap und Flächendiagramm</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Heatmap</h3>
+            <p class="text-muted mb-3">
+              Ein Raster von Zellen mit variabler Farbintensität — eine
+              Aktivitätskarte im GitHub-Stil. Die Anzahl der Spalten wird
+              über <code>grid-template-columns</code> am Container
+              festgelegt; <code>.chart-heatmap</code> erzwingt sie nicht.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="chart-heatmap" style="grid-template-columns: repeat(7, 1fr)"&gt;
+  &lt;div class="heatmap-cell" style="--val: 0.9"&gt;&lt;/div&gt;
+  &lt;div class="heatmap-cell" style="--val: 0.3"&gt;&lt;/div&gt;
+  &lt;div class="heatmap-cell" style="--val: 0.1"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">
+                Hier ist <code>--val</code> ein Bruchwert, kein Prozentsatz
+              </h5>
+              <p class="text-4 text-muted m-0">
+                Die einzige Stelle in der gesamten Diagrammfamilie, an der
+                <code>--val</code> anders funktioniert: Die Zelle nimmt ihn
+                als Farbdeckkraft (<code>rgba(…, var(--val))</code>), der
+                Bereich ist also <strong>0–1</strong>, nicht 0–100. Die
+                Eingabe von <code>90</code> statt <code>0.9</code> ergibt
+                eine voll gesättigte Zelle, unabhängig vom tatsächlichen Wert.
+              </p>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Flächendiagramm (SVG)</h3>
+            <p class="text-muted mb-3">
+              Eine Kurve mit Füllung darunter, gezeichnet als SVG-Pfad — die
+              Daten sind <code>&lt;path&gt;</code>-Koordinaten, kein CSS. Die
+              Klassen fügen nur die Aufdeckungs-Animation von links nach
+              rechts und den Linienstil hinzu.
+            </p>
+            <div class="component-code">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;svg class="chart-area" viewBox="0 0 300 100"&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id="areaGradient" x2="0" y2="1"&gt;
+      &lt;stop offset="0%" stop-color="var(--primary)"&gt;&lt;/stop&gt;
+      &lt;stop offset="100%" stop-color="var(--primary)" stop-opacity="0"&gt;&lt;/stop&gt;
+    &lt;/linearGradient&gt;
+  &lt;/defs&gt;
+  &lt;path class="area-fill" d="M0,80 L50,60 L100,70 L300,20 L300,100 L0,100 Z"&gt;&lt;/path&gt;
+  &lt;path class="area-line" d="M0,80 L50,60 L100,70 L300,20"&gt;&lt;/path&gt;
+&lt;/svg&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mt-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Komponente</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-heatmap</code></td>
+                    <td data-label="Komponente">Heatmap</td>
+                    <td data-label="Was sie macht">Das Raster. Die Spalten legen Sie selbst fest.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.heatmap-cell</code></td>
+                    <td data-label="Komponente">Heatmap</td>
+                    <td data-label="Was sie macht">
+                      Eine Zelle. <code>--val</code> ist Deckkraft 0–1, kein Prozentsatz.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-area</code></td>
+                    <td data-label="Komponente">Flächendiagramm</td>
+                    <td data-label="Was sie macht">SVG-Hülle mit der Aufdeckungs-Animation.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.area-fill</code></td>
+                    <td data-label="Komponente">Flächendiagramm</td>
+                    <td data-label="Was sie macht">Die Füllung unter der Kurve.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.area-line</code></td>
+                    <td data-label="Komponente">Flächendiagramm</td>
+                    <td data-label="Was sie macht">Die Kurve selbst.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. TORTENDIAGRAMM                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Tortendiagramm</h2>
+            <p class="text-muted mb-4">
+              Ein Ring aus <code>&lt;circle&gt;</code>-Elementen, mit
+              <code>stroke-dasharray</code> zerschnitten. Jedes Segment
+              braucht zwei Zahlen: seinen eigenen prozentualen Anteil
+              (<code>--val</code>) und seinen Startpunkt
+              (<code>--offset</code>) — die Summe der Anteile aller Segmente
+              <strong>vor</strong> ihm. Ohne das würden alle an derselben
+              Stelle beginnen und sich überlappen.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;!-- viewBox 0 0 36 36 ist ERFORDERLICH - Radius 15,9155 ergibt einen Umfang von genau 100,
+     daher funktioniert --val als Prozentsatz ohne Umrechnung --&gt;
+&lt;svg viewBox="0 0 36 36" class="chart-pie"&gt;
+  &lt;circle cx="18" cy="18" r="15.9155" class="pie-bg"&gt;&lt;/circle&gt;
+
+  &lt;!-- 45%, beginnt bei 0 --&gt;
+  &lt;circle cx="18" cy="18" r="15.9155" class="pie-segment text-primary"
+          style="--val: 45; --offset: 0"&gt;&lt;/circle&gt;
+
+  &lt;!-- 30%, beginnt dort, wo das erste endete (45) --&gt;
+  &lt;circle cx="18" cy="18" r="15.9155" class="pie-segment text-success"
+          style="--val: 30; --offset: 45"&gt;&lt;/circle&gt;
+&lt;/svg&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-pie</code></td>
+                    <td data-label="Was sie macht">
+                      Auf dem <code>&lt;svg&gt;</code>. Dreht das Layout um
+                      −90°, damit das erste Segment bei 12 Uhr beginnt.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.pie-bg</code></td>
+                    <td data-label="Was sie macht">Der graue Hintergrundring, sichtbar unter den Segmenten.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.pie-segment</code></td>
+                    <td data-label="Was sie macht">
+                      Ein Segment. Bezieht seine Farbe aus
+                      <code>currentColor</code> — vergeben Sie sie über eine
+                      Textklasse (<code>.text-primary</code>), nicht über ein
+                      <code>fill</code>-Attribut.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">
+                Ringdicke im Code, nicht in einer Klasse
+              </h5>
+              <p class="text-4 text-muted m-0">
+                Es gibt keinen „Pie"- oder „Donut"-Modifikator — die Dicke ist
+                <code>stroke-width</code> am <code>circle</code> in SCSS
+                (standardmäßig 6). Ein voller Kreis statt eines Rings
+                erfordert eine Bearbeitung des Framework-Quellcodes und lässt
+                sich nicht über das Markup einstellen.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. TRICHTER                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Trichter</h2>
+            <p class="text-muted mb-4">
+              Drei Formen derselben Idee — eine abnehmende Breite spiegelt
+              den Rückgang der Zahlen bei jeder weiteren Stufe wider. Die
+              Wahl hängt davon ab, wie viel vertikaler Platz zur Verfügung
+              steht und wie wörtlich die Trichterform sein soll.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Layout</th>
+                    <th>Wann</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-funnel</code></td>
+                    <td data-label="Layout">Vertikal, rechteckige Balken</td>
+                    <td data-label="Wann">Eine schmale Spalte, ein Dashboard.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-pipeline</code></td>
+                    <td data-label="Layout">Horizontal, Pfeile (Chevron)</td>
+                    <td data-label="Wann">
+                      CRM-Prozessstufen: „Kontakt → Angebot → Vertrag".
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-funnel-true</code></td>
+                    <td data-label="Layout">Trapez mit „Fuß"</td>
+                    <td data-label="Wann">
+                      Eine Präsentationsfolie, ein Bericht — die wörtlichste Trichterform.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="chart-funnel"&gt;
+  &lt;div class="funnel-stage" style="--val: 100%"&gt;Besuche: 1000&lt;/div&gt;
+  &lt;div class="funnel-stage" style="--val: 60%"&gt;Warenkorb: 600&lt;/div&gt;
+  &lt;div class="funnel-stage" style="--val: 25%"&gt;Kauf: 250&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="chart-pipeline"&gt;
+  &lt;div class="pipeline-stage is-active"&gt;Kontakt&lt;/div&gt;
+  &lt;div class="pipeline-stage"&gt;Angebot&lt;/div&gt;
+  &lt;div class="pipeline-stage"&gt;Vertrag&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Variante</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.funnel-stage</code></td>
+                    <td data-label="Variante">Vertikal</td>
+                    <td data-label="Was sie macht">
+                      Ein Balken. Breite: <code>--val</code> als Prozentsatz.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.pipeline-stage</code></td>
+                    <td data-label="Variante">Horizontal</td>
+                    <td data-label="Was sie macht">
+                      Ein Pfeilsegment. Farbe über
+                      <code>--stage-bg</code> / <code>--stage-text</code>.
+                      Aktuelle Stufe: <code>.is-active</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.funnel-true-stage</code></td>
+                    <td data-label="Variante">Trapez</td>
+                    <td data-label="Was sie macht">
+                      Eine Trichterschicht. Höhe: <code>--val</code> als
+                      Verhältnis (<code>flex</code>), kein Prozentsatz.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stage-label</code></td>
+                    <td data-label="Variante">Trapez</td>
+                    <td data-label="Was sie macht">Der Name der Stufe.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stage-value</code></td>
+                    <td data-label="Variante">Trapez</td>
+                    <td data-label="Was sie macht">Die Zahl neben der Stufe.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. STATISTIKKARTEN, LEERE ZUSTÄNDE, NAVIGATION        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Statistikkarten, leere Zustände, Navigation</h2>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Statistikkarten</h3>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="stat-card"&gt;
+  &lt;div class="stat-title"&gt;Umsatz&lt;/div&gt;
+  &lt;div class="stat-value"&gt;124.500 €&lt;/div&gt;
+  &lt;div class="stat-trend is-positive"&gt;↑ 12%&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Leerer Zustand</h3>
+            <p class="text-muted mb-3">
+              Der Platzhalter für das Diagramm, bevor Daten vorliegen — ein
+              Filter ohne Ergebnisse, ein frisches Konto. Ohne ihn sieht ein
+              leerer Container wie ein Ladefehler aus.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="empty-state"&gt;
+  &lt;div class="empty-state-icon"&gt;📊&lt;/div&gt;
+  &lt;p class="fw-bold m-0"&gt;Keine Daten für diesen Zeitraum&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Bereichsnavigation</h3>
+            <p class="text-muted mb-3">
+              Ein segmentierter Umschalter über dem Diagramm — „Q1 / Q2 /
+              Q3". Der Zustand wird von einem versteckten Radio-Feld
+              gehalten, sodass das Umschalten ohne eine einzige Zeile
+              JavaScript funktioniert.
+            </p>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div class="chart-nav">
+                  <label class="chart-nav-item">
+                    <input type="radio" name="docs-chart-range" checked />
+                    <span class="nav-label">Q1</span>
+                  </label>
+                  <label class="chart-nav-item">
+                    <input type="radio" name="docs-chart-range" />
+                    <span class="nav-label">Q2</span>
+                  </label>
+                  <label class="chart-nav-item">
+                    <input type="radio" name="docs-chart-range" />
+                    <span class="nav-label">Q3</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Komponente</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-card</code></td>
+                    <td data-label="Komponente">Statistikkarte</td>
+                    <td data-label="Was sie macht">Hülle.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-title</code></td>
+                    <td data-label="Komponente">Statistikkarte</td>
+                    <td data-label="Was sie macht">Die Beschriftung der Metrik.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-value</code></td>
+                    <td data-label="Komponente">Statistikkarte</td>
+                    <td data-label="Was sie macht">Die große Zahl.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-trend</code></td>
+                    <td data-label="Komponente">Statistikkarte</td>
+                    <td data-label="Was sie macht">
+                      Die Veränderung. <code>.is-positive</code> (grün) oder
+                      <code>.is-negative</code> (rot).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.empty-state</code></td>
+                    <td data-label="Komponente">Leerer Zustand</td>
+                    <td data-label="Was sie macht">Hülle mit gestricheltem Rand.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.empty-state-icon</code></td>
+                    <td data-label="Komponente">Leerer Zustand</td>
+                    <td data-label="Was sie macht">Ein großes Icon oder Emoji.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-nav</code></td>
+                    <td data-label="Komponente">Navigation</td>
+                    <td data-label="Was sie macht">Die Hülle des Umschalters.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.chart-nav-item</code></td>
+                    <td data-label="Komponente">Navigation</td>
+                    <td data-label="Was sie macht">
+                      Auf einem <code>&lt;label&gt;</code>. Darin ein
+                      verstecktes <code>input[type="radio"]</code> (gemeinsamer
+                      <code>name</code>) und <code>.nav-label</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. FALLSTRICKE                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Fallstricke</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="chart-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>Falsch berechnetes <code>--offset</code> im Tortendiagramm</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Jedes Segment braucht die Summe der Anteile
+                    <strong>aller Segmente vor ihm</strong>, nicht seine
+                    eigene Position in der Reihenfolge. Das dritte Segment
+                    mit Anteilen von 45/30/25 hat <code>--offset: 75</code>
+                    (45+30), nicht <code>--offset: 2</code>. Der Fehler
+                    äußert sich in überlappenden Segmenten — genau so, als
+                    wäre <code>--offset</code> gar nicht gesetzt.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="chart-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Änderung des <code>viewBox</code> im Tortendiagramm</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>viewBox="0 0 36 36"</code> und
+                    <code>r="15.9155"</code> sind nicht zufällig — ein Radius
+                    von 15,9155 ergibt einen Kreisumfang von genau 100.
+                    Dadurch bedeutet <code>--val: 45</code> in
+                    <code>stroke-dasharray</code> direkt 45 % des Umfangs,
+                    ohne Umrechnung. Eine der beiden Zahlen ohne die andere zu
+                    ändern zerstört diesen Zusammenhang, und die Segmente
+                    entsprechen nicht mehr den vorgesehenen Prozentsätzen.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="chart-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span><code>--val</code> als Prozentsatz, wo es ein Bruchwert ist</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    In der Heatmap ist <code>--val</code> direkt die
+                    Farbdeckkraft (0–1), kein Prozentsatz wie sonst überall
+                    in dieser Komponentenfamilie. Die Eingabe von
+                    <code>--val: 70</code> statt <code>--val: 0.7</code>
+                    erzeugt keinen Fehler — jede solche Zelle erscheint
+                    einfach maximal gesättigt, unabhängig vom tatsächlichen
+                    Unterschied zwischen den Werten.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="chart-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Segmentfarbe über <code>fill</code> statt einer Textklasse</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.pie-segment</code> bezieht seine Farbe aus
+                    <code>currentColor</code>, also der Textfarbe des
+                    Elements. Ein direkt am <code>&lt;circle&gt;</code>
+                    gesetztes Attribut <code>fill="…"</code> bewirkt nichts —
+                    stattdessen muss eine Klasse wie
+                    <code>.text-primary</code> hinzugefügt werden.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="chart-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">5</span>
+                  <span>Bekannte Ausnahme von der GPU-Regel: <code>.funnel-stage</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Der vertikale Trichter animiert die Änderung von
+                    <code>--val</code> über einen Übergang auf
+                    <code>width</code> — eine Eigenschaft, die der Rest des
+                    Frameworks bewusst meidet, da sie eine
+                    Layout-Neuberechnung erzwingt (siehe
+                    <a href="docs-animations.de.html">Animationen</a>,
+                    Abschnitt 1). In der Praxis betrifft das ein einzelnes
+                    Element, das sich selten und nicht als Reaktion auf
+                    Scrollen ändert, sodass der Aufwand vernachlässigbar ist
+                    — bauen Sie jedoch einen Trichter mit Dutzenden
+                    gleichzeitig animierten Balken, sollten Sie auf
+                    <code>.chart-funnel-true</code> oder eine eigene
+                    Animation über <code>transform: scaleX()</code> umsteigen.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. VERWANDTE SEITEN                                   -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">8. Verwandte Seiten</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-charts-basic.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Diagramme</h5>
+                  <p class="text-4 text-muted m-0">
+                    Fertige Zusammenstellungen im vollen Farbumfang.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-funnels.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: Trichter</h5>
+                  <p class="text-4 text-muted m-0">
+                    Alle drei Formen mit Bereichsnavigation.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-empty-states.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Beispiele: leere Zustände</h5>
+                  <p class="text-4 text-muted m-0">
+                    Varianten für unterschiedliche Situationen ohne Daten.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-components-extra.html" class="btn-secondary"
+              >➔ Zurück: Karussells &amp; Lightbox</a
+            >
+            <a href="docs-forms.de.html" class="btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Formulare &amp; Validierung ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

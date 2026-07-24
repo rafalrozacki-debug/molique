@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"CSS-Variablen - molique Docs","description":"Vollstandige Referenz der molique CSS-Variablen: 89 Theme-Variablen, 60 Komponenten-Variablen und 6 Markup-Eingaben. Werte fur helles und dunkles Theme, Verhalten und Fallstricke."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">CSS-Variablen</h1>
+            <p class="text-6 text-muted">
+              Das gesamte Erscheinungsbild von molique — Farben, Abstände,
+              Typografie, Dark Mode — beruht auf CSS-Variablen. Sie müssen
+              keine einzige Regel überschreiben, um das Theme zu ändern: es
+              genügt, die Werte auszutauschen.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. JAK TO DZIAŁA                                      -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Wie es funktioniert</h2>
+            <p class="text-muted mb-4">
+              Eine CSS-Variable ist eine benannte Box für einen Wert. Das
+              Framework schreibt niemals eine Farbe fest vor — es greift
+              überall auf eine Variable zurück. Wenn Sie deren Inhalt
+              austauschen, verbreitet sich die Änderung sofort über alle
+              Komponenten, die sie verwenden.
+            </p>
+            <p class="text-muted mb-4">
+              Variablen <strong>vererben sich den DOM-Baum hinunter</strong>
+              — genau wie die Textfarbe. Deshalb hängt die Reichweite einer
+              Änderung ausschließlich davon ab, auf welchem Element Sie sie
+              deklarieren. Das ist auch der Grund, warum
+              <strong>PurgeCSS sie niemals entfernen darf</strong> — siehe
+              Fallstrick Nr. 3.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Kategorie</th>
+                    <th>Anzahl</th>
+                    <th>Deklariert in</th>
+                    <th>Wer legt sie fest</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Theme-Variablen</strong></td>
+                    <td><span class="badge badge-primary">89</span></td>
+                    <td><code>:root</code> in <code>_root.scss</code></td>
+                    <td>Sie — global, einmal pro Projekt.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Komponenten-Variablen</strong></td>
+                    <td><span class="badge badge-secondary">60</span></td>
+                    <td>Die Datei der jeweiligen Komponente</td>
+                    <td>Das Framework. Einen Teil können Sie im Markup überschreiben.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Markup-Eingaben</strong></td>
+                    <td><span class="badge badge-warning">6</span></td>
+                    <td>Nirgends — sie werden nur gelesen</td>
+                    <td>
+                      Ausschließlich Sie. Ohne sie hat die Komponente keine
+                      Daten, aus denen sie schöpfen kann.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. JAK NADPISAĆ                                       -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Einen Wert überschreiben</h2>
+            <p class="text-muted mb-4">
+              Drei Reichweiten, von der breitesten zur engsten. Alle
+              funktionieren ohne <code>!important</code> — Sie kämpfen nicht
+              gegen die Spezifität, sondern geben nur einen anderen Wert an.
+            </p>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Reichweite 1</span>
+              Das gesamte Projekt
+            </h3>
+            <p class="text-muted mb-3">
+              Ein eigenes Stylesheet, das <strong>nach</strong> molique
+              eingebunden wird. Das ist der richtige Weg für das
+              Marken-Theme.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;link rel="stylesheet" href="css/molique-style.css"&gt;
+&lt;link rel="stylesheet" href="css/mein-theme.css"&gt;   &lt;!-- nach molique --&gt;</code></pre>
+            </div>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>/* mein-theme.css */
+:root {
+  --primary: #7C3AED;
+  --primary-hover: #6D28D9;
+  --primary-rgb: 124, 58, 237;   /* MUSS zu --primary passen */
+
+  --border-radius: 4px;          /* schärfere Oberfläche */
+  --spacing-unit: 6px;           /* engerer Rhythmus im gesamten Framework */
+}</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Reichweite 2</span>
+              Ein Abschnitt
+            </h3>
+            <p class="text-muted mb-3">
+              Eine Deklaration auf einem Container umfasst alles darin.
+              Nützlich, wenn ein Abschnitt einen anderen Akzent haben soll
+              als der Rest der Seite.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;section class="container p-5" style="--primary: #059669;"&gt;
+  &lt;!-- jeder .btn-primary und .text-primary hier ist grün --&gt;
+  &lt;button class="btn-primary"&gt;Speichern&lt;/button&gt;
+&lt;/section&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">
+              <span class="badge badge-primary mr-2">Reichweite 3</span>
+              Ein einzelnes Element
+            </h3>
+            <p class="text-muted mb-3">
+              So übergeben Sie <strong>Daten aus dem Backend</strong> —
+              Fortschritt, Bewertung, Lagerbestand. Der Zahlenwert reist in
+              einer Variable, nicht in einer Klasse, denn Klassen dürfen
+              niemals dynamisch zusammengesetzt werden.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;div class="star-rating" style="--rating: 4.5;"&gt;&lt;/div&gt;
+&lt;div class="stock-bar stock-bar-warning" style="--stock-filled: 2;"&gt;&lt;/div&gt;
+&lt;div class="chart-radial" style="--val: 75%;"&gt;&lt;/div&gt;</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. DARK MODE                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Dark Mode</h2>
+            <p class="text-muted mb-4">
+              Das dunkle Theme ist <strong>ausschließlich ein anderer
+              Wertesatz</strong> — null zusätzliche Regeln und null
+              duplizierte Komponenten. Das Attribut
+              <code>data-theme="dark"</code> auf <code>&lt;html&gt;</code>
+              tauscht 31 der 89 Theme-Variablen aus.
+            </p>
+            <p class="text-muted mb-4">
+              Deshalb müssen Sie beim Hinzufügen einer eigenen Farbvariable
+              diese <strong>in beiden Blöcken</strong> angeben. Eine nur in
+              <code>:root</code> deklarierte Variable bleibt im Dark Mode
+              gleich und verschwindet höchstwahrscheinlich auf dunklem
+              Hintergrund.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>:root {
+  --marken-akzent: #B45309;
+}
+
+[data-theme="dark"] {
+  --marken-akzent: #FBBF24;   /* heller, damit er auf Dunkel lesbar bleibt */
+}</code></pre>
+            </div>
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Woher das System-Theme kommt</h5>
+              <p class="text-4 text-muted m-0">
+                Beide Blöcke deklarieren auch <code>color-scheme</code>. Das
+                sorgt dafür, dass native Steuerelemente — Scrollbars, der
+                Kalender in <code>input[type="date"]</code>, der Hintergrund
+                von <code>&lt;dialog&gt;</code> — dem Theme folgen. Ohne
+                diese Deklaration können Überschriften in einem Modal auf
+                einer dunklen Karte schwarz werden.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Vier Fallstricke</h2>
+            <p class="text-muted mb-4">
+              Jeder von ihnen hat schon jemanden einen Nachmittag gekostet.
+              Alle laufen auf dasselbe hinaus: Eine Variable sagt nicht, was
+              sie ist — man muss es wissen.
+            </p>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span><code>--dark</code> bedeutet nicht „dunkel"</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Im hellen Theme ist <code>--dark</code>
+                    <code>#1E293B</code> (Graphit), aber im Dark Mode
+                    <strong>kehrt es sich um</strong> zu <code>#F8FAFC</code>
+                    (Weiß). Das ist nicht „die dunkle Farbe" — es ist die
+                    <strong>zum Hintergrund kontrastierende Farbe</strong>.
+                    Ebenso wird <code>--light</code> im Dark Mode dunkel.
+                  </p>
+                  <p class="text-muted mb-3">
+                    Die Folge: verwendet auf einem Element, das auf einem
+                    Foto liegt — dessen Hintergrund sich nicht mit dem Theme
+                    ändert — ergibt sich weißer Text auf weißem Grund.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>/* FALSCH - auf einem Foto verschwindet der Text im Dark Mode */
+.foto-bildunterschrift { color: var(--dark); }
+
+/* RICHTIG - literaler Wert, unabhängig vom Theme */
+.foto-bildunterschrift { color: #1E293B; }</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span><code>--x</code> und <code>--x-rgb</code> sind nicht dasselbe</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>--primary</code> ist eine fertige Farbe.
+                    <code>--primary-rgb</code> sind <strong>nur die
+                    Kanäle</strong> (<code>2, 132, 199</code>) — ohne das
+                    lässt sich keine Transparenz bauen. Es funktioniert
+                    <strong>ausschließlich innerhalb von <code>rgba()</code></strong>.
+                  </p>
+                  <p class="text-muted mb-3">
+                    Anderswo eingesetzt ist es keine gültige Farbe, also
+                    verwirft der Browser die <strong>gesamte
+                    Deklaration</strong> — stillschweigend, ohne
+                    Konsolenfehler.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>/* FALSCH - "2, 132, 199" ist keine Farbe, die Deklaration entfaellt */
+.karte { border-color: var(--primary-rgb); }
+
+/* RICHTIG */
+.karte { border-color: var(--primary); }
+.karte { background: rgba(var(--primary-rgb), 0.1); }</code></pre>
+                  </div>
+                  <p class="text-4 text-muted mt-3 m-0">
+                    Wenn Sie <code>--primary</code> in Ihrem Theme ändern,
+                    <strong>ändern Sie immer auch <code>--primary-rgb</code></strong>.
+                    Ein Auseinanderlaufen des Paares ergibt Transparenzen in
+                    der alten Farbe.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>PurgeCSS mit <code>variables: true</code> löscht das Theme</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Diese Option entfernt CSS-Variablen, die PurgeCSS in
+                    Ihren Dateien nicht gefunden hat. Das Problem: molique's
+                    Variablen werden <strong>innerhalb der Framework-Regeln
+                    selbst</strong> verwendet, nicht in Ihrem HTML — das Tool
+                    hält sie also für tot und entfernt sie. Ergebnis: eine
+                    Seite ohne Farben und ohne Abstände.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>// purgecss.config.js
+module.exports = {
+  variables: false,   // LASSEN SIE false - auf den Variablen steht das ganze Theme
+};</code></pre>
+                  </div>
+                  <p class="text-4 text-muted mt-3 m-0">
+                    Details und eine fertige Konfiguration:
+                    <a href="docs-purgecss.html">PurgeCSS &amp; Safelist</a>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span>Die Admin-Sidebar ist immer dunkel</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>--sidebar-bg</code> hat absichtlich
+                    <strong>kein</strong> Dark-Mode-Gegenstück — die Sidebar
+                    sieht in beiden Themes gleich aus. Deshalb müssen ihre
+                    hellen Akzente literale Werte sein.
+                  </p>
+                  <p class="text-muted mb-3">
+                    Wird dort <code>--light-rgb</code> verwendet, sieht das
+                    im hellen Theme korrekt aus, aber im dunklen kehrt sich
+                    diese Variable um — und Text sowie Highlights
+                    verschwinden auf dem dunklen Sidebar-Hintergrund. Dafür
+                    gibt es die separate <code>--sidebar-highlight-rgb</code>.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Kopieren</button>
+                    <pre><code>/* FALSCH - der Hover verschwindet im Dark Mode */
+.admin-nav-link:hover { background: rgba(var(--light-rgb), 0.1); }
+
+/* RICHTIG - ein vom Theme unabhaengiger Akzent */
+.admin-nav-link:hover { background: rgba(var(--sidebar-highlight-rgb), 0.1); }</code></pre>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. ZMIENNE MOTYWU (generowane)                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              5. Theme-Variablen
+              <span class="badge badge-primary">89</span>
+            </h2>
+            <p class="text-muted mb-4">
+              Deklariert in <code>:root</code>. Die Spalte
+              <strong>Dark Mode</strong> zeigt den Wert bei aktiviertem
+              dunklem Theme — <em>keine Änderung</em> bedeutet, dass die
+              Variable für beide Themes gilt. Die Spalte
+              <strong>Verwendet in</strong> zeigt die Sass-Module, die sie
+              nutzen.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <p class="text-4 text-muted m-0">
+                Diese Referenztabelle wird automatisch aus dem Sass-Quellcode
+                generiert und ist derzeit nur auf Polnisch verfügbar.
+                Variablennamen (<code>--primary</code>,
+                <code>--spacing-unit</code>…) und Werte benötigen ohnehin
+                keine Übersetzung.
+              </p>
+            </div>
+
+            <include src="partials/variables-global.html"></include>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. ZMIENNE KOMPONENTÓW (generowane)                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              6. Komponenten-Variablen
+              <span class="badge badge-secondary">60</span>
+            </h2>
+            <p class="text-muted mb-4">
+              Innerhalb einer bestimmten Komponente deklariert, funktionieren
+              sie also nur in ihrem Bereich. Zwei Arten:
+            </p>
+            <ul class="list-icons list-icons-arrow text-muted mb-4">
+              <li>
+                <span class="badge badge-success">markup</span> — dafür
+                vorgesehen, von Ihnen überschrieben zu werden, meist über
+                <code>style="--x: …"</code>.
+              </li>
+              <li>
+                <span class="badge badge-secondary">intern</span> — das
+                Framework berechnet sie selbst. Aufgeführt, weil sie in den
+                DevTools sichtbar sind und man wissen sollte, dass hier nicht
+                der Ort für eigene Änderungen ist.
+              </li>
+            </ul>
+
+            <include src="partials/variables-component.html"></include>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. WEJŚCIA Z MARKUPU (generowane)                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">
+              7. Markup-Eingaben
+              <span class="badge badge-warning">6</span>
+            </h2>
+            <p class="text-muted mb-4">
+              Variablen, die das Framework <strong>niemals selbst
+              deklariert</strong> — es liest sie nur. Das ist die
+              Schnittstelle zum Übergeben von Daten aus dem Backend. Steht in
+              der Spalte <em>Wenn nicht gesetzt</em>
+              <span class="badge badge-warning">erforderlich</span>, führt
+              ein fehlender Wert dazu, dass die Komponente nicht korrekt
+              gerendert wird.
+            </p>
+
+            <include src="partials/variables-input.html"></include>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. POWIĄZANE                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Verwandte Seiten</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="docs-typography.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Typografie &amp; Farben</h5>
+                  <p class="text-4 text-muted m-0">
+                    Klassen, die die Variablen aus Abschnitt 5 nutzen.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-purgecss.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">PurgeCSS &amp; Safelist</h5>
+                  <p class="text-4 text-muted m-0">
+                    Warum <code>variables: true</code> das Theme zerstört.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-classes.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Klassenübersicht</h5>
+                  <p class="text-4 text-muted m-0">
+                    Die vollständige Liste der Framework-Klassen.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

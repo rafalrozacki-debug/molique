@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"E-commerce - molique Docs","description":"molique e-commerce component reference: product card, photo gallery with thumbnails, cart with a quantity controller, selection tiles, star ratings and color swatches. Classes, variants and pitfalls."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+    <link rel="stylesheet" href="css/molique-style-shop.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SIDEBAR -->
+      <include src="partials/docs-sidebar.en.html"></include>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">E-commerce</h1>
+            <p class="text-6 text-muted">
+              Components specific to online stores — the product card, photo
+              gallery, cart and checkout selection tiles. They require a
+              separate <code>molique-style-shop.css</code> file, since they
+              don't belong in the framework core. Ready-made layouts are in
+              the <a href="examples-product-cards.html">examples</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. WHAT TO CHOOSE                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. What to choose</h2>
+            <p class="text-muted mb-4">
+              Five independent components — use as many as you need, none of
+              them requires the others.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Component</th>
+                    <th>When</th>
+                    <th>What it's built on</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Component"><code>.product-card</code></td>
+                    <td data-label="When">Product grid — category listings, search results.</td>
+                    <td data-label="What it's built on">Flexbox</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.product-gallery</code></td>
+                    <td data-label="When">Single product page — main photo + clickable thumbnails.</td>
+                    <td data-label="What it's built on">Flexbox + JS (<code>src</code> swap)</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.cart-item</code></td>
+                    <td data-label="When">A cart row or order summary row.</td>
+                    <td data-label="What it's built on">Flexbox + JS (quantity controller)</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.selection-tile</code></td>
+                    <td data-label="When">Picking a delivery or payment method at checkout.</td>
+                    <td data-label="What it's built on">Native <code>input[radio/checkbox]</code>, zero JS</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.star-rating</code> / <code>.product-swatches</code></td>
+                    <td data-label="When">Product rating and color-variant picker — usually inside a card.</td>
+                    <td data-label="What it's built on">Pure CSS (SVG mask), zero JS</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. PRODUCT CARD                                       -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Product card</h2>
+            <p class="text-muted mb-4">
+              <code>.product-price-block</code> has <code>margin-top: auto</code>
+              — regardless of the title's length, the price and button always
+              land at the bottom edge of the card, so cards in the same grid
+              row end at the same height.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;article class="product-card"&gt;
+  &lt;a href="#" class="product-image-wrapper"&gt;
+    &lt;div class="product-badges"&gt;
+      &lt;span class="badge badge-danger"&gt;-30%&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;img src="product.jpg" alt="Product" style="height: 250px;"&gt;
+  &lt;/a&gt;
+  &lt;div class="product-content"&gt;
+    &lt;a href="#" class="product-title"&gt;Product name&lt;/a&gt;
+    &lt;div class="product-price-block"&gt;
+      &lt;span class="price-current"&gt;$49.00&lt;/span&gt;
+      &lt;span class="price-old"&gt;$69.00&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;button class="btn-primary w-100"&gt;Add to cart&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-card</code></td>
+                    <td data-label="What it does">Wrapper. <code>height: 100%</code> — in a grid it stretches to match the tallest card in the row.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-image-wrapper</code></td>
+                    <td data-label="What it does">
+                      On an <code>&lt;a&gt;</code>. The image inside has no
+                      default height (<code>height: auto</code>) — without an
+                      inline <code>style="height:…"</code> or your own rule,
+                      cards in a grid will have images of different heights.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-badges</code></td>
+                    <td data-label="What it does">Absolutely positioned in the top-left corner. Plain <code>.badge-*</code>s go inside.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-content</code></td>
+                    <td data-label="What it does">The rest of the card below the image. <code>flex-grow: 1</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-title</code></td>
+                    <td data-label="What it does">Text color switches to <code>--primary</code> on hover.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-price-block</code></td>
+                    <td data-label="What it does">
+                      <code>margin-top: auto</code> — pins the price block to
+                      the bottom of the card. <code>baseline</code>
+                      alignment, so the price and the old price sit on a
+                      shared text line despite the different font sizes.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.price-current</code></td>
+                    <td data-label="What it does">Current price — large, <code>--primary</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.price-old</code></td>
+                    <td data-label="What it does">Pre-discount price — struck through, muted.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">List view instead of a grid</h5>
+              <p class="text-4 text-muted m-0">
+                Add the class <code>.product-list-view</code> to the
+                <strong>parent</strong> container (not to the card) — CSS
+                rebuilds every <code>.product-card</code> inside it into a
+                horizontal layout, with no changes to a single card's HTML.
+                Below the <code>sm</code> breakpoint the layout automatically
+                reverts to vertical.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. PRODUCT GALLERY                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Product gallery</h2>
+            <p class="text-muted mb-4">
+              A large photo + a row of clickable thumbnails. Clicking a
+              thumbnail swaps the main photo's <code>src</code> — no reload,
+              no lightbox, no external carousel library.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">How it works</h5>
+              <p class="text-4 text-muted m-0">
+                The <code>molique-shop.js</code> module (auto-loaded whenever
+                <code>.product-gallery</code> is present) listens for clicks
+                on <code>.gallery-thumb</code>. Each one reads the
+                <code>data-large</code> attribute from its own
+                <code>&lt;img&gt;</code> and inserts that value as the main
+                photo's <code>src</code> — without that attribute, clicking
+                does nothing. The thumbnail is a <code>&lt;button&gt;</code>,
+                not an <code>&lt;a&gt;</code> or a <code>&lt;div&gt;</code>, so
+                keyboard support (<kbd>Tab</kbd>, <kbd>Enter</kbd>) works
+                without adding anything extra.
+              </p>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="product-gallery"&gt;
+  &lt;div class="product-gallery-main"&gt;
+    &lt;img src="large-1.jpg" alt="Product"&gt;
+  &lt;/div&gt;
+  &lt;div class="product-gallery-thumbs"&gt;
+    &lt;button type="button" class="gallery-thumb is-active"&gt;
+      &lt;img src="small-1.jpg" data-large="large-1.jpg" alt=""&gt;
+    &lt;/button&gt;
+    &lt;button type="button" class="gallery-thumb opacity-50"&gt;
+      &lt;img src="small-2.jpg" data-large="large-2.jpg" alt=""&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-gallery</code></td>
+                    <td data-label="What it does">Wrapper. With no modifier: thumbnails in a row below the photo — works at every width, mobile included.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-gallery-left</code></td>
+                    <td data-label="What it does">
+                      From the <code>md</code> breakpoint up: thumbnails as a
+                      column TO THE LEFT of the photo. Below <code>md</code>
+                      — reverts to the default layout (a row underneath). DOM
+                      order stays the same, only the visual order changes
+                      (<code>order</code>).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-gallery-right</code></td>
+                    <td data-label="What it does">Same as <code>-left</code>, but the thumbnail column stays on the right (DOM order = visual order).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-gallery-main</code></td>
+                    <td data-label="What it does">A square container for the main photo (<code>aspect-ratio: 1/1</code>), the image fills it via <code>object-fit: cover</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-gallery-thumbs</code></td>
+                    <td data-label="What it does">The thumbnail bar.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.gallery-thumb</code></td>
+                    <td data-label="What it does">
+                      A single thumbnail (<code>&lt;button&gt;</code>, 64×64px).
+                      Requires an <code>&lt;img data-large="…"&gt;</code> inside.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.is-active</code> / <code>.opacity-50</code></td>
+                    <td data-label="What it does">
+                      Thumbnail state — applied by JS after a click (active
+                      one full, the rest dimmed). <code>.opacity-50</code> is
+                      a ready-made utility class, not a separate component class.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-showcase">
+              <div class="component-preview grid-cols-1 grid-md-cols-2 gap-4 w-100 bg-surface align-items-start">
+                <div>
+                  <p class="text-4 text-muted mb-2">Default (thumbnails below)</p>
+                  <div class="product-gallery" style="max-width: 320px">
+                    <div class="product-gallery-main">
+                      <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=700&auto=format&fit=crop" alt="Product view">
+                    </div>
+                    <div class="product-gallery-thumbs">
+                      <button type="button" class="gallery-thumb is-active">
+                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=100&auto=format&fit=crop" data-large="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=700&auto=format&fit=crop" alt="">
+                      </button>
+                      <button type="button" class="gallery-thumb opacity-50">
+                        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=100&auto=format&fit=crop" data-large="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=700&auto=format&fit=crop" alt="">
+                      </button>
+                      <button type="button" class="gallery-thumb opacity-50">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=100&auto=format&fit=crop" data-large="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=700&auto=format&fit=crop" alt="">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p class="text-4 text-muted mb-2"><code>.product-gallery-left</code> (from md)</p>
+                  <div class="product-gallery product-gallery-left" style="max-width: 320px">
+                    <div class="product-gallery-main">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=700&auto=format&fit=crop" alt="Product view">
+                    </div>
+                    <div class="product-gallery-thumbs">
+                      <button type="button" class="gallery-thumb is-active">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" data-large="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=700&auto=format&fit=crop" alt="">
+                      </button>
+                      <button type="button" class="gallery-thumb opacity-50">
+                        <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=100&auto=format&fit=crop" data-large="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=700&auto=format&fit=crop" alt="">
+                      </button>
+                      <button type="button" class="gallery-thumb opacity-50">
+                        <img src="https://images.unsplash.com/photo-1541888087425-41132243407e?q=80&w=100&auto=format&fit=crop" data-large="https://images.unsplash.com/photo-1541888087425-41132243407e?q=80&w=700&auto=format&fit=crop" alt="">
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;!-- Thumbnails on the left from the md breakpoint --&gt;
+&lt;div class="product-gallery product-gallery-left"&gt;
+  …
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. RATINGS AND COLOR VARIANTS                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Ratings and color variants</h2>
+            <p class="text-muted mb-4">
+              Two micro-components for inside a product card. Both purely
+              visual — zero JavaScript.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;!-- Rating of 4.5 out of 5 stars --&gt;
+&lt;div class="star-rating" style="--rating: 4.5;"&gt;&lt;/div&gt;
+
+&lt;!-- Color choice --&gt;
+&lt;div class="product-swatches"&gt;
+  &lt;div class="swatch is-active" style="background-color: #000;" title="Black"&gt;&lt;/div&gt;
+  &lt;div class="swatch" style="background-color: #ef4444;" title="Red"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class / variable</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.star-rating</code></td>
+                    <td data-label="What it does">
+                      Five stars cut out with an SVG mask from a linear
+                      gradient. The value is set EXCLUSIVELY through the
+                      <code>--rating</code> variable (0–5, fractions allowed)
+                      — there's no class-based equivalent.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">--star-color</code> / <code>--star-bg</code></td>
+                    <td data-label="What it does">Color of the filled and empty part of the stars. Defaults are <code>--warning</code> and <code>--border-color</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">--star-size</code></td>
+                    <td data-label="What it does">Size of a single star (16px by default) — scales the component's whole width (<code>--star-size × 5</code>).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.product-swatches</code></td>
+                    <td data-label="What it does">A row of color circles, <code>flex-wrap</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.swatch</code></td>
+                    <td data-label="What it does">
+                      A 24px circle. Color via inline
+                      <code>style="background-color:…"</code> — there's no set
+                      of ready-made color classes (a product's palette is
+                      arbitrary, not limited to the theme's palette).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.swatch.is-active</code></td>
+                    <td data-label="What it does">Outer <code>--primary</code> outline. Apply it manually in HTML or with your own JS — the shop module doesn't manage this.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. CART                                               -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Cart</h2>
+            <p class="text-muted mb-4">
+              A cart row with a built-in quantity controller. The +/- buttons
+              are handled by the same module as the gallery — it respects the
+              field's <code>min</code> and <code>max</code> attributes.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;div class="cart-item"&gt;
+  &lt;img src="product.jpg" alt="Product" class="cart-item-img"&gt;
+
+  &lt;div class="cart-item-info"&gt;
+    &lt;a href="#" class="fw-bold text-decoration-none"&gt;Product name&lt;/a&gt;
+  &lt;/div&gt;
+
+  &lt;div class="cart-item-controls"&gt;
+    &lt;div class="qty-input"&gt;
+      &lt;button class="qty-btn"&gt;-&lt;/button&gt;
+      &lt;input type="number" class="qty-val" value="1" min="1" max="99"&gt;
+      &lt;button class="qty-btn"&gt;+&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="fw-black text-6"&gt;$49.00&lt;/div&gt;
+    &lt;button class="btn-action text-danger" aria-label="Remove"&gt;&amp;times;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.cart-item</code></td>
+                    <td data-label="What it does">The row. Flexbox, <code>flex-wrap</code> — on narrow screens elements wrap instead of squeezing together.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.cart-item-img</code></td>
+                    <td data-label="What it does">An 80×80px thumbnail, <code>object-fit: cover</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.cart-item-info</code></td>
+                    <td data-label="What it does"><code>flex-grow: 1</code> — takes up the remaining space, pushing prices and controls to the right.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.cart-item-controls</code></td>
+                    <td data-label="What it does">The group: quantity controller + price + remove.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.qty-input</code></td>
+                    <td data-label="What it does">
+                      Wrapper for the controller. Height is forced to
+                      <code>--target-size-min</code> (44px, the B2B rule) —
+                      regardless of the button sizes inside.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.qty-btn</code></td>
+                    <td data-label="What it does">
+                      A +/- button. JS treats the
+                      <strong>first</strong> <code>.qty-btn</code> as minus,
+                      the <strong>last</strong> one as plus — DOM order
+                      matters here, see the pitfall below.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.qty-val</code></td>
+                    <td data-label="What it does">
+                      The number field between the buttons. It must be
+                      <code>type="number"</code> with a <code>min</code>
+                      attribute (and optionally <code>max</code>) — that's
+                      where JS reads the limits from. The browser's native
+                      spinner is hidden.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. SELECTION TILES                                    -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Selection tiles</h2>
+            <p class="text-muted mb-4">
+              For picking a delivery or payment method at checkout. A hidden
+              native <code>input[radio]</code>/<code>[checkbox]</code>
+              controls the look of the adjacent <code>.tile-content</code> —
+              zero JavaScript, selection and form validation work natively.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;label class="selection-tile"&gt;
+  &lt;input type="radio" name="delivery" value="standard" checked&gt;
+  &lt;div class="tile-content"&gt;
+    &lt;span class="fw-bold"&gt;Standard shipping&lt;/span&gt;
+    &lt;span class="text-primary fw-bold"&gt;$12.99&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/label&gt;
+
+&lt;!-- Variant with an animated border on selection --&gt;
+&lt;label class="selection-tile selection-tile-animated"&gt;
+  &lt;input type="radio" name="payment" value="blik"&gt;
+  &lt;div class="tile-content hover-border-trace"&gt;
+    &lt;span class="fw-bold"&gt;BLIK&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/label&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.selection-tile</code></td>
+                    <td data-label="What it does">
+                      On a <code>&lt;label&gt;</code>. The input inside is
+                      visually hidden (not <code>display: none</code>, so it
+                      stays in the accessibility tree and keyboard flow).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.tile-content</code></td>
+                    <td data-label="What it does">
+                      The tile's visible content.
+                      <strong>Must be a direct sibling</strong>
+                      of the input — the CSS rule targets it via
+                      <code>:checked + .tile-content</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.selection-tile-animated</code></td>
+                    <td data-label="What it does">
+                      On a <code>&lt;label&gt;</code>, alongside
+                      <code>.selection-tile</code>. Disables the immediate
+                      border change, handing the selection effect off to the
+                      <code>.hover-border-trace</code> (or <code>-2</code>)
+                      class added to <code>.tile-content</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PITFALLS                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Pitfalls</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="eshop-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>A thumbnail without <code>data-large</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    The JS module reads the large photo exclusively from the
+                    <code>data-large</code> attribute on the
+                    <code>&lt;img&gt;</code> inside the thumbnail. Without it,
+                    clicking a <code>.gallery-thumb</code> does nothing — no
+                    console error, the <code>if (newSrc)</code> check just
+                    never passes.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="eshop-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">2</span>
+                  <span>Thumbnail state isn't set automatically</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    The module only wires up click listeners — it doesn't run
+                    a startup pass over the photos. If you don't manually mark
+                    the first thumbnail as <code>.is-active</code> in the
+                    HTML, and the rest as <code>.opacity-50</code>, every
+                    thumbnail will look identical until the first click.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="eshop-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">3</span>
+                  <span>More than two <code>.qty-btn</code>s inside a <code>.qty-input</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    JS treats <code>:first-child</code> as minus and
+                    <code>:last-child</code> as plus. An extra button (e.g. a
+                    "Buy now" button dropped into the same container) throws
+                    this pair off — the third element becomes the new "plus",
+                    and the actual plus button stops working. Keep exactly two
+                    <code>.qty-btn</code>s and one <code>.qty-val</code>
+                    inside <code>.qty-input</code>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="eshop-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">4</span>
+                  <span><code>.product-list-view</code> on the wrong element</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    The class must land on the container
+                    <strong>surrounding</strong> the cards (e.g.
+                    <code>.grid-auto</code>), not on a single
+                    <code>.product-card</code>. The SCSS selectors are of the
+                    form <code>.product-list-view .product-card</code> —
+                    nothing changes on the card itself.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. RELATED                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">8. Related pages</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-product-cards.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: product cards</h5>
+                  <p class="text-4 text-muted m-0">Grid and list view side by side.</p>
+                </div>
+              </a>
+              <a href="docs-buttons.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Buttons &amp; Badges</h5>
+                  <p class="text-4 text-muted m-0"><code>.badge</code> variants used in <code>.product-badges</code>.</p>
+                </div>
+              </a>
+              <a href="docs-forms.en.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Forms &amp; Validation</h5>
+                  <p class="text-4 text-muted m-0">The rest of the checkout form fields.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Bottom navigation -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-widgets.en.html" class="btn-secondary"
+              >➔ Back: Widgets</a
+            >
+            <a
+              href="docs-blog.en.html"
+              class="btn-primary fw-bold hover-spring"
+              >Next step: Blog &amp; Articles ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
