@@ -423,7 +423,14 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   którego faktycznie kompiluje się `_admin-layout.scss`) oraz ten sam
   artefakt Sass co wcześniej przy `_grid-expand.scss` (komentarz `/* */`
   przed listą selektorów z `&` tworzył pusty blok w wyjściowym CSS —
-  naprawione przez `//`).
+  naprawione przez `//`). Udokumentowane na `docs-admin.html`: nowy
+  callout „Anti-FOUC: skrypt w `<head>` jest obowiązkowy" w sekcji 2
+  (Przełącznik szerokości sidebara) i nowa pułapka nr 6 w sekcji 7 — dla
+  kogoś, kto wdraża sam przycisk `#molique-sidebar-toggle` poza tym
+  projektem (bez `partials/head.html`) i mógłby nie wiedzieć o wymaganym
+  towarzyszącym skrypcie. Wpis dodany też do `changelog.html` (kategoria
+  „Poprawki", w bieżącym wydaniu v1.7.0) i `changelog.html.md`
+  zregenerowany.
 
 ### Do zrobienia później
 - **i18n: `posthtml-include` + `posthtml-expressions`** — użytkownik sam

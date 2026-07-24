@@ -522,6 +522,47 @@
                     treści dodatkowo przełącza switch.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Sidebar i motyw „skakały" przy przeładowaniu strony
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <code>molique-theme</code> i
+                    <code>molique-sidebar-state</code> z
+                    <code>localStorage</code> były odczytywane wyłącznie na
+                    <code>DOMContentLoaded</code> w <code>molique-script.js</code>
+                    — czyli PO pierwszym renderze przeglądarki. Powracający
+                    użytkownik ze zwężonym sidebarem (<code>.sidebar-md</code>/
+                    <code>.sidebar-sm</code>) lub ciemnym motywem widział więc
+                    na ułamek sekundy domyślny stan (pełny sidebar, jasny
+                    motyw), zanim się przełączał.
+                  </li>
+                  <li>
+                    Naprawa: mały, <strong>synchroniczny</strong> inline
+                    <code>&lt;script&gt;</code> na samej górze
+                    <code>&lt;head&gt;</code>, ustawiający
+                    <code>data-theme</code> i klasę <code>sidebar-md</code>/
+                    <code>sidebar-sm</code> bezpośrednio na
+                    <code>&lt;html&gt;</code> przed pierwszym malowaniem,
+                    wsparty lustrzanymi regułami CSS
+                    (<code>:root.sidebar-md</code>/
+                    <code>:root.sidebar-sm</code>) w
+                    <code>_admin-layout.scss</code>.
+                  </li>
+                  <li>
+                    Istniejąca logika w <code>molique-script.js</code> (klik
+                    przełącznika, zapis do <code>localStorage</code>) została
+                    bez zmian — poprawka jest czysto addytywna. Zweryfikowana
+                    z całkowicie zablokowanym <code>molique-script.js</code>:
+                    strona i tak renderuje się od razu poprawnie.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>
@@ -2059,4 +2100,5 @@
     <script src="js/molique-script.js" defer></script>
   </body>
 </html>
+
 ```

@@ -210,6 +210,30 @@
                 </tbody>
               </table>
             </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Anti-FOUC: skrypt w &lt;head&gt; jest obowiązkowy</h5>
+              <p class="text-4 text-muted m-0">
+                Wybór szerokości zapisuje się w <code>localStorage</code>, ale
+                <code>molique-script.js</code> odczytuje go dopiero na
+                <code>DOMContentLoaded</code> — czyli PO pierwszym renderze.
+                Bez dodatkowego kroku powracający użytkownik ze skurczonym
+                sidebarem zobaczy go najpierw w pełnej szerokości, a dopiero
+                potem zwężony. Rozwiązanie: mały, <strong>synchroniczny</strong>
+                (bez <code>defer</code>/<code>async</code>) skrypt na samej
+                górze <code>&lt;head&gt;</code>, który czyta
+                <code>localStorage</code> i ustawia klasę <code>sidebar-md</code>
+                / <code>sidebar-sm</code> bezpośrednio na <code>&lt;html&gt;</code>,
+                zanim przeglądarka narysuje cokolwiek — ten sam mechanizm
+                ustawia też <code>data-theme</code> dla motywu jasny/ciemny.
+                W tym projekcie skrypt siedzi w <code>partials/head.html</code>
+                i trafia do każdej strony automatycznie; w nowym wdrożeniu
+                musisz go skopiować ręcznie razem z lustrzanymi regułami CSS
+                (<code>:root.sidebar-md</code> / <code>:root.sidebar-sm</code>
+                w <code>_admin-layout.scss</code>) — bez nich sam zapis do
+                <code>localStorage</code> nic nie da.
+              </p>
+            </div>
           </section>
 
           <!-- ===================================================== -->
@@ -607,6 +631,28 @@
                     <code>.chart-radial</code>…) działa bez tego pliku, lejki
                     nie. Pełna referencja lejków jest w
                     <a href="docs-charts.html">dokumentacji wykresów</a>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="admin-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">6</span>
+                  <span>Kopiujesz tylko przycisk przełącznika i sidebar „skacze" przy przeładowaniu</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    <code>#molique-sidebar-toggle</code> zapisuje stan do
+                    <code>localStorage</code>, ale sam z siebie nie zapobiega
+                    migotaniu — to zadanie synchronicznego inline-skryptu w
+                    <code>&lt;head&gt;</code> opisanego w sekcji 2 wyżej. Jeśli
+                    wdrażasz sidebar poza tym projektem (bez
+                    <code>partials/head.html</code>), a zapomnisz przenieść ten
+                    skrypt razem z lustrzanymi regułami
+                    <code>:root.sidebar-md</code>/<code>:root.sidebar-sm</code>
+                    w <code>_admin-layout.scss</code>, powracający użytkownik
+                    zobaczy pełny sidebar przez ułamek sekundy, zanim skurczy
+                    się do zapamiętanej szerokości.
                   </p>
                 </div>
               </details>
