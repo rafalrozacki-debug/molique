@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Navigation & Menus - molique Docs","description":"molique navigation components reference: navbar and its overlay variants, JS-free offcanvas, mega menu, dropdown, pagination. Full class tables, CSS variables and pitfalls."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SIDEBAR -->
+      <include src="partials/docs-sidebar.en.html"></include>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Navigation &amp; Menus</h1>
+            <p class="text-6 text-muted">
+              Ten navigation components — besides the theme switch and
+              scroll-to-top, every one of them works without JavaScript.
+              This page explains the mechanisms and lists the classes;
+              ready-made blocks to copy are in the
+              <a href="examples-navbar.html">examples</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. WHAT TO CHOOSE                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. What to choose</h2>
+            <p class="text-muted mb-4">
+              Every component below is an independent SCSS module — if you
+              don't use one, simply don't load it into your bundle.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Component</th>
+                    <th>What for</th>
+                    <th>What it's built on</th>
+                    <th>Examples</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Component"><code>.navbar</code></td>
+                    <td data-label="What for">The page's main bar.</td>
+                    <td data-label="What it's built on">Flexbox</td>
+                    <td data-label="Examples"><a href="examples-navbar.html">navbar</a></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.navbar-menu-offcanvas</code></td>
+                    <td data-label="What for">A side-sliding menu on mobile.</td>
+                    <td data-label="What it's built on">Checkbox Hack</td>
+                    <td data-label="Examples"><a href="examples-navbar.html">navbar</a></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.mega-menu</code></td>
+                    <td data-label="What for">A wide, multi-column menu.</td>
+                    <td data-label="What it's built on">
+                      <code>&lt;details&gt;</code> + Anchor Positioning
+                    </td>
+                    <td data-label="Examples"><a href="examples-mega-menu.html">mega menu</a></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.dropdown</code></td>
+                    <td data-label="What for">A narrow menu below a button.</td>
+                    <td data-label="What it's built on">
+                      <code>&lt;details&gt;</code> or the Popover API
+                    </td>
+                    <td data-label="Examples"><a href="examples-dropdown.html">dropdown</a></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.breadcrumb</code></td>
+                    <td data-label="What for">A path back through the hierarchy.</td>
+                    <td data-label="What it's built on">Flexbox</td>
+                    <td data-label="Examples">
+                      <a href="examples-hero-sections.html">hero sections</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.pagination</code></td>
+                    <td data-label="What for">Paging through result pages.</td>
+                    <td data-label="What it's built on">Flexbox</td>
+                    <td data-label="Examples"><a href="examples-pagination.html">pagination</a></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.topbar</code></td>
+                    <td data-label="What for">A narrow bar above the navbar (contact, language).</td>
+                    <td data-label="What it's built on">Flexbox</td>
+                    <td data-label="Examples"><a href="examples-navbar.html">navbar</a></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.language-switch</code></td>
+                    <td data-label="What for">A language switcher with flags.</td>
+                    <td data-label="What it's built on">Popover API</td>
+                    <td data-label="Examples">
+                      <a href="examples-language-switch.html">language switch</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.theme-switch</code></td>
+                    <td data-label="What for">A light/dark theme switch.</td>
+                    <td data-label="What it's built on">Checkbox + JS</td>
+                    <td data-label="Examples"><a href="examples-navbar.html">navbar</a></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.scroll-to-top</code></td>
+                    <td data-label="What for">Return to the top of a long page.</td>
+                    <td data-label="What it's built on">JS (visibility)</td>
+                    <td data-label="Examples">
+                      <a href="examples-misc-widgets.html">widgets</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. NAVBAR - STRUCTURE                                 -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Navbar — structure</h2>
+            <p class="text-muted mb-4">
+              Three levels of nesting and nothing more:
+              <code>&lt;nav class="navbar"&gt;</code> wraps
+              <code>.navbar-container</code> (that's what constrains the
+              content width), and inside sit the brand and the menu. The
+              bar's height lives in the <code>--navbar-h</code> variable,
+              since other components reference it too — including the
+              admin panel's sidebar.
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;nav class="navbar"&gt;
+  &lt;div class="container navbar-container"&gt;
+    &lt;a href="/" class="navbar-brand"&gt;Logo&lt;/a&gt;
+    &lt;div class="navbar-menu"&gt;
+      &lt;a href="/offer" class="navbar-item"&gt;Offer&lt;/a&gt;
+      &lt;a href="/contact" class="navbar-item"&gt;Contact&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 p-0 bg-light">
+                <nav class="navbar w-100">
+                  <div class="container navbar-container">
+                    <a href="#" class="navbar-brand">Logo</a>
+                    <div class="navbar-menu d-none d-md-flex">
+                      <a href="#" class="navbar-item is-active">Offer</a>
+                      <a href="#" class="navbar-item">Portfolio</a>
+                      <a href="#" class="navbar-item">Contact</a>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>On</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar</code></td>
+                    <td data-label="On"><code>&lt;nav&gt;</code></td>
+                    <td data-label="What it does">
+                      The bar: background, shadow, height <code>--navbar-h</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-container</code></td>
+                    <td data-label="On"><code>&lt;div&gt;</code> inside the navbar</td>
+                    <td data-label="What it does">
+                      Spreads the brand and menu to opposite edges. Combine
+                      with <code>.container</code> to cap the width.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-brand</code></td>
+                    <td data-label="On"><code>&lt;a&gt;</code></td>
+                    <td data-label="What it does">Logo or name. Usually links to the homepage.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-menu</code></td>
+                    <td data-label="On"><code>&lt;div&gt;</code></td>
+                    <td data-label="What it does">The link container. Its presence activates the active-item highlighting module.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-item</code></td>
+                    <td data-label="On"><code>&lt;a&gt;</code></td>
+                    <td data-label="What it does">
+                      A single link. Has <code>min-height: 44px</code> —
+                      the touch-target requirement.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-sticky</code></td>
+                    <td data-label="On"><code>&lt;nav&gt;</code></td>
+                    <td data-label="What it does">
+                      Pins the bar to the top on scroll.
+                      <strong>Don't combine it with the overlay
+                      variants</strong> — see pitfall #1.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.logo-light</code> / <code class="fw-bold">.logo-dark</code></td>
+                    <td data-label="On"><code>&lt;img&gt;</code> inside the brand</td>
+                    <td data-label="What it does">
+                      A pair of logos — the framework shows whichever matches the theme.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.is-active</code></td>
+                    <td data-label="On"><code>.navbar-item</code></td>
+                    <td data-label="What it does">
+                      The current page. <strong>Don't write it into the
+                      markup</strong> — see section 6.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.is-scrolled</code></td>
+                    <td data-label="On"><code>&lt;nav&gt;</code></td>
+                    <td data-label="What it does">
+                      Applied by JS after scrolling. You never set it yourself.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.is-hidden</code></td>
+                    <td data-label="On"><code>.navbar-sticky</code></td>
+                    <td data-label="What it does">
+                      Hides the pinned bar upward when scrolling down. Also applied by JS.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. OVERLAY VARIANTS                                   -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Overlay variants</h2>
+            <p class="text-muted mb-4">
+              Two variants place the navbar <strong>on</strong> the content
+              instead of above it, so a hero photo can start at the very
+              top of the window. Both work the same way:
+              <code>position: absolute</code> over the hero, and once
+              scrolled JS applies <code>.is-scrolled</code>, which switches
+              the bar to <code>position: fixed</code> with the theme's background.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Look over the hero</th>
+                    <th>After scrolling</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-transparent</code></td>
+                    <td data-label="Look over the hero">No background, white links.</td>
+                    <td data-label="After scrolling">Theme background, bar flush against the edge.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-pill</code></td>
+                    <td data-label="Look over the hero">
+                      A pill pulled away from the edge, with its own dark background.
+                    </td>
+                    <td data-label="After scrolling">
+                      Unfolds into a regular bar flush against the edge.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Pill variables</h3>
+            <p class="text-muted mb-3">
+              The pill has <strong>separate variables for each state</strong>,
+              not one shared set. This isn't an oversight: an inline style
+              beats a class rule, so one shared variable set via
+              <code>style="…"</code> would lock the second state forever.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Variable</th>
+                    <th>Default</th>
+                    <th>Controls</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--navbar-pill-bg</code></td>
+                    <td data-label="Default">dark</td>
+                    <td data-label="Controls">Background over the hero. Dark even in the light theme — it sits on a photo.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--navbar-pill-color</code></td>
+                    <td data-label="Default">white</td>
+                    <td data-label="Controls">Link color over the hero.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--navbar-pill-bg-scrolled</code></td>
+                    <td data-label="Default">theme background</td>
+                    <td data-label="Controls">Background after scrolling.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--navbar-pill-color-scrolled</code></td>
+                    <td data-label="Default">theme text</td>
+                    <td data-label="Controls">Link color after scrolling.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--navbar-pill-padding-x</code></td>
+                    <td data-label="Default"><code>32px</code></td>
+                    <td data-label="Controls">How far the pill sits from the window edge.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--navbar-pill-padding-x-scrolled</code></td>
+                    <td data-label="Default"><code>16px</code></td>
+                    <td data-label="Controls">Offset after scrolling.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;nav class="navbar navbar-pill" style="
+       --navbar-pill-bg: #4c1d95;
+       --navbar-pill-bg-scrolled: #1e293b;
+       --navbar-pill-color-scrolled: #fff;"&gt;
+  &lt;div class="container navbar-container"&gt;…&lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;!-- The navbar is out of flow, so push the content below it down --&gt;
+&lt;header style="padding-top: calc(var(--navbar-h) + 4rem)"&gt;…&lt;/header&gt;</code></pre>
+            </div>
+
+            <p class="text-4 text-muted">
+              Both variants in action:
+              <a href="examples-navbar.html">navbar examples</a>.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. OFFCANVAS                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Offcanvas (mobile menu)</h2>
+            <p class="text-muted mb-4">
+              A menu sliding in from the side of the screen, <strong>with no
+              line of JavaScript</strong>. The whole mechanism is a hidden
+              checkbox: the hamburger and the backdrop are labels
+              (<code>&lt;label for&gt;</code>) for the same field, and CSS
+              reacts to <code>:checked</code>.
+            </p>
+            <p class="text-muted mb-4">
+              That's where the one hard requirement comes from: <strong>the
+              checkbox must be a sibling</strong> of the hamburger and the
+              menu, i.e. sit inside <code>.navbar-container</code>. CSS
+              selectors can only reach "sideways and downward" — if you
+              move the checkbox before <code>&lt;nav&gt;</code>, the menu
+              stops opening.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>On</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-offcanvas-toggle</code></td>
+                    <td data-label="On"><code>&lt;input type="checkbox"&gt;</code></td>
+                    <td data-label="What it does">
+                      The hidden toggle — the menu's open state. Requires an <code>id</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-toggle</code></td>
+                    <td data-label="On"><code>&lt;label for&gt;</code></td>
+                    <td data-label="What it does">
+                      The hamburger. Contains three empty
+                      <code>&lt;span&gt;</code>s — those are the icon's lines.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-offcanvas-backdrop</code></td>
+                    <td data-label="On"><code>&lt;label for&gt;</code></td>
+                    <td data-label="What it does">
+                      The dimmed backdrop. Since it's a label, clicking it
+                      closes the menu too — also with no JS.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.navbar-menu-offcanvas</code></td>
+                    <td data-label="On"><code>.navbar-menu</code></td>
+                    <td data-label="What it does">
+                      Turns the menu into a panel that slides in from the side on mobile.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-4 text-muted">
+              Complete markup to copy:
+              <a href="examples-navbar.html">navbar examples</a>.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. DROPDOWN MENUS                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Dropdown menus</h2>
+            <p class="text-muted mb-4">
+              The mega menu and dropdown are built on native
+              <code>&lt;details&gt;</code>: <code>&lt;summary&gt;</code> is
+              the button, and the sibling below is the panel. That's what
+              makes them open <strong>on click, not on hover</strong>, so
+              keyboard support works with nothing extra added.
+            </p>
+            <p class="text-muted mb-4">
+              Closing on a click outside the panel is an invisible,
+              full-screen "cover" present only while
+              <code>&lt;details&gt;</code> is open — the click lands on it,
+              it forwards the click to <code>&lt;summary&gt;</code>, and
+              that natively closes the panel.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">
+                A <code>name</code> attribute instead of a script
+              </h5>
+              <p class="text-4 text-muted m-0">
+                Give every menu in one bar the same
+                <code>name="nav-mega"</code>, and the browser will make sure
+                at most one stays open. With a single instance you won't
+                see the effect — it only kicks in from the second one on.
+              </p>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;details class="mega-menu" name="nav-mega"&gt;
+  &lt;summary class="navbar-item mega-menu-trigger"&gt;Components&lt;/summary&gt;
+  &lt;div class="mega-menu-content"&gt;
+    &lt;div class="mega-menu-group"&gt;
+      &lt;h6 class="mega-menu-col-title"&gt;Category&lt;/h6&gt;
+      &lt;a href="#" class="mega-menu-link"&gt;Link&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/details&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu</code></td>
+                    <td data-label="What it does">On <code>&lt;details&gt;</code>. The whole component.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu-trigger</code></td>
+                    <td data-label="What it does">
+                      On <code>&lt;summary&gt;</code>. Combine with
+                      <code>.navbar-item</code> so it looks like the rest of the links.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu-content</code></td>
+                    <td data-label="What it does">The panel. Anchors itself to the trigger via Anchor Positioning.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu-group</code></td>
+                    <td data-label="What it does">A column inside the panel.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu-col-title</code></td>
+                    <td data-label="What it does">The column's heading.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu-col-icon</code></td>
+                    <td data-label="What it does">An icon next to the column heading.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu-link</code></td>
+                    <td data-label="What it does">A link within a column.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.mega-menu-featured</code></td>
+                    <td data-label="What it does">
+                      A highlighted promo block in the panel. Inside:
+                      <code>.mega-menu-featured-icon</code>,
+                      <code>.mega-menu-featured-title</code>,
+                      <code>.mega-menu-featured-text</code>,
+                      <code>.mega-menu-featured-link</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.dropdown</code></td>
+                    <td data-label="What it does">
+                      On <code>&lt;details&gt;</code>. The mega menu's narrow counterpart.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.dropdown-toggle</code></td>
+                    <td data-label="What it does">On <code>&lt;summary&gt;</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.dropdown-menu</code></td>
+                    <td data-label="What it does">The panel with the items.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.dropdown-item</code></td>
+                    <td data-label="What it does">A single item.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.dropdown-menu-end</code></td>
+                    <td data-label="What it does">Aligns the panel to the button's right edge.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h5 class="fw-bold text-5 mb-2">Dropdowns outside the navbar</h5>
+              <p class="text-4 text-muted m-0">
+                Inside a table, card, or modal, <code>overflow</code> will
+                clip a panel built on <code>&lt;details&gt;</code>. Use the
+                Popover-API variant instead: a plain
+                <code>&lt;button popovertarget="ID"&gt;</code> plus a
+                <code>.dropdown-menu</code> with a <code>popover</code>
+                attribute and that same <code>id</code>. The panel lands in
+                the top layer, so nothing clips it, and it anchors itself
+                to the button automatically — with no <code>.dropdown</code>
+                wrapper needed.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. THE REST OF THE COMPONENTS                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. The rest of the components</h2>
+            <p class="text-muted mb-4">
+              Smaller navigation elements. Each one is its own SCSS module,
+              so you simply skip the ones you don't use in your bundle.
+            </p>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Pagination</h3>
+            <div class="component-code mb-3">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;ul class="pagination"&gt;
+  &lt;li class="page-item is-disabled"&gt;&lt;a class="page-link" href="#"&gt;Previous&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="page-item is-active"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;Next&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>Component</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.pagination</code></td>
+                    <td data-label="Component">Pagination</td>
+                    <td data-label="What it does">The list of pages. On a <code>&lt;ul&gt;</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.pagination-modern</code></td>
+                    <td data-label="Component">Pagination</td>
+                    <td data-label="What it does">A variant with spaced-out, separate buttons.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.page-item</code></td>
+                    <td data-label="Component">Pagination</td>
+                    <td data-label="What it does">
+                      An item (<code>&lt;li&gt;</code>). Variants:
+                      <code>.is-active</code> — the current page,
+                      <code>.is-disabled</code> — an unavailable step.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.page-link</code></td>
+                    <td data-label="Component">Pagination</td>
+                    <td data-label="What it does">The clickable <code>&lt;a&gt;</code> inside an item.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.breadcrumb</code></td>
+                    <td data-label="Component">Breadcrumbs</td>
+                    <td data-label="What it does">The path back. On an <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.breadcrumb-item</code></td>
+                    <td data-label="Component">Breadcrumbs</td>
+                    <td data-label="What it does">
+                      A link in the chain; CSS draws the separator.
+                      <code>.is-active</code> marks the current location.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.topbar</code></td>
+                    <td data-label="Component">Top bar</td>
+                    <td data-label="What it does">A narrow bar above the navbar — phone, email, language.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.topbar-content</code></td>
+                    <td data-label="Component">Top bar</td>
+                    <td data-label="What it does">Spreads its content to the bar's edges.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.topbar-list</code></td>
+                    <td data-label="Component">Top bar</td>
+                    <td data-label="What it does">A horizontal list of items with no bullets.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.scroll-to-top</code></td>
+                    <td data-label="Component">Scroll to top</td>
+                    <td data-label="What it does">
+                      A corner button. JS applies <code>.is-visible</code>
+                      after scrolling — you never set it yourself.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.progress-container-fixed</code></td>
+                    <td data-label="Component">Reading bar</td>
+                    <td data-label="What it does">The progress bar's track, pinned to the top of the window.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.progress-bar-reading</code></td>
+                    <td data-label="Component">Reading bar</td>
+                    <td data-label="What it does">
+                      The fill showing reading progress. Controlled by scroll.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Language switch</h3>
+            <p class="text-muted mb-3">
+              Built on the Popover API, so the list lands in the top layer
+              and can't be clipped. <strong>Flags only as SVG files</strong>
+              from <code>img/flags/</code> — emoji don't render on Windows,
+              and an external sprite won't work over <code>file://</code>.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.language-switch</code></td>
+                    <td data-label="What it does">The component's wrapper.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.language-switch-trigger</code></td>
+                    <td data-label="What it does">
+                      The button with <code>popovertarget</code> — flag and language code.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.language-switch-menu</code></td>
+                    <td data-label="What it does">
+                      The list of languages. Combine with
+                      <code>.dropdown-menu</code> and the
+                      <code>popover</code> attribute.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.language-switch-item</code></td>
+                    <td data-label="What it does">A single language; also <code>.dropdown-item</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.language-switch-flag</code></td>
+                    <td data-label="What it does">The flag as an <code>&lt;img&gt;</code> from <code>img/flags/</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.language-switch-name</code></td>
+                    <td data-label="What it does">The language's name next to the flag.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.language-switch-check</code></td>
+                    <td data-label="What it does">The mark next to the currently selected language.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Theme switch</h3>
+            <p class="text-muted mb-3">
+              A light/dark slider, in practice always a neighbor of the
+              language switch in the navbar — that's why it's described
+              here rather than among the forms. Underneath it's a plain
+              <code>&lt;input type="checkbox"&gt;</code> wrapped in a
+              <code>&lt;label&gt;</code>, so the keyboard works natively.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h5 class="fw-bold text-5 mb-2">
+                <code>id="theme-toggle"</code> is mandatory
+              </h5>
+              <p class="text-4 text-muted m-0">
+                This is the only component in molique where a
+                <strong>specific <code>id</code> is part of the
+                contract</strong> — <code>molique-script.js</code> looks up
+                the element via
+                <code>getElementById('theme-toggle')</code>. Rename it or
+                duplicate it, and the switch stops working with no error
+                reported. For the same reason, a page can have
+                <strong>only one</strong>.
+              </p>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;label class="theme-switch" title="Switch theme"&gt;
+  &lt;input type="checkbox" id="theme-toggle" class="theme-switch-input"&gt;
+  &lt;div class="theme-switch-track"&gt;
+    &lt;span class="theme-switch-thumb"&gt;&lt;/span&gt;
+    &lt;div class="theme-icon-wrapper"&gt;
+      &lt;svg class="theme-icon icon-sun"&gt;…&lt;/svg&gt;
+      &lt;svg class="theme-icon icon-moon"&gt;…&lt;/svg&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/label&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.theme-switch</code></td>
+                    <td data-label="What it does">
+                      The wrapper, on a <code>&lt;label&gt;</code> — that's
+                      why clicking anywhere in it toggles the theme.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.theme-switch-input</code></td>
+                    <td data-label="What it does">
+                      The hidden checkbox holding the state. It's the one
+                      that needs <code>id="theme-toggle"</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.theme-switch-track</code></td>
+                    <td data-label="What it does">The slider's track — the visible bordered pill.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.theme-switch-thumb</code></td>
+                    <td data-label="What it does">The floating element that rides along the track.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.theme-icon-wrapper</code></td>
+                    <td data-label="What it does">The container for both icons inside the track.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.theme-icon</code></td>
+                    <td data-label="What it does">The shared icon style — size and transition.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-sun</code></td>
+                    <td data-label="What it does">The light-theme icon.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-moon</code></td>
+                    <td data-label="What it does">The dark-theme icon.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>What the script does</th>
+                    <th>Detail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="What it does">Remembers the choice</td>
+                    <td data-label="Detail">
+                      The <code>molique-theme</code> key in
+                      <code>localStorage</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="What it does">Respects the system setting</td>
+                    <td data-label="Detail">
+                      On the first visit it reads
+                      <code>prefers-color-scheme</code>. A saved user choice
+                      takes priority.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="What it does">Switches the theme</td>
+                    <td data-label="Detail">
+                      Sets <code>data-theme</code> on
+                      <code>&lt;html&gt;</code> — that's the only thing that
+                      distinguishes the themes.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="What it does">A smooth transition</td>
+                    <td data-label="Detail">
+                      The View Transitions API does a GPU cross-fade. Older
+                      browsers and
+                      <code>prefers-reduced-motion</code> get an instant switch.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. ACTIVE ITEM                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Active item</h2>
+            <p class="text-muted mb-4">
+              The navbar is usually a single file shared by every subpage,
+              so <strong>the current item can't be marked in the
+              markup</strong> — it would be marked identically everywhere.
+              This is handled by the
+              <code>js/modules/molique-navbar-active.js</code> module,
+              auto-loaded whenever a page has a <code>.navbar-menu</code>.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Gets <code>.is-active</code></th>
+                    <th>When</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Gets"><code>.navbar-item</code></td>
+                    <td data-label="When">When its <code>href</code> points to the current address.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Gets"><code>.dropdown-item</code>, <code>.mega-menu-link</code></td>
+                    <td data-label="When">The same — including inside dropdown panels.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Gets">A panel's <code>&lt;summary&gt;</code></td>
+                    <td data-label="When">
+                      When the active link is nested inside — you can see which branch you're in.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-4 text-muted m-0">
+              If the same page appears in several menus at once, every
+              instance gets highlighted. The admin panel's vertical
+              sidebar is handled by a separate module — see the
+              <a href="docs-admin.en.html">Admin Panel</a>.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. PITFALLS                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Pitfalls</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="nav-pulapki" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>An overlay plus <code>.navbar-sticky</code> = the overlay disappears</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    <code>.navbar-transparent</code> and
+                    <code>.navbar-pill</code> work because they're
+                    <strong>outside the document flow</strong>
+                    (<code>position: absolute</code>) — that's what lets
+                    content sit underneath them. <code>.navbar-sticky</code>
+                    does the opposite: it returns to the flow. It wins in
+                    the cascade, and the whole overlay effect disappears.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Copy</button>
+                    <pre><code>&lt;!-- WRONG - sticky cancels the overlay --&gt;
+&lt;nav class="navbar navbar-transparent navbar-sticky"&gt;
+
+&lt;!-- RIGHT - pinning after scroll is already built in --&gt;
+&lt;nav class="navbar navbar-transparent"&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="nav-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">2</span>
+                  <span>Content hides under an overlay navbar</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    Since the bar is out of flow, it doesn't reserve any
+                    space for itself — the page's first element will slide
+                    right under it. Intentional for a photo hero, not for a
+                    regular section. Push the content down by the bar's height.
+                  </p>
+                  <div class="component-code">
+                    <button class="btn-copy">Copy</button>
+                    <pre><code>&lt;header style="padding-top: calc(var(--navbar-h) + 4rem)"&gt;…&lt;/header&gt;</code></pre>
+                  </div>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="nav-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">3</span>
+                  <span>The offcanvas checkbox moved outside the container</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    It's tempting to drop the <code>&lt;input&gt;</code>
+                    before <code>&lt;nav&gt;</code> "so it doesn't get in
+                    the way". Then the menu stops opening and there's no
+                    visible error — nothing just happens. CSS links the
+                    checkbox to the menu with a sibling selector, so both
+                    must sit inside the same <code>.navbar-container</code>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="nav-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">4</span>
+                  <span><code>.is-active</code> hard-coded into the navbar markup</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    The navbar is often one file for the entire site. A
+                    hard-coded active item will be highlighted on every
+                    subpage — including the ones where you're somewhere
+                    else. Leave this to the module from section 6.
+                  </p>
+                  <p class="text-4 text-muted m-0">
+                    The same rule applies to the documentation sidebar
+                    you're reading right now — that's why it's a single
+                    partial with no <code>.is-active</code> in the code.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="nav-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>A dropdown clipped inside a table or a modal</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted mb-3">
+                    A panel built on <code>&lt;details&gt;</code> is a
+                    regular element in the tree, so
+                    <code>overflow: hidden</code> or
+                    <code>overflow: auto</code> on an ancestor will cut it
+                    off. This typically happens inside
+                    <code>.table-wrapper</code> and in modals. The fix is
+                    the Popover-API variant described in section 5 — the
+                    panel lands in the top layer, out of
+                    <code>overflow</code>'s reach.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 9. RELATED                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">9. Related pages</h2>
+            <div class="grid-cols-1 grid-md-cols-3 gap-3">
+              <a href="examples-navbar.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: navbar</h5>
+                  <p class="text-4 text-muted m-0">
+                    Ready-made bars, offcanvas, both overlay variants, topbar.
+                  </p>
+                </div>
+              </a>
+              <a href="examples-mega-menu.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">Examples: mega menu</h5>
+                  <p class="text-4 text-muted m-0">
+                    Multi-column layouts with a featured block.
+                  </p>
+                </div>
+              </a>
+              <a href="docs-variables.en.html" class="card hover-shadow">
+                <div class="card-body">
+                  <h5 class="fw-bold text-5 mb-2">CSS Variables</h5>
+                  <p class="text-4 text-muted m-0">
+                    The full reference, including every navbar variable.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Bottom navigation -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs-layout.en.html" class="btn btn-secondary"
+              >➔ Back: Grid &amp; Layout</a
+            >
+            <a
+              href="docs-sections.en.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Next step: Sections, Hero &amp; Timeline ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

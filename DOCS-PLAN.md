@@ -636,16 +636,45 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   nieprzetłumaczonej stronie (`docs-navbar.html`: przełącznik pokazuje
   wyłącznie PL) i pełnego przełącznika na przetłumaczonej (3 pozycje).
 
+- **i18n: `docs-navbar.html` i `docs-classes.html` przetłumaczone —
+  wszystkie 22 strony `docs-*.html` mają teraz komplet EN/DE.** Dwie
+  ostatnie, wcześniej odłożone jako zbyt duże na jedną falę (1072 i 2325
+  linii), zrobione na wyraźną prośbę użytkownika ("zrób 2 ostatnie strony
+  docs").
+  - `docs-navbar.html`: standardowa strona referencyjna, ten sam wzorzec co
+    reszta (navbar/sidebar `.en/.de.html`, linki wewnętrzne do już
+    przetłumaczonych stron zaktualizowane).
+  - `docs-classes.html`: anomalia strukturalna zauważona przy tłumaczeniu —
+    ta strona, w odróżnieniu od WSZYSTKICH innych `docs-*.html`, **nie
+    includuje `partials/navbar.html`** (zaczyna się od razu od
+    `.admin-layout` po `<body>`), więc nie ma na niej przełącznika
+    językowego w navbarze — zachowane bez zmian dla PL/EN/DE, to
+    przedistniejąca cecha strony, nie coś do naprawienia w ramach i18n.
+    Strona to głównie gigantyczna tabela-ściągawka (13 kategorii, ~180
+    wierszy) — nazwy klas CSS w `<span class="class-name">` i fragmenty
+    `<code>` (składnia, nazwy zmiennych) zostawione bez zmian, tłumaczona
+    wyłącznie opisowa treść w komórkach `text-muted` oraz tekst w żywych
+    podglądach komponentów (np. „Przycisk"→„Button"/„Button", „Najedź"→„Hover
+    me"/„Hovern"). `<html data-theme="light">` (hardkodowany atrybut na tej
+    jednej stronie) zachowany bez zmian w obu wariantach.
+  - `docs-sidebar.en.html`/`.de.html`: dwa ostatnie linki wskazujące PL
+    zaktualizowane na `.en.html`/`.de.html` — sidebar dokumentacji ma teraz
+    100% linków w języku strony, zero świadomych wyjątków.
+  - Zweryfikowane pełnym `npm run build` (zero błędów) i Playwrightem: obie
+    strony × oba języki — `html[lang]`, `hreflang`, przełącznik (3 pozycje
+    na `docs-navbar`), liczba wierszy/kategorii w tabeli `docs-classes`
+    (176 wierszy, 13 kategorii — identyczna w PL/EN/DE), zachowanie nazwy
+    klasy `.btn-primary` w treści.
+
 ### Do zrobienia później
-- **i18n: `docs-navbar.html` i `docs-classes.html`** — dwie bardzo duże
-  strony referencyjne (1072 i 2325 linii), świadomie odłożone przez
-  użytkownika. Po nich zostają wyłącznie: ~58 stron `examples-*.html`,
-  `download.html`, `blog.html`, `404.html`, `starter.html`,
-  `theme-editor.html`, `builder.html`, oraz `changelog.html` i
-  `docs-roadmap.html` (użytkownik potwierdził, że mają zostać
-  przetłumaczone mimo kosztu utrzymania 3 wersji przy każdej zmianie —
-  świadoma decyzja, nadpisująca moją rekomendację "zostaw tylko PL").
-  Kolejność priorytetowa do ustalenia z użytkownikiem, gdy wróci do tematu.
+- **i18n: pozostały zakres** — po dokończeniu wszystkich 22 stron
+  `docs-*.html` zostają: ~58 stron `examples-*.html`, `download.html`,
+  `blog.html`, `404.html`, `starter.html`, `theme-editor.html`,
+  `builder.html`, oraz `changelog.html` (użytkownik potwierdził wcześniej,
+  że ma zostać przetłumaczony mimo kosztu utrzymania 3 wersji przy każdej
+  zmianie — świadoma decyzja, nadpisująca moją rekomendację "zostaw tylko
+  PL"; `docs-roadmap.html` już zrobiony, patrz wpis wyżej w tej samej
+  fali). Kolejność priorytetowa do ustalenia z użytkownikiem, gdy wróci do tematu.
 - **Lightbox i karuzela — dalsze dopracowanie** zapowiedziane przez
   użytkownika na później, poza tym, co już naprawiono przy
   `docs-components-extra` (Background Sync, klawiatura w lightboksie).

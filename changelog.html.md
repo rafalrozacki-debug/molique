@@ -803,6 +803,44 @@
                     udokumentowana komentarzem w plikach.
                   </li>
                 </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  i18n: komplet — wszystkie 22 strony <code>docs-*.html</code> po angielsku i niemiecku
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Dwie ostatnie, wcześniej odłożone strony
+                    dokończone:</strong> <code>docs-navbar.html</code> (1072
+                    linii, wzorzec bez odstępstw) i
+                    <code>docs-classes.html</code> (2325 linii, ogromna
+                    tabela-ściągawka klas CSS w 13 kategoriach). Cała
+                    dokumentacja referencyjna frameworka ma teraz komplet
+                    wersji językowych.
+                  </li>
+                  <li>
+                    <strong><code>docs-classes.html</code> ma inną
+                    strukturę niż reszta docs</strong> — jako jedyna nie
+                    includuje <code>partials/navbar.html</code>, więc nie
+                    ma na niej przełącznika języka w pasku górnym; zachowane
+                    identycznie w PL/EN/DE, to cecha strony sprzed i18n, nie
+                    coś do naprawienia. Tłumaczeniu podlegała wyłącznie
+                    opisowa treść komórek tabeli i tekst w żywych
+                    podglądach komponentów — nazwy klas CSS
+                    (<code>.btn-primary</code> itd.) i kod w
+                    <code>&lt;code&gt;</code> zostały bez zmian, tak jak
+                    wszędzie indziej w dokumentacji.
+                  </li>
+                  <li>
+                    <strong>Sidebar dokumentacji domknięty:</strong> dwa
+                    ostatnie linki w <code>docs-sidebar.en.html</code>/<code>.de.html</code>,
+                    które celowo wskazywały na polskie strony, przełączone
+                    na <code>.en.html</code>/<code>.de.html</code> — zero
+                    świadomych wyjątków, cały sidebar linkuje w języku strony.
+                  </li>
+                </ul>
               </div>
             </div>
           </li>
