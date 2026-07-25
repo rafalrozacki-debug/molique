@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Language Switch - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Language Switch</h1>
+            <p class="text-6 text-muted">
+              Ein pillenförmiges Sprachauswahlmenü — der Auslöser öffnet das
+              Menü als Popover im Top Layer (dasselbe Muster wie beim
+              Dropdown Popover), null JavaScript. Flaggen sind winzige
+              SVG-Dateien aus <code>img/flags/</code> — Emoji-Flaggen werden
+              unter Windows nicht angezeigt.
+            </p>
+          </div>
+
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Sprachumschalter</h3>
+            <p class="text-muted mb-4">
+              Der Auslöser zeigt die Flagge und den Code der aktiven Sprache.
+              Die Liste öffnet sich von der rechten Kante
+              (<code>.dropdown-menu-end</code>), funktioniert also sicher als
+              letztes Element in der Navbar. Die aktive Position hat ein
+              Häkchen. Der Ordner <code>img/flags/</code> enthält
+              ausschließlich die im Projekt angebotenen Sprachflaggen
+              (einzelne SVG-Dateien mit ~200 B, eingebunden über
+              <code>&lt;img&gt;</code>) — jede lädt einmal und wird für die
+              gesamte Website zwischengespeichert.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 justify-content-end">
+                <button
+                  class="language-switch-trigger"
+                  popovertarget="demo-lang-menu"
+                  title="Sprache ändern"
+                >
+                  <span class="language-switch-flag"><img src="img/flags/de.svg" width="20" height="15" alt="" /></span>
+                  <span>DE</span>
+                </button>
+                <div
+                  class="dropdown-menu dropdown-menu-end language-switch-menu"
+                  popover
+                  id="demo-lang-menu"
+                >
+                  <a href="#" class="dropdown-item language-switch-item">
+                    <span class="language-switch-flag"><img src="img/flags/de.svg" width="20" height="15" alt="" /></span>
+                    <span class="language-switch-name">Deutsch</span>
+                    <span class="language-switch-check"><svg aria-hidden="true" viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></span>
+                  </a>
+                  <a href="#" class="dropdown-item language-switch-item">
+                    <span class="language-switch-flag"><img src="img/flags/pl.svg" width="20" height="15" alt="" /></span>
+                    <span class="language-switch-name">Polski</span>
+                  </a>
+                  <a href="#" class="dropdown-item language-switch-item">
+                    <span class="language-switch-flag"><img src="img/flags/gb.svg" width="20" height="15" alt="" /></span>
+                    <span class="language-switch-name">English</span>
+                  </a>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;button class="language-switch-trigger" popovertarget="lang-menu" title="Sprache ändern"&gt;
+  &lt;span class="language-switch-flag"&gt;&lt;img src="img/flags/de.svg" width="20" height="15" alt=""&gt;&lt;/span&gt;
+  &lt;span&gt;DE&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;!-- [popover] = Top Layer; das Menü verankert sich automatisch am Button --&gt;
+&lt;div class="dropdown-menu dropdown-menu-end language-switch-menu" popover id="lang-menu"&gt;
+  &lt;a href="#" class="dropdown-item language-switch-item"&gt;
+    &lt;span class="language-switch-flag"&gt;&lt;img src="img/flags/de.svg" width="20" height="15" alt=""&gt;&lt;/span&gt;
+    &lt;span class="language-switch-name"&gt;Deutsch&lt;/span&gt;
+    &lt;span class="language-switch-check"&gt;&lt;svg aria-hidden="true" viewBox="0 0 256 256" fill="currentColor"&gt;&lt;path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/a&gt;
+  &lt;a href="#" class="dropdown-item language-switch-item"&gt;
+    &lt;span class="language-switch-flag"&gt;&lt;img src="img/flags/pl.svg" width="20" height="15" alt=""&gt;&lt;/span&gt;
+    &lt;span class="language-switch-name"&gt;Polski&lt;/span&gt;
+  &lt;/a&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-dropdown.de.html" class="btn btn-secondary"
+              >➔ Zurück: Dropdown</a
+            >
+            <a
+              href="examples-hero-sections.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Hero &amp; Spezialsektionen ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

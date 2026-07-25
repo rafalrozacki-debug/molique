@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Input Groups - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Input Groups</h1>
+            <p class="text-6 text-muted">
+              Fertige Kombinationen aus Feldern mit Text, Icons und Buttons
+              sowie erweiterte Inputs für Datum, Farbe und Bereich.
+            </p>
+          </div>
+
+          <!-- Gruppierte Felder -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Gruppierte Felder (Input Groups)</h3>
+            <p class="text-muted mb-4">
+              Text, Icons oder Buttons direkt an ein Textfeld anhängen —
+              nützlich bei Suchfeldern und Feldern mit Einheiten.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 gap-4 flex-column align-items-start bg-surface"
+              >
+                <!-- Suche mit Lupe -->
+                <div class="input-group w-100" style="max-width: 400px">
+                  <input
+                    type="text"
+                    class="input"
+                    placeholder="Kunde suchen..."
+                  />
+                  <button class="btn text-muted">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      fill="currentColor"
+                      viewBox="0 0 256 256"
+                    >
+                      <path
+                        d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Input + Button -->
+                <div class="input-group w-100" style="max-width: 400px">
+                  <input
+                    type="text"
+                    class="input"
+                    placeholder="Rabattcode eingeben..."
+                  />
+                  <button class="btn btn-primary">Anwenden</button>
+                </div>
+
+                <!-- Text + Input + Text -->
+                <div class="input-group w-100" style="max-width: 400px">
+                  <span class="input-group-text">Preis</span>
+                  <input type="number" class="input" placeholder="0.00" />
+                  <span class="input-group-text">EUR</span>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Suche mit Lupe --&gt;
+&lt;div class="input-group"&gt;
+  &lt;input type="text" class="input" placeholder="Suchen..."&gt;
+  &lt;!-- FIX: Klasse bg-surface entfernt --&gt;
+  &lt;button class="btn text-muted"&gt;
+    &lt;!-- Lupen-Icon --&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Feld mit Einheit --&gt;
+&lt;div class="input-group"&gt;
+  &lt;span class="input-group-text"&gt;Preis&lt;/span&gt;
+  &lt;input type="number" class="input" placeholder="0.00"&gt;
+  &lt;span class="input-group-text"&gt;EUR&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Erweiterte Inputs -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Erweiterte Inputs (Datum, Farbe, Bereich)</h3>
+            <p class="text-muted mb-4">
+              Individuelle Stile für Datum, Farbe und Bereich, für
+              konsistente Darstellung über verschiedene Browser hinweg.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column align-items-start w-100 bg-surface gap-4"
+              >
+                <!-- Date Picker -->
+                <div class="w-100" style="max-width: 400px">
+                  <label class="fw-bold mb-2 d-block">Datum wählen:</label>
+                  <input type="date" class="input" />
+                </div>
+
+                <!-- Color Picker -->
+                <div class="w-100" style="max-width: 400px">
+                  <label class="fw-bold mb-2 d-block">Primärfarbe:</label>
+                  <div class="d-flex align-items-center gap-3">
+                    <input type="color" class="input-color" value="#0d6efd" />
+                    <span class="text-muted text-4"
+                      >Klicken Sie auf das Quadrat, um es zu ändern</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Range Slider -->
+                <div class="w-100" style="max-width: 400px">
+                  <label class="fw-bold mb-2 d-block">Limit festlegen (in %):</label>
+                  <input
+                    type="range"
+                    class="input-range"
+                    min="0"
+                    max="100"
+                    value="50"
+                  />
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Date Picker --&gt;
+&lt;input type="date" class="input"&gt;
+
+&lt;!-- Color Picker --&gt;
+&lt;input type="color" class="input-color" value="#0d6efd"&gt;
+
+&lt;!-- Range Slider --&gt;
+&lt;input type="range" class="input-range" min="0" max="100" value="50"&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Input Group Inline -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Formularzeile (Inline)</h3>
+            <p class="text-muted mb-4">
+              <code>.input-group-inline</code> ordnet Label und Feld
+              nebeneinander in einer Zeile an (statt untereinander) und
+              bricht auf Mobilgeräten sicher um, ohne das Grid zu sprengen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column align-items-start w-100 bg-surface">
+                <div class="input-group-inline w-100">
+                  <label for="ig-inline-name" class="fw-bold">Vollständiger Name</label>
+                  <input id="ig-inline-name" type="text" class="input" placeholder="Hans Müller" />
+                </div>
+                <div class="input-group-inline w-100 mt-3">
+                  <label for="ig-inline-email" class="fw-bold">E-Mail-Adresse</label>
+                  <input id="ig-inline-email" type="email" class="input" placeholder="hans@firma.de" />
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="input-group-inline"&gt;
+  &lt;label for="name"&gt;Vollständiger Name&lt;/label&gt;
+  &lt;input id="name" type="text" class="input"&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-checkboxes-radio.de.html" class="btn btn-secondary"
+              >➔ Zurück: Checkboxen &amp; Radio</a
+            >
+            <a
+              href="examples-file-upload.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: File Upload ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

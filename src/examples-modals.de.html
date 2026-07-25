@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Modale - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Modale</h1>
+            <p class="text-6 text-muted">
+              Native Dialogfenster auf Basis des <code>&lt;dialog&gt;</code>-Tags —
+              der Browser übernimmt selbst die Abdunkelung des Hintergrunds,
+              den Focus Trap und das Schließen mit der ESC-Taste.
+            </p>
+          </div>
+
+          <!-- Native Modale (<dialog>) -->
+          <section>
+            <h3 class="text-5 fw-bold mb-3">Native Modale (&lt;dialog&gt;)</h3>
+            <p class="text-muted mb-4">
+              Ein-/Ausblendanimationen übernimmt CSS
+              <code>@starting-style</code>, ganz ohne JS-Bibliotheken.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <button
+                  class="btn btn-primary hover-spring"
+                  onclick="document.getElementById('demoModal').showModal()"
+                >
+                  Standard-Modal öffnen
+                </button>
+                <button
+                  class="btn btn-secondary hover-spring ml-md-2 mt-2 mt-md-0"
+                  onclick="document.getElementById('contextModal').showModal()"
+                >
+                  Context Modal öffnen (B2B)
+                </button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Öffnender Button --&gt;
+&lt;button onclick="document.getElementById('demoModal').showModal()"&gt;Öffnen&lt;/button&gt;
+
+&lt;!-- Modal-Struktur --&gt;
+&lt;dialog id="demoModal" class="modal-dialog"&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-header"&gt;Titel&lt;/div&gt;
+    &lt;div class="card-body"&gt;Modal-Inhalt...&lt;/div&gt;
+    &lt;div class="card-footer"&gt;
+      &lt;!-- Natives Schließen ohne JS! --&gt;
+      &lt;form method="dialog"&gt;
+        &lt;button class="btn btn-secondary"&gt;Schließen&lt;/button&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Modal Confirm & Modal SM -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Bestätigungs-Modal &amp; Kleines Modal</h3>
+            <p class="text-muted mb-4">
+              <code>.modal-confirm</code> ist ein zentriertes Layout ohne
+              Kopfzeile (Icon + Frage + zwei gleich große Buttons) für
+              „sind Sie sicher?"-Bestätigungen. <code>.modal-sm</code> ist
+              lediglich ein Breitenmodifikator (360px) für kurze Mitteilungen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <button
+                  class="btn btn-danger hover-spring"
+                  onclick="document.getElementById('confirmModal').showModal()"
+                >
+                  Datensatz löschen (Confirm)
+                </button>
+                <button
+                  class="btn btn-secondary hover-spring ml-md-2 mt-2 mt-md-0"
+                  onclick="document.getElementById('smModal').showModal()"
+                >
+                  Kleines Modal öffnen (SM)
+                </button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;dialog class="modal-dialog modal-confirm"&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-body"&gt;
+      &lt;div class="modal-confirm-icon"&gt;⚠️&lt;/div&gt;
+      &lt;h5 class="fw-bold mb-2"&gt;Diesen Datensatz löschen?&lt;/h5&gt;
+      &lt;p class="text-muted m-0"&gt;Dieser Vorgang kann nicht rückgängig gemacht werden.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="card-footer"&gt;
+      &lt;form method="dialog"&gt;&lt;button class="btn btn-secondary"&gt;Abbrechen&lt;/button&gt;&lt;/form&gt;
+      &lt;form method="dialog"&gt;&lt;button class="btn btn-danger"&gt;Löschen&lt;/button&gt;&lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;
+
+&lt;!-- Nur der Breitenmodifikator --&gt;
+&lt;dialog class="modal-dialog modal-sm"&gt;...&lt;/dialog&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-data-rows.de.html" class="btn btn-secondary"
+              >➔ Zurück: Data Rows</a
+            >
+            <a
+              href="examples-accordions.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Akkordeons ➔</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Demo-Modale -->
+    <dialog id="demoModal" class="modal-dialog">
+      <div class="card border-0">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h3 class="h5 m-0">Standard-Modal</h3>
+          <form method="dialog">
+            <button class="modal-close-btn">&times;</button>
+          </form>
+        </div>
+        <div class="card-body">
+          <p>Zentriert auf dem Bildschirm. Ideal für Mitteilungen und Bestätigungen.</p>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="contextModal" class="modal-dialog modal-context">
+      <div class="card border-0">
+        <div class="card-header">
+          <h3 class="fw-bold">Projektoptionen</h3>
+          <form method="dialog">
+            <button class="modal-close-btn">&times;</button>
+          </form>
+        </div>
+        <div class="card-body">
+          <ul class="modal-action-list">
+            <li><button class="modal-action-btn">📄 Vertrag erstellen</button></li>
+            <li>
+              <button class="modal-action-btn text-danger">
+                🗑️ Projekt löschen
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="confirmModal" class="modal-dialog modal-confirm">
+      <div class="card border-0">
+        <div class="card-body">
+          <div class="modal-confirm-icon">⚠️</div>
+          <h3 class="fw-bold mb-2">Diesen Datensatz löschen?</h3>
+          <p class="text-muted m-0">Dieser Vorgang kann nicht rückgängig gemacht werden.</p>
+        </div>
+        <div class="card-footer">
+          <form method="dialog">
+            <button class="btn btn-secondary">Abbrechen</button>
+          </form>
+          <form method="dialog">
+            <button class="btn btn-danger">Löschen</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="smModal" class="modal-dialog modal-sm">
+      <div class="card border-0">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h3 class="h5 m-0">Kleines Modal</h3>
+          <form method="dialog">
+            <button class="modal-close-btn">&times;</button>
+          </form>
+        </div>
+        <div class="card-body">
+          <p class="m-0">Der Modifikator <code>.modal-sm</code> begrenzt die Breite auf 360px.</p>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
