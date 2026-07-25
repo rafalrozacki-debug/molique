@@ -1,0 +1,203 @@
+/**
+ * molique - Stopka strony (partials/footer.html)
+ * Stopka jest ZAWSZE ciemna (.bg-dark) niezaleznie od motywu, jak sidebar
+ * admina - dlatego linki i tlo licza sie tu wzgledem literalnych kolorow
+ * .bg-dark (#1E293B / #F9F9F9), a nie zmiennych --dark, ktore w dark mode
+ * sie odwracaja.
+ *
+ * Asymetryczny odstep marka -> kolumny linkow: grid ma jeden wspolny
+ * column-gap, wiec kolumna marki dostaje dodatkowo max-width + margin-right
+ * (tylko od breakpointu lg) - jej TOR (1fr) zostaje nietkniety, tylko
+ * widoczna zawartosc jest ograniczona i domknieta wiekszym odstepem niz
+ * miedzy kolumnami 2-5.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  .footer-trustbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 2);
+    padding-bottom: calc(var(--spacing-unit) * 2.75);
+    margin-bottom: calc(var(--spacing-unit) * 3.75);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-trustbar-text {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1.25);
+    font-size: var(--text-sm);
+    color: rgba(249, 249, 249, 0.68);
+
+    strong {
+      color: #f9f9f9;
+      font-weight: var(--fw-semibold);
+    }
+
+    .footer-trustbar-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: calc(var(--spacing-unit) * 3.25);
+    padding-bottom: calc(var(--spacing-unit) * 4.5);
+    align-items: start;
+
+    @include mq(md, min) {
+      grid-template-columns: 1fr 1fr;
+      column-gap: calc(var(--spacing-unit) * 2.5);
+    }
+
+    @include mq(lg, min) {
+      grid-template-columns: 1fr 0.6fr 0.65fr 0.65fr 0.6fr;
+      column-gap: calc(var(--spacing-unit) * 2.5);
+    }
+
+    /* kolumna marki na md (2 kolumny) zajmuje caly gorny rzad */
+    @include mq(md, min) {
+      > *:first-child { grid-column: 1 / -1; }
+    }
+    @include mq(lg, min) {
+      > *:first-child {
+        grid-column: auto;
+        max-width: 260px;
+        margin-right: calc(var(--spacing-unit) * 4);
+      }
+    }
+  }
+
+  .footer-brand {
+    font-family: var(--font-family-heading);
+    font-weight: var(--fw-bold);
+    font-size: 1.3rem;
+    color: #f9f9f9;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+
+    span { color: var(--primary); }
+  }
+
+  .footer-tagline {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: rgba(249, 249, 249, 0.68);
+    max-width: 32ch;
+  }
+
+  .footer-heading {
+    font-family: var(--font-family-heading);
+    font-weight: var(--fw-bold);
+    font-size: var(--text-sm);
+    color: #f9f9f9;
+    margin: 0 0 calc(var(--spacing-unit) * 1.75);
+  }
+
+  .footer-link {
+    display: block;
+    width: fit-content;
+    color: rgba(249, 249, 249, 0.68);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+    transition: color var(--transition-speed);
+
+    &:hover { color: var(--primary); }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+  }
+
+  .footer-link-more {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.625);
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--primary);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+
+    svg {
+      width: 12px;
+      height: 12px;
+      transition: transform var(--transition-speed);
+    }
+
+    &:hover {
+      color: var(--primary-hover);
+
+      svg { transform: translateX(2px); }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+  }
+
+  .footer-author {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.5);
+    margin-top: calc(var(--spacing-unit) * 2.5);
+    padding-top: calc(var(--spacing-unit) * 2.25);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .footer-author-avatar {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    display: block;
+  }
+
+  .footer-author-name {
+    font-size: var(--text-sm);
+    color: #f9f9f9;
+    font-weight: var(--fw-bold);
+    line-height: 1.3;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover { color: var(--primary); }
+    }
+  }
+
+  .footer-author-role {
+    font-size: var(--text-xs);
+    color: rgba(249, 249, 249, 0.6);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--spacing-unit) * 1.25);
+    padding-top: calc(var(--spacing-unit) * 2.5);
+    font-size: var(--text-xs);
+    color: rgba(249, 249, 249, 0.55);
+  }
+}
