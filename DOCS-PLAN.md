@@ -644,19 +644,19 @@ kategoriach, same linki tekstowe bez ikon) był zbyt długi.
   - `docs-navbar.html`: standardowa strona referencyjna, ten sam wzorzec co
     reszta (navbar/sidebar `.en/.de.html`, linki wewnętrzne do już
     przetłumaczonych stron zaktualizowane).
-  - `docs-classes.html`: anomalia strukturalna zauważona przy tłumaczeniu —
-    ta strona, w odróżnieniu od WSZYSTKICH innych `docs-*.html`, **nie
-    includuje `partials/navbar.html`** (zaczyna się od razu od
-    `.admin-layout` po `<body>`), więc nie ma na niej przełącznika
-    językowego w navbarze — zachowane bez zmian dla PL/EN/DE, to
-    przedistniejąca cecha strony, nie coś do naprawienia w ramach i18n.
-    Strona to głównie gigantyczna tabela-ściągawka (13 kategorii, ~180
-    wierszy) — nazwy klas CSS w `<span class="class-name">` i fragmenty
-    `<code>` (składnia, nazwy zmiennych) zostawione bez zmian, tłumaczona
-    wyłącznie opisowa treść w komórkach `text-muted` oraz tekst w żywych
-    podglądach komponentów (np. „Przycisk"→„Button"/„Button", „Najedź"→„Hover
-    me"/„Hovern"). `<html data-theme="light">` (hardkodowany atrybut na tej
-    jednej stronie) zachowany bez zmian w obu wariantach.
+  - `docs-classes.html`: przy pierwszym tłumaczeniu strona **nie
+    includowała `partials/navbar.html`** (jedyna wśród `docs-*.html`) —
+    okazało się to zwykłym brakiem w PL źródle, nie zamierzoną cechą.
+    Użytkownik dopisał include ręcznie w edytorze; poprawka przeniesiona do
+    EN/DE tak, żeby wskazywały na `navbar.en.html`/`navbar.de.html` (commit
+    "Fix: docs-classes.html brakowało includu navbara"). Strona to głównie
+    gigantyczna tabela-ściągawka (13 kategorii, ~180 wierszy) — nazwy klas
+    CSS w `<span class="class-name">` i fragmenty `<code>` (składnia, nazwy
+    zmiennych) zostawione bez zmian, tłumaczona wyłącznie opisowa treść w
+    komórkach `text-muted` oraz tekst w żywych podglądach komponentów (np.
+    „Przycisk"→„Button"/„Button", „Najedź"→„Hover me"/„Hovern"). `<html
+    data-theme="light">` (hardkodowany atrybut na tej jednej stronie)
+    zachowany bez zmian w obu wariantach.
   - `docs-sidebar.en.html`/`.de.html`: dwa ostatnie linki wskazujące PL
     zaktualizowane na `.en.html`/`.de.html` — sidebar dokumentacji ma teraz
     100% linków w języku strony, zero świadomych wyjątków.
