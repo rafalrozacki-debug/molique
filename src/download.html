@@ -18,33 +18,81 @@
 
       <div class="grid-cols-1 grid-md-cols-2 gap-4 mb-5">
         <!-- PRODUCTION -->
-        <div class="card h-100">
+        <div class="card h-100" data-download-card data-tier="production">
           <div class="card-header d-flex align-items-center justify-content-between">
             <span class="fw-bold text-5">Production</span>
             <span class="badge badge-success">Zalecane</span>
           </div>
           <div class="card-body d-flex flex-column gap-3">
             <p class="text-muted m-0">
-              Gotowe do wklejenia. Skompilowane CSS (min + pełne), JS z
-              autoloaderem, fonty, flagi i szablon startowy.
+              Gotowe do wklejenia. Skompilowane CSS, JS z autoloaderem, flagi
+              i szablon startowy. Format CSS i fonty wybierasz poniżej.
             </p>
             <ul class="list-icons list-icons-check list-icons-success m-0">
-              <li><code>css/</code> - bundle min + pełne (rdzeń + moduły)</li>
+              <li><code>css/</code> - bundle CSS (format do wyboru niżej)</li>
               <li><code>js/</code> - rdzeń + moduły (<code>js/modules/</code>)</li>
-              <li><code>fonts/</code> - Inter + Poppins (wbudowane w CSS)</li>
               <li><code>img/flags/</code>, <code>starter.html</code>, README, LICENSE</li>
             </ul>
+
+            <div class="d-flex flex-column gap-2">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="prod-format"
+                  id="prod-format-min"
+                  value="min"
+                  data-format-input
+                  checked
+                />
+                <label class="form-check-label" for="prod-format-min"
+                  >Zminifikowana CSS</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="prod-format"
+                  id="prod-format-full"
+                  value="full"
+                  data-format-input
+                />
+                <label class="form-check-label" for="prod-format-full"
+                  >Pełna CSS (czytelna)</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="prod-fonts"
+                  data-fonts-input
+                />
+                <label class="form-check-label" for="prod-fonts">
+                  Dołącz fonty (~186 KB)
+                  <span
+                    class="tooltip-element"
+                    data-tooltip="Google Fonts: Inter + Poppins (fonts.google.com)"
+                    >ⓘ</span
+                  >
+                </label>
+              </div>
+            </div>
+
             <a
               href="dist/molique-1.7.0.zip"
               class="btn btn-primary fw-bold hover-spring mt-auto"
               download
-              >Pobierz Production (~363 KB) ⬇</a
+              data-download-link
+              data-label="Pobierz Production"
+              >Pobierz Production (~90 KB) ⬇</a
             >
           </div>
         </div>
 
         <!-- SOURCE -->
-        <div class="card h-100">
+        <div class="card h-100" data-download-card data-tier="source">
           <div class="card-header">
             <span class="fw-bold text-5">Source / Dev</span>
           </div>
@@ -52,7 +100,7 @@
             <p class="text-muted m-0">
               To co Production <strong>plus</strong> pełne źródła Sass
               (<code>css/scss/</code>) do kompilacji z własnymi zmiennymi
-              motywu.
+              motywu. Zawsze pełna, czytelna CSS.
             </p>
             <ul class="list-icons list-icons-check m-0">
               <li>Wszystko z paczki Production</li>
@@ -60,11 +108,31 @@
               <li>Zmienne motywu w <code>scss/_root.scss</code></li>
               <li>Kompilacja: <code>sass ...scss ...css</code></li>
             </ul>
+
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="src-fonts"
+                data-fonts-input
+              />
+              <label class="form-check-label" for="src-fonts">
+                Dołącz fonty (~186 KB)
+                <span
+                  class="tooltip-element"
+                  data-tooltip="Google Fonts: Inter + Poppins (fonts.google.com)"
+                  >ⓘ</span
+                >
+              </label>
+            </div>
+
             <a
               href="dist/molique-1.7.0-src.zip"
               class="btn btn-outline-primary fw-bold hover-spring mt-auto"
               download
-              >Pobierz Source (~500 KB) ⬇</a
+              data-download-link
+              data-label="Pobierz Source"
+              >Pobierz Source (~275 KB) ⬇</a
             >
           </div>
         </div>
@@ -154,13 +222,16 @@
       <div class="alert alert-info">
         <strong>Motyw:</strong> kolory, typografię i inne zmienne dobierzesz
         wizualnie w <a href="theme-editor">edytorze motywu</a>, a wynik
-        wkleisz jako blok <code>:root</code>. <strong>Fonty:</strong> Inter +
-        Poppins są wbudowane w <code>molique-style.css</code>
-        (<code>@font-face</code>) - wystarczy skopiować folder
-        <code>fonts/</code> obok <code>css/</code>.
+        wkleisz jako blok <code>:root</code>. <strong>Fonty:</strong> jeśli
+        zaznaczyłeś/aś opcję fontów przy pobieraniu, wystarczy skopiować
+        folder <code>fonts/</code> obok <code>css/</code> - reguły
+        <code>@font-face</code> już na nie wskazują w
+        <code>molique-style.css</code>. Bez tej opcji dograj Inter +
+        Poppins samodzielnie z <code>fonts.google.com</code>.
       </div>
     </main>
 
     <script defer src="js/molique-script.js"></script>
+    <script type="module" src="./download.js"></script>
   </body>
 </html>
