@@ -48,18 +48,37 @@
    2. FEATURED BOX (Wyróżnione cechy)
    ========================================= */
 .featured-box {
+  position: relative;
+  isolation: isolate;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   padding: calc(var(--spacing-unit) * 4);
   text-align: center;
   border-top: 4px solid var(--primary);
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  transition: transform var(--transition-speed);
   height: 100%;
-  
+
+  /* Cien hover na ::after (animowana tylko opacity) zamiast bezposredniego
+     przejscia box-shadow (reflow) - ten sam wzorzec co .hover-gpu-shadow. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transition: opacity var(--transition-speed);
+    pointer-events: none;
+    z-index: -1;
+  }
+
   &:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+
+    &::after {
+      opacity: 1;
+    }
   }
 }
 

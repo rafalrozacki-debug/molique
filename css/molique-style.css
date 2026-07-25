@@ -1867,27 +1867,28 @@
     /* =========================================
        4. BUTTON GROUPS (Zgrupowane przyciski)
        ========================================= */
+    /* Dzieci celuja w $btn-base-selectors (ta sama lista co baza wyzej), nie w
+       literalna klase .btn - odkad kolor implikuje .btn (patrz komentarz przy
+       IMPLIKACJA .btn), sam .btn-primary w grupie nie dostawal tu wczesniej
+       zadnego z tych zaokraglen/nachodzenia obwodek. */
     .btn-group {
       display: inline-flex;
       align-items: stretch;
     }
-    .btn-group .btn {
+    .btn-group .btn, .btn-group .btn-primary, .btn-group .btn-outline-primary, .btn-group .btn-secondary, .btn-group .btn-outline-secondary, .btn-group .btn-success, .btn-group .btn-outline-success, .btn-group .btn-danger, .btn-group .btn-outline-danger, .btn-group .btn-warning, .btn-group .btn-outline-warning, .btn-group .btn-info, .btn-group .btn-outline-info, .btn-group .btn-light, .btn-group .btn-outline-light, .btn-group .btn-dark, .btn-group .btn-outline-dark {
       position: relative;
       flex: 1 1 auto;
     }
-    .btn-group .btn:not(:first-child) {
+    .btn-group .btn:not(:first-child), .btn-group .btn-primary:not(:first-child), .btn-group .btn-outline-primary:not(:first-child), .btn-group .btn-secondary:not(:first-child), .btn-group .btn-outline-secondary:not(:first-child), .btn-group .btn-success:not(:first-child), .btn-group .btn-outline-success:not(:first-child), .btn-group .btn-danger:not(:first-child), .btn-group .btn-outline-danger:not(:first-child), .btn-group .btn-warning:not(:first-child), .btn-group .btn-outline-warning:not(:first-child), .btn-group .btn-info:not(:first-child), .btn-group .btn-outline-info:not(:first-child), .btn-group .btn-light:not(:first-child), .btn-group .btn-outline-light:not(:first-child), .btn-group .btn-dark:not(:first-child), .btn-group .btn-outline-dark:not(:first-child) {
       margin-left: calc(var(--btn-border-width) * -1);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }
-    .btn-group .btn:not(:last-child) {
+    .btn-group .btn:not(:last-child), .btn-group .btn-primary:not(:last-child), .btn-group .btn-outline-primary:not(:last-child), .btn-group .btn-secondary:not(:last-child), .btn-group .btn-outline-secondary:not(:last-child), .btn-group .btn-success:not(:last-child), .btn-group .btn-outline-success:not(:last-child), .btn-group .btn-danger:not(:last-child), .btn-group .btn-outline-danger:not(:last-child), .btn-group .btn-warning:not(:last-child), .btn-group .btn-outline-warning:not(:last-child), .btn-group .btn-info:not(:last-child), .btn-group .btn-outline-info:not(:last-child), .btn-group .btn-light:not(:last-child), .btn-group .btn-outline-light:not(:last-child), .btn-group .btn-dark:not(:last-child), .btn-group .btn-outline-dark:not(:last-child) {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
-    .btn-group .btn:hover,
-    .btn-group .btn:focus,
-    .btn-group .btn:active,
-    .btn-group .btn.is-active {
+    .btn-group .btn:hover, .btn-group .btn:focus, .btn-group .btn:active, .btn-group .btn.is-active, .btn-group .btn-primary:hover, .btn-group .btn-primary:focus, .btn-group .btn-primary:active, .btn-group .btn-primary.is-active, .btn-group .btn-outline-primary:hover, .btn-group .btn-outline-primary:focus, .btn-group .btn-outline-primary:active, .btn-group .btn-outline-primary.is-active, .btn-group .btn-secondary:hover, .btn-group .btn-secondary:focus, .btn-group .btn-secondary:active, .btn-group .btn-secondary.is-active, .btn-group .btn-outline-secondary:hover, .btn-group .btn-outline-secondary:focus, .btn-group .btn-outline-secondary:active, .btn-group .btn-outline-secondary.is-active, .btn-group .btn-success:hover, .btn-group .btn-success:focus, .btn-group .btn-success:active, .btn-group .btn-success.is-active, .btn-group .btn-outline-success:hover, .btn-group .btn-outline-success:focus, .btn-group .btn-outline-success:active, .btn-group .btn-outline-success.is-active, .btn-group .btn-danger:hover, .btn-group .btn-danger:focus, .btn-group .btn-danger:active, .btn-group .btn-danger.is-active, .btn-group .btn-outline-danger:hover, .btn-group .btn-outline-danger:focus, .btn-group .btn-outline-danger:active, .btn-group .btn-outline-danger.is-active, .btn-group .btn-warning:hover, .btn-group .btn-warning:focus, .btn-group .btn-warning:active, .btn-group .btn-warning.is-active, .btn-group .btn-outline-warning:hover, .btn-group .btn-outline-warning:focus, .btn-group .btn-outline-warning:active, .btn-group .btn-outline-warning.is-active, .btn-group .btn-info:hover, .btn-group .btn-info:focus, .btn-group .btn-info:active, .btn-group .btn-info.is-active, .btn-group .btn-outline-info:hover, .btn-group .btn-outline-info:focus, .btn-group .btn-outline-info:active, .btn-group .btn-outline-info.is-active, .btn-group .btn-light:hover, .btn-group .btn-light:focus, .btn-group .btn-light:active, .btn-group .btn-light.is-active, .btn-group .btn-outline-light:hover, .btn-group .btn-outline-light:focus, .btn-group .btn-outline-light:active, .btn-group .btn-outline-light.is-active, .btn-group .btn-dark:hover, .btn-group .btn-dark:focus, .btn-group .btn-dark:active, .btn-group .btn-dark.is-active, .btn-group .btn-outline-dark:hover, .btn-group .btn-outline-dark:focus, .btn-group .btn-outline-dark:active, .btn-group .btn-outline-dark.is-active {
       z-index: 1;
     }
     /* =========================================
@@ -1971,17 +1972,33 @@
     /* =========================================
        6. NOWOCZESNE EFEKTY (Modyfikatory)
        ========================================= */
-    /* 1. GLOW (Neonowa poświata) */
+    /* 1. GLOW (Neonowa poświata)
+       Cień hover NIE transitionuje bezposrednio (reflow) - siedzi na ::after,
+       ktory animuje tylko opacity. Ten sam wzorzec co .hover-gpu-shadow w
+       utilities/_animations.scss. Bazowy (spoczynkowy) cień zostaje na
+       przycisku, bo jest staly - nigdy sie nie zmienia, wiec nie kosztuje. */
     .btn-glow {
       position: relative;
-      /* Dziedziczy kolor tła przycisku do stworzenia poświaty */
+      isolation: isolate;
       box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      transition: transform 0.3s ease;
+    }
+    .btn-glow::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: 0 8px 25px -5px var(--primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: -1;
     }
     .btn-glow:hover {
       transform: translateY(-2px);
-      /* Używamy currentColor lub tła, ale najbezpieczniej użyć zmiennej z _root.scss */
-      box-shadow: 0 8px 25px -5px var(--primary);
+    }
+    .btn-glow:hover::after {
+      opacity: 1;
     }
     /* 2. GLASS (Szkło - idealne na ciemne tła i wideo) */
     .btn-glass {
@@ -1997,21 +2014,36 @@
       background: rgba(255, 255, 255, 0.2) !important;
       border-color: rgba(255, 255, 255, 0.4) !important;
     }
-    /* 3. 3D PUSH (Fizyczny przycisk) */
+    /* 3. 3D PUSH (Fizyczny przycisk)
+       Zamiast animowac Y-offset plaskiego box-shadow (reflow), "podstawa"
+       siedzi na statycznym ::before (solid tlo, offset o 6px pod przyciskiem).
+       Przycisk sam animuje wylacznie transform: translateY() - w miare
+       wciskania "zblizy sie" do statycznej podstawy, dajac identyczny efekt
+       znikajacego cienia bez animowania box-shadow ani razu. */
     .btn-3d {
       /* Wymaga zdefiniowania koloru cienia (np. ciemniejszy primary) */
       --btn-3d-shadow: var(--primary-hover);
+      position: relative;
+      isolation: isolate;
       transform: translateY(0);
-      box-shadow: 0 6px 0 0 var(--btn-3d-shadow) !important;
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      transition: transform 0.1s ease;
+    }
+    .btn-3d::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--btn-3d-shadow);
+      z-index: -1;
     }
     .btn-3d:hover {
       transform: translateY(2px);
-      box-shadow: 0 4px 0 0 var(--btn-3d-shadow) !important;
     }
     .btn-3d:active {
       transform: translateY(6px);
-      box-shadow: 0 0 0 0 var(--btn-3d-shadow) !important;
     }
     /* 4. SHINE (Przesuwający się błysk) */
     .btn-shine {
@@ -2037,25 +2069,61 @@
         left: 200%;
       }
     }
-    /* 5. GRADIENT ANIMATED (Płynący gradient) */
+    /* 5. GRADIENT ANIMATED (Płynący gradient)
+       Zamiast animowac background-position (reflow/paint na kazdej klatce),
+       gradient siedzi na ::before dwukrotnie szerszym od przycisku,
+       przesuwanym przez transform: translateX() - identyczny efekt plynacego
+       gradientu, zero animowanych wlasciwosci poza transform/opacity. Cien
+       na hover tak samo jak w .btn-glow: osobny ::after, animowana tylko
+       opacity. Tresc przycisku (z-index:auto) zostaje ponad obiema
+       warstwami (z-index ujemny), bo isolation:isolate tworzy dla nich
+       wlasny kontekst uwarstwienia. */
     .btn-gradient {
-      background: linear-gradient(135deg, var(--primary), var(--info), var(--success), var(--primary)) !important;
-      background-size: 300% 100% !important;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
       color: #fff !important;
       border: none !important;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease;
+    }
+    .btn-gradient::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -2;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--info), var(--success), var(--primary));
+      background-size: 50% 100%;
+      background-repeat: repeat-x;
+    }
+    .btn-gradient::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
     }
     .btn-gradient:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+    }
+    .btn-gradient:hover::before {
       animation: btnGradientFlow 3s linear infinite;
     }
+    .btn-gradient:hover::after {
+      opacity: 1;
+    }
     @keyframes btnGradientFlow {
-      0% {
-        background-position: 0% 50%;
+      from {
+        transform: translateX(0);
       }
-      100% {
-        background-position: 100% 50%;
+      to {
+        transform: translateX(-50%);
       }
     }
     /* =========================================
@@ -3959,6 +4027,7 @@
     margin: 0;
   }
   .pagination-modern .page-link {
+    position: relative;
     border-radius: var(--border-radius) !important; /* Każdy ma zaokrąglenia */
     margin-left: 0;
     border: 1px solid transparent;
@@ -3972,6 +4041,18 @@
     padding: 0 12px;
     font-weight: var(--fw-medium);
     box-shadow: var(--shadow-sm);
+    /* Wizualny rozmiar (36px) zostaje - niewidoczny obszar klikalny
+       dobity do --target-size-min (44px) przez ::before, bez zmiany
+       wygladu. */
+  }
+  .pagination-modern .page-link::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
   }
   .pagination-modern .page-link:hover {
     color: var(--primary);
@@ -4160,6 +4241,9 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      /* Bez tego flagę dało się przeciągnąć/zaznaczyć kursorem myszy. */
+      pointer-events: none;
+      user-select: none;
     }
     .language-switch-flag::after {
       content: "";
@@ -4387,18 +4471,35 @@
      2. FEATURED BOX (Wyróżnione cechy)
      ========================================= */
   .featured-box {
+    position: relative;
+    isolation: isolate;
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: calc(var(--spacing-unit) * 4);
     text-align: center;
     border-top: 4px solid var(--primary);
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    transition: transform var(--transition-speed);
     height: 100%;
+    /* Cien hover na ::after (animowana tylko opacity) zamiast bezposredniego
+       przejscia box-shadow (reflow) - ten sam wzorzec co .hover-gpu-shadow. */
+  }
+  .featured-box::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transition: opacity var(--transition-speed);
+    pointer-events: none;
+    z-index: -1;
   }
   .featured-box:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+  }
+  .featured-box:hover::after {
+    opacity: 1;
   }
   .featured-box-icon {
     display: inline-flex;
@@ -5771,6 +5872,17 @@
     cursor: pointer;
     z-index: 10;
     transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+    /* Wizualny rozmiar (40px) zostaje - niewidoczny obszar klikalny dobity
+       do --target-size-min (44px). */
+  }
+  .carousel-nav::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
   }
   .carousel-nav:hover {
     background-color: var(--primary);
@@ -5805,15 +5917,15 @@
     margin: 0;
     position: relative;
     transition: background-color var(--transition-speed), transform var(--transition-speed);
-    /* Zwiększenie obszaru klikalnego dla mobile */
+    /* Zwiększenie obszaru klikalnego do --target-size-min (44px) */
   }
   .carousel-dot::before {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 24px;
-    height: 24px;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
     transform: translate(-50%, -50%);
   }
   .carousel-dot:hover {
@@ -6194,6 +6306,7 @@
      4. STATUS DOTS (Kropki statusu i Ping)
      ========================================= */
   .status-dot {
+    position: relative; /* punkt odniesienia dla pierscienia .status-ping::after */
     display: inline-flex;
     align-items: center;
     gap: calc(var(--spacing-unit) * 1);
@@ -6235,19 +6348,30 @@
   .status-dot.status-danger::before {
     background-color: var(--danger);
   }
-  /* Animowany Ping (box-shadow na kropce) */
-  .status-ping::before {
+  /* Animowany Ping - pierscien na ::after (osobny od kropki ::before),
+     animowany wylacznie transform: scale + opacity zamiast box-shadow.
+     Pozycjonowany wzgledem .status-dot (position: relative wyzej), dokladnie
+     nad 8x8px kropka z ::before - lewy brzeg + pionowe wysrodkowanie. */
+  .status-ping::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ping-color);
+    pointer-events: none;
     animation: pingDot 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
   @keyframes pingDot {
     0% {
-      box-shadow: 0 0 0 0 var(--ping-color);
-    }
-    70% {
-      box-shadow: 0 0 0 6px transparent;
+      transform: translateY(-50%) scale(1);
+      opacity: 0.7;
     }
     100% {
-      box-shadow: 0 0 0 0 transparent;
+      transform: translateY(-50%) scale(2.8);
+      opacity: 0;
     }
   }
   /* =========================================
@@ -6454,6 +6578,21 @@
     cursor: pointer;
     margin: 0;
     position: relative;
+    /* .status-icon-toggle w środku ma zajęte oba pseudo-elementy pod grafikę
+       plus/checkmark, więc niewidoczny hit-area do --target-size-min (44px)
+       dokładamy tutaj, na klikalnym <label> - wizualny rozmiar ikony (32px)
+       zostaje bez zmian. Dotyczy tylko wariantu z tym wrapperem; goły
+       <button class="status-icon-toggle"> bez <label> nie ma wolnego
+       pseudo-elementu na ten sam trik (udokumentowane ograniczenie). */
+  }
+  .status-checkbox::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
   }
   .status-checkbox input[type=checkbox] {
     position: absolute;
@@ -6487,7 +6626,12 @@
     border-radius: var(--border-radius);
     padding: calc(var(--spacing-unit) * 4);
     text-align: center;
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    /* Tylko transform w transition - box-shadow na hover zmienia sie od razu
+       (jedno przemalowanie), nie w petli klatek jak przy animowanym
+       przejsciu. Wzorca ::after z .featured-box nie da sie tu uzyc: ten
+       kontener ma overflow:hidden (potrzebne pod wstazke .is-featured
+       ponizej), wiec cien pseudo-elementu zostalby przyciety. */
+    transition: transform var(--transition-speed);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -8509,13 +8653,16 @@
   /* Mikrocopy - CELOWO mniejsze niż tokeny --text-sm/--text-xs (13/12px),
      których używają komponenty. Klasy narzędziowe .text-sm/.text-xs to
      najmniejsze rozmiary w systemie (podpisy, prawne dopiski) i leżą
-     PONIŻEJ .text-1. Nie podpinaj ich pod var(--text-sm)/var(--text-xs). */
+     PONIŻEJ .text-1. Nie podpinaj ich pod var(--text-sm)/var(--text-xs).
+     clamp() zamiast sztywnego rem - lekko rosną na dużych ekranach (o ok.
+     1px), żeby nie stały się nieczytelne przy ekstremalnej gęstości
+     pikseli, ale zostają wyraźnie mniejsze niż .text-1 nawet przy max. */
   .text-xs {
-    font-size: 0.625rem !important;
-  } /* 10px */
+    font-size: clamp(0.625rem, 0.6rem + 0.08vw, 0.6875rem) !important;
+  } /* 10px -> 11px */
   .text-sm {
-    font-size: 0.6875rem !important;
-  } /* 11px */
+    font-size: clamp(0.6875rem, 0.66rem + 0.08vw, 0.75rem) !important;
+  } /* 11px -> 12px */
   .text-base {
     font-size: var(--text-base-size) !important;
   }

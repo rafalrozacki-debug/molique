@@ -49,7 +49,12 @@
     overflow-y: auto;
     overflow-x: hidden; 
     
-    /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie */
+    /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie.
+       Świadome odstępstwo od reguły GPU-only (transform/opacity):
+       animowanie width wywołuje reflow, ale to jednorazowa, inicjowana
+       kliknięciem zmiana (przełącznik szerokości), nie ciągła/zapętlona
+       animacja - koszt jest jednorazowy, nie per-klatkowy. Ten sam
+       kompromis co .progress-bar/.progress-bar-reading w _progress.scss. */
     width: var(--current-sidebar-width);
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
 

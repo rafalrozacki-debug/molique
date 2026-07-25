@@ -73,7 +73,19 @@
   cursor: pointer;
   z-index: 10;
   transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
-  
+
+  /* Wizualny rozmiar (40px) zostaje - niewidoczny obszar klikalny dobity
+     do --target-size-min (44px). */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
+  }
+
   &:hover {
     background-color: var(--primary);
     /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
@@ -108,14 +120,14 @@
   position: relative;
   transition: background-color var(--transition-speed), transform var(--transition-speed);
   
-  /* Zwiększenie obszaru klikalnego dla mobile */
+  /* Zwiększenie obszaru klikalnego do --target-size-min (44px) */
   &::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 24px;
-    height: 24px;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
     transform: translate(-50%, -50%);
   }
 

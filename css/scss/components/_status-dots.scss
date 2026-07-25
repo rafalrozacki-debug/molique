@@ -9,6 +9,7 @@
    4. STATUS DOTS (Kropki statusu i Ping)
    ========================================= */
 .status-dot {
+  position: relative; /* punkt odniesienia dla pierscienia .status-ping::after */
   display: inline-flex;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1);
@@ -43,13 +44,24 @@
   }
 }
 
-/* Animowany Ping (box-shadow na kropce) */
-.status-ping::before {
+/* Animowany Ping - pierscien na ::after (osobny od kropki ::before),
+   animowany wylacznie transform: scale + opacity zamiast box-shadow.
+   Pozycjonowany wzgledem .status-dot (position: relative wyzej), dokladnie
+   nad 8x8px kropka z ::before - lewy brzeg + pionowe wysrodkowanie. */
+.status-ping::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ping-color);
+  pointer-events: none;
   animation: pingDot 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @keyframes pingDot {
-  0% { box-shadow: 0 0 0 0 var(--ping-color); }
-  70% { box-shadow: 0 0 0 6px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
+  0% { transform: translateY(-50%) scale(1); opacity: 0.7; }
+  100% { transform: translateY(-50%) scale(2.8); opacity: 0; }
 }

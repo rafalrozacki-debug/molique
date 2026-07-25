@@ -158,31 +158,35 @@
   /* =========================================
      4. BUTTON GROUPS (Zgrupowane przyciski)
      ========================================= */
+  /* Dzieci celuja w $btn-base-selectors (ta sama lista co baza wyzej), nie w
+     literalna klase .btn - odkad kolor implikuje .btn (patrz komentarz przy
+     IMPLIKACJA .btn), sam .btn-primary w grupie nie dostawal tu wczesniej
+     zadnego z tych zaokraglen/nachodzenia obwodek. */
   .btn-group {
     display: inline-flex;
     align-items: stretch;
 
-    .btn {
+    #{$btn-base-selectors} {
       position: relative;
       flex: 1 1 auto;
-    }
 
-    .btn:not(:first-child) {
-      margin-left: calc(var(--btn-border-width) * -1);
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
+      &:not(:first-child) {
+        margin-left: calc(var(--btn-border-width) * -1);
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
 
-    .btn:not(:last-child) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
+      &:not(:last-child) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
 
-    .btn:hover, 
-    .btn:focus, 
-    .btn:active, 
-    .btn.is-active {
-      z-index: 1;
+      &:hover,
+      &:focus,
+      &:active,
+      &.is-active {
+        z-index: 1;
+      }
     }
   }
 
@@ -280,17 +284,35 @@
      6. NOWOCZESNE EFEKTY (Modyfikatory)
      ========================================= */
   
-  /* 1. GLOW (Neonowa poświata) */
+  /* 1. GLOW (Neonowa poświata)
+     Cień hover NIE transitionuje bezposrednio (reflow) - siedzi na ::after,
+     ktory animuje tylko opacity. Ten sam wzorzec co .hover-gpu-shadow w
+     utilities/_animations.scss. Bazowy (spoczynkowy) cień zostaje na
+     przycisku, bo jest staly - nigdy sie nie zmienia, wiec nie kosztuje. */
   .btn-glow {
     position: relative;
-    /* Dziedziczy kolor tła przycisku do stworzenia poświaty */
+    isolation: isolate;
     box-shadow: 0 0 15px 0 rgba(0,0,0,0.2);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    transition: transform 0.3s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: 0 8px 25px -5px var(--primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: -1;
+    }
 
     &:hover {
       transform: translateY(-2px);
-      /* Używamy currentColor lub tła, ale najbezpieczniej użyć zmiennej z _root.scss */
-      box-shadow: 0 8px 25px -5px var(--primary);
+
+      &::after {
+        opacity: 1;
+      }
     }
   }
 
@@ -310,23 +332,39 @@
     }
   }
 
-  /* 3. 3D PUSH (Fizyczny przycisk) */
+  /* 3. 3D PUSH (Fizyczny przycisk)
+     Zamiast animowac Y-offset plaskiego box-shadow (reflow), "podstawa"
+     siedzi na statycznym ::before (solid tlo, offset o 6px pod przyciskiem).
+     Przycisk sam animuje wylacznie transform: translateY() - w miare
+     wciskania "zblizy sie" do statycznej podstawy, dajac identyczny efekt
+     znikajacego cienia bez animowania box-shadow ani razu. */
   .btn-3d {
     /* Wymaga zdefiniowania koloru cienia (np. ciemniejszy primary) */
     --btn-3d-shadow: var(--primary-hover);
-    
+
+    position: relative;
+    isolation: isolate;
     transform: translateY(0);
-    box-shadow: 0 6px 0 0 var(--btn-3d-shadow) !important;
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    transition: transform 0.1s ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--btn-3d-shadow);
+      z-index: -1;
+    }
 
     &:hover {
       transform: translateY(2px);
-      box-shadow: 0 4px 0 0 var(--btn-3d-shadow) !important;
     }
 
     &:active {
       transform: translateY(6px);
-      box-shadow: 0 0 0 0 var(--btn-3d-shadow) !important;
     }
   }
 
@@ -356,30 +394,70 @@
     100% { left: 200%; }
   }
 
-  /* 5. GRADIENT ANIMATED (Płynący gradient) */
+  /* 5. GRADIENT ANIMATED (Płynący gradient)
+     Zamiast animowac background-position (reflow/paint na kazdej klatce),
+     gradient siedzi na ::before dwukrotnie szerszym od przycisku,
+     przesuwanym przez transform: translateX() - identyczny efekt plynacego
+     gradientu, zero animowanych wlasciwosci poza transform/opacity. Cien
+     na hover tak samo jak w .btn-glow: osobny ::after, animowana tylko
+     opacity. Tresc przycisku (z-index:auto) zostaje ponad obiema
+     warstwami (z-index ujemny), bo isolation:isolate tworzy dla nich
+     wlasny kontekst uwarstwienia. */
   .btn-gradient {
-    background: linear-gradient(
-      135deg, 
-      var(--primary), 
-      var(--info), 
-      var(--success), 
-      var(--primary)
-    ) !important;
-    background-size: 300% 100% !important;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     color: #fff !important;
     border: none !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -2;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--info),
+        var(--success),
+        var(--primary)
+      );
+      background-size: 50% 100%;
+      background-repeat: repeat-x;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
-      animation: btnGradientFlow 3s linear infinite;
+
+      &::before {
+        animation: btnGradientFlow 3s linear infinite;
+      }
+
+      &::after {
+        opacity: 1;
+      }
     }
   }
 
   @keyframes btnGradientFlow {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 100% 50%; }
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 
   /* =========================================

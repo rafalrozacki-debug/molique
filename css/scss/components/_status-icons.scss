@@ -124,6 +124,22 @@
   margin: 0;
   position: relative;
 
+  /* .status-icon-toggle w środku ma zajęte oba pseudo-elementy pod grafikę
+     plus/checkmark, więc niewidoczny hit-area do --target-size-min (44px)
+     dokładamy tutaj, na klikalnym <label> - wizualny rozmiar ikony (32px)
+     zostaje bez zmian. Dotyczy tylko wariantu z tym wrapperem; goły
+     <button class="status-icon-toggle"> bez <label> nie ma wolnego
+     pseudo-elementu na ten sam trik (udokumentowane ograniczenie). */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
+  }
+
   input[type="checkbox"] {
     position: absolute;
     opacity: 0;

@@ -14,13 +14,18 @@
   border-radius: var(--border-radius);
   padding: calc(var(--spacing-unit) * 4);
   text-align: center;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  /* Tylko transform w transition - box-shadow na hover zmienia sie od razu
+     (jedno przemalowanie), nie w petli klatek jak przy animowanym
+     przejsciu. Wzorca ::after z .featured-box nie da sie tu uzyc: ten
+     kontener ma overflow:hidden (potrzebne pod wstazke .is-featured
+     ponizej), wiec cien pseudo-elementu zostalby przyciety. */
+  transition: transform var(--transition-speed);
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
