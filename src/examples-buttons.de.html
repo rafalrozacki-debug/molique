@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Buttons - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Buttons</h1>
+            <p class="text-6 text-muted">
+              Kopierbereite molique-Button-Varianten — die volle Farbpalette,
+              Gruppierung, Ghost-Varianten für dichte Tabellen sowie ein
+              Button zum Kopieren in die Zwischenablage.
+            </p>
+          </div>
+
+          <!-- Button-Varianten -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Button-Varianten</h3>
+            <p class="text-muted mb-4">
+              Die Basisklasse <code>.btn</code> in Kombination mit
+              Farbmodifikatoren.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-3">
+                <button class="btn btn-primary">Primary</button>
+                <button class="btn btn-secondary">Secondary</button>
+                <button class="btn btn-success">Success</button>
+                <button class="btn btn-danger">Danger</button>
+                <button class="btn btn-warning">Warning</button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;button class="btn btn-primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-secondary"&gt;Secondary&lt;/button&gt;
+&lt;button class="btn btn-success"&gt;Success&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Button Group -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Button Group</h3>
+            <p class="text-muted mb-4">
+              Fasst mehrere Buttons zu einer Zeile zusammen. Ideal für
+              Toolbars oder Ansicht-Umschalter.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 gap-4 flex-column align-items-start"
+              >
+                <!-- Standardgruppe -->
+                <div class="btn-group">
+                  <button class="btn btn-primary">Links</button>
+                  <button class="btn btn-primary">Mitte</button>
+                  <button class="btn btn-primary">Rechts</button>
+                </div>
+
+                <!-- Outline-Gruppe -->
+                <div class="btn-group">
+                  <button class="btn btn-outline-dark">Tag</button>
+                  <button class="btn btn-outline-dark is-active">
+                    Woche
+                  </button>
+                  <button class="btn btn-outline-dark">Monat</button>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="btn-group"&gt;
+  &lt;button class="btn btn-outline-dark"&gt;Option 1&lt;/button&gt;
+  &lt;button class="btn btn-outline-dark"&gt;Option 2&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Ghost Buttons -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Action Buttons (Ghost)</h3>
+            <p class="text-muted mb-4">
+              Die Klasse <code>.btn-action</code> ist für dichte
+              B2B-Oberflächen gedacht (z. B. Tabellenzeilen). Sie entfernt den
+              Hintergrund und verringert das Padding, ohne die Lesbarkeit zu
+              beeinträchtigen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-3 bg-surface">
+                <div class="btn-action-group with-dividers">
+                  <button class="btn-action">Bearbeiten</button>
+                  <button class="btn-action">Duplizieren</button>
+                  <button class="btn-action text-danger">Löschen</button>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;button class="btn-action"&gt;Bearbeiten&lt;/button&gt;
+&lt;button class="btn-action text-danger"&gt;Löschen&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Kopier-Button -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Button zum Kopieren in die Zwischenablage</h3>
+            <p class="text-muted mb-4">
+              Ein eingebautes JS-Skript zum Kopieren von Inhalten — einfach
+              die Klasse <code>.btn-copy</code> hinzufügen.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column align-items-start w-100"
+              >
+                <div
+                  class="position-relative w-100 p-4 bg-light border rounded-2"
+                >
+                  <button
+                    class="btn-copy"
+                    style="background: var(--primary); border: none"
+                  >
+                    Rabattcode kopieren
+                  </button>
+                  <div class="text-8 fw-black text-primary mt-4">
+                    MOLIQUE2026
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Der Button muss direkt vor dem Element mit dem Text stehen --&gt;
+&lt;div class="position-relative"&gt;
+  &lt;button class="btn-copy"&gt;Kopieren&lt;/button&gt;
+  &lt;div&gt;Text, der in die Zwischenablage kopiert wird&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Spezielle Varianten -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Spezielle Varianten</h3>
+            <p class="text-muted mb-4">
+              Modifikatoren, die auf den bestehenden
+              <code>.btn</code>/<code>.btn-outline-*</code>-Klassen
+              aufsetzen — ein weicher Rahmen, ein gestapeltes Layout (Icon
+              über der Beschriftung) sowie visuelle Effekte (Glow, Glas, 3D,
+              Glanz, animierter Verlauf).
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-3">
+                <button class="btn btn-outline-primary btn-outline-soft">
+                  Soft Outline
+                </button>
+                <button class="btn btn-primary btn-stacked">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M218.83,103.77l-80-75.48a12,12,0,0,0-17.66,0l-80,75.48A12,12,0,0,0,44,116.9V208a12,12,0,0,0,12,12H96a12,12,0,0,0,12-12V160h40v48a12,12,0,0,0,12,12h40a12,12,0,0,0,12-12V116.9A12,12,0,0,0,218.83,103.77Z"/></svg>
+                  <span>Home</span>
+                </button>
+                <button class="btn btn-primary btn-glow">Glow</button>
+                <button class="btn btn-primary btn-3d">3D Push</button>
+                <button class="btn btn-primary btn-shine">Shine</button>
+                <button class="btn btn-gradient">Gradient</button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;button class="btn btn-outline-primary btn-outline-soft"&gt;Soft Outline&lt;/button&gt;
+
+&lt;button class="btn btn-primary btn-stacked"&gt;
+  &lt;svg viewBox="0 0 256 256" fill="currentColor"&gt;...&lt;/svg&gt;
+  &lt;span&gt;Home&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;button class="btn btn-primary btn-glow"&gt;Glow&lt;/button&gt;
+&lt;button class="btn btn-primary btn-3d"&gt;3D Push&lt;/button&gt;
+&lt;button class="btn btn-primary btn-shine"&gt;Shine&lt;/button&gt;
+&lt;button class="btn btn-gradient"&gt;Gradient&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+
+            <p class="text-muted mb-4 mt-4">
+              <code>.btn-glass</code> benötigt einen dunklen/farbigen
+              Hintergrund, damit der Glaseffekt sichtbar ist — deshalb hat die
+              Vorschau unten einen eigenen Hintergrund.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 gap-3"
+                style="background: linear-gradient(135deg, var(--dark), var(--primary));"
+              >
+                <button class="btn btn-glass">Glass</button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Erfordert einen dunklen/farbigen Hintergrund darunter --&gt;
+&lt;button class="btn btn-glass"&gt;Glass&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-typography.html" class="btn btn-secondary"
+              >➔ Zurück: Typografie &amp; Farben</a
+            >
+            <a
+              href="examples-badges.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Badges ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

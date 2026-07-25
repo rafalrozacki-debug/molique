@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Data Rows - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Data Rows</h1>
+            <p class="text-6 text-muted">
+              Eine moderne Alternative zu Tabellen auf Basis von CSS Grid und
+              Flexbox — ideal für Kunden-, Projekt- und Dateilisten in
+              CRM-Systemen.
+            </p>
+          </div>
+
+          <!-- Datenzeilen (Data Rows) -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Datenzeilen (Data Rows)</h3>
+            <p class="text-muted mb-4">
+              Die Klasse <code>.data-row</code> nutzt CSS Grid, um Elemente in
+              breiten Zeilen anzuordnen — eine großartige Alternative zu
+              Tabellen in CRM-Systemen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column w-100 bg-surface">
+                <!-- Zeile 1 -->
+                <div class="data-row w-100">
+                  <div class="fw-bold">Haus in der Kossaccach-Straße 44</div>
+                  <div class="text-muted">144 m² Wohnfläche</div>
+                  <div class="fw-bold">247.000 €</div>
+                  <div><span class="status-dot status-draft">Entwurf</span></div>
+                  <div class="data-row-actions btn-action-group with-dividers">
+                    <button class="btn-action">Bearbeiten</button>
+                    <button class="btn-action text-danger">Löschen</button>
+                  </div>
+                </div>
+
+                <!-- Zeile 2 -->
+                <div class="data-row w-100">
+                  <div class="fw-bold">Scheune S Solo</div>
+                  <div class="text-muted">225 m² Wohnfläche</div>
+                  <div class="fw-bold">412.000 €</div>
+                  <div>
+                    <span class="status-dot status-pending">Ausstehend</span>
+                  </div>
+                  <div class="data-row-actions btn-action-group with-dividers">
+                    <button class="btn-action">Bearbeiten</button>
+                    <button class="btn-action text-danger">Löschen</button>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Zeile auf Basis von CSS Grid --&gt;
+&lt;div class="data-row"&gt;
+  &lt;div class="fw-bold"&gt;Projektname&lt;/div&gt;
+  &lt;div class="text-muted"&gt;Parameter&lt;/div&gt;
+
+  &lt;!-- Status-Punkt --&gt;
+  &lt;div&gt;&lt;span class="status-dot status-pending"&gt;Ausstehend&lt;/span&gt;&lt;/div&gt;
+
+  &lt;!-- Aktions-Buttons (mit vertikalen Trennlinien) --&gt;
+  &lt;div class="data-row-actions btn-action-group with-dividers"&gt;
+    &lt;button class="btn-action"&gt;Bearbeiten&lt;/button&gt;
+    &lt;button class="btn-action text-danger"&gt;Löschen&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Kompakte Datenzeilen (List Items) -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Kompakte Datenzeilen (List Items)</h3>
+            <p class="text-muted mb-4">
+              Die Variante <code>.data-row-compact</code> basiert auf
+              Flexbox. Ideal für Seitenleisten, Download-Dateilisten oder
+              Benachrichtigungen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column w-100 bg-surface">
+                <div
+                  class="card border-0 shadow-sm w-100"
+                  style="max-width: 500px"
+                >
+                  <!-- Datei 1 -->
+                  <div class="data-row-compact">
+                    <div class="row-icon icon-square bg-danger text-white">
+                      <i class="icon-file-text"></i>
+                    </div>
+                    <div class="row-content">
+                      <div class="row-title">2026-finanzbericht.pdf</div>
+                      <div class="row-details">
+                        0,4 MB von 0,8 MB • Wird heruntergeladen...
+                      </div>
+                    </div>
+                    <div class="row-actions">
+                      <button
+                        class="btn btn-action text-muted hover-text-danger"
+                      >
+                        <i class="icon-x"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Benutzer 1 -->
+                  <div class="data-row-compact">
+                    <div class="row-icon bg-primary text-white">
+                      <i class="icon-user"></i>
+                    </div>
+                    <div class="row-content">
+                      <div class="row-title">James Brown</div>
+                      <div class="row-details">james@alignui.com</div>
+                    </div>
+                    <div class="row-actions">
+                      <span class="text-muted text-4 m-r-2">Kann ansehen</span>
+                      <button
+                        class="btn btn-action text-muted text-hover-primary"
+                      >
+                        <i class="icon-chevron-down"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="card border-0 shadow-sm"&gt;
+
+  &lt;!-- Kompakte Zeile --&gt;
+  &lt;div class="data-row-compact"&gt;
+
+    &lt;!-- Icon (.icon-square für ein Quadrat hinzufügen) --&gt;
+    &lt;div class="row-icon icon-square bg-danger text-white"&gt;
+      &lt;i class="icon-file-text"&gt;&lt;/i&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Inhalt (zu langer Text wird automatisch abgeschnitten) --&gt;
+    &lt;div class="row-content"&gt;
+      &lt;div class="row-title"&gt;2026-bericht.pdf&lt;/div&gt;
+      &lt;div class="row-details"&gt;0,4 MB von 0,8 MB&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Aktionen rechts --&gt;
+    &lt;div class="row-actions"&gt;
+      &lt;button class="btn btn-action"&gt;&lt;i class="icon-x"&gt;&lt;/i&gt;&lt;/button&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- List Group -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Einfache Liste (List Group)</h3>
+            <p class="text-muted mb-4">
+              Wenn <code>.data-row</code> zu viel und ein einfaches
+              <code>&lt;ul&gt;</code> zu wenig ist — <code>.list-group</code>
+              fasst Einträge zu einem einheitlichen Panel mit Rahmen zwischen
+              den Zeilen zusammen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="list-group w-100">
+                  <a href="#" class="list-group-item is-active"
+                    >Kontoeinstellungen</a
+                  >
+                  <a href="#" class="list-group-item">Benachrichtigungen</a>
+                  <a href="#" class="list-group-item">Zahlungsmethoden</a>
+                  <a href="#" class="list-group-item">API-Integrationen</a>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="list-group"&gt;
+  &lt;a href="#" class="list-group-item is-active"&gt;Kontoeinstellungen&lt;/a&gt;
+  &lt;a href="#" class="list-group-item"&gt;Benachrichtigungen&lt;/a&gt;
+  &lt;a href="#" class="list-group-item"&gt;Zahlungsmethoden&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-tables.html" class="btn btn-secondary"
+              >➔ Zurück: B2B-Tabellen</a
+            >
+            <a
+              href="examples-modals.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Modale ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

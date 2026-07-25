@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Dropdown - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Dropdown</h1>
+            <p class="text-6 text-muted">
+              Ein einfaches Dropdown-Menü — null JavaScript, schließt sich
+              automatisch bei Klick außerhalb. Zwei Varianten: die klassische
+              auf Basis von <code>&lt;details&gt;</code> (Navbar) sowie ein
+              Popover im Top Layer (überall dort, wo der Container den
+              Inhalt abschneidet — Tabellen, Karten, Modale).
+            </p>
+          </div>
+
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Einfaches Dropdown</h3>
+            <p class="text-muted mb-4">
+              <code>&lt;details class="dropdown"&gt;</code> +
+              <code>&lt;summary class="dropdown-toggle"&gt;</code> als
+              Auslöser, <code>.dropdown-menu</code> mit
+              <code>.dropdown-item</code>-Links als Inhalt.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-4">
+                <details class="dropdown">
+                  <summary class="dropdown-toggle btn btn-outline-dark">
+                    Optionen
+                  </summary>
+                  <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Bearbeiten</a>
+                    <a href="#" class="dropdown-item">Duplizieren</a>
+                    <a href="#" class="dropdown-item">Archivieren</a>
+                  </div>
+                </details>
+
+                <details class="dropdown">
+                  <summary class="dropdown-toggle btn btn-primary">
+                    Aktionen
+                  </summary>
+                  <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Bericht herunterladen</a>
+                    <a href="#" class="dropdown-item">Per E-Mail senden</a>
+                    <a href="#" class="dropdown-item">Löschen</a>
+                  </div>
+                </details>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;details class="dropdown"&gt;
+  &lt;summary class="dropdown-toggle btn btn-outline-dark"&gt;
+    Optionen
+  &lt;/summary&gt;
+  &lt;div class="dropdown-menu"&gt;
+    &lt;a href="#" class="dropdown-item"&gt;Bearbeiten&lt;/a&gt;
+    &lt;a href="#" class="dropdown-item"&gt;Duplizieren&lt;/a&gt;
+    &lt;a href="#" class="dropdown-item"&gt;Archivieren&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/details&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Dropdown als Popover (Top Layer) -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">
+              Dropdown als Popover (Top Layer)
+            </h3>
+            <p class="text-muted mb-4">
+              Die empfohlene Variante außerhalb der Navbar: fügen Sie
+              <code>popovertarget="ID"</code> zu <strong>einem beliebigen
+              bestehenden Button</strong> hinzu sowie das Attribut
+              <code>popover</code> plus dieselbe <code>id</code> zu
+              <code>.dropdown-menu</code>. Das Menü wird im Top Layer
+              gerendert (nicht durch <code>overflow</code> abgeschnitten —
+              z. B. in einem <code>.table-wrapper</code> oder einem Modal)
+              und verankert sich automatisch an seinem Button — ohne
+              <code>.dropdown</code>-Wrapper.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-4">
+                <button class="btn btn-outline-dark" popovertarget="demo-pop-menu">
+                  Optionen ▾
+                </button>
+                <div class="dropdown-menu" popover id="demo-pop-menu">
+                  <a href="#" class="dropdown-item">Bearbeiten</a>
+                  <a href="#" class="dropdown-item">Duplizieren</a>
+                  <a href="#" class="dropdown-item">Archivieren</a>
+                </div>
+
+                <button class="btn btn-primary" popovertarget="demo-pop-menu-end">
+                  Aktionen (rechtsbündig) ▾
+                </button>
+                <div
+                  class="dropdown-menu dropdown-menu-end"
+                  popover
+                  id="demo-pop-menu-end"
+                >
+                  <a href="#" class="dropdown-item">Bericht herunterladen</a>
+                  <a href="#" class="dropdown-item">Per E-Mail senden</a>
+                  <a href="#" class="dropdown-item text-danger">Löschen</a>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Ein beliebiger bestehender Button + popovertarget --&gt;
+&lt;button class="btn btn-outline-dark" popovertarget="pop-menu"&gt;Optionen ▾&lt;/button&gt;
+
+&lt;!-- [popover] = Top Layer: das Menü wird nicht durch overflow abgeschnitten --&gt;
+&lt;div class="dropdown-menu" popover id="pop-menu"&gt;
+  &lt;a href="#" class="dropdown-item"&gt;Bearbeiten&lt;/a&gt;
+  &lt;a href="#" class="dropdown-item"&gt;Duplizieren&lt;/a&gt;
+  &lt;a href="#" class="dropdown-item"&gt;Archivieren&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;!-- Ausrichtung an der rechten Kante des Buttons --&gt;
+&lt;div class="dropdown-menu dropdown-menu-end" popover id="pop-menu-2"&gt;...&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-pagination.html" class="btn btn-secondary"
+              >➔ Zurück: Paginierung</a
+            >
+            <a
+              href="examples-language-switch.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Sprachumschalter ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
