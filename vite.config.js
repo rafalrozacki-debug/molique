@@ -121,16 +121,31 @@ const LOCALE_META = {
   de: { label: 'DE', flag: 'de' },
 };
 
+// Ladny URL z nazwy bazowej pliku - BEZ specjalnego przypadku dla "index"
+// (w odroznieniu od tools/migrate-pretty-urls.js). Te wartosci trafiaja
+// m.in. do <link rel="alternate" hreflang="..." href="..."> w head.html -
+// Vite skanuje href we WSZYSTKICH <link> jako referencje do zasobu (w
+// odroznieniu od <a href>, ktorych nie skanuje), wiec "./" tutaj probowaloby
+// wczytac katalog src/ jako plik i wywalaloby caly build (EISDIR). Statyczne
+// <a href> (navbar-brand, stopka, 404) dostaly ladniejsze "./" wylacznie
+// przez jednorazowa migracje w tools/migrate-pretty-urls.js - to bezpieczne,
+// bo Vite nie skanuje <a>.
+function toPrettyUrl(base, locale) {
+  return locale ? `${base}.${locale}` : base;
+}
+
 function computeI18nLocals(filename) {
   const file = basename(filename);
   const match = file.match(/^(.+?)(?:\.(en|de))?\.html$/);
   const base = match[1];
   const locale = match[2] || 'pl';
-  const altPl = `${base}.html`;
-  const altEnFile = `${base}.en.html`;
-  const altDeFile = `${base}.de.html`;
-  const hasEn = existsSync(resolve(srcDir, altEnFile));
-  const hasDe = existsSync(resolve(srcDir, altDeFile));
+  const altPl = toPrettyUrl(base, null);
+  const altEnFile = toPrettyUrl(base, 'en');
+  const altDeFile = toPrettyUrl(base, 'de');
+  // existsSync sprawdza prawdziwe pliki .html na dysku - tylko wartosc
+  // wstrzykiwana do szablonu jest ladna, sam warunek istnienia zostaje.
+  const hasEn = existsSync(resolve(srcDir, `${base}.en.html`));
+  const hasDe = existsSync(resolve(srcDir, `${base}.de.html`));
 
   return {
     __lang: locale,
