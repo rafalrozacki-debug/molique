@@ -22,7 +22,7 @@
     >
       <div class="container py-5">
         <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
-          <span class="badge badge-primary mb-3">Aktuelle Version: 1.6.0</span>
+          <span class="badge badge-primary mb-3">Aktuelle Version: 1.7.0</span>
           <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
             Changelog
           </h1>
@@ -950,6 +950,202 @@
                     umgestellt - keine bewussten Ausnahmen mehr übrig, die
                     gesamte Sidebar verlinkt jetzt in der jeweiligen
                     Sprache der Seite.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Lizenzseite (<code>docs-license.html</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Der vollständige Text der Apache License 2.0 in
+                    lesbarer Form, plus eine kurze
+                    <code>NOTICE</code>-Zusammenfassung oben auf der Seite.
+                    Verfügbar auf Polnisch, Englisch und Deutsch.
+                  </li>
+                  <li>
+                    <strong>Der Lizenztext selbst bleibt in allen drei
+                    Versionen auf Englisch</strong> - das ist die einzige
+                    rechtsverbindliche Fassung; eine inoffizielle
+                    Übersetzung könnte Unklarheiten schaffen. Übersetzt
+                    wird nur die Seitenhülle (Titel, Einleitung,
+                    Navigationsschaltflächen).
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  KI-Anleitung auf Englisch und Deutsch
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>docs-llms.html</code> (die menschenlesbare
+                    Version von <code>llms.txt</code>) hat jetzt einen
+                    vollständigen Satz an Sprachversionen, passend zum
+                    Rest der Referenzdokumentation.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Änderung</span>
+                  Sprechende URLs auf der gesamten Seite
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Alle internen Links haben
+                    <code>.html</code> verloren</strong>
+                    (<code>docs.html</code> → <code>docs</code>,
+                    Startseite → <code>/</code>) - 2.310 Links in 270
+                    Dateien, umgeschrieben von einem einmaligen Skript,
+                    <code>tools/migrate-pretty-urls.js</code>. Der Server
+                    (<code>.htaccess</code>) unterstützte das schon seit
+                    einer früheren Version; die Seite hat es nur noch
+                    nicht genutzt.
+                  </li>
+                  <li>
+                    <strong>Eine Falle unterwegs:</strong> hreflang im
+                    <code>&lt;head&gt;</code> ist ein
+                    <code>&lt;link&gt;</code>-Tag, und Vite scannt
+                    <code>href</code> in jedem <code>&lt;link&gt;</code>
+                    als Asset-Referenz (im Gegensatz zu
+                    <code>&lt;a&gt;</code>, das ignoriert wird) - der
+                    erste Versuch mit <code>href="./"</code> für die
+                    Startseite versuchte, das Verzeichnis
+                    <code>src/</code> als Datei zu lesen, und brachte den
+                    gesamten Build zum Absturz.
+                  </li>
+                  <li>
+                    <code>sitemap.xml</code> und <code>robots.txt</code>
+                    tragen jetzt die echte Produktionsdomain (kein
+                    Platzhalter mehr) und decken alle PL/EN/DE-Seiten ab -
+                    generiert von einem neuen
+                    <code>tools/gen-sitemap.js</code>, das nach jedem
+                    Build automatisch läuft.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Korrekturen</span
+                  >
+                  CSS-Variablen statt fest codierter Werte
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Vollbild-Overlays</strong> (Lightbox,
+                    Offcanvas, Popover) haben ein gemeinsames
+                    <code>--backdrop-rgb</code> erhalten - aber nur als
+                    Farbquelle, nicht als eine gemeinsame Deckkraft. Jede
+                    Komponente hatte einen bewusst anderen Wert
+                    (0,95 / 0,5 / 0,6); ein erzwungener gemeinsamer Wert
+                    hätte das Erscheinungsbild der Lightbox tatsächlich
+                    verändert.
+                  </li>
+                  <li>
+                    <strong>Die Fußzeile</strong> hat lokale
+                    <code>--footer-muted-rgb</code>/<code>--footer-white-rgb</code>
+                    erhalten - nicht das globale <code>--light-rgb</code>,
+                    da sich dieses im Dark Mode umkehrt, während die
+                    Fußzeile immer dunkel ist.
+                  </li>
+                  <li>
+                    Abstände und Rundungen in der Paginierung, der
+                    Preisliste, den Pill-Tabs, dem Karussell, der
+                    Admin-Sidebar und der Code-Vorschau berechnen sich
+                    jetzt aus <code>--spacing-unit</code> /
+                    <code>--border-radius</code> - ohne optische
+                    Änderung (gleiche resultierende Werte).
+                  </li>
+                  <li>
+                    Neue Übergangsgeschwindigkeits-Token
+                    (<code>--transition-speed-fast/-slow/-slower/-chart</code>)
+                    statt einzelner Zahlen, verstreut über die
+                    Komponenten. Dabei haben
+                    <code>_accordion.scss</code> und
+                    <code>_charts.scss</code> auch Unterstützung für
+                    <code>prefers-reduced-motion</code> erhalten, die
+                    vorher komplett fehlte.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Konfigurierbarer Download (<code>download.html</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Das Production-Paket enthielt bisher gleichzeitig
+                    vollständiges und minifiziertes CSS - 425 KB
+                    Überschuss für alle, die nur eines von beiden
+                    brauchten. Jetzt wählen Sie das Format (ein
+                    <code>.tabs-pill</code>-Segmented-Control) und
+                    optional die Schriftarten (ein
+                    <code>.form-switch</code> im Kartenkopf) - das
+                    Standardpaket schrumpfte von ~363 KB auf ~90 KB.
+                  </li>
+                  <li>
+                    Sechs statische Varianten, gebaut von einem
+                    erweiterten <code>tools/build-packages.ps1</code>,
+                    clientseitig umgeschaltet ohne neue JS-Abhängigkeit.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Änderung</span>
+                  Lightbox auf nativem <code>&lt;dialog&gt;</code>
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Eine echte Barrierefreiheits-Lücke:</strong>
+                    Die alte, manuell gesteuerte
+                    <code>&lt;div&gt;</code>-Version hat den Fokus nicht
+                    eingefangen - mit Tab konnte man die geöffnete
+                    Lightbox verlassen und auf die dahinterliegende Seite
+                    gelangen. Natives
+                    <code>showModal()</code>/<code>close()</code>
+                    übernimmt das (plus Rückgabe des Fokus an das
+                    auslösende Element und Schließen mit Escape)
+                    automatisch.
+                  </li>
+                  <li>
+                    <code>::backdrop</code> + <code>@starting-style</code>
+                    statt manuellem Klassen-Umschalten und einem
+                    <code>setTimeout(10ms)</code>-Trick, um vor der
+                    Einblendung einen Reflow zu erzwingen.
+                  </li>
+                  <li>
+                    <strong>View Transitions API für die
+                    Bildwechsel-Animation - ausprobiert und wieder
+                    zurückgenommen.</strong> Im Test konnte sich das
+                    <code>finished</code>-Promise von
+                    <code>document.startViewTransition()</code> einfach
+                    nie auflösen, und ein weiterer Aufruf nach einem
+                    solchen Fall feuerte seinen Callback dann gar nicht
+                    mehr - ein reales Risiko, dass die Pfeile der Galerie
+                    dauerhaft einfrieren. Zurückgekehrt zu einer manuellen
+                    <code>transform</code>/<code>opacity</code>-Animation
+                    mit einem zeitbasierten Throttle (löst sich immer
+                    selbst), plus Unterstützung für
+                    <code>prefers-reduced-motion</code>, die vorher
+                    fehlte.
+                  </li>
+                  <li>
+                    Benachbarte Galeriebilder werden jetzt im Hintergrund
+                    vorab geladen - Pfeile und Swipe fühlen sich sofort
+                    an.
                   </li>
                 </ul>
               </div>

@@ -22,7 +22,7 @@
     >
       <div class="container py-5">
         <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
-          <span class="badge badge-primary mb-3">Current version: 1.6.0</span>
+          <span class="badge badge-primary mb-3">Current version: 1.7.0</span>
           <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
             Changelog
           </h1>
@@ -865,6 +865,188 @@
                     switched to <code>.en.html</code>/<code>.de.html</code>
                     — zero deliberate exceptions left, the entire sidebar
                     now links in the page's own language.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  License page (<code>docs-license.html</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The full Apache License 2.0 text in a readable form,
+                    plus a short <code>NOTICE</code> summary at the top.
+                    Available in Polish, English, and German.
+                  </li>
+                  <li>
+                    <strong>The license text itself stays in English on
+                    all three versions</strong> — it's the only legally
+                    binding form; an unofficial translation could
+                    introduce ambiguity. Only the page chrome (title,
+                    intro, navigation buttons) is translated.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  AI Instructions in English and German
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>docs-llms.html</code> (the human-readable version
+                    of <code>llms.txt</code>) now has a full set of
+                    language versions, matching the rest of the reference
+                    docs.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Change</span>
+                  Pretty URLs across the whole site
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Every internal link dropped
+                    <code>.html</code></strong> (<code>docs.html</code> →
+                    <code>docs</code>, the homepage → <code>/</code>) —
+                    2,310 links across 270 files, rewritten by a one-off
+                    script, <code>tools/migrate-pretty-urls.js</code>. The
+                    server (<code>.htaccess</code>) already supported this
+                    from an earlier release; the site just wasn't using it
+                    yet.
+                  </li>
+                  <li>
+                    <strong>A trap along the way:</strong> hreflang in
+                    <code>&lt;head&gt;</code> is a <code>&lt;link&gt;</code>
+                    tag, and Vite scans <code>href</code> on every
+                    <code>&lt;link&gt;</code> as an asset reference (unlike
+                    <code>&lt;a&gt;</code>, which it ignores) — the first
+                    pass, with <code>href="./"</code> for the homepage,
+                    tried to read the <code>src/</code> directory as a
+                    file and crashed the entire build.
+                  </li>
+                  <li>
+                    <code>sitemap.xml</code> and <code>robots.txt</code>
+                    now carry the real production domain (not a
+                    placeholder) and cover every PL/EN/DE page — generated
+                    by a new <code>tools/gen-sitemap.js</code>, run
+                    automatically after every build.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  CSS variables instead of hardcoded values
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Full-screen overlays</strong> (lightbox,
+                    offcanvas, popover) got a shared
+                    <code>--backdrop-rgb</code> — but only as a color
+                    source, not one shared opacity. Each component had a
+                    deliberately different value (0.95 / 0.5 / 0.6);
+                    forcing one shared value would have genuinely changed
+                    how the lightbox looks.
+                  </li>
+                  <li>
+                    <strong>The footer</strong> got local
+                    <code>--footer-muted-rgb</code>/<code>--footer-white-rgb</code>
+                    — not the global <code>--light-rgb</code>, since that
+                    one flips in dark mode while the footer is always
+                    dark.
+                  </li>
+                  <li>
+                    Spacing and radii in pagination, the pricing list,
+                    pill tabs, the carousel, the admin sidebar, and the
+                    code preview now compute from
+                    <code>--spacing-unit</code> /
+                    <code>--border-radius</code> — no visual change (same
+                    resulting values).
+                  </li>
+                  <li>
+                    New transition-speed tokens
+                    (<code>--transition-speed-fast/-slow/-slower/-chart</code>)
+                    instead of individual numbers scattered across
+                    components. While at it, <code>_accordion.scss</code>
+                    and <code>_charts.scss</code> also gained
+                    <code>prefers-reduced-motion</code> support, which
+                    they didn't have at all before.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Configurable download (<code>download.html</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The Production package used to bundle both full and
+                    minified CSS at once — 425 KB of dead weight for
+                    anyone who only needed one. Now you pick the format (a
+                    <code>.tabs-pill</code> segmented control) and
+                    optionally the fonts (a <code>.form-switch</code> in
+                    the card header) — the default package dropped from
+                    ~363 KB to ~90 KB.
+                  </li>
+                  <li>
+                    Six static variants built by an extended
+                    <code>tools/build-packages.ps1</code>, switched
+                    client-side with zero new JS dependencies.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Change</span>
+                  Lightbox on a native <code>&lt;dialog&gt;</code>
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>A real accessibility gap:</strong> the old
+                    version, built on a manually controlled
+                    <code>&lt;div&gt;</code>, didn't trap focus — pressing
+                    Tab could take you out of the open lightbox and onto
+                    the page behind it. Native
+                    <code>showModal()</code>/<code>close()</code> handles
+                    that (plus restoring focus to the trigger element and
+                    closing on Escape) automatically.
+                  </li>
+                  <li>
+                    <code>::backdrop</code> + <code>@starting-style</code>
+                    instead of manually toggling classes and a
+                    <code>setTimeout(10ms)</code> hack to force a reflow
+                    before the fade-in.
+                  </li>
+                  <li>
+                    <strong>View Transitions API for the image-swap
+                    animation — tried, then reverted.</strong> In testing,
+                    <code>document.startViewTransition()</code>'s
+                    <code>finished</code> promise could simply never
+                    settle, and a subsequent call after that happened
+                    would stop firing its callback at all — a real risk of
+                    permanently freezing the gallery's arrows. Reverted to
+                    a manual <code>transform</code>/<code>opacity</code>
+                    animation with a time-based throttle (always
+                    self-releasing), and added
+                    <code>prefers-reduced-motion</code> support, which
+                    was missing before.
+                  </li>
+                  <li>
+                    Adjacent gallery images are now preloaded in the
+                    background, so arrows and swipe feel instant.
                   </li>
                 </ul>
               </div>
