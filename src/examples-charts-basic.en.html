@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Basic Charts - molique Examples"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout">
+      <!-- SIDEBAR -->
+      <include src="partials/examples-sidebar.en.html"></include>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Basic Charts</h1>
+            <p class="text-6 text-muted">
+              Ready-to-copy charts built 100% on plain HTML/CSS/SVG —
+              sparklines, radial rings, activity heatmaps, area charts, and
+              pie charts.
+            </p>
+          </div>
+
+          <!-- Sparklines -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Sparklines (Bar Charts)</h3>
+            <p class="text-muted mb-4">
+              Built on Flexbox. Bar height is passed from the backend via
+              the <code>--val</code> CSS variable.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center"
+              >
+                <div
+                  class="r-chart-wrapper"
+                  data-type="sparkline"
+                  data-values="[20, 50, 30, 80, 40, 90, 60]"
+                  style="height: 150px; max-width: 400px"
+                >
+                  <div class="chart-sparkline">
+                    <div
+                      class="sparkline-bar tooltip-element"
+                      data-tooltip="Mon: 20"
+                      style="--val: 20%"
+                    ></div>
+                    <div
+                      class="sparkline-bar tooltip-element"
+                      data-tooltip="Tue: 50"
+                      style="--val: 50%"
+                    ></div>
+                    <div
+                      class="sparkline-bar tooltip-element"
+                      data-tooltip="Wed: 30"
+                      style="--val: 30%"
+                    ></div>
+                    <div
+                      class="sparkline-bar tooltip-element"
+                      data-tooltip="Thu: 80"
+                      style="--val: 80%"
+                    ></div>
+                    <div
+                      class="sparkline-bar tooltip-element"
+                      data-tooltip="Fri: 40"
+                      style="--val: 40%"
+                    ></div>
+                    <div
+                      class="sparkline-bar tooltip-element"
+                      data-tooltip="Sat: 90"
+                      style="--val: 90%"
+                    ></div>
+                    <div
+                      class="sparkline-bar tooltip-element"
+                      data-tooltip="Sun: 60"
+                      style="--val: 60%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;div class="r-chart-wrapper" data-type="sparkline" data-values="[20, 50, 80]"&gt;
+  &lt;div class="chart-sparkline"&gt;
+    &lt;div class="sparkline-bar" style="--val: 20%;"&gt;&lt;/div&gt;
+    &lt;div class="sparkline-bar" style="--val: 50%;"&gt;&lt;/div&gt;
+    &lt;div class="sparkline-bar" style="--val: 80%;"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Radial Bar -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Radial Bar (Rings)</h3>
+            <p class="text-muted mb-4">
+              Uses <code>conic-gradient</code> plus <code>radial-gradient</code>
+              masking to cut out the center.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center gap-5"
+              >
+                <div
+                  class="r-chart-wrapper"
+                  data-type="radial"
+                  data-values="[75]"
+                  style="width: auto; height: auto"
+                >
+                  <div class="chart-radial" style="--val: 75%">
+                    <span class="radial-value">75%</span>
+                  </div>
+                </div>
+
+                <div
+                  class="r-chart-wrapper"
+                  data-type="radial"
+                  data-values="[42]"
+                  style="width: auto; height: auto"
+                >
+                  <!-- Overriding the color via a local variable -->
+                  <div
+                    class="chart-radial"
+                    style="--val: 42%; --primary: var(--danger)"
+                  >
+                    <span class="radial-value text-danger">42%</span>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;div class="r-chart-wrapper" data-type="radial" data-values="[75]"&gt;
+  &lt;div class="chart-radial" style="--val: 75%;"&gt;
+    &lt;span class="radial-value"&gt;75%&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Heatmap -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Heatmap (Activity Maps)</h3>
+            <p class="text-muted mb-4">
+              Built on CSS Grid and <code>aspect-ratio</code>. The
+              <code>--val</code> variable (from 0.0 to 1.0) controls the
+              background color's opacity (Alpha channel).
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center py-5"
+              >
+                <div
+                  class="r-chart-wrapper"
+                  data-type="heatmap"
+                  style="height: auto; max-width: 400px"
+                >
+                  <!-- 10-column grid -->
+                  <div class="chart-heatmap grid-cols-10">
+                    <!-- Week 1 -->
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 10"
+                      style="--val: 0.1"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 40"
+                      style="--val: 0.4"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 80"
+                      style="--val: 0.8"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 100"
+                      style="--val: 1"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 20"
+                      style="--val: 0.2"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 50"
+                      style="--val: 0.5"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 5"
+                      style="--val: 0.05"
+                    ></div>
+                    <!-- Week 2 -->
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 60"
+                      style="--val: 0.6"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 90"
+                      style="--val: 0.9"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 30"
+                      style="--val: 0.3"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 10"
+                      style="--val: 0.1"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 70"
+                      style="--val: 0.7"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 100"
+                      style="--val: 1"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 40"
+                      style="--val: 0.4"
+                    ></div>
+                    <!-- Week 3 -->
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 20"
+                      style="--val: 0.2"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 10"
+                      style="--val: 0.1"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 50"
+                      style="--val: 0.5"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 80"
+                      style="--val: 0.8"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 90"
+                      style="--val: 0.9"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 100"
+                      style="--val: 1"
+                    ></div>
+                    <div
+                      class="heatmap-cell tooltip-element"
+                      data-tooltip="Value: 30"
+                      style="--val: 0.3"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;div class="chart-heatmap grid-cols-10"&gt;
+  &lt;!-- The --val value is the Alpha channel (opacity), from 0.0 to 1.0 --&gt;
+  &lt;div class="heatmap-cell" style="--val: 0.1;"&gt;&lt;/div&gt;
+  &lt;div class="heatmap-cell" style="--val: 0.8;"&gt;&lt;/div&gt;
+  &lt;div class="heatmap-cell" style="--val: 1.0;"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Smooth Area Chart -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Smooth Area Chart (SVG)</h3>
+            <p class="text-muted mb-4">
+              A clean, lightweight <code>&lt;svg&gt;</code> tag with Bezier
+              curves. Ideal as a background for stat cards.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center"
+              >
+                <div class="card p-4 w-100" style="max-width: 400px">
+                  <h4 class="text-muted text-4 fw-bold text-uppercase mb-1">
+                    Revenue
+                  </h4>
+                  <h2 class="text-9 fw-black mb-4">$124,500</h2>
+
+                  <div
+                    class="r-chart-wrapper"
+                    data-type="area"
+                    style="height: 100px; margin: 0 -16px -16px -16px"
+                  >
+                    <svg
+                      class="chart-area"
+                      viewBox="0 0 100 50"
+                      preserveAspectRatio="none"
+                    >
+                      <defs>
+                        <linearGradient
+                          id="areaGrad"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="0%"
+                            stop-color="var(--primary)"
+                            stop-opacity="0.3"
+                          />
+                          <stop
+                            offset="100%"
+                            stop-color="var(--primary)"
+                            stop-opacity="0"
+                          />
+                        </linearGradient>
+                      </defs>
+                      <!-- Fill (Area) -->
+                      <path
+                        class="area-fill"
+                        d="M0,50 L0,30 C20,20 40,40 60,20 C80,0 100,20 100,20 L100,50 Z"
+                      ></path>
+                      <!-- Line (Stroke) -->
+                      <path
+                        class="area-line"
+                        d="M0,30 C20,20 40,40 60,20 C80,0 100,20 100,20"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;div class="r-chart-wrapper" data-type="area"&gt;
+  &lt;svg class="chart-area" viewBox="0 0 100 50" preserveAspectRatio="none"&gt;
+    &lt;defs&gt;
+      &lt;linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"&gt;
+        &lt;stop offset="0%" stop-color="var(--primary)" stop-opacity="0.3"/&gt;
+        &lt;stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/&gt;
+      &lt;/linearGradient&gt;
+    &lt;/defs&gt;
+    &lt;path class="area-fill" d="M0,50 L0,30 C20,20 40,40 60,20 C80,0 100,20 100,20 L100,50 Z"&gt;&lt;/path&gt;
+    &lt;path class="area-line" d="M0,30 C20,20 40,40 60,20 C80,0 100,20 100,20"&gt;&lt;/path&gt;
+  &lt;/svg&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Donut Chart -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">
+              Pie / Donut Chart
+            </h3>
+            <p class="text-muted mb-4">
+              A multi-segment share chart built on pure SVG. Supports any
+              number of segments.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center gap-5"
+              >
+                <div
+                  class="r-chart-wrapper"
+                  data-type="donut"
+                  style="width: 200px; height: 200px"
+                >
+                  <!-- viewBox 0 0 36 36 is required for the 15.9155 radius math -->
+                  <svg viewBox="0 0 36 36" class="chart-pie">
+                    <!-- Ring background -->
+                    <circle cx="18" cy="18" r="15.9155" class="pie-bg"></circle>
+
+                    <!-- Segment 1: 45% (Offset: 0) -->
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="15.9155"
+                      class="pie-segment text-primary"
+                      style="--val: 45; --offset: 0"
+                    ></circle>
+
+                    <!-- Segment 2: 30% (Offset: 45) -->
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="15.9155"
+                      class="pie-segment text-success"
+                      style="--val: 30; --offset: 45"
+                    ></circle>
+
+                    <!-- Segment 3: 15% (Offset: 45 + 30 = 75) -->
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="15.9155"
+                      class="pie-segment text-warning"
+                      style="--val: 15; --offset: 75"
+                    ></circle>
+                  </svg>
+
+                  <!-- Optional text in the center of the Donut -->
+                  <div
+                    class="position-absolute top-50 left-50 translate-middle text-center"
+                  >
+                    <div class="text-8 fw-black">90%</div>
+                    <div class="text-3 text-muted text-uppercase">
+                      Completed
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="d-flex flex-column gap-2">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="status-dot status-pending"></span> B2B (45%)
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="status-dot status-done"></span> B2C (30%)
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span
+                      class="status-dot"
+                      style="--ping-color: var(--warning)"
+                      ><span
+                        style="
+                          background: var(--warning);
+                          width: 8px;
+                          height: 8px;
+                          border-radius: 50%;
+                          display: block;
+                        "
+                      ></span
+                    ></span>
+                    Other (15%)
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;svg viewBox="0 0 36 36" class="chart-pie"&gt;
+  &lt;circle cx="18" cy="18" r="15.9155" class="pie-bg"&gt;&lt;/circle&gt;
+
+  &lt;!-- Segment 1: 45% --&gt;
+  &lt;circle cx="18" cy="18" r="15.9155" class="pie-segment text-primary" style="--val: 45; --offset: 0;"&gt;&lt;/circle&gt;
+
+  &lt;!-- Segment 2: 30% (Offset is the previous value) --&gt;
+  &lt;circle cx="18" cy="18" r="15.9155" class="pie-segment text-success" style="--val: 30; --offset: 45;"&gt;&lt;/circle&gt;
+&lt;/svg&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Bottom navigation -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-progress-bars.en.html" class="btn btn-secondary"
+              >➔ Back: Progress Bars</a
+            >
+            <a
+              href="examples-stats-cards.en.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Next step: Stat Cards ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
