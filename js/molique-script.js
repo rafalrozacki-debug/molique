@@ -307,7 +307,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: '.admin-nav-submenu', file: 'modules/molique-admin-nav.js', init: 'initAdminNav' },
     { selectors: '.admin-nav', file: 'modules/molique-admin-nav-active.js', init: 'initAdminNavActive' },
     { selectors: '.theme-editor', file: 'modules/molique-theme-editor.js', init: 'initThemeEditor' },
-    { selectors: '.navbar-menu', file: 'modules/molique-navbar-active.js', init: 'initNavbarActive' }
+    { selectors: '.navbar-menu', file: 'modules/molique-navbar-active.js', init: 'initNavbarActive' },
+    { selectors: '.language-switch-menu', file: 'modules/molique-lang-suggest.js', init: 'initLangSuggest' }
   ];
 
   dynamicModules.forEach(module => {
