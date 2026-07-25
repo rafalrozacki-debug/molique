@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Eintrittsanimationen - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Eintrittsanimationen</h1>
+            <p class="text-6 text-muted">
+              Fertige Reveal-Animationsvarianten für Elemente beim Laden der
+              Seite und beim Scrollen — für die GPU optimiert.
+            </p>
+          </div>
+
+          <!-- Eintritte und Reveals -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Eintritte und Reveals</h3>
+            <p class="text-muted mb-4">
+              Basisklassen für das sanfte Einblenden von Elementen beim
+              Laden der Seite oder beim Scrollen.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 flex-column align-items-start"
+              >
+                <button
+                  class="btn btn-secondary btn-sm mb-4"
+                  onclick="toggleReveals()"
+                >
+                  Erneut abspielen
+                </button>
+
+                <div class="grid-auto w-100 gap-4">
+                  <div
+                    class="card p-4 text-center reveal-blur is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Blur Reveal</h4>
+                    <p class="text-muted text-4 m-0">Eintritt mit Unschärfe</p>
+                  </div>
+                  <div
+                    class="card p-4 text-center reveal-scale is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Scale Fade</h4>
+                    <p class="text-muted text-4 m-0">
+                      Vergrößerung von Skalierung 0,95
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Erfordert das Hinzufügen der Klasse .is-visible per JS --&gt;
+&lt;div class="reveal-blur is-visible"&gt;Sanfter Eintritt mit Unschärfe&lt;/div&gt;
+&lt;div class="reveal-scale is-visible"&gt;Eintritt aus 95 % Skalierung&lt;/div&gt;
+
+&lt;!-- Native Scroll-Animation (Null JS!) --&gt;
+&lt;div class="scroll-reveal"&gt;Ich erscheine beim Scrollen&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Gerichtete Eintrittsanimationen -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Gerichtete Eintrittsanimationen</h3>
+            <p class="text-muted mb-4">
+              Klassische Eintrittsanimationen aus verschiedenen Richtungen.
+              Erfordern die Basisklasse <code>.animate</code> sowie eine
+              Richtungsklasse.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 flex-column align-items-start"
+              >
+                <button
+                  class="btn btn-secondary btn-sm mb-4"
+                  onclick="toggleReveals()"
+                >
+                  Erneut abspielen
+                </button>
+
+                <div class="grid-cols-1 grid-md-cols-3 gap-4 w-100">
+                  <div
+                    class="card p-4 text-center animate fade-in-up is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Karte 1</h4>
+                    <p class="text-muted text-4 m-0">.fade-in-up</p>
+                  </div>
+                  <div
+                    class="card p-4 text-center animate fade-in-up delay-100 is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Karte 2</h4>
+                    <p class="text-muted text-4 m-0">.delay-100</p>
+                  </div>
+                  <div
+                    class="card p-4 text-center animate fade-in-up delay-200 is-visible demo-reveal"
+                  >
+                    <h4 class="fw-bold m-0">Karte 3</h4>
+                    <p class="text-muted text-4 m-0">.delay-200</p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Kaskadierendes Einblenden von Elementen --&gt;
+&lt;div class="animate fade-in-up"&gt;Erste&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-100"&gt;Zweite&lt;/div&gt;
+&lt;div class="animate fade-in-up delay-200"&gt;Dritte&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-switches.html" class="btn btn-secondary"
+              >➔ Zurück: Schalter</a
+            >
+            <a
+              href="examples-hover-microinteractions.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Hover-Mikrointeraktionen ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

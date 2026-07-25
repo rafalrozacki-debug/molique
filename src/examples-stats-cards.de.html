@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Statistikkarten - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Statistikkarten</h1>
+            <p class="text-6 text-muted">
+              Ein grundlegender Baustein jedes Dashboards — fertige
+              KPI-Karten zur Darstellung wichtiger Leistungskennzahlen.
+            </p>
+          </div>
+
+          <!-- Statistikkarten -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Statistikkarten (Stat Cards)</h3>
+            <p class="text-muted mb-4">
+              Ein grundlegender Baustein jedes Dashboards zur Darstellung
+              wichtiger Leistungskennzahlen (KPIs).
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="grid-cols-1 grid-md-cols-3 gap-4 w-100">
+                  <div class="stat-card">
+                    <div class="stat-title">Umsatz</div>
+                    <div class="stat-value">124.500 €</div>
+                    <div class="stat-trend is-positive">
+                      ↑ 12,5 %
+                      <span class="text-muted fw-normal"
+                        >vs. Vormonat</span
+                      >
+                    </div>
+                  </div>
+
+                  <div class="stat-card">
+                    <div class="stat-title">Neue Kunden</div>
+                    <div class="stat-value">42</div>
+                    <div class="stat-trend is-negative">
+                      ↓ 3,2 %
+                      <span class="text-muted fw-normal"
+                        >vs. Vormonat</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="stat-card"&gt;
+  &lt;div class="stat-title"&gt;Umsatz&lt;/div&gt;
+  &lt;div class="stat-value"&gt;124.500 €&lt;/div&gt;
+  &lt;div class="stat-trend is-positive"&gt;↑ 12,5 %&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Chart Micro -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Mini-Diagramm in der Karte (Chart Micro)</h3>
+            <p class="text-muted mb-4">
+              Die Klasse <code>.chart-micro</code>, die zu
+              <code>.r-chart-wrapper</code> hinzugefügt wird, erzwingt eine
+              feste, sichere Größe (80×40px) — ideal, um sie neben einer
+              Zahl in einer Statistikkarte einzubetten, ohne dass Flexbox
+              das Layout sprengen kann.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="stat-card d-flex align-items-center justify-content-between gap-3">
+                  <div>
+                    <div class="stat-title">Website-Traffic</div>
+                    <div class="stat-value">8.204</div>
+                  </div>
+                  <div
+                    class="r-chart-wrapper chart-micro"
+                    data-type="sparkline"
+                    data-values="[20, 50, 30, 80, 40, 90, 60]"
+                  >
+                    <div class="chart-sparkline">
+                      <div class="sparkline-bar" style="--val: 20%"></div>
+                      <div class="sparkline-bar" style="--val: 50%"></div>
+                      <div class="sparkline-bar" style="--val: 30%"></div>
+                      <div class="sparkline-bar" style="--val: 80%"></div>
+                      <div class="sparkline-bar" style="--val: 40%"></div>
+                      <div class="sparkline-bar" style="--val: 90%"></div>
+                      <div class="sparkline-bar" style="--val: 60%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="stat-card d-flex align-items-center justify-content-between"&gt;
+  &lt;div&gt;
+    &lt;div class="stat-title"&gt;Website-Traffic&lt;/div&gt;
+    &lt;div class="stat-value"&gt;8.204&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="r-chart-wrapper chart-micro"&gt;
+    &lt;div class="chart-sparkline"&gt;
+      &lt;div class="sparkline-bar" style="--val: 20%;"&gt;&lt;/div&gt;
+      &lt;div class="sparkline-bar" style="--val: 50%;"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-charts-basic.html" class="btn btn-secondary"
+              >➔ Zurück: Grundlegende Diagramme</a
+            >
+            <a
+              href="examples-empty-states.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Leere Zustände ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

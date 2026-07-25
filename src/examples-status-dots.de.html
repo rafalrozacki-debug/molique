@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Statuspunkte - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Statuspunkte</h1>
+            <p class="text-6 text-muted">
+              Eine leichte Komponente zur Kennzeichnung des Status von
+              Projekten oder Leads in B2B-Panels.
+            </p>
+          </div>
+
+          <!-- Statuspunkte -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Statuspunkte (Status Dots)</h3>
+            <p class="text-muted mb-4">
+              Eine leichte Komponente zur Kennzeichnung des Status von
+              Projekten oder Leads. Lässt sich mit der Klasse
+              <code>.status-ping</code> aus dem Animationsmodul kombinieren.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface gap-4">
+                <span class="status-dot status-draft">Entwurf</span>
+                <span class="status-dot status-pending">Ausstehend</span>
+                <span class="status-dot status-done">Abgeschlossen</span>
+                <span class="status-dot status-done status-ping">Live</span>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;span class="status-dot status-draft"&gt;Entwurf&lt;/span&gt;
+&lt;span class="status-dot status-pending"&gt;Ausstehend&lt;/span&gt;
+&lt;span class="status-dot status-done"&gt;Abgeschlossen&lt;/span&gt;
+
+&lt;!-- Mit pulsierender Animation --&gt;
+&lt;span class="status-dot status-done status-ping"&gt;Live&lt;/span&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Stock Bar -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">
+              Stock Bar (Segmentierter Lagerbestand)
+            </h3>
+            <p class="text-muted mb-4">
+              Eine fünfsegmentige Füllstandsanzeige — Lagerbestände, Limits,
+              Quoten. Null JS und keine zusätzlichen Elemente: Die Segmente
+              werden von einer SVG-Maske gezeichnet, und die Anzahl der
+              gefüllten Segmente wird vom Backend über die Variable
+              <code>style="--stock-filled: 3"</code> (0–5) übergeben. Leere
+              Segmente sind eine Abtönung der Variantenfarbe, sodass die
+              Komponente auch im Dark Mode funktioniert. Geben Sie den Wert
+              daneben als Text an (oder vergeben Sie <code>role="img"</code>
+              + <code>aria-label</code>) — der Balken selbst ist rein
+              visuell.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface flex-column align-items-start gap-3"
+              >
+                <div class="d-flex align-items-center gap-3">
+                  <span
+                    class="stock-bar stock-bar-success"
+                    style="--stock-filled: 4"
+                  ></span>
+                  <span class="text-muted text-4">50/142 · hoher Bestand</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span
+                    class="stock-bar stock-bar-warning"
+                    style="--stock-filled: 3"
+                  ></span>
+                  <span class="text-muted text-4">30/96 · mittlerer Bestand</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span
+                    class="stock-bar stock-bar-danger"
+                    style="--stock-filled: 1"
+                  ></span>
+                  <span class="text-muted text-4">30/30 · niedriger Bestand</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="stock-bar" style="--stock-filled: 2"></span>
+                  <span class="text-muted text-4"
+                    >neutrale Variante (secondary)</span
+                  >
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Füllung: --stock-filled von 0 bis 5 --&gt;
+&lt;span class="stock-bar stock-bar-success" style="--stock-filled: 4"&gt;&lt;/span&gt;
+&lt;span class="stock-bar stock-bar-warning" style="--stock-filled: 3"&gt;&lt;/span&gt;
+&lt;span class="stock-bar stock-bar-danger"  style="--stock-filled: 1"&gt;&lt;/span&gt;
+
+&lt;!-- Neutral (ohne Variante = Farbe secondary) --&gt;
+&lt;span class="stock-bar" style="--stock-filled: 2"&gt;&lt;/span&gt;
+
+&lt;!-- Für Screenreader zugängliche Version --&gt;
+&lt;span class="stock-bar stock-bar-success" style="--stock-filled: 4"
+      role="img" aria-label="Lagerbestand: 4/5"&gt;&lt;/span&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-start align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-stepper.de.html" class="btn btn-secondary"
+              >➔ Zurück: Stepper</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

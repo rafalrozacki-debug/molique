@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Stepper - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Stepper</h1>
+            <p class="text-6 text-muted">
+              Ein Fortschrittsbalken für mehrstufige Formulare — in einer
+              klassischen und einer nummerierten Variante.
+            </p>
+          </div>
+
+          <!-- Stepper -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Stepper (Fortschrittsbalken)</h3>
+            <p class="text-muted mb-4">
+              Ideal für mehrstufige Formulare. Verfügbar in zwei Varianten:
+              klassisch (dicke Balken) und nummeriert (durch eine Linie
+              verbundene Kreise).
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column w-100 bg-surface gap-5">
+                <!-- Variante 1: Klassisch -->
+                <div class="w-100">
+                  <p class="text-4 text-muted mb-3">
+                    Klassische Variante (Standard)
+                  </p>
+                  <div class="stepper w-100">
+                    <div class="step is-active">Schritt 1: Maße</div>
+                    <div class="step">Schritt 2: Konstruktion</div>
+                    <div class="step">Schritt 3: Dach</div>
+                  </div>
+                </div>
+
+                <!-- Variante 2: Nummeriert -->
+                <div class="w-100">
+                  <p class="text-4 text-muted mb-3">
+                    Nummerierte Variante (.stepper-numbered)
+                  </p>
+                  <div class="stepper stepper-numbered w-100">
+                    <div class="step is-completed">
+                      <div class="step-line"></div>
+                      Maße
+                    </div>
+                    <div class="step is-active">
+                      <div class="step-line"></div>
+                      Konstruktion
+                    </div>
+                    <div class="step">
+                      <div class="step-line"></div>
+                      Dach
+                    </div>
+                    <div class="step">
+                      <div class="step-line"></div>
+                      Zusammenfassung
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="stepper"&gt;
+  &lt;div class="step is-active"&gt;Schritt 1: Maße&lt;/div&gt;
+  &lt;div class="step"&gt;Schritt 2: Konstruktion&lt;/div&gt;
+  &lt;div class="step"&gt;Schritt 3: Dach&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Nummerierte Variante --&gt;
+&lt;div class="stepper stepper-numbered"&gt;
+
+  &lt;!-- Abgeschlossener Schritt (is-completed färbt die Linie) --&gt;
+  &lt;div class="step is-completed"&gt;
+    &lt;div class="step-line"&gt;&lt;/div&gt;
+    Maße
+  &lt;/div&gt;
+
+  &lt;!-- Aktiver Schritt --&gt;
+  &lt;div class="step is-active"&gt;
+    &lt;div class="step-line"&gt;&lt;/div&gt;
+    Konstruktion
+  &lt;/div&gt;
+
+  &lt;!-- Zukünftiger Schritt --&gt;
+  &lt;div class="step"&gt;
+    &lt;div class="step-line"&gt;&lt;/div&gt;
+    Dach
+  &lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-admin-layout.html" class="btn btn-secondary"
+              >➔ Zurück: Admin-Layout</a
+            >
+            <a
+              href="examples-status-dots.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Statuspunkte ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

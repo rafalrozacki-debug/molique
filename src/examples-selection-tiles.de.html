@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Auswahlkacheln - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+    <link rel="stylesheet" href="css/molique-style-shop.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Auswahlkacheln</h1>
+            <p class="text-6 text-muted">
+              Kacheln auf Basis versteckter Radio-Inputs — zur Auswahl der
+              Versand- oder Zahlungsmethode im Checkout.
+            </p>
+          </div>
+
+          <!-- Auswahlkacheln -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Auswahlkacheln (Selection Tiles)</h3>
+            <p class="text-muted mb-4">
+              Ideal zur Auswahl der Versand- oder Zahlungsmethode im
+              Checkout. Basiert auf versteckten Radio-Inputs.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column w-100 bg-surface">
+                <div class="checkout-section w-100">
+                  <p class="text-4 text-muted mb-3">
+                    Standardvariante (Sofort)
+                  </p>
+                  <div class="grid-cols-1 grid-md-cols-2 gap-3 mb-5">
+                    <label class="selection-tile">
+                      <input
+                        type="radio"
+                        name="delivery"
+                        value="standard"
+                        checked
+                      />
+                      <div class="tile-content p-3 border rounded-2 bg-body">
+                        <div
+                          class="tile-title d-flex justify-content-between align-items-center mb-1"
+                        >
+                          <span class="fw-bold">Standardversand</span>
+                          <span class="text-primary fw-bold">3,99 €</span>
+                        </div>
+                        <div class="text-muted text-4">2-3 Werktage</div>
+                      </div>
+                    </label>
+
+                    <label class="selection-tile">
+                      <input type="radio" name="delivery" value="express" />
+                      <div class="tile-content p-3 border rounded-2 bg-body">
+                        <div
+                          class="tile-title d-flex justify-content-between align-items-center mb-1"
+                        >
+                          <span class="fw-bold">Expressversand</span>
+                          <span class="text-primary fw-bold">8,99 €</span>
+                        </div>
+                        <div class="text-muted text-4">1 Werktag</div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <p class="text-4 text-muted mb-3">
+                    Animierte Variante (Border Trace)
+                  </p>
+                  <div class="grid-cols-1 grid-md-cols-2 gap-3">
+                    <!-- ANIMIERTE KACHEL -->
+                    <label class="selection-tile selection-tile-animated">
+                      <input type="radio" name="payment" value="card" checked />
+                      <!-- Klasse hover-border-trace hinzugefügt -->
+                      <div
+                        class="tile-content hover-border-trace p-3 border rounded-2 bg-body"
+                      >
+                        <div
+                          class="tile-title d-flex justify-content-between align-items-center mb-1"
+                        >
+                          <span class="fw-bold">Zahlungskarte</span>
+                          <span class="text-4">💳</span>
+                        </div>
+                        <div class="text-muted text-4">Stripe / PayPal</div>
+                      </div>
+                    </label>
+
+                    <!-- ANIMIERTE KACHEL -->
+                    <label class="selection-tile selection-tile-animated">
+                      <input type="radio" name="payment" value="apple-pay" />
+                      <!-- Klasse hover-border-trace hinzugefügt -->
+                      <div
+                        class="tile-content hover-border-trace p-3 border rounded-2 bg-body"
+                      >
+                        <div
+                          class="tile-title d-flex justify-content-between align-items-center mb-1"
+                        >
+                          <span class="fw-bold">Apple Pay</span>
+                          <span class="text-4">📱</span>
+                        </div>
+                        <div class="text-muted text-4">
+                          Schnelle Zahlung per Fingertipp
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Animierte Variante (Snake Border) --&gt;
+&lt;label class="selection-tile selection-tile-animated"&gt;
+  &lt;input type="radio" name="payment" value="apple-pay"&gt;
+
+  &lt;!-- Die Klasse hover-border-trace reagiert auf die Auswahl des Inputs! --&gt;
+  &lt;div class="tile-content hover-border-trace p-3 border rounded-2"&gt;
+    &lt;div class="fw-bold"&gt;Apple Pay&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/label&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-cart.de.html" class="btn btn-secondary"
+              >➔ Zurück: Warenkorb</a
+            >
+            <a
+              href="examples-ratings-swatches.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Bewertungen &amp; Farben ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
