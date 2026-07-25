@@ -16,6 +16,15 @@
 @use '../mixins' as *;
 
 @layer components {
+  /* Lokalne zmienne RGB dla stopki - NIE --light-rgb/--dark-rgb globalne,
+     bo te odwracaja sie w dark mode (patrz komentarz na gorze pliku).
+     Kazdy .footer-* nizej zachowuje WLASNA, dobrana dla siebie
+     przezroczystosc - zmieniaja sie tu tylko zrodla koloru. */
+  footer.bg-dark {
+    --footer-muted-rgb: 249, 249, 249;
+    --footer-white-rgb: 255, 255, 255;
+  }
+
   .footer-trustbar {
     display: flex;
     align-items: center;
@@ -24,7 +33,7 @@
     gap: calc(var(--spacing-unit) * 2);
     padding-bottom: calc(var(--spacing-unit) * 2.75);
     margin-bottom: calc(var(--spacing-unit) * 3.75);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(var(--footer-white-rgb), 0.1);
   }
 
   .footer-trustbar-text {
@@ -33,7 +42,7 @@
     flex-wrap: wrap;
     gap: calc(var(--spacing-unit) * 1.25);
     font-size: var(--text-sm);
-    color: rgba(249, 249, 249, 0.68);
+    color: rgba(var(--footer-muted-rgb), 0.68);
 
     strong {
       color: #f9f9f9;
@@ -44,7 +53,7 @@
       width: 3px;
       height: 3px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(var(--footer-white-rgb), 0.25);
     }
   }
 
@@ -93,7 +102,7 @@
   .footer-tagline {
     margin: 0;
     font-size: var(--text-sm);
-    color: rgba(249, 249, 249, 0.68);
+    color: rgba(var(--footer-muted-rgb), 0.68);
     max-width: 32ch;
   }
 
@@ -108,7 +117,7 @@
   .footer-link {
     display: block;
     width: fit-content;
-    color: rgba(249, 249, 249, 0.68);
+    color: rgba(var(--footer-muted-rgb), 0.68);
     text-decoration: none;
     font-size: var(--text-sm);
     margin-bottom: calc(var(--spacing-unit) * 1.25);
@@ -161,7 +170,7 @@
     gap: calc(var(--spacing-unit) * 1.5);
     margin-top: calc(var(--spacing-unit) * 2.5);
     padding-top: calc(var(--spacing-unit) * 2.25);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(var(--footer-white-rgb), 0.1);
   }
 
   .footer-author-avatar {
@@ -187,7 +196,7 @@
 
   .footer-author-role {
     font-size: var(--text-xs);
-    color: rgba(249, 249, 249, 0.6);
+    color: rgba(var(--footer-muted-rgb), 0.6);
   }
 
   .footer-bottom {
@@ -198,6 +207,6 @@
     gap: calc(var(--spacing-unit) * 1.25);
     padding-top: calc(var(--spacing-unit) * 2.5);
     font-size: var(--text-xs);
-    color: rgba(249, 249, 249, 0.55);
+    color: rgba(var(--footer-muted-rgb), 0.55);
   }
 }

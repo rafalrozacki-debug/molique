@@ -96,7 +96,11 @@
   /* Inne */
   --border-radius: 8px;
   --border-radius-lg: 16px;
-  --transition-speed: 0.2s;
+  --transition-speed: 0.2s;      /* Baza */
+  --transition-speed-fast: 0.15s;
+  --transition-speed-slow: 0.3s;
+  --transition-speed-slower: 0.4s;
+  --transition-speed-chart: 0.8s; /* Wykresy - dluzsza animacja "rosniecia" */
 
   /* Baza: 14px na mobile, rośnie do max 15px na desktopie. 
      Idealne do gęstych interfejsów SaaS/CRM. */
@@ -148,7 +152,14 @@
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
-  
+
+  /* Nakladki pelnoekranowe (lightbox, offcanvas, popover) - zawsze czarne,
+     niezaleznie od motywu (jak cienie wyzej). Kazdy komponent zachowuje
+     WLASNA, dobrana dla siebie przezroczystosc (rgba(var(--backdrop-rgb), X))
+     - ten token daje wspolne ZRODLO KOLORU do przyszlej zmiany (np. lekki
+     odcien zamiast czystej czerni), nie wspolna przezroczystosc. */
+  --backdrop-rgb: 0, 0, 0;
+
   --focus-ring-width: 3px;
   --focus-ring-color: rgba(var(--primary-rgb), 0.25);
   --focus-ring-radius: var(--border-radius);

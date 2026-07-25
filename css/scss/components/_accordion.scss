@@ -28,7 +28,7 @@
   &::details-content {
     /* Stan zamknięty ORAZ zamykanie: overflow wraca do hidden natychmiast,
        więc zwijana treść jest przycinana od pierwszej klatki. */
-    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), content-visibility 0.3s allow-discrete;
+    transition: height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1), content-visibility var(--transition-speed-slow) allow-discrete;
     height: 0;
     overflow: hidden;
   }
@@ -43,9 +43,18 @@
        pudełko i nachodziła na sąsiadów przez cały czas otwierania. */
     overflow: visible;
     transition:
-      height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      content-visibility 0.3s allow-discrete,
-      overflow 0s 0.3s allow-discrete;
+      height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1),
+      content-visibility var(--transition-speed-slow) allow-discrete,
+      overflow 0s var(--transition-speed-slow) allow-discrete;
+  }
+
+  /* A11y: bez animacji wysokosci dla uzytkownikow z prefers-reduced-motion -
+     akordeon otwiera/zamyka sie od razu, bez plynnego rozwijania. */
+  @media (prefers-reduced-motion: reduce) {
+    &::details-content,
+    &[open]::details-content {
+      transition: none;
+    }
   }
 }
 

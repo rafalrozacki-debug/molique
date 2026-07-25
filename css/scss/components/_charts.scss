@@ -54,13 +54,19 @@
   height: var(--val, 0%);
   background-color: var(--primary);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
-  transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  
+  transition: height var(--transition-speed-chart) cubic-bezier(0.2, 0.8, 0.2, 1);
+
   &:hover { opacity: 0.8; }
 
   /* Animacja rośnięcia przy ładowaniu */
   @starting-style {
     height: 0%;
+  }
+
+  /* A11y: bez animacji "rosniecia" dla uzytkownikow z prefers-reduced-motion -
+     slupki pojawiaja sie od razu w docelowej wysokosci. */
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 }
 

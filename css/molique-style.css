@@ -85,7 +85,11 @@
     /* Inne */
     --border-radius: 8px;
     --border-radius-lg: 16px;
-    --transition-speed: 0.2s;
+    --transition-speed: 0.2s; /* Baza */
+    --transition-speed-fast: 0.15s;
+    --transition-speed-slow: 0.3s;
+    --transition-speed-slower: 0.4s;
+    --transition-speed-chart: 0.8s; /* Wykresy - dluzsza animacja "rosniecia" */
     /* Baza: 14px na mobile, rośnie do max 15px na desktopie. 
        Idealne do gęstych interfejsów SaaS/CRM. */
     --text-base-size: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
@@ -124,6 +128,12 @@
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Nakladki pelnoekranowe (lightbox, offcanvas, popover) - zawsze czarne,
+       niezaleznie od motywu (jak cienie wyzej). Kazdy komponent zachowuje
+       WLASNA, dobrana dla siebie przezroczystosc (rgba(var(--backdrop-rgb), X))
+       - ten token daje wspolne ZRODLO KOLORU do przyszlej zmiany (np. lekki
+       odcien zamiast czystej czerni), nie wspolna przezroczystosc. */
+    --backdrop-rgb: 0, 0, 0;
     --focus-ring-width: 3px;
     --focus-ring-color: rgba(var(--primary-rgb), 0.25);
     --focus-ring-radius: var(--border-radius);
@@ -2587,7 +2597,7 @@
       width: 100%;
       height: 8px;
       background: var(--border-color);
-      border-radius: 1rem;
+      border-radius: 50rem; /* pigulka - ten sam idiom co .tabs-pill */
       outline: none;
       cursor: pointer;
       overflow: hidden;
@@ -2608,7 +2618,7 @@
     .input-range::-moz-range-progress {
       background: var(--primary);
       height: 8px;
-      border-radius: 1rem;
+      border-radius: 50rem;
     }
     .input-range::-moz-range-thumb {
       width: 16px;
@@ -3500,7 +3510,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(var(--backdrop-rgb), 0.5);
     backdrop-filter: blur(4px);
     z-index: 1040;
   }
@@ -4021,7 +4031,7 @@
   }
   /* WARIANT: Nowoczesna (Oddzielone kafelki) */
   .pagination-modern {
-    gap: 8px; /* Odstęp między przyciskami */
+    gap: var(--spacing-unit); /* Odstęp między przyciskami */
   }
   .pagination-modern .page-item {
     margin: 0;
@@ -4038,7 +4048,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 12px;
+    padding: 0 calc(var(--spacing-unit) * 1.5);
     font-weight: var(--fw-medium);
     box-shadow: var(--shadow-sm);
     /* Wizualny rozmiar (36px) zostaje - niewidoczny obszar klikalny
@@ -4536,7 +4546,7 @@
   .thumb-info-wrapper {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(var(--backdrop-rgb), 0.6);
     opacity: 0;
     transition: opacity 0.3s ease;
     display: flex;
@@ -4843,7 +4853,7 @@
     .lightbox-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(var(--backdrop-rgb), 0.95);
       z-index: 2000;
       display: none; /* Zmieniane przez JS na flex */
       align-items: center;
@@ -5106,7 +5116,7 @@
     /* Tło przyciemniające (Backdrop) dla Bottom Sheet na mobile */
     @media (max-width: 768px) {
       .popover-context::backdrop {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(var(--backdrop-rgb), 0.5);
         backdrop-filter: blur(2px);
         opacity: 0;
         transition: opacity 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
@@ -5446,7 +5456,7 @@
   .accordion-item::details-content {
     /* Stan zamknięty ORAZ zamykanie: overflow wraca do hidden natychmiast,
        więc zwijana treść jest przycinana od pierwszej klatki. */
-    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), content-visibility 0.3s allow-discrete;
+    transition: height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1), content-visibility var(--transition-speed-slow) allow-discrete;
     height: 0;
     overflow: hidden;
   }
@@ -5459,7 +5469,16 @@
        overflow stał się widoczny od razu, treść wychodziłaby poza rosnące
        pudełko i nachodziła na sąsiadów przez cały czas otwierania. */
     overflow: visible;
-    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), content-visibility 0.3s allow-discrete, overflow 0s 0.3s allow-discrete;
+    transition: height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1), content-visibility var(--transition-speed-slow) allow-discrete, overflow 0s var(--transition-speed-slow) allow-discrete;
+  }
+  .accordion-item {
+    /* A11y: bez animacji wysokosci dla uzytkownikow z prefers-reduced-motion -
+       akordeon otwiera/zamyka sie od razu, bez plynnego rozwijania. */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-item::details-content, .accordion-item[open]::details-content {
+      transition: none;
+    }
   }
   .accordion-header {
     display: flex;
@@ -5718,7 +5737,7 @@
     border-bottom: none;
     background-color: var(--card-bg-subtle);
     border-radius: 50rem;
-    padding: 4px;
+    padding: calc(var(--spacing-unit) * 0.5);
   }
   .tabs-pill .tab-label {
     position: relative;
@@ -5901,7 +5920,7 @@
   .carousel-dots {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: var(--spacing-unit);
     margin-top: calc(var(--spacing-unit) * 3);
   }
   .carousel-dot {
@@ -7169,7 +7188,7 @@
   .pricing-list li {
     display: flex;
     align-items: baseline;
-    margin-bottom: 12px;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
     font-size: 1rem;
   }
   .pricing-list-title {
@@ -7180,9 +7199,9 @@
   .pricing-list-dots {
     flex-grow: 1;
     border-bottom: 2px dotted var(--border-color);
-    margin: 0 8px;
+    margin: 0 var(--spacing-unit);
     position: relative;
-    top: -4px;
+    top: calc(var(--spacing-unit) * -0.5);
     opacity: 0.5;
   }
   .pricing-list-price {
@@ -7238,7 +7257,7 @@
     height: var(--val, 0%);
     background-color: var(--primary);
     border-radius: var(--border-radius) var(--border-radius) 0 0;
-    transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: height var(--transition-speed-chart) cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .sparkline-bar:hover {
     opacity: 0.8;
@@ -7249,6 +7268,15 @@
   @starting-style {
     .sparkline-bar {
       height: 0%;
+    }
+  }
+  .sparkline-bar {
+    /* A11y: bez animacji "rosniecia" dla uzytkownikow z prefers-reduced-motion -
+       slupki pojawiaja sie od razu w docelowej wysokosci. */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sparkline-bar {
+      transition: none;
     }
   }
   /* =========================================
@@ -7745,7 +7773,7 @@
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 4px 12px;
-      border-radius: 4px;
+      border-radius: calc(var(--border-radius) / 2);
       font-size: 0.75rem;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -7773,6 +7801,14 @@
    * miedzy kolumnami 2-5.
    */
   @layer components {
+    /* Lokalne zmienne RGB dla stopki - NIE --light-rgb/--dark-rgb globalne,
+       bo te odwracaja sie w dark mode (patrz komentarz na gorze pliku).
+       Kazdy .footer-* nizej zachowuje WLASNA, dobrana dla siebie
+       przezroczystosc - zmieniaja sie tu tylko zrodla koloru. */
+    footer.bg-dark {
+      --footer-muted-rgb: 249, 249, 249;
+      --footer-white-rgb: 255, 255, 255;
+    }
     .footer-trustbar {
       display: flex;
       align-items: center;
@@ -7781,7 +7817,7 @@
       gap: calc(var(--spacing-unit) * 2);
       padding-bottom: calc(var(--spacing-unit) * 2.75);
       margin-bottom: calc(var(--spacing-unit) * 3.75);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(var(--footer-white-rgb), 0.1);
     }
     .footer-trustbar-text {
       display: flex;
@@ -7789,7 +7825,7 @@
       flex-wrap: wrap;
       gap: calc(var(--spacing-unit) * 1.25);
       font-size: var(--text-sm);
-      color: rgba(249, 249, 249, 0.68);
+      color: rgba(var(--footer-muted-rgb), 0.68);
     }
     .footer-trustbar-text strong {
       color: #f9f9f9;
@@ -7799,7 +7835,7 @@
       width: 3px;
       height: 3px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(var(--footer-white-rgb), 0.25);
     }
     .footer-cols {
       display: grid;
@@ -7850,7 +7886,7 @@
     .footer-tagline {
       margin: 0;
       font-size: var(--text-sm);
-      color: rgba(249, 249, 249, 0.68);
+      color: rgba(var(--footer-muted-rgb), 0.68);
       max-width: 32ch;
     }
     .footer-heading {
@@ -7863,7 +7899,7 @@
     .footer-link {
       display: block;
       width: fit-content;
-      color: rgba(249, 249, 249, 0.68);
+      color: rgba(var(--footer-muted-rgb), 0.68);
       text-decoration: none;
       font-size: var(--text-sm);
       margin-bottom: calc(var(--spacing-unit) * 1.25);
@@ -7912,7 +7948,7 @@
       gap: calc(var(--spacing-unit) * 1.5);
       margin-top: calc(var(--spacing-unit) * 2.5);
       padding-top: calc(var(--spacing-unit) * 2.25);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(var(--footer-white-rgb), 0.1);
     }
     .footer-author-avatar {
       flex: none;
@@ -7935,7 +7971,7 @@
     }
     .footer-author-role {
       font-size: var(--text-xs);
-      color: rgba(249, 249, 249, 0.6);
+      color: rgba(var(--footer-muted-rgb), 0.6);
     }
     .footer-bottom {
       display: flex;
@@ -7945,7 +7981,7 @@
       gap: calc(var(--spacing-unit) * 1.25);
       padding-top: calc(var(--spacing-unit) * 2.5);
       font-size: var(--text-xs);
-      color: rgba(249, 249, 249, 0.55);
+      color: rgba(var(--footer-muted-rgb), 0.55);
     }
   }
   /**

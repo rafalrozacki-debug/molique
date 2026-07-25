@@ -80,6 +80,7 @@ export const GLOBAL = {
   '--body-rgb':      ['rgb', 'Kanały <code>--bg-body</code> — gradienty zanikania (<code>.fade-bottom</code>), nakładki.'],
   '--bg-surface-rgb':['rgb', 'Kanały <code>--bg-surface</code> — warstwa barwiąca w <code>.bg-glass</code> (glassmorphism).'],
   '--sidebar-rgb':   ['rgb', 'Kanały tła sidebara — cienie i gradienty w panelu admina.'],
+  '--backdrop-rgb':  ['rgb', 'Kanały nakładek pełnoekranowych (lightbox, offcanvas, popover). Zawsze czarne, niezależnie od motywu — każdy komponent dobiera własną przezroczystość.'],
 
   /* --- typography --- */
   '--text-base-size': ['typography', 'Rozmiar akapitu i punkt odniesienia dla <code>.text-3</code>. 14px na mobile, 15px na desktopie — celowo mało, pod gęste interfejsy B2B.'],
@@ -103,7 +104,11 @@ export const GLOBAL = {
   /* --- radius --- */
   '--border-radius':    ['radius', 'Domyślne zaokrąglenie: przyciski, inputy, karty, badge.'],
   '--border-radius-lg': ['radius', 'Większe zaokrąglenie: modale, hero, kontenery wyróżnione.'],
-  '--transition-speed': ['radius', 'Czas trwania przejść hover/focus. Jedna wartość na cały framework — spójne tempo interfejsu.'],
+  '--transition-speed':        ['radius', 'Czas trwania przejść hover/focus. Baza — spójne tempo interfejsu.'],
+  '--transition-speed-fast':   ['radius', 'Krótsze przejścia — mikrointerakcje typu hover na małych elementach.'],
+  '--transition-speed-slow':   ['radius', 'Dłuższe przejścia — akordeony, wysuwane panele, chowane szuflady.'],
+  '--transition-speed-slower': ['radius', 'Jeszcze dłuższe przejście — animacja ikony hamburgera w sidebarze admina.'],
+  '--transition-speed-chart':  ['radius', 'Animacja „rośnięcia” wykresów (sparkline, słupki) — celowo dużo dłuższa niż reszta interfejsu.'],
   '--shadow-sm':        ['radius', 'Delikatne uniesienie: inputy, małe karty.'],
   '--shadow-md':        ['radius', 'Standardowe uniesienie: dropdowny, popovery, karty po najechaniu.'],
   '--shadow-lg':        ['radius', 'Mocne uniesienie: modale, przyklejony navbar po scrollu.'],
@@ -198,6 +203,9 @@ export const COMPONENT = {
   '--stage-text': ['Wykresy', 'api', 'Kolor tekstu na etapie lejka.'],
 
   '--tab-count': ['Zakładki', 'api', 'Liczba zakładek — od niej zależy szerokość podkreślenia aktywnej. Ustaw per instancja.'],
+
+  '--footer-muted-rgb': ['Stopka', 'internal', 'Kanały przygaszonego tekstu stopki. Celowo literalne, nie <code>--light-rgb</code> — stopka jest zawsze ciemna, niezależnie od motywu.'],
+  '--footer-white-rgb': ['Stopka', 'internal', 'Kanały bieli w stopce — separatory i drobne akcenty. Ten sam powód co wyżej: stopka nie odwraca się w dark mode.'],
 
   '--position': ['Before/After', 'internal', 'Pozycja suwaka w procentach. Ustawiana przez <code>js/modules/molique-before-after.js</code>.'],
 
