@@ -9,7 +9,7 @@
     powershell -File tools/build-packages.ps1
 #>
 
-$version = '1.6.2'
+$version = '1.7.0'
 
 # Katalog glowny repo (ten skrypt jest w tools/)
 $root = Split-Path -Parent $PSScriptRoot
