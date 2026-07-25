@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Timeline - molique Examples"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout">
+      <!-- SIDEBAR -->
+      <include src="partials/examples-sidebar.en.html"></include>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Timeline</h1>
+            <p class="text-6 text-muted">
+              Ready-made timeline variants — a classic list with icons and
+              numbering, and an advanced grid-based variant with dates on
+              the left, ideal for ERP/CRM systems.
+            </p>
+          </div>
+
+          <!-- Timeline -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Timeline</h3>
+            <p class="text-muted mb-4">
+              A component for presenting processes, company history, or
+              project stages.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface gap-5 align-items-start"
+              >
+                <!-- Icon Variant -->
+                <div class="flex-grow-1">
+                  <p class="text-4 text-muted mb-4">
+                    Icon Variant (.timeline-large)
+                  </p>
+                  <ul class="timeline timeline-large m-0">
+                    <li class="timeline-item">
+                      <div class="timeline-badge">A</div>
+                      <h4 class="fw-bold mb-1">Green Surroundings</h4>
+                      <p class="text-muted text-4 m-0">
+                        An investment surrounded by greenery.
+                      </p>
+                    </li>
+                    <li class="timeline-item">
+                      <div class="timeline-badge">B</div>
+                      <h4 class="fw-bold mb-1">Security</h4>
+                      <p class="text-muted text-4 m-0">
+                        The grounds are fenced and monitored.
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Numbered Variant -->
+                <div class="flex-grow-1">
+                  <p class="text-4 text-muted mb-4">
+                    Automatic Numbering (.timeline-numbered)
+                  </p>
+                  <ul class="timeline timeline-numbered m-0">
+                    <li class="timeline-item">
+                      <h4 class="fw-bold mb-1">You choose an apartment</h4>
+                      <p class="text-muted text-4 m-0">
+                        You browse the listings and pick a unit.
+                      </p>
+                    </li>
+                    <li class="timeline-item">
+                      <h4 class="fw-bold mb-1">You sign the contract</h4>
+                      <p class="text-muted text-4 m-0">
+                        We finalize the paperwork.
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;!-- Numbered Variant (CSS inserts 1, 2, 3... on its own) --&gt;
+&lt;ul class="timeline timeline-numbered"&gt;
+  &lt;li class="timeline-item"&gt;
+    &lt;h4&gt;First step&lt;/h4&gt;
+    &lt;p&gt;Step description&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li class="timeline-item"&gt;
+    &lt;h4&gt;Second step&lt;/h4&gt;
+    &lt;p&gt;Step description&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Advanced Timeline (Labeled Timeline) -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Advanced Timeline (Labeled Timeline)</h3>
+            <p class="text-muted mb-4">
+              The <code>.timeline-labeled</code> variant is built on CSS
+              Grid — ideal for ERP/CRM systems where you need to place a
+              date or time of an operation on the left.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center"
+              >
+                <!-- SHOWCASE CONTAINER -->
+                <div class="w-100" style="max-width: 600px">
+                  <div class="timeline timeline-labeled">
+                    <!-- ITEM 1 (Success) -->
+                    <div class="timeline-item">
+                      <div class="timeline-label">
+                        <div class="fw-bold text-dark">06/30/2026</div>
+                        <div class="text-muted">16:44</div>
+                      </div>
+                      <div class="timeline-separator">
+                        <div class="timeline-node node-success"></div>
+                        <div class="timeline-line"></div>
+                      </div>
+                      <div class="timeline-content">
+                        <div class="d-flex align-items-center gap-2 m-b-1">
+                          <span class="fw-bold text-4 text-dark"
+                            >Michael Carter</span
+                          >
+                          <span class="text-muted text-3"
+                            >INV 15874/06/2026</span
+                          >
+                        </div>
+                        <div class="text-4 d-flex flex-column gap-1">
+                          <div>
+                            <span class="text-muted">- Cement 25kg</span>
+                            <span class="text-success fw-medium"
+                              >+100 units</span
+                            >
+                          </div>
+                          <div>
+                            <span class="text-muted"
+                              >- YDY Cable 3x2.5 mm²</span
+                            >
+                            <span class="text-success fw-medium">+250 m</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- ITEM 2 (Warning/Error) -->
+                    <div class="timeline-item">
+                      <div class="timeline-label">
+                        <div class="fw-bold text-dark">06/30/2026</div>
+                        <div class="text-muted">12:21</div>
+                      </div>
+                      <div class="timeline-separator">
+                        <div class="timeline-node node-danger"></div>
+                        <div class="timeline-line"></div>
+                      </div>
+                      <div class="timeline-content">
+                        <div class="d-flex align-items-center gap-2 m-b-1">
+                          <span class="fw-bold text-4 text-dark">John Doe</span>
+                          <span class="text-muted text-3">DN 5002/2026</span>
+                        </div>
+                        <div class="text-4 d-flex flex-column gap-1">
+                          <div>
+                            <span class="text-muted"
+                              >- Ceramic Block 25 cm</span
+                            >
+                            <span class="text-danger fw-medium"
+                              >-1,200 units</span
+                            >
+                          </div>
+                          <div>
+                            <span class="text-muted"
+                              >- Rebar Steel ⌀12</span
+                            >
+                            <span class="text-danger fw-medium">-2,000 kg</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- ITEM 3 (Last - no line) -->
+                    <div class="timeline-item">
+                      <div class="timeline-label">
+                        <div class="fw-bold text-dark">06/29/2026</div>
+                        <div class="text-muted">7:15 AM</div>
+                      </div>
+                      <div class="timeline-separator">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-line"></div>
+                      </div>
+                      <div class="timeline-content">
+                        <div class="d-flex align-items-center gap-2 m-b-1">
+                          <span class="fw-bold text-4 text-dark"
+                            >ERP System</span
+                          >
+                          <span class="text-muted text-3"
+                            >Automatic inventory check</span
+                          >
+                        </div>
+                        <div class="text-4 text-muted">
+                          Stock level verification process completed.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;div class="timeline timeline-labeled"&gt;
+
+  &lt;!-- Single entry --&gt;
+  &lt;div class="timeline-item"&gt;
+
+    &lt;!-- 1. Left column (Date) --&gt;
+    &lt;div class="timeline-label"&gt;
+      &lt;div class="fw-bold text-dark"&gt;06/30/2026&lt;/div&gt;
+      &lt;div class="text-muted"&gt;16:44&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 2. Middle column (Dot and line) --&gt;
+    &lt;div class="timeline-separator"&gt;
+      &lt;!-- Add the node-success or node-danger class for color --&gt;
+      &lt;div class="timeline-node node-success"&gt;&lt;/div&gt;
+      &lt;div class="timeline-line"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- 3. Right column (Content) --&gt;
+    &lt;div class="timeline-content"&gt;
+      &lt;div class="fw-bold text-dark"&gt;Michael Carter&lt;/div&gt;
+      &lt;div class="text-muted"&gt;Goods received into stock.&lt;/div&gt;
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Bottom navigation -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-hero-sections.en.html" class="btn btn-secondary"
+              >➔ Back: Hero &amp; Special Sections</a
+            >
+            <a
+              href="examples-background-video.en.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Next step: Background Video ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

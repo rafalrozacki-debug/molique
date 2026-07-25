@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"B2B-Tabellen - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">B2B-Tabellen</h1>
+            <p class="text-6 text-muted">
+              Klassische Datentabellen mit mobiler Transformation — auf
+              Smartphones verwandeln sie sich automatisch in gut lesbare
+              Karten.
+            </p>
+          </div>
+
+          <!-- B2B-Tabellen (Mobile-First Data) -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">B2B-Tabellen (Mobile-First Data)</h3>
+            <p class="text-muted mb-4">
+              Verwenden Sie den Container <code>.table-wrapper</code> für
+              horizontales Scrollen auf dem Desktop. Das Hinzufügen der
+              Klasse <code>.table-cards</code> verwandelt die Tabelle auf
+              Smartphones in gut lesbare Karten.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface flex-column gap-5">
+                <!-- Beispiel 1: Kompakte Tabelle mit Zebrastreifen -->
+                <div>
+                  <h4 class="text-5 fw-bold mb-2">
+                    Kompakte Tabelle (Zebra + Hover)
+                  </h4>
+                  <div class="table-wrapper">
+                    <table
+                      class="table table-sm table-striped table-hover table-cards"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Rechnung</th>
+                          <th>Kunde</th>
+                          <th>Betrag</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td data-label="Rechnung" class="fw-bold">
+                            #RE-2026/01
+                          </td>
+                          <td data-label="Kunde">Hans Müller</td>
+                          <td data-label="Betrag">3.125 €</td>
+                          <td data-label="Status">
+                            <span class="badge badge-success">Bezahlt</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td data-label="Rechnung" class="fw-bold">
+                            #RE-2026/02
+                          </td>
+                          <td data-label="Kunde">Anna Fischer</td>
+                          <td data-label="Betrag">1.050 €</td>
+                          <td data-label="Status">
+                            <span class="badge badge-warning">Ausstehend</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Beispiel 2: Lockere Tabelle mit dunklem, kompaktem Kopf -->
+                <div>
+                  <h4 class="text-5 fw-bold mb-2">
+                    Lockere Tabelle (Dunkler, kompakter Kopf)
+                  </h4>
+                  <div class="table-wrapper border-0 shadow-sm">
+                    <table
+                      class="table table-lg table-borderless table-hover table-cards"
+                    >
+                      <!-- Klassen thead-dark und thead-sm hinzugefügt -->
+                      <thead class="thead-dark thead-sm">
+                        <tr>
+                          <th>Benutzer</th>
+                          <th>Rolle</th>
+                          <th>Letzte Anmeldung</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td data-label="Benutzer" class="fw-bold">
+                            Peter Wagner
+                          </td>
+                          <td data-label="Rolle">Administrator</td>
+                          <td
+                            data-label="Letzte Anmeldung"
+                            class="text-muted"
+                          >
+                            Heute, 08:45
+                          </td>
+                        </tr>
+                        <tr>
+                          <td data-label="Benutzer" class="fw-bold">
+                            Katharina Fuchs
+                          </td>
+                          <td data-label="Rolle">Manager</td>
+                          <td
+                            data-label="Letzte Anmeldung"
+                            class="text-muted"
+                          >
+                            Gestern, 16:20
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Beispiel 3: Großer Kopf + Karten IMMER (nicht nur mobil) -->
+                <div>
+                  <h4 class="text-5 fw-bold mb-2">
+                    Großer Kopf (thead-lg) + Karten Immer (table-cards-always)
+                  </h4>
+                  <div class="table-wrapper">
+                    <table class="table thead-lg table-cards-always">
+                      <thead class="thead-primary">
+                        <tr>
+                          <th>Produkt</th>
+                          <th>SKU</th>
+                          <th>Lagerbestand</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td data-label="Produkt" class="fw-bold">
+                            Bürostuhl PRO
+                          </td>
+                          <td data-label="SKU">FB-1042</td>
+                          <td data-label="Lagerbestand">
+                            <span class="badge badge-success">32 Stk.</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td data-label="Produkt" class="fw-bold">
+                            Höhenverstellbarer Schreibtisch
+                          </td>
+                          <td data-label="SKU">BR-2091</td>
+                          <td data-label="Lagerbestand">
+                            <span class="badge badge-danger">0 Stk.</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Großer Kopf, Karten IMMER (nicht nur auf Mobilgeräten) --&gt;
+&lt;table class="table thead-lg table-cards-always"&gt;
+  &lt;thead class="thead-primary"&gt;
+    &lt;tr&gt;&lt;th&gt;Produkt&lt;/th&gt;&lt;th&gt;SKU&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-label="Produkt"&gt;Bürostuhl PRO&lt;/td&gt;
+      &lt;td data-label="SKU"&gt;FB-1042&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;!-- Kompakte Tabelle mit Zebrastreifen --&gt;
+&lt;div class="table-wrapper"&gt;
+  &lt;table class="table table-sm table-striped table-hover table-cards"&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Rechnung&lt;/th&gt;
+        &lt;th&gt;Status&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;!-- Das data-label-Attribut ist entscheidend für die mobile Ansicht! --&gt;
+        &lt;td data-label="Rechnung"&gt;#RE-2026/01&lt;/td&gt;
+        &lt;td data-label="Status"&gt;&lt;span class="badge badge-success"&gt;Bezahlt&lt;/span&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;!-- Tabelle mit dunklem, kompaktem Kopf --&gt;
+&lt;div class="table-wrapper"&gt;
+  &lt;table class="table table-lg table-borderless"&gt;
+    &lt;!-- Klassen zu thead hinzufügen --&gt;
+    &lt;thead class="thead-dark thead-sm"&gt;
+      &lt;tr&gt;
+        &lt;th&gt;Benutzer&lt;/th&gt;
+        &lt;th&gt;Rolle&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;!-- ... --&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-pricing-tables.de.html" class="btn btn-secondary"
+              >➔ Zurück: Preistabellen</a
+            >
+            <a
+              href="examples-data-rows.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Data Rows ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

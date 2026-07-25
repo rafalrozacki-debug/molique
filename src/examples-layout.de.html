@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Grid & Layout - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Grid &amp; Layout</h1>
+            <p class="text-6 text-muted">
+              Kopierbereite molique-Grid-Muster — vom automatischen
+              Auto-Grid über das starre 12-Spalten-Grid und überlappende
+              Karten bis hin zu Flexbox und dem asymmetrischen Bento Grid.
+            </p>
+          </div>
+
+          <!-- Intelligentes Auto-Grid -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Intelligentes Auto-Grid (RAM)</h3>
+            <p class="text-muted mb-4">
+              Die Klasse <code>.grid-auto</code> ordnet Elemente automatisch
+              in Spalten an — fehlt der Platz, fallen sie von selbst in eine
+              neue Zeile. Null Media Queries!
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-auto w-100 gap-3">
+                  <div
+                    class="bg-primary text-white p-4 rounded-2 text-center hover-gpu-shadow"
+                  >
+                    Karte 1
+                  </div>
+                  <div
+                    class="bg-primary text-white p-4 rounded-2 text-center hover-gpu-shadow"
+                  >
+                    Karte 2
+                  </div>
+                  <div
+                    class="bg-primary text-white p-4 rounded-2 text-center hover-gpu-shadow"
+                  >
+                    Karte 3
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Elemente ordnen sich je nach Bildschirm selbst in 1, 2 oder 3 Spalten an --&gt;
+&lt;div class="grid-auto gap-4"&gt;
+  &lt;div class="card"&gt;Karte 1&lt;/div&gt;
+  &lt;div class="card"&gt;Karte 2&lt;/div&gt;
+  &lt;div class="card"&gt;Karte 3&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Starres Grid -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Starres Grid (12-spaltig)</h3>
+            <p class="text-muted mb-4">
+              Wenn Sie präzise Kontrolle benötigen — die Klasse
+              <code>.grid-cols-12</code> am Elternelement und
+              <code>.col-span-*</code> an den Kindern.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="grid-cols-1 grid-md-cols-12 gap-3 w-100">
+                  <div
+                    class="col-md-span-8 bg-dark text-white p-4 rounded-2 text-center"
+                  >
+                    .col-md-span-8 (66 %)
+                  </div>
+                  <div
+                    class="col-md-span-4 bg-secondary text-white p-4 rounded-2 text-center"
+                  >
+                    .col-md-span-4 (33 %)
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Auf Mobilgeräten 1 Spalte, ab Tablet 12 Spalten --&gt;
+&lt;div class="grid-cols-1 grid-md-cols-12 gap-4"&gt;
+
+  &lt;!-- Nimmt auf dem Desktop 8 Spalten ein (auf Mobilgeräten 100 %) --&gt;
+  &lt;div class="col-md-span-8"&gt;Hauptinhalt&lt;/div&gt;
+
+  &lt;!-- Nimmt auf dem Desktop 4 Spalten ein (auf Mobilgeräten 100 %) --&gt;
+  &lt;div class="col-md-span-4"&gt;Seitenleiste&lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Overlapping Cards -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Überlappende Karten</h3>
+            <p class="text-muted mb-4">
+              Ein häufiges Premium-Muster — eine Karte „fährt" auf den
+              darüberliegenden Abschnitt (z. B. eine Suchleiste auf einem
+              Hero-Foto).
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column w-100 p-0">
+                <!-- Hero-Simulation -->
+                <div
+                  class="bg-dark text-white w-100 p-5 text-center"
+                  style="padding-bottom: 100px !important"
+                >
+                  <h3 class="text-9 m-0">Hero-Abschnitt</h3>
+                </div>
+                <!-- Überlappende Karte -->
+                <div class="overlap-container w-75 mx-auto">
+                  <div class="card p-4 shadow-lg text-center border-0">
+                    <p class="m-0 fw-bold">
+                      Überlappende Karte (.overlap-container)
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Abschnitt mit großem unteren Padding (pb-5) --&gt;
+&lt;section class="bg-dark pb-5"&gt;...&lt;/section&gt;
+
+&lt;!-- Karte, die auf den Abschnitt darüber fährt --&gt;
+&lt;div class="container overlap-container"&gt;
+  &lt;div class="card shadow-lg"&gt;
+    Karteninhalt
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Flexbox und Ausrichtung -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Flexbox und Ausrichtung von Elementen</h3>
+            <p class="text-muted mb-4">
+              Utility-Klassen zum Zentrieren, Verteilen und Ändern der
+              Reihenfolge von Elementen innerhalb von Containern.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview flex-column w-100 gap-5">
+                <!-- Beispiel 1: Ausrichtung -->
+                <div class="w-100">
+                  <p class="text-4 text-muted mb-2">
+                    Rechtsbündige Ausrichtung und vertikale Zentrierung
+                  </p>
+                  <div
+                    class="d-flex justify-content-end align-items-center bg-surface border p-3 rounded-2"
+                    style="height: 100px"
+                  >
+                    <button class="btn btn-primary">Button rechts</button>
+                  </div>
+                </div>
+
+                <!-- Beispiel 2: Mobile Reverse -->
+                <div class="w-100">
+                  <p class="text-4 text-muted mb-2">
+                    Mobile Reverse (Fenster verkleinern, um die Umordnung zu
+                    sehen!)
+                  </p>
+                  <div
+                    class="d-flex flex-column-reverse flex-md-row align-items-center gap-4 bg-surface border p-4 rounded-2"
+                  >
+                    <div class="w-100 w-md-50">
+                      <h3 class="fw-bold m-0">Text links</h3>
+                      <p class="text-muted m-0 mt-2">
+                        Auf dem Desktop bin ich links. Auf dem Handy rutsche
+                        ich ganz nach unten, unter das Foto!
+                      </p>
+                    </div>
+                    <div
+                      class="w-100 w-md-50 bg-dark text-white d-flex align-items-center justify-content-center rounded-2"
+                      style="height: 150px"
+                    >
+                      Foto rechts
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Ausrichtung von Elementen --&gt;
+&lt;div class="d-flex justify-content-end align-items-center"&gt;...&lt;/div&gt;
+
+&lt;!-- Umordnung auf Mobilgeräten (Mobile Reverse) --&gt;
+&lt;div class="d-flex flex-column-reverse flex-md-row"&gt;
+  &lt;div class="w-100 w-md-50"&gt;Text (auf Mobilgeräten unten)&lt;/div&gt;
+  &lt;div class="w-100 w-md-50"&gt;Foto (auf Mobilgeräten oben)&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Bento Grid -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Bento Grid</h3>
+            <p class="text-muted mb-4">
+              Ein modernes, asymmetrisches Kachel-Layout, das von Apple
+              populär gemacht wurde. Ideal für Dashboards und
+              „Features"-Abschnitte.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="bento-grid w-100">
+                  <div
+                    class="bg-primary text-white p-4 bento-col-2 bento-row-2 hover-gpu-shadow"
+                  >
+                    <h3 class="fw-bold">Hauptkachel</h3>
+                    <p class="opacity-75">.bento-col-2 .bento-row-2</p>
+                  </div>
+                  <div class="bg-dark text-white p-4 hover-gpu-shadow">
+                    <h3 class="fw-bold">Klein</h3>
+                  </div>
+                  <div
+                    class="bg-secondary text-white p-4 bento-row-2 hover-gpu-shadow"
+                  >
+                    <h3 class="fw-bold">Vertikal</h3>
+                    <p class="opacity-75">.bento-row-2</p>
+                  </div>
+                  <div
+                    class="bg-success text-white p-4 bento-col-2 hover-gpu-shadow"
+                  >
+                    <h3 class="fw-bold">Horizontal</h3>
+                    <p class="opacity-75">.bento-col-2</p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="bento-grid"&gt;
+  &lt;div class="bento-col-2 bento-row-2"&gt;Großes Quadrat&lt;/div&gt;
+  &lt;div&gt;Normales Quadrat&lt;/div&gt;
+  &lt;div class="bento-row-2"&gt;Vertikales Rechteck&lt;/div&gt;
+  &lt;div class="bento-col-2"&gt;Horizontales Rechteck&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="docs.de.html" class="btn btn-secondary"
+              >➔ Zurück: Dokumentation</a
+            >
+            <a
+              href="examples-navbar.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Navbar ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
