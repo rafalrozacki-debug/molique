@@ -8,11 +8,16 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # =========================================
 # 2. UKRYWANIE ROZSZERZEŃ .html
 # =========================================
-# Kiedy klient wchodzi na /oferta, serwer ładuje plik oferta.html
+# Kiedy klient wchodzi na /oferta, serwer ładuje plik oferta.html.
+# Dopuszczony jest też jeden opcjonalny segment językowy .en/.de na
+# końcu (np. /docs.en -> docs.en.html, /changelog.de -> changelog.de.html)
+# - reszta zasad (linki wewnętrzne nadal pokazują pełne .html) się nie
+# zmienia, to tylko serwerowa furtka dla ręcznie wpisanych/udostępnionych
+# adresów.
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^([^\.]+)$ $1.html [NC,L]
+RewriteRule ^([^\.]+(?:\.(?:en|de))?)$ $1.html [NC,L]
 
 # =========================================
 # 3. WŁASNA STRONA BŁĘDU 404
