@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Instrukcja dla AI (llms.txt) - molique Docs","description":"Czytelna wersja pliku llms.txt - złote zasady i słownik klas molique w formie, którą wskazujesz asystentowi AI, żeby generował markup zgodny z frameworkiem."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Instrukcja dla AI (llms.txt)</h1>
+            <p class="text-6 text-muted">
+              Plik <code>llms.txt</code> to złote zasady i słownik klas
+              molique w jednym miejscu — wskaż go asystentowi AI (Claude,
+              ChatGPT i inne), a wygeneruje markup zgodny z frameworkiem
+              zamiast zmyślać klasy. Ta strona to jego czytelna wersja dla
+              ludzi — generowana z tego samego pliku, więc nigdy się z nim
+              nie rozjedzie.
+            </p>
+          </div>
+
+          <div class="card p-4 mb-5 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+              <h2 class="text-5 fw-bold mb-1">Surowy plik dla agentów AI</h2>
+              <p class="text-muted m-0">
+                To jest adres, który realnie czytają narzędzia AI —
+                <code>/llms.txt</code>, zwykły plik tekstowy, bez HTML.
+              </p>
+            </div>
+            <a
+              href="llms.txt"
+              target="_blank"
+              rel="noopener"
+              class="btn btn-primary fw-bold hover-spring text-nowrap"
+            >
+              Zobacz surowy llms.txt ↗
+            </a>
+          </div>
+
+          <!-- TREŚĆ GENEROWANA z llms.txt przez tools/gen-llms-page.js -->
+          <include src="partials/llms-content.html"></include>
+
+          <!-- NAWIGACJA -->
+          <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+            <a href="docs-classes.html" class="btn btn-secondary">
+              ➔ Wróć: Spis Klas (Cheat Sheet)
+            </a>
+            <a href="download.html" class="btn btn-primary fw-bold hover-spring">
+              Pobierz molique ➔
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

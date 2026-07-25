@@ -4,13 +4,14 @@
   "description": "Ultralekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez zależności (zero jQuery). Wersja: **1.6.2**.",
   "main": "index.js",
   "scripts": {
-    "predev": "node tools/gen-variables-doc.js",
+    "predev": "node tools/gen-variables-doc.js && node tools/gen-llms-page.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "gen:chunks": "node tools/gen-chunks.js",
     "gen:variables": "node tools/gen-variables-doc.js",
-    "prebuild": "node tools/gen-chunks.js && node tools/gen-variables-doc.js"
+    "gen:llms-page": "node tools/gen-llms-page.js",
+    "prebuild": "node tools/gen-chunks.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js"
   },
   "repository": {
     "type": "git",
