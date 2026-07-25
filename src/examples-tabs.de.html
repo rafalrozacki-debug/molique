@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Tabs - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Tabs</h1>
+            <p class="text-6 text-muted">
+              Auf dem Radio Hack basierende Tabs — versteckte Radio-Inputs
+              steuern die Sichtbarkeit der Panels rein per CSS, inklusive
+              Segmented-Control-Variante.
+            </p>
+          </div>
+
+          <!-- Tabs -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Tabs</h3>
+            <p class="text-muted mb-4">
+              Wir nutzen den sogenannten Radio Hack. Versteckte Radio-Inputs
+              steuern die Sichtbarkeit der Panels rein per CSS.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100">
+                <div class="tabs w-100">
+                  <input
+                    type="radio"
+                    name="demo-tabs"
+                    id="tab-1"
+                    class="tab-input"
+                    checked
+                  />
+                  <input
+                    type="radio"
+                    name="demo-tabs"
+                    id="tab-2"
+                    class="tab-input"
+                  />
+
+                  <div class="tabs-header">
+                    <label for="tab-1" class="tab-label">Beschreibung</label>
+                    <label for="tab-2" class="tab-label">Spezifikation</label>
+                  </div>
+                  <div
+                    class="tabs-content p-4 border border-top-0 bg-surface rounded-bottom"
+                  >
+                    <div class="tab-pane">
+                      Das ist der Inhalt des ersten Tabs. Er funktioniert
+                      blitzschnell.
+                    </div>
+                    <div class="tab-pane">
+                      Und das ist die technische Spezifikation im zweiten Tab.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="tabs"&gt;
+  &lt;!-- Versteckte steuernde Inputs --&gt;
+  &lt;input type="radio" name="my-tabs" id="tab-1" class="tab-input" checked&gt;
+  &lt;input type="radio" name="my-tabs" id="tab-2" class="tab-input"&gt;
+
+  &lt;!-- Überschriften (mit den Inputs verbundene Labels) --&gt;
+  &lt;div class="tabs-header"&gt;
+    &lt;label for="tab-1" class="tab-label"&gt;Tab 1&lt;/label&gt;
+    &lt;label for="tab-2" class="tab-label"&gt;Tab 2&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Inhalt --&gt;
+  &lt;div class="tabs-content"&gt;
+    &lt;div class="tab-pane"&gt;Inhalt 1&lt;/div&gt;
+    &lt;div class="tab-pane"&gt;Inhalt 2&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="mt-5 pt-4 border-top">
+              <h5 class="fw-bold text-5 mb-3">
+                Variante: Segmented Control (gleitende Pille)
+              </h5>
+              <p class="text-4 text-muted mb-3">
+                Fügen Sie die Klasse <code>.tabs-pill</code> neben
+                <code>.tabs</code> hinzu, sowie
+                <code>style="--tab-count: N;"</code> (Anzahl der Tabs).
+                Fügen Sie innerhalb von <code>.tabs-header</code> ein leeres
+                <code>&lt;div class="tabs-pill-indicator"&gt;&lt;/div&gt;</code>
+                hinzu — das Gleiten des Indikators und die Farbe des aktiven
+                Labels passieren von selbst, in reinem CSS
+                (<code>:has()</code>, null JS).
+              </p>
+
+              <div class="component-showcase">
+                <div class="component-preview w-100">
+                  <div
+                    class="tabs tabs-pill w-100"
+                    style="--tab-count: 3; max-width: 420px"
+                  >
+                    <input
+                      type="radio"
+                      name="demo-tabs-pill"
+                      id="pill-tab-1"
+                      class="tab-input"
+                      checked
+                    />
+                    <input
+                      type="radio"
+                      name="demo-tabs-pill"
+                      id="pill-tab-2"
+                      class="tab-input"
+                    />
+                    <input
+                      type="radio"
+                      name="demo-tabs-pill"
+                      id="pill-tab-3"
+                      class="tab-input"
+                    />
+
+                    <div class="tabs-header">
+                      <div class="tabs-pill-indicator"></div>
+                      <label for="pill-tab-1" class="tab-label">Tag</label>
+                      <label for="pill-tab-2" class="tab-label">Woche</label>
+                      <label for="pill-tab-3" class="tab-label">Monat</label>
+                    </div>
+                    <div
+                      class="tabs-content p-4 border rounded-2 mt-3 bg-surface"
+                    >
+                      <div class="tab-pane">
+                        Statistiken des letzten Tages.
+                      </div>
+                      <div class="tab-pane">
+                        Statistiken der letzten Woche.
+                      </div>
+                      <div class="tab-pane">
+                        Statistiken des letzten Monats.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="component-code">
+                  <button class="btn-copy">Kopieren</button>
+                  <pre><code>&lt;div class="tabs tabs-pill" style="--tab-count: 3;"&gt;
+  &lt;input type="radio" name="my-pill-tabs" id="pt-1" class="tab-input" checked&gt;
+  &lt;input type="radio" name="my-pill-tabs" id="pt-2" class="tab-input"&gt;
+  &lt;input type="radio" name="my-pill-tabs" id="pt-3" class="tab-input"&gt;
+
+  &lt;div class="tabs-header"&gt;
+    &lt;!-- Gleitender Indikator — immer ein leeres div, ohne Inhalt --&gt;
+    &lt;div class="tabs-pill-indicator"&gt;&lt;/div&gt;
+    &lt;label for="pt-1" class="tab-label"&gt;Tag&lt;/label&gt;
+    &lt;label for="pt-2" class="tab-label"&gt;Woche&lt;/label&gt;
+    &lt;label for="pt-3" class="tab-label"&gt;Monat&lt;/label&gt;
+  &lt;/div&gt;
+
+  &lt;div class="tabs-content"&gt;
+    &lt;div class="tab-pane"&gt;Inhalt 1&lt;/div&gt;
+    &lt;div class="tab-pane"&gt;Inhalt 2&lt;/div&gt;
+    &lt;div class="tab-pane"&gt;Inhalt 3&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-accordions.de.html" class="btn btn-secondary"
+              >➔ Zurück: Akkordeons</a
+            >
+            <a
+              href="examples-toasts.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Toasts ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Schalter - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Schalter</h1>
+            <p class="text-6 text-muted">
+              Drei visuelle Schalter-Varianten, aufgebaut auf einer nativen
+              Checkbox, mit erzwungener 44px-Höhe für B2B-Barrierefreiheit.
+            </p>
+          </div>
+
+          <!-- Schalter (Switches) -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Schalter (Switches)</h3>
+            <p class="text-muted mb-4">
+              Aufgebaut auf einem nativen <code>&lt;input
+              type="checkbox"&gt;</code> — verfügbar in Standard-,
+              quadratischer und Outline-Variante.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview flex-column align-items-start w-100 bg-surface gap-4"
+              >
+                <!-- Standard (iOS) -->
+                <div class="w-100">
+                  <p class="text-4 text-muted mb-2">Standard (iOS-Stil)</p>
+                  <label class="form-switch">
+                    <input type="checkbox" class="form-switch-input" checked />
+                    <span class="form-switch-label">E-Mail-Benachrichtigungen</span>
+                  </label>
+                </div>
+
+                <!-- Quadratisch -->
+                <div class="w-100">
+                  <p class="text-4 text-muted mb-2">
+                    Quadratisch (.form-switch-square)
+                  </p>
+                  <label class="form-switch form-switch-square">
+                    <input type="checkbox" class="form-switch-input" checked />
+                    <span class="form-switch-label">Entwicklermodus</span>
+                  </label>
+                </div>
+
+                <!-- Outline -->
+                <div class="w-100">
+                  <p class="text-4 text-muted mb-2">
+                    Konturiert (.form-switch-outline)
+                  </p>
+                  <label class="form-switch form-switch-outline">
+                    <input type="checkbox" class="form-switch-input" checked />
+                    <span class="form-switch-label">Hintergrundsynchronisierung</span>
+                  </label>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Standard --&gt;
+&lt;label class="form-switch"&gt;
+  &lt;input type="checkbox" class="form-switch-input" checked&gt;
+  &lt;span class="form-switch-label"&gt;Option 1&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Quadratisch --&gt;
+&lt;label class="form-switch form-switch-square"&gt;
+  &lt;input type="checkbox" class="form-switch-input"&gt;
+  &lt;span class="form-switch-label"&gt;Option 2&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Konturiert --&gt;
+&lt;label class="form-switch form-switch-outline"&gt;
+  &lt;input type="checkbox" class="form-switch-input"&gt;
+  &lt;span class="form-switch-label"&gt;Option 3&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Switch als Collapse-Auslöser -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Switch zum Einblenden eines Feldes (ohne JS)</h3>
+            <p class="text-muted mb-4">
+              <code>.form-switch</code> direkt vor <code>.grid-expand</code>
+              (als Geschwister, nicht verschachtelt) blendet den darunter
+              liegenden Inhalt nach dem Aktivieren ein. Null JavaScript —
+              klicken Sie den Schalter, um es zu sehen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="w-100" style="max-width: 400px">
+                  <label class="form-switch">
+                    <input type="checkbox" class="form-switch-input" />
+                    <span class="form-switch-label"
+                      >E-Mail-Benachrichtigungen senden</span
+                    >
+                  </label>
+                  <div class="grid-expand">
+                    <div class="grid-expand-inner">
+                      <div class="form-floating mt-3">
+                        <input
+                          type="email"
+                          class="input"
+                          id="switch-collapse-email"
+                          placeholder=" "
+                        />
+                        <label for="switch-collapse-email">E-Mail-Adresse</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;label class="form-switch"&gt;
+  &lt;input type="checkbox" class="form-switch-input"&gt;
+  &lt;span class="form-switch-label"&gt;E-Mail-Benachrichtigungen senden&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;!-- Geschwister des Switches, NICHT im selben &lt;label&gt; --&gt;
+&lt;div class="grid-expand"&gt;
+  &lt;div class="grid-expand-inner"&gt;
+    &lt;input type="email" class="input" placeholder="E-Mail-Adresse"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-select.html" class="btn btn-secondary"
+              >➔ Zurück: Searchable Select</a
+            >
+            <a
+              href="examples-reveal-animations.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Eintrittsanimationen ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

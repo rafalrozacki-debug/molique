@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Status & Feedback - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Status &amp; Feedback</h1>
+            <p class="text-6 text-muted">
+              Mikrointeraktionen, die den Nutzer über den Zustand der
+              Anwendung informieren — pulsierende Status, sanftes Aufklappen
+              und eine animierte Erfolgs-Checkbox.
+            </p>
+          </div>
+
+          <!-- Status, Fehler und Layout -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Status, Fehler und Layout</h3>
+            <p class="text-muted mb-4">
+              Mikrointeraktionen, die den Nutzer über den Zustand der
+              Anwendung informieren, sowie sanft aufklappende Container.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-5 align-items-start">
+                <!-- Ping & Shake -->
+                <div class="d-flex flex-column gap-4">
+                  <div>
+                    <p class="text-4 text-muted mb-2">
+                      Status Ping (Pulsierender Punkt)
+                    </p>
+                    <span class="status-dot status-done status-ping"
+                      >System betriebsbereit (Live)</span
+                    >
+                  </div>
+
+                  <div>
+                    <p class="text-4 text-muted mb-2">Micro Shake (Fehler)</p>
+                    <button class="btn btn-danger" onclick="triggerShake(this)">
+                      Klicken, um einen Fehler auszulösen
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Grid Expand -->
+                <div class="flex-grow-1" style="max-width: 400px">
+                  <p class="text-4 text-muted mb-2">
+                    Grid Expand (Sanftes Aufklappen ohne max-height)
+                  </p>
+                  <div class="card p-3">
+                    <button
+                      class="btn btn-secondary w-100 mb-2"
+                      onclick="
+                        document
+                          .getElementById('demoExpand')
+                          .classList.toggle('is-open')
+                      "
+                    >
+                      Panel aus-/einklappen
+                    </button>
+                    <div id="demoExpand" class="grid-expand">
+                      <div class="grid-expand-inner">
+                        <div
+                          class="p-3 bg-surface rounded-2 mt-2 text-4 text-muted"
+                        >
+                          Dieser Text klappt dank der Animation von
+                          <code>grid-template-rows: 0fr</code> auf
+                          <code>1fr</code> vollkommen sanft auf. Schluss mit
+                          dem Hacken von <code>max-height: 1000px</code>!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Pulsierender Punkt --&gt;
+&lt;span class="status-dot status-done status-ping"&gt;Live&lt;/span&gt;
+
+&lt;!-- Wackeln (Klasse .shake hinzufügen) --&gt;
+&lt;button class="btn shake"&gt;Fehler&lt;/button&gt;
+
+&lt;!-- Sanftes Aufklappen (Grid Expand) --&gt;
+&lt;div class="grid-expand is-open"&gt;
+  &lt;div class="grid-expand-inner"&gt;
+    Inhalt, der sanft aufklappt...
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Interaktives Status-Icon (Checkbox) -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Interaktives Status-Icon (Checkbox)</h3>
+            <p class="text-muted mb-4">
+              Ein einzelnes HTML-Element, das sich sanft vom Zustand
+              „Hinzufügen" in den Zustand „Erfolg" verwandelt und dabei als
+              vollwertige Checkbox funktioniert.
+            </p>
+
+            <div class="component-showcase">
+              <div
+                class="component-preview w-100 bg-surface justify-content-center py-5"
+              >
+                <div class="text-center">
+                  <!-- Version als Checkbox -->
+                  <label class="status-checkbox mb-3">
+                    <input type="checkbox" name="premium_option" value="1" />
+                    <span class="status-icon-toggle hover-spring"></span>
+                  </label>
+                  <h4 class="text-5 fw-bold m-0">Wähle mich aus!</h4>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Vollwertige Formular-Checkbox --&gt;
+&lt;label class="status-checkbox"&gt;
+  &lt;input type="checkbox" name="feldname" value="1"&gt;
+  &lt;span class="status-icon-toggle"&gt;&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Statische Status-Icons -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Statische Status-Icons</h3>
+            <p class="text-muted mb-4">
+              Die Basis <code>.status-icon</code>, auf der die obige
+              Checkbox aufbaut — nützlich, wenn Sie nur den Zustand selbst
+              benötigen (ohne Interaktivität), z. B. als Markierung in einer
+              Schritt-Liste.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 gap-4">
+                <span class="status-icon status-icon-add"></span>
+                <span class="status-icon status-icon-success"></span>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Zustand „Hinzufügen" --&gt;
+&lt;span class="status-icon status-icon-add"&gt;&lt;/span&gt;
+
+&lt;!-- Zustand „Erfolg" --&gt;
+&lt;span class="status-icon status-icon-success"&gt;&lt;/span&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-text-effects.de.html" class="btn btn-secondary"
+              >➔ Zurück: Texteffekte</a
+            >
+            <a
+              href="examples-blobs-glassmorphism.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Blobs &amp; Glassmorphism ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

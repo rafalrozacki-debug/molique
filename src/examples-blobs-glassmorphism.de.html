@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Blobs & Glassmorphism - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Blobs &amp; Glassmorphism</h1>
+            <p class="text-6 text-muted">
+              Moderne Hintergründe mit animierten Farbklecksen sowie ein
+              Milchglaseffekt, ideal für Overlays über einem farbigen
+              Hintergrund.
+            </p>
+          </div>
+
+          <!-- Blobs & Glassmorphism -->
+          <section>
+            <h3 class="text-7 fw-bold mb-3">Blobs &amp; Glassmorphism</h3>
+            <p class="text-muted mb-4">
+              Die Klasse <code>.bg-blobs</code> erzeugt animierte,
+              verschwommene Farbkleckse im Hintergrund, und
+              <code>.bg-glass</code> erzeugt einen für Overlays idealen
+              Milchglaseffekt.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 p-0">
+                <div
+                  class="bg-blobs w-100 position-relative d-flex align-items-center justify-content-center"
+                  style="height: 400px; overflow: hidden"
+                >
+                  <div
+                    class="card bg-glass border-0 p-5 text-center"
+                    style="max-width: 400px; z-index: 10"
+                  >
+                    <h3 class="fw-bold text-dark m-0">Glassmorphism</h3>
+                    <p class="text-dark opacity-75 mt-2 mb-0">
+                      Der Hintergrund unter dieser Karte wird dynamisch
+                      verschwommen dargestellt.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Container mit animierten Farbklecksen --&gt;
+&lt;div class="bg-blobs"&gt;
+
+  &lt;!-- Karte mit Milchglaseffekt --&gt;
+  &lt;div class="card bg-glass"&gt;
+    &lt;h3&gt;Glassmorphism&lt;/h3&gt;
+  &lt;/div&gt;
+
+  &lt;!-- Dunkle Variante --&gt;
+  &lt;div class="card bg-glass-dark text-white"&gt;
+    &lt;h3&gt;Dark Glass&lt;/h3&gt;
+  &lt;/div&gt;
+
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-5">
+              Dunkle Variante: <code>.bg-blobs-deep</code>
+            </h3>
+            <p class="text-muted mb-4">
+              Der Hintergrund ist <strong>immer</strong> dunkel — auch im
+              hellen Motiv — sodass weißer Text darauf funktioniert, ohne zu
+              prüfen, welches Motiv aktiv ist. Derselbe Trick wie bei
+              <code>.navbar-pill</code>. Die Farbe tauschen Sie über
+              <code>style="--blobs-deep-bg: #123"</code>.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 p-0">
+                <div
+                  class="bg-blobs bg-blobs-deep w-100 position-relative d-flex align-items-center justify-content-center"
+                  style="height: 320px; overflow: hidden"
+                >
+                  <div
+                    class="card bg-glass border-0 p-5 text-center"
+                    style="max-width: 400px; z-index: 10"
+                  >
+                    <h3 class="fw-bold text-white m-0">Immer dunkler Hintergrund</h3>
+                    <p class="text-white opacity-75 mt-2 mb-0">
+                      Weißer Text ist in beiden Motiven lesbar.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="bg-blobs bg-blobs-deep"&gt;
+  &lt;div class="card bg-glass text-white"&gt;…&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Eigene Hintergrundfarbe --&gt;
+&lt;div class="bg-blobs bg-blobs-deep" style="--blobs-deep-bg: #1a103d"&gt;…&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-5">
+              Eigene Farben und Geschwindigkeit
+            </h3>
+            <p class="text-muted mb-4">
+              Die Komponente wird über Variablen gesteuert, nicht über
+              Klassen — Farbe und Timing sind stufenlose Werte, sodass jede
+              Klasse ein willkürlicher Punkt auf der Skala wäre. Genügt
+              <code>style</code> am Container.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 p-0">
+                <div
+                  class="bg-blobs bg-blobs-deep w-100 position-relative d-flex align-items-center justify-content-center"
+                  style="
+                    height: 320px;
+                    overflow: hidden;
+                    --blobs-deep-bg: #1a103d;
+                    --blob-1: rgba(168, 85, 247, 0.75);
+                    --blob-2: rgba(236, 72, 153, 0.6);
+                    --blob-speed: 5s;
+                  "
+                >
+                  <div
+                    class="card bg-glass border-0 p-5 text-center"
+                    style="max-width: 400px; z-index: 10"
+                  >
+                    <h3 class="fw-bold text-white m-0">Eigene Palette</h3>
+                    <p class="text-white opacity-75 mt-2 mb-0">
+                      Violett und Pink, doppelt so schnell.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="bg-blobs bg-blobs-deep" style="
+       --blobs-deep-bg: #1a103d;
+       --blob-1: rgba(168, 85, 247, 0.75);
+       --blob-2: rgba(236, 72, 153, 0.6);
+       --blob-speed: 5s;"&gt;
+  &lt;div class="card bg-glass text-white"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper mt-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Variable</th>
+                    <th>Standard</th>
+                    <th>Steuert</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--blob-1</code></td>
+                    <td data-label="Standard">primary, 50 % Deckkraft</td>
+                    <td data-label="Steuert">Die Farbe des Farbklecks in der oberen linken Ecke.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--blob-2</code></td>
+                    <td data-label="Standard">info, 40 % Deckkraft</td>
+                    <td data-label="Steuert">Die Farbe des Farbklecks in der unteren rechten Ecke.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--blob-speed</code></td>
+                    <td data-label="Standard"><code>7s</code></td>
+                    <td data-label="Steuert">
+                      Der Zyklus des ersten Farbklecks. Der zweite rechnet
+                      seinen als <code>×1.3</code>, sodass ein einzelner
+                      Wert beide beschleunigt und den Versatz der Zyklen
+                      erhält.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--blobs-deep-bg</code></td>
+                    <td data-label="Standard"><code>#0F172A</code></td>
+                    <td data-label="Steuert">
+                      Der Hintergrund der Variante
+                      <code>.bg-blobs-deep</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-status-feedback.de.html" class="btn btn-secondary"
+              >➔ Zurück: Status &amp; Feedback</a
+            >
+            <a
+              href="examples-border-effects.de.html"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Rahmenanimationen ➔</a
+            >
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
