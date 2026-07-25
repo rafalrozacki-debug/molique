@@ -5302,11 +5302,18 @@
         /* Resetujemy tło z zebry dla kart */
         background-color: var(--bg-surface) !important;
       }
+      .table-cards {
+        /* Etykieta NAD wartoscia (nie obok, flexem) - komorki z bogata trescia
+           (kilka <code> na raz, dluzszy opis) psuly sie w wariancie flex:
+           kazdy element potomny (kazdy <code>, kazdy fragment tekstu) staje sie
+           WLASNYM elementem flex i przy braku miejsca zamiast zawijac sie jako
+           jeden akapit, kazdy z nich osobno kurczy sie do prawie zerowej
+           szerokosci - tekst lamie sie na pojedyncze litery. Zwykly block-flow
+           (bez flex/grid na komorce) jest odporny na to niezaleznie od tego,
+           ile elementow inline zawiera wartosc. */
+      }
       .table-cards td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-align: right;
+        text-align: left;
         border-bottom: 1px solid var(--border-color);
         padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
       }
@@ -5315,10 +5322,13 @@
       }
       .table-cards td::before {
         content: attr(data-label);
+        display: block;
         font-weight: var(--fw-bold);
         color: var(--text-muted);
-        text-align: left;
-        padding-right: calc(var(--spacing-unit) * 2);
+        font-size: var(--text-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin-bottom: calc(var(--spacing-unit) * 0.5);
       }
     }
     /* Wersja Wymuszona (Działa zawsze, nawet na desktopie) */
@@ -5337,11 +5347,18 @@
       /* Resetujemy tło z zebry dla kart */
       background-color: var(--bg-surface) !important;
     }
+    .table-cards-always {
+      /* Etykieta NAD wartoscia (nie obok, flexem) - komorki z bogata trescia
+         (kilka <code> na raz, dluzszy opis) psuly sie w wariancie flex:
+         kazdy element potomny (kazdy <code>, kazdy fragment tekstu) staje sie
+         WLASNYM elementem flex i przy braku miejsca zamiast zawijac sie jako
+         jeden akapit, kazdy z nich osobno kurczy sie do prawie zerowej
+         szerokosci - tekst lamie sie na pojedyncze litery. Zwykly block-flow
+         (bez flex/grid na komorce) jest odporny na to niezaleznie od tego,
+         ile elementow inline zawiera wartosc. */
+    }
     .table-cards-always td {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-align: right;
+      text-align: left;
       border-bottom: 1px solid var(--border-color);
       padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
     }
@@ -5350,10 +5367,13 @@
     }
     .table-cards-always td::before {
       content: attr(data-label);
+      display: block;
       font-weight: var(--fw-bold);
       color: var(--text-muted);
-      text-align: left;
-      padding-right: calc(var(--spacing-unit) * 2);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: calc(var(--spacing-unit) * 0.5);
     }
   }
   /* =========================================
