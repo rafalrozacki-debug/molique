@@ -1,0 +1,2446 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.6.2."}'></include>
+  </head>
+  <body>
+    <!-- ==========================================
+         NAVBAR
+         ========================================== -->
+<include src="partials/navbar.en.html"></include>
+
+    <!-- ==========================================
+         HERO
+         ========================================== -->
+    <header
+      class="position-relative"
+      style="
+        background:
+          linear-gradient(rgba(8, 12, 24, 0.82), rgba(8, 12, 24, 0.92)),
+          url(&quot;img/futuristic-bg.webp&quot;) center/cover;
+      "
+    >
+      <div class="container py-5">
+        <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
+          <span class="badge badge-primary mb-3">Current version: 1.6.0</span>
+          <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
+            Changelog
+          </h1>
+          <p
+            class="text-6 animate fade-in-up delay-100"
+            style="color: rgba(255, 255, 255, 0.75)"
+          >
+            The history of changes, new features and fixes in the molique
+            framework - from the first commit to today's fully modular
+            architecture.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         CHANGE TIMELINE
+         ========================================== -->
+    <main class="py-5 bg-body">
+      <div class="container" style="max-width: 900px">
+        <ul
+          class="timeline timeline-labeled m-0"
+          style="--timeline-label-width: 110px"
+        >
+          <!-- ============================================================ -->
+          <!-- v1.7.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.0</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Keyboard-accessible tabs
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>.tab-input</code> had
+                    <code>display: none</code></strong> — that doesn't just
+                    hide the element visually, it removes it from the tab
+                    order and the accessibility tree. Tabs couldn't be
+                    switched with the keyboard or read by a screen reader,
+                    even though the framework declares WCAG 2.2 AAA
+                    compliance.
+                  </li>
+                  <li>
+                    Hiding switched to the <code>clip</code> technique — the
+                    same one <code>.sr-only</code> is built on. The element
+                    becomes invisible but stays <strong>focusable</strong>:
+                    the radio group regains native arrow-key support, and the
+                    focus ring lands on the visible
+                    <code>.tab-label</code>.
+                  </li>
+                  <li>
+                    <strong>Nothing in the markup changes</strong> — the same
+                    <code>.tabs</code> / <code>.tab-input</code> /
+                    <code>.tab-label</code> structure, just fixed behavior
+                    underneath.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Chart navigation (<code>.chart-nav</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    A segmented range switcher built on hidden radio inputs —
+                    no JavaScript. The component was documented and used in
+                    example markup on three pages since the first release,
+                    but the CSS rule was never written; now it works.
+                  </li>
+                  <li>
+                    Radios hidden with the <code>clip</code> technique, not
+                    <code>display: none</code> — same principle as the tabs
+                    fix above, so the group is keyboard-accessible right away.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Fewer classes to write: implications in the grid and buttons
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>.grid-md-cols-*</code> is a single-column
+                    grid by default</strong> below its breakpoint, so
+                    <code>class="grid-md-cols-12"</code> is enough. Previously
+                    you had to add <code>grid-cols-1</code>, and forgetting it
+                    caused a sneaky symptom: the layout looked fine, but
+                    <code>gap</code> stopped working on phones — the element
+                    wasn't a grid at all at that point.
+                  </li>
+                  <li>
+                    <strong>A button color class now implies
+                    <code>.btn</code></strong> — <code>class="btn-primary"</code>
+                    instead of <code>class="btn btn-primary"</code>. This
+                    applies to colors and their outline variants. Size and
+                    base-look modifiers don't carry it (they're add-ons, not
+                    buttons), and <code>.btn-action</code> deliberately doesn't
+                    inherit it, since it intentionally breaks the 44px rule.
+                  </li>
+                  <li>
+                    <strong>Nothing stops working.</strong> The existing
+                    <code>class="btn btn-primary"</code> and
+                    <code>class="grid-cols-1 grid-md-cols-12"</code> notation
+                    is still valid — the new rules only add a default
+                    behavior. Cost: +740 B in the buttons module, +62 B in
+                    the grid.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  The 404 page was unstyled
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>404.html</code> loaded <code>css/flex-ui.css</code>
+                    — a file left over from the framework's old name, gone
+                    for months. It also used two classes outside molique
+                    (<code>.page-404-wrapper</code>,
+                    <code>.max-w-600</code>) and a dead
+                    <code>js/script.js</code>. Result: a completely
+                    unstyled page.
+                  </li>
+                  <li>
+                    Rewritten using only molique classes, without a single
+                    line of custom CSS. It serves both as this site's own
+                    404 page and as a template to copy — a comment at the
+                    top of the file lists what to swap, plus config for
+                    Apache and nginx.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Change</span>
+                  Removed <code>.hover-text-primary</code> and
+                  <code>.hover-bg-light</code>
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>They broke the naming scheme.</strong> In
+                    molique, hover colors are named
+                    <code>WHAT-hover-COLOR</code>:
+                    <code>text-hover-primary</code>,
+                    <code>bg-hover-danger</code>,
+                    <code>border-hover-success</code>. These two classes had
+                    their parts reversed and were the only ones like that in
+                    the whole framework.
+                  </li>
+                  <li>
+                    <strong>They were duplicates.</strong> The counterparts
+                    <code>.text-hover-primary</code> and
+                    <code>.bg-hover-light</code> already exist in the
+                    palette, and additionally have a <code>transition</code>
+                    that the removed versions lacked — so the migration is a
+                    minor improvement, not just tidying up.
+                  </li>
+                  <li>
+                    <strong>What to do:</strong> replace
+                    <code>hover-text-primary</code> with
+                    <code>text-hover-primary</code>. The class
+                    <code>.hover-bg-light</code> wasn't used anywhere in the
+                    project. The rest of the <code>hover-*</code> classes
+                    (<code>.hover-scale</code>, <code>.hover-shadow</code>,
+                    <code>.hover-border-draw</code>, and the rest)
+                    <strong>don't change</strong> — they describe an effect,
+                    not a color.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  CSS variables reference (<code>docs-variables.html</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>All 148 variables in tables</strong> — 86 theme
+                    variables (with light and dark mode values), 56
+                    component variables, and 6 markup-driven inputs. For
+                    each: what it controls and which SCSS modules use it.
+                  </li>
+                  <li>
+                    <strong>The tables are generated</strong> by
+                    <code>tools/gen-variables-doc.js</code> straight from
+                    <code>_root.scss</code> — the values can't drift from
+                    the code. The generator <strong>fails the build</strong>
+                    if a SCSS variable appears without a description, or a
+                    description is left after a variable was removed.
+                  </li>
+                  <li>
+                    <strong>A gotchas section:</strong> why
+                    <code>--dark</code> turns light in dark mode, why
+                    <code>--x-rgb</code> only works inside <code>rgba()</code>,
+                    why <code>variables: true</code> in PurgeCSS wipes out
+                    the theme, and why you can't use
+                    <code>--light-rgb</code> in the sidebar.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  <code>.bg-glass</code> without a gradient, and a broken sidebar
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>.bg-glass</code> wasn't rendering its
+                    tint layer.</strong> The background referenced
+                    <code>rgba(var(--bg-surface-rgb), …)</code>, and that
+                    variable was never declared anywhere — a
+                    <code>var()</code> with no fallback invalidates the
+                    whole declaration, so glassmorphism was running on
+                    <code>backdrop-filter</code> alone. The variable was
+                    added to both themes.
+                  </li>
+                  <li>
+                    <strong>The docs sidebar extracted into a partial.</strong>
+                    It was duplicated across 19 files and had already
+                    drifted: six pages didn't link to the Class Reference or
+                    the Roadmap, and <code>docs-tables.html</code> was
+                    missing from eighteen menus. Now there's a single
+                    <code>partials/docs-sidebar.html</code>, and the active
+                    item is set from the URL by a new module,
+                    <code>js/modules/molique-admin-nav-active.js</code>.
+                  </li>
+                  <li>
+                    <strong>Verified:</strong> after the swap, the content of
+                    all 22 documentation pages <strong>outside the
+                    sidebar is byte-for-byte identical</strong>, and while
+                    fixing <code>.bg-glass</code>, seven of the eight CSS
+                    bundles compiled with zero change whatsoever.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Splitting SCSS into independent modules (start)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong><code>_navigation.scss</code> (968 lines) split
+                    into 8 standalone files:</strong> <code>_navbar</code>,
+                    <code>_mega-menu</code>, <code>_dropdown</code>,
+                    <code>_breadcrumbs</code>, <code>_pagination</code>,
+                    <code>_topbar</code>, <code>_scroll-to-top</code>,
+                    <code>_reading-progress</code>. Each can be skipped in a
+                    bundle without compile errors — the first step toward
+                    the package builder and the <code>molique-nano</code>
+                    variant from the roadmap.
+                  </li>
+                  <li>
+                    <strong>Verified that nothing was lost:</strong>
+                    comparison of the compiled CSS before and after the
+                    split, at the selector→declaration pair level —
+                    <strong>1771 pairs, zero lost, zero added, zero
+                    changed</strong>. The other bundles (admin, shop,
+                    blog…) are bit-for-bit identical.
+                  </li>
+                  <li>
+                    <strong>Removed a modularity leak:</strong> a single
+                    <code>.is-active</code> rule tied together the navbar,
+                    dropdown, and mega menu — so a bundle without the mega
+                    menu still contained an orphaned
+                    <code>.mega-menu-link</code>. Each component now has its
+                    own rule.
+                  </li>
+                  <li>
+                    <strong>New generator
+                    <code>tools/gen-scss-context.js</code></strong>
+                    rebuilds <code>_AI_CONTEXT_scss.md</code> from source —
+                    this file is a full SCSS dump, so it drifted from
+                    reality after every split.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Change</span>
+                  All JS files prefixed with <code>molique-</code>
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Modules renamed:</strong>
+                    <code>js/modules/carousel.js</code> →
+                    <code>js/modules/molique-carousel.js</code> (and
+                    similarly the other 16). The core
+                    <code>molique-script.js</code> had the prefix from day
+                    one. This lets scripts that sync the framework into a
+                    project overwrite <strong>only molique's own
+                    files</strong>, without touching user code.
+                  </li>
+                  <li>
+                    <strong>No changes needed in your code</strong> if you
+                    use the autoloader — the paths live in
+                    <code>molique-script.js</code> and were updated. Change
+                    something only if you're loading a module manually via
+                    <code>&lt;script src&gt;</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  A dead script and asset discoverability
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Removed a dead
+                    <code>js/molique-script-widgets.js</code></strong> — 7
+                    pages were loading a file that isn't in the package
+                    (404 in the console). Widgets are pulled in by the
+                    autoloader anyway; the docs were fixed, since they
+                    instructed you to include this file.
+                  </li>
+                  <li>
+                    <strong><code>llms.txt</code> and the safelist are now
+                    served</strong> from the site. Previously the build
+                    only copied asset directories, so
+                    <code>/llms.txt</code> returned a 404 — and that's the
+                    exact address AI agents fetch it from. Links were also
+                    added to the "Resources" menu, a "For Developers"
+                    section on the home page, and "Shrink the Package" on
+                    the download page.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  The Background Sync carousel wasn't changing background
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The <code>data-bg</code> attribute had been documented
+                    and present in example markup since the first release,
+                    but no line of JS ever read it —
+                    <code>.carousel-bg-sync</code> rendered with no
+                    background, despite ready-made CSS waiting for a
+                    <code>background-image</code>.
+                  </li>
+                  <li>
+                    Fixed in <code>molique-carousel.js</code>: the same
+                    <code>IntersectionObserver</code> that highlights the
+                    pagination dots now also sets the container's
+                    background to the <code>data-bg</code> of the currently
+                    visible slide.
+                  </li>
+                  <li>
+                    <strong>Nothing in the markup changes</strong> — the
+                    same, already-documented <code>data-bg</code> attribute
+                    now actually works.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Lightbox: no keyboard navigation despite being documented
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    The docs claimed the lightbox "natively supports
+                    keyboard navigation (arrows, ESC)" — in reality
+                    <code>molique-lightbox.js</code> didn't have a single
+                    <code>keydown</code> listener. A keyboard user who
+                    opened a photo had no way to close the modal.
+                  </li>
+                  <li>
+                    Fixed: <kbd>Esc</kbd> closes it, <kbd>←</kbd>/<kbd>→</kbd>
+                    switches photos. On open, focus moves to the close
+                    button and returns to the clicked thumbnail on close —
+                    standard modal behavior. Missing
+                    <code>aria-label</code>s were also added to the
+                    navigation and close buttons.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Improvement</span>
+                  Docs sidebar: collapsible categories + floating everywhere
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>~21 links in 8 categories took up too much
+                    space</strong> — the docs sidebar was a long, flat list
+                    that needed a lot of scrolling. Six categories (the
+                    ones with 2+ items) are now collapsible branches
+                    (<code>.admin-nav-submenu</code>) — collapsed by
+                    default, except the one you're currently in.
+                  </li>
+                  <li>
+                    <code>molique-admin-nav.js</code> now opens the branch
+                    containing the current page itself on desktop
+                    (previously it only highlighted it) — keyboard
+                    navigation and mobile drill-down unchanged.
+                  </li>
+                  <li>
+                    <code>.admin-layout-floating</code> (until now only on
+                    the landing page and the Class Reference) is now on
+                    every documentation page — a consistent look
+                    throughout.
+                  </li>
+                  <li>
+                    <strong>The Roadmap disappeared only from the docs
+                    tree</strong> — the component reference sidebar no
+                    longer links to it, since it's an announcements page,
+                    not API documentation. The page itself and the
+                    navbar/footer links are unchanged.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  File Upload: choosing a file gave no confirmation at all
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <code>.file-upload</code> is an invisible
+                    <code>input[type="file"]</code> stretched over the
+                    whole card — clicking and native drag-and-drop worked,
+                    but there wasn't a single line of JS anywhere in the
+                    repo reacting to a selection. Result: after dropping a
+                    photo, nothing happened (not even the browser's "open
+                    in a new tab" fired — the input silently captured the
+                    file).
+                  </li>
+                  <li>
+                    Added <code>molique-file-upload.js</code>: a
+                    <code>change</code> listener overwrites (or appends, if
+                    it's missing from the markup)
+                    <code>.file-upload-name</code> with the selected file's
+                    name.
+                  </li>
+                  <li>
+                    <strong>The <code>.file-upload-animated</code> variant
+                    didn't accept drag &amp; drop</strong> (clicking still
+                    worked). The icon, heading, and caption had the same
+                    <code>z-index</code> as the hidden input, and sat after
+                    it in the code — so they won the fight for which
+                    element receives the click exactly where you visually
+                    aim while dragging a file. Fixed with
+                    <code>pointer-events: none</code> on those elements.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Switch as a <code>.grid-expand</code> trigger
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    A third, zero-JS trigger for smooth expanding:
+                    <code>.form-switch:has(.form-switch-input:checked) +
+                    .grid-expand</code>. A common form pattern ("Send
+                    notifications?" → an email field) without a single line
+                    of JavaScript.
+                  </li>
+                  <li>
+                    The switch must be a <strong>sibling</strong> of
+                    <code>.grid-expand</code>, not wrap it in the same
+                    <code>&lt;label&gt;</code> — otherwise clicking the
+                    revealed content also toggles the switch.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Sidebar and theme "jumped" on page reload
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <code>molique-theme</code> and
+                    <code>molique-sidebar-state</code> from
+                    <code>localStorage</code> were only read on
+                    <code>DOMContentLoaded</code> in
+                    <code>molique-script.js</code> — i.e. AFTER the
+                    browser's first paint. A returning user with a
+                    collapsed sidebar (<code>.sidebar-md</code>/
+                    <code>.sidebar-sm</code>) or dark theme would therefore
+                    see the default state (full sidebar, light theme) for a
+                    split second before it switched.
+                  </li>
+                  <li>
+                    Fix: a small, <strong>synchronous</strong> inline
+                    <code>&lt;script&gt;</code> right at the top of
+                    <code>&lt;head&gt;</code>, setting
+                    <code>data-theme</code> and the
+                    <code>sidebar-md</code>/<code>sidebar-sm</code> class
+                    directly on <code>&lt;html&gt;</code> before the first
+                    paint, backed by mirrored CSS rules
+                    (<code>:root.sidebar-md</code>/
+                    <code>:root.sidebar-sm</code>) in
+                    <code>_admin-layout.scss</code>.
+                  </li>
+                  <li>
+                    The existing logic in <code>molique-script.js</code>
+                    (switch click, writing to <code>localStorage</code>)
+                    was left unchanged — this fix is purely additive.
+                    Verified with <code>molique-script.js</code> completely
+                    blocked: the page still renders correctly right away.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  <code>&lt;hr&gt;</code> disappeared in cards — looked like a dot
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    molique never styled <code>&lt;hr&gt;</code> — the
+                    element relied entirely on the browser's default style,
+                    which among other things centers it via
+                    <code>margin-inline: auto</code>. As a
+                    <strong>direct child of any flex container</strong>
+                    (most often <code>.card-body</code>, which has been
+                    <code>flex-direction: column</code> from the start),
+                    those cross-axis auto-margins take priority over
+                    <code>align-items: stretch</code> and "eat" all the
+                    free space — the line shrank to nearly zero width,
+                    showing up as a single dot in the middle of the card.
+                  </li>
+                  <li>
+                    Fixed by adding a base style in <code>_base.scss</code>:
+                    <code>width: 100%</code>,
+                    <code>margin-inline: 0</code>,
+                    <code>border-top: 1px solid var(--border-color)</code>.
+                    Zero auto-margins, so the problem disappears in every
+                    context — not just in cards.
+                  </li>
+                  <li>
+                    <strong>The same bug had already been patched once,
+                    locally</strong>, in <code>.modal-divider</code> — this
+                    fix generalizes it to every <code>&lt;hr&gt;</code> in
+                    the project, without touching any markup.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  <code>.form-floating</code> doubled its spacing in a card
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <code>.form-floating</code> has its own
+                    <code>margin-bottom</code> (needed when several fields
+                    sit directly in a plain block without a flex wrapper).
+                    But <code>.card-body</code> has a <code>gap</code> by
+                    default — as its direct child, a field got the spacing
+                    <strong>twice</strong> (gap + its own margin), so the
+                    distance to the next field/button was double what it
+                    was between other elements in the same card.
+                  </li>
+                  <li>
+                    Fixed with the rule <code>.card-body &gt; .form-floating {
+                    margin-bottom: 0; }</code> — outside
+                    <code>.card-body</code>, the margin behaves exactly as
+                    before.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Full-bleed on mobile (<code>.breakout-mobile</code>)
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    A new utility class: pulls an element out of
+                    <code>.container</code>'s padding on mobile (below
+                    768px), all the way to the screen edge — a typical case
+                    is a carousel, an image gallery, or a hero photo inside
+                    an article's body that should touch the phone's edges
+                    while the rest of the content keeps a normal margin.
+                    No effect on desktop.
+                  </li>
+                  <li>
+                    The "viewport centering" technique
+                    (<code>width: 100vw</code> +
+                    <code>margin-left: 50%</code> +
+                    <code>translateX(-50%)</code>) works regardless of the
+                    parent's actual padding value — you don't need to know
+                    or calculate it. The global guard
+                    <code>overflow-x: clip</code> on <code>html</code>
+                    (present in molique from the start) prevents the
+                    horizontal scroll that <code>100vw</code> usually
+                    triggers when a scrollbar is visible.
+                  </li>
+                  <li>
+                    <strong>Requires a direct parent centered in the
+                    viewport</strong> (like <code>.container</code>) — it
+                    works correctly as its direct child, but nested deeper
+                    (e.g. inside <code>.card-body</code>) it's calculated
+                    against the card's width, not the viewport's, and ends
+                    up shifted/clipped. Documented as gotcha #5 on
+                    <code>docs-layout.html</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Improvement</span>
+                  Roadmap trimmed of items completed along the way
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>8 ideas</strong> were completed along the way,
+                    as part of other work, and were removed from the list —
+                    including the entire "Architecture and Distribution"
+                    category (<code>molique-nano</code> as a builder
+                    preset, a full system of independent SCSS chunks), a
+                    universal <code>.position-sticky</code>, pill-style
+                    checkboxes/radios (<code>.selection-tile</code>), a
+                    typing text animation (<code>.typewriter</code>), CSS
+                    masking (<code>mask-image</code>/<code>clip-path</code>,
+                    already widely used), and a circular progress bar and
+                    gradient under the area chart's line (both in
+                    <code>.chart-radial</code>/<code>.chart-area</code>).
+                  </li>
+                  <li>
+                    <strong>6 more items were clarified</strong>, since they
+                    turned out to be partially done — the description
+                    changed from "build X from scratch" to what's actually
+                    missing (e.g. a real checklist with checkable items
+                    instead of decorative icons in <code>.list-icons</code>,
+                    hooking up <code>.file-upload-animated</code> to the
+                    shared <code>.hover-border-*</code> library, which
+                    already exists).
+                  </li>
+                  <li>
+                    The stats at the top of the page were updated (32 ideas
+                    in 10 categories, down from 41/11), an audit was done
+                    item by item against the real state of
+                    <code>css/scss/</code> and <code>js/</code>, not from
+                    memory.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  i18n: EN/DE pilot for this page
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>The language switcher in the navbar stopped
+                    being decorative</strong> — until now, the links in
+                    <code>.language-switch-menu</code> were
+                    <code>href="#"</code>. Now the landing page and
+                    "Getting Started" have real English and German
+                    versions, and the switcher navigates between them.
+                  </li>
+                  <li>
+                    <strong>A flat suffix convention</strong>, not
+                    subfolders: <code>docs.html</code> (Polish, default),
+                    <code>docs.en.html</code>, <code>docs.de.html</code>.
+                    Subfolders (<code>/en/</code>) would break every
+                    relative path across the whole site
+                    (<code>base: './'</code>); suffixes break nothing, and
+                    Vite already auto-detects every <code>.html</code> in
+                    <code>src/</code> as a separate build entry.
+                  </li>
+                  <li>
+                    <strong>Zero per-page manual config:</strong>
+                    <code>vite.config.js</code> figures out, from the
+                    filename alone (<code>computeI18nLocals</code>), which
+                    language variants exist on disk, and injects ready-made
+                    variables (<code>__hasEn</code>, <code>__altEn</code>…)
+                    into <strong>all</strong> <code>&lt;include&gt;</code>s
+                    of a page at once — <code>head.html</code> (hreflang)
+                    and <code>navbar.html</code> (the switcher) use the
+                    same, once-computed data.
+                  </li>
+                  <li>
+                    <strong>Graceful degradation</strong> for the remaining
+                    ~86 untranslated pages: the switcher shows only Polish
+                    (the English/German entry disappears instead of leading
+                    to a 404), and the <code>hreflang</code> tags in
+                    <code>&lt;head&gt;</code> only include the variants that
+                    exist, plus <code>x-default</code>.
+                  </li>
+                  <li>
+                    <strong>A gotcha caught before the commit:</strong>
+                    <code>posthtml-expressions</code> interpolates
+                    <em>every</em> <code>{{ }}</code> in the document in a
+                    single pass, before removing <code>&lt;if&gt;</code>
+                    branches with a false condition — a <code>null</code>
+                    value for a missing translation crashed the whole build
+                    (<code>ReferenceError</code>), even though
+                    <code>&lt;if&gt;</code> would have hidden it anyway.
+                    Fixed with a fallback to the Polish page instead of
+                    <code>null</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  i18n: 19 of 21 <code>docs-*.html</code> pages in English and German
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Continuing the pilot</strong> — using the same
+                    mechanism and conventions as above, another 19
+                    reference pages were translated:
+                    <code>docs-variables</code>, <code>docs-select</code>,
+                    <code>docs-widgets</code>, <code>docs-blog</code>,
+                    <code>docs-roadmap</code>, <code>docs-purgecss</code>,
+                    <code>docs-cards</code>, <code>docs-typography</code>,
+                    <code>docs-sections</code>, <code>docs-animations</code>,
+                    <code>docs-tables</code>, <code>docs-forms</code>,
+                    <code>docs-eshop</code>, <code>docs-charts</code>,
+                    <code>docs-admin</code>, <code>docs-layout</code>,
+                    <code>docs-components-extra</code>,
+                    <code>docs-buttons</code>, <code>docs-interactive</code>.
+                    Deliberately deferred: <code>docs-navbar.html</code>
+                    (1072 lines) and <code>docs-classes.html</code> (2325
+                    lines) — two pages clearly bigger than the rest
+                    combined.
+                  </li>
+                  <li>
+                    <strong><code>docs-variables.html</code> as a special
+                    case:</strong> its three variable tables are
+                    auto-generated by
+                    <code>tools/gen-variables-doc.js</code> and rebuilt
+                    before every build — manually translating their
+                    content would get silently overwritten. The page's
+                    static prose was translated normally; the three
+                    generated <code>&lt;include&gt;</code>s stay in Polish,
+                    with a note explaining why.
+                  </li>
+                  <li>
+                    <strong>Docs sidebar updated:</strong>
+                    <code>docs-sidebar.en.html</code>/<code>.de.html</code>
+                    now link to the translated variants everywhere except
+                    the two deferred pages — the fallback to the Polish
+                    version, where a translation doesn't exist yet, stays
+                    documented with a comment in the files.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  i18n: complete — all 22 <code>docs-*.html</code> pages in English and German
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>The two last, previously deferred pages
+                    finished:</strong> <code>docs-navbar.html</code> (1072
+                    lines, no deviation from the pattern) and
+                    <code>docs-classes.html</code> (2325 lines, a huge
+                    CSS class cheat-sheet table across 13 categories). The
+                    framework's entire reference documentation now has a
+                    complete set of language versions.
+                  </li>
+                  <li>
+                    <strong><code>docs-classes.html</code> has a different
+                    structure than the rest of the docs</strong> — it's the
+                    only one that doesn't include
+                    <code>partials/navbar.html</code>, so it has no
+                    language switcher in the top bar; kept identical in
+                    PL/EN/DE, this is a pre-existing feature of the page
+                    from before i18n, not something to fix. Translation
+                    covered only the descriptive content of table cells
+                    and the text in live component previews — CSS class
+                    names (<code>.btn-primary</code> etc.) and the code in
+                    <code>&lt;code&gt;</code> were left unchanged, same as
+                    everywhere else in the docs.
+                  </li>
+                  <li>
+                    <strong>Docs sidebar closed out:</strong> the last two
+                    links in
+                    <code>docs-sidebar.en.html</code>/<code>.de.html</code>,
+                    which deliberately pointed to the Polish pages, were
+                    switched to <code>.en.html</code>/<code>.de.html</code>
+                    — zero deliberate exceptions left, the entire sidebar
+                    now links in the page's own language.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.6.2 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.6.2</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Navbar "Pill" (<code>.navbar-pill</code>)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>A third navbar variant:</strong> navigation as a
+                    pill floating off the edge, sitting <strong>on
+                    top of</strong> the content - so the hero photo starts
+                    right from the top of the page, instead of below the
+                    bar. Once scrolled (<code>.is-scrolled</code> from JS),
+                    the pill unfolds into a regular bar at the edge and
+                    returns to the theme colors.
+                  </li>
+                  <li>
+                    <strong>Six variables - separate for each state:</strong>
+                    <code>--navbar-pill-bg</code> /
+                    <code>--navbar-pill-color</code> /
+                    <code>--navbar-pill-padding-x</code> over the hero, and
+                    their <code>-scrolled</code>-suffixed variants after
+                    scrolling. Separate, rather than overriding the base
+                    one - since an inline style (the way they're set) beats
+                    a class rule and would block the other state.
+                  </li>
+                  <li>
+                    <strong>The pill's default background is a
+                    literal</strong>, not <code>var(--dark)</code> - that
+                    variable lightens in dark mode, so a pill sitting over
+                    a photo would turn white and the white text would
+                    vanish. After scrolling, the defaults are the normal
+                    theme colors.
+                  </li>
+                  <li>
+                    <strong>Fixed a misleading example:</strong>
+                    <code>docs-navbar.html</code> and
+                    <code>examples-navbar.html</code> showed
+                    <code>navbar-transparent navbar-sticky</code> together
+                    - and <code>sticky</code> wins the cascade and returns
+                    to the document flow, which made the overlay effect
+                    disappear. Snippets fixed + a note about pushing the
+                    content down by <code>var(--navbar-h)</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  PurgeCSS support - a ready-made safelist
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>New file
+                    <code>purgecss.safelist.cjs</code></strong> in the
+                    package - a ready-made safelist of classes PurgeCSS
+                    can't see, because JS adds them at runtime
+                    (<code>.is-*</code> states, carousel, lightbox, and
+                    toast markup). Usage:
+                    <code>safelist: molique.runtime</code>.
+                  </li>
+                  <li>
+                    <strong>A second level for dynamic names:</strong>
+                    <code>molique.merge('status','grid')</code> for
+                    projects where the backend assembles class names (e.g.
+                    <code>badge-&lt;?= $status ?&gt;</code>). Groups:
+                    <code>colors</code>, <code>grid</code>,
+                    <code>spacing</code>, <code>status</code>.
+                  </li>
+                  <li>
+                    <strong>A generator instead of a hand-written list:</strong>
+                    <code>tools/gen-safelist.js</code> rebuilds the
+                    safelist from source (<code>css/*.css</code> +
+                    <code>js/</code>), so it won't drift when a new module
+                    is added.
+                  </li>
+                  <li>
+                    <strong>Verified with a real build:</strong> 277 KB →
+                    68 KB (−75%) while keeping everything that JS adds. The
+                    <code>@layer</code> declaration (cascade order)
+                    survives purging - the layer architecture is safe.
+                  </li>
+                  <li>
+                    <strong>New subpage
+                    <a href="docs-purgecss.en.html">docs-purgecss.html</a>:</strong>
+                    step-by-step instructions (install → configure →
+                    verify), ready-made configs for plain HTML, Vite and
+                    WordPress, a safelist-group table, and troubleshooting
+                    for the most common symptoms.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Accordion and toasts
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Accordion: no scrolling once expanded.</strong>
+                    <code>.accordion-item::details-content</code> has
+                    <code>overflow: hidden</code> by default (part of the
+                    <code>height: 0 → auto</code> animation trick). The
+                    <code>[open]</code> state only overrode the height, so
+                    when the content was taller than the height computed
+                    by the animation, it stayed permanently clipped - and
+                    a scrollable parent (<code>overflow-y: auto</code>)
+                    couldn't tell there was anything to scroll. Now
+                    <code>[open]</code> removes the clipping, but
+                    <strong>only after the animation finishes</strong>
+                    (<code>overflow 0s 0.3s allow-discrete</code>) -
+                    otherwise the content would spill outside the growing
+                    box and overlap its neighbors. On collapse, the
+                    clipping returns immediately.
+                  </li>
+                  <li>
+                    <code>MoliqueToast</code> no longer builds class names
+                    from a template (<code>toast-${type}</code>) - it uses
+                    a literal map instead. This makes every toast class
+                    visible to PurgeCSS and tooling, and an unknown
+                    <code>type</code>/<code>position</code> gets a safe
+                    fallback instead of an unstyled class. Behavior
+                    unchanged (verified: 4 types × 6 positions).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.6.1 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.6.1</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Active item in the navbar (auto from the URL)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>New module
+                    <code>js/modules/molique-navbar-active.js</code></strong>
+                    (auto-loaded when <code>.navbar-menu</code> is present):
+                    reads the URL and adds the <code>.is-active</code>
+                    class to the current page's link, as well as to the
+                    trigger of the dropdown/mega-menu it lives inside. The
+                    highlight style (primary color + heavier weight) is in
+                    <code>components/_navigation.scss</code>.
+                  </li>
+                  <li>
+                    <strong>A shared navbar with no manual marking:</strong>
+                    you don't write the active state into the markup - one
+                    navbar shared across pages, with the current item
+                    derived from the address. When a page appears in
+                    several menus, all its occurrences get highlighted.
+                    Zero dependencies, zero jQuery.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Release cleanup
+                </h3>
+                <ul class="text-secondary mb-0">
+                  <li>
+                    <strong>Unified sourcemaps:</strong> all CSS bundles now
+                    compile without <code>--source-map</code> - no more
+                    <code>sourceMappingURL</code> footers pointing at
+                    nonexistent <code>.map</code> files (previously
+                    inconsistent between bundles).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.6.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.6.0</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Theme Editor - a live CSS variable editor
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>New page
+                    <a href="theme-editor.en.html">theme-editor.html</a>:</strong>
+                    an interactive tool for controlling the theme live -
+                    colors (with automatic sync of the
+                    <code>-rgb</code> pairs and <code>-hover</code>
+                    darkening), surfaces, sidebar, border radius, spacing,
+                    focus ring, and base text size. Controls on the left,
+                    a live component preview on the right.
+                  </li>
+                  <li>
+                    <strong>Correct light/dark handling:</strong> changes
+                    are written to a <code>&lt;style&gt;</code> tag (not
+                    inline), so you edit the active theme separately - the
+                    palette goes to <code>:root</code> or
+                    <code>[data-theme="dark"]</code>, while "always dark"
+                    variables (sidebar) and dimensions always go to
+                    <code>:root</code>. "Copy CSS" exports ready-to-paste
+                    blocks; state is kept in <code>localStorage</code>,
+                    and there's also a Reset.
+                  </li>
+                  <li>
+                    <strong>Architecture:</strong> the module
+                    <code>js/modules/molique-theme-editor.js</code>
+                    (auto-loaded after <code>.theme-editor</code>), chrome
+                    styling in <code>components/_theme-editor.scss</code>
+                    (docs bundle). Control config lives in
+                    <code>data-te-*</code> attributes - zero dependencies,
+                    zero jQuery.
+                  </li>
+                  <li>
+                    <strong>Default button hover:</strong> new classes
+                    <code>.btn-hover-spring</code> /
+                    <code>.btn-hover-lift</code> /
+                    <code>.btn-hover-glow</code> on <code>&lt;body&gt;</code>
+                    give a shared hover effect to every <code>.btn</code>
+                    (buttons with their own <code>hover-*</code> class take
+                    priority). Also selectable in the theme editor (Buttons
+                    section). GPU: transform/box-shadow, respecting
+                    <code>prefers-reduced-motion</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Module autoloader + searchable select
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Modules now load from an absolute address:</strong>
+                    the autoloader was including modules via a relative
+                    path (<code>modules/x.js</code>), which resolved
+                    against <em>the current page's</em> address, not
+                    <code>molique-script.js</code>'s - on subpages (e.g.
+                    <code>/clock/</code>) this caused 404s. The base is now
+                    computed from <code>document.currentScript.src</code>.
+                    The bug had been in the repo since the first commit;
+                    spotted by a user embedding molique in their own
+                    plugin.
+                  </li>
+                  <li>
+                    <strong>Searchable Select on event delegation:</strong>
+                    <code>select.js</code> now handles options added to the
+                    DOM <em>after</em> the page loads (e.g. via AJAX), the
+                    hidden input gets a <code>change</code> event on
+                    selection, and a new API,
+                    <code>MoliqueSelectSearch.setValue(hiddenInput, value)</code>,
+                    sets the value from JS. Full backward compatibility
+                    (Popover API + the old <code>&lt;details&gt;</code>).
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Download subpage + downloadable packages
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Two packages:</strong>
+                    <a href="download.en.html">download.html</a> offers
+                    <em>Production</em> (compiled min+full CSS, JS with the
+                    autoloader, fonts, flags, <code>starter.html</code>)
+                    and <em>Source</em> (everything in Production + the
+                    <code>css/scss/</code> sources for your own compile).
+                  </li>
+                  <li>
+                    <strong>A packaging script:</strong>
+                    <code>tools/build-packages.ps1</code> minifies the
+                    bundles (<code>sass --style=compressed</code>) and
+                    builds both ZIPs into <code>dist/</code>. Also added:
+                    <code>README.md</code>, <code>starter.html</code>,
+                    <code>LICENSE</code>, and <code>NOTICE</code>.
+                  </li>
+                  <li>
+                    <strong>Apache 2.0 license</strong> (Copyright 2026
+                    Rafał Różacki) - full text in <code>LICENSE</code>,
+                    attribution in <code>NOTICE</code>.
+                  </li>
+                  <li>
+                    <strong>Fonts restored:</strong> the
+                    <code>@font-face</code> rules (Inter + Poppins) had
+                    gone missing somewhere along the way - the site was
+                    falling back to <code>system-ui</code>. They're back
+                    as <code>_fonts.scss</code>, built into
+                    <code>molique-style.css</code> (font-display: swap;
+                    <code>fonts/</code> folder next to <code>css/</code>).
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Improvement</span>
+                  Global navbar on every subpage
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Consistent navigation everywhere:</strong> the
+                    same top navbar (light/dark <code>&lt;picture&gt;</code>
+                    logo, mega-menu, language switch, theme toggle) now
+                    appears on every documentation and examples page -
+                    previously they only had the left sidebar. The admin
+                    layout's sidebar now sits BELOW the navbar (the same
+                    pattern as Bootstrap's docs).
+                  </li>
+                  <li>
+                    <strong>CSS coordination:</strong> a new
+                    <code>--navbar-h</code> variable; when a navbar sits
+                    above <code>.admin-layout</code>
+                    (<code>body:has(&gt; .navbar)</code>), the sidebar
+                    starts below it and fills the rest of the window, and
+                    the navbar doesn't hide on scroll (otherwise it would
+                    reveal an empty bar). Also fixed the logo on
+                    <code>index.html</code> (text → <code>picture</code>).
+                  </li>
+                  <li>
+                    <strong>Layout overhaul (everything in a single row):</strong>
+                    Blog moved into the <em>Examples</em> dropdown,
+                    Documentation/Changelog/Roadmap grouped into the
+                    <em>Resources</em> dropdown, a <em>Download molique</em>
+                    button (<code>download.html</code>) with
+                    <code>hover-spring</code>, and the language and theme
+                    switches arranged vertically next to each other. The
+                    same navbar refreshed across all ~82 pages.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3"
+                    >Breaking Change</span
+                  >
+                  New typography scale - the base text is now .text-3
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>The middle of the scale shifted:</strong> the
+                    base (paragraph) size is now <code>.text-3</code>, not
+                    <code>.text-1</code>. Below the base sit
+                    <code>.text-1</code> (12px) and <code>.text-2</code>
+                    (13px) - for metadata, timeline dates, and captions.
+                    <code>.text-4</code>&ndash;<code>.text-8</code>
+                    correspond to headings H5&ndash;H1, and
+                    <code>.text-9</code>&ndash;<code>.text-12</code> are
+                    hero sizes (up to 9rem).
+                  </li>
+                  <li>
+                    <strong>Microcopy:</strong> the classes
+                    <code>.text-sm</code> (11px) and <code>.text-xs</code>
+                    (10px) are now smaller than <code>.text-1</code> - for
+                    captions and legal fine print. The
+                    <code>--text-sm</code>/<code>--text-xs</code> tokens
+                    used internally by components stayed unchanged
+                    (13/12px).
+                  </li>
+                  <li>
+                    <strong>Migrating existing HTML:</strong> classes shift
+                    up by two steps - the old <code>.text-1</code> is the
+                    new <code>.text-3</code>, the old <code>.text-4</code>
+                    is the new <code>.text-6</code>, and so on; the old
+                    <code>.text-sm</code> &rarr; <code>.text-2</code>, the
+                    old <code>.text-xs</code> &rarr; <code>.text-1</code>.
+                    Every documentation and examples subpage was remapped
+                    automatically, so their appearance didn't change.
+                  </li>
+                  <li>
+                    <strong>Documentation:</strong> the class reference was
+                    updated (including the previously missing
+                    <code>.col-start-*</code> / <code>.offset-*</code>
+                    offsets), the Typography pages (docs + examples), and
+                    the <code>llms.txt</code> and <code>molique.md</code>
+                    dictionaries.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Fade Bottom - content fading at the bottom edge
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>The <code>.fade-bottom</code> class:</strong> a
+                    gradient covering the bottom edge of a scrollable
+                    container - content "fades out" instead of being
+                    sharply cut off. Color via <code>--fade-color</code>
+                    (defaults to <code>--bg-surface</code>), height via
+                    <code>--fade-height</code> (80px). The effect used to
+                    exist as a hardcoded fragment of an unloaded
+                    <code>_admin.scss</code> file - it's now back as an
+                    official, optional class available for any element.
+                  </li>
+                  <li>
+                    <strong>Admin integrations:</strong> on
+                    <code>.admin-sidebar</code>, the gradient automatically
+                    picks up the sidebar's background color and disables
+                    itself on mobile (Bottom Nav); on
+                    <code>.admin-main</code>, a fixed variant aligned to
+                    the content column works via layout variables
+                    (supports <code>.admin-layout-floating</code> mode).
+                    Demo on the Admin Layout page.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-3"
+                    >Documentation</span
+                  >
+                  Class reference completeness audit
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Filled in the gaps in the cheat sheet:</strong>
+                    the class reference got rows for previously
+                    undocumented utilities - icon lists
+                    (<code>.list-icons</code>), background overlays
+                    (<code>.overlay</code>), hover colors
+                    (<code>.bg-hover-*</code> / <code>.text-hover-*</code> /
+                    <code>.border-hover-*</code>),
+                    <code>.overlap-up-*</code>, <code>.align-self-*</code>,
+                    positioning micro-utilities
+                    (<code>.top-0</code>…<code>.inset-0</code>),
+                    <code>.bg-image</code>, <code>.hover-scale</code> /
+                    <code>.hover-shadow</code>, <code>.filter-none</code>.
+                    Component sub-parts (e.g. <code>.tab-pane</code>,
+                    <code>.step</code>, <code>.timeline-node</code>,
+                    <code>.pricing-header</code>) are described alongside
+                    their parent elements.
+                  </li>
+                  <li>
+                    <strong>Fixed a hover class name error:</strong> the
+                    cheat sheet incorrectly listed
+                    <code>.hover-bg-*</code> / <code>.hover-text-*</code>
+                    instead of the correct
+                    <code>.bg-hover-*</code> / <code>.text-hover-*</code> -
+                    which meant the live example didn't work. Names and
+                    the demo fixed, dictionaries (<code>llms.txt</code>,
+                    <code>molique.md</code>) updated with all of the above.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Admin submenu as a mobile drill-down (with "Back")
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Drill-down instead of a dead submenu:</strong>
+                    until now <code>.admin-nav-submenu</code> was
+                    completely hidden on mobile (<code>display: none</code>)
+                    - in the horizontal bottom bar there was no way to
+                    expand it. Now clicking the trigger swaps the view to a
+                    full-screen panel: the <code>&lt;summary&gt;</code>
+                    becomes a <strong>Back</strong> bar at the top, and a
+                    link list fills the rest - identical to the drill-down
+                    in the <code>-sm</code>/<code>-md</code> variants. The
+                    "Back" transformation was extracted into a shared mixin
+                    (<code>admin-drilldown-back</code>), so desktop and
+                    mobile share one piece of code. The same markup works
+                    everywhere.
+                  </li>
+                  <li>
+                    <strong>New module <code>admin-nav.js</code>:</strong> a
+                    bit of vanilla JS around the native
+                    <code>&lt;details&gt;</code> (auto-loaded after
+                    <code>.admin-nav-submenu</code>). Highlights the active
+                    item from the URL and its branch
+                    (<code>.is-active</code>) - without needing
+                    <code>[open]</code>, which used to auto-open the panel
+                    on mobile as soon as you landed on a subpage.
+                    Additionally: mutual exclusion of open submenus,
+                    closing on <kbd>Esc</kbd> and on breakpoint changes.
+                  </li>
+                  <li>
+                    <strong>Enter/exit animation (touch feedback):</strong>
+                    the panel slides in from the bottom with a slight
+                    bounce (<code>cubic-bezier</code> with overshoot; the
+                    overshoot is masked by a solid <code>box-shadow</code>,
+                    so the page doesn't flash), and the "Back" label
+                    appears with a slight delay. The exit (sliding back
+                    down) is handled by the module: native
+                    <code>&lt;details&gt;</code> hides content instantly,
+                    so JS adds an <code>.is-closing</code> class, waits for
+                    the animation to finish, and only then removes
+                    <code>[open]</code>. Motion only on
+                    <code>transform</code>/<code>opacity</code> (GPU),
+                    respecting <code>prefers-reduced-motion</code>.
+                  </li>
+                  <li>
+                    <strong>Clarified the "More" drop-up:</strong> the
+                    dictionaries and class reference incorrectly suggested
+                    the <code>.admin-nav-dropdown</code> class on
+                    <code>&lt;details&gt;</code>. In reality it's a
+                    separate pattern (Checkbox Hack:
+                    <code>.mobile-more-toggle</code> +
+                    <code>.mobile-more-label</code> +
+                    <code>.admin-nav-dropdown-menu</code>) - it's meant for
+                    bar overflow, not a nested submenu.
+                  </li>
+                  <li>
+                    <strong>The "More" drawer no longer slides under the
+                    bar:</strong> <code>.admin-nav-dropdown-menu</code> had
+                    a hardcoded <code>bottom: 70px</code> without
+                    <code>env(safe-area-inset-bottom)</code>, so on phones
+                    with gesture navigation, the bottom items hid behind
+                    the bar (unreadable). It now uses the same formula as
+                    the bottom-sheet submenu
+                    (<code>calc(70px + env(safe-area-inset-bottom))</code>).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.5.1 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.5.1</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Selects and dropdowns on the Popover API (Top Layer)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>No more clipping in modals:</strong> the
+                    <code>.select-search</code> and
+                    <code>.custom-select</code> components were rebuilt
+                    from <code>&lt;details&gt;</code> to the native
+                    Popover API + CSS Anchor Positioning. The menu renders
+                    in the browser's top layer - above an open
+                    <code>&lt;dialog&gt;</code> and outside containers with
+                    <code>overflow</code>. Esc and clicking outside the
+                    menu close it natively (light dismiss), no JS.
+                  </li>
+                  <li>
+                    <strong>New markup:</strong>
+                    <code>&lt;button popovertarget="ID"&gt;</code> as the
+                    trigger + a menu with a <code>popover</code> attribute
+                    and a unique <code>id</code>. The old
+                    <code>&lt;details&gt;</code>-based markup is still
+                    supported by <code>select.js</code> (backward
+                    compatibility).
+                  </li>
+                  <li>
+                    <strong>Plain select:</strong> the search box
+                    (<code>.select-search-input</code>) is now officially
+                    optional - without it, <code>.select-search</code>
+                    works like a classic select. The docs got a new demo
+                    of a select opened inside a scrollable modal.
+                  </li>
+                  <li>
+                    <strong>Dropdown Popover:</strong> a new
+                    <code>.dropdown-menu[popover]</code> variant - any
+                    existing button with <code>popovertarget="ID"</code>
+                    opens a menu in the top layer, automatically anchored
+                    to the button (implicit anchor - no
+                    <code>.dropdown</code> wrapper and no
+                    <code>anchor-name</code> needed). The classic
+                    <code>&lt;details&gt;</code>-based variant remains
+                    recommended in the navbar.
+                  </li>
+                  <li>
+                    <strong>Language Switch + SVG flags:</strong> the
+                    language switcher was moved to the popover variant, and
+                    emoji flags were replaced with individual SVG files
+                    (<code>img/flags/*.svg</code> via
+                    <code>&lt;img&gt;</code>) - emoji flags don't render on
+                    Windows (Chrome/Edge show letter pairs instead of
+                    flags). The folder only contains the languages offered
+                    in the project, and each file (~200 B) is cached once
+                    for the whole site. The active language's checkmark is
+                    now an SVG icon instead of a text character.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Smooth theme switching (View Transitions)
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>GPU cross-fade:</strong> switching light/dark
+                    now happens through
+                    <code>document.startViewTransition()</code> - the
+                    browser cross-fades two page snapshots (pure opacity),
+                    without animating colors on individual elements. The
+                    transition duration is controlled by CSS
+                    (<code>::view-transition-old/new</code>), and older
+                    browsers plus <code>prefers-reduced-motion</code>
+                    switch instantly, as before.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Stock Bar - segmented stock level
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>New component <code>.stock-bar</code>:</strong>
+                    a five-segment level indicator (stock levels, limits,
+                    quotas) in <code>-success</code>/<code>-warning</code>/<code>-danger</code>
+                    variants. Zero JS and zero extra markup - the segments
+                    are drawn by an SVG mask, and the fill level is passed
+                    from the backend via
+                    <code>style="--stock-filled: 3"</code> (0-5). Empty
+                    segments are a tint of the variant color, correct in
+                    dark mode too.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3"
+                    >Documentation</span
+                  >
+                  Examples, SEO and dictionaries
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>New example sections:</strong> a plain select
+                    without a search box, a select opened inside a
+                    scrollable modal, and a Dropdown Popover attached to
+                    any button.
+                  </li>
+                  <li>
+                    <strong>SEO and AI:</strong> <code>sitemap.xml</code>
+                    generated from the real list of 81 subpages (previously
+                    template addresses), updated <code>llms.txt</code>
+                    dictionaries and class reference.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Bugfixes
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>File Upload (animated):</strong> in the
+                    <code>.file-upload-animated</code> variant, the
+                    invisible <code>input[type="file"]</code> had its
+                    positioning overridden (<code>relative</code> instead
+                    of the base <code>absolute</code>), which pulled it
+                    into the page layout and pushed the card's content
+                    down. The base <code>.file-upload</code> variant was
+                    unaffected.
+                  </li>
+                  <li>
+                    <strong>Admin panel dark mode:</strong> the sidebar's
+                    light accents (logo, link hover, active submenu item,
+                    dividers, scrollbar) were based on
+                    <code>--light</code>/<code>--light-rgb</code>, which
+                    dark mode deliberately inverts - on the always-dark
+                    sidebar they turned dark and unreadable. The sidebar
+                    now has its own theme-independent variables
+                    (<code>--sidebar-text-active</code>,
+                    <code>--sidebar-highlight-rgb</code>).
+                  </li>
+                  <li>
+                    <strong>The "Back" button and modal closing:</strong> in
+                    the narrow sidebar's drill-down mode, the "Back" button
+                    (a transformed <code>&lt;summary&gt;</code>) inherited
+                    its color from <code>.is-active</code>
+                    (<code>--btn-text-light</code>), which made it
+                    disappear on a dark background in dark mode - it now
+                    has an explicit color from the sidebar's palette.
+                    Additionally, the close button in a modal's header no
+                    longer shows a full focus ring right after the dialog
+                    opens (<code>showModal()</code> focuses it
+                    automatically) - the keyboard indicator remains, in a
+                    subtler form.
+                  </li>
+                  <li>
+                    <strong>Black headings in modals (dark mode):</strong> a
+                    native <code>&lt;dialog&gt;</code> gets
+                    <code>color: CanvasText</code> from the browser (black,
+                    absent a scheme declaration), which breaks color
+                    inheritance from <code>body</code> - headings
+                    (<code>color: inherit</code>) turned black on a dark
+                    card. Modals and popovers now have an explicit theme
+                    color, and the framework declares
+                    <code>color-scheme: light/dark</code> - which also
+                    makes native scrollbars, form controls, and the date
+                    picker follow the theme.
+                  </li>
+                  <li>
+                    <strong>Mega Menu - "featured" card (dark mode):</strong>
+                    the background gradient used
+                    <code>--dark</code>/<code>--primary</code>, which
+                    invert in dark mode, so in the dark theme it turned
+                    nearly white under white text. The card is
+                    intentionally always dark (like the sidebar), so the
+                    gradient is now built on fixed colors.
+                  </li>
+                  <li>
+                    <strong>An "always dark" surfaces audit (dark
+                    mode):</strong> the same family of bugs as above -
+                    inverted <code>var(--dark)</code> under light text -
+                    fixed en masse in: <code>.overlay-dark</code> (the hero
+                    overlay was lightening instead of darkening),
+                    <code>.bg-dark</code> (footers with
+                    <code>.text-white</code> lost contrast),
+                    <code>.bg-gradient-corners</code> (a glow on a light
+                    background), and <code>.scroll-to-top</code> (the icon
+                    vanished on hover; its color now follows the theme like
+                    in <code>.btn-primary</code>).
+                  </li>
+                  <li>
+                    <strong>Modal backdrops (dark mode):</strong> the
+                    darkening behind an open <code>&lt;dialog&gt;</code>
+                    used an inverted <code>--dark-rgb</code> and turned
+                    into a light haze in dark mode. The backdrop now uses a
+                    fixed, dark color in both themes.
+                  </li>
+                  <li>
+                    <strong>Product card (dark mode):</strong>
+                    <code>.product-image-wrapper</code> had a literal
+                    white background - on a dark card that made a jarring
+                    block, showing through semi-transparent placeholders
+                    too (e.g. <code>--card-bg-subtle</code>). The
+                    background now follows the theme
+                    (<code>var(--bg-surface)</code>; in light mode it's
+                    still pure white).
+                  </li>
+                  <li>
+                    <strong>Number input without a native spinner:</strong>
+                    the system's <code>input[type="number"]</code> arrows
+                    doubled up with the <code>+</code>/<code>-</code>
+                    buttons of the <code>.qty-input</code> control (only
+                    the <code>.qty-val</code> class hid them). The spinner
+                    is now hidden for every number input inside
+                    <code>.qty-input</code>, and globally for
+                    <code>input[type="number"].input</code> - stepping is
+                    handled by the buttons, the keyboard (up/down), and the
+                    scroll wheel.
+                  </li>
+                  <li>
+                    <strong>Data Rows and contrast on primary (dark
+                    mode):</strong> <code>.data-row</code> had a literal
+                    white background (now <code>var(--bg-surface)</code> -
+                    unchanged in light mode), and the carousel arrows and
+                    the active <code>.list-group-item</code> used a
+                    literal <code>#fff</code> against <code>--primary</code>,
+                    which lightens in dark mode - the text color now
+                    follows the theme like in <code>.btn-primary</code>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.5.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.5.0</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Rebrand</span>
+                  r-style &rarr; molique
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>A new brand:</strong> a complete renaming of the
+                    framework to prepare it for its public debut - the
+                    files <code>r-style.css</code> /
+                    <code>r-script.js</code> and their module variants
+                    (blog, shop, contact, speed dial, share, before/after)
+                    were replaced with a consistent
+                    <code>molique-style*.css</code> and
+                    <code>molique-script.js</code> family.
+                  </li>
+                  <li>
+                    <strong>Repository cleanup:</strong> removed the
+                    outdated distribution package and orphaned files based
+                    on the old brand, no longer imported by any subpage.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3"
+                    >Architecture</span
+                  >
+                  Modular Sass in @layer layers
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Explicit layer order:</strong> the main file
+                    <code>molique-style.scss</code> now defines an explicit
+                    <code
+                      >@layer reset, base, layout, components, modules,
+                      utilities</code
+                    >
+                    order and pulls in individual partials via
+                    <code>sass:meta.load-css()</code> - zero accidental
+                    specificity conflicts.
+                  </li>
+                  <li>
+                    <strong>Split into topical folders:</strong> components
+                    were broken up into <code>components/</code> (cards,
+                    navigation, modals, forms, charts, dashboard, feedback),
+                    <code>layout/</code> (the admin panel layout), and
+                    <code>utilities/</code> (typography, colors, spacing,
+                    borders, animations) - easier to find and override a
+                    single style fragment.
+                  </li>
+                  <li>
+                    <strong>Separate bundles per module:</strong> shop,
+                    blog, admin panel, and documentation now compile into
+                    independent files
+                    (<code>molique-style-shop.css</code>,
+                    <code>-blog.css</code>, <code>-admin.css</code>,
+                    <code>-docs.css</code>) - you enqueue via
+                    <code>wp_enqueue_style</code> only what a given
+                    subpage actually needs.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  JS autoloader expansion
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>10 new micro-modules</strong> loaded
+                    asynchronously from <code>js/modules/</code> only when
+                    their component exists on the page:
+                    <code>carousel</code>, <code>context-menu</code>,
+                    <code>counters</code>, <code>filters</code>,
+                    <code>lightbox</code>, <code>parallax</code>,
+                    <code>select</code>, <code>shop</code>,
+                    <code>table-search</code>, and <code>text-effects</code>.
+                  </li>
+                  <li>
+                    <strong>Refreshed widgets:</strong> a review and minor
+                    fixes in the existing modules
+                    <code>before-after.js</code>, <code>magnetic.js</code>,
+                    <code>share.js</code>, and <code>tilt.js</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3"
+                    >Documentation</span
+                  >
+                  Split into topical subpages
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>One subpage = one topic:</strong> instead of a
+                    single, long document, the docs were split into
+                    separate pages (Layout, Navigation, Sections,
+                    Typography, Buttons, Cards, Interactions, Carousels and
+                    Lightbox, Charts, Forms, Select, Animations, Widgets,
+                    Store, Blog, Admin Panel, Class Reference) - faster
+                    loading and easier navigation.
+                  </li>
+                  <li>
+                    <strong>New Roadmap page</strong>
+                    (<code>docs-roadmap.html</code>) - the framework's
+                    public development plan as a timeline, including
+                    Container Queries, native <code>&lt;picture&gt;</code>,
+                    PurgeCSS, and a custom CLI.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-3"
+                    >Infrastructure</span
+                  >
+                  Production, SEO and performance
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Production files:</strong> added
+                    <code>manifest.json</code> (PWA), <code>robots.txt</code>,
+                    <code>sitemap.xml</code>, and <code>.htaccess</code>
+                    rules.
+                  </li>
+                  <li>
+                    <strong>Visibility for AI:</strong> added
+                    <code>llms.txt</code> to help language models find and
+                    correctly interpret the documentation.
+                  </li>
+                  <li>
+                    <strong>Local fonts:</strong> Inter and Poppins are now
+                    hosted locally in the <code>fonts/</code> folder and
+                    loaded via <code>&lt;link rel="preload"&gt;</code>
+                    instead of an external CDN - faster first render and no
+                    dependency on external servers.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.2.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.2.0</div>
+              <div class="text-muted text-4">June 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3"
+                    >Architecture</span
+                  >
+                  Smart JS Autoloader
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>DOM-based Lazy Loading:</strong> the monolithic
+                    JS file was split into a dozen or so micro-modules (in
+                    the <code>js/modules/</code> folder). The main script
+                    scans the page and asynchronously pulls in only the
+                    scripts whose components are physically present in the
+                    HTML.
+                  </li>
+                  <li>
+                    <strong>Local variables:</strong> implemented dynamic
+                    computation of negative margins for grouped buttons and
+                    forms, based on the <code>--btn-border-width</code>
+                    variable.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Data Viz &amp; Advanced UI
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Charts (Data Viz):</strong> added the
+                    <code>_charts.scss</code> module with charts built on
+                    Progressive Enhancement (Sparklines, a Radial Bar with
+                    CSS Houdini, Heatmaps, an SVG Area Chart, and a Donut
+                    Chart).
+                  </li>
+                  <li>
+                    <strong>Advanced Inputs:</strong> implemented dedicated,
+                    visually consistent styles for <code>type="range"</code>
+                    (with a filled track), <code>type="color"</code>, and
+                    <code>type="date"</code>.
+                  </li>
+                  <li>
+                    <strong>Grouped Elements:</strong> added support for
+                    <code>.btn-group</code> and <code>.input-group</code>
+                    with perfectly overlapping borders.
+                  </li>
+                  <li>
+                    <strong>Interactive Icons:</strong> added the
+                    <code>.status-icon-toggle</code> component (a Plus →
+                    Checkmark animation), which can also function as a
+                    fully native form checkbox.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Bugfixes &amp; UX
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Grid Blowout:</strong> resolved a grid-breaking
+                    issue on mobile devices by globally forcing
+                    <code>min-width: 0</code> on grid children.
+                  </li>
+                  <li>
+                    <strong>Lightbox Pointer Events:</strong> replaced touch
+                    events with universal <code>pointerdown/up</code>,
+                    allowing photos to be "swiped" using a mouse on desktop
+                    as well.
+                  </li>
+                  <li>
+                    <strong>Mega Menu:</strong> added an "invisible bridge"
+                    (pseudo-element) preventing the menu from closing while
+                    moving the cursor down away from a link.
+                  </li>
+                  <li>
+                    <strong>Mobile Bottom Nav:</strong> rebuilt the admin
+                    panel's mobile sidebar into a modern, horizontal
+                    navigation bar pinned to the bottom of the screen.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3"
+                    >Documentation</span
+                  >
+                  A Complete Handbook
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>Expanded the documentation to 14 topical subpages.</li>
+                  <li>
+                    Added instructional blocks (Pro Tips, Requirements,
+                    Options) to every component, explaining the
+                    architecture and implementation best practices.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.1.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.1.0</div>
+              <div class="text-muted text-4">June 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Data Viz &amp; Charts
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Progressive Enhancement:</strong> implemented a
+                    charts module (Sparklines, Radial Bar, Heatmap, Area
+                    Chart) built 100% on plain CSS/SVG. Charts load
+                    instantly, preventing CLS, and can optionally be
+                    overridden by JS libraries.
+                  </li>
+                  <li>
+                    <strong>CSS Variables:</strong> chart data is passed
+                    safely from the backend via the
+                    <code>style="--val: X%;"</code> attribute.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Expansion</span>
+                  Modules and Widgets
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>E-commerce &amp; Blog:</strong> added complete,
+                    independent modules for stores (Star Ratings on SVG
+                    masks, Swatches, Grid/List toggle) and blogs (Post
+                    Cards, Author Box).
+                  </li>
+                  <li>
+                    <strong>Widgets (Opt-in):</strong> implemented
+                    independent scripts and styles for: Before/After
+                    Slider, Speed Dial, Magnetic Buttons, and the Web Share
+                    API.
+                  </li>
+                  <li>
+                    <strong>GPU Microinteractions:</strong> added advanced
+                    text effects (Color Wipe, Animated Underline) and
+                    interactive status icons (Plus → Checkmark) working as
+                    native checkboxes.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-3">Documentation</span>
+                  A Complete Handbook
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    Created 12 new documentation subpages with interactive
+                    demos, instructional blocks, and a copy-to-clipboard
+                    feature.
+                  </li>
+                  <li>
+                    The docs use the <code>admin-layout</code> module with
+                    a responsive sidebar (Bottom Nav on mobile).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.0.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.0.0</div>
+              <div class="text-muted text-4">May 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Revolution</span>
+                  The molique 2026 Architecture
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Zero JS for UI:</strong> complete removal of
+                    JavaScript from Accordions, Tabs, Dropdowns, and
+                    Modals. A move to native <code>&lt;details&gt;</code>,
+                    <code>&lt;dialog&gt;</code> tags, and the powerful CSS
+                    <code>:has()</code> selector.
+                  </li>
+                  <li>
+                    <strong>Smart Grid (RAM):</strong> replaced the old
+                    Flexbox (<code>.row</code>, <code>.col-*</code>) with
+                    native CSS Grid. The new
+                    <code>.grid-auto</code> class arranges elements
+                    automatically without Media Queries.
+                  </li>
+                  <li>
+                    <strong>Fluid Typography:</strong> implemented
+                    <code>clamp()</code> and a Major Third scale. Fonts
+                    scale smoothly between mobile and desktop.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">New</span>
+                  Accessibility and Performance
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>B2B Target Size:</strong> enforced a minimum
+                    height of 44px for all interactive elements (WCAG 2.2
+                    AAA compliance).
+                  </li>
+                  <li>
+                    <strong>Native Validation:</strong> forms now use the
+                    <code>:user-invalid</code> pseudo-class, showing errors
+                    only after user interaction (no JS).
+                  </li>
+                  <li>
+                    <strong>GPU Acceleration:</strong> rebuilt the Parallax
+                    and animated Blob effects. Moved calculations to the
+                    graphics card (60 FPS on mobile).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v0.3.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v0.3.0</div>
+              <div class="text-muted text-4">April 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Revolution</span>
+                  A New Architecture
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Cascade Layers:</strong> rebuilt the
+                    framework's main file on a native layer system
+                    (<code>@layer</code>). Eliminated specificity wars.
+                  </li>
+                  <li>
+                    <strong>The end of <code>!important</code>:</strong>
+                    removed hundreds of <code>!important</code>
+                    declarations from the <code>_utilities.scss</code> and
+                    <code>_layout.scss</code> files. Utility classes now
+                    win thanks to the layered architecture.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">New</span>
+                  Native Components
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    <strong>Native Modals:</strong> completely dropped divs
+                    in favor of the native HTML
+                    <code>&lt;dialog&gt;</code> element. Built-in focus
+                    trap, ESC key support, and the
+                    <code>::backdrop</code> pseudo-element with no heavy JS
+                    scripts.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v0.2.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v0.2.0</div>
+              <div class="text-muted text-4">March 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Added</span>
+                  New Components
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Modals:</strong> added a responsive modal
+                    window component built on plain flexbox and a solid
+                    background darkening (<code>.modal-backdrop</code>).
+                  </li>
+                  <li>
+                    <strong>Alerts:</strong> added an alert notification
+                    system in every color variant.
+                  </li>
+                  <li>
+                    <strong>Dynamic Utilities:</strong> added SCSS loops
+                    generating background and text classes (e.g.
+                    <code>.bg-primary</code>, <code>.text-white</code>)
+                    that respond to contrast.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-3">Change</span>
+                  Refactoring
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Grid System:</strong> rebuilt the grid code.
+                    Replaced hundreds of lines of hardcoded declarations
+                    with efficient <code>@for</code> and <code>@each</code>
+                    loops in SCSS.
+                  </li>
+                  <li>
+                    <strong>Variables:</strong> moved structural CSS
+                    variables (shadows, sizes, weights) from the
+                    <code>[data-theme="dark"]</code> block into the main
+                    <code>:root</code>.
+                  </li>
+                  <li>
+                    <strong>Dart Sass:</strong> updated the math in SCSS
+                    (<code>math.percentage()</code>, <code>math.div()</code>)
+                    to remove compile errors, preparing the codebase for
+                    version 3.0.0.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Bugfixes
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    Removed hardcoded pixels and HEX colors from the base
+                    files (<code>_base.scss</code>,
+                    <code>_components.scss</code>) in favor of system
+                    variables.
+                  </li>
+                  <li>
+                    Fixed an unwanted color inversion issue for the
+                    <code>&lt;code&gt;</code> tag and elements using
+                    <code>.overlay-dark</code> in dark mode.
+                  </li>
+                  <li>
+                    Removed duplicate <code>:focus-visible</code> classes
+                    between the base file and the accessibility file
+                    (<code>_a11y.scss</code>).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v0.1.0 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v0.1.0</div>
+              <div class="text-muted text-4">Project start</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3"
+                    >Initialization</span
+                  >
+                  Baseline Version
+                </h3>
+                <ul class="text-secondary m-0">
+                  <li>
+                    Created the SCSS file structure (<code>_variables</code>,
+                    <code>_mixins</code>, <code>_base</code>,
+                    <code>_layout</code>, <code>_grid</code>).
+                  </li>
+                  <li>
+                    Implemented the basic 12-column Grid system (Flexbox).
+                  </li>
+                  <li>
+                    Created the basic components (Buttons, Forms, Cards).
+                  </li>
+                  <li>
+                    Added dark mode support via the
+                    <code>data-theme="dark"</code> attribute.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="bg-surface border-top pt-5 pb-4">
+      <div class="container">
+        <div class="grid-auto gap-4 mb-5">
+          <div>
+            <a href="index.en.html" class="navbar-brand text-main d-block mb-2"
+              >molique<span class="text-primary">.</span></a
+            >
+            <p class="m-0 text-muted" style="opacity: 0.8">
+              A lightweight CSS framework built on native HTML5 and modern
+              CSS. Zero JavaScript wherever possible.
+            </p>
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Getting Started</h6>
+            <a
+              href="docs.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Getting Started</a
+            >
+            <a
+              href="docs-roadmap.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Roadmap</a
+            >
+            <a
+              href="docs-classes.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Class Reference (Cheat Sheet)</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Components</h6>
+            <a
+              href="docs-buttons.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Buttons &amp; Badges</a
+            >
+            <a
+              href="docs-forms.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Forms</a
+            >
+            <a
+              href="docs-cards.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Cards</a
+            >
+            <a
+              href="docs-charts.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Charts</a
+            >
+          </div>
+
+          <div>
+            <h6 class="fw-bold mb-3 text-main">Modules</h6>
+            <a
+              href="docs-eshop.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Online Store</a
+            >
+            <a
+              href="docs-blog.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Blog &amp; Articles</a
+            >
+            <a
+              href="docs-admin.en.html"
+              class="d-block text-muted text-hover-primary text-decoration-none mb-2"
+              >Admin Panel</a
+            >
+          </div>
+        </div>
+
+        <hr style="border-color: var(--border-color)" />
+
+        <div
+          class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-3"
+        >
+          <p class="text-muted m-0 text-4">
+            &copy; <span id="footer-year"></span> molique. A CSS framework
+            for B2B.
+          </p>
+          <p class="text-muted m-0 text-4">Version 1.5.1</p>
+        </div>
+      </div>
+    </footer>
+
+    <button class="scroll-to-top" aria-label="Back to top">↑</button>
+
+    <script>
+      document.getElementById("footer-year").textContent =
+        new Date().getFullYear();
+    </script>
+    <script src="js/molique-script.js" defer></script>
+  </body>
+</html>
