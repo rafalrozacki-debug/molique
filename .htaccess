@@ -2,6 +2,10 @@
 # 1. PRZEKIEROWANIE NA HTTPS
 # =========================================
 RewriteEngine On
+# Jawna baza dla przepisywania - na niektórych hostingach (zwłaszcza
+# subdomenach, jak molique.rozacki.com) Apache źle zgaduje ją sam, co
+# cicho wyłącza reguły niżej bez żadnego błędu w logach.
+RewriteBase /
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
