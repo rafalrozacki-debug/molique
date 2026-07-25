@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Paket-Konfigurator - molique","description":"Stellen Sie Ihr eigenes molique-CSS-Paket zusammen: wählen Sie nur die Module aus, die Sie nutzen, und laden Sie eine fertige Datei herunter. Abhängigkeiten werden automatisch ausgewählt, die Größe live berechnet."}'></include>
+  </head>
+  <body class="btn-hover-spring">
+<include src="partials/navbar.de.html"></include>
+
+    <header class="container py-5">
+      <div class="text-center mb-5">
+        <span class="badge badge-primary mb-3">Konfigurator</span>
+        <h1 class="text-9 fw-black mb-3">Stellen Sie Ihr eigenes Paket zusammen</h1>
+        <p class="text-4 text-muted" style="max-width: 640px; margin: 0 auto">
+          Wählen Sie nur die Module aus, die Sie nutzen. Abhängigkeiten
+          werden automatisch ausgewählt, und die Größe sehen Sie live.
+          Das ist eine <strong>risikofreie</strong> Reduzierung — anders
+          als bei PurgeCSS wird nichts erraten.
+        </p>
+      </div>
+
+      <!-- VOREINSTELLUNGEN -->
+      <div class="mb-4">
+        <h2 class="text-5 fw-bold mb-3">Mit einem fertigen Set beginnen</h2>
+        <div class="d-flex flex-column flex-md-row gap-2">
+          <button type="button" class="btn btn-outline-primary" data-preset="nano">
+            Nano
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="landing">
+            Landingpage
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="admin">
+            Admin-Panel
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="shop">
+            Shop
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="all">
+            Alles
+          </button>
+          <button type="button" class="btn btn-outline-primary" id="btn-clear">
+            Zurücksetzen
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container pb-5">
+      <div class="grid grid-cols-1 grid-md-cols-3 gap-4">
+        <!-- MODULLISTE -->
+        <div class="col-md-span-2">
+          <div id="builder-loading" class="p-4 bg-surface border rounded-2">
+            <p class="text-muted m-0">Modulliste wird geladen…</p>
+          </div>
+          <!-- Ausnahme von der Regel "kein Inline-JS": Diese Warnung MUSS
+               ein klassisches, inline eingebundenes Skript sein. Der
+               Konfigurator ist ein ES-Modul, und solche werden bei
+               file:// durch CORS blockiert - Code darin würde also nie
+               ausgeführt, und die Seite wirkte wie ewig ladend, ohne
+               jeden Hinweis. -->
+          <script>
+            if (location.protocol === 'file:') {
+              document.getElementById('builder-loading').innerHTML =
+                '<div class="alert alert-warning m-0">' +
+                '<strong>Diese Seite muss über einen Server geöffnet werden, nicht von der Festplatte.</strong>' +
+                '<p class="m-0 mt-2">Der Konfigurator lädt die Modulliste per <code>fetch</code>, ' +
+                'und der Browser blockiert dies für <code>file://</code>-Adressen. ' +
+                'Führen Sie eines der folgenden Kommandos aus und öffnen Sie die angegebene Adresse:</p>' +
+                '<pre class="m-0 mt-2"><code>npm run dev      → http://localhost:5173/builder.html\n' +
+                'npm run preview  → Vorschau der gebauten Version</code></pre>' +
+                '</div>';
+            }
+          </script>
+          <div id="builder-list"></div>
+        </div>
+
+        <!-- ZUSAMMENFASSUNG -->
+        <aside>
+          <div class="card position-sticky" style="top: calc(var(--navbar-h) + 1rem)">
+            <div class="card-header">
+              <h2 class="text-5 m-0">Ihr Paket</h2>
+            </div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Module</span>
+                <strong id="sum-count">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Größe</span>
+                <strong id="sum-size">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Nach Gzip</span>
+                <strong id="sum-gzip" class="text-primary">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Ersparnis</span>
+                <strong id="sum-saved" class="text-success">—</strong>
+              </div>
+
+              <button type="button" class="btn btn-primary fw-bold w-100" id="btn-download">
+                CSS herunterladen ⬇
+              </button>
+
+              <p class="text-1 text-muted m-0">
+                Sie erhalten eine einzelne Datei
+                <code>molique-custom.css</code>. JavaScript und
+                Schriftarten holen Sie sich aus dem normalen Paket auf der
+                <a href="download.de.html">Download-Seite</a>.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- SO FUNKTIONIERT ES -->
+      <section class="mt-5 pt-5 border-top">
+        <h2 class="text-7 fw-bold mb-3">So funktioniert es</h2>
+        <div class="grid grid-cols-1 grid-md-cols-3 gap-4">
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Abhängigkeiten werden automatisch ausgewählt</h3>
+            <p class="text-3 text-muted m-0">
+              Manche Komponenten nutzen andere — z. B. verwendet das
+              Bestätigungsmodal die Karte und Buttons. Die Auswahl eines
+              solchen Moduls zieht automatisch das nach, was es benötigt.
+            </p>
+          </div>
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Die Reihenfolge spielt keine Rolle</h3>
+            <p class="text-3 text-muted m-0">
+              molique legt die Reihenfolge der <code>@layer</code>-Schichten
+              von vornherein fest, sodass die Deklaration über den
+              Vorrang entscheidet, nicht die Reihenfolge des
+              Zusammenbaus. Deshalb ist das Zusammenstellen eines Pakets
+              aus Bausteinen sicher.
+            </p>
+          </div>
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Risikofrei, anders als Purging</h3>
+            <p class="text-3 text-muted m-0">
+              Hier entscheiden <strong>Sie</strong>, was hineinkommt.
+              <a href="docs-purgecss.de.html">PurgeCSS</a> rät anhand
+              Ihrer Dateien und kann ohne Safelist funktionierende
+              Komponenten herausschneiden.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+<include src="partials/footer.de.html"></include>
+
+    <script src="js/molique-script.js" defer></script>
+    <script type="module" src="./builder.js"></script>
+  </body>
+</html>

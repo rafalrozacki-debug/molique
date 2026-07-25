@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Herunterladen - molique","description":"Laden Sie molique 1.6.2 herunter - das Production-Paket (einsatzbereit) oder das Source-Paket (mit Sass-Quellen für Ihre eigene Kompilierung)."}'></include>
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+
+    <main class="container py-5">
+      <div class="mb-5 pb-4 border-bottom">
+        <span class="badge badge-primary mb-3">molique 1.6.2</span>
+        <h1 class="text-9 fw-black mb-3">molique herunterladen</h1>
+        <p class="text-5 text-muted mw-100" style="max-width: 640px">
+          Null Abhängigkeiten, null jQuery. Wählen Sie ein Paket:
+          einsatzbereit (Production) oder mit Sass-Quellen für Ihre
+          eigene Kompilierung (Source).
+        </p>
+      </div>
+
+      <div class="grid-cols-1 grid-md-cols-2 gap-4 mb-5">
+        <!-- PRODUCTION -->
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <span class="fw-bold text-5">Production</span>
+            <span class="badge badge-success">Empfohlen</span>
+          </div>
+          <div class="card-body d-flex flex-column gap-3">
+            <p class="text-muted m-0">
+              Einsatzbereit. Kompiliertes CSS (min + vollständig), JS
+              mit Autoloader, Schriftarten, Flaggen und eine
+              Starter-Vorlage.
+            </p>
+            <ul class="list-icons list-icons-check list-icons-success m-0">
+              <li><code>css/</code> - Bundle min + vollständig (Kern + Module)</li>
+              <li><code>js/</code> - Kern + Module (<code>js/modules/</code>)</li>
+              <li><code>fonts/</code> - Inter + Poppins (in CSS eingebettet)</li>
+              <li><code>img/flags/</code>, <code>starter.html</code>, README, LICENSE</li>
+            </ul>
+            <a
+              href="dist/molique-1.6.2.zip"
+              class="btn btn-primary fw-bold hover-spring mt-auto"
+              download
+              >Production herunterladen (~327 KB) ⬇</a
+            >
+          </div>
+        </div>
+
+        <!-- SOURCE -->
+        <div class="card h-100">
+          <div class="card-header">
+            <span class="fw-bold text-5">Source / Dev</span>
+          </div>
+          <div class="card-body d-flex flex-column gap-3">
+            <p class="text-muted m-0">
+              Alles aus Production <strong>plus</strong> die vollständigen
+              Sass-Quellen (<code>css/scss/</code>) zur Kompilierung mit
+              eigenen Motiv-Variablen.
+            </p>
+            <ul class="list-icons list-icons-check m-0">
+              <li>Alles aus dem Production-Paket</li>
+              <li><code>css/scss/</code> - vollständige Quellen</li>
+              <li>Motiv-Variablen in <code>scss/_root.scss</code></li>
+              <li>Kompilierung: <code>sass ...scss ...css</code></li>
+            </ul>
+            <a
+              href="dist/molique-1.6.2-src.zip"
+              class="btn btn-outline-primary fw-bold hover-spring mt-auto"
+              download
+              >Source herunterladen (~426 KB) ⬇</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- PAKET VERKLEINERN -->
+      <section>
+        <h2 class="text-7 fw-bold mb-3">Paket verkleinern</h2>
+        <p class="text-muted mb-4">
+          Der Kern ist ~278 KB groß, aber kaum jemand nutzt alles davon.
+          Es gibt zwei Wege, das zu reduzieren —
+          <strong>beginnen Sie mit dem ersten</strong>, denn er birgt
+          überhaupt kein Risiko.
+        </p>
+
+        <div class="grid grid-cols-1 grid-md-cols-2 gap-4">
+          <div class="card h-100">
+            <div
+              class="card-header d-flex align-items-center justify-content-between"
+            >
+              <h3 class="text-5 m-0">1. Module auswählen</h3>
+              <span class="badge badge-success">Risikofrei</span>
+            </div>
+            <div class="card-body d-flex flex-column gap-3">
+              <p class="text-muted m-0">
+                Sie laden keinen Shop, Blog oder kein Admin-Panel? Binden
+                Sie diese Dateien einfach nicht ein. Jedes Modul ist ein
+                eigenes <code>css/molique-style-*.css</code>.
+              </p>
+              <ul class="list-icons list-icons-check list-icons-success m-0">
+                <li>66 Module zur Auswahl, Abhängigkeiten automatisch ausgewählt</li>
+                <li>Größe live berechnet, null Konfiguration</li>
+              </ul>
+              <a
+                href="builder.de.html"
+                class="btn btn-primary fw-bold hover-spring mt-auto"
+                >Konfigurator öffnen ➔</a
+              >
+            </div>
+          </div>
+
+          <div class="card h-100">
+            <div class="card-header">
+              <h3 class="text-5 m-0">2. PurgeCSS</h3>
+            </div>
+            <div class="card-body d-flex flex-column gap-3">
+              <p class="text-muted m-0">
+                Schneidet ungenutzte Klassen aus dem heraus, was
+                übrigbleibt. Effektiv (<strong>277 KB → 68 KB</strong>),
+                erfordert aber eine <strong>Safelist</strong> — manche
+                Klassen werden von JS zur Laufzeit hinzugefügt, und
+                PurgeCSS sieht sie nicht.
+              </p>
+              <div class="d-flex flex-column flex-md-row gap-2 mt-auto">
+                <a
+                  href="docs-purgecss.de.html"
+                  class="btn btn-primary fw-bold hover-spring"
+                  >Schritt-für-Schritt-Anleitung</a
+                >
+                <a
+                  href="purgecss.safelist.cjs"
+                  class="btn btn-outline-primary"
+                  download
+                  >Safelist herunterladen (3,6 KB) ⬇</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCHNELLSTART -->
+      <section>
+        <h2 class="text-7 fw-bold mb-3">Schnellstart</h2>
+        <p class="text-muted mb-3">
+          Entpacken, <code>css/</code> und <code>js/</code> in Ihr
+          Projekt kopieren und zwei Dateien einbinden. Vollständiges
+          Beispiel: <code>starter.html</code> im Paket.
+        </p>
+        <div class="p-4 bg-surface border rounded-2">
+          <pre class="m-0"><code>&lt;!-- im &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="css/molique-style.min.css" /&gt;
+
+&lt;!-- am Ende von &lt;body&gt; (Modul-Autoloader) --&gt;
+&lt;script defer src="js/molique-script.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- INFO -->
+      <div class="alert alert-info">
+        <strong>Motiv:</strong> Farben, Typografie und andere Variablen
+        wählen Sie visuell im <a href="theme-editor.de.html">Theme
+        Editor</a>, und das Ergebnis fügen Sie als <code>:root</code>-Block
+        ein. <strong>Schriftarten:</strong> Inter + Poppins sind in
+        <code>molique-style.css</code> eingebettet
+        (<code>@font-face</code>) - kopieren Sie einfach den Ordner
+        <code>fonts/</code> neben <code>css/</code>.
+      </div>
+    </main>
+
+    <script defer src="js/molique-script.js"></script>
+  </body>
+</html>

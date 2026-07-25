@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Theme Editor - molique","description":"Interactive molique theme editor: control CSS variables (colors, typography, radius, sidebar) live and copy the ready-made :root block."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css" />
+    <link rel="stylesheet" href="css/molique-style-docs.css" />
+  </head>
+  <body class="te-page">
+    <!-- ==========================================
+         NAVBAR
+         ========================================== -->
+<include src="partials/navbar.en.html"></include>
+
+    <!-- ==========================================
+         EDITOR
+         ========================================== -->
+    <div class="theme-editor">
+      <!-- ---------- CONTROLS ---------- -->
+      <aside class="te-controls">
+        <div class="te-controls-actions">
+          <button class="btn btn-secondary btn-sm" data-te-reset>Reset</button>
+          <button class="btn btn-primary btn-sm" data-te-copy>Copy CSS</button>
+        </div>
+        <p class="te-mode-hint">
+          You're editing the: <strong data-te-mode-label>Light</strong> theme.
+          Use the switch in the navbar to switch themes and edit the
+          other variant. Changes are saved in the browser; "Copy CSS"
+          exports a ready-made <code>:root</code> /
+          <code>[data-theme="dark"]</code> block.
+        </p>
+
+        <!-- Brand and accents -->
+        <details class="te-group" open>
+          <summary>Brand and Accents</summary>
+          <div class="te-group-body">
+            <div class="te-row">
+              <span class="te-label">Primary <code>--primary</code></span>
+              <input type="color" class="te-color" data-te-var="--primary" data-te-type="color" data-te-rgb="--primary-rgb" data-te-hover="--primary-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Success <code>--success</code></span>
+              <input type="color" class="te-color" data-te-var="--success" data-te-type="color" data-te-rgb="--success-rgb" data-te-hover="--success-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Danger <code>--danger</code></span>
+              <input type="color" class="te-color" data-te-var="--danger" data-te-type="color" data-te-rgb="--danger-rgb" data-te-hover="--danger-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Warning <code>--warning</code></span>
+              <input type="color" class="te-color" data-te-var="--warning" data-te-type="color" data-te-rgb="--warning-rgb" data-te-hover="--warning-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Info <code>--info</code></span>
+              <input type="color" class="te-color" data-te-var="--info" data-te-type="color" data-te-rgb="--info-rgb" data-te-hover="--info-hover" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Secondary <code>--secondary</code></span>
+              <input type="color" class="te-color" data-te-var="--secondary" data-te-type="color" data-te-rgb="--secondary-rgb" data-te-hover="--secondary-hover" data-te-scope="mode" />
+            </div>
+          </div>
+        </details>
+
+        <!-- Surfaces and text -->
+        <details class="te-group" open>
+          <summary>Surfaces and Text</summary>
+          <div class="te-group-body">
+            <div class="te-row">
+              <span class="te-label">Page background <code>--bg-body</code></span>
+              <input type="color" class="te-color" data-te-var="--bg-body" data-te-type="color" data-te-rgb="--body-rgb" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Surface (cards) <code>--bg-surface</code></span>
+              <!-- data-te-rgb REQUIRED: without computing --bg-surface-rgb,
+                   .bg-glass would keep the old color after the surface changes. -->
+              <input type="color" class="te-color" data-te-var="--bg-surface" data-te-type="color" data-te-rgb="--bg-surface-rgb" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Borders <code>--border-color</code></span>
+              <input type="color" class="te-color" data-te-var="--border-color" data-te-type="color" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Main text <code>--dark</code></span>
+              <input type="color" class="te-color" data-te-var="--dark" data-te-type="color" data-te-rgb="--dark-rgb" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Text on color <code>--light</code></span>
+              <input type="color" class="te-color" data-te-var="--light" data-te-type="color" data-te-rgb="--light-rgb" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Code block background <code>--code-bg</code></span>
+              <input type="color" class="te-color" data-te-var="--code-bg" data-te-type="color" data-te-scope="mode" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Code text <code>--code-text</code></span>
+              <input type="color" class="te-color" data-te-var="--code-text" data-te-type="color" data-te-scope="mode" />
+            </div>
+          </div>
+        </details>
+
+        <!-- Sidebar / Admin (theme-independent) -->
+        <details class="te-group">
+          <summary>Sidebar / Admin</summary>
+          <div class="te-group-body">
+            <p class="te-label"><code>Always dark — shared by both themes.</code></p>
+            <div class="te-row">
+              <span class="te-label">Sidebar background <code>--sidebar-bg</code></span>
+              <input type="color" class="te-color" data-te-var="--sidebar-bg" data-te-type="color" data-te-rgb="--sidebar-rgb" data-te-scope="root" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Sidebar text <code>--sidebar-text</code></span>
+              <input type="color" class="te-color" data-te-var="--sidebar-text" data-te-type="color" data-te-scope="root" />
+            </div>
+            <div class="te-row">
+              <span class="te-label">Active text <code>--sidebar-text-active</code></span>
+              <input type="color" class="te-color" data-te-var="--sidebar-text-active" data-te-type="color" data-te-scope="root" />
+            </div>
+            <div class="te-sidebar-preview">
+              <span class="te-sb-item is-active">Dashboard</span>
+              <span class="te-sb-item">Clients</span>
+              <span class="te-sb-item">Settings</span>
+            </div>
+          </div>
+        </details>
+
+        <!-- Shape and motion -->
+        <details class="te-group">
+          <summary>Shape and Motion</summary>
+          <div class="te-group-body">
+            <div class="te-row-stacked">
+              <span class="te-label">Border radius <code>--border-radius</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--border-radius" data-te-type="range" data-te-unit="px" data-te-scope="root" min="0" max="24" step="1" />
+                <output class="te-output">8px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Large border radius <code>--border-radius-lg</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--border-radius-lg" data-te-type="range" data-te-unit="px" data-te-scope="root" min="0" max="32" step="1" />
+                <output class="te-output">16px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Spacing unit <code>--spacing-unit</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--spacing-unit" data-te-type="range" data-te-unit="px" data-te-scope="root" min="4" max="12" step="1" />
+                <output class="te-output">8px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Animation speed <code>--transition-speed</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--transition-speed" data-te-type="range" data-te-unit="s" data-te-scope="root" min="0" max="0.6" step="0.05" />
+                <output class="te-output">0.2s</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Focus ring width <code>--focus-ring-width</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--focus-ring-width" data-te-type="range" data-te-unit="px" data-te-scope="root" min="0" max="6" step="1" />
+                <output class="te-output">3px</output>
+              </div>
+            </div>
+            <div class="te-row-stacked">
+              <span class="te-label">Sidebar width <code>--sidebar-width-lg</code></span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--sidebar-width-lg" data-te-type="range" data-te-unit="px" data-te-scope="root" min="220" max="360" step="4" />
+                <output class="te-output">280px</output>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Typography -->
+        <details class="te-group">
+          <summary>Typography</summary>
+          <div class="te-group-body">
+            <div class="te-row-stacked">
+              <span class="te-label">
+                Base size <code>--text-base-size</code>
+                <code>Overrides the fluid clamp() with a fixed value.</code>
+              </span>
+              <div class="te-range-wrap">
+                <input type="range" class="te-range" data-te-var="--text-base-size" data-te-type="range" data-te-unit="px" data-te-scope="root" min="13" max="18" step="0.5" value="15" />
+                <output class="te-output">15px</output>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Buttons -->
+        <details class="te-group">
+          <summary>Buttons</summary>
+          <div class="te-group-body">
+            <div class="te-row-stacked">
+              <span class="te-label">
+                Default hover for all <code>.btn</code>
+                <code>Class on &lt;body&gt; - applies to buttons without their own hover-*.</code>
+              </span>
+              <select class="input" data-te-btn-hover>
+                <option value="">None (color change only)</option>
+                <option value="btn-hover-spring">Spring (scale up)</option>
+                <option value="btn-hover-lift">Lift (raise + shadow)</option>
+                <option value="btn-hover-glow">Glow</option>
+              </select>
+            </div>
+          </div>
+        </details>
+      </aside>
+
+      <!-- ---------- PREVIEW ---------- -->
+      <main class="te-preview">
+        <div class="te-preview-grid">
+          <!-- Colors -->
+          <div class="card">
+            <div class="card-header fw-bold">Palette</div>
+            <div class="card-body">
+              <div class="te-swatches">
+                <span class="te-swatch bg-primary" title="primary"></span>
+                <span class="te-swatch bg-success" title="success"></span>
+                <span class="te-swatch bg-danger" title="danger"></span>
+                <span class="te-swatch bg-warning" title="warning"></span>
+                <span class="te-swatch bg-info" title="info"></span>
+                <span class="te-swatch bg-secondary" title="secondary"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="card">
+            <div class="card-header fw-bold">Buttons</div>
+            <div class="card-body d-flex flex-wrap gap-2">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-success">Success</button>
+              <button class="btn btn-danger">Danger</button>
+              <button class="btn btn-outline-primary">Outline</button>
+              <button class="btn btn-secondary btn-sm">Small</button>
+            </div>
+          </div>
+
+          <!-- Badges & statuses -->
+          <div class="card">
+            <div class="card-header fw-bold">Badges and Statuses</div>
+            <div class="card-body d-flex flex-wrap align-items-center gap-2">
+              <span class="badge badge-primary">Primary</span>
+              <span class="badge badge-success">Success</span>
+              <span class="badge badge-danger">Danger</span>
+              <span class="badge bg-warning-subtle">Subtle</span>
+              <span class="status-dot status-success status-ping"></span>
+              <span class="status-dot status-danger"></span>
+            </div>
+          </div>
+
+          <!-- Alerts -->
+          <div class="card">
+            <div class="card-header fw-bold">Alerts</div>
+            <div class="card-body d-flex flex-column gap-2">
+              <div class="alert alert-success m-0">Changes saved.</div>
+              <div class="alert alert-danger m-0">Something went wrong.</div>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div class="card">
+            <div class="card-header fw-bold">Form</div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div class="form-floating">
+                <input type="text" class="input" id="tePreviewInput" placeholder=" " />
+                <label for="tePreviewInput">Client name</label>
+              </div>
+              <input type="text" class="input" placeholder="Plain input (click = focus ring)" />
+              <label class="form-switch">
+                <input type="checkbox" class="form-switch-input" checked />
+                <span class="form-switch-label">Email notifications</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Progress -->
+          <div class="card">
+            <div class="card-header fw-bold">Progress</div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+              <span class="badge badge-primary">Base typography: sample paragraph</span>
+              <p class="m-0 text-muted">
+                Change the variables on the left and this preview will
+                react instantly - colors, border radius, spacing, and
+                text size.
+              </p>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="card">
+            <div class="card-header fw-bold">Table</div>
+            <div class="card-body">
+              <div class="table-wrapper">
+                <table class="table table-sm table-hover m-0">
+                  <thead class="thead-light">
+                    <tr><th>Client</th><th>Status</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Molique</td><td><span class="badge badge-success">Active</span></td></tr>
+                    <tr><td>Briko</td><td><span class="badge bg-warning-subtle">Pending</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Glass and code: the only place where --bg-surface-rgb
+               (the .bg-glass tinting layer) and --code-bg / --code-text
+               are visible. -->
+          <div class="card">
+            <div class="card-header fw-bold">Glass and Code Block</div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div
+                class="bg-blobs position-relative d-flex align-items-center justify-content-center rounded-2"
+                style="height: 150px; overflow: hidden"
+              >
+                <div class="bg-glass p-4 text-center" style="z-index: 10">
+                  <strong class="text-4">Glassmorphism</strong>
+                  <p class="text-2 m-0 mt-1">
+                    The tinting layer uses <code>--bg-surface-rgb</code>
+                  </p>
+                </div>
+              </div>
+
+              <div class="component-code">
+                <pre><code>.example {
+  color: var(--code-text);
+}</code></pre>
+              </div>
+
+              <p class="text-2 text-muted m-0">
+                Change <strong>Surface (cards)</strong> — the glass
+                follows it, since the editor recalculates the
+                <code>-rgb</code> pair.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>

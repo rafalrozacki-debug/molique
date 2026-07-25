@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Package Builder - molique","description":"Build your own molique CSS package: select only the modules you use and download a ready file. Dependencies are picked automatically, size is calculated live."}'></include>
+  </head>
+  <body class="btn-hover-spring">
+<include src="partials/navbar.en.html"></include>
+
+    <header class="container py-5">
+      <div class="text-center mb-5">
+        <span class="badge badge-primary mb-3">Builder</span>
+        <h1 class="text-9 fw-black mb-3">Build your own package</h1>
+        <p class="text-4 text-muted" style="max-width: 640px; margin: 0 auto">
+          Select only the modules you use. Dependencies are picked
+          automatically, and you'll see the size live. This is
+          <strong>risk-free</strong> reduction — unlike PurgeCSS, nothing
+          is guessed.
+        </p>
+      </div>
+
+      <!-- PRESETS -->
+      <div class="mb-4">
+        <h2 class="text-5 fw-bold mb-3">Start from a ready-made set</h2>
+        <div class="d-flex flex-column flex-md-row gap-2">
+          <button type="button" class="btn btn-outline-primary" data-preset="nano">
+            Nano
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="landing">
+            Landing page
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="admin">
+            Admin Panel
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="shop">
+            Store
+          </button>
+          <button type="button" class="btn btn-outline-primary" data-preset="all">
+            Everything
+          </button>
+          <button type="button" class="btn btn-outline-primary" id="btn-clear">
+            Clear
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container pb-5">
+      <div class="grid grid-cols-1 grid-md-cols-3 gap-4">
+        <!-- MODULE LIST -->
+        <div class="col-md-span-2">
+          <div id="builder-loading" class="p-4 bg-surface border rounded-2">
+            <p class="text-muted m-0">Loading module list…</p>
+          </div>
+          <!-- Exception to the "zero inline JS" rule: this warning MUST
+               be a classic, inline script. The builder is an ES module,
+               and those are blocked by CORS on file:// - so code placed
+               inside one would never run, and the page would look like
+               it's loading forever, with no clue why. -->
+          <script>
+            if (location.protocol === 'file:') {
+              document.getElementById('builder-loading').innerHTML =
+                '<div class="alert alert-warning m-0">' +
+                '<strong>This page must be opened through a server, not from disk.</strong>' +
+                '<p class="m-0 mt-2">The builder fetches the module list via <code>fetch</code>, ' +
+                'and the browser blocks this for <code>file://</code> addresses. ' +
+                'Run one of the following and open the given address:</p>' +
+                '<pre class="m-0 mt-2"><code>npm run dev      → http://localhost:5173/builder.html\n' +
+                'npm run preview  → preview of the built version</code></pre>' +
+                '</div>';
+            }
+          </script>
+          <div id="builder-list"></div>
+        </div>
+
+        <!-- SUMMARY -->
+        <aside>
+          <div class="card position-sticky" style="top: calc(var(--navbar-h) + 1rem)">
+            <div class="card-header">
+              <h2 class="text-5 m-0">Your package</h2>
+            </div>
+            <div class="card-body d-flex flex-column gap-3">
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Modules</span>
+                <strong id="sum-count">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Size</span>
+                <strong id="sum-size">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Gzipped</span>
+                <strong id="sum-gzip" class="text-primary">—</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">Savings</span>
+                <strong id="sum-saved" class="text-success">—</strong>
+              </div>
+
+              <button type="button" class="btn btn-primary fw-bold w-100" id="btn-download">
+                Download CSS ⬇
+              </button>
+
+              <p class="text-1 text-muted m-0">
+                You get a single <code>molique-custom.css</code> file.
+                Get the JavaScript and fonts from the regular package on
+                the <a href="download.en.html">download page</a>.
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- HOW IT WORKS -->
+      <section class="mt-5 pt-5 border-top">
+        <h2 class="text-7 fw-bold mb-3">How it works</h2>
+        <div class="grid grid-cols-1 grid-md-cols-3 gap-4">
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Dependencies are picked automatically</h3>
+            <p class="text-3 text-muted m-0">
+              Some components rely on others — e.g. the confirmation
+              modal uses the card and buttons. Selecting such a module
+              automatically pulls in whatever it needs.
+            </p>
+          </div>
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Order doesn't matter</h3>
+            <p class="text-3 text-muted m-0">
+              molique declares the <code>@layer</code> order upfront, so
+              precedence is decided by the declaration, not by the order
+              you assemble the pieces in. That makes building a package
+              from building blocks safe.
+            </p>
+          </div>
+          <div class="p-4 bg-surface border rounded-2">
+            <h3 class="text-5 fw-bold mb-2">Risk-free, unlike purging</h3>
+            <p class="text-3 text-muted m-0">
+              Here <strong>you</strong> decide what goes in.
+              <a href="docs-purgecss.en.html">PurgeCSS</a> guesses based
+              on your files and, without a safelist, can strip out
+              working components.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+<include src="partials/footer.en.html"></include>
+
+    <script src="js/molique-script.js" defer></script>
+    <script type="module" src="./builder.js"></script>
+  </body>
+</html>
