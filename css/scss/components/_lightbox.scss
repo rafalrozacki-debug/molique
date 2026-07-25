@@ -1,27 +1,74 @@
 // molique - Lightbox: galeria pelnoekranowa (markup budowany z JS).
 //
 // Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+//
+// Natywny <dialog> zamiast recznie sterowanego <div> - showModal()/close()
+// daja za darmo: pulapke fokusa (Tab nie wychodzi na strone pod spodem, co
+// stara wersja na div NIE robila), przywrocenie fokusa elementowi
+// wyzwalajacemu po zamknieciu, zamykanie klawiszem Escape i umieszczenie w
+// top layer (zero wojen o z-index). ::backdrop + @starting-style to ten sam
+// wzorzec, ktory _context-menu.scss juz stosuje dla swojego bottom-sheetu.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 @layer components {
 /* =========================================
-   3. LIGHTBOX (Galeria pełnoekranowa)
+   3. LIGHTBOX (Galeria pełnoekranowa, natywny <dialog>)
    ========================================= */
-.lightbox-overlay {
+dialog.lightbox-overlay {
+  /* Reset UA-stylesheetu <dialog> (ramka, tlo, wysrodkowanie przez margin:auto,
+     ograniczenia max-width/height) - reszta to normalny flex-overlay. */
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+
   position: fixed;
   inset: 0;
-  background: rgba(var(--backdrop-rgb), 0.95);
+  width: 100%;
+  height: 100%;
   z-index: 2000;
-  display: none; /* Zmieniane przez JS na flex */
   align-items: center;
   justify-content: center;
+
+  /* WAZNE: display:none tutaj musi zostac bezwarunkowy. Reguly autora
+     zawsze biją reguly user-agenta niezaleznie od specyficznosci selektora
+     - gdyby "display: flex" bylo tutaj (bez :modal), wygralaby ZAWSZE z
+     domyslnym "dialog:not([open]) { display:none }" przegladarki, nawet
+     gdy dialog jest zamkniety. Dlatego flex trafia wylacznie do &:modal. */
+  display: none;
   opacity: 0;
-  transition: opacity var(--transition-speed);
-  
-  &.is-active {
+  transition: opacity var(--transition-speed), overlay var(--transition-speed) allow-discrete,
+    display var(--transition-speed) allow-discrete;
+
+  &:modal {
+    display: flex;
     opacity: 1;
+  }
+
+  @starting-style {
+    &:modal {
+      opacity: 0;
+    }
+  }
+
+  &::backdrop {
+    background: rgba(var(--backdrop-rgb), 0);
+    transition: background-color var(--transition-speed) allow-discrete;
+  }
+
+  &:modal::backdrop {
+    background: rgba(var(--backdrop-rgb), 0.95);
+  }
+
+  @starting-style {
+    &:modal::backdrop {
+      background: rgba(var(--backdrop-rgb), 0);
+    }
   }
 }
 
@@ -71,7 +118,7 @@
   line-height: 1;
   opacity: 0.7;
   transition: opacity var(--transition-speed);
-  
+
   &:hover { opacity: 1; }
 }
 
@@ -87,7 +134,7 @@
   padding: 20px;
   z-index: 2010;
   transition: color var(--transition-speed);
-  
+
   &:hover { color: #fff; }
 }
 
