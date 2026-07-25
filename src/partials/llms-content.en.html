@@ -1,0 +1,278 @@
+<!-- Reczne tlumaczenie wygenerowanej tresci PL (partials/llms-content.html).
+     Zrodlo prawdy dla tresci to nadal llms.txt (PL) - przy kazdej zmianie
+     tam trzeba recznie zsynchronizowac to tlumaczenie (ten sam kompromis
+     co reszta stron .en.html w tym projekcie - brak automatycznej
+     synchronizacji miedzy jezykami). -->
+<p class="text-muted mb-4">Context: A lightweight, rigorously optimized B2B CSS framework.</p>
+<h2 class="text-8 fw-bold mb-3">1. GOLDEN RULES (CORE RULES)</h2>
+<ul class="text-secondary mb-4">
+  <li><strong>Native HTML5/CSS over JS:</strong> Always prefer native solutions (<code>&lt;dialog&gt;</code>, <code>&lt;details&gt;</code>, <code>:user-invalid</code>, <code>scroll-snap</code>, <code>popover</code>). JS is a last resort.
+    </li>
+  <li><strong>Zero specificity wars:</strong> CSS is built on <code>@layer</code> cascade layers. No <code>!important</code> allowed (except for utility classes in <code>@layer utilities</code>).
+    </li>
+  <li><strong>B2B Accessibility (A11y):</strong> Interactive elements (button, input) must have <code>min-height: 44px</code> (variable <code>--target-size-min</code>). The exception is <code>.btn-action</code> buttons in dense tables.
+    </li>
+  <li><strong>GPU performance:</strong> Animations may only modify <code>transform</code>, <code>scale</code>, <code>translate</code>, and <code>opacity</code>. Never animate <code>box-shadow</code>, <code>width</code>, <code>height</code> (avoid reflow).
+    </li>
+</ul>
+<h2 class="text-8 fw-bold mb-3 mt-5">2. CLASS DICTIONARY & HTML STRUCTURES (CHEAT SHEET)</h2>
+<h3 class="text-6 fw-bold mb-2 mt-4">Layout &amp; Grid</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Smart Grid (Auto):</strong> <code>.grid-auto</code>, <code>.grid-auto-sm</code>, <code>.grid-auto-lg</code>. (Arranges columns automatically).
+    </li>
+  <li><strong>Fixed Grid:</strong> Parent <code>.grid-cols-1</code> through <code>12</code>. Children <code>.col-span-1</code> through <code>12</code>. The <code>.grid-md-cols-*</code> and <code>.grid-lg-cols-*</code> variants are single-column by DEFAULT below their own breakpoint, so <code>class="grid-md-cols-12"</code> is enough — adding <code>grid-cols-1</code> changes nothing.
+    </li>
+  <li><strong>GOLDEN GRID RULE (RWD):</strong> On mobile devices (inside <code>.grid-cols-1</code>) <strong>NEVER use <code>.col-span-*</code> classes</strong>. Elements take up 100% width by default. Use ONLY classes with the <code>-md-</code> prefix (e.g. <code>.col-md-span-6</code>) to define the desktop layout! Using <code>.col-span-12</code> on mobile will break the layout.
+    </li>
+  <li><strong>Offsets (Grid):</strong> <code>.col-start-1</code> through <code>12</code> OR the classic <code>.offset-1</code> through <code>11</code> (plus <code>-md-</code>, <code>-lg-</code> variants). Lets you shift elements within the grid.
+    </li>
+  <li><strong>Flexbox:</strong> <code>.d-flex</code>, <code>.flex-column</code>, <code>.align-items-center</code>, <code>.justify-content-between</code>, <code>.gap-1</code> through <code>.gap-5</code>. Single child: <code>.align-self-start/-end/-center/-stretch</code>.
+    </li>
+  <li><strong>Spacing:</strong> <code>.m-1</code> through <code>.m-5</code>, <code>.p-1</code> through <code>.p-5</code> (plus <code>-md-</code> variants, e.g. <code>.p-md-4</code>). Pulling upward (negative margin): <code>.overlap-up-50/-100/-150</code>.
+    </li>
+  <li><strong>Positioning:</strong> <code>.position-relative/-absolute/-fixed/-sticky</code>; edges <code>.top-0/.bottom-0/.left-0/.right-0/.inset-0</code>; centering <code>.top-50</code>+<code>.left-50</code>+<code>.translate-middle(-x/-y)</code>. Sizing: <code>.w-25/-50/-75/-100/-auto</code>, <code>.mw-100</code>, <code>.min-vh-100</code>.
+    </li>
+  <li><strong>Breakout (Full-bleed on mobile):</strong> <code>.breakout-mobile</code> — pulls an element out of <code>.container</code>'s padding below 768px, all the way to the screen edge (carousels, galleries, a hero image inside body text). No effect on desktop. Viewport centering (<code>width:100vw</code> + <code>margin-left:50%</code> + <code>translateX(-50%)</code>) is calculated relative to the DIRECT parent, which must be centered in the window like <code>.container</code> — nesting it deeper (e.g. inside <code>.card-body</code>) breaks the result.
+    </li>
+  <li><strong>Bento Grid:</strong> <code>.bento-grid</code> &gt; <code>.bento-col-2</code>, <code>.bento-row-2</code>.
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Navigation (Navbar)</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Base:</strong> <code>.navbar</code> &gt; <code>.navbar-container</code> &gt; <code>.navbar-brand</code> + <code>.navbar-menu</code> &gt; <code>.navbar-item</code>.
+    </li>
+  <li><strong>Active item (current page):</strong> the <code>.is-active</code> class on <code>.navbar-item</code> (and <code>.dropdown-item</code> / <code>.mega-menu-link</code>) — primary color + heavier weight. Assigned from the URL by the <code>js/modules/molique-navbar-active.js</code> module (auto-loaded when <code>.navbar-menu</code> is present): highlights the current page's link AND the trigger of whichever dropdown menu it's inside. Do NOT write the active state into the markup — the navbar is often shared across pages, the script handles it from the address.
+    </li>
+  <li><strong>Variants:</strong> <code>.navbar-transparent</code>, <code>.navbar-sticky</code> (adds <code>.is-scrolled</code>).
+    </li>
+  <li><strong>Overlay variants (<code>.navbar-transparent</code>, <code>.navbar-pill</code>):</strong> <code>position: absolute</code> — the navbar sits ON TOP of the content, so a hero photo starts right from the top of the page. On scroll, JS adds <code>.is-scrolled</code> → <code>position: fixed</code> + theme background. <strong>Do NOT combine with <code>.navbar-sticky</code></strong> (sticky returns to document flow and wins the cascade — the overlay stops working). Push hero content down by <code>var(--navbar-h)</code>.
+    </li>
+  <li><strong>Pill:</strong> <code>.navbar-pill</code> — the navbar as a pill floating off the edge with its own background; after scrolling it unfolds into a bar at the edge. Background is ALWAYS dark (it sits over a photo), overridden via <code>style="--navbar-pill-bg: #123"</code>. Both states have SEPARATE variables (an inline style beats a class rule, so one shared variable would block the other state): <code>--navbar-pill-bg</code>/<code>--navbar-pill-color</code> over the hero, <code>--navbar-pill-bg-scrolled</code>/<code>--navbar-pill-color-scrolled</code> after scrolling, <code>--navbar-pill-padding-x</code> (32px)/<code>--navbar-pill-padding-x-scrolled</code> (16px). Links stay white until scrolled. On mobile the offcanvas panel takes over <code>--navbar-pill-bg</code> (otherwise white links would land on the light <code>--bg-surface</code>); in <code>.navbar-transparent</code>, which has nothing to paint the panel with, links there fall back to <code>--text-main</code>.
+    </li>
+  <li><strong>Offcanvas (Mobile):</strong> Built on the Checkbox Hack (<code>.navbar-offcanvas-toggle:checked</code>).
+    </li>
+  <li><strong>Mega Menu:</strong> <code>&lt;details class="mega-menu" name="group"&gt;</code> &gt; <code>&lt;summary class="navbar-item mega-menu-trigger"&gt;</code> + <code>.mega-menu-content</code> (inside: <code>.mega-menu-group</code> with <code>.mega-menu-col-title</code> and <code>.mega-menu-link</code>, optionally <code>.mega-menu-featured</code>). Opens on CLICK, not hover — native <code>&lt;details&gt;</code>, works from the keyboard and without JS. Degrades to an accordion in the offcanvas on mobile. <code>name</code> makes multiple mega menus mutually exclusive.
+    </li>
+  <li><strong>Dropdown (navbar):</strong> <code>&lt;details class="dropdown"&gt;</code> &gt; <code>&lt;summary class="dropdown-toggle"&gt;</code> + <code>.dropdown-menu</code>.
+    </li>
+  <li><strong>Dropdown Popover (outside the navbar — top layer):</strong> any <code>&lt;button popovertarget="ID"&gt;</code> + <code>.dropdown-menu</code> with a <code>popover</code> attribute and a unique <code>id</code> — the menu is NOT clipped by overflow (tables, cards, modals) and anchors itself automatically to its button (implicit anchor, no <code>.dropdown</code> wrapper needed). Right-align with the added <code>.dropdown-menu-end</code>.
+    </li>
+  <li><strong>Theme Switch (light/dark):</strong> <code>&lt;label class="theme-switch"&gt;</code> &gt; <code>&lt;input type="checkbox" id="theme-toggle" class="theme-switch-input"&gt;</code> + <code>.theme-switch-track</code> (with <code>.theme-switch-thumb</code> and <code>.theme-icon-wrapper</code> &gt; <code>.theme-icon.icon-sun</code> / <code>.theme-icon.icon-moon</code>). <strong><code>id="theme-toggle"</code> is REQUIRED</strong> — <code>molique-script.js</code> looks it up via <code>getElementById</code>; a different <code>id</code> or a second switch on the page = silent failure, no error. The choice lives in <code>localStorage</code> under <code>molique-theme</code>; on first visit it reads <code>prefers-color-scheme</code>; the theme is the <code>data-theme</code> attribute on <code>&lt;html&gt;</code>. Also read synchronously in <code>&lt;head&gt;</code> — see Admin Sidebar anti-FOUC below.
+    </li>
+  <li><strong>Language Switch (Popover):</strong> <code>&lt;button class="language-switch-trigger" popovertarget="ID"&gt;</code> (with <code>.language-switch-flag</code> + the language code) + <code>.dropdown-menu.dropdown-menu-end.language-switch-menu</code> with a <code>popover</code> attribute and <code>id</code> &gt; <code>.dropdown-item.language-switch-item</code> (with <code>.language-switch-flag</code>, <code>.language-switch-name</code>, optionally <code>.language-switch-check</code>). Flags ONLY as separate SVG files from <code>img/flags/</code> (<code>&lt;img src="img/flags/pl.svg" width="20" height="15" alt=""&gt;</code>) — the folder only holds the languages actually offered in the project; NEVER emoji flags (they don't render on Windows) or an external sprite with <code>&lt;use&gt;</code> (doesn't work under file:// and is sometimes blocked by CORS). Real content translation: the reference implementation (flat files page.html/page.en.html/page.de.html, auto-hreflang, hiding languages without a translation for a given page) is documented in this repo's DOCS-PLAN.md and implemented in vite.config.js (computeI18nLocals).
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">UI &amp; Business Components</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Cards:</strong> <code>.card</code> &gt; <code>.card-header</code> + <code>.card-body</code> + <code>.card-footer</code>. Variants: <code>.featured-box</code>, <code>.thumb-info</code> (with <code>.thumb-info-wrapper</code>).
+    </li>
+  <li><strong>Buttons:</strong> color (<code>.btn-primary</code>, <code>secondary</code>, <code>success</code>, <code>danger</code>, <code>warning</code>, <code>info</code>, <code>dark</code>, <code>light</code>) + size (<code>.btn-xs</code>, <code>.btn-sm</code>, <code>.btn-md</code>, <code>.btn-lg</code>, <code>.btn-xl</code>). <strong>A COLOR CLASS IMPLIES <code>.btn</code></strong> — <code>class="btn-primary"</code> is enough, no need for <code>class="btn btn-primary"</code>; add plain <code>.btn</code> only for a colorless button. The implication only covers colors and their outline variants — size and base-look modifiers do NOT carry it, and <code>.btn-action</code> deliberately does not inherit it. Outline: <code>.btn-outline-&lt;color&gt;</code> for every color + <code>.btn-outline-soft</code> (30% border, 10% on hover). Grouping: <code>.btn-group</code> (current: <code>.is-active</code>). Default hover for every <code>.btn</code>: the <code>.btn-hover-spring</code>/<code>-lift</code>/<code>-glow</code> class on <code>&lt;body&gt;</code> (buttons with their own <code>hover-*</code> class take priority).
+    </li>
+  <li><strong>Buttons — look variants:</strong> <code>.btn-3d</code> (requires <code>--btn-3d-shadow</code> in the button's color, defaults to primary), <code>.btn-glass</code> (ON A PHOTO ONLY — blurs what's underneath; background and border use <code>!important</code>, you can't override them with a class), <code>.btn-glow</code>, <code>.btn-gradient</code> (primary → info, ignores the color class), <code>.btn-shine</code>, <code>.btn-stacked</code> (icon above the label; the label goes in <code>.btn-text</code> — a label, NOT a separate variant).
+    </li>
+  <li><strong>Ghost Buttons (Tables):</strong> <code>.btn-action</code> (e.g. for Edit/Delete actions). Grouping with dividers: <code>.btn-action-group.with-dividers</code>.
+    </li>
+  <li><strong>Badges:</strong> <code>.badge</code> + <code>.badge-primary</code> (or other colors).
+    </li>
+  <li><strong>Modals (Native):</strong> <code>&lt;dialog class="modal-dialog"&gt;</code> (or <code>.modal-context</code> for a side/bottom panel). Closing: <code>&lt;form method="dialog"&gt;</code>.
+    </li>
+  <li><strong>Tabs:</strong> <code>.tabs</code> &gt; hidden <code>input.tab-input[type=radio]</code> (shared <code>name</code>) + <code>.tabs-header</code> &gt; <code>label.tab-label</code> + <code>.tabs-content</code> &gt; <code>.tab-pane</code>. Panel order MUST match input order — CSS links them by position, not by name. The <code>.tabs-pill</code> variant with <code>.tabs-pill-indicator</code> (width computed from <code>--tab-count</code>). <code>.tab-input</code> is hidden with the <code>clip</code> technique (like <code>.sr-only</code>, NOT <code>display: none</code>), so the group keeps working with arrow-key navigation.
+    </li>
+  <li><strong>Accordions:</strong> <code>&lt;details class="accordion-item" name="group"&gt;</code> &gt; <code>&lt;summary class="accordion-header"&gt;</code> + <code>&lt;div class="accordion-body"&gt;</code>. The header is a flex with <code>gap</code>; the <code>::after</code> arrow is pushed by <code>margin-left: auto</code> — several elements (e.g. a <code>.badge</code> plus text) stay left-aligned. Wrap a sentence containing <code>&lt;code&gt;</code> in a single <code>&lt;span&gt;</code>, otherwise <code>gap</code> will space it out as a separate flex item.
+    </li>
+  <li><strong>B2B Tables:</strong> <code>.table-wrapper</code> &gt; <code>&lt;table class="table"&gt;</code>. Variants: <code>.table-sm</code>, <code>.table-lg</code>, <code>.table-striped</code>, <code>.table-hover</code>, <code>.table-borderless</code>. Headers: <code>.thead-light</code>, <code>.thead-dark</code>, <code>.thead-primary</code> (plus sizes <code>.thead-sm</code>, <code>.thead-lg</code>).
+    </li>
+  <li><strong>Mobile Tables:</strong> Add <code>.table-cards</code> to <code>&lt;table&gt;</code>. Requires a <code>data-label="Name"</code> attribute on every <code>&lt;td&gt;</code> — CSS reads labels ONLY from there, it won't read them from <code>&lt;th&gt;</code>. The <code>.table-cards-always</code> variant does the same at every width.
+    </li>
+  <li><strong>List Group:</strong> <code>.list-group</code> &gt; <code>.list-group-item</code> (current: <code>.is-active</code>). A vertical list of clickable items.
+    </li>
+  <li><strong>Counters:</strong> <code>.counter</code> &gt; <code>.counter-value</code> + <code>.counter-title</code>. The target value is the CONTENT of <code>.counter-value</code>; <code>js/modules/molique-counters.js</code> (auto-loaded) counts up to it once it enters the viewport. Without JS the number is still visible, just without the animation.
+    </li>
+  <li><strong>Data Rows (CRM Grid):</strong> <code>.data-row</code> &gt; divs with data + <code>.data-row-actions</code>.
+    </li>
+  <li><strong>Compact Data Rows (List Items):</strong> <code>.data-row-compact</code> &gt; <code>.row-icon</code> + <code>.row-content</code> (with <code>.row-title</code> and <code>.row-details</code>) + <code>.row-actions</code>.
+    </li>
+  <li><strong>Pricing Tables:</strong> <code>.pricing-table</code> (add <code>.is-featured</code> to highlight one) &gt; <code>.pricing-header</code> + <code>.pricing-features</code>.
+    </li>
+  <li><strong>Progress Bars:</strong> <code>.progress</code> &gt; <code>.progress-bar</code> (width via <code>style="width: X%"</code>). NOTE: <code>.progress-bar</code>/<code>.progress-bar-reading</code> animate <code>width</code> (transition) — a conscious departure from the GPU-only rule.
+    </li>
+  <li><strong>Timeline:</strong> <code>.timeline</code> (variants: <code>.timeline-large</code>, <code>.timeline-numbered</code>) &gt; <code>.timeline-item</code>.
+    </li>
+  <li><strong>Labeled Timeline (dates on the left):</strong> <code>.timeline.timeline-labeled</code> &gt; <code>.timeline-item</code> &gt; <code>.timeline-label</code> + <code>.timeline-separator</code> (with <code>.timeline-node</code> and <code>.timeline-line</code>) + <code>.timeline-content</code>.
+    </li>
+  <li><strong>Stepper:</strong> <code>.stepper</code> (variant: <code>.stepper-numbered</code>) &gt; <code>.step</code> (add <code>.is-active</code> or <code>.is-completed</code>).
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Forms (Zero JS Validation)</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Floating Labels:</strong> <code>.form-floating</code> &gt; <code>input.input[placeholder=" "]</code> + <code>label</code> + <code>.feedback-invalid</code>. Its own <code>margin-bottom</code> zeroes out as a direct child of <code>.card-body</code> (which has a gap) — outside <code>.card-body</code> it behaves normally.
+    </li>
+  <li><strong>Switches:</strong> <code>&lt;label class="form-switch"&gt;</code> &gt; <code>&lt;input type="checkbox" class="form-switch-input"&gt;</code> + <code>&lt;span class="form-switch-label"&gt;</code>. Variants: <code>.form-switch-square</code>, <code>.form-switch-outline</code>.
+    </li>
+  <li><strong>Input Groups:</strong> <code>.input-group</code> &gt; <code>.input-group-text</code> + <code>.input</code> + <code>.btn</code>. (Automatically joins the elements into a smooth rectangle).
+    </li>
+  <li><strong>Advanced Inputs:</strong> <code>.input-range</code>, <code>.input-color</code>, <code>input[type="date"].input</code>, <code>input[type="number"].input</code> (no native spinner — stepping is handled by <code>.qty-input</code> with <code>+</code> / <code>-</code> buttons, the keyboard, and scroll).
+    </li>
+  <li><strong>Searchable Select (Popover API):</strong> <code>.select-search</code> &gt; <code>&lt;button class="input select-search-trigger" popovertarget="ID"&gt;</code> + <code>.select-search-menu</code> with a <code>popover</code> attribute and a unique <code>id</code> (top layer — the menu is NOT clipped inside modals or scrolling containers). The search box (<code>.select-search-input</code>) is OPTIONAL — without it the component behaves like a plain select (just the option list). <code>select.js</code> uses event delegation (handles options added after page load, e.g. via AJAX); the hidden input gets a <code>change</code> event on selection; set the value from JS with <code>MoliqueSelectSearch.setValue(hiddenInput, value)</code>.
+    </li>
+  <li><strong>Premium Multi Select (Popover API):</strong> <code>.custom-select</code> &gt; <code>&lt;button class="custom-select-trigger" popovertarget="ID"&gt;</code> + <code>.custom-select-dropdown</code> with a <code>popover</code> attribute and a unique <code>id</code> (with <code>.custom-select-category</code> and <code>.custom-select-option</code>).
+    </li>
+  <li><strong>File Upload:</strong> <code>.file-upload</code> (variant: <code>.file-upload-animated</code>) &gt; an invisible <code>input[type="file"]</code> stretched over the whole zone (click and drag&amp;drop work natively). The auto-loaded <code>js/modules/molique-file-upload.js</code> listens for <code>change</code> and overwrites <code>.file-upload-name</code> with the file's name — the element is optional in the markup, the module will add it itself.
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Feedback &amp; Status</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Toasts:</strong> Use the Popover API. Triggered from JS: <code>MoliqueToast.show({ message: '...', type: 'success' })</code>.
+    </li>
+  <li><strong>Status Dots:</strong> <code>.status-dot</code> + <code>.status-draft</code> / <code>pending</code> / <code>done</code> / <code>danger</code>. Add <code>.status-ping</code> for a pulsing effect.
+    </li>
+  <li><strong>Stock Bar (segmented stock level):</strong> <code>.stock-bar</code> + variant <code>.stock-bar-success</code> / <code>-warning</code> / <code>-danger</code> (no variant: secondary color). Filled from the backend via <code>style="--stock-filled: 3"</code> (0–5); segments are drawn by an SVG mask — zero JS and zero extra markup. The bar is purely visual: state the value as text alongside it, or add <code>role="img"</code> + <code>aria-label</code>.
+    </li>
+  <li><strong>Interactive Icon:</strong> <code>.status-icon-toggle</code> (Plus -&gt; Checkmark animation). Can be used with <code>&lt;label class="status-checkbox"&gt;</code>.
+    </li>
+  <li><strong>Tooltips:</strong> <code>.tooltip-element[data-tooltip="Text"]</code>.
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Modules: Admin, E-commerce, Blog</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Admin Layout:</strong> <code>.admin-layout</code> &gt; <code>.admin-sidebar</code> + <code>.admin-main</code>. The <code>.admin-layout-floating</code> variant pulls the content away from the edges.
+    </li>
+  <li><strong>Fade Bottom:</strong> <code>.fade-bottom</code> — fades content out at the bottom edge (a gradient instead of a hard cut). Works on any scrollable container: <code>--fade-color</code> = the container's background color (defaults to <code>--bg-surface</code>), height <code>--fade-height</code> (80px). On <code>.admin-sidebar</code> and <code>.admin-main</code> the color is picked automatically; on mobile the sidebar's gradient turns itself off.
+    </li>
+  <li><strong>Admin Sidebar:</strong> Width classes: <code>.sidebar-md</code>, <code>.sidebar-sm</code> (on <code>.admin-layout</code>). Logo handling on mobile: <code>.admin-logo-hide</code>, <code>.admin-logo-compact</code>.
+    </li>
+  <li><strong>Admin Sidebar — width toggle:</strong> <code>&lt;button id="molique-sidebar-toggle" class="admin-nav-link"&gt;</code> (an ID, one per page) + <code>.sidebar-toggle-icon</code> with exactly three empty <code>&lt;span&gt;</code>s (morphing hamburger → asymmetric lines → arrow). A click cycles <code>.admin-layout</code> between full / <code>.sidebar-md</code> / <code>.sidebar-sm</code>, remembered in <code>localStorage</code> (<code>molique-sidebar-state</code>). The logic lives permanently in the <code>molique-script.js</code> core, NOT in the autoloader. GOTCHA: a sample (non-real) <code>.admin-nav-submenu[open]</code> anywhere on the same page, outside the real sidebar, will turn into a full-screen invisible overlay once the page switches to <code>.sidebar-md</code>/<code>.sidebar-sm</code> — the drill-down selector is global, not scoped to <code>.admin-sidebar</code>.
+    </li>
+  <li><strong>Admin Sidebar — anti-FOUC:</strong> <code>molique-theme</code>/<code>molique-sidebar-state</code> from <code>localStorage</code> are only read on <code>DOMContentLoaded</code> in <code>molique-script.js</code> → a returning user with a collapsed sidebar/dark mode would see a split second of the full (<code>lg</code>) sidebar / light theme before it switches. The fix has two parts (copy them together): (1) a synchronous (no defer/async) inline <code>&lt;script&gt;</code> right at the top of <code>&lt;head&gt;</code> (<code>partials/head.html</code>), right after the viewport meta tag — it reads both keys and sets <code>data-theme</code> + the <code>sidebar-md</code>/<code>sidebar-sm</code> class on <code>&lt;html&gt;</code> BEFORE the first paint; (2) <code>layout/_admin-layout.scss</code> gets mirrored rules <code>:root.sidebar-md &amp;</code>/<code>:root.sidebar-sm &amp;</code> alongside <code>&amp;.sidebar-md</code>/<code>&amp;.sidebar-sm</code>, because at the moment of the first render the class only exists on <code>&lt;html&gt;</code>, not yet on <code>.admin-layout</code> (that's added later, by <code>molique-script.js</code>, to handle the click). The existing logic in <code>molique-script.js</code> stays unchanged — this fix is purely additive, reading what it already writes, just earlier.
+    </li>
+  <li><strong>Admin Header (Faux Cutout):</strong> <code>.dashboard-header</code> &gt; left side + <code>.dashboard-header-actions</code>. Creates the illusion of a cutout in the header.
+    </li>
+  <li><strong>Admin Nav:</strong> <code>.admin-nav</code> &gt; <code>.admin-nav-link</code>. Submenu: <code>&lt;details class="admin-nav-submenu"&gt;</code> &gt; <code>&lt;summary class="admin-nav-link"&gt;</code> + <code>.admin-nav-submenu-list</code> (with <code>.admin-nav-submenu-link</code>). Native <code>&lt;details&gt;</code> — the same markup renders as a tree (wide sidebar), and on <code>-sm</code>/<code>-md</code> plus the mobile Bottom Nav as a full-screen drill-down with a "Back" bar. Active state is handled by the <code>js/modules/molique-admin-nav.js</code> module (auto-loaded): highlights the current item from the URL, and on desktop it OPENS the branch containing the current page itself (<code>details.open = true</code>), but closes it immediately on mobile (the drill-down never rides in open on its own). Mutually excludes open submenus (mobile only). Do NOT mark the active state with <code>open</code> in the markup — the module figures it out from the address, regardless of viewport.
+    </li>
+  <li><strong>Admin Nav — flat link activity:</strong> a sidebar without submenus (shared across several subpages) is handled by <code>js/modules/molique-admin-nav-active.js</code> (auto-loaded when <code>.admin-nav</code> is present): assigns <code>.is-active</code> to every <code>.admin-nav-link</code> pointing at the current URL, including its duplicate in the mobile bar. Skips links inside <code>.admin-nav-submenu</code> (those belong to <code>molique-admin-nav.js</code>). Do NOT write the active state into the markup — the script does it from the address.
+    </li>
+  <li><strong>Admin Nav — "More" drop-up (mobile):</strong> a SEPARATE pattern (Checkbox Hack) for overflow in the bar: <code>&lt;input type="checkbox" class="mobile-more-toggle"&gt;</code> + <code>&lt;label class="admin-nav-link mobile-more-label"&gt;</code> + <code>.admin-nav-dropdown-menu</code> (desktop <code>display:contents</code>, mobile a drawer from the bottom). There is NO <code>.admin-nav-dropdown</code> class on a <code>&lt;details&gt;</code>.
+    </li>
+  <li><strong>E-commerce:</strong>
+      <ul>
+        <li>Card: <code>.product-card</code> (add <code>.product-list-view</code> to the parent for a horizontal view — on the container SURROUNDING the cards, not on the card itself).</li>
+        <li>Product gallery: <code>.product-gallery</code> &gt; <code>.product-gallery-main</code> (main photo, <code>aspect-ratio: 1/1</code>) + <code>.product-gallery-thumbs</code> &gt; <code>.gallery-thumb</code> (a <code>&lt;button&gt;</code>, requires <code>&lt;img data-large="…"&gt;</code> — <code>js/modules/molique-shop.js</code>, auto-loaded when <code>.product-gallery</code> is present, takes the large photo from there on click). The module only wires up listeners, it does NOT set the initial state — mark the first thumbnail <code>.is-active</code> by hand, the rest <code>.opacity-50</code>. Placement variants: <code>.product-gallery-left</code> / <code>-right</code> — a thumbnail column beside the photo, ONLY from <code>md</code> up (below that: a default row underneath). DOM order stays fixed, <code>-left</code> only rearranges it visually via <code>order</code>.</li>
+        <li>Cart: <code>.cart-item</code> with a <code>.qty-input</code> controller &gt; exactly two <code>.qty-btn</code>s (JS uses <code>:first-child</code>/<code>:last-child</code> as minus/plus) + one <code>.qty-val</code> (<code>type="number"</code>, requires <code>min</code>, optionally <code>max</code>).</li>
+        <li>Selection tiles: <code>.selection-tile</code> &gt; a hidden input (not <code>display:none</code>) + <code>.tile-content</code> as a DIRECT sibling (<code>:checked + .tile-content</code>). The <code>.selection-tile-animated</code> variant works together with <code>.hover-border-trace</code>/<code>-2</code> on <code>.tile-content</code>.</li>
+        <li>Stars: <code>.star-rating</code> (controlled via <code>style="--rating: 4.5;"</code>, variables <code>--star-size</code>/<code>--star-color</code>/<code>--star-bg</code>).</li>
+        <li>Swatches: <code>.product-swatches</code> &gt; <code>.swatch</code> (color via inline <code>style="background-color:…"</code>, <code>.is-active</code> = a <code>--primary</code> outline).</li>
+      </ul>
+    </li>
+  <li><strong>Blog:</strong> <code>.post-card</code> (grid) + <code>.post-date-badge</code> (a date floating over the photo, requires <code>.post-image-wrapper</code> as a parent with <code>position: relative</code>). <code>.blog-post</code> (a classic list) + <code>.post-date</code> (a calendar column). NOTE: <code>.post-date-badge</code> and <code>.post-date</code> share the same child classes <code>.day</code>/<code>.month</code>, but with TWO different sets of styles — outside these two parents, <code>.day</code>/<code>.month</code> have no CSS at all. <code>.simple-post-list</code> (a sidebar widget) &gt; <code>.post-image</code> + <code>.post-info</code> + <code>.post-meta-date</code> — styled ONLY in this context; thumbnail size via <code>--post-thumb-size</code> (defaults to 60px). <code>.post-meta-date</code> is NOT the same as <code>.post-meta</code> (a row of links with icons) — a similar name, zero shared code. <code>.author-box</code> &gt; <code>.author-avatar</code> + <code>.author-info</code> (the parent for <code>.author-name</code>/<code>.author-role</code>/<code>.author-bio</code>).
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Typography &amp; Colors</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Size scale:</strong> <code>.text-1</code> through <code>.text-12</code> (a fluid <code>clamp()</code>). The base text size (paragraph size) is <code>.text-3</code>. Below the base: <code>.text-1</code> (12px) and <code>.text-2</code> (13px) — metadata, timeline dates. Above it: <code>.text-4</code>–<code>.text-8</code> match headings H5–H1, and <code>.text-9</code>–<code>.text-12</code> are hero sizes (up to 9rem). Microcopy: <code>.text-sm</code> (11px) and <code>.text-xs</code> (10px) — even smaller than <code>.text-1</code> (captions, legal fine print); <code>.text-base</code> returns to the base size.
+    </li>
+  <li><strong>Weights:</strong> <code>.fw-light</code>, <code>.fw-normal</code>, <code>.fw-medium</code>, <code>.fw-bold</code>, <code>.fw-black</code>.
+    </li>
+  <li><strong>Text/background colors:</strong> <code>.text-primary</code>, <code>.bg-surface</code>, <code>.bg-body</code>, <code>.bg-glass</code> (Glassmorphism).
+    </li>
+  <li><strong>Hover colors:</strong> <code>.bg-hover-*</code>, <code>.text-hover-*</code>, <code>.border-hover-*</code> (the full palette). NAMING SCHEME: <code>WHAT-hover-COLOR</code> — <code>text-hover-primary</code>, <code>bg-hover-danger</code>, <code>border-hover-success</code>. Never the other way around (<code>hover-text-primary</code> is a mistake; such classes were removed from the framework in 1.7.0). Do NOT add these to a <code>.btn</code> (a button has its own hover color from its variant, the rules would compete) — change <code>--&lt;color&gt;-hover</code> instead.
+    </li>
+  <li><strong>Button hover effects:</strong> the <code>hover-*</code> classes from the utilities module work on any element, including <code>.btn</code>. Safe ones: <code>.hover-scale</code>, <code>.hover-shadow</code>, <code>.hover-gpu-shadow</code>, <code>.hover-tilt</code>, <code>.hover-border-draw</code>, <code>.hover-border-trace</code> (the last two draw in their own <code>::before</code>, they don't touch the background). The <code>-2</code> variants (<code>.hover-border-draw-2</code>, <code>.hover-border-trace-2</code>) draw lines using gradients in the element's <code>background-image</code>: the button's background stays intact, but the line defaults to <code>--primary</code>, so it's invisible on <code>.btn-primary</code> — set <code>--hover-border-color</code>.
+    </li>
+  <li><strong>Icon lists:</strong> <code>.list-unstyled</code> and <code>.list-icons</code> + icon variant <code>.list-icons-check/-arrow/-cross</code> and color <code>.list-icons-success/-danger/-dark</code>.
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Animations, Effects &amp; Utilities (GPU)</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Entrances:</strong> <code>.animate.fade-in-up</code>, <code>.reveal-blur</code>, <code>.reveal-scale</code>.
+    </li>
+  <li><strong>Scroll Reveal:</strong> <code>.scroll-reveal</code> (uses <code>animation-timeline: view()</code>).
+    </li>
+  <li><strong>Hover:</strong> <code>.hover-spring</code>, <code>.hover-gpu-shadow</code>, <code>.hover-tilt</code> (static) or <code>.tilt-card</code> (dynamic, JS). Lighter variants: <code>.hover-scale</code>, <code>.hover-shadow</code>.
+    </li>
+  <li><strong>Text Effects:</strong> <code>.hover-text-wipe</code>, <code>.hover-underline</code>, <code>.text-highlight</code>, <code>.typewriter</code>, <code>.text-gradient-animated</code>, <code>.text-clip-bg</code>.
+    </li>
+  <li><strong>Borders (Rounded):</strong> <code>.hover-border-expand</code>, <code>.hover-border-spin</code>.
+    </li>
+  <li><strong>Borders (Sharp):</strong> <code>.hover-border-draw-2</code>, <code>.hover-border-trace-2</code>.
+    </li>
+  <li><strong>Border Color:</strong> Change the default color by adding <code>style="--hover-border-color: var(--danger);"</code>.
+    </li>
+  <li><strong>Background Video/Image:</strong> <code>.bg-video-container</code> &gt; <code>img.bg-video</code> (poster) + <code>video.bg-video</code>; the static variant <code>.bg-image-container</code> &gt; <code>.bg-image</code> (also <code>picture.bg-image</code>) — both with a default overlay.
+    </li>
+  <li><strong>Overlay (background darkening):</strong> parent <code>.has-overlay</code> + <code>.overlay</code>. <code>.overlay</code> alone already gives a 50% darkening — color (<code>.overlay-dark/-primary/-light</code>, <code>.bg-overlay</code> = black) and opacity (<code>.overlay-10</code> through <code>.overlay-90</code>) only change it. <code>.has-overlay</code> is REQUIRED: without it the overlay looks for context further up and spills outside the section.
+    </li>
+  <li><strong>Sections:</strong> a bare <code>&lt;section&gt;</code> already has a default vertical rhythm (<code>padding-block</code> = 48px top and bottom). There is NO <code>.section</code> class — the spacing is a property of the tag itself. Don't add <code>mb-5 pb-5</code>; set your own spacing with a utility class (<code>.py-4</code>, <code>.p-0</code>), which overrides the default.
+    </li>
+  <li><strong>Separator:</strong> a bare <code>&lt;hr&gt;</code>, zero classes — full width, <code>border-top: 1px solid var(--border-color)</code>, <code>margin-block</code> 16px. The reset is intentional: the browser's default <code>&lt;hr&gt;</code> has <code>margin-inline: auto</code>, which as a direct child of any flex container (e.g. <code>.card-body</code>) shrinks it to nearly nothing (cross-axis auto-margins beat <code>align-items: stretch</code>) — it looks like a dot. <code>width: 100%</code> + <code>margin-inline: 0</code> eliminates this for good.
+    </li>
+  <li><strong>Image Filters:</strong> <code>.filter-grayscale</code>, <code>.filter-blur</code>, <code>.filter-none</code> (removes the filter, e.g. from <code>.hover-filter-none</code>).
+    </li>
+  <li><strong>Borders:</strong> <code>.border</code>, <code>.border-0</code>, <code>.border-top</code>, <code>.border-bottom</code>, <code>.border-start</code>, <code>.border-end</code>.
+    </li>
+  <li><strong>Rounding (Radius):</strong> <code>.rounded-0</code> through <code>.rounded-5</code>, <code>.rounded-circle</code>, <code>.rounded-pill</code>, <code>.rounded-top-0</code>, <code>.rounded-bottom-0</code>.
+    </li>
+  <li><strong>Animated background blobs:</strong> <code>.bg-blobs</code> — two blurred, organic blobs (primary + info) floating in a container's background. The background follows the theme. The <code>.bg-blobs-deep</code> variant is ALWAYS DARK, even in light mode (like <code>.navbar-pill</code>) — white text works on it without checking the theme. Color via <code>--blobs-deep-bg</code> (defaults to <code>#0F172A</code>); do NOT use <code>var(--bg-body)</code> or <code>var(--dark)</code> there, since they invert in dark mode. Controlled via VARIABLES, not classes (color and speed are continuous values): <code>--blob-1</code> / <code>--blob-2</code> (blob colors), <code>--blob-speed</code> (the first one's cycle; the second computes its own as <code>×1.3</code>, so a single value speeds up both while keeping their cycles offset). Typically used under <code>.bg-glass</code> (the glass needs something to blur). The shape is static (<code>border-radius</code> isn't animatable without reflow), motion comes only from a rotating <code>transform</code>. Turns off under <code>prefers-reduced-motion</code>.
+    </li>
+  <li><strong>Grid Expand (smooth accordion):</strong> <code>.grid-expand</code> &gt; <code>.grid-expand-inner</code> (wraps the content; without it there's nothing for <code>overflow:hidden</code> to clip). Animates <code>grid-template-rows: 0fr → 1fr</code>. Three triggers: <code>.is-open</code> (manually, from JS), <code>details[open]</code> (a native <code>&lt;details&gt;</code>), <code>.form-switch:has(.form-switch-input:checked) + .grid-expand</code> (the switch must be a sibling RIGHT BEFORE it, not inside the same <code>&lt;label&gt;</code>). All zero-JS.
+    </li>
+  <li><strong>Other Helpers:</strong> <code>.parallax-container</code> (scroll-driven), <code>.bg-gradient-corners</code> (a glow), <code>.stacking-container</code> &gt; <code>.section-stacked</code>, <code>.embed-responsive</code> (for YouTube/Vimeo video).
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Widgets (Opt-in)</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Carousels:</strong> <code>.carousel</code> &gt; <code>.carousel-track</code> &gt; <code>.carousel-slide</code> (width via its own <code>min-width</code>). Arrows are optional; dots <code>.carousel-dots</code>/<code>.carousel-dot.is-active</code> are generated by the script itself when there's more than 1 slide. The <code>.carousel-bg-sync</code> variant (+ <code>.carousel-bg-overlay</code>) changes the container's background to the visible slide's <code>data-bg</code> via the same <code>IntersectionObserver</code>; arrows are only visible on hover.
+    </li>
+  <li><strong>Lightbox:</strong> <code>&lt;a href="large.jpg" data-lightbox data-gallery="gallery"&gt;</code> — that's all you write. The script builds the whole modal itself (<code>.lightbox-overlay</code>/<code>.lightbox-close</code>/<code>.lightbox-nav</code>/…) at the end of <code>&lt;body&gt;</code> — don't write those classes by hand. Keyboard inside the open modal: <code>←</code>/<code>→</code> switches photos, <code>Esc</code> closes it, focus goes to <code>.lightbox-close</code> on open and returns to the trigger on close.
+    </li>
+  <li><strong>Portfolio Filters:</strong> <code>.nav-filters</code> (buttons with <code>data-filter</code>, <code>"all"</code> = everything) requires a <code>.filter-item</code>/<code>data-category</code> container as a direct <code>nextElementSibling</code> — nothing in between. The script assigns <code>.is-hidden</code>/<code>.is-animated</code>.
+    </li>
+  <li><strong>Reading Progress Bar:</strong> <code>.progress-container-fixed</code> &gt; <code>.progress-bar-reading</code>, right after <code>&lt;body&gt;</code>. Handled permanently in the <code>molique-script.js</code> core, not in the autoloader.
+    </li>
+  <li><strong>Before / After:</strong> <code>.before-after-slider</code> &gt; <code>.img-after</code> (the bottom layer, sets the height) + <code>.img-before</code> (clipped via <code>clip-path</code> based on <code>--position</code>) + <code>.slider-control</code> (an invisible <code>input[range]</code>) + <code>.slider-line</code>/<code>.slider-handle</code>. The two photos should share the same aspect ratio.
+    </li>
+  <li><strong>Magnetic Button:</strong> <code>.btn-magnetic</code> — zero CSS, the effect is an inline <code>transform</code> from JS on <code>mousemove</code>. Only <code>(pointer: fine)</code>.
+    </li>
+  <li><strong>Speed Dial:</strong> <code>.speed-dial</code> (always <code>bottom/right: 30px</code>, no corner variant) &gt; <code>.speed-dial-main</code> + <code>.speed-dial-actions</code> &gt; <code>.speed-dial-action</code>. Expands on <code>:hover</code>/<code>:focus-within</code> — zero JS.
+    </li>
+  <li><strong>Sharing:</strong> <code>.share-bar</code> &gt; <code>.share-btn[data-network]</code> (facebook/twitter/linkedin/whatsapp/native — native is the Web Share API, no support = a blocking <code>alert()</code>).
+    </li>
+  <li><strong>Back to Top:</strong> <code>.scroll-to-top</code> (also <code>bottom/right: 30px</code> — COLLIDES with <code>.speed-dial</code> on the same page) + <code>.is-visible</code> (added by the molique-script.js core after 400px of scroll).
+    </li>
+  <li><strong>Table Search:</strong> <code>input[data-search-target="#id"]</code> filters the <code>#id</code> rows live (an auto-loaded module). <code>.cheat-sheet-category</code> hides itself automatically when nothing beneath it matches.
+    </li>
+</ul>
+<h3 class="text-6 fw-bold mb-2 mt-4">Charts (Data Viz - Progressive Enhancement)</h3>
+<ul class="text-secondary mb-4">
+  <li><strong>Principle:</strong> Charts are built as an HTML/CSS/SVG fallback.
+    </li>
+  <li><strong>Passing data:</strong> Values are passed from the backend ONLY through CSS variables: <code>style="--val: 75%;"</code>.
+    </li>
+  <li><strong>Structure:</strong> <code>.r-chart-wrapper</code> (add <code>.chart-micro</code> for small charts) &gt; <code>.chart-sparkline</code> / <code>.chart-radial</code> / <code>.chart-heatmap</code> / <code>.chart-area</code> / <code>.chart-pie</code>.
+    </li>
+  <li><strong>Funnels:</strong> <code>.chart-funnel</code> (vertical), <code>.chart-pipeline</code> (horizontal), <code>.chart-funnel-true</code> (classic trapezoid).
+    </li>
+  <li><strong>Chart Navigation (segmented range switcher):</strong> <code>.chart-nav</code> &gt; <code>&lt;label class="chart-nav-item"&gt;</code> &gt; <code>&lt;input type="radio" name="…"&gt;</code> + <code>&lt;span class="nav-label"&gt;</code>. State is held by the radio, switching works without JS. The radio is hidden with the <code>clip</code> technique (NOT <code>display: none</code>), so the group stays operable with arrow keys; the focus ring lands on <code>.nav-label</code>.
+    </li>
+</ul>
+<h2 class="text-8 fw-bold mb-3 mt-5">3. JAVASCRIPT ARCHITECTURE</h2>
+<ul class="text-secondary mb-4">
+  <li><strong>Autoloader:</strong> The main <code>molique-script.js</code> file scans the DOM and asynchronously fetches micro-modules from <code>js/modules/</code> (e.g. <code>carousel.js</code>, <code>lightbox.js</code>) only when the matching component exists on the page.
+    </li>
+  <li><strong>Vanilla JS:</strong> jQuery is completely forbidden.
+    </li>
+  <li><strong>File names always carry the <code>molique-</code> prefix</strong> — applies to everything that ends up in someone else's project: the core (<code>molique-script.js</code>), JS modules (<code>js/modules/molique-*.js</code>), CSS bundles (<code>css/molique-style*.css</code>), and configurator chunks (<code>dist/chunks/molique-*.css</code>). This lets sync scripts overwrite only the framework's own files. The chunk name is assigned by <code>tools/gen-chunks.js</code> and written into the manifest — the configurator reads it from there.
+    </li>
+  <li><strong>NEVER concatenate class names dynamically</strong> (<code>'toast-' + type</code>, <code>`col-span-${n}`</code>) — such a name doesn't exist as a literal in the source, so neither PurgeCSS nor the safelist generator can see it. Use a literal map instead: <code>const T = { success: 'toast-success', … }</code> + <code>T[type] || T.info</code>.
+    </li>
+  <li><strong>States always as <code>.is-*</code></strong> (<code>is-active</code>, <code>is-hidden</code>, <code>is-selected</code>) — the convention the safelist pattern relies on.
+    </li>
+</ul>
+<h2 class="text-8 fw-bold mb-3 mt-5">4. PURGE / CSS SIZE</h2>
+<ul class="text-secondary mb-4">
+  <li><strong>Modules first, purge second:</strong> choosing bundles (admin, shop, blog…) is a risk-free reduction; PurgeCSS comes only after that.
+    </li>
+  <li><strong>Safelist:</strong> the package includes <code>purgecss.safelist.cjs</code>. <code>safelist: molique.runtime</code> = the minimum (classes added by JS). <code>molique.merge('status','grid')</code> when the backend concatenates class names (e.g. <code>badge-&lt;?= $status ?&gt;</code>). Without the safelist you lose, among others, <code>.is-*</code>, <code>toast-*</code>, <code>lightbox-*</code>, <code>@keyframes toastProgressAnim</code>.
+    </li>
+  <li><strong>Never <code>variables: true</code></strong> — the whole theme rests on CSS variables. Effect on a real page: 277 KB → 68 KB (−75%).
+    </li>
+</ul>
