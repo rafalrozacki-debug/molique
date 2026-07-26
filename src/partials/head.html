@@ -1,6 +1,14 @@
 <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Preload obrazu tla hero (LCP na stronach, ktore go maja) - ustawiane
+         per-strona przez <include locals='{"heroImage":"..."}'>. Tlo jest
+         w CSS (background: url(...)), wiec bez tego przegladarka odkrywa
+         ten zasob dopiero po sparsowaniu CSSOM; preload + fetchpriority=high
+         (fetchpriority nie dziala na tle CSS bezposrednio) daje mu
+         pierwszenstwo od razu. -->
+    <if condition="heroImage"><link rel="preload" as="image" href="{{ heroImage }}" fetchpriority="high" />
+    </if>
     <!-- Zapobiega FOUC (flash of unstyled content): ustawia motyw i
          szerokosc sidebara PRZED pierwszym renderowaniem, zamiast czekac
          na DOMContentLoaded w molique-script.js (ktory i tak dalej
@@ -26,16 +34,18 @@
     <title>{{ title }}</title>
     <if condition="description"><meta name="description" content="{{ description }}" />
     </if><meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#0284C7" />
+    <meta name="theme-color" content="#5145E5" />
 
-    <!-- i18n: warianty jezykowe tej strony. __altEn/__altDe sa null, gdy
+    <!-- i18n: warianty jezykowe tej strony. __hasEn/__hasDe sa false, gdy
          plik-tlumaczenie jeszcze nie istnieje w src/ (patrz computeI18nLocals
          w vite.config.js) - wtedy <if> pomija dany hreflang, zamiast wskazywac
-         wyszukiwarce na nieistniejacy adres. -->
-    <link rel="alternate" hreflang="pl" href="{{ __altPl }}" />
-    <if condition="__hasEn"><link rel="alternate" hreflang="en" href="{{ __altEn }}" />
-    </if><if condition="__hasDe"><link rel="alternate" hreflang="de" href="{{ __altDe }}" />
-    </if><link rel="alternate" hreflang="x-default" href="{{ __altPl }}" />
+         wyszukiwarce na nieistniejacy adres. Bezwzgledne __hreflangXx (nie
+         wzgledne __altXx uzywane w przelaczniku jezyka navbaru) - Google
+         odrzuca wzgledne wartosci hreflang. -->
+    <link rel="alternate" hreflang="pl" href="{{ __hreflangPl }}" />
+    <if condition="__hasEn"><link rel="alternate" hreflang="en" href="{{ __hreflangEn }}" />
+    </if><if condition="__hasDe"><link rel="alternate" hreflang="de" href="{{ __hreflangDe }}" />
+    </if><link rel="alternate" hreflang="x-default" href="{{ __hreflangPl }}" />
 
     <!-- Favicony. Ścieżki WZGLĘDNE, tak jak reszta zasobów (vite base: './') —
          strona ma działać spod dowolnego katalogu hostingu, a build jest
@@ -49,4 +59,4 @@
     <link rel="preload" href="fonts/inter-v20-latin_latin-ext-regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="fonts/inter-v20-latin_latin-ext-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="fonts/poppins-v24-latin_latin-ext-700.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="css/molique-style.css" />
+    <link rel="stylesheet" href="css/molique-style.css?v={{ __version }}" />

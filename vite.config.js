@@ -192,6 +192,20 @@ function toPrettyUrl(base, locale) {
   return locale ? `${base}.${locale}` : base;
 }
 
+// Jedyne zrodlo prawdy dla domeny produkcyjnej - to samo SITE_URL co w
+// tools/gen-sitemap.js. hreflang MUSI byc bezwzgledny (Google Search Console
+// odrzuca wzgledne wartosci - patrz audyt Lighthouse "hreflang"), w
+// odroznieniu od __altPl/__altEn/__altDe uzywanych w przelaczniku jezyka w
+// navbarze, ktore musza zostac wzgledne (dzialaja spod dowolnego katalogu).
+const SITE_URL = 'https://molique.rozacki.com';
+function toAbsoluteUrl(base, locale) {
+  // Strona glowna dostaje sam korzen domeny (bez segmentu "index") - ta sama
+  // zasada co w tools/gen-sitemap.js, zeby hreflang zgadzal sie z adresami
+  // faktycznie promowanymi w sitemap.xml.
+  const segment = base === 'index' ? (locale ? `index.${locale}` : '') : toPrettyUrl(base, locale);
+  return `${SITE_URL}/${segment}`;
+}
+
 function computeI18nLocals(filename) {
   const file = basename(filename);
   const match = file.match(/^(.+?)(?:\.(en|de))?\.html$/);
@@ -217,6 +231,11 @@ function computeI18nLocals(filename) {
     __altDe: hasDe ? altDeFile : altPl,
     __hasEn: hasEn,
     __hasDe: hasDe,
+    // Bezwzgledne adresy WYLACZNIE do <link rel="alternate" hreflang="...">
+    // w head.html - nigdzie indziej (nawigacja zostaje wzgledna).
+    __hreflangPl: toAbsoluteUrl(base, null),
+    __hreflangEn: toAbsoluteUrl(base, 'en'),
+    __hreflangDe: toAbsoluteUrl(base, 'de'),
     // Domyslne warianty paczek (min bez fontow / src bez fontow) w jezyku
     // TEJ strony - patrz PACKAGE_SIZES wyzej. Uzywane jako startowa etykieta
     // "~X KB" na download.html/.en/.de, zanim download.js w ogole sie odpali.
@@ -247,6 +266,7 @@ function moliqueInclude() {
         // w prozie stron.
         const locals = {
           description: '',
+          heroImage: '',
           __version: APP_VERSION,
           __moduleCount: MODULE_COUNT,
           __globalVarsCount: VARS_COUNTS.global,

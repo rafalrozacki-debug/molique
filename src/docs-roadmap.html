@@ -45,11 +45,11 @@
       <div class="container">
         <div class="grid grid-cols-12 gap-4">
           <div class="col-span-12 col-md-span-6 stat-card text-center">
-            <div class="stat-value">33</div>
+            <div class="stat-value">38</div>
             <div class="stat-title">Pomysłów na liście</div>
           </div>
           <div class="col-span-12 col-md-span-6 stat-card text-center">
-            <div class="stat-value">10</div>
+            <div class="stat-value">11</div>
             <div class="stat-title">Kategorii tematycznych</div>
           </div>
         </div>
@@ -63,27 +63,30 @@
       <div class="container" style="max-width: 900px">
         <div class="d-flex flex-wrap justify-content-center gap-2">
           <a href="#nawigacja" class="btn btn-sm btn-outline-primary"
-            >🧭 Nawigacja</a
+            ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-compass"></use></svg> Nawigacja</a
           >
           <a href="#formularze" class="btn btn-sm btn-outline-primary"
-            >📝 Formularze</a
+            ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-note-pencil"></use></svg> Formularze</a
           >
           <a href="#przyciski" class="btn btn-sm btn-outline-primary"
-            >🔘 Przyciski</a
+            ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-radio-button"></use></svg> Przyciski</a
           >
           <a href="#komponenty" class="btn btn-sm btn-outline-primary"
-            >🧩 Komponenty</a
+            ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-puzzle-piece"></use></svg> Komponenty</a
           >
           <a href="#feedback" class="btn btn-sm btn-outline-primary"
-            >💬 Feedback</a
+            ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-chat-circle"></use></svg> Feedback</a
           >
-          <a href="#efekty" class="btn btn-sm btn-outline-primary">✨ Efekty</a>
+          <a href="#efekty" class="btn btn-sm btn-outline-primary"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-sparkle"></use></svg> Efekty</a>
           <a href="#wykresy" class="btn btn-sm btn-outline-primary"
-            >📊 Wykresy</a
+            ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-chart-bar"></use></svg> Wykresy</a
           >
-          <a href="#sklep" class="btn btn-sm btn-outline-primary">🛒 Sklep</a>
-          <a href="#admin" class="btn btn-sm btn-outline-primary">🛠️ Admin</a>
-          <a href="#dx" class="btn btn-sm btn-outline-primary">🧑‍💻 Narzędzia</a>
+          <a href="#sklep" class="btn btn-sm btn-outline-primary"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-shopping-cart"></use></svg> Sklep</a>
+          <a href="#admin" class="btn btn-sm btn-outline-primary"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-wrench"></use></svg> Admin</a>
+          <a href="#dx" class="btn btn-sm btn-outline-primary"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-laptop"></use></svg> Narzędzia</a>
+          <a href="#natywne" class="btn btn-sm btn-outline-primary"
+            ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dna"></use></svg> Natywne znaczniki</a
+          >
         </div>
       </div>
     </section>
@@ -419,6 +422,61 @@
                 komponentów (<code>.navbar</code>, <code>.card</code> itd.)
                 zostaje bez zmian — tam nie ma eksplozji kombinatorycznej,
                 którą trzeba by ciąć.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 11. NATYWNE ZNACZNIKI BEZ KLAS -->
+        <section id="natywne" class="mb-0">
+          <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
+            <span class="badge badge-secondary text-3">Natywne</span>
+            Natywne znaczniki bez klas
+            <span class="badge badge-secondary text-3 ml-auto">5</span>
+          </h2>
+          <p class="text-muted mb-3">
+            Miejsca, w których sam znacznik HTML — bez żadnej klasy —
+            zyskałby na wyglądzie przez samo użycie molique, tak jak dziś
+            działa to już z gołym <code>&lt;hr&gt;</code> czy inline
+            <code>&lt;code&gt;</code>.
+          </p>
+          <div class="card p-4">
+            <ul class="text-secondary m-0">
+              <li>
+                <strong
+                  ><code>&lt;dialog&gt;</code> i <code>[popover]</code> bez
+                  klasy</strong
+                >
+                — dziś pełny wygląd (wyśrodkowanie, cień, animacja) dostają
+                tylko jako <code>.lightbox-overlay</code>,
+                <code>.modal-dialog</code> czy <code>.dropdown-menu</code>;
+                goły znacznik renderuje się surowym stylem przeglądarki.
+              </li>
+              <li>
+                <strong><code>&lt;progress&gt;</code> i <code>&lt;meter&gt;</code></strong>
+                — przemalowanie natywnych znaczników (kolor z
+                <code>--primary</code>, zaokrąglenie) jako uzupełnienie
+                własnych <code>.progress</code>/<code>.stock-bar</code> na
+                divach.
+              </li>
+              <li>
+                <strong><code>&lt;fieldset&gt;</code>/<code>&lt;legend&gt;</code></strong>
+                — reset toporowego domyślnego obramowania przeglądarki na
+                spójny z <code>--border-color</code>, zaokrąglony.
+              </li>
+              <li>
+                <strong><code>&lt;blockquote&gt;</code></strong> (bez
+                wariantu) — od razu przyzwoity wygląd zamiast surowego
+                wcięcia przeglądarki.
+              </li>
+              <li>
+                <strong
+                  ><code>&lt;dl&gt;</code>/<code>&lt;dt&gt;</code>/<code
+                    >&lt;dd&gt;</code
+                  ></strong
+                >
+                — listy definicji pod specyfikacje i metadane, dziś średnio
+                wyglądające domyślnie.
               </li>
             </ul>
           </div>

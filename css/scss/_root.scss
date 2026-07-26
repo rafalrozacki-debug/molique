@@ -14,70 +14,76 @@
      Deklaracja naprawia też natywne scrollbary i kontrolki formularzy. */
   color-scheme: light;
 
-  /* Fonty z systemowym fallbackiem */
-  --font-family-base: 'FontBody', system-ui, -apple-system, sans-serif;
+  /* Fonty z systemowym fallbackiem. Baza i nagłówki obie na FontHeading
+     (Poppins) - v2 design refresh (patrz artefakt "Modernizacja Molique
+     Design System"). FontBody (Inter) zostaje zadeklarowany w _fonts.scss
+     (uzytkownik moze go dalej uzyc recznie), ale nic domyslnie juz na niego
+     nie wskazuje. */
+  --font-family-base: 'FontHeading', system-ui, -apple-system, sans-serif;
   --font-family-heading: 'FontHeading', system-ui, -apple-system, sans-serif;
 
-  /* NOWA PALETA BAZOWA (Nowoczesne B2B) */
-  --primary: #0284C7;
-  --primary-hover: #0369A1;
+  /* PALETA v2 - Indygo jako brand, chlodniejszy neutral (Modernizacja 2026) */
+  --primary: #5145E5;
+  --primary-hover: #3D31CE;
   --light: #F9F9F9;
-  --dark: #1E293B;
-  
-  --secondary: #64748B;
-  --secondary-hover: #475569;
-  --success: #10B981;
-  --success-hover: #059669;
-  --danger: #EF4444;
-  --danger-hover: #DC2626;
-  --warning: #F59E0B;
-  --warning-hover: #D97706;
-  --info: #0EA5E9;
-  --info-hover: #0284C7;
+  --dark: #14162B;
+
+  --secondary: #696D8F;
+  --secondary-hover: #4E5273;
+  --success: #12B76A;
+  --success-hover: #039855;
+  --danger: #F04438;
+  --danger-hover: #D92D20;
+  --warning: #F79009;
+  --warning-hover: #DC6803;
+  --info: #2E90FA;
+  --info-hover: #1570EF;
 
   /* Kolory tła i tekstu */
-  --bg-body: #F1F5F9; /* Delikatny szary podkład pod panele */
+  --bg-body: #F5F6FC; /* Chlodny neutral pod panele */
   --bg-surface: #FFFFFF; /* Czysta biel dla kart i głównych kontenerów */
   --text-main: var(--dark);
   --text-muted: var(--secondary);
-  --border-color: #E2E8F0;
-  
+  --border-color: #E7E8F2;
+
   /* ZMIENNE SIDEBARA ADMINA.
      UWAGA: sidebar jest ZAWSZE ciemny (--sidebar-bg nie zmienia się
      w dark mode), więc jego jasne akcenty muszą być literalne — NIE
      wolno tu używać var(--light) / var(--light-rgb), bo dark mode
      odwraca te zmienne (jasny → ciemny) i tekst oraz podświetlenia
-     znikają na ciemnym tle sidebara. */
-  --sidebar-bg: #102E4A;
+     znikają na ciemnym tle sidebara. sidebar-bg jest teraz polprzezroczysty
+     (rgba, "szklany" v2 - patrz artefakt), stad zalezy od --sidebar-rgb
+     ponizej zamiast literalnego hexa. */
+  --sidebar-bg: rgba(var(--sidebar-rgb), 0.92);
   --sidebar-submenu-bg: #52677D;
-  --sidebar-text: #94A3B8;
-  --sidebar-text-active: #F9F9F9;
+  --sidebar-text: #A9ADCB;
+  --sidebar-text-active: #FFFFFF;
   /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
      logo) — niezależne od motywu, w przeciwieństwie do --light-rgb */
   --sidebar-highlight-rgb: 249, 249, 249;
-  
+
   /* Rozmiary Sidebara */
   --sidebar-width-lg: 280px;
   --sidebar-width-md: 100px;
   --sidebar-width-sm: 72px;
 
   /* Kolory RGB do przezroczystości (Muszą odpowiadać kolorom HEX wyżej!) */
-  --primary-rgb: 2, 132, 199;     /* #0284C7 */
-  --secondary-rgb: 100, 116, 139; /* #64748B */
-  --success-rgb: 16, 185, 129;    /* #10B981 */
-  --danger-rgb: 239, 68, 68;      /* #EF4444 */
-  --warning-rgb: 245, 158, 11;    /* #F59E0B */
-  --info-rgb: 14, 165, 233;       /* #0EA5E9 */
-  
-  --dark-rgb: 30, 41, 59;         /* #1E293B */
-  --light-rgb: 249, 249, 249;     /* #F9F9F9 */
-  --body-rgb: 241, 245, 249;      /* #F1F5F9 */
-  --bg-surface-rgb: 255, 255, 255; /* #FFFFFF - kanały --bg-surface, używane przez .bg-glass */
-  --sidebar-rgb: 16, 46, 74;      /* #102E4A */
+  --primary-rgb: 81, 69, 229;     /* #5145E5 */
+  --secondary-rgb: 105, 109, 143; /* #696D8F */
+  --success-rgb: 18, 183, 106;    /* #12B76A */
+  --danger-rgb: 240, 68, 56;      /* #F04438 */
+  --warning-rgb: 247, 144, 9;     /* #F79009 */
+  --info-rgb: 46, 144, 250;       /* #2E90FA */
 
-  --btn-text-light: var(--light);
+  --dark-rgb: 20, 22, 43;         /* #14162B */
+  --light-rgb: 249, 249, 249;     /* #F9F9F9 */
+  --body-rgb: 245, 246, 252;      /* #F5F6FC */
+  --bg-surface-rgb: 255, 255, 255; /* #FFFFFF - kanały --bg-surface, używane przez .bg-glass */
+  --sidebar-rgb: 20, 22, 43;      /* = --dark-rgb - sidebar "szklany" v2 nad tlem strony */
+
+  --btn-text-light: #FFFFFF;
   --btn-text-dark: var(--dark);
-  --card-bg-subtle: rgba(var(--dark-rgb), 0.03);
+  --card-bg-subtle: rgba(var(--dark-rgb), 0.035);
 
   /* BLOKI KODU. Ciemne w OBU motywach (tak wygląda kod wszędzie), ale
      wartość NIE może być zahardkodowana: w dark mode --bg-surface to
@@ -94,9 +100,9 @@
   --grid-gap: calc(var(--spacing-unit) * 3);
 
   /* Inne */
-  --border-radius: 8px;
-  --border-radius-lg: 16px;
-  --transition-speed: 0.2s;      /* Baza */
+  --border-radius: 14px;
+  --border-radius-lg: 28px;
+  --transition-speed: 0.22s;      /* Baza */
   --transition-speed-fast: 0.15s;
   --transition-speed-slow: 0.3s;
   --transition-speed-slower: 0.4s;
@@ -148,10 +154,11 @@
      dokładnie pod paskiem i wypełnia resztę okna. */
   --navbar-h: 76px;
 
-  /* Cienie i Poświaty */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* Cienie i Poświaty - v2: wielowarstwowe, barwione --dark-rgb zamiast
+     czystej czerni (spojne z chlodniejszym neutralem calej palety) */
+  --shadow-sm: 0 1px 2px rgba(var(--dark-rgb), 0.05), 0 4px 10px -2px rgba(var(--dark-rgb), 0.05);
+  --shadow-md: 0 2px 4px rgba(var(--dark-rgb), 0.04), 0 14px 30px -8px rgba(var(--dark-rgb), 0.12);
+  --shadow-lg: 0 40px 80px -32px rgba(var(--dark-rgb), 0.28), 0 12px 24px -8px rgba(var(--dark-rgb), 0.08);
 
   /* Nakladki pelnoekranowe (lightbox, offcanvas, popover) - zawsze czarne,
      niezaleznie od motywu (jak cienie wyzej). Kazdy komponent zachowuje
@@ -195,51 +202,66 @@
      kontrolki, kalendarz date-pickera) podążają za ciemnym motywem */
   color-scheme: dark;
 
-  /* 1. Kolory strukturalne (Odwrócenie) */
-  --bg-body: #0F172A; /* Bardzo ciemny granat/szary (nie czysty czarny!) */
-  --bg-surface: #1E293B; /* Nieco jaśniejszy od body (tworzy głębię kart) */
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --border-color: #334155;
+  /* 1. Kolory strukturalne (v2 - blisko czerni, ciepla/fioletowa, nie
+     czysty czarny ani stary granat) */
+  --bg-body: #0A0B14;
+  --bg-surface: #141629; /* Nieco jaśniejszy od body (tworzy głębię kart) */
+  --text-main: #ECEDF8;
+  --text-muted: #9BA0C4;
+  --border-color: #262A48;
 
-  /* 2. Kolory semantyczne (Rozjaśnione i odsycone dla czytelności na ciemnym) */
-  --primary: #38BDF8;       /* Jaśniejszy niebieski */
-  --primary-hover: #7DD3FC;
-  
-  --secondary: #94A3B8;     /* Jaśniejszy szary */
-  --secondary-hover: #CBD5E1;
-  
-  --success: #34D399;       /* Pastelowy zielony */
-  --success-hover: #6EE7B7;
-  
-  --danger: #F87171;        /* Pastelowy czerwony (nie razi w oczy) */
-  --danger-hover: #FCA5A5;
-  
-  --warning: #FBBF24;       /* Jasny pomarańczowy/żółty */
-  --warning-hover: #FCD34D;
-  
-  --info: #38BDF8;
-  --info-hover: #7DD3FC;
+  /* 2. Kolory semantyczne v2 (rozjasnione warianty indygo/success/danger itd. */
+  --primary: #8B84FF;
+  --primary-hover: #A5A0FF;
 
-  /* Zmienne semantyczne odwrócone */
-  --light: #1E293B; /* W dark mode 'light' staje się ciemny */
-  --dark: #F8FAFC;  /* W dark mode 'dark' staje się jasny */
+  --secondary: #8E93B5;
+  --secondary-hover: #A9AECB;
+
+  --success: #32D583;
+  --success-hover: #6CE9A6;
+
+  --danger: #FF7A72;
+  --danger-hover: #FFA39D;
+
+  --warning: #FDB022;
+  --warning-hover: #FEC84B;
+
+  --info: #63A8FF;
+  --info-hover: #8EC2FF;
+
+  /* Zmienne semantyczne odwrócone - light w dark mode = bg-surface (ta sama
+     zaleznosc co przed v2, tylko z nowymi wartosciami) */
+  --light: #141629;
+  --dark: #ECEDF8;
 
   /* 3. Wartości RGB dla Dark Mode (Kluczowe dla klas -subtle i focus ringów!) */
-  --primary-rgb: 56, 189, 248;
-  --secondary-rgb: 148, 163, 184;
-  --success-rgb: 52, 211, 153;
-  --danger-rgb: 248, 113, 113;
-  --warning-rgb: 251, 191, 36;
-  --info-rgb: 56, 189, 248;
-  
-  --dark-rgb: 248, 250, 252;
-  --light-rgb: 15, 23, 42;
-  --body-rgb: 15, 23, 42;
-  --bg-surface-rgb: 30, 41, 59;
-  --sidebar-rgb: 15, 23, 42;
+  --primary-rgb: 139, 132, 255;
+  --secondary-rgb: 142, 147, 181;
+  --success-rgb: 50, 213, 131;
+  --danger-rgb: 255, 122, 114;
+  --warning-rgb: 253, 176, 34;
+  --info-rgb: 99, 168, 255;
 
-  /* Ciemniej niż --bg-surface (#1E293B) i niż --bg-body (#0F172A),
+  --dark-rgb: 236, 237, 248;
+  --light-rgb: 20, 22, 41;
+  --body-rgb: 10, 11, 20;
+  --bg-surface-rgb: 20, 22, 41;
+  /* Sidebar NIE zmienia sie w dark mode (patrz UWAGA przy --sidebar-bg w
+     :root) - to samo --sidebar-rgb co w light, zeby rgba(var(--sidebar-rgb))
+     dalo dokladnie ten sam kolor niezaleznie od motywu strony. */
+  --sidebar-rgb: 20, 22, 43;
+
+  --btn-text-light: #0A0B14;
+
+  /* Cienie v2 w dark mode: czysta czern (nie barwione --dark-rgb jak w
+     light) - na ciemnym tle barwiony cien jest niewidoczny/bez sensu. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.5), 0 16px 34px -10px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 44px 90px -34px rgba(0, 0, 0, 0.85), 0 14px 28px -10px rgba(0, 0, 0, 0.5);
+
+  --card-bg-subtle: rgba(255, 255, 255, 0.05);
+
+  /* Ciemniej niż --bg-surface (#141629) i niż --bg-body (#0A0B14),
      żeby blok kodu odcinał się od obu. */
-  --code-bg: #060B16;
+  --code-bg: #05060C;
 }

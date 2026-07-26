@@ -136,7 +136,12 @@
       /* Wracamy do bezpiecznego ukrywania, bo sidebar sam będzie rósł */
       overflow-y: auto;
       overflow-x: hidden;
-      /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie */
+      /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie.
+         Świadome odstępstwo od reguły GPU-only (transform/opacity):
+         animowanie width wywołuje reflow, ale to jednorazowa, inicjowana
+         kliknięciem zmiana (przełącznik szerokości), nie ciągła/zapętlona
+         animacja - koszt jest jednorazowy, nie per-klatkowy. Ten sam
+         kompromis co .progress-bar/.progress-bar-reading w _progress.scss. */
       width: var(--current-sidebar-width);
       transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
       /* Elegancki scrollbar */
@@ -259,7 +264,7 @@
       height: 14px;
       position: relative;
       display: inline-block;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
     }
     .sidebar-toggle-icon span {
       position: absolute;
@@ -267,7 +272,7 @@
       height: 2px;
       background-color: currentColor;
       border-radius: 2px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
       width: 100%;
     }
     .sidebar-toggle-icon {
@@ -349,7 +354,7 @@
         font-size: 1.25rem;
         font-weight: var(--fw-black);
         background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         margin: 0 !important;
       }
     }
@@ -381,7 +386,7 @@
         font-size: 1.25rem;
         font-weight: var(--fw-black);
         background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         margin: 0 !important;
       }
     }
@@ -609,7 +614,7 @@
         /* FIX: Zamiast display: none, ukrywamy szufladę pod ekranem! */
         visibility: hidden;
         transform: translateY(100%);
-        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s;
+        transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1), visibility var(--transition-speed-slow);
       }
       .admin-nav-dropdown-menu .admin-nav-link {
         flex-direction: row;

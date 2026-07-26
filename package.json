@@ -4,25 +4,27 @@
   "description": "Ultralekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez zależności (zero jQuery).",
   "main": "index.js",
   "scripts": {
-    "predev": "node tools/gen-chunks.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js",
+    "predev": "node tools/gen-chunks.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js && node tools/gen-icon-sprite.js",
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "node tools/gen-sitemap.js",
+    "postbuild": "node tools/gen-sitemap.js && node tools/minify-css.js",
     "preview": "vite preview",
     "gen:chunks": "node tools/gen-chunks.js",
     "gen:variables": "node tools/gen-variables-doc.js",
     "gen:llms-page": "node tools/gen-llms-page.js",
     "gen:sitemap": "node tools/gen-sitemap.js",
+    "gen:minify-css": "node tools/minify-css.js",
+    "gen:icons": "node tools/gen-icon-sprite.js",
     "sync:version": "node tools/sync-version.js",
-    "prebuild": "node tools/gen-chunks.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js"
+    "prebuild": "node tools/gen-chunks.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js && node tools/gen-icon-sprite.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rafalrozacki-debug/molique.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["css", "framework", "b2b", "css-framework", "dark-mode"],
+  "author": "Rafał Różacki",
+  "license": "Apache-2.0",
   "type": "module",
   "bugs": {
     "url": "https://github.com/rafalrozacki-debug/molique/issues"

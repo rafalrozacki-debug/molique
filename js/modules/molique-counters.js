@@ -7,7 +7,7 @@ if (counters.length > 0) {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const counter = entry.target;
-        const target = parseFloat(counter.getAttribute('data-target'));
+        const target = parseFloat(counter.textContent);
         const duration = 2000;
         const startTime = performance.now();
         const prefix = counter.getAttribute('data-prefix') || '';

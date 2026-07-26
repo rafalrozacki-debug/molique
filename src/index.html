@@ -15,14 +15,7 @@
     <!-- ==========================================
          HERO
          ========================================== -->
-    <header
-      class="position-relative"
-      style="
-        background:
-          linear-gradient(rgba(8, 12, 24, 0.82), rgba(8, 12, 24, 0.92)),
-          url(&quot;img/futuristic-bg.webp&quot;) center/cover;
-      "
-    >
+    <header class="bg-gradient-corners-light">
       <div class="container py-5">
         <div
           class="d-flex flex-column flex-md-row align-items-center gap-5 py-5"
@@ -30,15 +23,21 @@
           <div class="w-100 w-md-50">
             <span class="badge badge-primary mb-3">molique {{ __version }}</span>
             <h1
-              class="text-9 fw-black mb-3 text-white animate fade-in-up"
-              style="line-height: 1.15"
+              class="mb-3 animate fade-in-up"
+              style="
+                font-family: var(--font-family-heading);
+                font-size: clamp(2.4rem, 3.4vw, 3.4rem);
+                font-weight: 600;
+                line-height: 1.05;
+                letter-spacing: -0.03em;
+              "
             >
               CSS, który <span class="text-gradient-animated">myśli</span>
               jak przeglądarka 2026&nbsp;roku
             </h1>
             <p
-              class="text-4 mb-4 animate fade-in-up delay-100"
-              style="color: rgba(255, 255, 255, 0.75); max-width: 540px"
+              class="text-muted mb-4 animate fade-in-up delay-100"
+              style="font-size: 1.0625rem; line-height: 1.6; max-width: 540px"
             >
               Lekki framework B2B zbudowany na natywnym HTML5 i najnowszym CSS —
               Anchor Positioning, <em>:has()</em>, Popover API. Akordeony, taby,
@@ -50,14 +49,7 @@
               <a href="docs" class="btn btn-primary btn-lg hover-spring"
                 >Zacznij teraz</a
               >
-              <a
-                href="docs-classes"
-                class="btn btn-lg"
-                style="
-                  background: rgba(255, 255, 255, 0.08);
-                  color: #fff;
-                  border: 1px solid rgba(255, 255, 255, 0.25);
-                "
+              <a href="docs-classes" class="btn btn-outline-secondary btn-lg"
                 >Spis komponentów</a
               >
             </div>
@@ -87,6 +79,58 @@
         </div>
       </div>
     </header>
+
+    <main>
+    <!-- ==========================================
+         WYNIKI GOOGLE LIGHTHOUSE
+         ========================================== -->
+    <section class="py-5">
+      <div class="container">
+        <div class="text-center mb-4">
+          <span class="badge badge-success mb-3">Google Lighthouse · Desktop</span>
+          <h2 class="text-7 fw-black mb-2">100/100 nie na pokaz</h2>
+          <p class="text-4 text-muted" style="max-width: 600px; margin: 0 auto">
+            Prawdziwy, zweryfikowany audyt tej samej strony, którą właśnie
+            oglądasz — nie deklaracja marketingowa.
+          </p>
+        </div>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-12 col-md-span-3 d-flex flex-column align-items-center">
+            <div class="chart-radial mb-2" style="--val: 100%">
+              <span class="radial-value counter-value">100</span>
+            </div>
+            <div class="counter-title">Performance</div>
+          </div>
+          <div class="col-span-12 col-md-span-3 d-flex flex-column align-items-center">
+            <div class="chart-radial mb-2" style="--val: 100%">
+              <span class="radial-value counter-value">100</span>
+            </div>
+            <div class="counter-title">Accessibility</div>
+          </div>
+          <div class="col-span-12 col-md-span-3 d-flex flex-column align-items-center">
+            <div class="chart-radial mb-2" style="--val: 100%">
+              <span class="radial-value counter-value">100</span>
+            </div>
+            <div class="counter-title">Best Practices</div>
+          </div>
+          <div class="col-span-12 col-md-span-3 d-flex flex-column align-items-center">
+            <div class="chart-radial mb-2" style="--val: 100%">
+              <span class="radial-value counter-value">100</span>
+            </div>
+            <div class="counter-title">SEO</div>
+          </div>
+        </div>
+        <div class="text-center mt-3">
+          <a
+            href="https://pagespeed.web.dev/analysis?url=https%3A%2F%2Fmolique.rozacki.com%2F&form_factor=desktop"
+            target="_blank"
+            rel="noopener"
+            class="text-muted text-hover-primary text-decoration-none"
+            >Zobacz pełny raport PageSpeed Insights →</a
+          >
+        </div>
+      </div>
+    </section>
 
     <!-- ==========================================
          STATY
@@ -130,8 +174,8 @@
 
         <div class="grid-auto gap-4">
           <div class="featured-box scroll-reveal">
-            <div class="featured-box-icon">⚡</div>
-            <h4 class="text-6 fw-bold mb-2">Zero JS, gdzie się da</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-lightning"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Zero JS, gdzie się da</h3>
             <p class="text-muted m-0">
               Akordeony, taby, dropdowny, mega menu i modale działają na czystym
               HTML5 i CSS — Radio Hack, <code>&lt;details&gt;</code>
@@ -140,8 +184,8 @@
           </div>
 
           <div class="featured-box scroll-reveal">
-            <div class="featured-box-icon">🧩</div>
-            <h4 class="text-6 fw-bold mb-2">Kompletny ekosystem</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-puzzle-piece"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Kompletny ekosystem</h3>
             <p class="text-muted m-0">
               Formularze, tabele, wykresy, e-commerce i panel admina — jeden
               spójny system klas zamiast składania kilku bibliotek.
@@ -149,8 +193,8 @@
           </div>
 
           <div class="featured-box scroll-reveal">
-            <div class="featured-box-icon">🌗</div>
-            <h4 class="text-6 fw-bold mb-2">Dark Mode wbudowany</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-moon-stars"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Dark Mode wbudowany</h3>
             <p class="text-muted m-0">
               Jedna zmienna motywu na całą paletę kolorów. Zero migotania (FOUC)
               przy przełączaniu i przy pierwszym ładowaniu strony.
@@ -158,8 +202,8 @@
           </div>
 
           <div class="featured-box scroll-reveal">
-            <div class="featured-box-icon">♿</div>
-            <h4 class="text-6 fw-bold mb-2">Dostępność od podstawy</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-wheelchair"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Dostępność od podstawy</h3>
             <p class="text-muted m-0">
               Wymuszone 44px pola dotykowe na mobile, widoczny
               <code>:focus-visible</code> i natywna walidacja formularzy.
@@ -167,8 +211,8 @@
           </div>
 
           <div class="featured-box scroll-reveal">
-            <div class="featured-box-icon">🚀</div>
-            <h4 class="text-6 fw-bold mb-2">Wydajność GPU</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-rocket-launch"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Wydajność GPU</h3>
             <p class="text-muted m-0">
               Animacje wyłącznie na <code>transform</code> i
               <code>opacity</code> — zero kosztownego reflow, nawet w gęstych
@@ -177,8 +221,8 @@
           </div>
 
           <div class="featured-box scroll-reveal">
-            <div class="featured-box-icon">🎨</div>
-            <h4 class="text-6 fw-bold mb-2">Modularny Sass</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-palette"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Modularny Sass</h3>
             <p class="text-muted m-0">
               Importuj tylko to, czego potrzebujesz — od bazowego grida po moduł
               sklepu, bez zbędnego balastu w bundlu.
@@ -299,8 +343,8 @@
 
         <div class="grid-auto gap-4">
           <div class="featured-box">
-            <div class="featured-box-icon">🤖</div>
-            <h4 class="text-6 fw-bold mb-2">Instrukcja dla modeli AI</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-robot"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Instrukcja dla modeli AI</h3>
             <p class="text-muted mb-3">
               Plik <code>llms.txt</code> ze słownikiem klas i zasadami molique.
               Wskaż go asystentowi, a wygeneruje markup zgodny z frameworkiem
@@ -312,8 +356,8 @@
           </div>
 
           <div class="featured-box">
-            <div class="featured-box-icon">🧱</div>
-            <h4 class="text-6 fw-bold mb-2">Konfigurator paczki</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-cube"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Konfigurator paczki</h3>
             <p class="text-muted mb-3">
               Zaznacz tylko te moduły, których używasz — zależności dobiorą się
               same, rozmiar widzisz na żywo. Redukcja <strong>bez ryzyka</strong>,
@@ -325,8 +369,8 @@
           </div>
 
           <div class="featured-box">
-            <div class="featured-box-icon">📦</div>
-            <h4 class="text-6 fw-bold mb-2">PurgeCSS bez niespodzianek</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-package"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">PurgeCSS bez niespodzianek</h3>
             <p class="text-muted mb-3">
               Gotowa safelista klas, które JS dodaje dopiero w przeglądarce —
               bez niej purge psuje akordeony, toasty i lightbox.
@@ -338,8 +382,8 @@
           </div>
 
           <div class="featured-box">
-            <div class="featured-box-icon">🎨</div>
-            <h4 class="text-6 fw-bold mb-2">Edytor motywu na żywo</h4>
+            <div class="featured-box-icon"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-palette"></use></svg></div>
+            <h3 class="text-6 fw-bold mb-2">Edytor motywu na żywo</h3>
             <p class="text-muted mb-3">
               Kolory, zaokrąglenia, odstępy i typografia — klikasz, widzisz
               efekt od razu, kopiujesz gotowy blok <code>:root</code> do swojego
@@ -385,6 +429,7 @@
         </div>
       </div>
     </section>
+    </main>
 
     <!-- ==========================================
          FOOTER

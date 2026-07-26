@@ -15,40 +15,46 @@
        nagłówki (color: inherit) robią się czarne na ciemnej karcie.
        Deklaracja naprawia też natywne scrollbary i kontrolki formularzy. */
     color-scheme: light;
-    /* Fonty z systemowym fallbackiem */
-    --font-family-base: 'FontBody', system-ui, -apple-system, sans-serif;
+    /* Fonty z systemowym fallbackiem. Baza i nagłówki obie na FontHeading
+       (Poppins) - v2 design refresh (patrz artefakt "Modernizacja Molique
+       Design System"). FontBody (Inter) zostaje zadeklarowany w _fonts.scss
+       (uzytkownik moze go dalej uzyc recznie), ale nic domyslnie juz na niego
+       nie wskazuje. */
+    --font-family-base: 'FontHeading', system-ui, -apple-system, sans-serif;
     --font-family-heading: 'FontHeading', system-ui, -apple-system, sans-serif;
-    /* NOWA PALETA BAZOWA (Nowoczesne B2B) */
-    --primary: #0284C7;
-    --primary-hover: #0369A1;
+    /* PALETA v2 - Indygo jako brand, chlodniejszy neutral (Modernizacja 2026) */
+    --primary: #5145E5;
+    --primary-hover: #3D31CE;
     --light: #F9F9F9;
-    --dark: #1E293B;
-    --secondary: #64748B;
-    --secondary-hover: #475569;
-    --success: #10B981;
-    --success-hover: #059669;
-    --danger: #EF4444;
-    --danger-hover: #DC2626;
-    --warning: #F59E0B;
-    --warning-hover: #D97706;
-    --info: #0EA5E9;
-    --info-hover: #0284C7;
+    --dark: #14162B;
+    --secondary: #696D8F;
+    --secondary-hover: #4E5273;
+    --success: #12B76A;
+    --success-hover: #039855;
+    --danger: #F04438;
+    --danger-hover: #D92D20;
+    --warning: #F79009;
+    --warning-hover: #DC6803;
+    --info: #2E90FA;
+    --info-hover: #1570EF;
     /* Kolory tła i tekstu */
-    --bg-body: #F1F5F9; /* Delikatny szary podkład pod panele */
+    --bg-body: #F5F6FC; /* Chlodny neutral pod panele */
     --bg-surface: #FFFFFF; /* Czysta biel dla kart i głównych kontenerów */
     --text-main: var(--dark);
     --text-muted: var(--secondary);
-    --border-color: #E2E8F0;
+    --border-color: #E7E8F2;
     /* ZMIENNE SIDEBARA ADMINA.
        UWAGA: sidebar jest ZAWSZE ciemny (--sidebar-bg nie zmienia się
        w dark mode), więc jego jasne akcenty muszą być literalne — NIE
        wolno tu używać var(--light) / var(--light-rgb), bo dark mode
        odwraca te zmienne (jasny → ciemny) i tekst oraz podświetlenia
-       znikają na ciemnym tle sidebara. */
-    --sidebar-bg: #102E4A;
+       znikają na ciemnym tle sidebara. sidebar-bg jest teraz polprzezroczysty
+       (rgba, "szklany" v2 - patrz artefakt), stad zalezy od --sidebar-rgb
+       ponizej zamiast literalnego hexa. */
+    --sidebar-bg: rgba(var(--sidebar-rgb), 0.92);
     --sidebar-submenu-bg: #52677D;
-    --sidebar-text: #94A3B8;
-    --sidebar-text-active: #F9F9F9;
+    --sidebar-text: #A9ADCB;
+    --sidebar-text-active: #FFFFFF;
     /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
        logo) — niezależne od motywu, w przeciwieństwie do --light-rgb */
     --sidebar-highlight-rgb: 249, 249, 249;
@@ -57,20 +63,20 @@
     --sidebar-width-md: 100px;
     --sidebar-width-sm: 72px;
     /* Kolory RGB do przezroczystości (Muszą odpowiadać kolorom HEX wyżej!) */
-    --primary-rgb: 2, 132, 199; /* #0284C7 */
-    --secondary-rgb: 100, 116, 139; /* #64748B */
-    --success-rgb: 16, 185, 129; /* #10B981 */
-    --danger-rgb: 239, 68, 68; /* #EF4444 */
-    --warning-rgb: 245, 158, 11; /* #F59E0B */
-    --info-rgb: 14, 165, 233; /* #0EA5E9 */
-    --dark-rgb: 30, 41, 59; /* #1E293B */
+    --primary-rgb: 81, 69, 229; /* #5145E5 */
+    --secondary-rgb: 105, 109, 143; /* #696D8F */
+    --success-rgb: 18, 183, 106; /* #12B76A */
+    --danger-rgb: 240, 68, 56; /* #F04438 */
+    --warning-rgb: 247, 144, 9; /* #F79009 */
+    --info-rgb: 46, 144, 250; /* #2E90FA */
+    --dark-rgb: 20, 22, 43; /* #14162B */
     --light-rgb: 249, 249, 249; /* #F9F9F9 */
-    --body-rgb: 241, 245, 249; /* #F1F5F9 */
+    --body-rgb: 245, 246, 252; /* #F5F6FC */
     --bg-surface-rgb: 255, 255, 255; /* #FFFFFF - kanały --bg-surface, używane przez .bg-glass */
-    --sidebar-rgb: 16, 46, 74; /* #102E4A */
-    --btn-text-light: var(--light);
+    --sidebar-rgb: 20, 22, 43; /* = --dark-rgb - sidebar "szklany" v2 nad tlem strony */
+    --btn-text-light: #FFFFFF;
     --btn-text-dark: var(--dark);
-    --card-bg-subtle: rgba(var(--dark-rgb), 0.03);
+    --card-bg-subtle: rgba(var(--dark-rgb), 0.035);
     /* BLOKI KODU. Ciemne w OBU motywach (tak wygląda kod wszędzie), ale
        wartość NIE może być zahardkodowana: w dark mode --bg-surface to
        dokładnie #1E293B, więc blok kodu zlewał się z tłem strony w jeden
@@ -83,9 +89,9 @@
     /* Grid */
     --grid-gap: calc(var(--spacing-unit) * 3);
     /* Inne */
-    --border-radius: 8px;
-    --border-radius-lg: 16px;
-    --transition-speed: 0.2s; /* Baza */
+    --border-radius: 14px;
+    --border-radius-lg: 28px;
+    --transition-speed: 0.22s; /* Baza */
     --transition-speed-fast: 0.15s;
     --transition-speed-slow: 0.3s;
     --transition-speed-slower: 0.4s;
@@ -124,10 +130,11 @@
        Używana, gdy pod navbarem siedzi layout admina - sidebar startuje
        dokładnie pod paskiem i wypełnia resztę okna. */
     --navbar-h: 76px;
-    /* Cienie i Poświaty */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Cienie i Poświaty - v2: wielowarstwowe, barwione --dark-rgb zamiast
+       czystej czerni (spojne z chlodniejszym neutralem calej palety) */
+    --shadow-sm: 0 1px 2px rgba(var(--dark-rgb), 0.05), 0 4px 10px -2px rgba(var(--dark-rgb), 0.05);
+    --shadow-md: 0 2px 4px rgba(var(--dark-rgb), 0.04), 0 14px 30px -8px rgba(var(--dark-rgb), 0.12);
+    --shadow-lg: 0 40px 80px -32px rgba(var(--dark-rgb), 0.28), 0 12px 24px -8px rgba(var(--dark-rgb), 0.08);
     /* Nakladki pelnoekranowe (lightbox, offcanvas, popover) - zawsze czarne,
        niezaleznie od motywu (jak cienie wyzej). Kazdy komponent zachowuje
        WLASNA, dobrana dla siebie przezroczystosc (rgba(var(--backdrop-rgb), X))
@@ -164,43 +171,55 @@
     /* Kolory systemowe przeglądarki (CanvasText, scrollbary, natywne
        kontrolki, kalendarz date-pickera) podążają za ciemnym motywem */
     color-scheme: dark;
-    /* 1. Kolory strukturalne (Odwrócenie) */
-    --bg-body: #0F172A; /* Bardzo ciemny granat/szary (nie czysty czarny!) */
-    --bg-surface: #1E293B; /* Nieco jaśniejszy od body (tworzy głębię kart) */
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
-    --border-color: #334155;
-    /* 2. Kolory semantyczne (Rozjaśnione i odsycone dla czytelności na ciemnym) */
-    --primary: #38BDF8; /* Jaśniejszy niebieski */
-    --primary-hover: #7DD3FC;
-    --secondary: #94A3B8; /* Jaśniejszy szary */
-    --secondary-hover: #CBD5E1;
-    --success: #34D399; /* Pastelowy zielony */
-    --success-hover: #6EE7B7;
-    --danger: #F87171; /* Pastelowy czerwony (nie razi w oczy) */
-    --danger-hover: #FCA5A5;
-    --warning: #FBBF24; /* Jasny pomarańczowy/żółty */
-    --warning-hover: #FCD34D;
-    --info: #38BDF8;
-    --info-hover: #7DD3FC;
-    /* Zmienne semantyczne odwrócone */
-    --light: #1E293B; /* W dark mode 'light' staje się ciemny */
-    --dark: #F8FAFC; /* W dark mode 'dark' staje się jasny */
+    /* 1. Kolory strukturalne (v2 - blisko czerni, ciepla/fioletowa, nie
+       czysty czarny ani stary granat) */
+    --bg-body: #0A0B14;
+    --bg-surface: #141629; /* Nieco jaśniejszy od body (tworzy głębię kart) */
+    --text-main: #ECEDF8;
+    --text-muted: #9BA0C4;
+    --border-color: #262A48;
+    /* 2. Kolory semantyczne v2 (rozjasnione warianty indygo/success/danger itd. */
+    --primary: #8B84FF;
+    --primary-hover: #A5A0FF;
+    --secondary: #8E93B5;
+    --secondary-hover: #A9AECB;
+    --success: #32D583;
+    --success-hover: #6CE9A6;
+    --danger: #FF7A72;
+    --danger-hover: #FFA39D;
+    --warning: #FDB022;
+    --warning-hover: #FEC84B;
+    --info: #63A8FF;
+    --info-hover: #8EC2FF;
+    /* Zmienne semantyczne odwrócone - light w dark mode = bg-surface (ta sama
+       zaleznosc co przed v2, tylko z nowymi wartosciami) */
+    --light: #141629;
+    --dark: #ECEDF8;
     /* 3. Wartości RGB dla Dark Mode (Kluczowe dla klas -subtle i focus ringów!) */
-    --primary-rgb: 56, 189, 248;
-    --secondary-rgb: 148, 163, 184;
-    --success-rgb: 52, 211, 153;
-    --danger-rgb: 248, 113, 113;
-    --warning-rgb: 251, 191, 36;
-    --info-rgb: 56, 189, 248;
-    --dark-rgb: 248, 250, 252;
-    --light-rgb: 15, 23, 42;
-    --body-rgb: 15, 23, 42;
-    --bg-surface-rgb: 30, 41, 59;
-    --sidebar-rgb: 15, 23, 42;
-    /* Ciemniej niż --bg-surface (#1E293B) i niż --bg-body (#0F172A),
+    --primary-rgb: 139, 132, 255;
+    --secondary-rgb: 142, 147, 181;
+    --success-rgb: 50, 213, 131;
+    --danger-rgb: 255, 122, 114;
+    --warning-rgb: 253, 176, 34;
+    --info-rgb: 99, 168, 255;
+    --dark-rgb: 236, 237, 248;
+    --light-rgb: 20, 22, 41;
+    --body-rgb: 10, 11, 20;
+    --bg-surface-rgb: 20, 22, 41;
+    /* Sidebar NIE zmienia sie w dark mode (patrz UWAGA przy --sidebar-bg w
+       :root) - to samo --sidebar-rgb co w light, zeby rgba(var(--sidebar-rgb))
+       dalo dokladnie ten sam kolor niezaleznie od motywu strony. */
+    --sidebar-rgb: 20, 22, 43;
+    --btn-text-light: #0A0B14;
+    /* Cienie v2 w dark mode: czysta czern (nie barwione --dark-rgb jak w
+       light) - na ciemnym tle barwiony cien jest niewidoczny/bez sensu. */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.5), 0 16px 34px -10px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 44px 90px -34px rgba(0, 0, 0, 0.85), 0 14px 28px -10px rgba(0, 0, 0, 0.5);
+    --card-bg-subtle: rgba(255, 255, 255, 0.05);
+    /* Ciemniej niż --bg-surface (#141629) i niż --bg-body (#0A0B14),
        żeby blok kodu odcinał się od obu. */
-    --code-bg: #060B16;
+    --code-bg: #05060C;
   }
   /**
    * molique - Fonty (@font-face)
@@ -3216,6 +3235,46 @@
    * molique - Style Bazowe i Reset
    * Zawiera reset CSS, style dla html/body i podstawowe kontenery
    */
+  /**
+   * molique - Ikony (Phosphor, sprite SVG selektywny)
+   * Zero fontu ikon, zero <img> per ikona: jeden plik img/icons-sprite.svg
+   * (generowany przez tools/gen-icon-sprite.js z folderu ikon Phosphor,
+   * TYLKO te faktycznie uzyte w src/*.html), referowany przez <use>.
+   *
+   * Uzycie:
+   *   <svg class="icon"><use href="img/icons-sprite.svg#ph-lightning"></use></svg>
+   *
+   * Kolor: kazda sciezka ikony ma juz stroke="currentColor" (Phosphor SVG),
+   * wiec .icon dziedziczy kolor tekstu automatycznie - zero CSS potrzebnego
+   * per-instancja, dziala tak samo w dark mode.
+   */
+  @layer components {
+    .icon {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      flex-shrink: 0;
+      vertical-align: -0.125em;
+      /* Fallback dla wag "fill"/"duotone" (uzywaja fill, nie stroke) -
+         stroke="currentColor" jest juz w SVG per-sciezka, ale fill tutaj
+         zabezpiecza gdyby ktos uzyl symbolu bez wlasnego fill. */
+      fill: currentColor;
+    }
+    /* Warianty rozmiaru - font-size kontroluje 1em, wiec te klasy dzialaja
+       wszedzie, takze na elementach, ktore same nie ustawiaja font-size. */
+    .icon-sm {
+      width: 0.875em;
+      height: 0.875em;
+    }
+    .icon-lg {
+      width: 1.5em;
+      height: 1.5em;
+    }
+    .icon-xl {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
   /* =========================================
      1. NAVBAR (Baza)
      ========================================= */
@@ -3420,7 +3479,7 @@
     /* --- API kolorów: osobna zmienna na każdy stan -------------------------
        <nav class="navbar navbar-pill" style="
               --navbar-pill-bg: #4c1d95;
-              --navbar-pill-bg-scrolled: #1e293b;
+              --navbar-pill-bg-scrolled: #14162B;
               --navbar-pill-color-scrolled: #fff;">
 
        Świadomie NIE przedefiniowujemy zmiennych bazowych w .is-scrolled -
@@ -3428,7 +3487,7 @@
        i zablokowałby drugi stan. Stąd osobne pary *-scrolled. */
     /* Stan pastylki (nad hero). Tło to LITERAŁ, nie var(--dark) - ta zmienna
        w dark mode jaśnieje, więc pastylka by zbielała, a biały tekst zniknął. */
-    --navbar-pill-bg: #1e293b;
+    --navbar-pill-bg: #14162B;
     --navbar-pill-color: #fff;
     /* Stan po scrollu - domyślnie kolory motywu, jak zwykły navbar. */
     --navbar-pill-bg-scrolled: var(--bg-surface);
@@ -3734,7 +3793,7 @@
        celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
        odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
        zmiennymi biały tekst lądował na jasnym tle. */
-    background-image: linear-gradient(145deg, #1E293B, #0284C7);
+    background-image: linear-gradient(145deg, #14162B, #5145E5);
     color: #fff;
   }
   .mega-menu-featured-icon {
@@ -4325,7 +4384,7 @@
          (.overlay-dark/-primary/-light, .bg-overlay) i krycia (.overlay-10..90)
          nadpisuja te wartosci - stoja dalej w zrodle przy tej samej
          specyficznosci. */
-      background-color: #1E293B;
+      background-color: #14162B;
       opacity: 0.5;
     }
     /* --- Kolory nakładki --- */
@@ -4337,7 +4396,7 @@
       background-color: #000;
     }
     .overlay-dark {
-      background-color: #1E293B;
+      background-color: #14162B;
     }
     .overlay-primary {
       background-color: var(--primary);
@@ -4515,13 +4574,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--text-main);
     color: var(--primary);
-    font-size: 1.5rem;
-    font-weight: var(--fw-bold);
+    font-size: 2.5rem;
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
   /* =========================================
@@ -7345,16 +7399,26 @@
     justify-content: center;
     /* Mapujemy zmienną inline na zarejestrowaną zmienną Houdini */
     --chart-val: var(--val, 0%);
+    /* Animacja wejścia całego kółka (Pop-in) */
+    animation: radialPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+    /* Pierścień (conic-gradient + maska wycinająca środek) żyje na ::before,
+       NIE bezpośrednio na .chart-radial: mask-image ucina render całego
+       elementu WRAZ Z DZIEĆMI, więc na głównym boksie ucinałby też
+       .radial-value w środku - liczba byłaby zawsze niewidoczna. */
+  }
+  .chart-radial::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
     background: conic-gradient(var(--primary) var(--chart-val), var(--border-color) 0);
     -webkit-mask-image: radial-gradient(transparent 55%, black 56%);
     mask-image: radial-gradient(transparent 55%, black 56%);
     /* MAGIA: Płynna animacja wypełniania pierścienia */
     transition: --chart-val 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    /* Animacja wejścia całego kółka (Pop-in) */
-    animation: radialPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
   }
   @starting-style {
-    .chart-radial {
+    .chart-radial::before {
       --chart-val: 0%;
     }
   }
@@ -7844,7 +7908,7 @@
    * molique - Stopka strony (partials/footer.html)
    * Stopka jest ZAWSZE ciemna (.bg-dark) niezaleznie od motywu, jak sidebar
    * admina - dlatego linki i tlo licza sie tu wzgledem literalnych kolorow
-   * .bg-dark (#1E293B / #F9F9F9), a nie zmiennych --dark, ktore w dark mode
+   * .bg-dark (#14162B / #F9F9F9), a nie zmiennych --dark, ktore w dark mode
    * sie odwracaja.
    *
    * Asymetryczny odstep marka -> kolumny linkow: grid ma jeden wspolny
@@ -7861,6 +7925,11 @@
     footer.bg-dark {
       --footer-muted-rgb: 249, 249, 249;
       --footer-white-rgb: 255, 255, 255;
+      /* Odcien primary z dark mode (#8B84FF), nie var(--primary) light-mode'owy
+         (#5145E5) - ten drugi na literalnie ciemnym tle stopki daje tylko
+         2.82:1 (WCAG wymaga 4.5:1 dla tekstu). */
+      --footer-primary: #8B84FF;
+      --footer-primary-hover: #A5A0FF;
     }
     .footer-trustbar {
       display: flex;
@@ -7934,7 +8003,7 @@
       margin-bottom: calc(var(--spacing-unit) * 1.25);
     }
     .footer-brand span {
-      color: var(--primary);
+      color: var(--footer-primary);
     }
     .footer-tagline {
       margin: 0;
@@ -7959,10 +8028,10 @@
       transition: color var(--transition-speed);
     }
     .footer-link:hover {
-      color: var(--primary);
+      color: var(--footer-primary);
     }
     .footer-link:focus-visible {
-      outline: 2px solid var(--primary);
+      outline: 2px solid var(--footer-primary);
       outline-offset: 3px;
       border-radius: 3px;
     }
@@ -7973,7 +8042,7 @@
       background: none;
       border: none;
       padding: 0;
-      color: var(--primary);
+      color: var(--footer-primary);
       font-family: inherit;
       font-size: var(--text-sm);
       font-weight: var(--fw-bold);
@@ -7985,13 +8054,13 @@
       transition: transform var(--transition-speed);
     }
     .footer-link-more:hover {
-      color: var(--primary-hover);
+      color: var(--footer-primary-hover);
     }
     .footer-link-more:hover svg {
       transform: translateX(2px);
     }
     .footer-link-more:focus-visible {
-      outline: 2px solid var(--primary);
+      outline: 2px solid var(--footer-primary);
       outline-offset: 3px;
       border-radius: 3px;
     }
@@ -8020,7 +8089,7 @@
       text-decoration: none;
     }
     .footer-author-name a:hover {
-      color: var(--primary);
+      color: var(--footer-primary);
     }
     .footer-author-role {
       font-size: var(--text-xs);
@@ -8931,7 +9000,7 @@
        w HTML z .text-white - z flipowanym var(--dark) w ciemnym motywie tło
        robiło się jasne pod białym tekstem. */
     .bg-dark {
-      background-color: #1E293B !important;
+      background-color: #14162B !important;
       color: #F9F9F9 !important;
     }
     .bg-light {
@@ -9264,7 +9333,7 @@
       position: relative;
       /* Literal: łuna wymaga zawsze ciemnego tła (flipowany var(--dark)
          w ciemnym motywie rozjaśniał sekcję pod jasną treścią) */
-      background-color: #1E293B;
+      background-color: #14162B;
       z-index: 1;
       /* Zabezpieczenie przed wylewaniem się zawartości */
       overflow: hidden;
@@ -9276,7 +9345,25 @@
       z-index: -1;
       /* FIX: Pseudo-element musi dziedziczyć zaokrąglenia od rodzica! */
       border-radius: inherit;
-      background: radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.4) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.4) 0%, transparent 50%);
+      background: radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.22) 0%, transparent 45%), radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.18) 0%, transparent 45%);
+      pointer-events: none;
+    }
+    /* Ta sama łuna co wyżej, ale na jasnym tle - w przeciwienstwie do
+       .bg-gradient-corners TO tlo odwraca sie normalnie z motywem (var(--bg-body)),
+       bo tu nie ma zalozenia o bialym tekscie na wierzchu. */
+    .bg-gradient-corners-light {
+      position: relative;
+      background-color: var(--bg-body);
+      z-index: 1;
+      overflow: hidden;
+    }
+    .bg-gradient-corners-light::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background: radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.09) 0%, transparent 45%), radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.07) 0%, transparent 45%);
       pointer-events: none;
     }
     /* Tekst wycięty z tła (Wymaga zmiennej --clip-img w HTML) */
@@ -9863,7 +9950,7 @@
        odwracają się w dark mode, więc w motywie jasnym tło zrobiłoby się jasne
        i biały tekst by zniknął. Podmiana przez style="--blobs-deep-bg: #123". */
     .bg-blobs-deep {
-      --blobs-deep-bg: #0F172A;
+      --blobs-deep-bg: #0A0B14;
       background-color: var(--blobs-deep-bg);
       /* Mocniejsze krycie kolorow, bo na ciemnym tle rozmyte barwy gasna.
          Nadpisujemy --blob-1/--blob-2, wiec wlasny kolor podany w style="..."

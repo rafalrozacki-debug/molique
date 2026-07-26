@@ -1,0 +1,36 @@
+/**
+ * molique - Ikony (Phosphor, sprite SVG selektywny)
+ * Zero fontu ikon, zero <img> per ikona: jeden plik img/icons-sprite.svg
+ * (generowany przez tools/gen-icon-sprite.js z folderu ikon Phosphor,
+ * TYLKO te faktycznie uzyte w src/*.html), referowany przez <use>.
+ *
+ * Uzycie:
+ *   <svg class="icon"><use href="img/icons-sprite.svg#ph-lightning"></use></svg>
+ *
+ * Kolor: kazda sciezka ikony ma juz stroke="currentColor" (Phosphor SVG),
+ * wiec .icon dziedziczy kolor tekstu automatycznie - zero CSS potrzebnego
+ * per-instancja, dziala tak samo w dark mode.
+ */
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+@layer components {
+  .icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    vertical-align: -0.125em;
+    /* Fallback dla wag "fill"/"duotone" (uzywaja fill, nie stroke) -
+       stroke="currentColor" jest juz w SVG per-sciezka, ale fill tutaj
+       zabezpiecza gdyby ktos uzyl symbolu bez wlasnego fill. */
+    fill: currentColor;
+  }
+
+  /* Warianty rozmiaru - font-size kontroluje 1em, wiec te klasy dzialaja
+     wszedzie, takze na elementach, ktore same nie ustawiaja font-size. */
+  .icon-sm { width: 0.875em; height: 0.875em; }
+  .icon-lg { width: 1.5em; height: 1.5em; }
+  .icon-xl { width: 2rem; height: 2rem; }
+}

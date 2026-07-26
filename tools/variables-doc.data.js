@@ -206,6 +206,8 @@ export const COMPONENT = {
 
   '--footer-muted-rgb': ['Stopka', 'internal', 'Kanały przygaszonego tekstu stopki. Celowo literalne, nie <code>--light-rgb</code> — stopka jest zawsze ciemna, niezależnie od motywu.'],
   '--footer-white-rgb': ['Stopka', 'internal', 'Kanały bieli w stopce — separatory i drobne akcenty. Ten sam powód co wyżej: stopka nie odwraca się w dark mode.'],
+  '--footer-primary': ['Stopka', 'internal', 'Odcień primary dobrany pod zawsze ciemne tło stopki (kontrast 4.5:1). Celowo nie <code>var(--primary)</code> — jego jasny wariant na tym tle daje tylko 2.82:1.'],
+  '--footer-primary-hover': ['Stopka', 'internal', 'Stan hover/focus powyższego — jaśniejszy odcień dla dodatkowego kontrastu przy interakcji.'],
 
   '--position': ['Before/After', 'internal', 'Pozycja suwaka w procentach. Ustawiana przez <code>js/modules/molique-before-after.js</code>.'],
 

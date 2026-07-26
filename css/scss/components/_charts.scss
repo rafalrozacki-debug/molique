@@ -81,26 +81,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   /* Mapujemy zmienną inline na zarejestrowaną zmienną Houdini */
   --chart-val: var(--val, 0%);
-  
-  background: conic-gradient(
-    var(--primary) var(--chart-val), 
-    var(--border-color) 0
-  );
-  
-  -webkit-mask-image: radial-gradient(transparent 55%, black 56%);
-  mask-image: radial-gradient(transparent 55%, black 56%);
-  
-  /* MAGIA: Płynna animacja wypełniania pierścienia */
-  transition: --chart-val 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  
+
   /* Animacja wejścia całego kółka (Pop-in) */
   animation: radialPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
 
-  @starting-style {
-    --chart-val: 0%;
+  /* Pierścień (conic-gradient + maska wycinająca środek) żyje na ::before,
+     NIE bezpośrednio na .chart-radial: mask-image ucina render całego
+     elementu WRAZ Z DZIEĆMI, więc na głównym boksie ucinałby też
+     .radial-value w środku - liczba byłaby zawsze niewidoczna. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+
+    background: conic-gradient(
+      var(--primary) var(--chart-val),
+      var(--border-color) 0
+    );
+
+    -webkit-mask-image: radial-gradient(transparent 55%, black 56%);
+    mask-image: radial-gradient(transparent 55%, black 56%);
+
+    /* MAGIA: Płynna animacja wypełniania pierścienia */
+    transition: --chart-val 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    @starting-style {
+      --chart-val: 0%;
+    }
   }
 }
 

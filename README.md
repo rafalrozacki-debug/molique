@@ -75,8 +75,9 @@ Dostępne grupy: `colors`, `grid`, `spacing`, `status`.
 przy zachowaniu wszystkiego, co dodaje JS.
 
 > **Uwaga:** zanim sięgniesz po PurgeCSS, sprawdź czy wystarczy dobór modułów wyżej —
-> to redukcja bez żadnego ryzyka. `variables: true` zepsuje motyw (111 zmiennych CSS),
-> a `keyframes: true` jest bezpieczne **tylko** z safelistą.
+> to redukcja bez żadnego ryzyka. `variables: true` zepsuje motyw (dziesiątki
+> zmiennych CSS, pełna lista w `docs-variables.html`), a `keyframes: true`
+> jest bezpieczne **tylko** z safelistą.
 
 ## Autoloader JS
 
