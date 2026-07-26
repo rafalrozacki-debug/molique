@@ -21,6 +21,53 @@ const srcDir = resolve(__dirname, 'src');
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf8'));
 const APP_VERSION = pkg.version;
 
+// Czyta JSON wygenerowany przez inny skrypt (build-packages.ps1 /
+// gen-chunks.js / gen-variables-doc.js), z bezpiecznym fallbackiem, jesli
+// ktos odpali `vite build` na czystym repo przed pierwszym uruchomieniem
+// tamtego skryptu - build ma sie nie wywalic, tylko pokazac wartosc
+// zapasowa (i ostrzezenie), zamiast krzaczyc strone.
+function readJsonSafe(path, fallback, label) {
+  if (!existsSync(path)) {
+    console.warn(`[molique] UWAGA: brak ${path} - uzywam wartosci zapasowej dla ${label}.`);
+    return fallback;
+  }
+  // PowerShell 5.1 "Set-Content -Encoding utf8" zawsze dokleja BOM (nie ma
+  // tam "utf8NoBOM" jak w PowerShell 7+) - build-packages.ps1 pisze nim
+  // package-sizes.json, wiec JSON.parse musi ten BOM zdjac, inaczej "﻿{"
+  // nie jest poprawnym JSON-em i cala konfiguracja Vite sie wywala.
+  let text = readFileSync(path, 'utf8');
+  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
+  return JSON.parse(text);
+}
+
+// Rozmiary paczek ZIP - jedyne zrodlo prawdy to dist/package-sizes.json,
+// zapisywany przez tools/build-packages.ps1 na podstawie REALNYCH plikow,
+// nie recznie szacowanych wartosci.
+const PACKAGE_SIZES = readJsonSafe(
+  resolve(__dirname, 'dist/package-sizes.json'),
+  { pl: {}, en: {}, de: {} },
+  'rozmiarow paczek (uruchom tools/build-packages.ps1)'
+);
+
+// Liczba modulow w konfiguratorze - jedyne zrodlo to dist/chunks/manifest.json
+// (ten sam plik, ktorego builder.html uzywa na zywo), zeby marketingowy tekst
+// na download.html nigdy nie rozjechal sie z realna lista modulow.
+const CHUNK_MANIFEST = readJsonSafe(
+  resolve(__dirname, 'dist/chunks/manifest.json'),
+  { chunks: [] },
+  'liczby modulow (uruchom tools/gen-chunks.js)'
+);
+const MODULE_COUNT = CHUNK_MANIFEST.chunks.length;
+
+// Liczby zmiennych CSS - jedyne zrodlo to tools/variables-counts.json,
+// zapisywany przez tools/gen-variables-doc.js z tych samych danych, z
+// ktorych generowane sa tabele na docs-variables.html.
+const VARS_COUNTS = readJsonSafe(
+  resolve(__dirname, 'tools/variables-counts.json'),
+  { global: 0, component: 0, input: 0, darkOverrides: 0 },
+  'liczby zmiennych CSS (uruchom tools/gen-variables-doc.js)'
+);
+
 // Auto-wejścia: każda strona .html w src/ staje się osobnym wejściem builda,
 // bez ręcznej listy ~85 podstron. Nowa strona = po prostu nowy plik w src/.
 const input = Object.fromEntries(
@@ -170,6 +217,11 @@ function computeI18nLocals(filename) {
     __altDe: hasDe ? altDeFile : altPl,
     __hasEn: hasEn,
     __hasDe: hasDe,
+    // Domyslne warianty paczek (min bez fontow / src bez fontow) w jezyku
+    // TEJ strony - patrz PACKAGE_SIZES wyzej. Uzywane jako startowa etykieta
+    // "~X KB" na download.html/.en/.de, zanim download.js w ogole sie odpali.
+    __prodSizeKb: PACKAGE_SIZES[locale]?.[''] ?? 0,
+    __srcSizeKb: PACKAGE_SIZES[locale]?.['-src'] ?? 0,
   };
 }
 
@@ -190,7 +242,19 @@ function moliqueInclude() {
         // computeI18nLocals) liczone z nazwy pliku, dostępne we WSZYSTKICH
         // <include> tej strony (head.html, navbar.html), bez przekazywania
         // ich ręcznie. __version - patrz komentarz przy APP_VERSION wyżej.
-        const locals = { description: '', __version: APP_VERSION, ...computeI18nLocals(ctx.filename) };
+        // __moduleCount / __*VarsCount - patrz CHUNK_MANIFEST / VARS_COUNTS
+        // wyżej; te same zasady: jedno wyliczone źródło, zero ręcznych liczb
+        // w prozie stron.
+        const locals = {
+          description: '',
+          __version: APP_VERSION,
+          __moduleCount: MODULE_COUNT,
+          __globalVarsCount: VARS_COUNTS.global,
+          __componentVarsCount: VARS_COUNTS.component,
+          __inputVarsCount: VARS_COUNTS.input,
+          __darkOverrideCount: VARS_COUNTS.darkOverrides,
+          ...computeI18nLocals(ctx.filename),
+        };
         const result = await posthtml([
           posthtmlInclude({ root: srcDir, posthtmlExpressionsOptions: { locals } }),
           // Drugi przebieg NA CALYM, juz rozwinietym dokumencie (po
@@ -218,11 +282,13 @@ export default defineConfig({
   // Wyłączamy domyślny publicDir — zasoby dowozi vite-plugin-static-copy.
   publicDir: false,
   appType: 'mpa',
-  // Stala globalna podmieniana tekstowo w kazdym module JS przechodzacym
-  // przez Vite (np. src/download.js) - ten sam APP_VERSION co w HTML-ach,
-  // wiec numer wersji nigdy nie rozjezdza sie miedzy stronami a skryptami.
+  // Stale globalne podmieniane tekstowo w kazdym module JS przechodzacym
+  // przez Vite (np. src/download.js) - te same wartosci co w HTML-ach,
+  // wiec numer wersji i rozmiary paczek nigdy nie rozjezdza sie miedzy
+  // stronami a skryptami.
   define: {
     __MOLIQUE_VERSION__: JSON.stringify(APP_VERSION),
+    __MOLIQUE_PACKAGE_SIZES__: JSON.stringify(PACKAGE_SIZES),
   },
   build: {
     // Build strony trafia do _site/ (ignorowany w gicie). NIGDY do dist/,

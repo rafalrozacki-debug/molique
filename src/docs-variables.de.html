@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de">
   <head>
-    <include src="partials/head.html" locals='{"title":"CSS-Variablen - molique Docs","description":"Vollstandige Referenz der molique CSS-Variablen: 94 Theme-Variablen, 62 Komponenten-Variablen und 6 Markup-Eingaben. Werte fur helles und dunkles Theme, Verhalten und Fallstricke."}'></include>
+    <include src="partials/head.html" locals='{"title":"CSS-Variablen - molique Docs","description":"Vollstandige Referenz der molique CSS-Variablen: {{ __globalVarsCount }} Theme-Variablen, {{ __componentVarsCount }} Komponenten-Variablen und {{ __inputVarsCount }} Markup-Eingaben. Werte fur helles und dunkles Theme, Verhalten und Fallstricke."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css" />
     <link rel="stylesheet" href="css/molique-style-docs.css" />
   </head>
@@ -58,19 +58,19 @@
                 <tbody>
                   <tr>
                     <td><strong>Theme-Variablen</strong></td>
-                    <td><span class="badge badge-primary">94</span></td>
+                    <td><span class="badge badge-primary">{{ __globalVarsCount }}</span></td>
                     <td><code>:root</code> in <code>_root.scss</code></td>
                     <td>Sie — global, einmal pro Projekt.</td>
                   </tr>
                   <tr>
                     <td><strong>Komponenten-Variablen</strong></td>
-                    <td><span class="badge badge-secondary">62</span></td>
+                    <td><span class="badge badge-secondary">{{ __componentVarsCount }}</span></td>
                     <td>Die Datei der jeweiligen Komponente</td>
                     <td>Das Framework. Einen Teil können Sie im Markup überschreiben.</td>
                   </tr>
                   <tr>
                     <td><strong>Markup-Eingaben</strong></td>
-                    <td><span class="badge badge-warning">6</span></td>
+                    <td><span class="badge badge-warning">{{ __inputVarsCount }}</span></td>
                     <td>Nirgends — sie werden nur gelesen</td>
                     <td>
                       Ausschließlich Sie. Ohne sie hat die Komponente keine
@@ -165,7 +165,7 @@
               Wertesatz</strong> — null zusätzliche Regeln und null
               duplizierte Komponenten. Das Attribut
               <code>data-theme="dark"</code> auf <code>&lt;html&gt;</code>
-              tauscht 31 der 94 Theme-Variablen aus.
+              tauscht {{ __darkOverrideCount }} der {{ __globalVarsCount }} Theme-Variablen aus.
             </p>
             <p class="text-muted mb-4">
               Deshalb müssen Sie beim Hinzufügen einer eigenen Farbvariable
@@ -342,7 +342,7 @@ module.exports = {
           <section>
             <h2 class="text-8 fw-bold mb-3">
               5. Theme-Variablen
-              <span class="badge badge-primary">94</span>
+              <span class="badge badge-primary">{{ __globalVarsCount }}</span>
             </h2>
             <p class="text-muted mb-4">
               Deklariert in <code>:root</code>. Die Spalte
@@ -372,7 +372,7 @@ module.exports = {
           <section>
             <h2 class="text-8 fw-bold mb-3">
               6. Komponenten-Variablen
-              <span class="badge badge-secondary">62</span>
+              <span class="badge badge-secondary">{{ __componentVarsCount }}</span>
             </h2>
             <p class="text-muted mb-4">
               Innerhalb einer bestimmten Komponente deklariert, funktionieren
@@ -401,7 +401,7 @@ module.exports = {
           <section>
             <h2 class="text-8 fw-bold mb-3">
               7. Markup-Eingaben
-              <span class="badge badge-warning">6</span>
+              <span class="badge badge-warning">{{ __inputVarsCount }}</span>
             </h2>
             <p class="text-muted mb-4">
               Variablen, die das Framework <strong>niemals selbst

@@ -140,25 +140,10 @@ for (const [name, [group]] of Object.entries(GLOBAL).map(([k, v]) => [k, v])) {
   if (!GROUPS.some((g) => g.id === group)) problems.push(`GLOBAL: ${name} wskazuje na nieistniejaca grupe "${group}"`);
 }
 
-// Liczby w PROZIE strony (naglowki sekcji, opis meta, zdanie o dark mode) sa
-// pisane recznie, wiec cichnie rozjezdzaja sie po dodaniu zmiennej. Tabele
-// generujemy, ale zdania - nie; ta kontrola pilnuje wlasnie ich.
-const pagePath = path.join(root, 'src', 'docs-variables.html');
-if (fs.existsSync(pagePath)) {
-  const page = fs.readFileSync(pagePath, 'utf8');
-  const darkCount = Object.keys(GLOBAL).filter((n) => dark.has(n)).length;
-  const expected = [
-    [String(light.size) + ' zmiennych motywu', 'liczba zmiennych motywu w opisie strony'],
-    ['>' + light.size + '<', 'plakietka z liczba zmiennych motywu'],
-    [String(component.size) + ' zmiennych komponentów', 'liczba zmiennych komponentow w opisie'],
-    ['podmienia ' + darkCount + ' z ' + light.size, 'zdanie o dark mode'],
-  ];
-  for (const [needle, what] of expected) {
-    if (!page.includes(needle)) {
-      problems.push(`docs-variables.html: nieaktualna ${what} - brak "${needle}"`);
-    }
-  }
-}
+// Liczby w PROZIE strony (naglowki sekcji, opis meta, zdanie o dark mode)
+// pochodza z {{ __globalVarsCount }} itd. (locals wstrzykiwane przez
+// vite.config.js), nie z recznie wpisanego tekstu. Ten generator jest
+// jedynym zrodlem tych liczb - zapisuje je do variables-counts.json ponizej.
 
 // EDYTOR MOTYWU a pary --x / --x-rgb.
 // Kontrolka koloru, ktorej odpowiada zmienna -rgb w :root, MUSI wyliczac te
@@ -349,3 +334,16 @@ console.log('Zmienne komponentow:      ' + component.size);
 console.log('Czyste wejscia z markupu: ' + input.size);
 console.log('Razem udokumentowanych:   ' + (light.size + component.size + input.size));
 console.log('Zapisano 3 partiale do src/partials/variables-*.html');
+
+// Jedyne zrodlo liczb dla {{ __globalVarsCount }} itd. w vite.config.js -
+// docs-variables.html/.en/.de czytaja je stamtad, zero recznej synchronizacji.
+fs.writeFileSync(
+  path.join(root, 'tools', 'variables-counts.json'),
+  JSON.stringify({
+    global: light.size,
+    component: component.size,
+    input: input.size,
+    darkOverrides: withDark,
+  }, null, 2) + '\n'
+);
+console.log('Zapisano tools/variables-counts.json');

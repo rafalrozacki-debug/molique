@@ -147,13 +147,21 @@ $langs = @(
   @{ code = 'de'; suffix = '-de' }
 )
 
+# Rozmiary KB per (jezyk, wariant) - jedyne zrodlo prawdy dla etykiet "~X KB"
+# na download.html/.en/.de i dla __MOLIQUE_PACKAGE_SIZES__ w download.js,
+# liczone z rzeczywistych zbudowanych plikow, nie wpisywane recznie.
+$sizes = @{}
+foreach ($lang in $langs) { $sizes[$lang.code] = @{} }
+
 Write-Host "2/4  Budowanie wariantow Production (4 formaty x 3 jezyki)..."
 $results = @()
 foreach ($lang in $langs) {
   foreach ($v in $prodVariants) {
     $name = "molique-$version$($lang.suffix)$($v.suffix)"
     $folder = New-PackageFolder -Name $name -CssFormat $v.format -WithFonts $v.fonts -WithScssSource $false -Lang $lang.code
-    $results += New-PackageZip -Folder $folder -ZipName "$name.zip"
+    $zipPath = New-PackageZip -Folder $folder -ZipName "$name.zip"
+    $results += $zipPath
+    $sizes[$lang.code][$v.suffix] = [math]::Round((Get-Item $zipPath).Length / 1KB)
   }
 }
 
@@ -162,11 +170,17 @@ foreach ($lang in $langs) {
   foreach ($v in $srcVariants) {
     $name = "molique-$version$($lang.suffix)$($v.suffix)"
     $folder = New-PackageFolder -Name $name -CssFormat 'full' -WithFonts $v.fonts -WithScssSource $true -Lang $lang.code
-    $results += New-PackageZip -Folder $folder -ZipName "$name.zip"
+    $zipPath = New-PackageZip -Folder $folder -ZipName "$name.zip"
+    $results += $zipPath
+    $sizes[$lang.code][$v.suffix] = [math]::Round((Get-Item $zipPath).Length / 1KB)
   }
 }
 
 Remove-Item -Recurse -Force $stage
+
+$sizesPath = Join-Path $dist 'package-sizes.json'
+$sizes | ConvertTo-Json -Depth 3 | Set-Content -Path $sizesPath -Encoding utf8
+Write-Host "Zapisano $sizesPath"
 
 Write-Host ""
 Write-Host "4/4  Gotowe ($($results.Count) paczek):"
