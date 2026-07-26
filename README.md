@@ -4,7 +4,7 @@
 
 A lightweight, rigorously optimized CSS framework for B2B. Built on native
 cascade layers (`@layer`), with zero specificity wars and zero dependencies
-(no jQuery). Version: **1.7.2**.
+(no jQuery). Version: **1.7.3**.
 
 ## Repository structure
 
