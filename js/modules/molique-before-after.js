@@ -1,5 +1,5 @@
 /**
- * molify - widżet przed/po (before/after)
+ * molique - widżet przed/po (before/after)
  */
 
 function initBeforeAfter() {

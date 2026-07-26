@@ -1,5 +1,5 @@
 /**
- * molify - widget pochylenia (tilt)
+ * molique - widget pochylenia (tilt)
  */
 
 function initTilt() {

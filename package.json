@@ -1,10 +1,10 @@
 {
   "name": "molique-website",
-  "version": "1.7.0",
-  "description": "Ultralekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez zależności (zero jQuery). Wersja: **1.7.0**.",
+  "version": "1.7.1",
+  "description": "Ultralekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez zależności (zero jQuery).",
   "main": "index.js",
   "scripts": {
-    "predev": "node tools/gen-variables-doc.js && node tools/gen-llms-page.js",
+    "predev": "node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js",
     "dev": "vite",
     "build": "vite build",
     "postbuild": "node tools/gen-sitemap.js",
@@ -13,7 +13,8 @@
     "gen:variables": "node tools/gen-variables-doc.js",
     "gen:llms-page": "node tools/gen-llms-page.js",
     "gen:sitemap": "node tools/gen-sitemap.js",
-    "prebuild": "node tools/gen-chunks.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js"
+    "sync:version": "node tools/sync-version.js",
+    "prebuild": "node tools/gen-chunks.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
   "homepage": "https://github.com/rafalrozacki-debug/molique#readme",
   "devDependencies": {
     "posthtml": "^0.16.7",
+    "posthtml-expressions": "^1.11.4",
     "posthtml-include": "^2.0.1",
     "sass": "^1.101.3",
     "vite": "^8.1.5",

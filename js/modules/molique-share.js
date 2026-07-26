@@ -1,5 +1,5 @@
 /**
- * molify - widget udostępniania (social media share buttons)
+ * molique - widget udostępniania (social media share buttons)
  */
 
 function initShare() {

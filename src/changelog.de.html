@@ -22,7 +22,7 @@
     >
       <div class="container py-5">
         <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
-          <span class="badge badge-primary mb-3">Aktuelle Version: 1.7.0</span>
+          <span class="badge badge-primary mb-3">Aktuelle Version: {{ __version }}</span>
           <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
             Changelog
           </h1>
@@ -841,7 +841,7 @@
                     <strong>Eine Stolperfalle, die vor dem Commit gefunden
                     wurde:</strong>
                     <code>posthtml-expressions</code> interpoliert
-                    <em>jedes</em> <code>{{ }}</code> im Dokument in einem
+                    <em>jedes</em> <code><raw>{{ }}</raw></code> im Dokument in einem
                     einzigen Durchgang, bevor
                     <code>&lt;if&gt;</code>-Zweige mit falscher Bedingung
                     entfernt werden - ein <code>null</code>-Wert für eine
@@ -1146,6 +1146,131 @@
                     Benachbarte Galeriebilder werden jetzt im Hintergrund
                     vorab geladen - Pfeile und Swipe fühlen sich sofort
                     an.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.7.1 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.1</div>
+              <div class="text-muted text-4">Juli 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  <code>.table-cards</code> auf Mobilgeräten — Text bricht in
+                  einzelne Buchstaben um
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Eine Zelle mit "umfangreichem" Inhalt (mehrere
+                    <code>&lt;code&gt;</code>-Tags auf einmal, eine längere
+                    Beschreibung) verwendete in der Kartenvariante
+                    <code>display: flex</code> - jedes Kind-Element wurde zu
+                    einem EIGENEN Flex-Item, und statt sich bei Platzmangel
+                    als ein Absatz umzubrechen, schrumpfte jedes einzelne
+                    für sich auf nahezu null Breite: der Text zerfiel in
+                    einzelne Buchstaben.
+                  </li>
+                  <li>
+                    Die Beschriftung (<code>data-label</code>) kehrt zu
+                    gewöhnlichem <code>display: block</code> ÜBER dem Wert
+                    zurück (über <code>::before</code>) statt daneben via
+                    Flex - ein gewöhnlicher Block-Flow ist gegen dieses
+                    Problem immun, unabhängig davon, wie viele Inline-Elemente
+                    der Zellenwert enthält.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Neu</span>
+                  Code-Kommentare in EN/DE-Paketen jetzt übersetzt
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Pakete, die von <code>download.en.html</code> und
+                    <code>download.de.html</code> heruntergeladen wurden,
+                    enthielten genau dieselben Dateien wie die polnische
+                    Seite - Kommentare in
+                    <code>.scss</code>/<code>.css</code>/<code>.js</code>
+                    blieben unabhängig von der Sprache der Seite, von der
+                    der Nutzer kam, auf Polnisch.
+                  </li>
+                  <li>
+                    Lösung: eine Quelle der Wahrheit (der Repo-Code,
+                    unverändert) + ein Übersetzungswörterbuch
+                    (<code>tools/i18n-comments/</code>, ~1.050 einzigartige
+                    Phrasen ins Englische und Deutsche übersetzt) + Ersetzung
+                    des Kommentartexts in einer temporären Kopie, erst beim
+                    Packen des ZIPs durch
+                    <code>tools/build-packages.ps1</code> angewendet. Code,
+                    CSS-Klassen, Variablen und Dateinamen bleiben in jeder
+                    Sprache unangetastet - übersetzt wird ausschließlich der
+                    umgebende Fließtext.
+                  </li>
+                  <li>
+                    18 Pakete statt 6 (Sprache × CSS-Format × Schriften).
+                    <code>download.js</code> wählt die passende Variante
+                    anhand des <code>&lt;html lang&gt;</code> der Seite.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Versionsnummer aus einer einzigen Quelle der Wahrheit
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Die Versionsnummer ging beim Release immer wieder
+                    verloren - von Hand eingetragen an über einem Dutzend
+                    Stellen (Seiten, <code>download.js</code>,
+                    <code>build-packages.ps1</code>, README). Jetzt gibt es
+                    nur noch eine Quelle: das Feld <code>version</code> in
+                    <code>package.json</code>.
+                  </li>
+                  <li>
+                    HTML-Seiten erhalten <code><raw>{{ __version }}</raw></code> (ein
+                    zusätzlicher <code>posthtml-expressions</code>-Durchgang
+                    über das gesamte Dokument in <code>vite.config.js</code>,
+                    nicht nur innerhalb von Partials), JS erhält die von Vite
+                    injizierte Konstante <code>__MOLIQUE_VERSION__</code>, und
+                    <code>build-packages.ps1</code> sowie das neue
+                    <code>tools/sync-version.js</code> (README.md, eingebunden
+                    in <code>predev</code>/<code>prebuild</code>) lesen
+                    dasselbe Feld.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-3">Roadmap</span>
+                  Eingebauter Just-In-Time-Compiler
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Neue Idee auf der Liste: eine JIT-Engine, die das reale
+                    Markup nach tatsächlich genutzten Klassen der Ebene
+                    <code>@layer utilities</code> durchsucht und nur die
+                    benötigten Kombinationen aus den Sass-Maps ausgibt, statt
+                    des vollen Satzes + PurgeCSS. Details auf der
+                    <a href="docs-roadmap">Roadmap-Seite</a>.
                   </li>
                 </ul>
               </div>

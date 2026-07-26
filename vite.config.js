@@ -4,11 +4,22 @@ import { fileURLToPath } from 'node:url';
 import { readdirSync, existsSync, copyFileSync, readFileSync } from 'node:fs';
 import posthtml from 'posthtml';
 import posthtmlInclude from 'posthtml-include';
+import posthtmlExpressions from 'posthtml-expressions';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // __dirname nie istnieje w ESM ("type": "module") — odtwarzamy z import.meta.url.
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const srcDir = resolve(__dirname, 'src');
+
+// package.json "version" to JEDYNE zrodlo prawdy numeru wersji w calym
+// repo - wstrzykiwane nizej jako {{ __version }} (strony/partiale) oraz
+// __MOLIQUE_VERSION__ (JS bundlowany przez Vite, patrz `define` w
+// defineConfig). Historia w changelog.html/.en/.de oraz wzmianki o
+// konkretnym PRZESZLYM wydaniu (np. "usuniete w 1.7.0" w docs-typography)
+// swiadomie NIE korzystaja z tej zmiennej - to fakty historyczne, ktore
+// nie maja sie zmieniac wraz z bumpem wersji.
+const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf8'));
+const APP_VERSION = pkg.version;
 
 // Auto-wejścia: każda strona .html w src/ staje się osobnym wejściem builda,
 // bez ręcznej listy ~85 podstron. Nowa strona = po prostu nowy plik w src/.
@@ -172,20 +183,23 @@ function moliqueInclude() {
     transformIndexHtml: {
       order: 'pre',
       async handler(html, ctx) {
+        // Domyślne locals dla posthtml-expressions: description='' sprawia,
+        // że warunek <if condition="description"> na stronach bez opisu jest
+        // falsy (pomija <meta description>) zamiast rzucać ReferenceError.
+        // Strony z opisem nadpisują to swoim locals. i18n locals (patrz
+        // computeI18nLocals) liczone z nazwy pliku, dostępne we WSZYSTKICH
+        // <include> tej strony (head.html, navbar.html), bez przekazywania
+        // ich ręcznie. __version - patrz komentarz przy APP_VERSION wyżej.
+        const locals = { description: '', __version: APP_VERSION, ...computeI18nLocals(ctx.filename) };
         const result = await posthtml([
-          posthtmlInclude({
-            root: srcDir,
-            // Domyślne locals dla posthtml-expressions: description='' sprawia,
-            // że warunek <if condition="description"> na stronach bez opisu jest
-            // falsy (pomija <meta description>) zamiast rzucać ReferenceError.
-            // Strony z opisem nadpisują to swoim locals. i18n locals (patrz
-            // computeI18nLocals) liczone z nazwy pliku, dostępne we WSZYSTKICH
-            // <include> tej strony (head.html, navbar.html), bez przekazywania
-            // ich ręcznie.
-            posthtmlExpressionsOptions: {
-              locals: { description: '', ...computeI18nLocals(ctx.filename) },
-            },
-          }),
+          posthtmlInclude({ root: srcDir, posthtmlExpressionsOptions: { locals } }),
+          // Drugi przebieg NA CALYM, juz rozwinietym dokumencie (po
+          // posthtmlInclude) - posthtmlInclude sam wywoluje expressions
+          // TYLKO wewnatrz tresci partiali, ktore wlacza (<include>), nigdy
+          // na tekscie samej strony najwyzszego poziomu. Bez tego drugiego
+          // przebiegu {{ __version }} dzialaloby wylacznie w partialach
+          // (np. footer.html), nie w index.html/download.html bezposrednio.
+          posthtmlExpressions({ locals }),
         ]).process(html, {
           from: ctx.filename,
         });
@@ -204,6 +218,12 @@ export default defineConfig({
   // Wyłączamy domyślny publicDir — zasoby dowozi vite-plugin-static-copy.
   publicDir: false,
   appType: 'mpa',
+  // Stala globalna podmieniana tekstowo w kazdym module JS przechodzacym
+  // przez Vite (np. src/download.js) - ten sam APP_VERSION co w HTML-ach,
+  // wiec numer wersji nigdy nie rozjezdza sie miedzy stronami a skryptami.
+  define: {
+    __MOLIQUE_VERSION__: JSON.stringify(APP_VERSION),
+  },
   build: {
     // Build strony trafia do _site/ (ignorowany w gicie). NIGDY do dist/,
     // bo tam leżą wersjonowane paczki wydania (molique-*.zip).

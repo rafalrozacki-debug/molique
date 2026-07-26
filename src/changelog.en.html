@@ -22,7 +22,7 @@
     >
       <div class="container py-5">
         <div class="text-center py-5" style="max-width: 720px; margin: 0 auto">
-          <span class="badge badge-primary mb-3">Current version: 1.7.0</span>
+          <span class="badge badge-primary mb-3">Current version: {{ __version }}</span>
           <h1 class="text-10 fw-black mb-3 text-white animate fade-in-up">
             Changelog
           </h1>
@@ -769,7 +769,7 @@
                   <li>
                     <strong>A gotcha caught before the commit:</strong>
                     <code>posthtml-expressions</code> interpolates
-                    <em>every</em> <code>{{ }}</code> in the document in a
+                    <em>every</em> <code><raw>{{ }}</raw></code> in the document in a
                     single pass, before removing <code>&lt;if&gt;</code>
                     branches with a false condition — a <code>null</code>
                     value for a missing translation crashed the whole build
@@ -1047,6 +1047,125 @@
                   <li>
                     Adjacent gallery images are now preloaded in the
                     background, so arrows and swipe feel instant.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
+          <!-- v1.7.1 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.1</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  <code>.table-cards</code> on mobile — text wrapping into
+                  single letters
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    A cell with "rich" content (several <code>&lt;code&gt;</code>
+                    tags at once, a longer description) in the card variant
+                    used <code>display: flex</code> - every child element
+                    became its OWN flex item, and instead of wrapping as one
+                    paragraph when space ran out, each one individually
+                    shrank toward zero width: the text broke into single
+                    letters.
+                  </li>
+                  <li>
+                    The label (<code>data-label</code>) is back to plain
+                    <code>display: block</code> ABOVE the value (via
+                    <code>::before</code>) instead of beside it via flex -
+                    plain block-flow is immune to this issue regardless of
+                    how many inline elements the cell's value contains.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-success fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">New</span>
+                  Code comments in EN/DE packages now translated
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Packages downloaded from <code>download.en.html</code>
+                    and <code>download.de.html</code> shipped the exact same
+                    files as the Polish site - comments in
+                    <code>.scss</code>/<code>.css</code>/<code>.js</code>
+                    stayed in Polish regardless of the page language the
+                    user came from.
+                  </li>
+                  <li>
+                    Fix: one source of truth (the repo code, unchanged) + a
+                    translation dictionary (<code>tools/i18n-comments/</code>,
+                    ~1,050 unique phrases translated to EN and DE) + comment
+                    text substitution in a temporary copy, applied only when
+                    the ZIP is packaged by
+                    <code>tools/build-packages.ps1</code>. Code, CSS classes,
+                    variables, and file names stay untouched in every
+                    language - only the surrounding prose is translated.
+                  </li>
+                  <li>
+                    18 packages instead of 6 (language × CSS format × fonts).
+                    <code>download.js</code> picks the right variant based on
+                    the page's <code>&lt;html lang&gt;</code>.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Version number from a single source of truth
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The version number kept getting lost at release time -
+                    typed by hand in a dozen-plus places (pages,
+                    <code>download.js</code>, <code>build-packages.ps1</code>,
+                    the README). Now the only source is the
+                    <code>version</code> field in <code>package.json</code>.
+                  </li>
+                  <li>
+                    HTML pages get <code><raw>{{ __version }}</raw></code> (an extra
+                    <code>posthtml-expressions</code> pass over the whole
+                    document in <code>vite.config.js</code>, not just inside
+                    partials), JS gets the <code>__MOLIQUE_VERSION__</code>
+                    constant injected by Vite, and
+                    <code>build-packages.ps1</code> plus the new
+                    <code>tools/sync-version.js</code> (README.md, wired into
+                    <code>predev</code>/<code>prebuild</code>) read the same
+                    field.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-info fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-info mx-2 text-3">Roadmap</span>
+                  Built-in Just-In-Time compiler
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    New idea on the list: a JIT engine scanning real markup
+                    for classes actually used from the
+                    <code>@layer utilities</code> layer, emitting only the
+                    needed combinations from the Sass maps instead of the
+                    full set + PurgeCSS. Details on the
+                    <a href="docs-roadmap">roadmap page</a>.
                   </li>
                 </ul>
               </div>

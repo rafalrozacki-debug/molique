@@ -45,7 +45,7 @@
       <div class="container">
         <div class="grid grid-cols-12 gap-4">
           <div class="col-span-12 col-md-span-6 stat-card text-center">
-            <div class="stat-value">32</div>
+            <div class="stat-value">33</div>
             <div class="stat-title">Pomysłów na liście</div>
           </div>
           <div class="col-span-12 col-md-span-6 stat-card text-center">
@@ -392,7 +392,7 @@
           <h2 class="text-7 fw-bold d-flex align-items-center gap-2 mb-3">
             <span class="badge badge-dark text-3">DX</span>
             Dokumentacja i narzędzia
-            <span class="badge badge-secondary text-3 ml-auto">2</span>
+            <span class="badge badge-secondary text-3 ml-auto">3</span>
           </h2>
           <div class="card p-4">
             <ul class="text-secondary m-0">
@@ -404,6 +404,21 @@
               <li>
                 <strong>Wtyczka do VS Code</strong> — podpowiedzi i
                 autouzupełnianie klas molique bezpośrednio w edytorze.
+              </li>
+              <li>
+                <strong>Wbudowany kompilator Just-In-Time</strong> — dziś
+                warstwa <code>@layer utilities</code> (spacing, grid, kolory,
+                warianty hover) jest generowana z góry przez pętle Sass
+                <code>@each</code>, więc bundle zawiera wszystkie możliwe
+                kombinacje, a nieużywane trzeba dopiero wyciąć PurgeCSS-em i
+                bezpieczną safelistą. JIT skanowałby realny markup (HTML + JS)
+                w poszukiwaniu klas, które faktycznie występują jako literały —
+                to już dziś jedyny dozwolony sposób ich zapisu w projekcie
+                (zakaz sklejania nazw klas w JS) — i doklejał do wyniku
+                dokładnie te kombinacje z map Sass, bez reszty. Warstwa
+                komponentów (<code>.navbar</code>, <code>.card</code> itd.)
+                zostaje bez zmian — tam nie ma eksplozji kombinatorycznej,
+                którą trzeba by ciąć.
               </li>
             </ul>
           </div>

@@ -1,5 +1,5 @@
 /**
- * molify - widżet magnetycznych przycisków
+ * molique - widżet magnetycznych przycisków
  */
 
 function initMagneticButtons() {
