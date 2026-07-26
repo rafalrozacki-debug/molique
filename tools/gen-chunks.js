@@ -23,6 +23,7 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { CORE_LABELS, DESCRIPTIONS, CATEGORIES } from './builder-i18n.data.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scssDir = path.join(root, 'css', 'scss');
@@ -46,17 +47,17 @@ const core = [
   { id: 'root',      file: 'root',      layer: 'reset',     cat: 'Podstawy', mandatory: true,  label: 'Zmienne motywu (:root)' },
   { id: 'fonts',     file: 'fonts',     layer: 'reset',     cat: 'Podstawy', mandatory: false, label: 'Fonty (@font-face)' },
   { id: 'base',      file: 'base',      layer: 'base',      cat: 'Podstawy', mandatory: true,  label: 'Reset i typografia bazowa' },
-  { id: 'a11y',      file: 'a11y',      layer: 'base',      cat: 'Podstawy', mandatory: false, label: 'Dostepnosc (focus, reduced-motion)' },
+  { id: 'a11y',      file: 'a11y',      layer: 'base',      cat: 'Podstawy', mandatory: false, label: 'Dostępność (focus, reduced-motion)' },
   { id: 'eink',      file: 'eink',      layer: 'base',      cat: 'Podstawy', mandatory: false, label: 'Tryb e-ink / druk' },
   { id: 'grid',      file: 'grid',      layer: 'layout',    cat: 'Layout',   mandatory: false, label: 'Grid i kontenery' },
   { id: 'layout',    file: 'layout',    layer: 'layout',    cat: 'Layout',   mandatory: false, label: 'Layout: sekcje, flex, pozycjonowanie' },
   { id: 'buttons',   file: 'buttons',   layer: 'components',cat: 'Podstawy', mandatory: false, label: 'Przyciski' },
-  { id: 'utilities', file: 'utilities', layer: 'utilities', cat: 'Utilities',mandatory: false, label: 'Klasy narzedziowe' },
+  { id: 'utilities', file: 'utilities', layer: 'utilities', cat: 'Utilities',mandatory: false, label: 'Klasy narzędziowe' },
   // optIn = poza presetem "Wszystko" i poza zaznaczaniem calej kategorii.
   // Ten modul generuje odstepy dla PIECIU progow (sm/md/lg/xl + baza), wiec
   // sam wazy tyle, co kilka komponentow. Wlaczasz go swiadomie albo wcale -
   // dlatego nie moze wjechac do paczki przy kliknieciu "zaznacz wszystko".
-  { id: 'utilities-extended', file: 'utilities-extended', layer: 'utilities', cat: 'Utilities', mandatory: false, optIn: true, label: 'Odstepy na wszystkich progach (sm/lg/xl)' },
+  { id: 'utilities-extended', file: 'utilities-extended', layer: 'utilities', cat: 'Utilities', mandatory: false, optIn: true, label: 'Odstępy na wszystkich progach (sm/lg/xl)' },
 ];
 
 // Kategoria wg nazwy pliku komponentu (dla UI konfiguratora).
@@ -69,7 +70,7 @@ const CAT = [
   [/^(modal|lightbox|context-menu|accordion|tabs|carousel)/,    'Okna i media'],
   [/^(cards|hero|code-preview|charts|chart-)/,                  'Prezentacja'],
   [/^(admin-|dashboard)/,                                       'Panel admina'],
-  [/^theme-editor$/,                                            'Narzedzia'],
+  [/^theme-editor$/,                                            'Narzędzia'],
 ];
 const catOf = (id) => (CAT.find(([re]) => re.test(id)) || [null, 'Inne'])[1];
 
@@ -194,14 +195,44 @@ for (const c of chunks) {
   delete c._css;
 }
 
-/* ---------- 5. Manifest ---------- */
+/* ---------- 5. Tlumaczenia EN/DE (konfigurator paczki, builder.html) ---------- */
+// Etykiety modulow komponentow (labelOf()) sa auto-generowane z angielskich
+// nazw plikow i NIE wymagaja wpisu w CORE_LABELS - czytelne we wszystkich
+// jezykach bez zmian. Opis (desc) i core.label wymagaja wpisu zawsze -
+// bez niego builder.js po angielsku/niemiecku pokazalby polski tekst.
+const missingI18n = [];
+for (const c of chunks) {
+  if (!DESCRIPTIONS[c.id]) missingI18n.push(`${c.id}: brak wpisu w DESCRIPTIONS`);
+  if (core.some((k) => k.id === c.id) && !CORE_LABELS[c.id]) {
+    missingI18n.push(`${c.id}: brak wpisu w CORE_LABELS`);
+  }
+  if (!CATEGORIES[c.cat]) missingI18n.push(`${c.id}: kategoria "${c.cat}" brak w CATEGORIES`);
+}
+if (missingI18n.length) {
+  console.error('\nGenerator chunkow PRZERWANY - brakuje tlumaczen w tools/builder-i18n.data.js:\n');
+  for (const m of missingI18n) console.error('  - ' + m);
+  console.error('\nUzupelnij i uruchom ponownie.');
+  process.exit(1);
+}
+
+/* ---------- 6. Manifest ---------- */
 
 const manifest = {
   generated: new Date().toISOString().slice(0, 10),
   note: 'Chunki mozna sklejac w dowolnej kolejnosci - o precedencji decyduje deklaracja @layer na gorze kazdego pliku. Sklejajac, zostaw deklaracje warstw TYLKO RAZ (pierwsza) i pomin @charset.',
   layerOrder: ['reset', 'base', 'layout', 'components', 'modules', 'utilities'],
   chunks: chunks.map((c) => ({
-    id: c.id, label: c.label, desc: c.desc, cat: c.cat, layer: c.layer,
+    id: c.id,
+    label: c.label,
+    labelEn: CORE_LABELS[c.id]?.en ?? c.label,
+    labelDe: CORE_LABELS[c.id]?.de ?? c.label,
+    desc: c.desc,
+    descEn: DESCRIPTIONS[c.id].en,
+    descDe: DESCRIPTIONS[c.id].de,
+    cat: c.cat,
+    catEn: CATEGORIES[c.cat].en,
+    catDe: CATEGORIES[c.cat].de,
+    layer: c.layer,
     mandatory: c.mandatory, optIn: c.optIn === true,
     file: fileOf(c.id), bytes: c.bytes, gzip: c.gzip, deps: c.deps,
   })),

@@ -12,8 +12,12 @@
 const MANIFEST_URL = 'dist/chunks/manifest.json';
 const CHUNK_DIR = 'dist/chunks/';
 
-// Ten sam plik JS lada na stronie PL/EN/DE - komunikaty toastow czytaja
-// jezyk z <html lang> (ten sam wzorzec co molique-lang-suggest.js).
+// Ten sam plik JS lada na stronie PL/EN/DE - komunikaty i etykiety czytaja
+// jezyk z <html lang> (ten sam wzorzec co molique-lang-suggest.js). Etykiety
+// i opisy POSZCZEGOLNYCH modulow (label/desc/cat) nie sa tlumaczone tutaj -
+// przychodza juz przetlumaczone w manifest.json (labelEn/descEn/catEn, patrz
+// tools/builder-i18n.data.js + gen-chunks.js), bo to jedyne miejsce, gdzie
+// obie strony (generator manifestu i ten skrypt) widza te same dane.
 const BUILDER_LANG = document.documentElement.lang;
 const BUILDER_STRINGS = {
   done: {
@@ -26,28 +30,83 @@ const BUILDER_STRINGS = {
     en: (msg) => 'Error: ' + msg,
     de: (msg) => 'Fehler: ' + msg,
   },
+  toggleAll: { pl: 'Przełącz wszystkie', en: 'Toggle all', de: 'Alle umschalten' },
+  cssHeader: {
+    pl: (n, ids) => '/*! molique - paczka złożona konfiguratorem\n *  Moduły (' + n + '): ' + ids + '\n *  Kolejność warstw deklarowana niżej - nie usuwaj tej linii.\n */\n',
+    en: (n, ids) => '/*! molique - package assembled with the configurator\n *  Modules (' + n + '): ' + ids + '\n *  Layer order is declared below - do not remove this line.\n */\n',
+    de: (n, ids) => '/*! molique - mit dem Konfigurator zusammengestelltes Paket\n *  Module (' + n + '): ' + ids + '\n *  Layer-Reihenfolge wird unten deklariert - diese Zeile nicht entfernen.\n */\n',
+  },
+  requires: { pl: 'wymaga: ', en: 'requires: ', de: 'erfordert: ' },
+  alwaysIncluded: { pl: 'zawsze w paczce', en: 'always included', de: 'immer enthalten' },
+  optInNote: {
+    pl: 'dodatkowy - poza presetem „Wszystko"',
+    en: 'opt-in - outside the "Everything" preset',
+    de: 'optional - außerhalb des Presets „Alles"',
+  },
+  fetchFailed: { pl: 'Nie udało się pobrać ', en: 'Failed to fetch ', de: 'Abruf fehlgeschlagen: ' },
+  assembling: { pl: 'Składam…', en: 'Assembling…', de: 'Wird zusammengestellt…' },
+  loadingModules: { pl: 'Pobieram listę modułów…', en: 'Fetching module list…', de: 'Modulliste wird geladen…' },
+  manifestLoadFailedTitle: {
+    pl: 'Nie udało się wczytać manifestu.',
+    en: 'Failed to load the manifest.',
+    de: 'Manifest konnte nicht geladen werden.',
+  },
+  manifestLoadFailedBody: {
+    pl: 'Uruchom <code>npm run build</code> (generuje <code>dist/chunks/</code>). Szczegóły: ',
+    en: 'Run <code>npm run build</code> (it generates <code>dist/chunks/</code>). Details: ',
+    de: 'Führen Sie <code>npm run build</code> aus (erzeugt <code>dist/chunks/</code>). Details: ',
+  },
 };
-const builderT = (key, arg) => (BUILDER_STRINGS[key][BUILDER_LANG] || BUILDER_STRINGS[key].en)(arg);
+const builderT = (key, ...args) => {
+  const entry = BUILDER_STRINGS[key][BUILDER_LANG] || BUILDER_STRINGS[key].en;
+  return typeof entry === 'function' ? entry(...args) : entry;
+};
+
+// label()/desc()/cat() czytaja odpowiednie pole z manifestu (patrz wyzej) -
+// domyslnie polskie, na PL nie ma nic do wyboru.
+const label = (c) => (BUILDER_LANG === 'en' ? c.labelEn : BUILDER_LANG === 'de' ? c.labelDe : c.label);
+const desc = (c) => (BUILDER_LANG === 'en' ? c.descEn : BUILDER_LANG === 'de' ? c.descDe : c.desc);
+const catOf = (c) => (BUILDER_LANG === 'en' ? c.catEn : BUILDER_LANG === 'de' ? c.catDe : c.cat);
 
 const LAYER_DECL = /@layer\s+reset\s*,\s*base\s*,\s*layout\s*,\s*components\s*,\s*modules\s*,\s*utilities\s*;/g;
 
+const PRESETS_I18N = {
+  nano: {
+    pl: { label: 'Nano', desc: 'Sam fundament: zmienne, reset, grid, przyciski.' },
+    en: { label: 'Nano', desc: 'Just the foundation: variables, reset, grid, buttons.' },
+    de: { label: 'Nano', desc: 'Nur das Fundament: Variablen, Reset, Grid, Buttons.' },
+  },
+  landing: {
+    pl: { label: 'Landing page', desc: 'Strona ofertowa: nawigacja, hero, karty, cennik, formularz.' },
+    en: { label: 'Landing page', desc: 'A marketing page: navigation, hero, cards, pricing, form.' },
+    de: { label: 'Landing Page', desc: 'Eine Marketing-Seite: Navigation, Hero, Karten, Preise, Formular.' },
+  },
+  admin: {
+    pl: { label: 'Panel admina', desc: 'Dashboard B2B: sidebar, tabele, formularze, modale, wykresy.' },
+    en: { label: 'Admin panel', desc: 'B2B dashboard: sidebar, tables, forms, modals, charts.' },
+    de: { label: 'Admin-Panel', desc: 'B2B-Dashboard: Sidebar, Tabellen, Formulare, Modale, Diagramme.' },
+  },
+  shop: {
+    pl: { label: 'Sklep', desc: 'E-commerce: karty produktów, koszyk, oceny, galeria.' },
+    en: { label: 'Shop', desc: 'E-commerce: product cards, cart, ratings, gallery.' },
+    de: { label: 'Shop', desc: 'E-Commerce: Produktkarten, Warenkorb, Bewertungen, Galerie.' },
+  },
+};
+
 const PRESETS = {
   nano: {
-    label: 'Nano',
-    desc: 'Sam fundament: zmienne, reset, grid, przyciski.',
+    ...PRESETS_I18N.nano[BUILDER_LANG] || PRESETS_I18N.nano.en,
     ids: ['root', 'fonts', 'base', 'a11y', 'grid', 'layout', 'buttons'],
   },
   landing: {
-    label: 'Landing page',
-    desc: 'Strona ofertowa: nawigacja, hero, karty, cennik, formularz.',
+    ...PRESETS_I18N.landing[BUILDER_LANG] || PRESETS_I18N.landing.en,
     ids: ['root', 'fonts', 'base', 'a11y', 'grid', 'layout', 'buttons', 'utilities',
       'navbar', 'dropdown', 'hero', 'cards', 'accordion', 'pricing-table', 'pricing-list',
       'testimonials', 'form-base', 'form-groups', 'form-check', 'badges', 'alerts',
       'timeline', 'scroll-to-top'],
   },
   admin: {
-    label: 'Panel admina',
-    desc: 'Dashboard B2B: sidebar, tabele, formularze, modale, wykresy.',
+    ...PRESETS_I18N.admin[BUILDER_LANG] || PRESETS_I18N.admin.en,
     ids: ['root', 'fonts', 'base', 'a11y', 'grid', 'layout', 'buttons', 'utilities',
       'navbar', 'dropdown', 'admin-nav', 'admin-sidebar', 'dashboard', 'tables',
       'data-rows', 'data-row-compact', 'form-base', 'form-groups', 'form-check',
@@ -55,8 +114,7 @@ const PRESETS = {
       'badges', 'status-dots', 'tooltips', 'tabs', 'charts', 'stepper', 'progress'],
   },
   shop: {
-    label: 'Sklep',
-    desc: 'E-commerce: karty produktów, koszyk, oceny, galeria.',
+    ...PRESETS_I18N.shop[BUILDER_LANG] || PRESETS_I18N.shop.en,
     ids: ['root', 'fonts', 'base', 'a11y', 'grid', 'layout', 'buttons', 'utilities',
       'navbar', 'mega-menu', 'dropdown', 'cards', 'badges', 'alerts', 'toasts',
       'form-base', 'form-groups', 'form-check', 'modal', 'lightbox', 'carousel',
@@ -100,14 +158,19 @@ function withDeps(ids) {
 // się zwijała. Zmiany stanu nanosi syncUI(), które tylko odświeża checkboxy.
 function renderOnce() {
   const cats = {};
-  for (const c of manifest.chunks) (cats[c.cat] = cats[c.cat] || []).push(c);
+  // Grupujemy po PRZETLUMACZONEJ nazwie kategorii - dwie kategorie z tym samym
+  // polskim "cat" maja to samo catEn/catDe, wiec grupowanie zostaje spojne.
+  for (const c of manifest.chunks) {
+    const cat = catOf(c);
+    (cats[cat] = cats[cat] || []).push(c);
+  }
 
   $('#builder-list').innerHTML = Object.entries(cats)
     .map(([cat, items]) => `
       <div class="mb-4">
         <div class="d-flex align-items-center justify-content-between mb-2">
           <h3 class="text-5 fw-bold m-0">${cat}</h3>
-          <button type="button" class="btn-action" data-cat="${cat}">Przełącz wszystkie</button>
+          <button type="button" class="btn-action" data-cat="${items[0].cat}">${builderT('toggleAll')}</button>
         </div>
         <div class="grid grid-cols-1 grid-md-cols-2 gap-2">
           ${items.map(itemHtml).join('')}
@@ -123,12 +186,12 @@ function renderOnce() {
 // przypadkowego przełączania modułu.
 function itemHtml(c) {
   const deps = c.deps.length
-    ? `<span class="text-1 text-muted d-block">wymaga: ${c.deps.join(', ')}</span>`
+    ? `<span class="text-1 text-muted d-block">${builderT('requires')}${c.deps.join(', ')}</span>`
     : '';
   const note = c.mandatory
-    ? '<span class="text-1 text-primary d-block">zawsze w paczce</span>'
+    ? `<span class="text-1 text-primary d-block">${builderT('alwaysIncluded')}</span>`
     : c.optIn
-      ? '<span class="text-1 text-warning d-block">dodatkowy - poza presetem „Wszystko"</span>'
+      ? `<span class="text-1 text-warning d-block">${builderT('optInNote')}</span>`
       : '';
   return `
     <div class="p-2 border rounded-2" data-row="${c.id}">
@@ -137,11 +200,11 @@ function itemHtml(c) {
         <input type="checkbox" class="form-check-input" data-id="${c.id}"
                ${c.mandatory ? 'disabled' : ''} />
         <span class="d-flex align-items-center justify-content-between gap-2 w-100">
-          <strong class="text-3">${c.label}</strong>
+          <strong class="text-3">${label(c)}</strong>
           <span class="badge badge-secondary text-1">${kb(c.gzip)}</span>
         </span>
       </label>
-      <span class="text-2 text-muted d-block mt-1">${c.desc || ''}</span>
+      <span class="text-2 text-muted d-block mt-1">${desc(c) || ''}</span>
       ${deps}
       ${note}
     </div>`;
@@ -185,7 +248,7 @@ async function buildCss() {
 
   const texts = await Promise.all(
     chosen.map((c) => fetch(CHUNK_DIR + c.file).then((r) => {
-      if (!r.ok) throw new Error('Nie udało się pobrać ' + c.file);
+      if (!r.ok) throw new Error(builderT('fetchFailed') + c.file);
       return r.text();
     }))
   );
@@ -197,11 +260,7 @@ async function buildCss() {
       .trim()
   );
 
-  const header =
-    '/*! molique - paczka złożona konfiguratorem\n' +
-    ' *  Moduły (' + chosen.length + '): ' + chosen.map((c) => c.id).join(', ') + '\n' +
-    ' *  Kolejność warstw deklarowana niżej - nie usuwaj tej linii.\n' +
-    ' */\n';
+  const header = builderT('cssHeader', chosen.length, chosen.map((c) => c.id).join(', '));
 
   return header + '@layer ' + order.join(', ') + ';\n' + bodies.join('\n');
 }
@@ -251,9 +310,9 @@ function bind() {
 
   $('#btn-download').addEventListener('click', async () => {
     const btn = $('#btn-download');
-    const label = btn.textContent;
+    const originalLabel = btn.textContent;
     btn.disabled = true;
-    btn.textContent = 'Składam…';
+    btn.textContent = builderT('assembling');
     try {
       const css = await buildCss();
       const url = URL.createObjectURL(new Blob([css], { type: 'text/css;charset=utf-8' }));
@@ -270,7 +329,7 @@ function bind() {
       else alert(builderT('error', err.message));
     } finally {
       btn.disabled = false;
-      btn.textContent = label;
+      btn.textContent = originalLabel;
     }
   });
 }
@@ -280,7 +339,7 @@ function bind() {
 // Ślad, że skrypt w ogóle wystartował. Bez tego strona z zablokowanym
 // modułem wygląda identycznie jak strona, która wciąż się ładuje.
 const loadingEl = $('#builder-loading');
-if (loadingEl) loadingEl.querySelector('p').textContent = 'Pobieram listę modułów…';
+if (loadingEl) loadingEl.querySelector('p').textContent = builderT('loadingModules');
 
 // Uwaga: ostrzeżenia o file:// NIE ma tutaj celowo. Ten plik jest modułem ES,
 // a przeglądarka blokuje moduły na file:// przez CORS - kod stąd nigdy by się
@@ -300,7 +359,7 @@ fetch(MANIFEST_URL)
   })
   .catch((err) => {
     $('#builder-loading').innerHTML =
-      '<div class="alert alert-danger m-0"><strong>Nie udało się wczytać manifestu.</strong> ' +
-      'Uruchom <code>npm run build</code> (generuje <code>dist/chunks/</code>). Szczegóły: ' +
+      '<div class="alert alert-danger m-0"><strong>' + builderT('manifestLoadFailedTitle') + '</strong> ' +
+      builderT('manifestLoadFailedBody') +
       err.message + '</div>';
   });
