@@ -14,7 +14,7 @@ This repo contains two distinct things:
   is the actual "product": the `dist/*.zip` packages (see [Releases][releases])
   are exactly these folders, zipped up and ready to drop into any project.
   The rest of this README covers only this part.
-- **The source of [molique.rozacki.com][live]** - all the docs, examples,
+- **The source of [molique.dev][live]** - all the docs, examples,
   and module demos (`src/`), built with Vite (`npm run dev` /
   `npm run build`, configuration in `vite.config.js`, tooling in `tools/`).
   This is NOT part of the downloadable package - it's just our own site,
@@ -24,7 +24,7 @@ This repo contains two distinct things:
   nothing hidden here.
 
 [releases]: https://github.com/rafalrozacki-debug/molique/releases
-[live]: https://molique.rozacki.com
+[live]: https://molique.dev
 
 ## Quick start
 

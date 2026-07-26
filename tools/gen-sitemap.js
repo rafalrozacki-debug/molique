@@ -25,7 +25,7 @@ import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const SITE_URL = 'https://molique.rozacki.com';
+const SITE_URL = 'https://molique.dev';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = resolve(root, 'src');

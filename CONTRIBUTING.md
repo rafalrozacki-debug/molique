@@ -16,7 +16,7 @@ przyjmie.
 
 Zobacz sekcję ["Struktura repozytorium"](README.md#repository-structure) w
 README - w skrócie: `css/`/`js/`/`fonts/` to sam framework, `src/` to
-źródło strony [molique.rozacki.com](https://molique.rozacki.com) (docs,
+źródło strony [molique.dev](https://molique.dev) (docs,
 przykłady, demo modułów).
 
 ## Środowisko lokalne

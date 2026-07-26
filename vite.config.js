@@ -113,6 +113,7 @@ const rootFiles = [
   'favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png',
   'apple-touch-icon.png', 'android-chrome-192x192.png',
   'android-chrome-512x512.png', 'site.webmanifest',
+  'sitemap.xml', 'robots.txt',
 ];
 const outDir = resolve(__dirname, '_site');
 
@@ -122,7 +123,8 @@ function copyRootFiles() {
   // Typy binarne MUSZĄ być rozpoznane: domyślne text/plain sprawia, że
   // przeglądarka w trybie dev odrzuca ikonę i favicon się nie pokazuje.
   const mime = (name) =>
-    name.endsWith('.txt') ? 'text/plain; charset=utf-8'
+    name.endsWith('.xml') ? 'application/xml; charset=utf-8'
+    : name.endsWith('.txt') ? 'text/plain; charset=utf-8'
     : name.endsWith('.cjs') ? 'text/javascript; charset=utf-8'
     : name.endsWith('.ico') ? 'image/x-icon'
     : name.endsWith('.png') ? 'image/png'
@@ -198,7 +200,7 @@ function toPrettyUrl(base, locale) {
 // odrzuca wzgledne wartosci - patrz audyt Lighthouse "hreflang"), w
 // odroznieniu od __altPl/__altEn/__altDe uzywanych w przelaczniku jezyka w
 // navbarze, ktore musza zostac wzgledne (dzialaja spod dowolnego katalogu).
-const SITE_URL = 'https://molique.rozacki.com';
+const SITE_URL = 'https://molique.dev';
 function toAbsoluteUrl(base, locale) {
   // Strona glowna dostaje sam korzen domeny (bez segmentu "index") - ta sama
   // zasada co w tools/gen-sitemap.js, zeby hreflang zgadzal sie z adresami

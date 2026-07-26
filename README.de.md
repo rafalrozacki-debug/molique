@@ -15,7 +15,7 @@ Dieses Repo enthält zwei unterschiedliche Dinge:
   [Releases][releases]) sind genau diese Ordner, gezippt und einsatzbereit
   für jedes Projekt. Der Rest dieser README bezieht sich ausschließlich
   auf diesen Teil.
-- **Der Quellcode von [molique.rozacki.com][live]** - die gesamte
+- **Der Quellcode von [molique.dev][live]** - die gesamte
   Dokumentation, Beispiele und Modul-Demos (`src/`), gebaut mit Vite
   (`npm run dev` / `npm run build`, Konfiguration in `vite.config.js`,
   Werkzeuge in `tools/`). Das ist NICHT Teil des herunterladbaren Pakets -
@@ -26,7 +26,7 @@ Dieses Repo enthält zwei unterschiedliche Dinge:
   sichtbar, es gibt hier also nichts zu verstecken.
 
 [releases]: https://github.com/rafalrozacki-debug/molique/releases
-[live]: https://molique.rozacki.com
+[live]: https://molique.dev
 
 ## Schnellstart
 
