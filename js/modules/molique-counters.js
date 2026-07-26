@@ -13,6 +13,22 @@ if (counters.length > 0) {
         const prefix = counter.getAttribute('data-prefix') || '';
         const suffix = counter.getAttribute('data-suffix') || '';
 
+        // .chart-radial wypelnia sie sam przy wczytaniu strony (CSS
+        // @starting-style) - jesli sekcja jest poza pierwszym ekranem,
+        // animacja konczy sie na zawsze niewidoczna. Gdy licznik siedzi
+        // w pierscieniu, resetujemy --val do 0% (bez transition, stad
+        // klasa js-resetting) i od razu wracamy do docelowej wartosci,
+        // zeby wypelnienie odtworzylo sie razem z liczba.
+        const chart = counter.closest('.chart-radial');
+        if (chart) {
+          const chartTarget = chart.style.getPropertyValue('--val') || getComputedStyle(chart).getPropertyValue('--val');
+          chart.classList.add('js-resetting');
+          chart.style.setProperty('--val', '0%');
+          chart.offsetHeight; // force reflow - commituje 0% przed odblokowaniem transition
+          chart.classList.remove('js-resetting');
+          requestAnimationFrame(() => chart.style.setProperty('--val', chartTarget));
+        }
+
         const updateCounter = (currentTime) => {
           const progress = Math.min((currentTime - startTime) / duration, 1);
           const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);

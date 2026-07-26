@@ -1,36 +1,38 @@
+🇬🇧 **English** · 🇵🇱 [Polski](README.pl.md) · 🇩🇪 [Deutsch](README.de.md)
+
 # molique
 
-Ultralekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na
-natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez
-zależności (zero jQuery). Wersja: **1.7.1**.
+A lightweight, rigorously optimized CSS framework for B2B. Built on native
+cascade layers (`@layer`), with zero specificity wars and zero dependencies
+(no jQuery). Version: **1.7.1**.
 
-## Struktura repozytorium
+## Repository structure
 
-Ten repo zawiera dwie odrębne rzeczy:
+This repo contains two distinct things:
 
-- **Sam framework** — `css/`, `js/`, `fonts/`, `starter.html`. To jest
-  właściwy "produkt": paczki `dist/*.zip` (patrz [Releases][releases])
-  to dokładnie te foldery, spakowane i gotowe do wgrania do dowolnego
-  projektu. Reszta tego README dotyczy wyłącznie tej części.
-- **Źródło strony [molique.rozacki.com][live]** — cała dokumentacja,
-  przykłady i demo modułów (`src/`), zbudowane przez Vite
-  (`npm run dev` / `npm run build`, konfiguracja w `vite.config.js`,
-  narzędzia w `tools/`). To NIE jest część pobieranej paczki — to nasza
-  własna strona, napisana w oparciu o molique (dogfooding). Jeśli
-  chcesz naprawić literówkę w docsach albo dodać przykład komponentu,
-  to jest właściwe miejsce — cała treść strony jest i tak publicznie
-  widoczna przez "Wyświetl kod źródłowy" w przeglądarce, więc nie ma tu
-  nic chowanego.
+- **The framework itself** - `css/`, `js/`, `fonts/`, `starter.html`. This
+  is the actual "product": the `dist/*.zip` packages (see [Releases][releases])
+  are exactly these folders, zipped up and ready to drop into any project.
+  The rest of this README covers only this part.
+- **The source of [molique.rozacki.com][live]** - all the docs, examples,
+  and module demos (`src/`), built with Vite (`npm run dev` /
+  `npm run build`, configuration in `vite.config.js`, tooling in `tools/`).
+  This is NOT part of the downloadable package - it's just our own site,
+  built using molique. If you want to fix a typo in the docs or add a
+  component example, this is the right place - the whole page is already
+  publicly visible via "View Source" in the browser anyway, so there's
+  nothing hidden here.
 
 [releases]: https://github.com/rafalrozacki-debug/molique/releases
 [live]: https://molique.rozacki.com
 
-## Szybki start
+## Quick start
 
-1. Skopiuj foldery `css/`, `js/` i `fonts/` do swojego projektu
-   (`fonts/` jest wymagany przez wbudowany `@font-face` - Inter + Poppins;
-   bez niego molique zdegraduje się łagodnie do `system-ui`).
-2. W `<head>` dołącz rdzeń, a JS na końcu `<body>` z atrybutem `defer`:
+1. Copy the `css/`, `js/`, and `fonts/` folders into your project
+   (`fonts/` is required by the built-in `@font-face` - Poppins;
+   without it, molique degrades gracefully to `system-ui`).
+2. In `<head>`, include the core, and the JS at the end of `<body>` with
+   the `defer` attribute:
 
 ```html
 <link rel="stylesheet" href="css/molique-style.css" />
@@ -38,36 +40,37 @@ Ten repo zawiera dwie odrębne rzeczy:
 <script defer src="js/molique-script.js"></script>
 ```
 
-3. Gotowe. Zobacz `starter.html` jako punkt wyjścia.
+3. Done. See `starter.html` as a starting point.
 
-## Co jest w paczce
+## What's in the package
 
-| Ścieżka | Opis |
+| Path | Description |
 | --- | --- |
-| `css/molique-style.css` | Rdzeń: reset, base, layout, komponenty, utilities. **Wymagany.** |
-| `css/molique-style.min.css` | Zminifikowana wersja rdzenia (produkcja). |
-| `css/molique-style-admin.css` | Moduł panelu admina (layout, sidebar, drill-down). Opcjonalny. |
-| `css/molique-style-shop.css` | Moduł e-commerce. Opcjonalny. |
-| `css/molique-style-blog.css` | Moduł bloga. Opcjonalny. |
-| `css/molique-style-docs.css` | Chrome dokumentacji + theme-editor. Opcjonalny. |
-| `js/molique-script.js` | Rdzeń JS + inteligentny autoloader modułów. |
-| `js/modules/*.js` | Mikro-moduły dociągane w runtime (carousel, lightbox, select, theme-editor, …). |
-| `fonts/` | Pliki `woff2` (Inter + Poppins). Używane przez `@font-face` wbudowany w `molique-style.css` - skopiuj ten folder obok `css/`. |
-| `img/flags/` | Flagi SVG do komponentu language-switch. |
-| `starter.html` | Minimalny szablon startowy. |
-| `purgecss.safelist.cjs` | Gotowa safelista dla PurgeCSS (patrz niżej). Potrzebna tylko, jeśli purge'ujesz CSS. |
-| `scss/` | *(tylko paczka Source)* Źródła Sass do własnej kompilacji. |
+| `css/molique-style.css` | Core: reset, base, layout, components, utilities. **Required.** |
+| `css/molique-style.min.css` | Minified core (production). |
+| `css/molique-style-admin.css` | Admin panel module (layout, sidebar, drill-down). Optional. |
+| `css/molique-style-shop.css` | E-commerce module. Optional. |
+| `css/molique-style-blog.css` | Blog module. Optional. |
+| `css/molique-style-docs.css` | Docs chrome + theme editor. Optional. |
+| `js/molique-script.js` | JS core + smart module autoloader. |
+| `js/modules/*.js` | Micro-modules loaded at runtime (carousel, lightbox, select, theme editor, …). |
+| `fonts/` | `woff2` files (Poppins). Used by the `@font-face` built into `molique-style.css` - copy this folder next to `css/`. |
+| `img/flags/` | SVG flags for the language-switch component. |
+| `starter.html` | Minimal starter template. |
+| `purgecss.safelist.cjs` | Ready-made PurgeCSS safelist (see below). Only needed if you purge your CSS. |
+| `scss/` | *(Source package only)* Sass sources for compiling your own. |
 
-## Moduły opcjonalne (CSS)
+## Optional modules (CSS)
 
-Dołączaj tylko te, których używasz — każdy to osobny plik `css/molique-style-*.css`
-(admin, shop, blog, docs, before-after, share, speed-dial).
+Include only the ones you use - each is its own `css/molique-style-*.css`
+file (admin, shop, blog, docs, before-after, share, speed-dial).
 
-## PurgeCSS (opcjonalnie)
+## PurgeCSS (optional)
 
-Część klas molique **nie występuje w Twoim HTML** — dodaje je JS w czasie działania
-(stany `.is-*`, markup karuzeli, lightboxa i toastów). PurgeCSS ich nie widzi i bez
-safelisty je wytnie. Dlatego w paczce jest gotowy plik:
+Some molique classes **don't appear in your HTML** - they're added by JS at
+runtime (`.is-*` states, carousel, lightbox, and toast markup). PurgeCSS
+can't see them and will strip them without a safelist. That's why the
+package ships this file:
 
 ```js
 // purgecss.config.js
@@ -76,56 +79,58 @@ const molique = require('./purgecss.safelist.cjs');
 module.exports = {
   content: ['./**/*.html', './**/*.php', './js/**/*.js'],
   css: ['./css/molique-style.css'],
-  safelist: molique.runtime,   // MINIMUM - bez tego komponenty się psują
+  safelist: molique.runtime,   // MINIMUM - without it, components break
   keyframes: true,
-  variables: false,            // NIE usuwaj zmiennych - na nich stoi motyw
+  variables: false,            // do NOT strip variables - the theme relies on them
 };
 ```
 
-**Warianty safelisty:**
+**Safelist variants:**
 
-| Wywołanie | Kiedy |
+| Call | When |
 | --- | --- |
-| `molique.runtime` | Zawsze. Klasy dodawane przez JS molique. |
-| `molique.merge('status', 'grid')` | Gdy Twój **backend skleja nazwy klas** — np. `class="badge-<?= $status ?>"` albo `col-md-span-<?= $n ?>`. Takich klas nie ma w żadnym pliku, więc trzeba je zachować jawnie. |
-| `molique.all` | Wszystkie rodziny utilities (najbezpieczniej, najmniejszy zysk). |
+| `molique.runtime` | Always. Classes added by molique's JS. |
+| `molique.merge('status', 'grid')` | When your **backend concatenates class names** - e.g. `class="badge-<?= $status ?>"` or `col-md-span-<?= $n ?>`. These classes don't exist literally in any file, so they need to be kept explicitly. |
+| `molique.all` | All utility families (safest, smallest gain). |
 
-Dostępne grupy: `colors`, `grid`, `spacing`, `status`.
+Available groups: `colors`, `grid`, `spacing`, `status`.
 
-**Efekt na realnej stronie** (navbar + karta + przyciski): `277 KB → 68 KB` (−75%),
-przy zachowaniu wszystkiego, co dodaje JS.
+**Effect on a real page** (navbar + card + buttons): `277 KB → 68 KB` (−75%),
+while keeping everything JS adds.
 
-> **Uwaga:** zanim sięgniesz po PurgeCSS, sprawdź czy wystarczy dobór modułów wyżej —
-> to redukcja bez żadnego ryzyka. `variables: true` zepsuje motyw (dziesiątki
-> zmiennych CSS, pełna lista w `docs-variables.html`), a `keyframes: true`
-> jest bezpieczne **tylko** z safelistą.
+> **Note:** before reaching for PurgeCSS, check whether picking the right
+> modules above is enough - that's a reduction with zero risk. `variables: true`
+> will break the theme (dozens of CSS variables, full list in
+> `docs-variables.html`), and `keyframes: true` is safe **only** with the
+> safelist.
 
-## Autoloader JS
+## JS autoloader
 
-`molique-script.js` skanuje DOM i **dociąga moduły z `js/modules/` tylko wtedy,
-gdy dany komponent istnieje na stronie** — nie ma potrzeby ręcznego ładowania.
-Dlatego zostaw folder `js/modules/` w całości obok `molique-script.js`.
+`molique-script.js` scans the DOM and **only pulls in modules from
+`js/modules/` when the matching component exists on the page** - no manual
+loading needed. So leave the `js/modules/` folder intact next to
+`molique-script.js`.
 
-## Motyw (Theme Editor)
+## Theme (Theme Editor)
 
-Kolory, typografię, zaokrąglenia i inne zmienne dobierzesz wizualnie w
-edytorze motywu (`theme-editor.html` w wersji online), a wynik skopiujesz jako
-blok `:root { … }` do własnego CSS.
+Pick colors, typography, radii, and other variables visually in the theme
+editor (`theme-editor.html` in the online version), then copy the result as
+a `:root { … }` block into your own CSS.
 
-## Kompilacja ze źródeł (paczka Source)
+## Compiling from source (Source package)
 
-Wymaga Dart Sass:
+Requires Dart Sass:
 
 ```bash
 sass css/scss/molique-style.scss css/molique-style.css --style=expanded
 sass css/scss/molique-style-admin.scss css/molique-style-admin.css --style=expanded
-# ...analogicznie pozostałe bundle
+# ...same pattern for the remaining bundles
 ```
 
-Zmienne motywu (kolory, spacing, radius, typografia) są w
+Theme variables (colors, spacing, radius, typography) live in
 `scss/_root.scss`.
 
-## Licencja
+## License
 
-Apache License 2.0. Copyright 2026 Rafał Różacki. Pełny tekst w pliku
-`LICENSE`, informacja o atrybucji w `NOTICE`.
+Apache License 2.0. Copyright 2026 Rafał Różacki. Full text in the
+`LICENSE` file, attribution notice in `NOTICE`.

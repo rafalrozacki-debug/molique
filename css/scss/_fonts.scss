@@ -1,18 +1,17 @@
 /**
  * molique - Fonty (@font-face)
- * FontBody = Inter (tekst), FontHeading = Poppins (nagłówki).
- * Nazwy rodzin odpowiadają --font-family-base / --font-family-heading z _root.
+ * FontBody = FontHeading = Poppins (jeden krój, ciaśniejszy tracking - patrz
+ * --font-family-base w _root.scss). Dwie nazwy zostają jako alias, nie jako
+ * dwa różne kroje: gdyby projekt kiedyś wrócił do osobnego fontu dla body,
+ * wystarczy zmienić --font-family-base, bez ruszania tego pliku.
  * Ścieżki względne do skompilowanego CSS w css/ (pliki w css/../fonts/).
  * font-display: swap - tekst widoczny od razu, bez FOIT.
  *
- * DLACZEGO unicode-range: paczka Poppins ma pliki latin-ext TYLKO dla wagi
- * 400 i 700. Pozostałe wagi (m.in. 900 = .fw-black, używana w nagłówkach)
- * to subset "latin" bez ł/ż/ą/ę/ć/ń/ś/ź - przeglądarka podmieniała wtedy
- * POJEDYNCZE znaki na font systemowy, co widać jako rozjechaną typografię.
- * Rozwiązanie: podstawowa łacina leci z pliku właściwej wagi, a zakres
- * latin-ext z najbliższego pliku, który te glify ma (400 dla lekkich wag,
- * 700 dla ciężkich). Docelowo warto dociągnąć subsety latin-ext dla
- * wszystkich wag - wtedy druga deklaracja per waga staje się zbędna.
+ * Kazda waga ma WLASNY plik latin-ext (polskie/czeskie/etc. znaki) pobrany
+ * bezposrednio z Google Fonts, zamiast pozyczac glify z najblizszej wagi,
+ * ktora akurat go miala - to poprzednie rozwiazanie dawalo widoczny rozjazd
+ * grubosci kresek pomiedzy podstawowa lacina i znakami typu ą/ę/ł w tym
+ * samym slowie przy wagach 100/200/300/500/600/800/900.
  */
 
 // Zakresy z google-webfonts-helper (te same, których używa Google Fonts).
@@ -23,65 +22,24 @@ $latin-ext: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
   U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
   U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 
-/* --- FontBody: Inter (pliki mają latin-ext dla obu wag) --- */
-@font-face {
-  font-family: 'FontBody';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('../fonts/inter-v20-latin_latin-ext-regular.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'FontBody';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('../fonts/inter-v20-latin_latin-ext-700.woff2') format('woff2');
-}
+$poppins-weights: 100, 200, 300, 400, 500, 600, 700, 800, 900;
 
-/* --- FontHeading: Poppins ---
-   Mapa: waga -> (plik dla podstawowej łaciny, plik dla latin-ext).
-   Wagi 400 i 700 mają własny plik z latin-ext, więc drugiej deklaracji
-   nie potrzebują (null). */
-$poppins: (
-  100: ('poppins-v24-latin-100' 'poppins-v24-latin_latin-ext-regular'),
-  200: ('poppins-v24-latin-200' 'poppins-v24-latin_latin-ext-regular'),
-  300: ('poppins-v24-latin-300' 'poppins-v24-latin_latin-ext-regular'),
-  400: ('poppins-v24-latin_latin-ext-regular' null),
-  500: ('poppins-v24-latin-500' 'poppins-v24-latin_latin-ext-regular'),
-  600: ('poppins-v24-latin-600' 'poppins-v24-latin_latin-ext-700'),
-  700: ('poppins-v24-latin_latin-ext-700' null),
-  800: ('poppins-v24-latin-800' 'poppins-v24-latin_latin-ext-700'),
-  900: ('poppins-v24-latin-900' 'poppins-v24-latin_latin-ext-700')
-);
-
-@each $weight, $files in $poppins {
-  $base: nth($files, 1);
-  $ext: nth($files, 2);
+@each $weight in $poppins-weights {
+  @font-face {
+    font-family: 'FontHeading';
+    font-style: normal;
+    font-weight: $weight;
+    font-display: swap;
+    src: url('../fonts/poppins-v24-latin-#{$weight}.woff2') format('woff2');
+    unicode-range: $latin;
+  }
 
   @font-face {
     font-family: 'FontHeading';
     font-style: normal;
     font-weight: $weight;
     font-display: swap;
-    src: url('../fonts/#{$base}.woff2') format('woff2');
-
-    // Subset "latin" trzeba ograniczyć zakresem, żeby nie przechwytywał
-    // znaków, których nie zawiera. Plik z pełnym latin-ext (400/700)
-    // obsługuje oba zakresy, więc zostaje bez ograniczenia.
-    @if $ext != null {
-      unicode-range: $latin;
-    }
-  }
-
-  @if $ext != null {
-    @font-face {
-      font-family: 'FontHeading';
-      font-style: normal;
-      font-weight: $weight;
-      font-display: swap;
-      src: url('../fonts/#{$ext}.woff2') format('woff2');
-      unicode-range: $latin-ext;
-    }
+    src: url('../fonts/poppins-v24-latin-ext-#{$weight}.woff2') format('woff2');
+    unicode-range: $latin-ext;
   }
 }

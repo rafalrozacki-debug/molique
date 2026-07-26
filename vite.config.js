@@ -108,7 +108,8 @@ logger.warnOnce = (msg, opts) => {
 // Favicony muszą leżeć w korzeniu: przeglądarki i czytniki manifestu pytają
 // o nie po nazwie, a site.webmanifest odwołuje się do ikon względem SIEBIE.
 const rootFiles = [
-  'llms.txt', 'purgecss.safelist.cjs', 'LICENSE', 'NOTICE', 'README.md',
+  'llms.txt', 'purgecss.safelist.cjs', 'LICENSE', 'NOTICE',
+  'README.md', 'README.pl.md', 'README.de.md',
   'favicon.ico', 'favicon-16x16.png', 'favicon-32x32.png',
   'apple-touch-icon.png', 'android-chrome-192x192.png',
   'android-chrome-512x512.png', 'site.webmanifest',

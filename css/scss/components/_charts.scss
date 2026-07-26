@@ -85,6 +85,16 @@
   /* Mapujemy zmienną inline na zarejestrowaną zmienną Houdini */
   --chart-val: var(--val, 0%);
 
+  /* Hak dla JS (molique-counters.js): gdy .chart-radial towarzyszy
+     .counter-value, skrypt resetuje --val do 0% i odtwarza wypelnienie
+     w momencie wejscia w widok (bez tego pierscien wypelnia sie od razu
+     przy wczytaniu strony przez @starting-style nizej - niewidoczne,
+     jesli sekcja jest poza pierwszym ekranem). Reset musi byc SKOKOWY,
+     nie animowany, stad chwilowe wylaczenie transition na ::before. */
+  &.js-resetting::before {
+    transition: none !important;
+  }
+
   /* Animacja wejścia całego kółka (Pop-in) */
   animation: radialPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
 

@@ -15,6 +15,20 @@
  * Konfiguracja kontrolek siedzi w HTML (atrybuty data-te-*), więc moduł jest
  * generyczny. Zero zależności, zero jQuery.
  */
+
+// Ten sam plik JS ląduje na stronie PL/EN/DE, więc teksty toastów nie mogą
+// być zaszyte na sztywno - czytamy jezyk z <html lang> (ten sam wzorzec co
+// molique-lang-suggest.js) i wybieramy z malego slownika.
+const TE_LANG = document.documentElement.lang;
+const TE_STRINGS = {
+  noChanges: { pl: 'Brak zmian do skopiowania', en: 'No changes to copy', de: 'Keine Änderungen zum Kopieren' },
+  copied: { pl: 'Skopiowano CSS motywu', en: 'Theme CSS copied', de: 'Theme-CSS kopiert' },
+  reset: { pl: 'Przywrócono domyślny motyw', en: 'Default theme restored', de: 'Standard-Theme wiederhergestellt' },
+  dark: { pl: 'Ciemny', en: 'Dark', de: 'Dunkel' },
+  light: { pl: 'Jasny', en: 'Light', de: 'Hell' },
+};
+const teT = (key) => TE_STRINGS[key][TE_LANG] || TE_STRINGS[key].en;
+
 function initThemeEditor() {
   const root = document.querySelector('.theme-editor');
   if (!root) return;
@@ -102,7 +116,7 @@ function initThemeEditor() {
 
   function updateModeHint() {
     const hint = root.querySelector('[data-te-mode-label]');
-    if (hint) hint.textContent = mode() === 'dark' ? 'Ciemny' : 'Jasny';
+    if (hint) hint.textContent = mode() === 'dark' ? teT('dark') : teT('light');
   }
 
   function buildExport() {
@@ -127,10 +141,10 @@ function initThemeEditor() {
     copyBtn.addEventListener('click', () => {
       const css = buildExport();
       if (!css) {
-        toast('Brak zmian do skopiowania', 'info');
+        toast(teT('noChanges'), 'info');
         return;
       }
-      copyText(css).then(() => toast('Skopiowano CSS motywu', 'success'));
+      copyText(css).then(() => toast(teT('copied'), 'success'));
     });
   }
 
@@ -145,7 +159,7 @@ function initThemeEditor() {
       applyBtnHover('');
       if (btnHoverSel) btnHoverSel.value = '';
       try { localStorage.removeItem(BTN_HOVER_KEY); } catch (e) { /* ignore */ }
-      toast('Przywrócono domyślny motyw', 'info');
+      toast(teT('reset'), 'info');
     });
   }
 

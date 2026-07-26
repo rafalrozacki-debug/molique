@@ -93,7 +93,7 @@ function New-PackageFolder {
   New-Item -ItemType Directory -Force (Join-Path $folder 'img/flags') | Out-Null
   Copy-Item (Join-Path $root 'img/flags/*.svg') (Join-Path $folder 'img/flags')
 
-  foreach ($f in @('starter.html', 'README.md', 'LICENSE', 'NOTICE', 'llms.txt', 'purgecss.safelist.cjs')) {
+  foreach ($f in @('starter.html', 'README.md', 'README.pl.md', 'README.de.md', 'LICENSE', 'NOTICE', 'llms.txt', 'purgecss.safelist.cjs')) {
     if (Test-Path (Join-Path $root $f)) { Copy-Item (Join-Path $root $f) $folder }
   }
 

@@ -12,6 +12,23 @@
 const MANIFEST_URL = 'dist/chunks/manifest.json';
 const CHUNK_DIR = 'dist/chunks/';
 
+// Ten sam plik JS lada na stronie PL/EN/DE - komunikaty toastow czytaja
+// jezyk z <html lang> (ten sam wzorzec co molique-lang-suggest.js).
+const BUILDER_LANG = document.documentElement.lang;
+const BUILDER_STRINGS = {
+  done: {
+    pl: (kb) => 'Gotowe — paczka pobrana (' + kb + ').',
+    en: (kb) => 'Done — package downloaded (' + kb + ').',
+    de: (kb) => 'Fertig — Paket heruntergeladen (' + kb + ').',
+  },
+  error: {
+    pl: (msg) => 'Błąd: ' + msg,
+    en: (msg) => 'Error: ' + msg,
+    de: (msg) => 'Fehler: ' + msg,
+  },
+};
+const builderT = (key, arg) => (BUILDER_STRINGS[key][BUILDER_LANG] || BUILDER_STRINGS[key].en)(arg);
+
 const LAYER_DECL = /@layer\s+reset\s*,\s*base\s*,\s*layout\s*,\s*components\s*,\s*modules\s*,\s*utilities\s*;/g;
 
 const PRESETS = {
@@ -246,11 +263,11 @@ function bind() {
       a.click();
       URL.revokeObjectURL(url);
       if (window.MoliqueToast) {
-        MoliqueToast.show({ message: 'Gotowe — paczka pobrana (' + kb(new Blob([css]).size) + ').', type: 'success' });
+        MoliqueToast.show({ message: builderT('done', kb(new Blob([css]).size)), type: 'success' });
       }
     } catch (err) {
-      if (window.MoliqueToast) MoliqueToast.show({ message: 'Błąd: ' + err.message, type: 'danger' });
-      else alert('Błąd: ' + err.message);
+      if (window.MoliqueToast) MoliqueToast.show({ message: builderT('error', err.message), type: 'danger' });
+      else alert(builderT('error', err.message));
     } finally {
       btn.disabled = false;
       btn.textContent = label;
