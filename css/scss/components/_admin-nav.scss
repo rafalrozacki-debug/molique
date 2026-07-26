@@ -302,9 +302,14 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
       z-index: 100;
       /* FIX: Długie listy (np. nawigacja dokumentacji) muszą się przewijać w pionie,
-         inaczej szuflada wystaje ponad górną krawędź ekranu */
+         inaczej szuflada wystaje ponad górną krawędź ekranu - a na stronach,
+         które mają jednocześnie navbar (partials/navbar.html) NAD tym
+         sidebarem, "górna krawędź ekranu" to w praktyce dół navbara, nie
+         y=0: bez odjęcia --navbar-h szuflada wjeżdżała POD stały navbar i
+         jej górne pozycje (pierwsze grupy w długim menu) były przez niego
+         przysłonięte. */
       max-height: calc(
-        100dvh - 70px - env(safe-area-inset-bottom) - (var(--spacing-unit) * 4)
+        100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - (var(--spacing-unit) * 4)
       );
       overflow-y: auto;
       

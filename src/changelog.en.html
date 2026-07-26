@@ -48,6 +48,45 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.5 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.5</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  The mobile "More" drawer slid in under the navbar
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The sidebar's mobile "More" drop-up
+                    (<code>.admin-nav-dropdown-menu</code>) calculated its
+                    max height only from the bottom of the screen
+                    (subtracting the bottom nav bar), without accounting for
+                    the fixed navbar at the top (<code>--navbar-h</code>).
+                    With a longer list (e.g. on docs pages), the drawer
+                    would extend up underneath the navbar, hiding its top
+                    items behind it - affecting every page that combines a
+                    navbar with a sidebar. Added the missing
+                    <code>var(--navbar-h)</code> subtraction to the
+                    <code>max-height</code> formula.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.4 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

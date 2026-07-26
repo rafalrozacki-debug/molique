@@ -48,6 +48,46 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.5 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.5</div>
+              <div class="text-muted text-4">Juli 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  Die mobile „Mehr"-Schublade rutschte unter den Navbar
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Das mobile „Mehr"-Dropdown der Sidebar
+                    (<code>.admin-nav-dropdown-menu</code>) berechnete seine
+                    maximale Höhe nur ausgehend vom unteren Bildschirmrand
+                    (abzüglich der unteren Navigationsleiste), ohne den
+                    festen Navbar oben zu berücksichtigen
+                    (<code>--navbar-h</code>). Bei einer längeren Liste (z.
+                    B. auf Docs-Seiten) reichte die Schublade bis unter den
+                    Navbar, wodurch ihre obersten Einträge dahinter verdeckt
+                    wurden - betraf jede Seite, die einen Navbar mit einer
+                    Sidebar kombiniert. Die fehlende Subtraktion von
+                    <code>var(--navbar-h)</code> wurde der
+                    <code>max-height</code>-Formel hinzugefügt.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.4 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
