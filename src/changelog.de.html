@@ -48,6 +48,113 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.2 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.2</div>
+              <div class="text-muted text-4">Juli 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Die Seite ist auf ihre endgültige Domain molique.dev umgezogen
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Die gesamte Seite läuft jetzt unter
+                    <code>molique.dev</code> (gleiches Hosting). Die alte
+                    Domain <code>molique.rozacki.com</code> leitet jetzt
+                    automatisch (301, unter Beibehaltung des vollständigen
+                    Pfads) auf die entsprechende Seite unter der neuen Domain
+                    weiter.
+                  </li>
+                  <li>
+                    Ein versteckter Build-Fehler wurde behoben:
+                    <code>sitemap.xml</code> und <code>robots.txt</code>
+                    landeten nie automatisch im Produktions-Build (zu spät
+                    in der Pipeline generiert, NACHDEM die Root-Dateien
+                    bereits kopiert waren) — werden jetzt vor dem Build
+                    generiert, zusammen mit den restlichen Root-Dateien.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Live-Vorschau im Hero der Startseite
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Statt nur eines Codeblocks zeigt der Hero-Bereich jetzt
+                    ein FUNKTIONIERENDES Segmented Control — ein Klick auf
+                    SCSS&nbsp;/&nbsp;CSS&nbsp;/&nbsp;HTML zeigt nacheinander
+                    den Quellcode-Ausschnitt, das kompilierte CSS und die
+                    Verwendung im HTML, jeweils für denselben
+                    <code>.hover-spring</code>-Effekt, der auf dem Button
+                    „Jetzt loslegen" direkt daneben zu sehen ist.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fehlerbehebungen</span
+                  >
+                  Barrierefreiheit (WCAG) auf der gesamten Seite
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Textkontrast.</strong> <code>--success</code>,
+                    <code>--danger</code>, <code>--warning</code> und
+                    <code>--info</code> sind in beiden Modi hell/pastellig
+                    genug, dass sie als reine TEXTfarbe
+                    (<code>.text-success</code> usw.) nicht genug Kontrast
+                    hatten — neue, abgedunkelte Varianten
+                    <code>--success-text</code> / <code>--danger-text</code>
+                    / <code>--warning-text</code> / <code>--info-text</code>
+                    beheben das, ohne das Aussehen von Badges, Buttons oder
+                    Status-Punkten zu verändern.
+                  </li>
+                  <li>
+                    <strong>Dunkler Modus.</strong> Dabei einen
+                    schwerwiegenderen, versteckten Fehler gefunden und
+                    behoben: <code>.btn-warning</code> /
+                    <code>.badge-warning</code> hatten im dunklen Modus nur
+                    1,58:1 Kontrast (die Textfarb-Variable kippte mit dem
+                    Farbmodus um, statt fest zu bleiben) — jetzt ein
+                    literales <code>--btn-text-dark</code>.
+                  </li>
+                  <li>
+                    <strong>Links im Fließtext.</strong> Links innerhalb von
+                    Absätzen, Tabellenzellen und Listeneinträgen ohne eigene
+                    Klasse bekommen jetzt eine Unterstreichung — die Farbe
+                    allein war kein ausreichender Unterschied zum
+                    umgebenden Text.
+                  </li>
+                  <li>
+                    <strong>Struktur des Seitenmenüs.</strong> Das mobile
+                    „Mehr"-Dropdown in der Docs-/Beispiele-Sidebar hatte
+                    ungültiges Listen-HTML (Elemente direkt in einem
+                    <code>&lt;ul&gt;</code> statt in einem
+                    <code>&lt;li&gt;</code>) — behoben, ohne optische oder
+                    funktionale Änderung.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.0 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

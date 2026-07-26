@@ -13,12 +13,30 @@
   .text-muted { color: var(--text-muted) !important; }
   .text-white { color: #ffffff !important; }
 
+  /* Zwykly link w prozie (akapit, komorka tabeli, pozycja listy) BEZ
+     wlasnej klasy: sam kolor --primary nie daje wystarczajacej ROZNICY od
+     otaczajacego tekstu (--text-main, --text-muted czy --secondary), zeby
+     byc "rozroznialny nie tylko kolorem" (WCAG 1.4.1) - potrzebne
+     podkreslenie jako druga, niekolorowa wskazowka. `:not([class])`
+     celowo wyklucza linki, ktore MAJA wlasna klase (.btn, .card,
+     .admin-nav-link, .dropdown-item itd.) - te sa stylowane jako oddzielne
+     elementy UI (padding, hover-tlo), nie fragmenty zdania, wiec
+     podkreslenie by tam tylko przeszkadzalo. Linki z .text-decoration-none
+     (!important) i tak by wygraly niezaleznie od tego wyjatku. */
+  p a:not([class]),
+  td a:not([class]),
+  li a:not([class]) {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
   .text-primary { color: var(--primary) !important; }
   .text-secondary { color: var(--secondary) !important; }
-  .text-success { color: var(--success) !important; }
-  .text-danger { color: var(--danger) !important; }
-  .text-warning { color: var(--warning) !important; }
-  .text-info { color: var(--info) !important; }
+  .text-success { color: var(--success-text) !important; }
+  .text-danger { color: var(--danger-text) !important; }
+  .text-warning { color: var(--warning-text) !important; }
+  .text-info { color: var(--info-text) !important; }
   .text-dark { color: var(--dark) !important; }
   .text-light { color: var(--light) !important; }
 
@@ -31,10 +49,10 @@
 
   .bg-primary { background-color: var(--primary) !important; color: var(--btn-text-light) !important; }
   .bg-secondary { background-color: var(--secondary) !important; color: var(--btn-text-light) !important; }
-  .bg-success { background-color: var(--success) !important; color: var(--btn-text-light) !important; }
-  .bg-danger { background-color: var(--danger) !important; color: var(--btn-text-light) !important; }
-  .bg-warning { background-color: var(--warning) !important; color: var(--text-main) !important; }
-  .bg-info { background-color: var(--info) !important; color: var(--text-main) !important; }
+  .bg-success { background-color: var(--success) !important; color: var(--btn-text-dark) !important; }
+  .bg-danger { background-color: var(--danger) !important; color: var(--btn-text-dark) !important; }
+  .bg-warning { background-color: var(--warning) !important; color: var(--btn-text-dark) !important; }
+  .bg-info { background-color: var(--info) !important; color: var(--btn-text-dark) !important; }
   /* bg-dark na literałach: sekcje "zawsze ciemne" (stopki, hero) łączone
      w HTML z .text-white - z flipowanym var(--dark) w ciemnym motywie tło
      robiło się jasne pod białym tekstem. */
@@ -45,10 +63,10 @@
   /* Wykorzystujemy zmienne RGB z _root.scss do uzyskania przezroczystości */
   .bg-primary-subtle { background-color: rgba(var(--primary-rgb), 0.1) !important; color: var(--primary) !important; }
   .bg-secondary-subtle { background-color: rgba(var(--secondary-rgb), 0.1) !important; color: var(--secondary) !important; }
-  .bg-success-subtle { background-color: rgba(var(--success-rgb), 0.1) !important; color: var(--success) !important; }
-  .bg-danger-subtle { background-color: rgba(var(--danger-rgb), 0.1) !important; color: var(--danger) !important; }
-  .bg-warning-subtle { background-color: rgba(var(--warning-rgb), 0.1) !important; color: var(--warning-hover) !important; }
-  .bg-info-subtle { background-color: rgba(var(--info-rgb), 0.1) !important; color: var(--info-hover) !important; }
+  .bg-success-subtle { background-color: rgba(var(--success-rgb), 0.1) !important; color: var(--success-text) !important; }
+  .bg-danger-subtle { background-color: rgba(var(--danger-rgb), 0.1) !important; color: var(--danger-text) !important; }
+  .bg-warning-subtle { background-color: rgba(var(--warning-rgb), 0.1) !important; color: var(--warning-text) !important; }
+  .bg-info-subtle { background-color: rgba(var(--info-rgb), 0.1) !important; color: var(--info-text) !important; }
   .bg-dark-subtle { background-color: rgba(var(--dark-rgb), 0.1) !important; color: var(--dark) !important; }
   .bg-light-subtle { background-color: rgba(var(--light-rgb), 0.5) !important; color: var(--text-main) !important; }
   .bg-surface-subtle { background-color: rgba(var(--dark-rgb), 0.03) !important; color: var(--text-main) !important; }
@@ -80,10 +98,14 @@
       &:hover {
         background-color: #{$color} !important;
         
-        /* Automatyczny kontrast tekstu */
-        @if $name == "primary" or $name == "success" or $name == "danger" or $name == "dark" or $name == "info" or $name == "secondary" {
+        /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+           ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+           jasne/pastelowe w OBU motywach. */
+        @if $name == "primary" or $name == "dark" or $name == "secondary" {
           color: var(--btn-text-light) !important;
-        } @else if $name == "warning" or $name == "light" or $name == "surface" or $name == "body" {
+        } @else if $name == "success" or $name == "danger" or $name == "warning" or $name == "info" {
+          color: var(--btn-text-dark) !important;
+        } @else if $name == "light" or $name == "surface" or $name == "body" {
           color: var(--text-main) !important;
         }
       }

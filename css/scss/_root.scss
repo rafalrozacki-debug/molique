@@ -38,6 +38,22 @@
   --info: #2E90FA;
   --info-hover: #1570EF;
 
+  /* Warianty "-text" (przyciemnione o stala jasnosc w HSL, zachowany
+     odcien/nasycenie): --success/--warning/--danger/--info jako TLO (badge,
+     dot, przycisk) maja wystarczajacy kontrast wzgledem wlasnej tresci, ale
+     jako sam kolor TEKSTU na jasnym tle (.text-success itd.) daja tylko ok.
+     2.2-4.2:1 - ponizej progu WCAG 4.5:1. Uzywaj tych zmiennych WYLACZNIE
+     tam, gdzie kolor jest samym czytelnym tekstem na --bg-body/--bg-surface
+     (.text-warning, .bg-warning-subtle itd.) - tla/badge/status-dot
+     zostaja przy zwyklych --success/--warning/--danger/--info, tam problemu
+     nie ma (tekst w srodku ma juz wlasna, osobno dobrana pare kolorow). W
+     dark mode --success/--warning/--danger/--info juz maja kontrast 8+:1 na
+     ciemnym tle, wiec tam warianty "-text" sa identyczne z baza. */
+  --success-text: #0c7745;
+  --warning-text: #985805;
+  --danger-text: #cc1c0f;
+  --info-text: #0565cc;
+
   /* Kolory tła i tekstu */
   --bg-body: #F5F6FC; /* Chlodny neutral pod panele */
   --bg-surface: #FFFFFF; /* Czysta biel dla kart i głównych kontenerów */
@@ -57,6 +73,12 @@
   --sidebar-submenu-bg: #52677D;
   --sidebar-text: #A9ADCB;
   --sidebar-text-active: #FFFFFF;
+  /* Akcent marki na sidebarze (np. .sidebar-sm .admin-nav-link.is-active) -
+     TA SAMA pulapka co wyzej: var(--primary) w LIGHT mode to #5145E5,
+     zbyt ciemny na ciemnym tle sidebara (2.3:1). Literalna wartosc
+     --primary z DARK mode (#8B84FF, jasniejszy wariant do ciemnych tel) -
+     nie odwraca sie, bo sidebar sam sie nie odwraca. */
+  --sidebar-active-accent: #8B84FF;
   /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
      logo) — niezależne od motywu, w przeciwieństwie do --light-rgb */
   --sidebar-highlight-rgb: 249, 249, 249;
@@ -81,7 +103,12 @@
   --sidebar-rgb: 20, 22, 43;      /* = --dark-rgb - sidebar "szklany" v2 nad tlem strony */
 
   --btn-text-light: #FFFFFF;
-  --btn-text-dark: var(--dark);
+  /* UWAGA: NIE var(--dark) - --dark odwraca sie w dark mode (staje sie
+     prawie-bialy), co dawalo bialy-na-bialym dla .btn-warning/.badge-warning
+     w ciemnym motywie (kontrast 1.58:1). success/danger/warning/info sa
+     dosc jasne/pastelowe w OBU motywach, wiec potrzebuja STALE ciemnego
+     tekstu niezaleznie od tematu - stad literal, nie zmienna motywu. */
+  --btn-text-dark: #14162B;
   --card-bg-subtle: rgba(var(--dark-rgb), 0.035);
 
   /* BLOKI KODU. Ciemne w OBU motywach (tak wygląda kod wszędzie), ale
@@ -228,6 +255,14 @@
   --info: #63A8FF;
   --info-hover: #8EC2FF;
 
+  /* W dark mode --success/--warning/--danger juz maja 10+:1 na --bg-body
+     ciemnym, wiec warianty "-text" zostaja identyczne z baza - patrz
+     komentarz przy definicji w :root. */
+  --success-text: var(--success);
+  --warning-text: var(--warning);
+  --danger-text: var(--danger);
+  --info-text: var(--info);
+
   /* Zmienne semantyczne odwrócone - light w dark mode = bg-surface (ta sama
      zaleznosc co przed v2, tylko z nowymi wartosciami) */
   --light: #141629;
@@ -251,6 +286,9 @@
   --sidebar-rgb: 20, 22, 43;
 
   --btn-text-light: #0A0B14;
+  /* Ta sama literalna wartosc co w :root - CELOWO bez zmiany w dark mode,
+     patrz komentarz przy definicji w :root. */
+  --btn-text-dark: #14162B;
 
   /* Cienie v2 w dark mode: czysta czern (nie barwione --dark-rgb jak w
      light) - na ciemnym tle barwiony cien jest niewidoczny/bez sensu. */

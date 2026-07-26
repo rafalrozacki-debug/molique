@@ -191,7 +191,10 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       
       &.is-active {
         background-color: transparent;
-        color: var(--primary);
+        /* NIE var(--primary) - sidebar jest zawsze ciemny, a --primary w
+           light mode (#5145E5) daje tylko 2.3:1 na tym tle. Patrz
+           --sidebar-active-accent w _root.scss. */
+        color: var(--sidebar-active-accent);
         box-shadow: none;
       }
     }
@@ -236,6 +239,19 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
      MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
      ========================================= */
   
+  /* Checkbox + label + .admin-nav-dropdown-menu musza (dla selektora
+     rodzenstwa .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu nizej)
+     dzielic wspolnego rodzica - stad razem w jednym <li>, zamiast wprost w
+     <ul class="admin-nav"> (input/label/div jako BEZPOSREDNIE dzieci <ul>
+     lamaly wymog, ze <ul> smie miec tylko <li> - audyt Lighthouse "list").
+     display:contents na tym <li> czyni go niewidocznym w layoucie (jego
+     dzieci ukladaja sie tak, jakby nadal byly bezposrednimi flex-itemami
+     .admin-nav) - identyczny wizualny efekt jak przed zmiana, tylko
+     poprawny w DOM. */
+  .admin-nav-more-item {
+    display: contents;
+  }
+
   .mobile-more-toggle {
     display: none;
   }
@@ -248,6 +264,14 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 
   .admin-nav-dropdown-menu {
+    /* Teraz <ul> (bylo <div>) - <li> wewnatrz wymaga prawdziwego rodzica
+       ul/ol/menu (parser HTML5 auto-zamyka najblizszy otwarty <li>, gdy
+       napotka kolejny <li>, POMIJAJAC posrednie <div> - <ul>/<ol> tworzy
+       scope, ktory to blokuje). Domyslny margin/padding <ul> trzeba
+       wyzerowac recznie (list-style:none dziedziczy z .admin-nav, ale to
+       nie). */
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: calc(var(--spacing-unit) * 1);

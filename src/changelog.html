@@ -47,6 +47,110 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.2 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.2</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Strona przeniesiona na docelową domenę molique.dev
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Cała strona działa teraz pod <code>molique.dev</code> (ten
+                    sam hosting). Stara domena
+                    <code>molique.rozacki.com</code> automatycznie
+                    przekierowuje (301, z zachowaniem pełnej ścieżki) na
+                    odpowiednik pod nową domeną.
+                  </li>
+                  <li>
+                    Naprawiony ukryty błąd builda:
+                    <code>sitemap.xml</code> i <code>robots.txt</code> nigdy
+                    nie trafiały automatycznie do produkcyjnego builda
+                    (generowane za późno w pipeline'ie, PO skopiowaniu plików
+                    startowych) — teraz generowane przed buildem, razem z
+                    resztą plików startowych.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Żywy podgląd w hero strony głównej
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Sekcja hero zamiast samego bloku kodu pokazuje teraz
+                    DZIAŁający segmented control — kliknięcie
+                    SCSS&nbsp;/&nbsp;CSS&nbsp;/&nbsp;HTML pokazuje kolejno
+                    fragment źródła, skompilowany CSS i sposób użycia w
+                    HTML-u, na przykładzie tego samego efektu
+                    <code>.hover-spring</code>, który widać na przycisku
+                    „Zacznij teraz" obok.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Poprawki</span
+                  >
+                  Dostępność (WCAG) na całej stronie
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Kontrast tekstu.</strong>
+                    <code>--success</code>, <code>--danger</code>,
+                    <code>--warning</code> i <code>--info</code> są dość
+                    jasne/pastelowe w obu motywach, żeby jako sam kolor TEKSTU
+                    (<code>.text-success</code> itd.) nie mieć wystarczającego
+                    kontrastu — nowe, przyciemnione warianty
+                    <code>--success-text</code> / <code>--danger-text</code> /
+                    <code>--warning-text</code> / <code>--info-text</code>
+                    naprawiają to bez zmiany wyglądu badge'y, przycisków i
+                    kropek statusu.
+                  </li>
+                  <li>
+                    <strong>Ciemny motyw.</strong> Przy okazji znaleziony i
+                    naprawiony poważniejszy, utajony błąd:
+                    <code>.btn-warning</code> / <code>.badge-warning</code>
+                    miały w ciemnym motywie kontrast tylko 1.58:1 (zmienna
+                    tekstu odwracała się razem z motywem, zamiast zostać
+                    stała) — teraz literalny <code>--btn-text-dark</code>.
+                  </li>
+                  <li>
+                    <strong>Linki w prozie.</strong> Linki wewnątrz akapitów,
+                    komórek tabel i pozycji list bez własnej klasy dostały
+                    podkreślenie — sam kolor nie dawał wystarczającej różnicy
+                    względem otaczającego tekstu.
+                  </li>
+                  <li>
+                    <strong>Struktura menu bocznego.</strong> Rozwijane menu
+                    „Więcej" na mobile w sidebarze dokumentacji/przykładów
+                    miało nieprawidłową strukturę listy HTML (elementy poza
+                    <code>&lt;li&gt;</code> bezpośrednio w
+                    <code>&lt;ul&gt;</code>) — poprawione bez zmiany wyglądu
+                    ani działania.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.0 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

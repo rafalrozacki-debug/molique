@@ -67,15 +67,22 @@
      2. WARIANTY KOLORYSTYCZNE (Pętla SCSS)
      ========================================= */
   @each $name, $color in $theme-colors {
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
+    $text-safe: $name == "success" or $name == "danger" or $name == "warning" or $name == "info";
 
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-#{$name} {
       background-color: #{$color};
       border-color: #{$color};
-      
+
       /* Automatyczny kontrast tekstu */
-      @if $name == "warning" or $name == "light" {
+      @if $name == "light" {
         color: var(--text-main);
+      } @else if $text-safe {
+        color: var(--btn-text-dark);
       } @else {
         color: var(--btn-text-light, #fff);
       }
@@ -91,14 +98,23 @@
     .btn-outline-#{$name} {
       background-color: transparent;
       border-color: #{$color};
-      color: #{$color};
+
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      @if $text-safe {
+        color: var(--#{$name}-text);
+      } @else {
+        color: #{$color};
+      }
 
       /* Domyślny, pełny hover */
       &:hover, &:focus-visible {
         background-color: #{$color};
-        
-        @if $name == "warning" or $name == "light" {
+
+        @if $name == "light" {
           color: var(--text-main);
+        } @else if $text-safe {
+          color: var(--btn-text-dark);
         } @else {
           color: var(--btn-text-light, #fff);
         }

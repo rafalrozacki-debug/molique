@@ -23,25 +23,33 @@ const root = resolve(__dirname, '..');
 const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 const version = pkg.version;
 
-const readmePath = resolve(root, 'README.md');
-const readme = readFileSync(readmePath, 'utf8');
+// Wzorzec scisly per plik (kazdy jezyk uzywa innego slowa) - celowo NIE
+// lapczywy regex ogolny na "1.2.3" gdziekolwiek, zeby nie ruszyc przypadkiem
+// innej liczby wersji w tresci (np. wersji przegladarki we fragmencie kodu).
+const readmeTargets = [
+  { file: 'README.md', word: 'Version' },
+  { file: 'README.pl.md', word: 'Wersja' },
+  { file: 'README.de.md', word: 'Version' },
+];
 
-// Wzorzec scisly (markdown bold: "Wersja: **X.Y.Z**.") - celowo NIE lapczywy
-// regex ogolny na "1.2.3" gdziekolwiek, zeby nie ruszyc przypadkiem innej
-// liczby wersji w tresci (np. wersji przegladarki we fragmencie kodu).
-const versionLineRe = /Wersja: \*\*\d+\.\d+\.\d+\*\*\./;
+for (const { file, word } of readmeTargets) {
+  const path = resolve(root, file);
+  const content = readFileSync(path, 'utf8');
+  const versionLineRe = new RegExp(`${word}: \\*\\*\\d+\\.\\d+\\.\\d+\\*\\*\\.`);
 
-if (!versionLineRe.test(readme)) {
-  console.warn(
-    `[sync-version] UWAGA: nie znaleziono wzorca "Wersja: **X.Y.Z**." w README.md - ` +
-    `sprawdz recznie, czy numer wersji nie jest tam nieaktualny (nic nie nadpisano).`
-  );
-} else {
-  const updated = readme.replace(versionLineRe, `Wersja: **${version}**.`);
-  if (updated !== readme) {
-    writeFileSync(readmePath, updated, 'utf8');
-    console.log(`[sync-version] README.md zsynchronizowane z wersja ${version}.`);
+  if (!versionLineRe.test(content)) {
+    console.warn(
+      `[sync-version] UWAGA: nie znaleziono wzorca "${word}: **X.Y.Z**." w ${file} - ` +
+      `sprawdz recznie, czy numer wersji nie jest tam nieaktualny (nic nie nadpisano).`
+    );
+    continue;
+  }
+
+  const updated = content.replace(versionLineRe, `${word}: **${version}**.`);
+  if (updated !== content) {
+    writeFileSync(path, updated, 'utf8');
+    console.log(`[sync-version] ${file} zsynchronizowane z wersja ${version}.`);
   } else {
-    console.log(`[sync-version] README.md juz aktualne (${version}).`);
+    console.log(`[sync-version] ${file} juz aktualne (${version}).`);
   }
 }

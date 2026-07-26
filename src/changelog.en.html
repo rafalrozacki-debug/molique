@@ -48,6 +48,108 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.2 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.2</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  The site has moved to its permanent home, molique.dev
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The entire site now runs on <code>molique.dev</code>
+                    (same hosting). The old domain
+                    <code>molique.rozacki.com</code> now redirects
+                    automatically (301, preserving the full path) to the
+                    matching page on the new domain.
+                  </li>
+                  <li>
+                    Fixed a hidden build bug: <code>sitemap.xml</code> and
+                    <code>robots.txt</code> were never making it into the
+                    production build automatically (generated too late in
+                    the pipeline, AFTER the root files were already copied)
+                    — now generated before the build, alongside the rest of
+                    the root files.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Live preview in the homepage hero
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Instead of just a code block, the hero section now shows
+                    a WORKING segmented control — clicking
+                    SCSS&nbsp;/&nbsp;CSS&nbsp;/&nbsp;HTML shows, in turn, the
+                    source snippet, the compiled CSS, and how to use it in
+                    HTML, all for the same <code>.hover-spring</code> effect
+                    visible on the "Get started now" button right next to it.
+                  </li>
+                </ul>
+
+                <h3
+                  class="text-3 text-warning fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-warning text-dark mx-2 text-3"
+                    >Fixes</span
+                  >
+                  Accessibility (WCAG) across the whole site
+                </h3>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Text contrast.</strong> <code>--success</code>,
+                    <code>--danger</code>, <code>--warning</code> and
+                    <code>--info</code> are light/pastel enough in both
+                    themes that using them as plain TEXT color
+                    (<code>.text-success</code> etc.) didn't have enough
+                    contrast — new, darkened <code>--success-text</code> /
+                    <code>--danger-text</code> / <code>--warning-text</code>
+                    / <code>--info-text</code> variants fix this without
+                    changing how badges, buttons, or status dots look.
+                  </li>
+                  <li>
+                    <strong>Dark mode.</strong> Found and fixed a more
+                    serious, hidden bug along the way:
+                    <code>.btn-warning</code> / <code>.badge-warning</code>
+                    had only 1.58:1 contrast in dark mode (the text color
+                    variable flipped along with the theme instead of staying
+                    fixed) — now a literal <code>--btn-text-dark</code>.
+                  </li>
+                  <li>
+                    <strong>Links in body text.</strong> Links inside
+                    paragraphs, table cells, and list items without their own
+                    class now get an underline — color alone wasn't enough
+                    of a difference from the surrounding text.
+                  </li>
+                  <li>
+                    <strong>Sidebar menu structure.</strong> The mobile
+                    "More" dropdown in the docs/examples sidebar had invalid
+                    list HTML (elements sitting directly inside a
+                    <code>&lt;ul&gt;</code> instead of inside
+                    <code>&lt;li&gt;</code>) — fixed with no visual or
+                    behavioral change.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.0 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
