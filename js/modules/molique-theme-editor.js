@@ -37,6 +37,20 @@ function initThemeEditor() {
   const STORAGE_KEY = 'molique-theme-editor';
   const controls = Array.from(root.querySelectorAll('[data-te-var]'));
 
+  // Kazdy control ma OBOK siebie w tym samym .te-row czytelny opis
+  // (<span class="te-label">), ale to nie jest prawdziwy <label> powiazany
+  // przez for/id - bez tego czytnik ekranu nie wie, czym steruje dany
+  // input[type=color]/input[type=range] itd. Ustawiamy aria-label z tekstu
+  // tego opisu zamiast recznie dopisywac dziesiatki id/for w HTML.
+  controls.forEach((control) => {
+    if (control.hasAttribute('aria-label') || control.hasAttribute('aria-labelledby')) return;
+    const row = control.closest('.te-row');
+    const label = row && row.querySelector('.te-label');
+    if (label && label.textContent.trim()) {
+      control.setAttribute('aria-label', label.textContent.trim());
+    }
+  });
+
   const overrides = load();
 
   const styleEl = document.createElement('style');

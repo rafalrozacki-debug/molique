@@ -1,6 +1,17 @@
 /**
  * molique - Moduł Karuzeli (Slider)
  */
+// Kropki nawigacji dostaja aria-label z numerem slajdu - ten sam plik JS
+// laduje na stronie PL/EN/DE, wiec tekst nie moze byc zaszyty na sztywno
+// (ten sam wzorzec co molique-lang-suggest.js/molique-theme-editor.js).
+const CAROUSEL_LANG = document.documentElement.lang;
+const carouselDotLabel = (index) => {
+  const n = index + 1;
+  if (CAROUSEL_LANG === 'pl') return `Przejdź do slajdu ${n}`;
+  if (CAROUSEL_LANG === 'de') return `Zu Folie ${n} wechseln`;
+  return `Go to slide ${n}`;
+};
+
 document.querySelectorAll('.carousel').forEach(carousel => {
   const track = carousel.querySelector('.carousel-track');
   if (!track) return;
@@ -25,7 +36,9 @@ document.querySelectorAll('.carousel').forEach(carousel => {
     
     slides.forEach((_, index) => {
       const dot = document.createElement('button');
+      dot.type = 'button';
       dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', carouselDotLabel(index));
       dot.addEventListener('click', () => {
         const slideWidth = slides[0].getBoundingClientRect().width;
         track.scrollTo({ left: slideWidth * index, behavior: 'smooth' });

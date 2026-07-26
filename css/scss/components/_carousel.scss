@@ -102,7 +102,11 @@
 .carousel-dots {
   display: flex;
   justify-content: center;
-  gap: var(--spacing-unit);
+  /* Kropki maja 10px + niewidoczny obszar klikalny --target-size-min (44px)
+     przez ::before ponizej - przy zbyt malym gap te niewidoczne obszary
+     sasiednich kropek zachodza na siebie (WCAG 2.5.8, min. 24px "bezpiecznej"
+     przestrzeni miedzy celami dotyku). */
+  gap: calc(var(--spacing-unit) * 2);
   margin-top: calc(var(--spacing-unit) * 3);
 }
 
