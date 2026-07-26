@@ -4,6 +4,27 @@ Ultralekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na
 natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez
 zależności (zero jQuery). Wersja: **1.7.1**.
 
+## Struktura repozytorium
+
+Ten repo zawiera dwie odrębne rzeczy:
+
+- **Sam framework** — `css/`, `js/`, `fonts/`, `starter.html`. To jest
+  właściwy "produkt": paczki `dist/*.zip` (patrz [Releases][releases])
+  to dokładnie te foldery, spakowane i gotowe do wgrania do dowolnego
+  projektu. Reszta tego README dotyczy wyłącznie tej części.
+- **Źródło strony [molique.rozacki.com][live]** — cała dokumentacja,
+  przykłady i demo modułów (`src/`), zbudowane przez Vite
+  (`npm run dev` / `npm run build`, konfiguracja w `vite.config.js`,
+  narzędzia w `tools/`). To NIE jest część pobieranej paczki — to nasza
+  własna strona, napisana w oparciu o molique (dogfooding). Jeśli
+  chcesz naprawić literówkę w docsach albo dodać przykład komponentu,
+  to jest właściwe miejsce — cała treść strony jest i tak publicznie
+  widoczna przez "Wyświetl kod źródłowy" w przeglądarce, więc nie ma tu
+  nic chowanego.
+
+[releases]: https://github.com/rafalrozacki-debug/molique/releases
+[live]: https://molique.rozacki.com
+
 ## Szybki start
 
 1. Skopiuj foldery `css/`, `js/` i `fonts/` do swojego projektu
