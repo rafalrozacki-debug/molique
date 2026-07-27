@@ -48,3 +48,18 @@ export function renderStub(stubName: string, values: Record<string, string>): st
 export function joinBlocks(...blocks: string[]): string {
   return blocks.map((b) => b.trimEnd()).join('\n\n') + '\n';
 }
+
+/**
+ * Renderuje TEN SAM maly stub osobno dla kazdego elementu tablicy i skleja
+ * wyniki - do list o zmiennej dlugosci zadeklarowanej przez uzytkownika
+ * (N kolumn tabeli, N krokow lejka, N pod-przyciskow Speed Diala).
+ *
+ * Petla siedzi w TypeScript, NIE w szablonie - stub sam w sobie zostaje
+ * plaski, bez skladni "kazdy"/"jesli" (patrz naglowek pliku). Wynik tej
+ * funkcji trafia zwykle jako WARTOSC jednego placeholdera w szablonie
+ * nadrzednym (np. {{ WIERSZ }} w modal-table.stub.html), nie jest
+ * uzywany samodzielnie.
+ */
+export function renderList(stubName: string, items: Record<string, string>[]): string {
+  return items.map((values) => renderStub(stubName, values).trimEnd()).join('\n');
+}

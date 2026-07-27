@@ -18,7 +18,15 @@ import path from 'node:path';
 import { build } from './build.js';
 import { watch } from './watch.js';
 import { loadConfig, resolveTargets, DEFAULT_CONFIG_FILE, INIT_TEMPLATE } from './config.js';
-import { registerMakeCommand } from './cli/make.js';
+import { registerMakeModalCommand } from './cli/make-modal.js';
+import { registerMakeLayoutCommand } from './cli/make-layout.js';
+import { registerMakeNavCommand } from './cli/make-nav.js';
+import { registerMakeTableCommand } from './cli/make-table.js';
+import { registerMakeChartCommand } from './cli/make-chart.js';
+import { registerMakeFormCommand } from './cli/make-form.js';
+import { registerMakePopoverCommand } from './cli/make-popover.js';
+import { registerMakeWidgetCommand } from './cli/make-widget.js';
+import { registerMakeComponentListCommand } from './cli/list.js';
 
 /* ---------- Tlumaczenie argv (PL/DE -> EN) ---------- */
 
@@ -28,6 +36,22 @@ const COMMAND_ALIASES: Record<string, string> = {
   bauen: 'build', // DE
   obserwuj: 'watch', // PL
   beobachten: 'watch', // DE
+  'zrob:modal': 'make:modal', // PL
+  'mache:modal': 'make:modal', // DE
+  'zrob:uklad': 'make:layout', // PL
+  'mache:layout': 'make:layout', // DE
+  'zrob:nawigacje': 'make:nav', // PL
+  'mache:nav': 'make:nav', // DE
+  'zrob:tabele': 'make:table', // PL
+  'mache:tabelle': 'make:table', // DE
+  'zrob:wykres': 'make:chart', // PL
+  'mache:diagramm': 'make:chart', // DE
+  'zrob:formularz': 'make:form', // PL
+  'mache:formular': 'make:form', // DE
+  'zrob:popover': 'make:popover', // PL
+  'mache:popover': 'make:popover', // DE
+  'zrob:widget': 'make:widget', // PL
+  'mache:widget': 'make:widget', // DE
 };
 
 const FLAG_ALIASES: Record<string, string> = {
@@ -155,7 +179,19 @@ program
     process.on('SIGTERM', shutdown);
   });
 
-registerMakeCommand(program);
+registerMakeModalCommand(program);
+registerMakeLayoutCommand(program);
+registerMakeNavCommand(program);
+registerMakeTableCommand(program);
+registerMakeChartCommand(program);
+registerMakeFormCommand(program);
+registerMakePopoverCommand(program);
+registerMakeWidgetCommand(program);
+// Rejestrowana na koncu (kolejnosc bez znaczenia funkcjonalnego - lista w
+// cli/list.ts czyta program.commands dopiero w momencie wywolania akcji,
+// gdy wszystkie komendy juz sa zarejestrowane), ale czytelniej trzymac
+// "spis" jako ostatnia pozycje w kolejnosci rejestracji.
+registerMakeComponentListCommand(program);
 
 program.parseAsync(translateArgv(process.argv)).catch((err) => {
   console.error(err instanceof Error ? err.message : err);

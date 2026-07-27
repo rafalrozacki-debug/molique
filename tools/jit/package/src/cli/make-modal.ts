@@ -1,25 +1,24 @@
 /**
- * molique-jit - `make:component` (Scaffolding)
+ * molique-jit - `make:modal` (Scaffolding)
  *
- * Zobacz tools/jit/docs/scaffolding-spec.md. Dzis (pierwsza iteracja)
- * obsluguje WYLACZNIE generator Modala (spec, punkt 3.B) - Tabela i inne
- * komendy `make:*` to kolejne kroki. Pytanie "jaki komponent?" jest
- * pominiete, bo przy jednej realnej opcji tylko wydluzaloby flow - jak
- * dojdzie druga (np. Tabela), dodaj wybor na poczatku `action()` i
- * dopisz kolejna galaz obok `makeModal()`.
+ * Zobacz tools/jit/docs/scaffolding-spec.md, punkt 3.B. Trzy warianty
+ * (Standard / Confirm / Context), markup w stubach (src/stubs/modal-*.stub.html)
+ * jest 1:1 z realnym, dzialajacym przykladem w src/examples-modals.html tego
+ * repo - nie z ilustracyjnego pseudokodu w scaffolding-spec.md - zeby
+ * wygenerowany kod byl gwarantowanie zgodny z tym, co faktycznie wspiera CSS
+ * (patrz css/scss/components/_modal*.scss).
  *
- * Markup w stubach (src/stubs/modal-*.stub.html) jest 1:1 z realnym,
- * dzialajacym przykladem w src/examples-modals.html tego repo - nie z
- * ilustracyjnego pseudokodu w scaffolding-spec.md - zeby wygenerowany kod
- * byl gwarantowanie zgodny z tym, co faktycznie wspiera CSS (patrz
- * css/scss/components/_modal*.scss).
+ * Nazwa komendy byla wczesniej "make:component" (kiedy Modal byl jedynym
+ * generatorem) - przemianowana na "make:modal" po dodaniu kolejnych rodzin
+ * (make:layout itd.), zeby pasowac do konwencji "jedna komenda = jeden
+ * typ komponentu". "make:component" teraz listuje dostepne generatory
+ * (patrz cli/list.ts).
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
 import type { Command } from 'commander';
 import { select, input, confirm } from '@inquirer/prompts';
 import { renderStub, joinBlocks } from '../stubs.js';
+import { outputResult } from './output.js';
 
 type ModalType = 'standard' | 'confirm' | 'context';
 
@@ -129,40 +128,13 @@ async function makeModal(): Promise<string> {
   return makeContextModal(id);
 }
 
-async function outputResult(html: string, defaultFileName: string): Promise<void> {
-  const outputMode = await select({
-    message: 'Co zrobic z wygenerowanym kodem?',
-    choices: [
-      { name: 'Wypisz w konsoli (do skopiowania)', value: 'console' },
-      { name: 'Zapisz do pliku', value: 'file' },
-    ],
-  });
-
-  if (outputMode === 'console') {
-    console.log('\n' + html);
-    return;
-  }
-
-  const outPath = await input({ message: 'Sciezka pliku wyjsciowego:', default: defaultFileName });
-  const resolved = path.resolve(process.cwd(), outPath);
-
-  if (fs.existsSync(resolved)) {
-    const overwrite = await confirm({ message: `${outPath} juz istnieje - nadpisac?`, default: false });
-    if (!overwrite) {
-      console.log('Anulowano.');
-      return;
-    }
-  }
-
-  fs.mkdirSync(path.dirname(resolved), { recursive: true });
-  fs.writeFileSync(resolved, html);
-  console.log(`Zapisano: ${outPath}`);
-}
-
-export function registerMakeCommand(program: Command): void {
+export function registerMakeModalCommand(program: Command): void {
   program
-    .command('make:component')
-    .description('Interaktywny generator gotowych blokow HTML (scaffolding) - dzis tylko Modal')
+    .command('make:modal')
+    .description(
+      'Interaktywny generator modala (<dialog>) - Standard / Confirm / Context ' +
+        '(aliasy: zrob:modal, mache:modal)'
+    )
     .action(async () => {
       const html = await makeModal();
       await outputResult(html, 'components/modal.html');
