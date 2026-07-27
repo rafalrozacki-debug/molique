@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.9."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.10."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,48 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.10 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.10</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  <code>.tabs-pill</code> stretched to the width of the tab content
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>.tabs</code> is <code>flex-direction: column</code>
+                    with default <code>align-items: stretch</code>, so
+                    <code>.tabs-header</code> (the pill) and
+                    <code>.tabs-content</code> always had exactly the same
+                    width - the segmented toggle stretched to the full width
+                    of whatever it switched (e.g. a wide table) instead of
+                    staying compact.
+                  </li>
+                  <li>
+                    <code>.tabs-pill .tabs-header</code> got
+                    <code>align-self: flex-start</code> and
+                    <code>width: fit-content</code> - the pill now sizes to
+                    its labels, independent of how wide the tab content below
+                    it is. <code>.tabs-content</code> unchanged.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.9 -->
           <!-- ============================================================ -->

@@ -5930,6 +5930,15 @@
     background-color: var(--card-bg-subtle);
     border-radius: 50rem;
     padding: calc(var(--spacing-unit) * 0.5);
+    /* .tabs (flex-column) domyslnie rozciaga header i content na ta sama
+       szerokosc (align-items: stretch) - dla pigulki to zle wyglada,
+       segmentowany przelacznik ma byc kompaktowy (dopasowany do etykiet),
+       niezaleznie od tego, jak szeroka jest tresc zakladki (np. tabela)
+       pod spodem. Wylaczamy rozciaganie TYLKO dla headera - .tabs-content
+       zostaje na pelnej szerokosci bez zmian. */
+    align-self: flex-start;
+    width: fit-content;
+    max-width: 100%;
   }
   .tabs-pill .tab-label {
     position: relative;
