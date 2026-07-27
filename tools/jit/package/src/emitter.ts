@@ -15,14 +15,28 @@ import type { LoadedData } from './lookup.js';
 
 const LAYER_DECLARATION = '@layer reset, base, layout, components, modules, utilities;';
 
+// Kazdy chunk w dist/chunks/ niesie WLASNA kopie LAYER_DECLARATION na
+// poczatku pliku (gen-chunks.js dopisuje ja do kazdego, zeby dzialal tez
+// uzyty samodzielnie, poza tym emitterem) - przy sklejaniu wielu chunkow
+// trzeba ja usunac ze WSZYSTKICH oprocz jednej, ktora sama dopisujemy
+// wyzej. Dokladnie ta sama zasada i regex co w konfiguratorze
+// (src/builder.js, LAYER_DECL) - patrz tez notatka w dist/chunks/manifest.json:
+// "Sklejajac, zostaw deklaracje warstw TYLKO RAZ (pierwsza)". Bez tego
+// typowy build dublowal ja dziesiatki razy (raz na chunk).
+const LAYER_DECL_RE = /@layer\s+reset\s*,\s*base\s*,\s*layout\s*,\s*components\s*,\s*modules\s*,\s*utilities\s*;/g;
+
+function stripLayerDeclaration(css: string): string {
+  return css.replace(LAYER_DECL_RE, '');
+}
+
 export function emit(data: LoadedData, matchedUtilityClasses: string[], matchedComponentIds: string[]): string {
   const parts: string[] = [LAYER_DECLARATION];
 
-  parts.push(fs.readFileSync(data.rootCssPath, 'utf8'));
+  parts.push(stripLayerDeclaration(fs.readFileSync(data.rootCssPath, 'utf8')));
   // "base" (reset, typografia bazowa, .container/.container-fluid) jest tak
   // samo "mandatory" jak zmienne motywu - bez niego strona nie renderuje sie
   // poprawnie niezaleznie od tego, jakie klasy zostaly zeskanowane.
-  parts.push(fs.readFileSync(data.baseCssPath, 'utf8'));
+  parts.push(stripLayerDeclaration(fs.readFileSync(data.baseCssPath, 'utf8')));
 
   // Komponenty jako CALE, juz skompilowane pliki chunkow (dokladnie ta sama
   // tresc, ktora dzis produkuje tools/gen-chunks.js) - nie probujemy wycinac
@@ -31,7 +45,7 @@ export function emit(data: LoadedData, matchedUtilityClasses: string[], matchedC
   // sam skan klas nie potrafi bezpiecznie odtworzyc czesciowo.
   for (const id of matchedComponentIds) {
     const file = path.join(data.componentsDir, `molique-${id}.css`);
-    if (fs.existsSync(file)) parts.push(fs.readFileSync(file, 'utf8'));
+    if (fs.existsSync(file)) parts.push(stripLayerDeclaration(fs.readFileSync(file, 'utf8')));
   }
 
   parts.push('@layer utilities{' + utilitiesLayerBody(data, matchedUtilityClasses) + '}');
