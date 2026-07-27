@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <include src="partials/head.html" locals='{"title":"CLI molique-jit - molique Docs","description":"Wiersz poleceń dla silnika JIT molique: komendy init/build/watch z polskimi i niemieckimi aliasami, plik konfiguracyjny molique.config.mjs i generator gotowych komponentów HTML."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
+  </head>
+  <body>
+<include src="partials/navbar.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <span class="badge badge-warning text-dark mb-3">Podgląd</span>
+            <h1 class="text-11 fw-black mb-3">CLI molique-jit</h1>
+            <p class="text-6 text-muted">
+              Wiersz poleceń, którym obsługujesz silnik
+              <a href="docs-jit">molique JIT</a>: budowanie, tryb
+              nasłuchujący na żywo, konfiguracja — plus osobny generator
+              gotowych bloków HTML.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- STATUS: PODGLĄD                                       -->
+          <!-- ===================================================== -->
+          <div class="p-4 bg-surface border rounded-2 mb-5" style="border-color: var(--warning)">
+            <h3 class="fw-bold text-5 mb-2 d-flex align-items-center gap-2">
+              <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-eye"></use></svg>
+              To jest podgląd — pakiet jeszcze nie jest na npm
+            </h3>
+            <p class="text-4 text-muted mb-2">
+              CLI opisane na tej stronie <strong>istnieje, działa i zostało
+              ręcznie zweryfikowane</strong> — to nie jest zapowiedź funkcji,
+              której jeszcze nie ma. Jedyne, czego naprawdę brakuje, to
+              pierwsza publikacja pakietu <code>molique-jit</code> w rejestrze
+              npm, więc <code>npx molique-jit</code> nie zadziała jeszcze
+              „z marszu”.
+            </p>
+            <p class="text-4 text-muted m-0">
+              Do tego czasu najszybszy sposób, żeby to zobaczyć w akcji, to
+              zbudować pakiet lokalnie ze źródeł — patrz sekcja
+              <a href="#instalacja">Instalacja ze źródeł</a> niżej. Kod źródłowy
+              jest jawny w repozytorium:
+              <a href="https://github.com/rafalrozacki-debug/molique/tree/main/tools/jit"
+                target="_blank" rel="noopener">github.com/rafalrozacki-debug/molique</a>.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. INSTALACJA ZE ŹRÓDEŁ                               -->
+          <!-- ===================================================== -->
+          <section id="instalacja">
+            <h2 class="text-8 fw-bold mb-3">1. Instalacja ze źródeł (do czasu publikacji na npm)</h2>
+            <p class="text-muted mb-3">
+              Wymaga Node.js. Sklonuj repozytorium i zbuduj pakiet lokalnie:
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>git clone https://github.com/rafalrozacki-debug/molique.git
+cd molique/tools/jit/package
+npm install
+npm run build</code></pre>
+            </div>
+            <p class="text-muted mb-3">
+              Od tego momentu <code>node dist/cli.js</code> zachowuje się
+              dokładnie tak, jak w tej dokumentacji opisane jest
+              <code>npx molique-jit</code> — wystarczy podmienić jedno na
+              drugie:
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>node dist/cli.js init
+node dist/cli.js build --minify
+node dist/cli.js make:component</code></pre>
+            </div>
+            <p class="text-muted m-0">
+              Po publikacji na npm ta sekcja zniknie, a wszystkie przykłady
+              niżej (z <code>npx molique-jit …</code>) zadziałają bez żadnej
+              zmiany składni — CLI już dziś jest napisane pod docelowy sposób
+              użycia.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. KONFIGURACJA                                       -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Plik konfiguracyjny <code>molique.config.mjs</code></h2>
+            <p class="text-muted mb-3">
+              Komenda <code>init</code> tworzy ten plik za Ciebie, z komentarzami
+              przy każdym polu. Pełny, ręcznie napisany przykład:
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>// molique.config.mjs
+export default {
+  // Gdzie szukać nazw klas.
+  content: ['**/*.html', '**/*.php'],
+
+  // Gdzie zapisać wynikowy CSS.
+  output: 'css/molique-jit.css',
+
+  // WYŁĄCZNIE klasy specyficzne dla Twojego projektu (np. składane w PHP).
+  // Klas runtime'owych molique (toasty, karuzela, stany .is-*) NIE trzeba
+  // tu wpisywać — silnik dołącza je automatycznie.
+  safelist: ['badge-success', 'badge-danger'],
+};</code></pre>
+            </div>
+
+            <p class="text-muted mb-3">
+              Jeśli masz kilka niezależnych stron w jednym projekcie (np.
+              główną witrynę i osobny landing kampanii), pole
+              <code>targets</code> zastępuje <code>content</code>/
+              <code>output</code> powyżej i buduje każdy cel osobno — landing
+              dostaje własny, mały plik CSS, bez reszty:
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>export default {
+  targets: [
+    { content: ['src/**/*.html'], output: 'css/molique-jit.css' },
+    { content: ['landing-kampania.html'], output: 'css/landing-kampania.css' },
+  ],
+};</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Pole</th>
+                    <th>Domyślnie</th>
+                    <th>Opis</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>content</code></td>
+                    <td><code>['**/*.html', '**/*.php']</code></td>
+                    <td>Gdzie szukać klas (wzorce glob).</td>
+                  </tr>
+                  <tr>
+                    <td><code>output</code></td>
+                    <td><code>css/molique-jit.css</code></td>
+                    <td>Ścieżka pliku wynikowego.</td>
+                  </tr>
+                  <tr>
+                    <td><code>safelist</code></td>
+                    <td><code>[]</code></td>
+                    <td>Klasy Twojego projektu, których skan mógłby nie znaleźć (np. sklejane w backendzie).</td>
+                  </tr>
+                  <tr>
+                    <td><code>minify</code></td>
+                    <td><code>false</code></td>
+                    <td>Obecnie efektywnie bez znaczenia — źródłowe dane są już skompresowane u źródła.</td>
+                  </tr>
+                  <tr>
+                    <td><code>targets</code></td>
+                    <td>—</td>
+                    <td>Lista niezależnych buildów; gdy podana, zastępuje <code>content</code>/<code>output</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. KOMENDY CLI                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Komendy CLI</h2>
+            <p class="text-muted mb-4">
+              Binarka nazywa się <code>molique-jit</code> (nie samo
+              <code>molique</code>), żeby nie kolidować z innymi narzędziami o
+              krótszej nazwie. CLI rozumie polecenia po angielsku, ale też ich
+              polskie i niemieckie odpowiedniki — wygodne w zespołach, które na
+              co dzień mówią jednym z tych języków.
+            </p>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Angielski (kanoniczny)</th>
+                    <th>Polski alias</th>
+                    <th>Niemiecki alias</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>init</code></td>
+                    <td><code>start</code></td>
+                    <td><code>start</code></td>
+                    <td>Tworzy plik <code>molique.config.mjs</code> ze wzorcową konfiguracją.</td>
+                  </tr>
+                  <tr>
+                    <td><code>build</code></td>
+                    <td><code>buduj</code></td>
+                    <td><code>bauen</code></td>
+                    <td>Jednorazowo kompiluje CSS do pliku(ów) wyjściowego(ych).</td>
+                  </tr>
+                  <tr>
+                    <td><code>watch</code></td>
+                    <td><code>obserwuj</code></td>
+                    <td><code>beobachten</code></td>
+                    <td>Nasłuchuje zmian plików i przebudowuje na żywo (~50ms debounce).</td>
+                  </tr>
+                  <tr>
+                    <td><code>--minify</code> / <code>-m</code></td>
+                    <td><code>--minifikuj</code></td>
+                    <td><code>--minifizieren</code></td>
+                    <td>Wymusza kompresję wyjścia.</td>
+                  </tr>
+                  <tr>
+                    <td><code>--config</code> / <code>-c</code></td>
+                    <td><code>--konfiguracja</code></td>
+                    <td><code>--konfiguration</code></td>
+                    <td>Wskazuje własną ścieżkę pliku konfiguracyjnego.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-muted mb-3">Wszystkie trzy warianty językowe robią dokładnie to samo:</p>
+
+            <div class="tabs tabs-pill mb-4" style="--tab-count: 3">
+              <input type="radio" name="cli-lang-tabs" id="cli-lang-1" class="tab-input" checked />
+              <input type="radio" name="cli-lang-tabs" id="cli-lang-2" class="tab-input" />
+              <input type="radio" name="cli-lang-tabs" id="cli-lang-3" class="tab-input" />
+
+              <div class="tabs-header">
+                <div class="tabs-pill-indicator"></div>
+                <label for="cli-lang-1" class="tab-label">Standard</label>
+                <label for="cli-lang-2" class="tab-label">Polski</label>
+                <label for="cli-lang-3" class="tab-label">Deutsch</label>
+              </div>
+
+              <div class="tabs-content mt-3">
+                <div class="tab-pane">
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>npx molique-jit init
+npx molique-jit build --minify
+npx molique-jit watch --config ./custom.config.mjs</code></pre>
+                  </div>
+                </div>
+                <div class="tab-pane">
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>npx molique-jit start
+npx molique-jit buduj --minifikuj
+npx molique-jit obserwuj --konfiguracja ./custom.config.mjs</code></pre>
+                  </div>
+                </div>
+                <div class="tab-pane">
+                  <div class="component-code">
+                    <button class="btn-copy">Kopiuj</button>
+                    <pre><code>npx molique-jit start
+npx molique-jit bauen --minifizieren
+npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h3 class="fw-bold text-5 mb-2">Kody wyjścia</h3>
+              <p class="text-4 text-muted m-0">
+                <code>build</code> kończy się kodem <code>0</code> przy
+                sukcesie i <code>1</code> przy błędzie (np. gdy plik
+                konfiguracyjny wskazuje nieistniejący folder) — wygodne do
+                spięcia z CI, np. jako krok przed publikacją.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. GENERATOR KOMPONENTÓW                              -->
+          <!-- ===================================================== -->
+          <section id="generator">
+            <h2 class="text-8 fw-bold mb-3">4. Generator komponentów: <code>make:component</code></h2>
+            <p class="text-muted mb-4">
+              Osobna komenda, niezależna od budowania CSS. Uruchamia w
+              terminalu interaktywny kreator (strzałki + Enter), a na końcu
+              wypisuje gotowy, wklejalny blok HTML — zgodny co do znaku z
+              prawdziwymi, działającymi przykładami modali w tej dokumentacji.
+            </p>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <p class="text-4 text-muted m-0">
+                <strong>Stan dzisiejszy:</strong> pierwsza iteracja generatora
+                obsługuje wyłącznie <strong>Modal</strong> (natywny
+                <code>&lt;dialog&gt;</code>), w trzech wariantach opisanych
+                niżej. Generator tabel B2B i szablonów całych stron (opisane
+                jako pomysł w <a href="docs-roadmap">Roadmapie</a>) nie są
+                jeszcze zaimplementowane — nie polegaj na nich, dopóki nie
+                pojawią się tutaj. To jest też pierwsza komenda z rodziny
+                <code>make:*</code> — kolejne (np. <code>make:table</code>)
+                dołączą do tej samej sekcji, gdy powstaną.
+              </p>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>npx molique-jit make:component</code></pre>
+            </div>
+
+            <p class="text-muted mb-3">Kreator pyta kolejno o:</p>
+            <div class="grid grid-cols-1 grid-md-cols-3 gap-4 mb-4">
+              <div class="card p-4">
+                <h3 class="fw-bold text-5 mb-2">Standard</h3>
+                <p class="text-4 text-muted mb-0">
+                  Zwykły modal: tytuł, treść, przycisk otwierający (etykieta +
+                  kolor).
+                </p>
+              </div>
+              <div class="card p-4">
+                <h3 class="fw-bold text-5 mb-2">Confirm</h3>
+                <p class="text-4 text-muted mb-0">
+                  Dialog potwierdzający: pytanie, opis, etykiety przycisków
+                  Anuluj/Potwierdź, kolor akcji (np. <code>danger</code> dla
+                  usuwania) i ikona ostrzeżenia.
+                </p>
+              </div>
+              <div class="card p-4">
+                <h3 class="fw-bold text-5 mb-2">Context</h3>
+                <p class="text-4 text-muted mb-0">
+                  Boczne menu kontekstowe: tytuł oraz dwie pierwsze pozycje
+                  akcji (etykieta + ikona) — kolejne dopisujesz ręcznie,
+                  kopiując wygenerowany wzorzec.
+                </p>
+              </div>
+            </div>
+
+            <p class="text-muted m-0">
+              Na koniec wybierasz, czy kod ma trafić na ekran konsoli (do
+              skopiowania myszką) czy od razu zapisać się do pliku — narzędzie
+              nigdy nie nadpisuje istniejącego pliku bez wyraźnego
+              potwierdzenia.
+            </p>
+          </section>
+
+          <!-- NAWIGACJA -->
+          <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+            <a href="docs-jit" class="btn btn-secondary">
+              <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-left"></use></svg> Wróć: molique JIT
+            </a>
+            <a href="docs-roadmap" class="btn btn-primary fw-bold hover-spring">
+              Roadmapa <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-right"></use></svg>
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js"></script>
+  </body>
+</html>
