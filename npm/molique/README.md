@@ -55,6 +55,27 @@ supply your own (e.g. via `@fontsource/poppins`) or point the `@font-face`
 Include only the ones you use - each is its own `css/molique-style-*.css`
 file (admin, shop, blog, docs, before-after, share, speed-dial).
 
+## molique-jit (optional)
+
+**[`molique-jit`][jit]** is a companion CLI, published as its own package,
+that scans your project's actual markup and generates only the CSS you
+use - a more precise, zero-safelist-maintenance alternative to manually
+picking modules above or configuring PurgeCSS below.
+
+```bash
+npm install --save-dev molique-jit
+npx molique-jit init    # creates molique.config.mjs
+npx molique-jit build   # scans your project, writes the output CSS
+npx molique-jit watch   # rebuilds on file change, for local dev
+```
+
+It also ships an interactive scaffolding CLI (`molique-jit make:modal`,
+`make:table`, `make:form`, `make:chart`, …) that generates ready-to-use
+component markup grounded 1:1 in molique's own source - see the
+[`molique-jit` package][jit] for the full command list.
+
+[jit]: https://www.npmjs.com/package/molique-jit
+
 ## PurgeCSS (optional)
 
 Some molique classes **don't appear in your HTML** - they're added by JS at
@@ -84,12 +105,6 @@ module.exports = {
 | `molique.all` | All utility families (safest, smallest gain). |
 
 Available groups: `colors`, `grid`, `spacing`, `status`.
-
-> For a more precise, automatic alternative to manual PurgeCSS configuration,
-> see **[`molique-jit`][jit]** - scans your project and generates only the
-> CSS you actually use, with zero safelist maintenance.
-
-[jit]: https://www.npmjs.com/package/molique-jit
 
 ## JS autoloader
 
