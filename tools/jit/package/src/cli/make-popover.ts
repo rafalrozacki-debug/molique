@@ -10,8 +10,10 @@
  * WAZNE: `.popover-context` jest uzywany w CALYM repo TYLKO na jednej
  * dedykowanej stronie przykladow - nie ma udokumentowanego parowania z np.
  * `.btn-action` (ghost button w tabelach), wiec generator trzyma sie
- * dokladnie tego, co pokazuje realny przyklad: zwykly `<button class="btn
- * btn-{kolor}">`, nie wymysla nowych polaczen.
+ * dokladnie tego, co pokazuje realny przyklad: zwykly `<button
+ * class="btn-{kolor}">`. Klasa koloru implikuje juz `.btn` we frameworku
+ * (patrz `_buttons.scss`, "IMPLIKACJA .btn") - baza NIE jest dopisywana
+ * osobno.
  *
  * Kotwica: real markup rozdziela `id` (na popoverze, parowany z
  * `popovertarget`) od nazwanej kotwicy CSS (`anchor-name` na przycisku /
@@ -39,7 +41,12 @@ const TRIGGER_COLOR_CHOICES = [
   { name: 'Secondary (domyslny)', value: 'btn-secondary' },
   { name: 'Primary', value: 'btn-primary' },
   { name: 'Light', value: 'btn-light' },
-  { name: 'Outline (soft)', value: 'btn-outline-soft' },
+  // .btn-outline-soft SAMO W SOBIE nie ma zadnego koloru - to modyfikator
+  // zagniezdzony w SCSS wewnatrz KAZDEGO .btn-outline-<kolor> (zlagodzona
+  // ramka/hover), nie samodzielna klasa. Poprzednia wersja tego wyboru
+  // (`'btn-outline-soft'` jako pojedyncza wartosc) dawala przycisk bez
+  // zadnego realnego koloru - naprawione przez sparowanie z primary.
+  { name: 'Outline (soft)', value: 'btn-outline-primary btn-outline-soft' },
 ] as const;
 
 export interface PopoverItemAnswer {
@@ -52,7 +59,7 @@ export interface PopoverItemAnswer {
 
 export interface PopoverAnswers {
   triggerLabel: string;
-  triggerColor: 'btn-secondary' | 'btn-primary' | 'btn-light' | 'btn-outline-soft';
+  triggerColor: 'btn-secondary' | 'btn-primary' | 'btn-light' | 'btn-outline-primary btn-outline-soft';
   /** Nazwa ikony przy przycisku, puste = brak ikony. */
   triggerIcon: string;
   /** ID popovera (unikalne na stronie) - ANCHOR_NAME jest z niego wyprowadzany automatycznie. */
@@ -100,7 +107,7 @@ export function renderPopover(answers: PopoverAnswers): string {
   const { triggerLabel, triggerColor, triggerIcon, id, items } = answers;
 
   const ANCHOR_NAME = `--anchor-${id}`;
-  const TRIGGER_CLASS = `btn ${triggerColor}`;
+  const TRIGGER_CLASS = triggerColor;
   const TRIGGER_CONTENT = [triggerLabel, triggerIcon ? iconHtml(triggerIcon).trim() : ''].filter(Boolean).join(' ');
 
   // Dzielacy <hr> pojawia sie w realnym przykladzie DOKLADNIE raz, tuz

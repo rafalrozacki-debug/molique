@@ -21,6 +21,8 @@ framework. Two independent halves in one tool:
 npm install --save-dev molique-jit
 ```
 
+`npx molique-jit --version` (or `-V`) prints the installed version.
+
 ## JIT engine
 
 ```bash
@@ -61,6 +63,24 @@ your own backend concatenates.
 | `make:progress` | Labeled progress bar (`.progress`/`.progress-bar`) |
 | `make:accordion` | Native `<details>`-based FAQ accordion, zero JS |
 | `make:pagination` | Classic / Modern pagination bar |
+| `make:tooltip` | Pure-CSS tooltip (`.tooltip-element`) |
+| `make:alert` | Static inline alert message (`.alert`) |
+| `make:dropdown` | Classic `<details>` dropdown / Popover (top-layer) dropdown |
+| `make:tabs` | Classic / Segmented-control (pill) tabs, Radio Hack, zero JS |
+| `make:status-dot` | Status dot with optional pulsing ping (`.status-dot`) |
+| `make:counter` | Animated counter (`.counter`) |
+| `make:timeline` | Icon / Numbered / Labeled (date-left, Grid) timeline |
+| `make:carousel` | Basic / Hero Background-Sync carousel, native scroll-snap |
+| `make:lightbox` | Gallery links (`data-lightbox`/`data-gallery`) - modal built by JS |
+| `make:card` | Classic / Featured Box / Thumb Info (Center + Bottom) / Interactive card |
+| `make:data-row` | Grid CRM data row (`.data-row`) / Compact list item (`.data-row-compact`) |
+| `make:pricing-table` | Pricing cards (`.pricing-table`) / Dotted-leader pricing list (`.pricing-list`) |
+| `make:list-group` | Vertical list of clickable items (`.list-group`) |
+| `make:testimonial` | Testimonial card with star rating and author (`.testimonial`) |
+| `make:toast` | Trigger button + `MoliqueToast.show()` call (JS-driven, no persistent markup) |
+| `make:breadcrumb` | Navigation breadcrumb trail (`.breadcrumb`) |
+| `make:status-icon` | Static status icon / zero-JS Plus-Checkmark toggle checkbox |
+| `make:code-preview` | "Live preview + copyable code" showcase block (`.component-showcase`) |
 | `make:component` | Lists all of the above |
 
 Every generator that produces a variable-length list (nav items, table
@@ -97,10 +117,11 @@ npx molique-jit make:table --answers-file ./table.json -o components/table.html
 
 ## Localization (PL/DE)
 
-Every command and repeatable-count flag has a Polish and German alias -
-`molique-jit zrob:modal` / `molique-jit mache:modal`, `--minifikuj` /
-`--minifizieren`, and so on. Run `npx molique-jit --help` for the full,
-current list.
+Every command and flag has a Polish and German alias - `molique-jit
+zrob:modal` / `molique-jit mache:modal`, `--minifikuj` / `--minifizieren`,
+`--odpowiedzi`/`--antworten` for `--answers`, `--wyjscie`/`--ausgabe` for
+`--out`, and so on. Run `npx molique-jit --help` (or its own aliases,
+`pomoc`/`hilfe`) for the full, current list.
 
 ## License
 

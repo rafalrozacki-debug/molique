@@ -27,16 +27,24 @@ export interface AnswersFlags {
  * jak dotychczas). `--answers-file` ma pierwszenstwo nad `--answers`, gdy
  * ktos (bezsensownie) poda oba naraz.
  */
+function parseJson<T>(raw: string, source: string): T {
+  try {
+    return JSON.parse(raw) as T;
+  } catch (err) {
+    throw new Error(`molique-jit: ${source} nie jest poprawnym JSON-em - ${(err as Error).message}`);
+  }
+}
+
 export function loadAnswers<T>(opts: AnswersFlags): T | undefined {
   if (opts.answersFile) {
     const resolved = path.resolve(process.cwd(), opts.answersFile);
     if (!fs.existsSync(resolved)) {
       throw new Error(`molique-jit: brak pliku "${resolved}" podanego przez --answers-file.`);
     }
-    return JSON.parse(fs.readFileSync(resolved, 'utf8')) as T;
+    return parseJson<T>(fs.readFileSync(resolved, 'utf8'), `--answers-file (${opts.answersFile})`);
   }
   if (opts.answers) {
-    return JSON.parse(opts.answers) as T;
+    return parseJson<T>(opts.answers, '--answers');
   }
   return undefined;
 }

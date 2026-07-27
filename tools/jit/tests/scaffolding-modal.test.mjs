@@ -42,8 +42,8 @@ test('make:modal - Confirm: ikona, oba przyciski, warianty kolorow', () => {
   });
   assert.match(html, /class="modal-dialog modal-confirm"/);
   assert.match(html, /icons-sprite\.svg#ph-trash/);
-  assert.match(html, /<button class="btn btn-secondary">Anuluj<\/button>/);
-  assert.match(html, /<button class="btn btn-danger">Usun<\/button>/);
+  assert.match(html, /<button class="btn-secondary">Anuluj<\/button>/);
+  assert.match(html, /<button class="btn-danger">Usun<\/button>/);
 });
 
 test('make:modal - Context: lista akcji, druga oznaczona jako danger', () => {

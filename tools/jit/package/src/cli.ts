@@ -15,6 +15,7 @@
 import { Command } from 'commander';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { build } from './build.js';
 import { watch } from './watch.js';
 import { loadConfig, resolveTargets, DEFAULT_CONFIG_FILE, INIT_TEMPLATE } from './config.js';
@@ -30,11 +31,31 @@ import { registerMakeBadgeCommand } from './cli/make-badge.js';
 import { registerMakeProgressCommand } from './cli/make-progress.js';
 import { registerMakeAccordionCommand } from './cli/make-accordion.js';
 import { registerMakePaginationCommand } from './cli/make-pagination.js';
+import { registerMakeTooltipCommand } from './cli/make-tooltip.js';
+import { registerMakeAlertCommand } from './cli/make-alert.js';
+import { registerMakeDropdownCommand } from './cli/make-dropdown.js';
+import { registerMakeTabsCommand } from './cli/make-tabs.js';
+import { registerMakeStatusDotCommand } from './cli/make-status-dot.js';
+import { registerMakeCounterCommand } from './cli/make-counter.js';
+import { registerMakeTimelineCommand } from './cli/make-timeline.js';
+import { registerMakeCarouselCommand } from './cli/make-carousel.js';
+import { registerMakeLightboxCommand } from './cli/make-lightbox.js';
+import { registerMakeCardCommand } from './cli/make-card.js';
+import { registerMakeDataRowCommand } from './cli/make-data-row.js';
+import { registerMakePricingTableCommand } from './cli/make-pricing-table.js';
+import { registerMakeListGroupCommand } from './cli/make-list-group.js';
+import { registerMakeTestimonialCommand } from './cli/make-testimonial.js';
+import { registerMakeToastCommand } from './cli/make-toast.js';
+import { registerMakeBreadcrumbCommand } from './cli/make-breadcrumb.js';
+import { registerMakeStatusIconCommand } from './cli/make-status-icon.js';
+import { registerMakeCodePreviewCommand } from './cli/make-code-preview.js';
 import { registerMakeComponentListCommand } from './cli/list.js';
 
 /* ---------- Tlumaczenie argv (PL/DE -> EN) ---------- */
 
 const COMMAND_ALIASES: Record<string, string> = {
+  pomoc: 'help', // PL
+  hilfe: 'help', // DE
   start: 'init', // PL i DE dziela to samo slowo dla "init"
   buduj: 'build', // PL
   bauen: 'build', // DE
@@ -64,6 +85,42 @@ const COMMAND_ALIASES: Record<string, string> = {
   'mache:akkordeon': 'make:accordion', // DE
   'zrob:paginacje': 'make:pagination', // PL
   'mache:seitenzahlen': 'make:pagination', // DE
+  'zrob:podpowiedz': 'make:tooltip', // PL
+  'mache:tooltip': 'make:tooltip', // DE
+  'zrob:komunikat': 'make:alert', // PL
+  'mache:hinweis': 'make:alert', // DE
+  'zrob:rozwijane': 'make:dropdown', // PL
+  'mache:dropdown': 'make:dropdown', // DE
+  'zrob:zakladki': 'make:tabs', // PL
+  'mache:tabs': 'make:tabs', // DE
+  'zrob:kropke-statusu': 'make:status-dot', // PL
+  'mache:statuspunkt': 'make:status-dot', // DE
+  'zrob:licznik': 'make:counter', // PL
+  'mache:zaehler': 'make:counter', // DE
+  'zrob:os-czasu': 'make:timeline', // PL
+  'mache:zeitleiste': 'make:timeline', // DE
+  'zrob:karuzele': 'make:carousel', // PL
+  'mache:karussell': 'make:carousel', // DE
+  'zrob:lightbox': 'make:lightbox', // PL
+  'mache:lightbox': 'make:lightbox', // DE
+  'zrob:karte': 'make:card', // PL
+  'mache:karte': 'make:card', // DE
+  'zrob:wiersz-danych': 'make:data-row', // PL
+  'mache:datenzeile': 'make:data-row', // DE
+  'zrob:cennik': 'make:pricing-table', // PL
+  'mache:preisliste': 'make:pricing-table', // DE
+  'zrob:liste-grupowa': 'make:list-group', // PL
+  'mache:listengruppe': 'make:list-group', // DE
+  'zrob:referencje': 'make:testimonial', // PL
+  'mache:referenz': 'make:testimonial', // DE
+  'zrob:powiadomienie': 'make:toast', // PL
+  'mache:benachrichtigung': 'make:toast', // DE
+  'zrob:okruszki': 'make:breadcrumb', // PL
+  'mache:brotkrumen': 'make:breadcrumb', // DE
+  'zrob:ikone-statusu': 'make:status-icon', // PL
+  'mache:statussymbol': 'make:status-icon', // DE
+  'zrob:podglad-kodu': 'make:code-preview', // PL
+  'mache:codevorschau': 'make:code-preview', // DE
 };
 
 const FLAG_ALIASES: Record<string, string> = {
@@ -71,6 +128,17 @@ const FLAG_ALIASES: Record<string, string> = {
   '--minifizieren': '--minify',
   '--konfiguracja': '--config',
   '--konfiguration': '--config',
+  // Flagi wspoldzielone przez komendy make:* (plan rozwoju CLI) - dodane
+  // dla pelnej spojnosci z reszta CLI, mimo ze w praktyce te flagi czesciej
+  // trafiaja do skryptow/CI niz do reki na zywo w terminalu.
+  '--liczba': '--count', // PL
+  '--anzahl': '--count', // DE
+  '--odpowiedzi': '--answers', // PL
+  '--antworten': '--answers', // DE
+  '--plik-odpowiedzi': '--answers-file', // PL
+  '--antwortdatei': '--answers-file', // DE
+  '--wyjscie': '--out', // PL
+  '--ausgabe': '--out', // DE
 };
 
 // argv = [nodePath, scriptPath, ...userArgs] - slowo komendy zaczyna sie
@@ -105,8 +173,17 @@ function targetsCwd(configPath: string): string {
 
 /* ---------- Program ---------- */
 
+// Wersja czytana z wlasnego package.json (jedyne zrodlo prawdy) - zamiast
+// duplikowac numer na sztywno tutaj, gdzie latwo zapomniec o aktualizacji
+// przy kazdym wydaniu.
+const packageJsonPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'package.json');
+const { version } = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')) as { version: string };
+
 const program = new Command();
-program.name('molique-jit').description('Silnik JIT dla frameworka molique - generuje wylacznie potrzebny CSS.');
+program
+  .name('molique-jit')
+  .description('Silnik JIT dla frameworka molique - generuje wylacznie potrzebny CSS.')
+  .version(version, '-V, --version', 'Wypisz numer wersji');
 
 program
   .command('init')
@@ -203,6 +280,24 @@ registerMakeBadgeCommand(program);
 registerMakeProgressCommand(program);
 registerMakeAccordionCommand(program);
 registerMakePaginationCommand(program);
+registerMakeTooltipCommand(program);
+registerMakeAlertCommand(program);
+registerMakeDropdownCommand(program);
+registerMakeTabsCommand(program);
+registerMakeStatusDotCommand(program);
+registerMakeCounterCommand(program);
+registerMakeTimelineCommand(program);
+registerMakeCarouselCommand(program);
+registerMakeLightboxCommand(program);
+registerMakeCardCommand(program);
+registerMakeDataRowCommand(program);
+registerMakePricingTableCommand(program);
+registerMakeListGroupCommand(program);
+registerMakeTestimonialCommand(program);
+registerMakeToastCommand(program);
+registerMakeBreadcrumbCommand(program);
+registerMakeStatusIconCommand(program);
+registerMakeCodePreviewCommand(program);
 // Rejestrowana na koncu (kolejnosc bez znaczenia funkcjonalnego - lista w
 // cli/list.ts czyta program.commands dopiero w momencie wywolania akcji,
 // gdy wszystkie komendy juz sa zarejestrowane), ale czytelniej trzymac
