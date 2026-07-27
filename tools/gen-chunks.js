@@ -239,6 +239,54 @@ const manifest = {
 };
 
 fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+
+/* ---------- 7. Class index dla molique-jit (klasa -> chunk komponentu) ---------- */
+// WLASNE liczenie wlasnosci, ograniczone WYLACZNIE do chunkow komponentow -
+// celowo NIE reuzywa "defines" z sekcji 4. Ten "defines" liczy pierwszenstwo
+// klas przez WSZYSTKIE chunki (rowniez core: root/a11y/eink/grid/...), a przy
+// remisie liczby wystapien wygrywa kolejnosc przetwarzania (kolejnosc w
+// tablicy `chunks`) - dla samego pola "deps" w manifescie to nieszkodliwe
+// (tylko informacyjne), ale tutaj byloby to zrodlem cichych bledow: np.
+// ".card" wystepuje jako pierwszy token TAKZE w _eink.scss (warianty pod
+// druk), z tym samym licznikiem co w _cards.scss - a poniewaz "eink" jest w
+// core i przetwarzany wczesniej, `defines.get('card')` wskazuje na "eink",
+// czyli NIE-komponent, i klasa "card" po prostu znika z indeksu. Liczac
+// wlasnosc od nowa, tylko na podstawie `components`, taki fantomowy remis
+// z plikami core nigdy nie powstaje.
+const classIndex = {};
+{
+  const compCounts = new Map(); // klasa -> Map(componentId -> ile)
+  for (const c of components) {
+    const css = fs.readFileSync(path.join(outDir, fileOf(c.id)), 'utf8');
+    for (const cls of firstOf(css)) {
+      if (!compCounts.has(cls)) compCounts.set(cls, new Map());
+      const m = compCounts.get(cls);
+      m.set(c.id, (m.get(c.id) || 0) + 1);
+    }
+  }
+  for (const [cls, m] of compCounts) {
+    const byName = [...m.keys()]
+      .filter((id) => cls === id || cls.startsWith(id + '-'))
+      .sort((a, b) => b.length - a.length)[0];
+    classIndex[cls] = byName || [...m.entries()].sort((a, b) => b[1] - a[1])[0][0];
+  }
+}
+fs.writeFileSync(
+  path.join(outDir, 'class-index.json'),
+  JSON.stringify(
+    {
+      generated: manifest.generated,
+      note:
+        'PLIK GENEROWANY AUTOMATYCZNIE - nie edytuj recznie. Zrodlo: tools/gen-chunks.js. ' +
+        'Mapuje klase CSS na ID chunka komponentu (dist/chunks/molique-<id>.css), ' +
+        'ktory molique-jit ma dolaczyc w calosci po zeskanowaniu tej klasy w projekcie.',
+      classes: classIndex,
+    },
+    null,
+    2
+  ) + '\n'
+);
+
 fs.rmSync(tmpDir, { recursive: true, force: true });
 
 const kb = (n) => (n / 1024).toFixed(1) + ' KB';
