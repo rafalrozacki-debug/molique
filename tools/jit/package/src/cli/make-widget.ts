@@ -21,6 +21,10 @@
  *
  * Ostatni z 8 zaplanowanych generatorow - po nim `make:component` wypisuje
  * komplet.
+ *
+ * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
+ * Etap B): kazdy z 4 wariantow dostaje wlasny typ `XxxAnswers` i wlasna
+ * czysta `renderXxx()`.
  */
 
 import type { Command } from 'commander';
@@ -28,13 +32,19 @@ import { select, input, checkbox } from '@inquirer/prompts';
 import { renderStub, renderList } from '../stubs.js';
 import { outputResult } from './output.js';
 import { promptCount } from './prompts.js';
+import { loadAnswers } from './answers.js';
 
 /* ---------- Speed Dial ---------- */
 
 const SPEED_DIAL_DEFAULT_ICONS = ['ph-envelope-simple', 'ph-phone', 'ph-chat-circle'];
 
-async function makeSpeedDial(countFlag?: string): Promise<string> {
-  const MAIN_SYMBOL = await input({ message: 'Znak/symbol na glownym przycisku:', default: '+' });
+export interface SpeedDialAnswers {
+  mainSymbol: string;
+  actions: Array<{ label: string; icon: string }>;
+}
+
+export async function collectSpeedDialAnswers(countFlag?: string): Promise<SpeedDialAnswers> {
+  const mainSymbol = await input({ message: 'Znak/symbol na glownym przycisku:', default: '+' });
 
   const count = await promptCount({
     message: 'Ile dodatkowych akcji w Speed Dial?',
@@ -46,35 +56,70 @@ async function makeSpeedDial(countFlag?: string): Promise<string> {
 
   const actions = [];
   for (let i = 1; i <= count; i++) {
-    const LABEL = await input({ message: `  Etykieta (aria-label) akcji ${i}:`, default: `Akcja ${i}` });
-    const ICON = await input({
+    const label = await input({ message: `  Etykieta (aria-label) akcji ${i}:`, default: `Akcja ${i}` });
+    const icon = await input({
       message: `  Ikona akcji ${i} (nazwa z img/icons-sprite.svg):`,
       default: SPEED_DIAL_DEFAULT_ICONS[i - 1] ?? 'ph-star',
     });
-    actions.push({ LABEL, ICON });
+    actions.push({ label, icon });
   }
 
-  const ACTIONS = renderList('_speed-dial-action.stub.html', actions);
-  return renderStub('speed-dial.stub.html', { MAIN_SYMBOL, ACTIONS });
+  return { mainSymbol, actions };
+}
+
+export function renderSpeedDial(answers: SpeedDialAnswers): string {
+  const ACTIONS = renderList(
+    '_speed-dial-action.stub.html',
+    answers.actions.map((a) => ({ LABEL: a.label, ICON: a.icon }))
+  );
+  return renderStub('speed-dial.stub.html', { MAIN_SYMBOL: answers.mainSymbol, ACTIONS });
 }
 
 /* ---------- Before / After Slider ---------- */
 
-async function makeBeforeAfter(): Promise<string> {
-  const AFTER_IMG = await input({ message: 'URL zdjecia "Po":', default: 'img/after.jpg' });
-  const AFTER_ALT = await input({ message: 'Tekst alternatywny zdjecia "Po":', default: 'Po' });
-  const BEFORE_IMG = await input({ message: 'URL zdjecia "Przed":', default: 'img/before.jpg' });
-  const BEFORE_ALT = await input({ message: 'Tekst alternatywny zdjecia "Przed":', default: 'Przed' });
-  const MAX_WIDTH = await input({ message: 'Maksymalna szerokosc suwaka:', default: '600px' });
-  const ASPECT_RATIO = await input({ message: 'Proporcje suwaka (aspect-ratio):', default: '16/9' });
+export interface BeforeAfterAnswers {
+  afterImg: string;
+  afterAlt: string;
+  beforeImg: string;
+  beforeAlt: string;
+  maxWidth: string;
+  aspectRatio: string;
+}
 
-  return renderStub('before-after.stub.html', { AFTER_IMG, AFTER_ALT, BEFORE_IMG, BEFORE_ALT, MAX_WIDTH, ASPECT_RATIO });
+export async function collectBeforeAfterAnswers(): Promise<BeforeAfterAnswers> {
+  const afterImg = await input({ message: 'URL zdjecia "Po":', default: 'img/after.jpg' });
+  const afterAlt = await input({ message: 'Tekst alternatywny zdjecia "Po":', default: 'Po' });
+  const beforeImg = await input({ message: 'URL zdjecia "Przed":', default: 'img/before.jpg' });
+  const beforeAlt = await input({ message: 'Tekst alternatywny zdjecia "Przed":', default: 'Przed' });
+  const maxWidth = await input({ message: 'Maksymalna szerokosc suwaka:', default: '600px' });
+  const aspectRatio = await input({ message: 'Proporcje suwaka (aspect-ratio):', default: '16/9' });
+  return { afterImg, afterAlt, beforeImg, beforeAlt, maxWidth, aspectRatio };
+}
+
+export function renderBeforeAfter(answers: BeforeAfterAnswers): string {
+  return renderStub('before-after.stub.html', {
+    AFTER_IMG: answers.afterImg,
+    AFTER_ALT: answers.afterAlt,
+    BEFORE_IMG: answers.beforeImg,
+    BEFORE_ALT: answers.beforeAlt,
+    MAX_WIDTH: answers.maxWidth,
+    ASPECT_RATIO: answers.aspectRatio,
+  });
 }
 
 /* ---------- Stepper ---------- */
 
-async function makeStepper(): Promise<string> {
-  const variant = await select({
+type StepperVariant = 'classic' | 'numbered';
+
+export interface StepperAnswers {
+  variant: StepperVariant;
+  labels: string[];
+  /** Etykieta aktualnie aktywnego kroku. */
+  activeLabel: string;
+}
+
+export async function collectStepperAnswers(): Promise<StepperAnswers> {
+  const variant = await select<StepperVariant>({
     message: 'Wariant steppera?',
     choices: [
       { name: 'Klasyczny (grube paski)', value: 'classic' },
@@ -93,6 +138,12 @@ async function makeStepper(): Promise<string> {
     choices: labels.map((l) => ({ name: l, value: l })),
     default: labels[0],
   });
+
+  return { variant, labels, activeLabel };
+}
+
+export function renderStepper(answers: StepperAnswers): string {
+  const { variant, labels, activeLabel } = answers;
   const activeIndex = labels.indexOf(activeLabel);
 
   const stubName = variant === 'numbered' ? '_stepper-step-numbered.stub.html' : '_stepper-step-classic.stub.html';
@@ -124,23 +175,63 @@ const NETWORK_META: Record<string, { name: string; letter: string }> = {
   whatsapp: { name: 'WhatsApp', letter: 'w' },
   native: { name: 'Natywne udostepnianie (Web Share API)', letter: '' },
 };
-// Kolejnosc jak w realnym przykladzie - stala, niezalezna od kolejnosci zaznaczania w checkboxie.
+// Kolejnosc jak w realnym przykladzie - stala, niezalezna od kolejnosci zaznaczania w checkboxie
+// (lub od kolejnosci w JSON-ie przy --answers).
 const NETWORK_ORDER = ['facebook', 'twitter', 'linkedin', 'whatsapp', 'native'];
 
-async function makeShareBar(): Promise<string> {
-  const selected = await checkbox({
+export interface ShareBarAnswers {
+  /** Podzbior 'facebook'|'twitter'|'linkedin'|'whatsapp'|'native', w dowolnej kolejnosci - render wymusza kolejnosc NETWORK_ORDER. */
+  networks: string[];
+}
+
+export async function collectShareBarAnswers(): Promise<ShareBarAnswers> {
+  const networks = await checkbox({
     message: 'Ktore sieci dodac do paska?',
     choices: NETWORK_ORDER.map((value) => ({ name: NETWORK_META[value].name, value, checked: true })),
     validate: (choices) => (choices && choices.length > 0) || 'Wybierz przynajmniej jedna siec.',
   });
+  return { networks };
+}
 
-  const itemBlocks = NETWORK_ORDER.filter((n) => selected.includes(n)).map((network) =>
+export function renderShareBar(answers: ShareBarAnswers): string {
+  const itemBlocks = NETWORK_ORDER.filter((n) => answers.networks.includes(n)).map((network) =>
     network === 'native'
       ? renderStub('_share-btn-native.stub.html', {}).trimEnd()
       : renderStub('_share-btn-letter.stub.html', { NETWORK: network, LETTER: NETWORK_META[network].letter }).trimEnd()
   );
-
   return renderStub('share-bar.stub.html', { ITEMS: itemBlocks.join('\n') });
+}
+
+/* ---------- Dispatch ---------- */
+
+export type WidgetAnswers =
+  | ({ type: 'speed-dial' } & SpeedDialAnswers)
+  | ({ type: 'before-after' } & BeforeAfterAnswers)
+  | ({ type: 'stepper' } & StepperAnswers)
+  | ({ type: 'share-bar' } & ShareBarAnswers);
+
+function renderWidget(answers: WidgetAnswers): string {
+  if (answers.type === 'speed-dial') return renderSpeedDial(answers);
+  if (answers.type === 'before-after') return renderBeforeAfter(answers);
+  if (answers.type === 'stepper') return renderStepper(answers);
+  return renderShareBar(answers);
+}
+
+async function collectWidgetAnswers(countFlag?: string): Promise<WidgetAnswers> {
+  const widgetType = await select<WidgetAnswers['type']>({
+    message: 'Jaki widget chcesz wygenerowac?',
+    choices: [
+      { name: 'Speed Dial (plywajacy przycisk akcji)', value: 'speed-dial' },
+      { name: 'Before / After Slider (suwak porownawczy zdjec)', value: 'before-after' },
+      { name: 'Stepper (pasek postepu formularza)', value: 'stepper' },
+      { name: 'Share Bar (udostepnianie w social media)', value: 'share-bar' },
+    ],
+  });
+
+  if (widgetType === 'speed-dial') return { type: 'speed-dial', ...(await collectSpeedDialAnswers(countFlag)) };
+  if (widgetType === 'before-after') return { type: 'before-after', ...(await collectBeforeAfterAnswers()) };
+  if (widgetType === 'stepper') return { type: 'stepper', ...(await collectStepperAnswers()) };
+  return { type: 'share-bar', ...(await collectShareBarAnswers()) };
 }
 
 /* ---------- Rejestracja komendy ---------- */
@@ -153,26 +244,13 @@ export function registerMakeWidgetCommand(program: Command): void {
         '(aliasy: zrob:widget, mache:widget)'
     )
     .option('-n, --count <liczba>', 'Liczba akcji w Speed Dial (dotyczy tylko tego wariantu) - pomija to jedno pytanie')
-    .action(async (opts: { count?: string }) => {
-      const widgetType = await select({
-        message: 'Jaki widget chcesz wygenerowac?',
-        choices: [
-          { name: 'Speed Dial (plywajacy przycisk akcji)', value: 'speed-dial' },
-          { name: 'Before / After Slider (suwak porownawczy zdjec)', value: 'before-after' },
-          { name: 'Stepper (pasek postepu formularza)', value: 'stepper' },
-          { name: 'Share Bar (udostepnianie w social media)', value: 'share-bar' },
-        ],
-      });
-
-      const html =
-        widgetType === 'speed-dial'
-          ? await makeSpeedDial(opts.count)
-          : widgetType === 'before-after'
-            ? await makeBeforeAfter()
-            : widgetType === 'stepper'
-              ? await makeStepper()
-              : await makeShareBar();
-
-      await outputResult(html, `components/${widgetType}.html`);
+    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt WidgetAnswers, z polem "type") - pomija WSZYSTKIE pytania')
+    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
+    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
+      const provided = loadAnswers<WidgetAnswers>(opts);
+      const answers = provided ?? (await collectWidgetAnswers(opts.count));
+      const html = renderWidget(answers);
+      await outputResult(html, `components/${answers.type}.html`, provided ? { out: opts.out } : undefined);
     });
 }

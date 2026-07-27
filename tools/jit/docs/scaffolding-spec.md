@@ -1,5 +1,20 @@
 # Molique CLI - Scaffolding Engine (DevTools)
 
+> **Ten dokument to WCZESNY SZKIC z etapu planowania**, sprzed budowy
+> realnego scaffoldingu - opisuje kształt `make:page` +
+> `make:component`-z-pod-trybami, ktory zostal PORZUCONY na rzecz jednej
+> oddzielnej komendy na rodzine komponentow (`make:table`, `make:modal`,
+> `make:layout`, `make:nav`, `make:chart`, `make:form`, `make:popover`,
+> `make:widget` - `make:component` sluzy dzis wylacznie do WYPISANIA listy
+> dostepnych generatorow, patrz `src/cli/list.ts`). **Aktualna,
+> autorytatywna dokumentacja komend `make:*` (flagi, `-n/--count`,
+> `--answers`/`--answers-file`) zyje w `cli-spec.md`, sekcja 6** -
+> rozbudowywana przyrostowo, po jednej komendzie, w miare przerabiania
+> kazdego pliku `src/cli/make-*.ts` na ksztalt collect/render (plan
+> rozwoju CLI). Sekcja 1 ponizej (architektura stubow) nadal jest trafna;
+> sekcje 2-3 opisuja ten porzucony ksztalt i zostaja tu jako zapis
+> historyczny procesu projektowania, nie jako biezaca prawda.
+
 Ten dokument opisuje architekturę systemu generowania komponentów (Scaffolding) z wiersza poleceń dla Molique CSS. 
 
 Celem Scaffoldingu jest znaczne przyspieszenie pracy programisty poprzez interaktywne pytania (kreatory) w terminalu i wypluwanie gotowych, zoptymalizowanych bloków HTML (z pełnym wsparciem A11y, ARIA i natywnych rozwiązań CSS, na których opiera się Molique).
@@ -57,4 +72,6 @@ Główne działo CLI. Tworzy powtarzalne struktury złożone.
        <form method="dialog"><button class="modal-close-btn">&times;</button></form>
        <div class="card-body">...</div>
     </div>
+  </dialog>
+  ```
   </dialog>

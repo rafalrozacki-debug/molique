@@ -19,6 +19,12 @@
  * A11y: _stock-bar.scss w komentarzu zrodlowym wprost wymaga
  * `role="img"` + `aria-label` (element jest czysto wizualny) - generator
  * dodaje to zawsze, nie jako opcje do wlaczenia.
+ *
+ * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
+ * Etap B): kazdy z 4 wariantow dostaje wlasny typ `XxxAnswers` i wlasna
+ * czysta `renderXxx()`. Przy okazji: Stock Bar wolal `promptCount()` bez
+ * przekazania `flagValue` (komenda w ogole nie rejestrowala `-n/--count`) -
+ * naprawione tutaj, zgodnie z konwencja reszty komend.
  */
 
 import type { Command } from 'commander';
@@ -26,8 +32,9 @@ import { select, input } from '@inquirer/prompts';
 import { renderStub, renderList } from '../stubs.js';
 import { outputResult } from './output.js';
 import { promptCount } from './prompts.js';
+import { loadAnswers } from './answers.js';
 
-/* ---------- Radial Bar ---------- */
+type ChartColor = 'primary' | 'success' | 'danger' | 'warning' | 'info';
 
 // Ta sama klasyfikacja jasny/ciemny tekst na tle koloru co petla hover w
 // _colors.scss ($theme-colors): primary/dark/secondary -> jasny tekst,
@@ -40,7 +47,14 @@ const COLOR_CHOICES = [
   { name: 'Info', value: 'info' },
 ] as const;
 
-async function makeRadial(): Promise<string> {
+/* ---------- Radial Bar ---------- */
+
+export interface RadialAnswers {
+  value: number;
+  color: ChartColor;
+}
+
+export async function collectRadialAnswers(): Promise<RadialAnswers> {
   const valueStr = await input({
     message: 'Wartosc procentowa (0-100):',
     default: '75',
@@ -49,13 +63,15 @@ async function makeRadial(): Promise<string> {
       return (Number.isInteger(n) && n >= 0 && n <= 100) || 'Podaj liczbe calkowita od 0 do 100.';
     },
   });
-  const VALUE = valueStr;
+  const color = await select<ChartColor>({ message: 'Kolor pierscienia?', choices: COLOR_CHOICES, default: 'primary' });
+  return { value: Number(valueStr), color };
+}
 
-  const color = await select({ message: 'Kolor pierscienia?', choices: COLOR_CHOICES, default: 'primary' });
+export function renderRadial(answers: RadialAnswers): string {
+  const { value, color } = answers;
   const COLOR_STYLE = color === 'primary' ? '' : ` --primary: var(--${color});`;
   const VALUE_CLASS = color === 'primary' ? '' : ` text-${color}`;
-
-  return renderStub('chart-radial.stub.html', { VALUE, COLOR_STYLE, VALUE_CLASS });
+  return renderStub('chart-radial.stub.html', { VALUE: String(value), COLOR_STYLE, VALUE_CLASS });
 }
 
 /* ---------- Funnel (pionowy) ---------- */
@@ -69,7 +85,11 @@ const FUNNEL_PALETTE: Array<{ bg: string; darkText: boolean }> = [
   { bg: 'secondary', darkText: false },
 ];
 
-async function makeFunnel(): Promise<string> {
+export interface FunnelAnswers {
+  labels: string[];
+}
+
+export async function collectFunnelAnswers(): Promise<FunnelAnswers> {
   const labelsLine = await input({
     message: 'Etykiety etapow, od najszerszego do najwezszego (oddzielone przecinkami):',
     default: 'Odwiedziny, Rejestracje, Zakupy',
@@ -78,13 +98,16 @@ async function makeFunnel(): Promise<string> {
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
+  return { labels };
+}
 
+export function renderFunnel(answers: FunnelAnswers): string {
+  const { labels } = answers;
   // Szerokosc maleje rownomiernie od 100% do 45% - realny przyklad w
   // examples-funnels.html robi dokladnie to samo (100%, 75%, ...).
   const floor = 45;
   const stages = labels.map((LABEL, i) => {
-    const VALUE =
-      labels.length === 1 ? 100 : Math.round(100 - (i * (100 - floor)) / (labels.length - 1));
+    const VALUE = labels.length === 1 ? 100 : Math.round(100 - (i * (100 - floor)) / (labels.length - 1));
     const { bg, darkText } = FUNNEL_PALETTE[i % FUNNEL_PALETTE.length];
     const STYLE_EXTRA = ` --stage-bg: var(--${bg});` + (darkText ? ' --stage-text: var(--btn-text-dark);' : '');
     return { LABEL, VALUE: String(VALUE), STYLE_EXTRA };
@@ -96,7 +119,13 @@ async function makeFunnel(): Promise<string> {
 
 /* ---------- Pipeline (poziomy CRM) ---------- */
 
-async function makePipeline(): Promise<string> {
+export interface PipelineAnswers {
+  steps: string[];
+  /** Etykieta aktualnie aktywnego kroku, '' = brak aktywnego. */
+  activeLabel: string;
+}
+
+export async function collectPipelineAnswers(): Promise<PipelineAnswers> {
   const stepsLine = await input({
     message: 'Nazwy krokow procesu (oddzielone przecinkami):',
     default: 'Nowy, Kontakt, Wycena, Negocjacje, Umowa',
@@ -112,26 +141,36 @@ async function makePipeline(): Promise<string> {
     default: steps[0] ?? '',
   });
 
-  const stages = steps.map((LABEL) => ({
-    LABEL,
-    ACTIVE_CLASS: LABEL === activeLabel ? ' is-active' : '',
-  }));
+  return { steps, activeLabel };
+}
 
+export function renderPipeline(answers: PipelineAnswers): string {
+  const { steps, activeLabel } = answers;
+  const stages = steps.map((LABEL) => ({ LABEL, ACTIVE_CLASS: LABEL === activeLabel ? ' is-active' : '' }));
   const STAGES = renderList('_pipeline-stage.stub.html', stages);
   return renderStub('chart-pipeline.stub.html', { STAGES });
 }
 
 /* ---------- Stock Bar ---------- */
 
-async function makeStockBar(): Promise<string> {
+type StockBarVariant = '' | 'stock-bar-success' | 'stock-bar-warning' | 'stock-bar-danger';
+
+export interface StockBarAnswers {
+  filled: number;
+  variant: StockBarVariant;
+  ariaLabel: string;
+}
+
+export async function collectStockBarAnswers(countFlag?: string): Promise<StockBarAnswers> {
   const filled = await promptCount({
     message: 'Ile z 5 segmentow wypelnionych?',
     default: '3',
     min: 0,
     max: 5,
+    flagValue: countFlag,
   });
 
-  const variant = await select({
+  const variant = await select<StockBarVariant>({
     message: 'Wariant koloru?',
     choices: [
       { name: 'Domyslny (neutralny)', value: '' },
@@ -141,11 +180,48 @@ async function makeStockBar(): Promise<string> {
     ],
     default: '',
   });
+
+  const ariaLabel = await input({ message: 'Tekst dla czytnikow ekranu (aria-label):', default: `Stan: ${filled}/5` });
+
+  return { filled, variant, ariaLabel };
+}
+
+export function renderStockBar(answers: StockBarAnswers): string {
+  const { filled, variant, ariaLabel } = answers;
   const VARIANT_CLASS = variant ? ` ${variant}` : '';
+  return renderStub('chart-stock-bar.stub.html', { FILLED: String(filled), VARIANT_CLASS, ARIA_LABEL: ariaLabel });
+}
 
-  const ARIA_LABEL = await input({ message: 'Tekst dla czytnikow ekranu (aria-label):', default: `Stan: ${filled}/5` });
+/* ---------- Dispatch ---------- */
 
-  return renderStub('chart-stock-bar.stub.html', { FILLED: String(filled), VARIANT_CLASS, ARIA_LABEL });
+export type ChartAnswers =
+  | ({ type: 'radial' } & RadialAnswers)
+  | ({ type: 'funnel' } & FunnelAnswers)
+  | ({ type: 'pipeline' } & PipelineAnswers)
+  | ({ type: 'stock-bar' } & StockBarAnswers);
+
+function renderChart(answers: ChartAnswers): string {
+  if (answers.type === 'radial') return renderRadial(answers);
+  if (answers.type === 'funnel') return renderFunnel(answers);
+  if (answers.type === 'pipeline') return renderPipeline(answers);
+  return renderStockBar(answers);
+}
+
+async function collectChartAnswers(countFlag?: string): Promise<ChartAnswers> {
+  const chartType = await select<ChartAnswers['type']>({
+    message: 'Jaki wykres chcesz wygenerowac?',
+    choices: [
+      { name: 'Radial Bar (kolko z progresem)', value: 'radial' },
+      { name: 'Funnel (pionowy lejek)', value: 'funnel' },
+      { name: 'Pipeline (poziomy proces CRM)', value: 'pipeline' },
+      { name: 'Stock Bar (segmentowy poziom zapasu)', value: 'stock-bar' },
+    ],
+  });
+
+  if (chartType === 'radial') return { type: 'radial', ...(await collectRadialAnswers()) };
+  if (chartType === 'funnel') return { type: 'funnel', ...(await collectFunnelAnswers()) };
+  if (chartType === 'pipeline') return { type: 'pipeline', ...(await collectPipelineAnswers()) };
+  return { type: 'stock-bar', ...(await collectStockBarAnswers(countFlag)) };
 }
 
 /* ---------- Rejestracja komendy ---------- */
@@ -157,26 +233,14 @@ export function registerMakeChartCommand(program: Command): void {
       'Interaktywny generator wykresow CSS/SVG (Radial Bar / Funnel / Pipeline / Stock Bar) ' +
         '(aliasy: zrob:wykres, mache:diagramm)'
     )
-    .action(async () => {
-      const chartType = await select({
-        message: 'Jaki wykres chcesz wygenerowac?',
-        choices: [
-          { name: 'Radial Bar (kolko z progresem)', value: 'radial' },
-          { name: 'Funnel (pionowy lejek)', value: 'funnel' },
-          { name: 'Pipeline (poziomy proces CRM)', value: 'pipeline' },
-          { name: 'Stock Bar (segmentowy poziom zapasu)', value: 'stock-bar' },
-        ],
-      });
-
-      const html =
-        chartType === 'radial'
-          ? await makeRadial()
-          : chartType === 'funnel'
-            ? await makeFunnel()
-            : chartType === 'pipeline'
-              ? await makePipeline()
-              : await makeStockBar();
-
-      await outputResult(html, `components/${chartType}-chart.html`);
+    .option('-n, --count <liczba>', 'Liczba wypelnionych segmentow w Stock Bar (dotyczy tylko tego wariantu) - pomija to jedno pytanie')
+    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt ChartAnswers, z polem "type") - pomija WSZYSTKIE pytania')
+    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
+    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
+      const provided = loadAnswers<ChartAnswers>(opts);
+      const answers = provided ?? (await collectChartAnswers(opts.count));
+      const html = renderChart(answers);
+      await outputResult(html, `components/${answers.type}-chart.html`, provided ? { out: opts.out } : undefined);
     });
 }

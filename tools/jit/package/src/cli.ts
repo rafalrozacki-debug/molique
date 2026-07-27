@@ -26,6 +26,10 @@ import { registerMakeChartCommand } from './cli/make-chart.js';
 import { registerMakeFormCommand } from './cli/make-form.js';
 import { registerMakePopoverCommand } from './cli/make-popover.js';
 import { registerMakeWidgetCommand } from './cli/make-widget.js';
+import { registerMakeBadgeCommand } from './cli/make-badge.js';
+import { registerMakeProgressCommand } from './cli/make-progress.js';
+import { registerMakeAccordionCommand } from './cli/make-accordion.js';
+import { registerMakePaginationCommand } from './cli/make-pagination.js';
 import { registerMakeComponentListCommand } from './cli/list.js';
 
 /* ---------- Tlumaczenie argv (PL/DE -> EN) ---------- */
@@ -52,6 +56,14 @@ const COMMAND_ALIASES: Record<string, string> = {
   'mache:popover': 'make:popover', // DE
   'zrob:widget': 'make:widget', // PL
   'mache:widget': 'make:widget', // DE
+  'zrob:odznake': 'make:badge', // PL
+  'mache:abzeichen': 'make:badge', // DE
+  'zrob:pasek-postepu': 'make:progress', // PL
+  'mache:fortschritt': 'make:progress', // DE
+  'zrob:akordeon': 'make:accordion', // PL
+  'mache:akkordeon': 'make:accordion', // DE
+  'zrob:paginacje': 'make:pagination', // PL
+  'mache:seitenzahlen': 'make:pagination', // DE
 };
 
 const FLAG_ALIASES: Record<string, string> = {
@@ -187,6 +199,10 @@ registerMakeChartCommand(program);
 registerMakeFormCommand(program);
 registerMakePopoverCommand(program);
 registerMakeWidgetCommand(program);
+registerMakeBadgeCommand(program);
+registerMakeProgressCommand(program);
+registerMakeAccordionCommand(program);
+registerMakePaginationCommand(program);
 // Rejestrowana na koncu (kolejnosc bez znaczenia funkcjonalnego - lista w
 // cli/list.ts czyta program.commands dopiero w momencie wywolania akcji,
 // gdy wszystkie komendy juz sa zarejestrowane), ale czytelniej trzymac
