@@ -57,16 +57,43 @@ your own backend concatenates.
 | `make:form` | Floating Labels / Classic fields + optional Searchable Select / Premium Multi Select / Drag & Drop File Upload |
 | `make:popover` | `.popover-context` anchored context menu (CSS Anchor Positioning) |
 | `make:widget` | Speed Dial / Before-After Slider / Stepper / Share Bar |
+| `make:badge` | Status pill (`.badge`) |
+| `make:progress` | Labeled progress bar (`.progress`/`.progress-bar`) |
+| `make:accordion` | Native `<details>`-based FAQ accordion, zero JS |
+| `make:pagination` | Classic / Modern pagination bar |
 | `make:component` | Lists all of the above |
 
 Every generator that produces a variable-length list (nav items, table
-rows, chart stages, …) accepts `-n, --count <n>` to skip the "how many?"
-prompt - the rest of the flow stays interactive.
+rows, chart stages, accordion panels, …) accepts `-n, --count <n>` to skip
+the "how many?" prompt - the rest of the flow stays interactive.
 
 ```bash
 npx molique-jit make:modal
 npx molique-jit make:table --count 5
 ```
+
+### Non-interactive mode (`--answers` / `--answers-file`)
+
+Every command also accepts a full set of answers up front, skipping ALL
+prompts at once - useful for scripts and CI, where nobody's at a terminal
+to answer questions. The JSON shape matches that command's own
+`XxxAnswers` TypeScript type (see `cli-spec.md` in the repo for every
+command's exact shape).
+
+```bash
+npx molique-jit make:badge --answers '{"text":"New","color":"success"}'
+npx molique-jit make:table --answers-file ./table.json -o components/table.html
+```
+
+- `--answers '<json>'` - inline JSON.
+- `--answers-file <path>` - read the JSON from a file instead.
+- `-o, --out <path>` - write the result straight to a file (only applies
+  together with `--answers`/`--answers-file`; without them, the normal
+  interactive "console or file?" prompt still applies). Omit `-o` and the
+  generated markup goes straight to stdout - pipe it wherever you like.
+- `-n, --count` still works as the lighter, single-question shortcut for
+  interactive use - if both are given, `--answers`/`--answers-file` wins
+  (it already encodes the count).
 
 ## Localization (PL/DE)
 
