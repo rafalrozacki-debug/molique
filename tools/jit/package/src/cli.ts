@@ -18,6 +18,7 @@ import path from 'node:path';
 import { build } from './build.js';
 import { watch } from './watch.js';
 import { loadConfig, resolveTargets, DEFAULT_CONFIG_FILE, INIT_TEMPLATE } from './config.js';
+import { registerMakeCommand } from './cli/make.js';
 
 /* ---------- Tlumaczenie argv (PL/DE -> EN) ---------- */
 
@@ -153,6 +154,8 @@ program
     process.on('SIGINT', shutdown);
     process.on('SIGTERM', shutdown);
   });
+
+registerMakeCommand(program);
 
 program.parseAsync(translateArgv(process.argv)).catch((err) => {
   console.error(err instanceof Error ? err.message : err);
