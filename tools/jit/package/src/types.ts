@@ -58,6 +58,8 @@ export interface BuildOptions {
   cwd: string;
   /** Sciezka pliku wyjsciowego CSS. */
   outFile: string;
+  /** Dodatkowe, zawsze dolaczane klasy (z molique.config.mjs -> safelist) - poza wbudowana safelista runtime molique. */
+  safelist?: string[];
   verbose?: boolean;
 }
 

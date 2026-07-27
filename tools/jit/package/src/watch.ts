@@ -44,7 +44,11 @@ export async function watch(options: WatchOptions): Promise<WatchHandle> {
 
   function rebuild(): void {
     const tokens = unionTokens(fileCache);
-    const { matchedUtilityClasses, matchedComponentIds, unmatchedTokenCount } = resolve(tokens, data);
+    const { matchedUtilityClasses, matchedComponentIds, unmatchedTokenCount } = resolve(
+      tokens,
+      data,
+      options.safelist
+    );
     const css = emit(data, matchedUtilityClasses, matchedComponentIds);
 
     fs.mkdirSync(path.dirname(options.outFile), { recursive: true });

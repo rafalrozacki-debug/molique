@@ -56,11 +56,18 @@ for (const id of componentIds) {
   copiedComponents++;
 }
 
-/* ---------- 3. Zmienne motywu (:root + dark mode) - zawsze potrzebne ---------- */
+/* ---------- 3. Zmienne motywu + reset/base - zawsze potrzebne ---------- */
+// "root" (zmienne :root + dark mode) i "base" (reset, typografia bazowa,
+// .container/.container-fluid) sa oba oznaczone "mandatory: true" w
+// gen-chunks.js - konfigurator nawet nie pozwala ich odznaczyc, bo bez nich
+// framework nie renderuje sie poprawnie. molique-jit traktuje je tak samo:
+// dolaczane zawsze, niezaleznie od zeskanowanych klas.
 
-const rootChunk = path.join(chunksDir, 'molique-root.css');
-requireFile(rootChunk, 'Brak dist/chunks/molique-root.css - uruchom node tools/gen-chunks.js.');
-fs.copyFileSync(rootChunk, path.join(dataDir, 'molique-root.css'));
+for (const id of ['root', 'base']) {
+  const chunk = path.join(chunksDir, `molique-${id}.css`);
+  requireFile(chunk, `Brak dist/chunks/molique-${id}.css - uruchom node tools/gen-chunks.js.`);
+  fs.copyFileSync(chunk, path.join(dataDir, `molique-${id}.css`));
+}
 
 /* ---------- 4. Bazowa safelist - z purgecss.safelist.cjs, nie ręcznie ---------- */
 // Tylko tier "runtime.standard" (klasy tworzone/przelaczane przez WLASNY JS
@@ -86,6 +93,6 @@ fs.writeFileSync(
   ) + '\n'
 );
 
-console.log('Skopiowano komponentow: ' + copiedComponents);
-console.log('Skopiowano: utilities.json, class-index.json, molique-root.css, safelist.json');
+console.log('Skopiowano komponentow (+ buttons/grid/layout): ' + copiedComponents);
+console.log('Skopiowano: utilities.json, class-index.json, molique-root.css, molique-base.css, safelist.json');
 console.log('Zapisano do: ' + path.relative(root, dataDir));

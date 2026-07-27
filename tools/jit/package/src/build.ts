@@ -18,7 +18,11 @@ import type { BuildOptions, BuildResult } from './types.js';
 export async function build(options: BuildOptions): Promise<BuildResult> {
   const data = loadData();
   const { tokens } = await scan({ content: options.content, cwd: options.cwd });
-  const { matchedUtilityClasses, matchedComponentIds, unmatchedTokenCount } = resolve(tokens, data);
+  const { matchedUtilityClasses, matchedComponentIds, unmatchedTokenCount } = resolve(
+    tokens,
+    data,
+    options.safelist
+  );
   const css = emit(data, matchedUtilityClasses, matchedComponentIds);
 
   fs.mkdirSync(path.dirname(options.outFile), { recursive: true });

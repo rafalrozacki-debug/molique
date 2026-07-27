@@ -240,9 +240,10 @@ const manifest = {
 
 fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
-/* ---------- 7. Class index dla molique-jit (klasa -> chunk komponentu) ---------- */
-// WLASNE liczenie wlasnosci, ograniczone WYLACZNIE do chunkow komponentow -
-// celowo NIE reuzywa "defines" z sekcji 4. Ten "defines" liczy pierwszenstwo
+/* ---------- 7. Class index dla molique-jit (klasa -> chunk "wyzwalany klasa") ---------- */
+// WLASNE liczenie wlasnosci, ograniczone do `classIndexSources` (komponenty +
+// trzy chunki core zachowujace sie jak komponenty, patrz nizej) - celowo NIE
+// reuzywa "defines" z sekcji 4. Ten "defines" liczy pierwszenstwo
 // klas przez WSZYSTKIE chunki (rowniez core: root/a11y/eink/grid/...), a przy
 // remisie liczby wystapien wygrywa kolejnosc przetwarzania (kolejnosc w
 // tablicy `chunks`) - dla samego pola "deps" w manifescie to nieszkodliwe
@@ -253,10 +254,19 @@ fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, nu
 // czyli NIE-komponent, i klasa "card" po prostu znika z indeksu. Liczac
 // wlasnosc od nowa, tylko na podstawie `components`, taki fantomowy remis
 // z plikami core nigdy nie powstaje.
+// Trzy chunki core, ktore mimo etykiety "core" zachowuja sie jak komponenty
+// z perspektywy JIT-a: uzytkownik "wlacza" je przez UZYCIE konkretnej klasy
+// (.btn-primary, .col-span-6, .d-flex), a nie przez sama obecnosc frameworka.
+// Reszta core (root/fonts/base/a11y/eink/utilities*) albo jest zawsze
+// potrzebna (base wlaczany oddzielnie nizej, patrz baseCssPath), albo nie
+// jest wyzwalana pojedyncza klasa (fonts/a11y/eink) - poza zakresem na razie.
+const CLASS_TRIGGERED_CORE_IDS = ['buttons', 'grid', 'layout'];
+const classIndexSources = components.concat(core.filter((c) => CLASS_TRIGGERED_CORE_IDS.includes(c.id)));
+
 const classIndex = {};
 {
-  const compCounts = new Map(); // klasa -> Map(componentId -> ile)
-  for (const c of components) {
+  const compCounts = new Map(); // klasa -> Map(id -> ile)
+  for (const c of classIndexSources) {
     const css = fs.readFileSync(path.join(outDir, fileOf(c.id)), 'utf8');
     for (const cls of firstOf(css)) {
       if (!compCounts.has(cls)) compCounts.set(cls, new Map());

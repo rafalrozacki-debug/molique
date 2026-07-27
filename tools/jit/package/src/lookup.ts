@@ -27,7 +27,10 @@ export interface LoadedData {
   classIndex: ClassIndex;
   safelist: Safelist;
   componentsDir: string;
+  /** Zmienne motywu (:root + dark mode) - "mandatory" w gen-chunks.js, zawsze dolaczane. */
   rootCssPath: string;
+  /** Reset, typografia bazowa, .container/.container-fluid - tez "mandatory", zawsze dolaczane. */
+  baseCssPath: string;
 }
 
 function readJson<T>(file: string): T {
@@ -48,6 +51,7 @@ export function loadData(): LoadedData {
     safelist: readJson<Safelist>(path.join(dataDir, 'safelist.json')),
     componentsDir: path.join(dataDir, 'components'),
     rootCssPath: path.join(dataDir, 'molique-root.css'),
+    baseCssPath: path.join(dataDir, 'molique-base.css'),
   };
 }
 
@@ -64,9 +68,10 @@ export interface ResolveResult {
  * zadnego trafienia to po prostu klasa spoza molique (bootstrap, wlasny BEM
  * itd.) - nie jest to blad.
  */
-export function resolve(tokens: Set<string>, data: LoadedData): ResolveResult {
+export function resolve(tokens: Set<string>, data: LoadedData, extraSafelist: string[] = []): ResolveResult {
   const effectiveTokens = new Set(tokens);
   for (const s of data.safelist.standard) effectiveTokens.add(s);
+  for (const s of extraSafelist) effectiveTokens.add(s);
 
   const matchedUtilityClasses: string[] = [];
   const matchedComponentIds = new Set<string>();

@@ -19,6 +19,10 @@ export function emit(data: LoadedData, matchedUtilityClasses: string[], matchedC
   const parts: string[] = [LAYER_DECLARATION];
 
   parts.push(fs.readFileSync(data.rootCssPath, 'utf8'));
+  // "base" (reset, typografia bazowa, .container/.container-fluid) jest tak
+  // samo "mandatory" jak zmienne motywu - bez niego strona nie renderuje sie
+  // poprawnie niezaleznie od tego, jakie klasy zostaly zeskanowane.
+  parts.push(fs.readFileSync(data.baseCssPath, 'utf8'));
 
   // Komponenty jako CALE, juz skompilowane pliki chunkow (dokladnie ta sama
   // tresc, ktora dzis produkuje tools/gen-chunks.js) - nie probujemy wycinac
