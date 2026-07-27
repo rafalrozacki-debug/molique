@@ -19,12 +19,15 @@ export interface UtilityRule {
   wrappers: string[];
   /** Deklaracje CSS (bez selektora i klamer), np. "color:var(--primary) !important". */
   css: string;
+  /** Nazwa chunka zrodlowego, np. "molique-utilities-extended.css" (modul opt-in). */
+  source: string;
 }
 
 /** Fragment CSS bez zadnej klasy w selektorze (np. @keyframes, @property) - zawsze dolaczany. */
 export interface AlwaysIncludeEntry {
   /** Kompletny, juz opakowany fragment CSS, gotowy do wklejenia verbatim. */
   raw: string;
+  source: string;
 }
 
 export interface UtilitiesDictionary {

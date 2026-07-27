@@ -107,31 +107,37 @@ function ownerOf(selector) {
 const wrapRaw = (raw, wrappers) =>
   wrappers.reduceRight((inner, head) => head + '{' + inner + '}', raw);
 
-// classes: nazwa klasy -> tablica { selector, wrappers, css }
-// alwaysInclude: fragmenty bez zadnej klasy - { raw } (juz w pelni opakowane
-// we wszystkie warunkowe @media/@supports, gotowe do wklejenia verbatim)
-function walkRules(body, wrappers, classes, alwaysInclude, unmatchedLog) {
+// classes: nazwa klasy -> tablica { selector, wrappers, css, source }
+// alwaysInclude: fragmenty bez zadnej klasy - { raw, source } (juz w pelni
+// opakowane we wszystkie warunkowe @media/@supports, gotowe do wklejenia
+// verbatim). Pole "source" (nazwa pliku chunka) pozwala odbiorcom (np.
+// testowi parytetu) odroznic klasy z domyslnego bundla od klas z
+// opt-in "utilities-extended" - ten drugi modul CELOWO nie wchodzi do
+// css/molique-style.css (patrz komentarz "Modul OPT-IN" w
+// _utilities-extended.scss), wiec porownywanie go z pelnym buildem strony
+// zawsze bylo bledne zalozenie, nie prawdziwy dryf.
+function walkRules(body, wrappers, source, classes, alwaysInclude, unmatchedLog) {
   for (const stmt of splitTopLevel(body)) {
     if (stmt.head.startsWith('@media') || stmt.head.startsWith('@supports')) {
-      walkRules(stmt.body, [...wrappers, stmt.head], classes, alwaysInclude, unmatchedLog);
+      walkRules(stmt.body, [...wrappers, stmt.head], source, classes, alwaysInclude, unmatchedLog);
       continue;
     }
     if (stmt.head.startsWith('@layer')) {
       // Zagniezdzony @layer utilities{...} (podwojne opakowanie z
       // gen-chunks.js + wlasny @layer w pliku zrodlowym) - przezroczysty,
       // ta sama efektywna warstwa, nie dolicza warunku.
-      walkRules(stmt.body, wrappers, classes, alwaysInclude, unmatchedLog);
+      walkRules(stmt.body, wrappers, source, classes, alwaysInclude, unmatchedLog);
       continue;
     }
     if (stmt.head.startsWith('@keyframes') || stmt.head.startsWith('@property')) {
       // Opakowanie opaczne - NIE wchodzimy w srodek (selektory procentowe
       // "10%, 90%{...}" wewnatrz @keyframes nie sa klasami CSS).
-      alwaysInclude.push({ raw: wrapRaw(stmt.head + '{' + stmt.body + '}', wrappers) });
+      alwaysInclude.push({ raw: wrapRaw(stmt.head + '{' + stmt.body + '}', wrappers), source });
       unmatchedLog.push(stmt.head + ' (alwaysInclude)');
       continue;
     }
     if (stmt.head.startsWith('@')) {
-      alwaysInclude.push({ raw: wrapRaw(stmt.head + '{' + stmt.body + '}', wrappers) });
+      alwaysInclude.push({ raw: wrapRaw(stmt.head + '{' + stmt.body + '}', wrappers), source });
       unmatchedLog.push(stmt.head + ' (nierozpoznany at-rule, alwaysInclude)');
       continue;
     }
@@ -140,12 +146,12 @@ function walkRules(body, wrappers, classes, alwaysInclude, unmatchedLog) {
       if (!selector) continue;
       const owner = ownerOf(selector);
       if (!owner) {
-        alwaysInclude.push({ raw: wrapRaw(selector + '{' + stmt.body + '}', wrappers) });
+        alwaysInclude.push({ raw: wrapRaw(selector + '{' + stmt.body + '}', wrappers), source });
         unmatchedLog.push(selector + ' (brak klasy, alwaysInclude)');
         continue;
       }
       if (!classes[owner]) classes[owner] = [];
-      classes[owner].push({ selector, wrappers, css: stmt.body.trim() });
+      classes[owner].push({ selector, wrappers, css: stmt.body.trim(), source });
     }
   }
 }
@@ -167,11 +173,13 @@ for (const name of SOURCES) {
     );
     process.exit(1);
   }
-  walkRules(layer.body, [], classes, alwaysInclude, unmatchedLog);
+  walkRules(layer.body, [], name, classes, alwaysInclude, unmatchedLog);
 }
 
 // Deduplikacja identycznych wpisow klas (na wypadek, gdyby oba chunki
-// wygenerowaly dokladnie ta sama regule dla tej samej klasy).
+// wygenerowaly dokladnie ta sama regule dla tej samej klasy). "source"
+// celowo POZA kluczem - identyczna regula z dwoch chunkow to nadal jeden
+// wpis, pierwsze trafienie decyduje o przypisanym source.
 for (const cls of Object.keys(classes)) {
   const seen = new Set();
   classes[cls] = classes[cls].filter((entry) => {

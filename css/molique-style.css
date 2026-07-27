@@ -36,6 +36,21 @@
     --warning-hover: #DC6803;
     --info: #2E90FA;
     --info-hover: #1570EF;
+    /* Warianty "-text" (przyciemnione o stala jasnosc w HSL, zachowany
+       odcien/nasycenie): --success/--warning/--danger/--info jako TLO (badge,
+       dot, przycisk) maja wystarczajacy kontrast wzgledem wlasnej tresci, ale
+       jako sam kolor TEKSTU na jasnym tle (.text-success itd.) daja tylko ok.
+       2.2-4.2:1 - ponizej progu WCAG 4.5:1. Uzywaj tych zmiennych WYLACZNIE
+       tam, gdzie kolor jest samym czytelnym tekstem na --bg-body/--bg-surface
+       (.text-warning, .bg-warning-subtle itd.) - tla/badge/status-dot
+       zostaja przy zwyklych --success/--warning/--danger/--info, tam problemu
+       nie ma (tekst w srodku ma juz wlasna, osobno dobrana pare kolorow). W
+       dark mode --success/--warning/--danger/--info juz maja kontrast 8+:1 na
+       ciemnym tle, wiec tam warianty "-text" sa identyczne z baza. */
+    --success-text: #0c7745;
+    --warning-text: #985805;
+    --danger-text: #cc1c0f;
+    --info-text: #0565cc;
     /* Kolory tła i tekstu */
     --bg-body: #F5F6FC; /* Chlodny neutral pod panele */
     --bg-surface: #FFFFFF; /* Czysta biel dla kart i głównych kontenerów */
@@ -54,6 +69,12 @@
     --sidebar-submenu-bg: #52677D;
     --sidebar-text: #A9ADCB;
     --sidebar-text-active: #FFFFFF;
+    /* Akcent marki na sidebarze (np. .sidebar-sm .admin-nav-link.is-active) -
+       TA SAMA pulapka co wyzej: var(--primary) w LIGHT mode to #5145E5,
+       zbyt ciemny na ciemnym tle sidebara (2.3:1). Literalna wartosc
+       --primary z DARK mode (#8B84FF, jasniejszy wariant do ciemnych tel) -
+       nie odwraca sie, bo sidebar sam sie nie odwraca. */
+    --sidebar-active-accent: #8B84FF;
     /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
        logo) — niezależne od motywu, w przeciwieństwie do --light-rgb */
     --sidebar-highlight-rgb: 249, 249, 249;
@@ -74,7 +95,12 @@
     --bg-surface-rgb: 255, 255, 255; /* #FFFFFF - kanały --bg-surface, używane przez .bg-glass */
     --sidebar-rgb: 20, 22, 43; /* = --dark-rgb - sidebar "szklany" v2 nad tlem strony */
     --btn-text-light: #FFFFFF;
-    --btn-text-dark: var(--dark);
+    /* UWAGA: NIE var(--dark) - --dark odwraca sie w dark mode (staje sie
+       prawie-bialy), co dawalo bialy-na-bialym dla .btn-warning/.badge-warning
+       w ciemnym motywie (kontrast 1.58:1). success/danger/warning/info sa
+       dosc jasne/pastelowe w OBU motywach, wiec potrzebuja STALE ciemnego
+       tekstu niezaleznie od tematu - stad literal, nie zmienna motywu. */
+    --btn-text-dark: #14162B;
     --card-bg-subtle: rgba(var(--dark-rgb), 0.035);
     /* BLOKI KODU. Ciemne w OBU motywach (tak wygląda kod wszędzie), ale
        wartość NIE może być zahardkodowana: w dark mode --bg-surface to
@@ -190,6 +216,13 @@
     --warning-hover: #FEC84B;
     --info: #63A8FF;
     --info-hover: #8EC2FF;
+    /* W dark mode --success/--warning/--danger juz maja 10+:1 na --bg-body
+       ciemnym, wiec warianty "-text" zostaja identyczne z baza - patrz
+       komentarz przy definicji w :root. */
+    --success-text: var(--success);
+    --warning-text: var(--warning);
+    --danger-text: var(--danger);
+    --info-text: var(--info);
     /* Zmienne semantyczne odwrócone - light w dark mode = bg-surface (ta sama
        zaleznosc co przed v2, tylko z nowymi wartosciami) */
     --light: #141629;
@@ -210,6 +243,9 @@
        dalo dokladnie ten sam kolor niezaleznie od motywu strony. */
     --sidebar-rgb: 20, 22, 43;
     --btn-text-light: #0A0B14;
+    /* Ta sama literalna wartosc co w :root - CELOWO bez zmiany w dark mode,
+       patrz komentarz przy definicji w :root. */
+    --btn-text-dark: #14162B;
     /* Cienie v2 w dark mode: czysta czern (nie barwione --dark-rgb jak w
        light) - na ciemnym tle barwiony cien jest niewidoczny/bez sensu. */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
@@ -1564,6 +1600,10 @@
     /* =========================================
        2. WARIANTY KOLORYSTYCZNE (Pętla SCSS)
        ========================================= */
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-primary {
       background-color: var(--primary);
@@ -1580,6 +1620,8 @@
     .btn-outline-primary {
       background-color: transparent;
       border-color: var(--primary);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
       color: var(--primary);
       /* Domyślny, pełny hover */
     }
@@ -1601,6 +1643,10 @@
       border-color: rgba(var(--primary-rgb), 0.5);
       color: var(--primary);
     }
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-secondary {
       background-color: var(--secondary);
@@ -1617,6 +1663,8 @@
     .btn-outline-secondary {
       background-color: transparent;
       border-color: var(--secondary);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
       color: var(--secondary);
       /* Domyślny, pełny hover */
     }
@@ -1638,12 +1686,16 @@
       border-color: rgba(var(--secondary-rgb), 0.5);
       color: var(--secondary);
     }
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-success {
       background-color: var(--success);
       border-color: var(--success);
       /* Automatyczny kontrast tekstu */
-      color: var(--btn-text-light, #fff);
+      color: var(--btn-text-dark);
     }
     .btn-success:hover, .btn-success:focus-visible {
       /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
@@ -1654,12 +1706,14 @@
     .btn-outline-success {
       background-color: transparent;
       border-color: var(--success);
-      color: var(--success);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      color: var(--success-text);
       /* Domyślny, pełny hover */
     }
     .btn-outline-success:hover, .btn-outline-success:focus-visible {
       background-color: var(--success);
-      color: var(--btn-text-light, #fff);
+      color: var(--btn-text-dark);
     }
     .btn-outline-success {
       /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
@@ -1675,12 +1729,16 @@
       border-color: rgba(var(--success-rgb), 0.5);
       color: var(--success);
     }
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-danger {
       background-color: var(--danger);
       border-color: var(--danger);
       /* Automatyczny kontrast tekstu */
-      color: var(--btn-text-light, #fff);
+      color: var(--btn-text-dark);
     }
     .btn-danger:hover, .btn-danger:focus-visible {
       /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
@@ -1691,12 +1749,14 @@
     .btn-outline-danger {
       background-color: transparent;
       border-color: var(--danger);
-      color: var(--danger);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      color: var(--danger-text);
       /* Domyślny, pełny hover */
     }
     .btn-outline-danger:hover, .btn-outline-danger:focus-visible {
       background-color: var(--danger);
-      color: var(--btn-text-light, #fff);
+      color: var(--btn-text-dark);
     }
     .btn-outline-danger {
       /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
@@ -1712,12 +1772,16 @@
       border-color: rgba(var(--danger-rgb), 0.5);
       color: var(--danger);
     }
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-warning {
       background-color: var(--warning);
       border-color: var(--warning);
       /* Automatyczny kontrast tekstu */
-      color: var(--text-main);
+      color: var(--btn-text-dark);
     }
     .btn-warning:hover, .btn-warning:focus-visible {
       /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
@@ -1728,12 +1792,14 @@
     .btn-outline-warning {
       background-color: transparent;
       border-color: var(--warning);
-      color: var(--warning);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      color: var(--warning-text);
       /* Domyślny, pełny hover */
     }
     .btn-outline-warning:hover, .btn-outline-warning:focus-visible {
       background-color: var(--warning);
-      color: var(--text-main);
+      color: var(--btn-text-dark);
     }
     .btn-outline-warning {
       /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
@@ -1749,12 +1815,16 @@
       border-color: rgba(var(--warning-rgb), 0.5);
       color: var(--warning);
     }
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-info {
       background-color: var(--info);
       border-color: var(--info);
       /* Automatyczny kontrast tekstu */
-      color: var(--btn-text-light, #fff);
+      color: var(--btn-text-dark);
     }
     .btn-info:hover, .btn-info:focus-visible {
       /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
@@ -1765,12 +1835,14 @@
     .btn-outline-info {
       background-color: transparent;
       border-color: var(--info);
-      color: var(--info);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      color: var(--info-text);
       /* Domyślny, pełny hover */
     }
     .btn-outline-info:hover, .btn-outline-info:focus-visible {
       background-color: var(--info);
-      color: var(--btn-text-light, #fff);
+      color: var(--btn-text-dark);
     }
     .btn-outline-info {
       /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
@@ -1786,6 +1858,10 @@
       border-color: rgba(var(--info-rgb), 0.5);
       color: var(--info);
     }
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-light {
       background-color: var(--light);
@@ -1802,6 +1878,8 @@
     .btn-outline-light {
       background-color: transparent;
       border-color: var(--light);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
       color: var(--light);
       /* Domyślny, pełny hover */
     }
@@ -1823,6 +1901,10 @@
       border-color: rgba(var(--light-rgb), 0.5);
       color: var(--light);
     }
+    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
+       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
+       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
+       --*-text w _root.scss. */
     /* --- WARIANTY PEŁNE (Solid) --- */
     .btn-dark {
       background-color: var(--dark);
@@ -1839,6 +1921,8 @@
     .btn-outline-dark {
       background-color: transparent;
       border-color: var(--dark);
+      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
+         kontrastu co .text-* (patrz --*-text w _root.scss). */
       color: var(--dark);
       /* Domyślny, pełny hover */
     }
@@ -5280,7 +5364,11 @@
     /* Domyślny / Jasny (Subtelne odcięcie) */
     .thead-light th {
       background-color: var(--card-bg-subtle);
-      color: var(--text-muted);
+      /* NIE --text-muted - na tym prawie-bialym tle daje tylko 4.34:1 (male,
+         pogrubione litery naglowka wymagaja pelnego 4.5:1). --secondary-hover
+         jest wystarczajaco ciemniejszy (6.5+:1 w obu motywach), bez
+         wprowadzania nowej zmiennej. */
+      color: var(--secondary-hover);
       border-bottom: 2px solid var(--border-color); /* Mocniejsza linia pod nagłówkiem */
     }
     /* Ciemny (Mocny kontrast) */
@@ -6024,7 +6112,11 @@
   .carousel-dots {
     display: flex;
     justify-content: center;
-    gap: var(--spacing-unit);
+    /* Kropki maja 10px + niewidoczny obszar klikalny --target-size-min (44px)
+       przez ::before ponizej - przy zbyt malym gap te niewidoczne obszary
+       sasiednich kropek zachodza na siebie (WCAG 2.5.8, min. 24px "bezpiecznej"
+       przestrzeni miedzy celami dotyku). */
+    gap: calc(var(--spacing-unit) * 2);
     margin-top: calc(var(--spacing-unit) * 3);
   }
   .carousel-dot {
@@ -6228,17 +6320,19 @@
   }
   .badge-success {
     background-color: var(--success);
+    color: var(--btn-text-dark);
   }
   .badge-danger {
     background-color: var(--danger);
+    color: var(--btn-text-dark);
   }
   .badge-warning {
     background-color: var(--warning);
-    color: var(--text-main);
+    color: var(--btn-text-dark);
   }
   .badge-info {
     background-color: var(--info);
-    color: var(--text-main);
+    color: var(--btn-text-dark);
   }
   .badge-dark {
     background-color: var(--dark);
@@ -6827,12 +6921,14 @@
     border-bottom: none;
   }
   .pricing-features li {
-    /* Przekreślone, niedostępne funkcje */
+    /* Przekreślone, niedostępne funkcje. BEZ dodatkowego opacity - samo
+       --text-muted juz daje 5:1 na bialym tle, a doklejone opacity:0.5
+       scinalo to do 2:1 (zbyt slabe nawet dla drugoplanowej tresci).
+       Przekreslenie samo w sobie wystarczajaco odroznia wizualnie. */
   }
   .pricing-features li.is-disabled {
     color: var(--text-muted);
     text-decoration: line-through;
-    opacity: 0.5;
   }
   /* =========================================
      2. PASKI POSTĘPU (Progress Bars)
@@ -7737,12 +7833,15 @@
     gap: 4px;
     font-size: 0.875rem;
     font-weight: var(--fw-bold);
+    /* --success/--danger jako sam kolor TEKSTU nie maja dosc kontrastu
+       (patrz --success-text/--danger-text w _root.scss - ten sam powod co
+       .text-success/.text-danger). */
   }
   .stat-trend.is-positive {
-    color: var(--success);
+    color: var(--success-text);
   }
   .stat-trend.is-negative {
-    color: var(--danger);
+    color: var(--danger-text);
   }
   /* =========================================
      8. EMPTY STATES (Puste stany danych)
@@ -8944,6 +9043,24 @@
     .text-white {
       color: #ffffff !important;
     }
+    /* Zwykly link w prozie (akapit, komorka tabeli, pozycja listy) BEZ
+       wlasnej klasy: sam kolor --primary nie daje wystarczajacej ROZNICY od
+       otaczajacego tekstu (--text-main, --text-muted czy --secondary), zeby
+       byc "rozroznialny nie tylko kolorem" (WCAG 1.4.1) - potrzebne
+       podkreslenie jako druga, niekolorowa wskazowka. `:not([class])`
+       celowo wyklucza linki, ktore MAJA wlasna klase (.btn, .card,
+       .admin-nav-link, .dropdown-item itd.) - te sa stylowane jako oddzielne
+       elementy UI (padding, hover-tlo), nie fragmenty zdania, wiec
+       podkreslenie by tam tylko przeszkadzalo. Linki z .text-decoration-none
+       (!important) i tak by wygraly niezaleznie od tego wyjatku. */
+    p a:not([class]),
+    td a:not([class]),
+    li a:not([class]),
+    .alert a:not([class]) {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.15em;
+    }
     .text-primary {
       color: var(--primary) !important;
     }
@@ -8951,16 +9068,16 @@
       color: var(--secondary) !important;
     }
     .text-success {
-      color: var(--success) !important;
+      color: var(--success-text) !important;
     }
     .text-danger {
-      color: var(--danger) !important;
+      color: var(--danger-text) !important;
     }
     .text-warning {
-      color: var(--warning) !important;
+      color: var(--warning-text) !important;
     }
     .text-info {
-      color: var(--info) !important;
+      color: var(--info-text) !important;
     }
     .text-dark {
       color: var(--dark) !important;
@@ -8990,19 +9107,19 @@
     }
     .bg-success {
       background-color: var(--success) !important;
-      color: var(--btn-text-light) !important;
+      color: var(--btn-text-dark) !important;
     }
     .bg-danger {
       background-color: var(--danger) !important;
-      color: var(--btn-text-light) !important;
+      color: var(--btn-text-dark) !important;
     }
     .bg-warning {
       background-color: var(--warning) !important;
-      color: var(--text-main) !important;
+      color: var(--btn-text-dark) !important;
     }
     .bg-info {
       background-color: var(--info) !important;
-      color: var(--text-main) !important;
+      color: var(--btn-text-dark) !important;
     }
     /* bg-dark na literałach: sekcje "zawsze ciemne" (stopki, hero) łączone
        w HTML z .text-white - z flipowanym var(--dark) w ciemnym motywie tło
@@ -9027,19 +9144,19 @@
     }
     .bg-success-subtle {
       background-color: rgba(var(--success-rgb), 0.1) !important;
-      color: var(--success) !important;
+      color: var(--success-text) !important;
     }
     .bg-danger-subtle {
       background-color: rgba(var(--danger-rgb), 0.1) !important;
-      color: var(--danger) !important;
+      color: var(--danger-text) !important;
     }
     .bg-warning-subtle {
       background-color: rgba(var(--warning-rgb), 0.1) !important;
-      color: var(--warning-hover) !important;
+      color: var(--warning-text) !important;
     }
     .bg-info-subtle {
       background-color: rgba(var(--info-rgb), 0.1) !important;
-      color: var(--info-hover) !important;
+      color: var(--info-text) !important;
     }
     .bg-dark-subtle {
       background-color: rgba(var(--dark-rgb), 0.1) !important;
@@ -9070,7 +9187,9 @@
     }
     .bg-hover-primary:hover {
       background-color: var(--primary) !important;
-      /* Automatyczny kontrast tekstu */
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
       color: var(--btn-text-light) !important;
     }
     /* Tekst na hover */
@@ -9093,7 +9212,9 @@
     }
     .bg-hover-secondary:hover {
       background-color: var(--secondary) !important;
-      /* Automatyczny kontrast tekstu */
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
       color: var(--btn-text-light) !important;
     }
     /* Tekst na hover */
@@ -9116,8 +9237,10 @@
     }
     .bg-hover-success:hover {
       background-color: var(--success) !important;
-      /* Automatyczny kontrast tekstu */
-      color: var(--btn-text-light) !important;
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
+      color: var(--btn-text-dark) !important;
     }
     /* Tekst na hover */
     .text-hover-success {
@@ -9139,8 +9262,10 @@
     }
     .bg-hover-danger:hover {
       background-color: var(--danger) !important;
-      /* Automatyczny kontrast tekstu */
-      color: var(--btn-text-light) !important;
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
+      color: var(--btn-text-dark) !important;
     }
     /* Tekst na hover */
     .text-hover-danger {
@@ -9162,8 +9287,10 @@
     }
     .bg-hover-warning:hover {
       background-color: var(--warning) !important;
-      /* Automatyczny kontrast tekstu */
-      color: var(--text-main) !important;
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
+      color: var(--btn-text-dark) !important;
     }
     /* Tekst na hover */
     .text-hover-warning {
@@ -9185,8 +9312,10 @@
     }
     .bg-hover-info:hover {
       background-color: var(--info) !important;
-      /* Automatyczny kontrast tekstu */
-      color: var(--btn-text-light) !important;
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
+      color: var(--btn-text-dark) !important;
     }
     /* Tekst na hover */
     .text-hover-info {
@@ -9208,7 +9337,9 @@
     }
     .bg-hover-light:hover {
       background-color: var(--light) !important;
-      /* Automatyczny kontrast tekstu */
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
       color: var(--text-main) !important;
     }
     /* Tekst na hover */
@@ -9231,7 +9362,9 @@
     }
     .bg-hover-dark:hover {
       background-color: var(--dark) !important;
-      /* Automatyczny kontrast tekstu */
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
       color: var(--btn-text-light) !important;
     }
     /* Tekst na hover */
@@ -9254,7 +9387,9 @@
     }
     .bg-hover-surface:hover {
       background-color: var(--bg-surface) !important;
-      /* Automatyczny kontrast tekstu */
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
       color: var(--text-main) !important;
     }
     /* Tekst na hover */
@@ -9277,7 +9412,9 @@
     }
     .bg-hover-body:hover {
       background-color: var(--bg-body) !important;
-      /* Automatyczny kontrast tekstu */
+      /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
+         ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
+         jasne/pastelowe w OBU motywach. */
       color: var(--text-main) !important;
     }
     /* Tekst na hover */
