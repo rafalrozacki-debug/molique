@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"CLI molique-jit - molique Docs","description":"Wiersz poleceń dla silnika JIT molique: komendy init/build/watch z polskimi i niemieckimi aliasami, plik konfiguracyjny molique.config.mjs i generator gotowych komponentów HTML."}'></include>
+    <include src="partials/head.html" locals='{"title":"CLI molique-jit - molique Docs","description":"Wiersz poleceń dla silnika JIT molique: instalacja z npm, komendy init/build/watch, plik molique.config.mjs i 8 generatorów gotowych komponentów HTML (make:*)."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
     <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
   </head>
@@ -15,74 +15,44 @@
       <main class="admin-main">
         <div class="docs-content-wrapper">
           <div class="mb-5 pb-4 border-bottom">
-            <span class="badge badge-warning text-dark mb-3">Podgląd</span>
+            <span class="badge badge-success mb-3">Na npm</span>
             <h1 class="text-11 fw-black mb-3">CLI molique-jit</h1>
             <p class="text-6 text-muted">
               Wiersz poleceń, którym obsługujesz silnik
               <a href="docs-jit">molique JIT</a>: budowanie, tryb
-              nasłuchujący na żywo, konfiguracja — plus osobny generator
+              nasłuchujący na żywo, konfiguracja — plus 8 generatorów
               gotowych bloków HTML.
             </p>
           </div>
 
           <!-- ===================================================== -->
-          <!-- STATUS: PODGLĄD                                       -->
-          <!-- ===================================================== -->
-          <div class="p-4 bg-surface border rounded-2 mb-5" style="border-color: var(--warning)">
-            <h3 class="fw-bold text-5 mb-2 d-flex align-items-center gap-2">
-              <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-eye"></use></svg>
-              To jest podgląd — pakiet jeszcze nie jest na npm
-            </h3>
-            <p class="text-4 text-muted mb-2">
-              CLI opisane na tej stronie <strong>istnieje, działa i zostało
-              ręcznie zweryfikowane</strong> — to nie jest zapowiedź funkcji,
-              której jeszcze nie ma. Jedyne, czego naprawdę brakuje, to
-              pierwsza publikacja pakietu <code>molique-jit</code> w rejestrze
-              npm, więc <code>npx molique-jit</code> nie zadziała jeszcze
-              „z marszu”.
-            </p>
-            <p class="text-4 text-muted m-0">
-              Do tego czasu najszybszy sposób, żeby to zobaczyć w akcji, to
-              zbudować pakiet lokalnie ze źródeł — patrz sekcja
-              <a href="#instalacja">Instalacja ze źródeł</a> niżej. Kod źródłowy
-              jest jawny w repozytorium:
-              <a href="https://github.com/rafalrozacki-debug/molique/tree/main/tools/jit"
-                target="_blank" rel="noopener">github.com/rafalrozacki-debug/molique</a>.
-            </p>
-          </div>
-
-          <!-- ===================================================== -->
-          <!-- 1. INSTALACJA ZE ŹRÓDEŁ                               -->
+          <!-- 1. INSTALACJA                                         -->
           <!-- ===================================================== -->
           <section id="instalacja">
-            <h2 class="text-8 fw-bold mb-3">1. Instalacja ze źródeł (do czasu publikacji na npm)</h2>
+            <h2 class="text-8 fw-bold mb-3">1. Instalacja</h2>
             <p class="text-muted mb-3">
-              Wymaga Node.js. Sklonuj repozytorium i zbuduj pakiet lokalnie:
+              Pakiet jest opublikowany na npm jako <code>molique-jit</code>.
+              Zwykle wystarczy zależność deweloperska:
             </p>
             <div class="component-code mb-4">
               <button class="btn-copy">Kopiuj</button>
-              <pre><code>git clone https://github.com/rafalrozacki-debug/molique.git
-cd molique/tools/jit/package
-npm install
-npm run build</code></pre>
+              <pre><code>npm install --save-dev molique-jit</code></pre>
             </div>
             <p class="text-muted mb-3">
-              Od tego momentu <code>node dist/cli.js</code> zachowuje się
-              dokładnie tak, jak w tej dokumentacji opisane jest
-              <code>npx molique-jit</code> — wystarczy podmienić jedno na
-              drugie:
+              Albo bez instalacji, jednorazowo przez <code>npx</code>:
             </p>
             <div class="component-code mb-4">
               <button class="btn-copy">Kopiuj</button>
-              <pre><code>node dist/cli.js init
-node dist/cli.js build --minify
-node dist/cli.js make:component</code></pre>
+              <pre><code>npx molique-jit init
+npx molique-jit build</code></pre>
             </div>
             <p class="text-muted m-0">
-              Po publikacji na npm ta sekcja zniknie, a wszystkie przykłady
-              niżej (z <code>npx molique-jit …</code>) zadziałają bez żadnej
-              zmiany składni — CLI już dziś jest napisane pod docelowy sposób
-              użycia.
+              Strona pakietu:
+              <a href="https://www.npmjs.com/package/molique-jit"
+                target="_blank" rel="noopener">npmjs.com/package/molique-jit</a>.
+              Kod źródłowy jest jawny w repozytorium:
+              <a href="https://github.com/rafalrozacki-debug/molique/tree/main/tools/jit"
+                target="_blank" rel="noopener">github.com/rafalrozacki-debug/molique</a>.
             </p>
           </section>
 
@@ -109,6 +79,8 @@ export default {
   // Klas runtime'owych molique (toasty, karuzela, stany .is-*) NIE trzeba
   // tu wpisywać — silnik dołącza je automatycznie.
   safelist: ['badge-success', 'badge-danger'],
+
+  minify: true,
 };</code></pre>
             </div>
 
@@ -156,7 +128,7 @@ export default {
                   </tr>
                   <tr>
                     <td><code>minify</code></td>
-                    <td><code>false</code></td>
+                    <td><code>true</code></td>
                     <td>Obecnie efektywnie bez znaczenia — źródłowe dane są już skompresowane u źródła.</td>
                   </tr>
                   <tr>
@@ -173,7 +145,7 @@ export default {
           <!-- 3. KOMENDY CLI                                        -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">3. Komendy CLI</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Komendy silnika</h2>
             <p class="text-muted mb-4">
               Binarka nazywa się <code>molique-jit</code> (nie samo
               <code>molique</code>), żeby nie kolidować z innymi narzędziami o
@@ -281,68 +253,114 @@ npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 4. GENERATOR KOMPONENTÓW                              -->
+          <!-- 4. GENERATORY KOMPONENTÓW                             -->
           <!-- ===================================================== -->
           <section id="generator">
-            <h2 class="text-8 fw-bold mb-3">4. Generator komponentów: <code>make:component</code></h2>
+            <h2 class="text-8 fw-bold mb-3">4. Generatory komponentów: <code>make:*</code></h2>
             <p class="text-muted mb-4">
-              Osobna komenda, niezależna od budowania CSS. Uruchamia w
-              terminalu interaktywny kreator (strzałki + Enter), a na końcu
-              wypisuje gotowy, wklejalny blok HTML — zgodny co do znaku z
-              prawdziwymi, działającymi przykładami modali w tej dokumentacji.
+              Osobna rodzina komend, niezależna od budowania CSS. Każda
+              uruchamia w terminalu interaktywny kreator (strzałki + Enter),
+              a na końcu wypisuje gotowy, wklejalny blok HTML — zgodny co do
+              znaku z prawdziwymi, działającymi przykładami z tej
+              dokumentacji. Sama komenda <code>make:component</code> niczego
+              nie generuje — wypisuje spis wszystkich dostępnych generatorów,
+              żeby nie trzeba było pamiętać nazw:
             </p>
-
-            <div class="p-4 bg-surface border rounded-2 mb-4">
-              <p class="text-4 text-muted m-0">
-                <strong>Stan dzisiejszy:</strong> pierwsza iteracja generatora
-                obsługuje wyłącznie <strong>Modal</strong> (natywny
-                <code>&lt;dialog&gt;</code>), w trzech wariantach opisanych
-                niżej. Generator tabel B2B i szablonów całych stron (opisane
-                jako pomysł w <a href="docs-roadmap">Roadmapie</a>) nie są
-                jeszcze zaimplementowane — nie polegaj na nich, dopóki nie
-                pojawią się tutaj. To jest też pierwsza komenda z rodziny
-                <code>make:*</code> — kolejne (np. <code>make:table</code>)
-                dołączą do tej samej sekcji, gdy powstaną.
-              </p>
-            </div>
-
             <div class="component-code mb-4">
               <button class="btn-copy">Kopiuj</button>
               <pre><code>npx molique-jit make:component</code></pre>
             </div>
 
-            <p class="text-muted mb-3">Kreator pyta kolejno o:</p>
-            <div class="grid grid-cols-1 grid-md-cols-3 gap-4 mb-4">
-              <div class="card p-4">
-                <h3 class="fw-bold text-5 mb-2">Standard</h3>
-                <p class="text-4 text-muted mb-0">
-                  Zwykły modal: tytuł, treść, przycisk otwierający (etykieta +
-                  kolor).
-                </p>
-              </div>
-              <div class="card p-4">
-                <h3 class="fw-bold text-5 mb-2">Confirm</h3>
-                <p class="text-4 text-muted mb-0">
-                  Dialog potwierdzający: pytanie, opis, etykiety przycisków
-                  Anuluj/Potwierdź, kolor akcji (np. <code>danger</code> dla
-                  usuwania) i ikona ostrzeżenia.
-                </p>
-              </div>
-              <div class="card p-4">
-                <h3 class="fw-bold text-5 mb-2">Context</h3>
-                <p class="text-4 text-muted mb-0">
-                  Boczne menu kontekstowe: tytuł oraz dwie pierwsze pozycje
-                  akcji (etykieta + ikona) — kolejne dopisujesz ręcznie,
-                  kopiując wygenerowany wzorzec.
-                </p>
-              </div>
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Komenda</th>
+                    <th>Polski alias</th>
+                    <th>Niemiecki alias</th>
+                    <th>Generuje</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>make:modal</code></td>
+                    <td><code>zrob:modal</code></td>
+                    <td><code>mache:modal</code></td>
+                    <td>Modal (<code>&lt;dialog&gt;</code>) — Standard / Confirm / Context</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:layout</code></td>
+                    <td><code>zrob:uklad</code></td>
+                    <td><code>mache:layout</code></td>
+                    <td>Szkielet strony — Admin Dashboard / Hero (Simple + Cutout) / Bento Grid</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:nav</code></td>
+                    <td><code>zrob:nawigacje</code></td>
+                    <td><code>mache:nav</code></td>
+                    <td>Navbar — offcanvas, 3 warianty tła, opcjonalnie Mega Menu / Theme Switch / Language Switch</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:table</code></td>
+                    <td><code>zrob:tabele</code></td>
+                    <td><code>mache:tabelle</code></td>
+                    <td>Tabela B2B z automatycznym <code>data-label</code> na mobile</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:chart</code></td>
+                    <td><code>zrob:wykres</code></td>
+                    <td><code>mache:diagramm</code></td>
+                    <td>Wykres CSS/SVG — Radial Bar / Funnel / Pipeline / Stock Bar</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:form</code></td>
+                    <td><code>zrob:formularz</code></td>
+                    <td><code>mache:formular</code></td>
+                    <td>Formularz — Floating Labels / Klasyczny, opcjonalnie Searchable Select / Premium Multi Select / Drag &amp; Drop File Upload</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:popover</code></td>
+                    <td><code>zrob:popover</code></td>
+                    <td><code>mache:popover</code></td>
+                    <td>Menu kontekstowe <code>.popover-context</code> (CSS Anchor Positioning)</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:widget</code></td>
+                    <td><code>zrob:widget</code></td>
+                    <td><code>mache:widget</code></td>
+                    <td>Speed Dial / Before-After Slider / Stepper / Share Bar</td>
+                  </tr>
+                  <tr>
+                    <td><code>make:component</code></td>
+                    <td colspan="2">—</td>
+                    <td>Wypisuje ten spis (nie jest generatorem)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mb-4">
+              <h3 class="fw-bold text-5 mb-2">Flaga <code>-n, --count</code></h3>
+              <p class="text-4 text-muted m-0">
+                Każdy generator, który tworzy listę o zmiennej długości
+                (pozycje menu, wiersze tabeli, etapy wykresu…), przyjmuje
+                <code>-n, --count &lt;liczba&gt;</code> — pomija TYLKO pytanie
+                „ile?", reszta kreatora (etykiety, warianty, kolory) nadal
+                działa interaktywnie:
+              </p>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>npx molique-jit make:modal
+npx molique-jit make:table --count 5</code></pre>
             </div>
 
             <p class="text-muted m-0">
-              Na koniec wybierasz, czy kod ma trafić na ekran konsoli (do
-              skopiowania myszką) czy od razu zapisać się do pliku — narzędzie
-              nigdy nie nadpisuje istniejącego pliku bez wyraźnego
-              potwierdzenia.
+              Na koniec każdego generatora wybierasz, czy kod ma trafić na
+              ekran konsoli (do skopiowania myszką) czy od razu zapisać się
+              do pliku — narzędzie nigdy nie nadpisuje istniejącego pliku bez
+              wyraźnego potwierdzenia.
             </p>
           </section>
 
