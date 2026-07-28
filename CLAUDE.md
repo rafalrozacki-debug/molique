@@ -88,3 +88,14 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   `--warning-text`, `--danger-text`, `--info-text`) dla tekstu/ikon na
   jasnym tle, nigdy gołe `--success`/`--warning` itd. — te drugie są
   dobrane pod tła, nie pod kontrast tekstu.
+- **Goły `1fr` w CSS Grid to `minmax(auto, 1fr)`, nie `minmax(0, 1fr)`:**
+  minimum toru liczy się z min-content potomków (dowolnie głęboko
+  zagnieżdżonych), NIE z zera — `min-width: 0` + `overflow-x: hidden` na
+  elemencie w tym torze tego NIE gwarantują (to inny mechanizm). Efekt
+  bywa niewidoczny bez narzędzi deweloperskich, bo `html`/`body` w tym
+  projekcie mają celowo `overflow-x: clip` (nie `scroll`, żeby nie psuć
+  `position: sticky`) — więc zamiast scrollbara dostajesz ciche obcięcie
+  treści. Zawsze `minmax(0, 1fr)` (albo `repeat(N, minmax(0, 1fr))`),
+  gdy tor może zawierać cokolwiek o nieprzewidywalnej szerokości
+  wewnętrznej (tabela, długa etykieta, pigułka zakładek). Naprawione w
+  `.admin-layout` (v1.7.13) i `.tabs-pill` — sprawdź oba jako wzorzec.
