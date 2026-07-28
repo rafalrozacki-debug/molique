@@ -6307,6 +6307,111 @@
     text-transform: uppercase;
     letter-spacing: 1px;
   }
+  /**
+   * molique - Stat Tile (karta KPI)
+   * Karta statystyki: ikona (bez tła — świadoma decyzja, kolorowe kafle pod
+   * ikonami przetestowane i odrzucone w praktyce) + etykieta + jedna stała
+   * wielkość liczby zawsze + opcjonalna delta trendu. Łączyć z .card.
+   *
+   * Użycie:
+   *   <div class="card stat-tile">
+   *     <div class="stat-tile-icon stat-tile-icon-success">
+   *       <svg class="icon icon-lg"><use href="img/icons-sprite.svg#ph-credit-card"></use></svg>
+   *     </div>
+   *     <div class="stat-tile-body">
+   *       <span class="stat-tile-label">Wartość netto</span>
+   *       <span class="stat-tile-value">18 420<span class="stat-tile-unit">zł</span></span>
+   *       <span class="stat-tile-delta stat-tile-delta-up">
+   *         <svg class="icon"><use href="img/icons-sprite.svg#ph-trend-up"></use></svg>
+   *         +12% <span class="stat-tile-delta-context">vs poprzedni okres</span>
+   *       </span>
+   *     </div>
+   *   </div>
+   *
+   * Warianty ikony: bazowa = --primary; modyfikatory -success/-warning/-danger/
+   * -info przełączają tylko kolor ikony, zawsze przez -text warianty (kontrast
+   * na jasnym tle .card — patrz _root.scss). Delta jest opcjonalna.
+   */
+  @layer components {
+    .stat-tile {
+      flex-direction: row;
+      align-items: center;
+      gap: calc(var(--spacing-unit) * 2);
+      padding: calc(var(--spacing-unit) * 2.5);
+    }
+    .stat-tile-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--primary);
+    }
+    .stat-tile-icon .icon {
+      width: 30px;
+      height: 30px;
+    }
+    .stat-tile-icon-success {
+      color: var(--success-text);
+    }
+    .stat-tile-icon-warning {
+      color: var(--warning-text);
+    }
+    .stat-tile-icon-danger {
+      color: var(--danger-text);
+    }
+    .stat-tile-icon-info {
+      color: var(--info-text);
+    }
+    .stat-tile-body {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .stat-tile-label {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      font-weight: var(--fw-medium);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stat-tile-value {
+      font-size: var(--h2-size);
+      font-weight: var(--fw-black);
+      color: var(--text-main);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-tile-unit {
+      font-size: var(--text-sm);
+      font-weight: var(--fw-medium);
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .stat-tile-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--text-xs);
+      font-weight: var(--fw-semibold);
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-tile-delta .icon {
+      width: 0.9em;
+      height: 0.9em;
+    }
+    .stat-tile-delta-up {
+      color: var(--success-text);
+    }
+    .stat-tile-delta-down {
+      color: var(--danger-text);
+    }
+    .stat-tile-delta-context {
+      color: var(--text-muted);
+      font-weight: var(--fw-medium);
+    }
+  }
   /* =========================================
      1. BADGES (Pigułki)
      ========================================= */

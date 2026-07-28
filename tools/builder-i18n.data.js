@@ -281,6 +281,10 @@ export const DESCRIPTIONS = {
     en: 'Scroll to top: back-to-top button.',
     de: 'Scroll to Top: Nach-oben-Button.',
   },
+  'stat-tile': {
+    en: 'Stat Tile: KPI card (icon, label, fixed-size number, optional trend delta). Pair with .card.',
+    de: 'Stat Tile: KPI-Karte (Icon, Beschriftung, Zahl mit fester Groesse, optionales Trend-Delta). Mit .card kombinieren.',
+  },
   'status-dots': {
     en: 'Status dots + a pulsing "ping" variant.',
     de: 'Status Dots + pulsierende "Ping"-Variante.',

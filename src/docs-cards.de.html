@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de">
   <head>
-    <include src="partials/head.html" locals='{"title":"Karten - molique Docs","description":"Referenz fur molique Karten: die klassische Karte, Featured Box, thumb-info Bildkarten, Referenzen und das Uberlappen auf ein Hero. Klassentabellen, Hover-Effekte und Fallstricke."}'></include>
+    <include src="partials/head.html" locals='{"title":"Karten - molique Docs","description":"Referenz fur molique Karten: die klassische Karte, Featured Box, thumb-info Bildkarten, Referenzen, KPI-Kacheln (Stat Tile) und das Uberlappen auf ein Hero. Klassentabellen, Hover-Effekte und Fallstricke."}'></include>
     <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
     <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
   </head>
@@ -17,7 +17,7 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Karten</h1>
             <p class="text-6 text-muted">
-              Vier Kartentypen für unterschiedliche Zwecke plus ein
+              Fünf Kartentypen für unterschiedliche Zwecke plus ein
               vollständiges Set an Hover-Effekten. Fertige Layouts finden Sie
               in den <a href="examples-cards.de">Beispielen</a>;
               Datentabellen behandelt eine separate Seite,
@@ -77,6 +77,17 @@
                     <td data-label="Wofür">Eine Kundenbewertung.</td>
                     <td data-label="Was sie hinzufügt">
                       Ein Layout für Zitat, Bewertung und Autor mit Avatar.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile</code></td>
+                    <td data-label="Wofür">
+                      Eine KPI-Kachel in einem Dashboard (Umsatz,
+                      Kundenanzahl…).
+                    </td>
+                    <td data-label="Was sie hinzufügt">
+                      Ein horizontales Icon-plus-Zahl-Layout, eine feste
+                      Wertgröße und ein optionales Trend-Delta.
                     </td>
                   </tr>
                 </tbody>
@@ -366,10 +377,170 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 5. EFEKTY I WCIĄGANIE NA HERO                         -->
+          <!-- 5. STAT TILE (KARTA KPI)                              -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">5. Effekte und Überlappen auf ein Hero</h2>
+            <h2 class="text-8 fw-bold mb-3">5. Stat Tile (KPI-Karte)</h2>
+            <p class="text-muted mb-4">
+              Eine Kennzahlen-Kachel: ein Icon ohne farbigen Hintergrund
+              (getestet und in der Praxis verworfen), eine Beschriftung, eine
+              immer feste Wertgröße und ein optionales Trend-Delta.
+              Kombinieren Sie es mit <code>.card</code> — <code>.stat-tile</code>
+              fügt nur das innere Layout hinzu, den Rest (Hintergrund, Rahmen,
+              Schatten) übernimmt die Karte.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview">
+                <div class="grid-auto w-100 gap-4">
+                  <div class="card stat-tile">
+                    <div class="stat-tile-icon">
+                      <svg class="icon icon-lg" aria-hidden="true"><use href="img/icons-sprite.svg#ph-credit-card"></use></svg>
+                    </div>
+                    <div class="stat-tile-body">
+                      <span class="stat-tile-label">Nettoumsatz</span>
+                      <span class="stat-tile-value">18.420<span class="stat-tile-unit">€</span></span>
+                    </div>
+                  </div>
+                  <div class="card stat-tile">
+                    <div class="stat-tile-icon stat-tile-icon-success">
+                      <svg class="icon icon-lg" aria-hidden="true"><use href="img/icons-sprite.svg#ph-trend-up"></use></svg>
+                    </div>
+                    <div class="stat-tile-body">
+                      <span class="stat-tile-label">Neukunden</span>
+                      <span class="stat-tile-value">128</span>
+                      <span class="stat-tile-delta stat-tile-delta-up">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-trend-up"></use></svg>
+                        +12% <span class="stat-tile-delta-context">ggü. Vorperiode</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="card stat-tile">
+                    <div class="stat-tile-icon stat-tile-icon-danger">
+                      <svg class="icon icon-lg" aria-hidden="true"><use href="img/icons-sprite.svg#ph-warning"></use></svg>
+                    </div>
+                    <div class="stat-tile-body">
+                      <span class="stat-tile-label">Reklamationen</span>
+                      <span class="stat-tile-value">7</span>
+                      <span class="stat-tile-delta stat-tile-delta-down">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-trend-down"></use></svg>
+                        -3% <span class="stat-tile-delta-context">ggü. Vorperiode</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="card stat-tile"&gt;
+  &lt;div class="stat-tile-icon stat-tile-icon-success"&gt;
+    &lt;svg class="icon icon-lg"&gt;&lt;use href="img/icons-sprite.svg#ph-credit-card"&gt;&lt;/use&gt;&lt;/svg&gt;
+  &lt;/div&gt;
+  &lt;div class="stat-tile-body"&gt;
+    &lt;span class="stat-tile-label"&gt;Nettoumsatz&lt;/span&gt;
+    &lt;span class="stat-tile-value"&gt;18.420&lt;span class="stat-tile-unit"&gt;€&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="stat-tile-delta stat-tile-delta-up"&gt;
+      &lt;svg class="icon"&gt;&lt;use href="img/icons-sprite.svg#ph-trend-up"&gt;&lt;/use&gt;&lt;/svg&gt;
+      +12% &lt;span class="stat-tile-delta-context"&gt;ggü. Vorperiode&lt;/span&gt;
+    &lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie tut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile</code></td>
+                    <td data-label="Was sie tut">
+                      Erfordert <code>.card</code> am selben Element — legt
+                      das horizontale Layout (Icon + Inhalt) und das Padding
+                      fest.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile-icon</code></td>
+                    <td data-label="Was sie tut">
+                      Icon ohne Hintergrund. Standardfarbe
+                      <code>--primary</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse">
+                      <code class="fw-bold">.stat-tile-icon-success</code> /
+                      <code class="fw-bold">-warning</code> /
+                      <code class="fw-bold">-danger</code> /
+                      <code class="fw-bold">-info</code>
+                    </td>
+                    <td data-label="Was sie tut">
+                      Ändern nur die Iconfarbe (<code>-text</code>-Varianten,
+                      kontrastreich auf dem hellen Kartenhintergrund).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile-label</code></td>
+                    <td data-label="Was sie tut">
+                      Die Beschriftung über der Zahl — bei zu langem Text mit
+                      Ellipse abgeschnitten.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile-value</code></td>
+                    <td data-label="Was sie tut">
+                      Die Zahl — immer dieselbe Größe, unabhängig von der
+                      Instanz. Das ist der Kern des Komponenten: konsistente
+                      Hierarchie über eine ganze Reihe von KPI-Kacheln hinweg.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile-unit</code></td>
+                    <td data-label="Was sie tut">
+                      Die Einheit nach der Zahl (z. B. „€", „%") — kleiner und
+                      gedämpft.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile-delta</code></td>
+                    <td data-label="Was sie tut">
+                      Ein optionaler Trendindikator. Die Varianten
+                      <code>-up</code> / <code>-down</code> setzen die Farbe.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.stat-tile-delta-context</code></td>
+                    <td data-label="Was sie tut">
+                      Der Zusatztext im Delta (z. B. „ggü. Vorperiode") in
+                      <code>--text-muted</code>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h3 class="fw-bold text-5 mb-2">Warum die Zahl eine feste Größe hat</h3>
+              <p class="text-4 text-muted m-0">
+                Handgestrickte KPI-Karten driften in der Praxis auseinander —
+                jede neue bekommt eine andere Textgröße für die Zahl, bis die
+                Kachelreihe nicht mehr wie ein einheitliches System aussieht.
+                <code>.stat-tile-value</code> lässt diese Wahl gar nicht erst
+                zu: eine feste Größe, einmal im Komponenten festgelegt.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. EFEKTY I WCIĄGANIE NA HERO                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Effekte und Überlappen auf ein Hero</h2>
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Hover</h3>
             <p class="text-muted mb-3">
@@ -472,10 +643,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 6. PUŁAPKI                                            -->
+          <!-- 7. PUŁAPKI                                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">6. Fallstricke</h2>
+            <h2 class="text-8 fw-bold mb-3">7. Fallstricke</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="card-pulapki" open>
@@ -569,10 +740,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. POWIĄZANE                                          -->
+          <!-- 8. POWIĄZANE                                          -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Verwandte Seiten</h2>
+            <h2 class="text-8 fw-bold mb-3">8. Verwandte Seiten</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="examples-cards.de" class="card hover-shadow">
                 <div class="card-body">
