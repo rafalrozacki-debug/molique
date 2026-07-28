@@ -56,7 +56,16 @@
 
     /* Mobile: Przejście na Bottom Nav */
     @media (max-width: 768px) {
-      grid-template-columns: 1fr;
+      /* Goly 1fr to w skrocie minmax(auto, 1fr) - minimum toru liczy sie
+         z min-content potomkow (np. tabeli albo pigulki zakladek z dluzsza
+         etykieta), NIE z zera, nawet gdy .admin-main ma juz min-width: 0 +
+         overflow-x: hidden (te dwie wlasciwosci nie chronia przed
+         przepelnieniem SAMEGO toru grida - to inny mechanizm). Efekt: tor
+         rosnie ponad szerokosc ekranu, a przez overflow-x: clip na
+         html/body (celowe, zeby nie psuc position:sticky) nie widac
+         scrollbara - tresc po prostu cicho obcina sie za krawedzia.
+         minmax(0, 1fr) jednoznacznie zeruje minimum toru. */
+      grid-template-columns: minmax(0, 1fr);
       --current-sidebar-width: 100%;
     }
   }

@@ -5925,7 +5925,14 @@
   .tabs-pill .tabs-header {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(var(--tab-count), 1fr);
+    /* minmax(0, ...), nie goly 1fr: przy width: fit-content nizej to
+       jedyny sposob, zeby pigulka mogla SKURCZYC SIE ponizej naturalnej
+       szerokosci etykiet, gdy zabraknie miejsca (np. wiele zakladek albo
+       dluzsze etykiety na mobile) - bez minmax(0, ...) kazda kolumna
+       zada swojego min-content, wiec fit-content nie ma jak zejsc ponizej
+       tej sumy i pigulka przepelnia dostepna szerokosc (ten sam mechanizm
+       co przy golym 1fr w .admin-layout, patrz layout/_admin-layout.scss). */
+    grid-template-columns: repeat(var(--tab-count), minmax(0, 1fr));
     border-bottom: none;
     background-color: var(--card-bg-subtle);
     border-radius: 50rem;
@@ -5947,6 +5954,13 @@
     border-bottom: none;
     border-radius: 50rem;
     margin-bottom: 0;
+    /* Kolumna moze skurczyc sie ponizej naturalnej szerokosci etykiety
+       (patrz minmax(0, ...) wyzej) - przy braku miejsca etykieta ma sie
+       przycinac wielokropkiem, nie zawijac do dwoch linii (rozsadzi
+       pigulke) ani przepelniac poza kolumne. */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .tabs-pill .tabs-pill-indicator {
     position: absolute;

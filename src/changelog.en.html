@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.12."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.13."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,58 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.13 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.13</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Silent <code>.admin-layout</code> overflow on mobile
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    A bare <code>1fr</code> in <code>grid-template-columns</code>
+                    (mobile, below 768px) is short for
+                    <code>minmax(auto, 1fr)</code> - the track's minimum is
+                    computed from its descendants' min-content, NOT from
+                    zero, even when <code>.admin-main</code> already has
+                    <code>min-width: 0</code> + <code>overflow-x: hidden</code>
+                    (a different mechanism from protecting the grid track
+                    itself from overflowing). If any descendant - at any
+                    depth - has a large intrinsic size, the track grows past
+                    the screen width. Because <code>html</code>/<code>body</code>
+                    deliberately use <code>overflow-x: clip</code> (not
+                    <code>scroll</code> - to avoid breaking
+                    <code>position: sticky</code>), the result isn't a
+                    visible scrollbar, just content silently clipped past the
+                    edge of the screen. Fixed with an explicit
+                    <code>minmax(0, 1fr)</code>.
+                  </li>
+                  <li>
+                    The same mechanism is now guarded in
+                    <code>.tabs-pill</code> too: the tab columns'
+                    <code>grid-template-columns</code> is now
+                    <code>repeat(var(--tab-count), minmax(0, 1fr))</code>, and
+                    labels truncate with an ellipsis instead of wrapping to
+                    two lines or overflowing the column when space runs out.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.12 -->
           <!-- ============================================================ -->

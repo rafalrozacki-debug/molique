@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.12."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.13."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -46,6 +46,59 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.13 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.13</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Ciche przepełnienie <code>.admin-layout</code> na mobile
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Goły <code>1fr</code> w <code>grid-template-columns</code>
+                    (mobile, poniżej 768px) to w skrócie
+                    <code>minmax(auto, 1fr)</code> — minimum toru liczy się z
+                    min-content potomków, NIE z zera, nawet gdy
+                    <code>.admin-main</code> ma już <code>min-width: 0</code>
+                    + <code>overflow-x: hidden</code> (to inny mechanizm niż
+                    ochrona przed przepełnieniem samego toru grida). Jeśli
+                    jakikolwiek potomek — dowolnie głęboko — ma dużą
+                    wewnętrzną intrinsic-size, tor rośnie ponad szerokość
+                    ekranu. Ponieważ <code>html</code>/<code>body</code> mają
+                    celowo <code>overflow-x: clip</code> (nie
+                    <code>scroll</code> — żeby nie psuć
+                    <code>position: sticky</code>), efektem nie jest widoczny
+                    scrollbar, tylko ciche obcinanie treści za krawędzią
+                    ekranu. Naprawione przez jednoznaczne
+                    <code>minmax(0, 1fr)</code>.
+                  </li>
+                  <li>
+                    Ten sam mechanizm zabezpieczony też w
+                    <code>.tabs-pill</code>: <code>grid-template-columns</code>
+                    kolumn zakładek to teraz
+                    <code>repeat(var(--tab-count), minmax(0, 1fr))</code>, a
+                    etykiety przycinają się wielokropkiem zamiast zawijać się
+                    do dwóch linii lub przepełniać kolumnę, gdy zabraknie
+                    miejsca.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.12 -->
           <!-- ============================================================ -->

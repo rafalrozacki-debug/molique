@@ -67,7 +67,16 @@
     }
     @media (max-width: 768px) {
       .admin-layout {
-        grid-template-columns: 1fr;
+        /* Goly 1fr to w skrocie minmax(auto, 1fr) - minimum toru liczy sie
+           z min-content potomkow (np. tabeli albo pigulki zakladek z dluzsza
+           etykieta), NIE z zera, nawet gdy .admin-main ma juz min-width: 0 +
+           overflow-x: hidden (te dwie wlasciwosci nie chronia przed
+           przepelnieniem SAMEGO toru grida - to inny mechanizm). Efekt: tor
+           rosnie ponad szerokosc ekranu, a przez overflow-x: clip na
+           html/body (celowe, zeby nie psuc position:sticky) nie widac
+           scrollbara - tresc po prostu cicho obcina sie za krawedzia.
+           minmax(0, 1fr) jednoznacznie zeruje minimum toru. */
+        grid-template-columns: minmax(0, 1fr);
         --current-sidebar-width: 100%;
       }
     }
@@ -522,7 +531,10 @@
       }
       .admin-nav-link.is-active {
         background-color: transparent;
-        color: var(--primary);
+        /* NIE var(--primary) - sidebar jest zawsze ciemny, a --primary w
+           light mode (#5145E5) daje tylko 2.3:1 na tym tle. Patrz
+           --sidebar-active-accent w _root.scss. */
+        color: var(--sidebar-active-accent);
         box-shadow: none;
       }
     }
@@ -563,6 +575,18 @@
     /* =========================================
        MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
        ========================================= */
+    /* Checkbox + label + .admin-nav-dropdown-menu musza (dla selektora
+       rodzenstwa .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu nizej)
+       dzielic wspolnego rodzica - stad razem w jednym <li>, zamiast wprost w
+       <ul class="admin-nav"> (input/label/div jako BEZPOSREDNIE dzieci <ul>
+       lamaly wymog, ze <ul> smie miec tylko <li> - audyt Lighthouse "list").
+       display:contents na tym <li> czyni go niewidocznym w layoucie (jego
+       dzieci ukladaja sie tak, jakby nadal byly bezposrednimi flex-itemami
+       .admin-nav) - identyczny wizualny efekt jak przed zmiana, tylko
+       poprawny w DOM. */
+    .admin-nav-more-item {
+      display: contents;
+    }
     .mobile-more-toggle {
       display: none;
     }
@@ -575,6 +599,14 @@
       }
     }
     .admin-nav-dropdown-menu {
+      /* Teraz <ul> (bylo <div>) - <li> wewnatrz wymaga prawdziwego rodzica
+         ul/ol/menu (parser HTML5 auto-zamyka najblizszy otwarty <li>, gdy
+         napotka kolejny <li>, POMIJAJAC posrednie <div> - <ul>/<ol> tworzy
+         scope, ktory to blokuje). Domyslny margin/padding <ul> trzeba
+         wyzerowac recznie (list-style:none dziedziczy z .admin-nav, ale to
+         nie). */
+      margin: 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
       gap: calc(var(--spacing-unit) * 1);
@@ -608,8 +640,13 @@
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
         z-index: 100;
         /* FIX: Długie listy (np. nawigacja dokumentacji) muszą się przewijać w pionie,
-           inaczej szuflada wystaje ponad górną krawędź ekranu */
-        max-height: calc(100dvh - 70px - env(safe-area-inset-bottom) - var(--spacing-unit) * 4);
+           inaczej szuflada wystaje ponad górną krawędź ekranu - a na stronach,
+           które mają jednocześnie navbar (partials/navbar.html) NAD tym
+           sidebarem, "górna krawędź ekranu" to w praktyce dół navbara, nie
+           y=0: bez odjęcia --navbar-h szuflada wjeżdżała POD stały navbar i
+           jej górne pozycje (pierwsze grupy w długim menu) były przez niego
+           przysłonięte. */
+        max-height: calc(100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - var(--spacing-unit) * 4);
         overflow-y: auto;
         /* FIX: Zamiast display: none, ukrywamy szufladę pod ekranem! */
         visibility: hidden;

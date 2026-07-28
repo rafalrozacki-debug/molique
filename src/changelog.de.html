@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Änderungsverlauf, neue Funktionen und Fehlerbehebungen im molique-CSS-Framework - der vollständige Changelog von v0.1.0 bis v1.7.12."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Änderungsverlauf, neue Funktionen und Fehlerbehebungen im molique-CSS-Framework - der vollständige Changelog von v0.1.0 bis v1.7.13."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,60 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.13 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.13</div>
+              <div class="text-muted text-4">Juli 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  Stiller <code>.admin-layout</code>-Überlauf auf Mobile
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Ein nacktes <code>1fr</code> in
+                    <code>grid-template-columns</code> (Mobile, unter 768px)
+                    ist die Kurzform für <code>minmax(auto, 1fr)</code> - das
+                    Minimum der Spur wird aus dem Min-Content der
+                    Nachkommen berechnet, NICHT aus null, selbst wenn
+                    <code>.admin-main</code> bereits <code>min-width: 0</code>
+                    + <code>overflow-x: hidden</code> hat (ein anderer
+                    Mechanismus als der Schutz der Grid-Spur selbst vor
+                    Überlauf). Hat irgendein Nachkomme - in beliebiger Tiefe -
+                    eine große intrinsische Größe, wächst die Spur über die
+                    Bildschirmbreite hinaus. Da <code>html</code>/<code>body</code>
+                    bewusst <code>overflow-x: clip</code> verwenden (nicht
+                    <code>scroll</code> - um <code>position: sticky</code>
+                    nicht zu brechen), ist das Ergebnis keine sichtbare
+                    Scrollleiste, sondern still über den Bildschirmrand
+                    hinaus abgeschnittener Inhalt. Behoben durch ein
+                    explizites <code>minmax(0, 1fr)</code>.
+                  </li>
+                  <li>
+                    Derselbe Mechanismus ist jetzt auch in
+                    <code>.tabs-pill</code> abgesichert: Die
+                    <code>grid-template-columns</code> der Tab-Spalten ist
+                    jetzt <code>repeat(var(--tab-count), minmax(0, 1fr))</code>,
+                    und Beschriftungen werden mit Ellipse abgeschnitten,
+                    statt bei knappem Platz auf zwei Zeilen umzubrechen oder
+                    die Spalte zu überlaufen.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.12 -->
           <!-- ============================================================ -->
