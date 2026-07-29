@@ -275,6 +275,55 @@
     border: 1px solid rgba(var(--dark-rgb), 0.1);
     flex-shrink: 0;
   }
+  /* Gotowe palety - siatka przycisków, kazdy z 3 kropkami (primary/
+     secondary/tlo) jako podglad zanim sie kliknie. Kolory kropek sa
+     inline w HTML (stale, referencyjne wartosci presetu), NIE zmiennymi
+     motywu - to jedyne miejsce w edytorze, gdzie kolor NIE ma reagowac
+     na zmiane motywu, bo prezentuje kolor DOCELOWY, nie aktualny. */
+  .te-presets {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(var(--spacing-unit) * 1);
+  }
+  .te-preset-btn {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1);
+    min-height: var(--target-size-min);
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    background-color: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-main);
+    font: inherit;
+    font-size: var(--text-sm);
+    font-weight: var(--fw-medium);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--transition-speed), transform var(--transition-speed);
+  }
+  .te-preset-btn:hover, .te-preset-btn:focus-visible {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+  }
+  .te-preset-btn:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
+  }
+  .te-preset-swatches {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .te-preset-swatches span {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin-left: -6px;
+    box-shadow: 0 0 0 2px var(--bg-body);
+  }
+  .te-preset-swatches span:first-child {
+    margin-left: 0;
+  }
   /* Podgląd kolorów sidebara (zmienne "zawsze ciemne") */
   .te-sidebar-preview {
     background-color: var(--sidebar-bg);
