@@ -1,16 +1,16 @@
 /**
- * molique - Style Przycisków
- * Zawiera wszystkie warianty, rozmiary i grupy przycisków
+ * molique - Button Styles
+ * Contains every button variant, size, and grouping
  */
 
 @use 'variables' as *;
 
 @layer components {
   /* =========================================
-     1. BAZOWY PRZYCISK (.btn)
+     1. BASE BUTTON (.btn)
      ========================================= */
-  /* Kolory muszą być zadeklarowane PRZED blokiem bazowym, bo buduje on z nich
-     listę selektorów (patrz niżej). */
+  /* Colors must be declared BEFORE the base block, since it builds a
+     selector list from them (see below). */
   $theme-colors: (
     "primary": var(--primary),
     "secondary": var(--secondary),
@@ -22,17 +22,18 @@
     "dark": var(--dark)
   );
 
-  /* IMPLIKACJA .btn - sam .btn-primary wystarczy, bez dopisywania .btn.
-     Listę budujemy z mapy kolorów, więc nowy kolor dostaje bazę automatycznie;
-     ręczna lista rozjechałaby się przy pierwszym dodanym wariancie.
+  /* .btn IMPLICATION - .btn-primary alone is enough, no need to also add
+     .btn. The list is built from the color map, so a new color gets the
+     base automatically; a hand-written list would drift out of sync the
+     moment a new variant was added.
 
-     CELOWO NIE OBEJMUJE:
-     - modyfikatorów wyglądu (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
-       .btn-glow, .btn-stacked, .btn-outline-soft) i rozmiarów (.btn-sm itd.) -
-       to dodatki do przycisku, nie przyciski,
-     - .btn-action, który ŚWIADOMIE łamie regułę 44px na gęste tabele,
+     DELIBERATELY EXCLUDES:
+     - appearance modifiers (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
+       .btn-glow, .btn-stacked, .btn-outline-soft) and sizes (.btn-sm etc.) -
+       these are add-ons to a button, not buttons themselves,
+     - .btn-action, which DELIBERATELY breaks the 44px rule for dense tables,
      - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* -
-       mają prefiks btn-, ale przyciskami nie są. */
+       they carry the btn- prefix but aren't buttons. */
   $btn-base-selectors: ".btn";
   @each $name, $color in $theme-colors {
     $btn-base-selectors: "#{$btn-base-selectors}, .btn-#{$name}, .btn-outline-#{$name}";
@@ -56,7 +57,7 @@
     border: var(--btn-border-width) solid transparent; 
     transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
 
-    /* Focus Ring dla dostępności */
+    /* Focus ring for accessibility */
     &:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: 2px;
@@ -64,22 +65,22 @@
   }
 
   /* =========================================
-     2. WARIANTY KOLORYSTYCZNE (Pętla SCSS)
+     2. COLOR VARIANTS (SCSS loop)
      ========================================= */
   @each $name, $color in $theme-colors {
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
     $text-safe: $name == "success" or $name == "danger" or $name == "warning" or $name == "info";
 
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* --- SOLID VARIANTS --- */
     .btn-#{$name} {
       background-color: #{$color};
       border-color: #{$color};
 
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       @if $name == "light" {
         color: var(--text-main);
       } @else if $text-safe {
@@ -89,26 +90,26 @@
       }
 
       &:hover, &:focus-visible {
-        /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+        /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
         background-color: var(--#{$name}-hover, color-mix(in srgb, #{$color} 85%, black));
         border-color: var(--#{$name}-hover, color-mix(in srgb, #{$color} 85%, black));
       }
     }
 
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-#{$name} {
       background-color: transparent;
       border-color: #{$color};
 
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       @if $text-safe {
         color: var(--#{$name}-text);
       } @else {
         color: #{$color};
       }
 
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
       &:hover, &:focus-visible {
         background-color: #{$color};
 
@@ -121,15 +122,15 @@
         }
       }
 
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
       &.btn-outline-soft {
-        /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+        /* By default the border is very subtle (30% opacity) */
         border-color: rgba(var(--#{$name}-rgb), 0.3);
-        
+
         &:hover, &:focus-visible {
-          /* Tło na 10% krycia */
+          /* Background at 10% opacity */
           background-color: rgba(var(--#{$name}-rgb), 0.1);
-          /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+          /* The border becomes slightly more defined (50% opacity), but still soft */
           border-color: rgba(var(--#{$name}-rgb), 0.5);
           color: #{$color};
         }
@@ -138,7 +139,7 @@
   }
 
   /* =========================================
-     3. ROZMIARY PRZYCISKÓW
+     3. BUTTON SIZES
      ========================================= */
   .btn-xs {
     padding: calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.75);
@@ -173,12 +174,12 @@
   }
 
   /* =========================================
-     4. BUTTON GROUPS (Zgrupowane przyciski)
+     4. BUTTON GROUPS
      ========================================= */
-  /* Dzieci celuja w $btn-base-selectors (ta sama lista co baza wyzej), nie w
-     literalna klase .btn - odkad kolor implikuje .btn (patrz komentarz przy
-     IMPLIKACJA .btn), sam .btn-primary w grupie nie dostawal tu wczesniej
-     zadnego z tych zaokraglen/nachodzenia obwodek. */
+  /* Children target $btn-base-selectors (the same list as the base
+     above), not the literal .btn class - since a color implies .btn (see
+     the .btn IMPLICATION comment), a bare .btn-primary inside a group
+     used to get none of this radius/border-overlap handling. */
   .btn-group {
     display: inline-flex;
     align-items: stretch;
@@ -208,7 +209,7 @@
   }
 
   /* =========================================
-     5. GHOST BUTTONS (Akcje w tabelach i paskach)
+     5. GHOST BUTTONS (actions in tables and bars)
      ========================================= */
   .btn-action {
     appearance: none;
@@ -257,7 +258,7 @@
     }
   }
   
-  /* Grupowanie przycisków akcji */
+  /* Grouping action buttons */
   .btn-action-group {
     display: flex;
     align-items: center;
@@ -298,14 +299,15 @@
   }
 
   /* =========================================
-     6. NOWOCZESNE EFEKTY (Modyfikatory)
+     6. MODERN EFFECTS (modifiers)
      ========================================= */
-  
-  /* 1. GLOW (Neonowa poświata)
-     Cień hover NIE transitionuje bezposrednio (reflow) - siedzi na ::after,
-     ktory animuje tylko opacity. Ten sam wzorzec co .hover-gpu-shadow w
-     utilities/_animations.scss. Bazowy (spoczynkowy) cień zostaje na
-     przycisku, bo jest staly - nigdy sie nie zmienia, wiec nie kosztuje. */
+
+  /* 1. GLOW (neon glow)
+     The hover shadow does NOT transition directly (reflow) - it lives on
+     ::after, which only animates opacity. The same pattern as
+     .hover-gpu-shadow in utilities/_animations.scss. The base (resting)
+     shadow stays on the button itself, since it's static - it never
+     changes, so it costs nothing. */
   .btn-glow {
     position: relative;
     isolation: isolate;
@@ -333,7 +335,7 @@
     }
   }
 
-  /* 2. GLASS (Szkło - idealne na ciemne tła i wideo) */
+  /* 2. GLASS (ideal for dark backgrounds and video) */
   .btn-glass {
     background: rgba(255, 255, 255, 0.1) !important;
     backdrop-filter: blur(10px);
@@ -349,14 +351,15 @@
     }
   }
 
-  /* 3. 3D PUSH (Fizyczny przycisk)
-     Zamiast animowac Y-offset plaskiego box-shadow (reflow), "podstawa"
-     siedzi na statycznym ::before (solid tlo, offset o 6px pod przyciskiem).
-     Przycisk sam animuje wylacznie transform: translateY() - w miare
-     wciskania "zblizy sie" do statycznej podstawy, dajac identyczny efekt
-     znikajacego cienia bez animowania box-shadow ani razu. */
+  /* 3. 3D PUSH (a physical button)
+     Instead of animating a flat box-shadow's Y-offset (reflow), the
+     "base" lives on a static ::before (solid background, offset 6px
+     below the button). The button itself animates only
+     transform: translateY() - as it's pressed, it "gets closer" to the
+     static base, producing the identical disappearing-shadow effect
+     without ever animating box-shadow. */
   .btn-3d {
-    /* Wymaga zdefiniowania koloru cienia (np. ciemniejszy primary) */
+    /* Requires the shadow color to be defined (e.g. a darker primary) */
     --btn-3d-shadow: var(--primary-hover);
 
     position: relative;
@@ -385,7 +388,7 @@
     }
   }
 
-  /* 4. SHINE (Przesuwający się błysk) */
+  /* 4. SHINE (a sweeping highlight) */
   .btn-shine {
     position: relative;
     overflow: hidden;
@@ -411,15 +414,15 @@
     100% { left: 200%; }
   }
 
-  /* 5. GRADIENT ANIMATED (Płynący gradient)
-     Zamiast animowac background-position (reflow/paint na kazdej klatce),
-     gradient siedzi na ::before dwukrotnie szerszym od przycisku,
-     przesuwanym przez transform: translateX() - identyczny efekt plynacego
-     gradientu, zero animowanych wlasciwosci poza transform/opacity. Cien
-     na hover tak samo jak w .btn-glow: osobny ::after, animowana tylko
-     opacity. Tresc przycisku (z-index:auto) zostaje ponad obiema
-     warstwami (z-index ujemny), bo isolation:isolate tworzy dla nich
-     wlasny kontekst uwarstwienia. */
+  /* 5. GRADIENT ANIMATED (a flowing gradient)
+     Instead of animating background-position (reflow/paint on every
+     frame), the gradient lives on a ::before twice as wide as the
+     button, shifted via transform: translateX() - the identical flowing-
+     gradient effect, zero animated properties besides transform/opacity.
+     The hover shadow works the same way as in .btn-glow: a separate
+     ::after, only opacity animated. The button's content (z-index: auto)
+     stays above both layers (negative z-index), since isolation: isolate
+     creates its own stacking context for them. */
   .btn-gradient {
     position: relative;
     isolation: isolate;
@@ -478,10 +481,10 @@
   }
 
   /* =========================================
-     6. WARIANTY UKŁADU (Layout Modifiers)
+     6. LAYOUT MODIFIERS
      ========================================= */
-  
-  /* Przycisk pionowy (Ikona nad tekstem) - Wzorzec z aplikacji mobilnych */
+
+  /* Vertical button (icon above text) - a pattern from mobile apps */
   .btn-stacked {
     flex-direction: column;
     justify-content: center;
@@ -516,12 +519,12 @@
   }
 
   /* =========================================
-     DOMYŚLNY HOVER PRZYCISKÓW (opt-in)
+     DEFAULT BUTTON HOVER (opt-in)
      =========================================
-     Dodaj JEDNĄ z klas do <body> (lub dowolnego kontenera), aby WSZYSTKIE
-     .btn w środku dostały wspólny efekt hover - twórca wybiera go raz,
-     zamiast oznaczać każdy przycisk osobno. Przyciski z własną klasą
-     hover-* są pomijane (mają pierwszeństwo). GPU: transform + box-shadow. */
+     Add ONE of these classes to <body> (or any container) to give EVERY
+     .btn inside it a shared hover effect - the author picks it once
+     instead of tagging each button individually. Buttons with their own
+     hover-* class are skipped (they take precedence). GPU: transform + box-shadow. */
   .btn-hover-spring .btn:not([class*="hover-"]),
   .btn-hover-lift .btn:not([class*="hover-"]),
   .btn-hover-glow .btn:not([class*="hover-"]) {

@@ -1,37 +1,37 @@
-// molique - Optymalizacja dla e-ink / monochrome i wydruku.
+// molique - Optimization for e-ink / monochrome and print.
 /* =========================================
-   OPTYMALIZACJA DLA E-INK / MONOCHROME
+   E-INK / MONOCHROME OPTIMIZATION
    ========================================= */
 
-// Wykrywamy ekrany czarno-białe LUB takie o wolnym odświeżaniu
+// Detect black-and-white screens OR ones with a slow refresh rate
 @media (monochrome), (update: slow) {
-  
-  // Wyłączamy wszystkie animacje i przejścia, które mogą powodować efekt smużenia na e-ink
+
+  // Disable every animation and transition, which can cause ghosting on e-ink
   *, *::before, *::after {
     transition: none !important;
     animation: none !important;
   }
 
-  // Wymuszamy maksymalny kontrast
+  // Force maximum contrast
   body {
     background-color: #ffffff !important;
     color: #000000 !important;
   }
 
-  // Usuwamy cienie i obramowania, które mogą być nieczytelne lub powodować efekt smużenia
+  // Remove shadows and borders, which can be illegible or cause ghosting
   .card, .btn, .shadow, .dropdown-menu {
     box-shadow: none !important;
     border: 2px solid #000000 !important;
   }
 
-  // Wyróżnienie linków bez użycia koloru
+  // Highlight links without relying on color
   a {
     color: #000000 !important;
     text-decoration: underline !important;
     font-weight: 700;
   }
 
-  // Ukrywamy całkowicie elementy, które nie mają sensu bez kolorów/animacji
+  // Fully hide elements that make no sense without colors/animations
   .video-bg, .skeleton-loader {
     display: none !important;
   }

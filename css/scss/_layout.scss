@@ -1,13 +1,13 @@
 /**
  * molique - Layout
- * Zawiera sizing, positioning, flexbox i display
+ * Contains sizing, positioning, flexbox, and display
  */
 
 @use 'variables' as *;
 @use 'mixins' as *;
 
 /* =========================================
-   1. SIZING (Szerokość / Wysokość)
+   1. SIZING (width / height)
    ========================================= */
 .w-25 { width: 25%; }
 .w-50 { width: 50%; }
@@ -20,7 +20,7 @@
 .vh-100 { height: 100vh; }
 .min-vh-100 { min-height: 100vh; }
 
-/* DODANE: Responsywne szerokości */
+/* ADDED: Responsive widths */
 @include mq(md) {
   .w-md-25 { width: 25%; }
   .w-md-50 { width: 50%; }
@@ -56,7 +56,7 @@
 .align-self-center { align-self: center; }
 .align-self-stretch { align-self: stretch; }
 
-/* Odstępy (Gap) dla Flexboxa i Grida */
+/* Gap for Flexbox and Grid */
 .gap-0 { gap: 0; }
 .gap-1 { gap: calc(var(--spacing-unit) * 1); }
 .gap-2 { gap: calc(var(--spacing-unit) * 2); }
@@ -83,7 +83,7 @@
 }
 
 /* =========================================
-   3. POZYCJONOWANIE
+   3. POSITIONING
    ========================================= */
 .position-relative { position: relative !important; }
 .position-absolute { position: absolute !important; }
@@ -94,14 +94,14 @@
   z-index: var(--z-index-sticky); 
 }
 
-/* Krawędzie */
+/* Edges */
 .top-0 { top: 0 !important; }
 .bottom-0 { bottom: 0 !important; }
 .left-0 { left: 0 !important; }
 .right-0 { right: 0 !important; }
 .inset-0 { inset: 0 !important; }
 
-/* Centrowanie absolutne */
+/* Absolute centering */
 .top-50 { top: 50% !important; }
 .left-50 { left: 50% !important; }
 
@@ -118,7 +118,7 @@
 .z-30 { z-index: 30; }
 
 /* =========================================
-   5. TEKST
+   5. TEXT
    ========================================= */
 .text-center { text-align: center; }
 .text-start { text-align: left; }
@@ -128,14 +128,14 @@
 .fw-normal { font-weight: var(--fw-normal); }
 .fw-light { font-weight: var(--fw-light); }
 /* =========================================
-   6. FADE BOTTOM (Zanikanie treści przy dolnej krawędzi)
+   6. FADE BOTTOM (fading content at the bottom edge)
    =========================================
-   Opt-in dla dowolnego przewijanego kontenera (lub elementu, przez
-   który przewija się strona): gradient przykrywa dolną krawędź i
-   treść "zanika" zamiast być ucięta. Kolor gradientu MUSI odpowiadać
-   tłu elementu - steruj przez --fade-color (domyślnie --bg-surface).
-   Wysokość: --fade-height. Komponenty admina (.admin-sidebar,
-   .admin-main) mają własne integracje w module admin. */
+   Opt-in for any scrollable container (or element the page scrolls
+   through): a gradient covers the bottom edge and the content "fades"
+   instead of being cut off. The gradient color MUST match the element's
+   background - control it via --fade-color (default --bg-surface).
+   Height: --fade-height. The admin components (.admin-sidebar,
+   .admin-main) have their own integrations in the admin module. */
 .fade-bottom {
   --fade-height: 80px;
   --fade-color: var(--bg-surface);
@@ -146,7 +146,7 @@
     position: sticky;
     bottom: 0;
     height: var(--fade-height);
-    /* Gradient nakłada się na treść, nie wydłuża przewijania */
+    /* The gradient overlaps the content, it doesn't extend the scroll area */
     margin-top: calc(var(--fade-height) * -1);
     flex-shrink: 0;
     background: linear-gradient(to top, var(--fade-color) 15%, transparent);

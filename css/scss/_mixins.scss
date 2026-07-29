@@ -1,8 +1,8 @@
-// Mixin dla responsywności (Mobile-first)
+// Mixin for responsiveness (mobile-first)
 
 @use 'variables' as *;
 
-// Mixin dla responsywności
+// Mixin for responsiveness
 @mixin mq($breakpoint, $type: min) {
   @if $type == min {
     @if $breakpoint == sm {
@@ -20,14 +20,14 @@
     } @else if $breakpoint == sm {
       @media (max-width: $breakpoint-sm-max) { @content; }
     } @else if $breakpoint == md {
-      @media (max-width: $breakpoint-md-max) { @content; } /* TEGO BRAKOWAŁO */
+      @media (max-width: $breakpoint-md-max) { @content; } /* THIS WAS MISSING */
     } @else if $breakpoint == lg {
-      @media (max-width: $breakpoint-lg-max) { @content; } /* TEGO BRAKOWAŁO */
+      @media (max-width: $breakpoint-lg-max) { @content; } /* THIS WAS MISSING */
     }
   }
 }
 
-// Ukrywa strzałki (spinnery) w polach input type="number"
+// Hides the spinner arrows on input type="number" fields
 @mixin hide-number-spinners {
   appearance: textfield;
   // stylelint-disable-next-line property-no-vendor-prefix

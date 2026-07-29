@@ -2,37 +2,37 @@
 @layer reset, base, layout, components, modules, utilities;
 @layer reset {
   /**
-   * molique - Zmienne Root i Fonty
-   * Architektura: Płynna typografia, B2B Target Size, Dark Mode Ready
+   * molique - Root Variables and Fonts
+   * Architecture: fluid typography, B2B target size, dark-mode ready
    */
   /* =========================================
-     ZMIENNE CSS (CSS Custom Properties)
+     CSS VARIABLES (CSS Custom Properties)
      ========================================= */
   :root {
-    /* Deklaracja schematu kolorów dla przeglądarki. Bez niej kolory
-       systemowe (CanvasText itd.) są ZAWSZE jasnoschematowe - np. natywny
-       <dialog> dostaje od UA color: CanvasText (czarny) i w dark mode
-       nagłówki (color: inherit) robią się czarne na ciemnej karcie.
-       Deklaracja naprawia też natywne scrollbary i kontrolki formularzy. */
+    /* Declares the color scheme for the browser. Without it, system colors
+       (CanvasText etc.) are ALWAYS light-scheme - e.g. the native <dialog>
+       gets color: CanvasText (black) from the UA, and in dark mode headings
+       (color: inherit) turn black on a dark card. This declaration also
+       fixes native scrollbars and form controls. */
     color-scheme: light;
-    /* Fonty z systemowym fallbackiem. Baza i nagłówki obie na FontHeading
-       (Poppins) - v2 design refresh (patrz artefakt "Modernizacja Molique
-       Design System"). Jeden krój w calym systemie - FontBody zostal
-       usuniety z _fonts.scss razem z Inter. */
+    /* Fonts with a system fallback. Both body and headings use FontHeading
+       (Poppins) - the v2 design refresh (see the "Molique Design System
+       Modernization" artifact). One typeface across the whole system -
+       FontBody was removed from _fonts.scss along with Inter. */
     --font-family-base: 'FontHeading', system-ui, -apple-system, sans-serif;
     --font-family-heading: 'FontHeading', system-ui, -apple-system, sans-serif;
-    /* PALETA "Slate Violet" (2026-07) - primary zostaje w rodzinie indygo
-       (blisko poprzedniej v2), ale success/danger/warning/info zamienione
-       na CIEMNIEJSZE, bardziej nasycone odcienie tego samego typu koloru.
-       Powod: poprzednie (jasne/pastelowe) dzialaly TYLKO jako tlo z ciemnym
-       tekstem na wierzchu - jako sam tekst na --bg-body/--bg-surface daly
-       zaledwie 2.2-4.2:1 (ponizej progu WCAG 4.5:1), stad caly osobny system
-       "-text" ponizej. Nowe kolory sa dobrane tak, zeby PRZESZLY 4.5:1 w OBIE
-       strony jednoczesnie: jako tekst na jasnym tle ORAZ jako tlo z bialym
-       tekstem na wierzchu - jeden kolor, jedna rola, zero drugiego zestawu do
-       utrzymania. Zweryfikowane przeliczeniem kontrastu (WCAG 2.1 formula),
-       nie "na oko" - patrz --semantic-fg nizej po drugiej stronie tej samej
-       zmiany (tekst NA kolorowym tle, przyciski/badge). */
+    /* "Slate Violet" PALETTE (2026-07) - primary stays in the indigo family
+       (close to the previous v2), but success/danger/warning/info were
+       swapped for DARKER, more saturated shades of the same color type.
+       Reason: the previous ones (light/pastel) only worked as a background
+       with dark text on top - as plain text on --bg-body/--bg-surface they
+       gave only 2.2-4.2:1 (below the WCAG 4.5:1 threshold), hence the whole
+       separate "-text" system below. The new colors are chosen to PASS
+       4.5:1 in BOTH directions at once: as text on a light background AND
+       as a background with white text on top - one color, one role, zero
+       second set to maintain. Verified by computing the contrast ratio
+       (WCAG 2.1 formula), not by eye - see --semantic-fg below, the other
+       side of this same change (text ON a colored background, buttons/badges). */
     --primary: #4F46E5;
     --primary-hover: #463ECA;
     --light: #F9F9F9;
@@ -47,50 +47,50 @@
     --warning-hover: #9E4908;
     --info: #006FEE;
     --info-hover: #0062D1;
-    /* Warianty "-text" - w tej palecie IDENTYCZNE z baza (patrz komentarz
-       wyzej: nowe success/warning/danger/info juz przechodza 4.5:1 jako sam
-       tekst, wiec osobno przyciemniona wersja nie jest juz potrzebna). Nazwy
-       zmiennych zostaja - dziesiatki miejsc w kodzie (.text-success,
-       .bg-warning-subtle, .stat-tile-icon-danger itd.) juz z nich korzystaja,
-       aliasowanie do bazy to zero-ryzykowna zmiana bez dotykania tamtych
-       plikow. W dark mode ten alias istnial juz od zawsze (patrz nizej) -
-       teraz oba motywy dzialaja tak samo z tego samego powodu. */
+    /* "-text" variants - IDENTICAL to the base in this palette (see the
+       comment above: the new success/warning/danger/info already pass
+       4.5:1 as plain text, so a separately darkened version is no longer
+       needed). The variable names stay - dozens of places in the code
+       (.text-success, .bg-warning-subtle, .stat-tile-icon-danger, etc.)
+       already use them, so aliasing to the base is a zero-risk change that
+       doesn't touch those files. In dark mode this alias already existed
+       (see below) - now both themes work the same way for the same reason. */
     --success-text: var(--success);
     --warning-text: var(--warning);
     --danger-text: var(--danger);
     --info-text: var(--info);
-    /* Kolory tła i tekstu */
-    --bg-body: #F5F6FC; /* Chlodny neutral pod panele */
-    --bg-surface: #FFFFFF; /* Czysta biel dla kart i głównych kontenerów */
+    /* Background and text colors */
+    --bg-body: #F5F6FC; /* Cool neutral behind panels */
+    --bg-surface: #FFFFFF; /* Pure white for cards and main containers */
     --text-main: var(--dark);
     --text-muted: var(--secondary);
     --border-color: #E7E8F2;
-    /* ZMIENNE SIDEBARA ADMINA.
-       UWAGA: sidebar jest ZAWSZE ciemny (--sidebar-bg nie zmienia się
-       w dark mode), więc jego jasne akcenty muszą być literalne - NIE
-       wolno tu używać var(--light) / var(--light-rgb), bo dark mode
-       odwraca te zmienne (jasny → ciemny) i tekst oraz podświetlenia
-       znikają na ciemnym tle sidebara. sidebar-bg jest teraz polprzezroczysty
-       (rgba, "szklany" v2 - patrz artefakt), stad zalezy od --sidebar-rgb
-       ponizej zamiast literalnego hexa. */
+    /* ADMIN SIDEBAR VARIABLES.
+       NOTE: the sidebar is ALWAYS dark (--sidebar-bg doesn't change in
+       dark mode), so its light accents must be literal - do NOT use
+       var(--light) / var(--light-rgb) here, since dark mode inverts those
+       variables (light → dark) and the text and highlights disappear on
+       the sidebar's dark background. sidebar-bg is now semi-transparent
+       (rgba, the v2 "glass" look - see the artifact), hence it depends on
+       --sidebar-rgb below instead of a literal hex value. */
     --sidebar-bg: rgba(var(--sidebar-rgb), 0.92);
     --sidebar-submenu-bg: #52677D;
     --sidebar-text: #A9ADCB;
     --sidebar-text-active: #FFFFFF;
-    /* Akcent marki na sidebarze (np. .sidebar-sm .admin-nav-link.is-active) -
-       TA SAMA pulapka co wyzej: var(--primary) w LIGHT mode to #5145E5,
-       zbyt ciemny na ciemnym tle sidebara (2.3:1). Literalna wartosc
-       --primary z DARK mode (#8B84FF, jasniejszy wariant do ciemnych tel) -
-       nie odwraca sie, bo sidebar sam sie nie odwraca. */
+    /* Brand accent on the sidebar (e.g. .sidebar-sm .admin-nav-link.is-active)
+       - the SAME pitfall as above: var(--primary) in LIGHT mode is #5145E5,
+       too dark on the sidebar's dark background (2.3:1). The literal DARK
+       mode value of --primary (#8B84FF, the lighter variant meant for dark
+       backgrounds) - doesn't invert, because the sidebar itself doesn't invert. */
     --sidebar-active-accent: #8B84FF;
-    /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
-       logo) - niezależne od motywu, w przeciwieństwie do --light-rgb */
+    /* Light sidebar accents (hover, separators, scrollbar, logo badge) -
+       theme-independent, unlike --light-rgb */
     --sidebar-highlight-rgb: 249, 249, 249;
-    /* Rozmiary Sidebara */
+    /* Sidebar sizes */
     --sidebar-width-lg: 280px;
     --sidebar-width-md: 100px;
     --sidebar-width-sm: 72px;
-    /* Kolory RGB do przezroczystości (Muszą odpowiadać kolorom HEX wyżej!) */
+    /* RGB colors for transparency (must match the HEX colors above!) */
     --primary-rgb: 79, 70, 229; /* #4F46E5 */
     --secondary-rgb: 113, 113, 122; /* #71717A */
     --success-rgb: 14, 121, 60; /* #0E793C */
@@ -100,65 +100,66 @@
     --dark-rgb: 20, 22, 43; /* #14162B */
     --light-rgb: 249, 249, 249; /* #F9F9F9 */
     --body-rgb: 245, 246, 252; /* #F5F6FC */
-    --bg-surface-rgb: 255, 255, 255; /* #FFFFFF - kanały --bg-surface, używane przez .bg-glass */
-    --sidebar-rgb: 20, 22, 43; /* = --dark-rgb - sidebar "szklany" v2 nad tlem strony */
+    --bg-surface-rgb: 255, 255, 255; /* #FFFFFF - --bg-surface's channels, used by .bg-glass */
+    --sidebar-rgb: 20, 22, 43; /* = --dark-rgb - the v2 "glass" sidebar over the page background */
     --btn-text-light: #FFFFFF;
-    /* UWAGA: NIE var(--dark) - --dark odwraca sie w dark mode (staje sie
-       prawie-bialy), co dawalo bialy-na-bialym dla .btn-warning/.badge-warning
-       w ciemnym motywie (kontrast 1.58:1). W OBU motywach success/danger/
-       warning/info sa dosc nasycone/jasne (kazdy motyw ma WLASNY, dobrany dla
-       siebie odcien - patrz --semantic-fg nizej), wiec potrzebuja STALE
-       ciemnego tekstu niezaleznie od tego, ktory to motyw - stad literal, nie
-       zmienna motywu. */
+    /* NOTE: NOT var(--dark) - --dark inverts in dark mode (becomes
+       near-white), which gave white-on-white for .btn-warning/.badge-warning
+       in the dark theme (1.58:1 contrast). In BOTH themes success/danger/
+       warning/info are fairly saturated/light (each theme has ITS OWN shade
+       chosen for itself - see --semantic-fg below), so they need
+       PERMANENTLY dark text regardless of which theme is active - hence a
+       literal, not a theme variable. */
     --btn-text-dark: #14162B;
-    /* Tekst NA solidnym tle success/danger/warning/info (przyciski .btn-*,
-       .badge-*, .bg-success itd.) - w PRZECIWIENSTWIE do --btn-text-dark
-       wyzej, ten token JEST mode-aware: w light mode te kolory sa ciemne i
-       nasycone (potrzebuja jasnego tekstu), w dark mode sa jasne/neonowe na
-       ciemnym tle (potrzebuja ciemnego tekstu) - dokladnie odwrotna logika
-       niz --primary/--secondary/--dark (te zawsze uzywaja --btn-text-light,
-       bo sa "ciemne" w obu motywach z definicji). Bez tego tokenu flip
-       kolorow success/danger/warning/info w tej palecie zostawilby ciemny
-       tekst na ciemnym tle. */
+    /* Text ON a solid success/danger/warning/info background (.btn-*,
+       .badge-*, .bg-success buttons/badges etc.) - UNLIKE --btn-text-dark
+       above, this token IS mode-aware: in light mode these colors are dark
+       and saturated (need light text), in dark mode they're light/neon on a
+       dark background (need dark text) - the exact opposite logic to
+       --primary/--secondary/--dark (those always use --btn-text-light,
+       since they're "dark" in both themes by definition). Without this
+       token, the success/danger/warning/info color flip in this palette
+       would leave dark text on a dark background. */
     --semantic-fg: var(--btn-text-light);
     --card-bg-subtle: rgba(var(--dark-rgb), 0.035);
-    /* BLOKI KODU. Ciemne w OBU motywach (tak wygląda kod wszędzie), ale
-       wartość NIE może być zahardkodowana: w dark mode --bg-surface to
-       dokładnie #1E293B, więc blok kodu zlewał się z tłem strony w jeden
-       prostokąt. W ciemnym motywie schodzimy poniżej tła powierzchni. */
+    /* CODE BLOCKS. Dark in BOTH themes (that's how code looks everywhere),
+       but the value CANNOT be hardcoded: in dark mode --bg-surface is
+       exactly #1E293B, so the code block would blend into the page
+       background as one rectangle. In the dark theme we go darker than the
+       surface background. */
     --code-bg: #1E293B;
     --code-text: #E2E8F0;
     --code-border: rgba(255, 255, 255, 0.12);
-    /* Spacing (1 jednostka = 8px) */
+    /* Spacing (1 unit = 8px) */
     --spacing-unit: 8px;
     /* Grid */
     --grid-gap: calc(var(--spacing-unit) * 3);
-    /* Inne */
+    /* Other */
     --border-radius: 14px;
     --border-radius-lg: 28px;
-    --transition-speed: 0.22s; /* Baza */
+    --transition-speed: 0.22s; /* Base */
     --transition-speed-fast: 0.15s;
     --transition-speed-slow: 0.3s;
     --transition-speed-slower: 0.4s;
-    --transition-speed-chart: 0.8s; /* Wykresy - dluzsza animacja "rosniecia" */
-    /* Baza: 14px na mobile, rośnie do max 15px na desktopie. 
-       Idealne do gęstych interfejsów SaaS/CRM. */
+    --transition-speed-chart: 0.8s; /* Charts - a longer "growth" animation */
+    /* Base: 14px on mobile, grows up to a max of 15px on desktop.
+       Ideal for dense SaaS/CRM interfaces. */
     --text-base-size: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
-    /* Skala dla nagłówków (Major Third - 1.25) 
-       Przeliczona od nowej, mniejszej bazy, żeby zachować proporcje */
-    /* H1: Główne tytuły stron */
+    /* Heading scale (Major Third - 1.25)
+       Recalculated from the new, smaller base to keep the proportions */
+    /* H1: Main page titles */
     --h1-size: clamp(2rem, 2vw + 1rem, 2.5rem);
-    /* H2: Tytuły sekcji */
+    /* H2: Section titles */
     --h2-size: clamp(1.6rem, 1.5vw + 0.8rem, 2rem);
-    /* H3: Tytuły dużych kart/widgetów */
+    /* H3: Large card/widget titles */
     --h3-size: clamp(1.28rem, 1vw + 0.8rem, 1.6rem);
-    /* H4: Standardowe tytuły kart */
+    /* H4: Standard card titles */
     --h4-size: clamp(1.02rem, 0.8vw + 0.7rem, 1.28rem);
-    /* H5: Wyróżniony tekst, etykiety */
+    /* H5: Emphasized text, labels */
     --h5-size: clamp(0.9rem, 0.5vw + 0.7rem, 1.02rem);
-    /* H6: Równe tekstowi bazowemu, ale pogrubione */
+    /* H6: Same as base text, but bold */
     --h6-size: var(--text-base-size);
-    /* Skala dla małych tekstów (np. stopki, metadane, tagi) */
+    /* Scale for small text (e.g. footers, metadata, tags) */
     --text-sm: 0.8125rem; /* 13px */
     --text-xs: 0.75rem; /* 12px */
     /* =========================================
@@ -168,30 +169,30 @@
     --hamburger-size: var(--target-size-min);
     --hamburger-bar-width: 24px;
     --hamburger-bar-height: 2px;
-    /* Rozmiary kontenerów i komponentów */
+    /* Container and component sizes */
     --container-max-width: 1200px;
     --post-thumb-size: 60px;
-    /* Wysokość globalnego navbara (logo 44px + pionowy padding 2x16px).
-       Używana, gdy pod navbarem siedzi layout admina - sidebar startuje
-       dokładnie pod paskiem i wypełnia resztę okna. */
+    /* Height of the global navbar (44px logo + 2x16px vertical padding).
+       Used when an admin layout sits below the navbar - the sidebar starts
+       exactly under the bar and fills the rest of the window. */
     --navbar-h: 76px;
-    /* Cienie i Poświaty - v2: wielowarstwowe, barwione --dark-rgb zamiast
-       czystej czerni (spojne z chlodniejszym neutralem calej palety) */
+    /* Shadows and glows - v2: layered, tinted with --dark-rgb instead of
+       pure black (consistent with the whole palette's cooler neutral) */
     --shadow-sm: 0 1px 2px rgba(var(--dark-rgb), 0.05), 0 4px 10px -2px rgba(var(--dark-rgb), 0.05);
     --shadow-md: 0 2px 4px rgba(var(--dark-rgb), 0.04), 0 14px 30px -8px rgba(var(--dark-rgb), 0.12);
     --shadow-lg: 0 40px 80px -32px rgba(var(--dark-rgb), 0.28), 0 12px 24px -8px rgba(var(--dark-rgb), 0.08);
-    /* Nakladki pelnoekranowe (lightbox, offcanvas, popover) - zawsze czarne,
-       niezaleznie od motywu (jak cienie wyzej). Kazdy komponent zachowuje
-       WLASNA, dobrana dla siebie przezroczystosc (rgba(var(--backdrop-rgb), X))
-       - ten token daje wspolne ZRODLO KOLORU do przyszlej zmiany (np. lekki
-       odcien zamiast czystej czerni), nie wspolna przezroczystosc. */
+    /* Full-screen overlays (lightbox, offcanvas, popover) - always black,
+       regardless of theme (like the shadows above). Every component keeps
+       ITS OWN, individually chosen transparency (rgba(var(--backdrop-rgb), X))
+       - this token gives a shared COLOR SOURCE for a future change (e.g. a
+       slight tint instead of pure black), not a shared transparency. */
     --backdrop-rgb: 0, 0, 0;
     --focus-ring-width: 3px;
     --focus-ring-color: rgba(var(--primary-rgb), 0.25);
     --focus-ring-radius: var(--border-radius);
     /* Layout */
     --scroll-padding: 80px;
-    /* Z-INDEX (Architektura warstw) */
+    /* Z-INDEX (layer architecture) */
     --z-index-dropdown: 1000;
     --z-index-sticky: 1020;
     --z-index-fixed: 1030;
@@ -201,7 +202,7 @@
     --z-index-toast: 1070;
     --z-index-tooltip: 1080;
     --z-index-skip-link: 9999;
-    /* WAGI FONTÓW */
+    /* FONT WEIGHTS */
     --fw-light: 300;
     --fw-normal: 400;
     --fw-medium: 500;
@@ -210,26 +211,27 @@
     --fw-black: 900;
   }
   /* =========================================
-     KOLORY - PALETA DARK MODE
+     COLORS - DARK MODE PALETTE
      ========================================= */
   [data-theme=dark] {
-    /* Kolory systemowe przeglądarki (CanvasText, scrollbary, natywne
-       kontrolki, kalendarz date-pickera) podążają za ciemnym motywem */
+    /* Browser system colors (CanvasText, scrollbars, native controls, the
+       date picker calendar) follow the dark theme */
     color-scheme: dark;
-    /* 1. Kolory strukturalne (v2 - blisko czerni, ciepla/fioletowa, nie
-       czysty czarny ani stary granat) */
+    /* 1. Structural colors (v2 - near-black, warm/violet, neither pure
+       black nor the old navy) */
     --bg-body: #0A0B14;
-    --bg-surface: #141629; /* Nieco jaśniejszy od body (tworzy głębię kart) */
+    --bg-surface: #141629; /* Slightly lighter than body (creates card depth) */
     --text-main: #ECEDF8;
     --text-muted: #9BA0C4;
     --border-color: #262A48;
-    /* 2. Kolory semantyczne "Slate Violet" (rozjasnione/neonowe warianty pod
-       ciemne tlo - patrz komentarz przy definicji palety w :root). Danger
-       NIE jest 1:1 wartoscia z referencyjnego mockupu (#f31260) - ten kolor
-       z bazowym --btn-text-dark dawal 4.30:1 (tylko AA-large, nie AA-normal
-       4.5:1) - #F43A74 to najblizszy odcien tej samej rodziny (jasniejszy,
-       mniej nasycony), ktory realnie przechodzi 4.5:1 (4.84:1, zweryfikowane
-       przeliczeniem WCAG). Reszta wartosci przyjeta z mockupu bez zmian. */
+    /* 2. "Slate Violet" semantic colors (brightened/neon variants for the
+       dark background - see the comment at the palette definition in
+       :root). Danger is NOT a 1:1 value from the reference mockup
+       (#f31260) - that color with the base --btn-text-dark gave 4.30:1
+       (only AA-large, not AA-normal's 4.5:1) - #F43A74 is the closest shade
+       in the same family (lighter, less saturated) that actually passes
+       4.5:1 (4.84:1, verified by computing WCAG contrast). The rest of the
+       values were taken from the mockup unchanged. */
     --primary: #818CF8;
     --primary-hover: #98A1F9;
     --secondary: #A1A1AA;
@@ -242,18 +244,18 @@
     --warning-hover: #F7B54B;
     --info: #338EF7;
     --info-hover: #58A2F8;
-    /* W dark mode --success/--warning/--danger juz maja 10+:1 na --bg-body
-       ciemnym, wiec warianty "-text" zostaja identyczne z baza - patrz
-       komentarz przy definicji w :root. */
+    /* In dark mode --success/--warning/--danger already have 10+:1 on the
+       dark --bg-body, so the "-text" variants stay identical to the base -
+       see the comment at the definition in :root. */
     --success-text: var(--success);
     --warning-text: var(--warning);
     --danger-text: var(--danger);
     --info-text: var(--info);
-    /* Zmienne semantyczne odwrócone - light w dark mode = bg-surface (ta sama
-       zaleznosc co przed v2, tylko z nowymi wartosciami) */
+    /* Semantic variables inverted - light in dark mode = bg-surface (the
+       same relationship as before v2, just with the new values) */
     --light: #141629;
     --dark: #ECEDF8;
-    /* 3. Wartości RGB dla Dark Mode (Kluczowe dla klas -subtle i focus ringów!) */
+    /* 3. RGB values for Dark Mode (essential for the -subtle classes and focus rings!) */
     --primary-rgb: 129, 140, 248;
     --secondary-rgb: 161, 161, 170;
     --success-rgb: 69, 212, 131;
@@ -264,42 +266,45 @@
     --light-rgb: 20, 22, 41;
     --body-rgb: 10, 11, 20;
     --bg-surface-rgb: 20, 22, 41;
-    /* Sidebar NIE zmienia sie w dark mode (patrz UWAGA przy --sidebar-bg w
-       :root) - to samo --sidebar-rgb co w light, zeby rgba(var(--sidebar-rgb))
-       dalo dokladnie ten sam kolor niezaleznie od motywu strony. */
+    /* The sidebar does NOT change in dark mode (see the NOTE at --sidebar-bg
+       in :root) - the same --sidebar-rgb as in light mode, so
+       rgba(var(--sidebar-rgb)) gives exactly the same color regardless of
+       the page's theme. */
     --sidebar-rgb: 20, 22, 43;
     --btn-text-light: #0A0B14;
-    /* Ta sama literalna wartosc co w :root - CELOWO bez zmiany w dark mode,
-       patrz komentarz przy definicji w :root. */
+    /* The same literal value as in :root - DELIBERATELY unchanged in dark
+       mode, see the comment at the definition in :root. */
     --btn-text-dark: #14162B;
-    /* Odwrotnosc niz w :root - w dark mode success/danger/warning/info sa
-       jasne/neonowe na ciemnym tle, wiec potrzebuja CIEMNEGO tekstu (patrz
-       komentarz przy definicji w :root). */
+    /* The inverse of :root - in dark mode success/danger/warning/info are
+       light/neon on a dark background, so they need DARK text (see the
+       comment at the definition in :root). */
     --semantic-fg: var(--btn-text-dark);
-    /* Cienie v2 w dark mode: czysta czern (nie barwione --dark-rgb jak w
-       light) - na ciemnym tle barwiony cien jest niewidoczny/bez sensu. */
+    /* v2 dark-mode shadows: pure black (not tinted with --dark-rgb like in
+       light mode) - a tinted shadow on a dark background is invisible/pointless. */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 4px 12px -2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.5), 0 16px 34px -10px rgba(0, 0, 0, 0.6);
     --shadow-lg: 0 44px 90px -34px rgba(0, 0, 0, 0.85), 0 14px 28px -10px rgba(0, 0, 0, 0.5);
     --card-bg-subtle: rgba(255, 255, 255, 0.05);
-    /* Ciemniej niż --bg-surface (#141629) i niż --bg-body (#0A0B14),
-       żeby blok kodu odcinał się od obu. */
+    /* Darker than --bg-surface (#141629) and than --bg-body (#0A0B14), so
+       the code block stands out from both. */
     --code-bg: #05060C;
   }
   /**
-   * molique - Fonty (@font-face)
-   * FontBody = FontHeading = Poppins (jeden krój, ciaśniejszy tracking - patrz
-   * --font-family-base w _root.scss). Dwie nazwy zostają jako alias, nie jako
-   * dwa różne kroje: gdyby projekt kiedyś wrócił do osobnego fontu dla body,
-   * wystarczy zmienić --font-family-base, bez ruszania tego pliku.
-   * Ścieżki względne do skompilowanego CSS w css/ (pliki w css/../fonts/).
-   * font-display: swap - tekst widoczny od razu, bez FOIT.
+   * molique - Fonts (@font-face)
+   * FontBody = FontHeading = Poppins (one typeface, tighter tracking - see
+   * --font-family-base in _root.scss). The two names stay as an alias, not
+   * as two different typefaces: if the project ever went back to a
+   * separate body font, changing --font-family-base is enough, with no
+   * need to touch this file.
+   * Paths are relative to the compiled CSS in css/ (files live in css/../fonts/).
+   * font-display: swap - text is visible immediately, no FOIT.
    *
-   * Kazda waga ma WLASNY plik latin-ext (polskie/czeskie/etc. znaki) pobrany
-   * bezposrednio z Google Fonts, zamiast pozyczac glify z najblizszej wagi,
-   * ktora akurat go miala - to poprzednie rozwiazanie dawalo widoczny rozjazd
-   * grubosci kresek pomiedzy podstawowa lacina i znakami typu ą/ę/ł w tym
-   * samym slowie przy wagach 100/200/300/500/600/800/900.
+   * Every weight has ITS OWN latin-ext file (Polish/Czech/etc. characters)
+   * downloaded directly from Google Fonts, instead of borrowing glyphs from
+   * the nearest weight that happened to have one - that previous approach
+   * gave a visible mismatch in stroke weight between the base Latin
+   * characters and glyphs like ą/ę/ł within the same word, for weights
+   * 100/200/300/500/600/800/900.
    */
   @font-face {
     font-family: "FontHeading";
@@ -448,27 +453,28 @@
 }
 @layer base {
   /**
-   * molique - Style Bazowe i Reset
-   * Zawiera reset CSS, style dla html/body i podstawowe kontenery
+   * molique - Base Styles and Reset
+   * Contains the CSS reset, html/body styles, and the base containers
    */
   /**
    * molique - Zmienne SCSS
    */
   /**
-   * molique - Style Bazowe i Reset
-   * Zawiera reset CSS, style dla html/body i podstawowe kontenery
+   * molique - Base Styles and Reset
+   * Contains the CSS reset, html/body styles, and the base containers
    */
   @layer base {
     /* =========================================
-       RESET, BAZA & A11Y
+       RESET, BASE & A11Y
        ========================================= */
     html {
       scroll-behavior: smooth;
       scroll-padding-top: var(--scroll-padding);
-      /* Globalna tarcza anty-rozsadzeniowa. UWAGA: musi być "clip", nie "hidden" -
-         "hidden" wymusza overflow-y:auto (sprzężenie osi wg specyfikacji CSS Overflow),
-         przez co html/body stają się nieoczekiwanym "scroll container" i wyłączają
-         position:sticky wszystkim elementom w dokumencie (np. .admin-sidebar). */
+      /* Global anti-blowout shield. NOTE: must be "clip", not "hidden" -
+         "hidden" forces overflow-y:auto (axis coupling per the CSS Overflow
+         spec), which turns html/body into an unexpected "scroll container"
+         and disables position:sticky for every element in the document
+         (e.g. .admin-sidebar). */
       overflow-x: clip;
       width: 100%;
     }
@@ -488,7 +494,7 @@
       width: 100%;
       position: relative;
     }
-    /* Globalny Focus Ring (Dostępność) */
+    /* Global Focus Ring (accessibility) */
     :focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: 2px;
@@ -505,7 +511,7 @@
     a:hover {
       color: var(--primary-hover);
     }
-    /* Wymuszenie dziedziczenia fontów dla elementów formularzy */
+    /* Forces font inheritance for form elements */
     input, button, select, textarea, optgroup, option {
       font-family: inherit;
       font-size: inherit;
@@ -515,7 +521,7 @@
     /* =========================================
        B2B TARGET SIZE ENFORCEMENT (WCAG 2.2)
        ========================================= */
-    /* 1. Domyślny, kompaktowy rozmiar dla Desktopu (myszka) */
+    /* 1. Default, compact size for desktop (mouse) */
     button,
     input:not([type=checkbox]):not([type=radio]):not([type=color]),
     select,
@@ -524,7 +530,7 @@
       padding-top: calc(var(--spacing-unit) * 0.5);
       padding-bottom: calc(var(--spacing-unit) * 0.5);
     }
-    /* 2. Wymuszenie 44px TYLKO na urządzeniach dotykowych (Mobile/Tablet) */
+    /* 2. Enforces 44px ONLY on touch devices (mobile/tablet) */
     @media (pointer: coarse) {
       button,
       input:not([type=checkbox]):not([type=radio]):not([type=color]),
@@ -536,23 +542,26 @@
       }
     }
     /* =========================================
-       SEKCJE
+       SECTIONS
        ========================================= */
-    /* Goly <section> ma sensowny rytm pionowy bez dokladania klas. Nie ma
-       klasy .section - odstep jest wlasnoscia SEMANTYCZNEGO znacznika.
+    /* A bare <section> gets a sensible vertical rhythm with no extra
+       classes needed. There is no .section class - the spacing is a
+       property of the SEMANTIC tag itself.
 
-       Wartosc odtwarza dotychczasowy rytm: sekcje mialy "pb-5 mb-5", czyli
-       48px paddingu i 48px marginesu = 96px przerwy. Teraz kazda ma 48px gory
-       I dolu, wiec miedzy dwiema sasiednimi nadal wychodzi 96px.
+       The value reproduces the previous rhythm: sections used to have
+       "pb-5 mb-5", i.e. 48px of padding and 48px of margin = 96px of gap.
+       Now each one has 48px top AND bottom, so two adjacent sections still
+       end up with 96px between them.
 
-       Padding, nie margines: tlo sekcji ma obejmowac takze odstep, inaczej
-       kolorowa sekcja mialaby biale pasy. Warstwa base, wiec kazda klasa
-       narzedziowa (.p-0, .py-4) nadpisze to bez walki o specyficznosc. */
+       Padding, not margin: a section's background should also cover the
+       spacing, otherwise a colored section would show white stripes. It's
+       in the base layer, so any utility class (.p-0, .py-4) overrides it
+       without a specificity fight. */
     section {
       padding-block: calc(var(--spacing-unit) * 6);
     }
     /* =========================================
-       TYPOGRAFIA - NAGŁÓWKI
+       TYPOGRAPHY - HEADINGS
        ========================================= */
     h1, h2, h3, h4, h5, h6 {
       font-family: var(--font-family-heading);
@@ -592,15 +601,15 @@
       text-wrap: pretty;
       max-width: 75ch;
     }
-    /* Reset domyślnego stylu przeglądarki. Bez tego UA-owy
-       "border-style: inset" + "margin-inline: auto" rozjeżdża się jako
-       BEZPOŚREDNIE dziecko flexa (np. .card-body, każdy .d-flex.flex-column):
-       auto-marginesy w osi poprzecznej flexboksa mają pierwszeństwo przed
-       align-items:stretch i "zjadają" całą wolną przestrzeń zamiast
-       rozciągnąć element, więc linia kurczy się do prawie zerowej szerokości
-       (widać ją jako kropkę). Ten sam problem już raz naprawiono lokalnie w
-       .modal-divider (_modal-context.scss) - to jest ta sama poprawka
-       zgeneralizowana na wszystkie <hr>. */
+    /* Reset of the browser's default style. Without this, the UA's
+       "border-style: inset" + "margin-inline: auto" breaks as a DIRECT
+       child of a flex container (e.g. .card-body, any .d-flex.flex-column):
+       auto margins on the flexbox's cross axis take precedence over
+       align-items: stretch and "eat" all the free space instead of
+       stretching the element, so the line shrinks to nearly zero width
+       (it shows up as a dot). This same problem was already fixed once
+       locally in .modal-divider (_modal-context.scss) - this is that same
+       fix generalized to every <hr>. */
     hr {
       width: 100%;
       flex-shrink: 0;
@@ -610,14 +619,14 @@
       border-top: 1px solid var(--border-color);
     }
     /* =========================================
-       KONTENERY
+       CONTAINERS
        ========================================= */
     .container {
       width: 100%;
       max-width: var(--container-max-width);
       margin-right: auto;
       margin-left: auto;
-      /* FIX: Bezpieczny, mniejszy padding na mobile (16px) */
+      /* FIX: A safe, smaller padding on mobile (16px) */
       padding-right: calc(var(--spacing-unit) * 2);
       padding-left: calc(var(--spacing-unit) * 2);
     }
@@ -628,7 +637,7 @@
       margin-right: auto;
       margin-left: auto;
     }
-    /* Na desktopie wracamy do paddingu opartego na grid-gap */
+    /* On desktop we go back to a padding based on grid-gap */
     @media (min-width: 768px) {
       .container, .container-fluid {
         padding-right: calc(var(--grid-gap) / 2);
@@ -657,7 +666,7 @@
     }
   }
   /* =========================================
-     DOSTĘPNOŚĆ (ACCESSIBILITY - A11y)
+     ACCESSIBILITY (A11y)
      ========================================= */
   .sr-only {
     position: absolute;
@@ -688,7 +697,7 @@
     outline-offset: 2px;
   }
   /* =========================================
-     OPTYMALIZACJA DLA E-INK / MONOCHROME
+     E-INK / MONOCHROME OPTIMIZATION
      ========================================= */
   @media (monochrome), (update: slow) {
     *, *::before, *::after {
@@ -718,43 +727,43 @@
    * molique - Zmienne SCSS
    */
   /**
-   * molique - Style Bazowe i Reset
-   * Zawiera reset CSS, style dla html/body i podstawowe kontenery
+   * molique - Base Styles and Reset
+   * Contains the CSS reset, html/body styles, and the base containers
    */
   /**
-   * molique - System Grid (Natywny CSS Grid - Wzorzec RAM)
-   * Architektura: Zero klas na dzieciach, pełna automatyzacja
+   * molique - Grid System (native CSS Grid - the RAM pattern)
+   * Architecture: zero classes on children, full automation
    */
   @layer layout {
     /* =========================================
-       1. BAZOWY KONTENER SIATKI
+       1. BASE GRID CONTAINER
        ========================================= */
     .grid {
       display: grid;
       gap: var(--grid-gap);
     }
-    /* NAPRAWA GRID BLOWOUT: 
-       Każde dziecko grida może się skurczyć poniżej swojej zawartości */
+    /* GRID BLOWOUT FIX:
+       Every grid child can shrink below the width of its content */
     .grid > *,
     [class*=grid-cols-] > *,
     [class*=grid-auto] > * {
       min-width: 0;
     }
     /* =========================================
-       2. INTELIGENTNY AUTO-GRID (Święty Graal RWD)
+       2. SMART AUTO-GRID (the RWD holy grail)
        ========================================= */
-    /* 
-       Użycie: <div class="grid-auto">...</div>
-       Dzieci same ułożą się w kolumny o minimalnej szerokości 280px.
-       Jeśli brakuje miejsca, automatycznie spadną do nowej linii.
+    /*
+       Usage: <div class="grid-auto">...</div>
+       Children arrange themselves into columns with a 280px minimum width.
+       If there isn't enough room, they automatically wrap to a new line.
     */
     .grid-auto {
       display: grid;
       gap: var(--grid-gap);
-      /* Wzorzec RAM: Repeat, Auto-fit, Minmax */
+      /* The RAM pattern: Repeat, Auto-fit, Minmax */
       grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 280px)), 1fr));
     }
-    /* Warianty Auto-Grida (nadpisywanie zmiennej lokalnej) */
+    /* Auto-grid variants (overriding the local variable) */
     .grid-auto-sm {
       --grid-min: 200px;
     }
@@ -762,7 +771,7 @@
       --grid-min: 350px;
     }
     /* =========================================
-       3. SZTYWNE KOLUMNY (Tylko gdy naprawdę potrzebne)
+       3. FIXED COLUMNS (only when truly needed)
        ========================================= */
     .grid-cols-1 {
       display: grid;
@@ -812,19 +821,21 @@
       display: grid;
       grid-template-columns: repeat(12, 1fr);
     }
-    /* Siatka responsywna domyślnie JEDNOKOLUMNOWA poniżej swojego progu.
-       Bez tej reguły .grid-md-cols-12 istniało wyłącznie w media query, więc na
-       telefonie element nie był gridem w ogóle. Dzieci układały się wtedy jako
-       bloki - wizualnie na pełną szerokość, czyli POPRAWNIE - ale gap przestawał
-       działać (wymaga grid/flex) i odstępy znikały tylko na mobile. Trudny do
-       wyłapania błąd, bo desktop wyglądał dobrze.
+    /* A responsive grid defaults to SINGLE-COLUMN below its own breakpoint.
+       Without this rule, .grid-md-cols-12 only existed inside a media
+       query, so on a phone the element wasn't a grid at all. Its children
+       then stacked as blocks - visually full-width, which is CORRECT - but
+       gap stopped working (it requires grid/flex) and the spacing
+       disappeared only on mobile. A hard bug to catch, because desktop
+       looked fine.
 
-       Dzięki temu wystarczy `class="grid-md-cols-12"`; dopisywanie
-       `grid-cols-1` przestaje być potrzebne. Reguły z media queries są dalej
-       w źródle przy tej samej specyficzności, więc od progu normalnie wygrywają.
+       Thanks to this, `class="grid-md-cols-12"` is enough on its own;
+       adding `grid-cols-1` is no longer needed. The media-query rules still
+       come later in the source at the same specificity, so they normally
+       win once the breakpoint is reached.
 
-       Dotyczy obu progów - także .grid-lg-cols-*, które ma tu swój odpowiednik
-       dla dzieci (.col-lg-span-*, .offset-lg-*). */
+       Applies to both breakpoints - including .grid-lg-cols-*, which has
+       its own counterpart here for children (.col-lg-span-*, .offset-lg-*). */
     [class*=grid-md-cols-],
     [class*=grid-lg-cols-] {
       display: grid;
@@ -880,9 +891,10 @@
         grid-template-columns: repeat(12, 1fr);
       }
     }
-    /* Wariant lg. Musi stać PO bloku md, żeby przy obu klasach naraz
-       (np. "grid-md-cols-2 grid-lg-cols-4") wygrywał od progu lg - obie mają
-       tę samą specyficzność, więc decyduje kolejność w źródle. */
+    /* The lg variant. Must come AFTER the md block, so that with both
+       classes at once (e.g. "grid-md-cols-2 grid-lg-cols-4") lg wins from
+       its breakpoint onward - both have the same specificity, so source
+       order decides. */
     @media (min-width: 992px) {
       .grid-lg-cols-1 {
         display: grid;
@@ -934,10 +946,10 @@
       }
     }
     /* =========================================
-       4. OVERRIDE DZIECI (Rozpiętość i Offsety)
+       4. CHILD OVERRIDES (span and offsets)
        ========================================= */
-    /* --- 1. ROZPIĘTOŚĆ (Span) --- */
-    /* FIX: Używamy grid-column-end zamiast grid-column! */
+    /* --- 1. SPAN --- */
+    /* FIX: We use grid-column-end instead of grid-column! */
     .col-span-1 {
       grid-column-end: span 1;
       min-width: 0;
@@ -1086,7 +1098,7 @@
         min-width: 0;
       }
     }
-    /* --- 2. OFFSETY (Przesuwanie elementów w siatce) --- */
+    /* --- 2. OFFSETS (moving elements within the grid) --- */
     .col-start-1,
     .offset-0 {
       grid-column-start: 1;
@@ -1235,7 +1247,7 @@
         grid-column-start: 12;
       }
     }
-    /* Reset offsetu */
+    /* Offset reset */
     .col-start-auto, .offset-0 {
       grid-column-start: auto;
     }
@@ -1250,27 +1262,27 @@
       }
     }
     /* =========================================
-       5. BENTO GRID (Asymetryczna siatka)
+       5. BENTO GRID (asymmetric grid)
        ========================================= */
     .bento-grid {
       display: grid;
-      /* Domyślna szerokość kafelka (Twoje płynne podejście) */
+      /* Default tile width (a fluid approach) */
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
-      /* FIX 1: minmax() gwarantuje 250px, ale pozwala kafelkowi urosnąć, jeśli tekstu jest za dużo */
+      /* FIX 1: minmax() guarantees 250px, but lets a tile grow if there's too much text */
       grid-auto-rows: minmax(250px, auto);
       gap: var(--grid-gap);
-      /* FIX 2: MAGIA BENTO! Zmusza przeglądarkę do upychania mniejszych klocków w puste luki */
+      /* FIX 2: BENTO MAGIC! Forces the browser to pack smaller tiles into empty gaps */
       grid-auto-flow: dense;
-      /* Dzieci Bento Grida */
+      /* Bento Grid children */
     }
     .bento-grid > * {
       border-radius: var(--border-radius);
       overflow: hidden;
-      /* Zapewnia, że zawartość wypełnia kafelek */
+      /* Ensures the content fills the tile */
       display: flex;
       flex-direction: column;
     }
-    /* Modyfikatory rozpiętości (Działają od tabletu w górę) */
+    /* Span modifiers (work from tablet upward) */
     @media (min-width: 768px) {
       .bento-col-2 {
         grid-column: span 2;
@@ -1284,7 +1296,7 @@
       .bento-row-3 {
         grid-row: span 3;
       }
-      /* FIX: Wymuszenie sztywnej liczby kolumn dla precyzyjnych układów Bento */
+      /* FIX: Forces a fixed column count for precise Bento layouts */
       .bento-grid-3 {
         grid-template-columns: repeat(3, 1fr);
       }
@@ -1297,15 +1309,15 @@
    * molique - Zmienne SCSS
    */
   /**
-   * molique - Style Bazowe i Reset
-   * Zawiera reset CSS, style dla html/body i podstawowe kontenery
+   * molique - Base Styles and Reset
+   * Contains the CSS reset, html/body styles, and the base containers
    */
   /**
    * molique - Layout
-   * Zawiera sizing, positioning, flexbox i display
+   * Contains sizing, positioning, flexbox, and display
    */
   /* =========================================
-     1. SIZING (Szerokość / Wysokość)
+     1. SIZING (width / height)
      ========================================= */
   .w-25 {
     width: 25%;
@@ -1334,7 +1346,7 @@
   .min-vh-100 {
     min-height: 100vh;
   }
-  /* DODANE: Responsywne szerokości */
+  /* ADDED: Responsive widths */
   @media (min-width: 768px) {
     .w-md-25 {
       width: 25%;
@@ -1412,7 +1424,7 @@
   .align-self-stretch {
     align-self: stretch;
   }
-  /* Odstępy (Gap) dla Flexboxa i Grida */
+  /* Gap for Flexbox and Grid */
   .gap-0 {
     gap: 0;
   }
@@ -1469,7 +1481,7 @@
     }
   }
   /* =========================================
-     3. POZYCJONOWANIE
+     3. POSITIONING
      ========================================= */
   .position-relative {
     position: relative !important;
@@ -1485,7 +1497,7 @@
     top: 0;
     z-index: var(--z-index-sticky);
   }
-  /* Krawędzie */
+  /* Edges */
   .top-0 {
     top: 0 !important;
   }
@@ -1501,7 +1513,7 @@
   .inset-0 {
     inset: 0 !important;
   }
-  /* Centrowanie absolutne */
+  /* Absolute centering */
   .top-50 {
     top: 50% !important;
   }
@@ -1533,7 +1545,7 @@
     z-index: 30;
   }
   /* =========================================
-     5. TEKST
+     5. TEXT
      ========================================= */
   .text-center {
     text-align: center;
@@ -1554,14 +1566,14 @@
     font-weight: var(--fw-light);
   }
   /* =========================================
-     6. FADE BOTTOM (Zanikanie treści przy dolnej krawędzi)
+     6. FADE BOTTOM (fading content at the bottom edge)
      =========================================
-     Opt-in dla dowolnego przewijanego kontenera (lub elementu, przez
-     który przewija się strona): gradient przykrywa dolną krawędź i
-     treść "zanika" zamiast być ucięta. Kolor gradientu MUSI odpowiadać
-     tłu elementu - steruj przez --fade-color (domyślnie --bg-surface).
-     Wysokość: --fade-height. Komponenty admina (.admin-sidebar,
-     .admin-main) mają własne integracje w module admin. */
+     Opt-in for any scrollable container (or element the page scrolls
+     through): a gradient covers the bottom edge and the content "fades"
+     instead of being cut off. The gradient color MUST match the element's
+     background - control it via --fade-color (default --bg-surface).
+     Height: --fade-height. The admin components (.admin-sidebar,
+     .admin-main) have their own integrations in the admin module. */
   .fade-bottom {
     --fade-height: 80px;
     --fade-color: var(--bg-surface);
@@ -1572,7 +1584,7 @@
     position: sticky;
     bottom: 0;
     height: var(--fade-height);
-    /* Gradient nakłada się na treść, nie wydłuża przewijania */
+    /* The gradient overlaps the content, it doesn't extend the scroll area */
     margin-top: calc(var(--fade-height) * -1);
     flex-shrink: 0;
     background: linear-gradient(to top, var(--fade-color) 15%, transparent);
@@ -1585,26 +1597,27 @@
    * molique - Zmienne SCSS
    */
   /**
-   * molique - Style Przycisków
-   * Zawiera wszystkie warianty, rozmiary i grupy przycisków
+   * molique - Button Styles
+   * Contains every button variant, size, and grouping
    */
   @layer components {
     /* =========================================
-       1. BAZOWY PRZYCISK (.btn)
+       1. BASE BUTTON (.btn)
        ========================================= */
-    /* Kolory muszą być zadeklarowane PRZED blokiem bazowym, bo buduje on z nich
-       listę selektorów (patrz niżej). */
-    /* IMPLIKACJA .btn - sam .btn-primary wystarczy, bez dopisywania .btn.
-       Listę budujemy z mapy kolorów, więc nowy kolor dostaje bazę automatycznie;
-       ręczna lista rozjechałaby się przy pierwszym dodanym wariancie.
+    /* Colors must be declared BEFORE the base block, since it builds a
+       selector list from them (see below). */
+    /* .btn IMPLICATION - .btn-primary alone is enough, no need to also add
+       .btn. The list is built from the color map, so a new color gets the
+       base automatically; a hand-written list would drift out of sync the
+       moment a new variant was added.
 
-       CELOWO NIE OBEJMUJE:
-       - modyfikatorów wyglądu (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
-         .btn-glow, .btn-stacked, .btn-outline-soft) i rozmiarów (.btn-sm itd.) -
-         to dodatki do przycisku, nie przyciski,
-       - .btn-action, który ŚWIADOMIE łamie regułę 44px na gęste tabele,
+       DELIBERATELY EXCLUDES:
+       - appearance modifiers (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
+         .btn-glow, .btn-stacked, .btn-outline-soft) and sizes (.btn-sm etc.) -
+         these are add-ons to a button, not buttons themselves,
+       - .btn-action, which DELIBERATELY breaks the 44px rule for dense tables,
        - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* -
-         mają prefiks btn-, ale przyciskami nie są. */
+         they carry the btn- prefix but aren't buttons. */
     .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark {
       --btn-border-width: 1px;
       display: inline-flex;
@@ -1621,369 +1634,369 @@
       border-radius: var(--border-radius);
       border: var(--btn-border-width) solid transparent;
       transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
-      /* Focus Ring dla dostępności */
+      /* Focus ring for accessibility */
     }
     .btn:focus-visible, .btn-primary:focus-visible, .btn-outline-primary:focus-visible, .btn-secondary:focus-visible, .btn-outline-secondary:focus-visible, .btn-success:focus-visible, .btn-outline-success:focus-visible, .btn-danger:focus-visible, .btn-outline-danger:focus-visible, .btn-warning:focus-visible, .btn-outline-warning:focus-visible, .btn-info:focus-visible, .btn-outline-info:focus-visible, .btn-light:focus-visible, .btn-outline-light:focus-visible, .btn-dark:focus-visible, .btn-outline-dark:focus-visible {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: 2px;
     }
     /* =========================================
-       2. WARIANTY KOLORYSTYCZNE (Pętla SCSS)
+       2. COLOR VARIANTS (SCSS loop)
        ========================================= */
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-primary {
       background-color: var(--primary);
       border-color: var(--primary);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--btn-text-light, #fff);
     }
     .btn-primary:hover, .btn-primary:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--primary-hover, color-mix(in srgb, var(--primary) 85%, black));
       border-color: var(--primary-hover, color-mix(in srgb, var(--primary) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-primary {
       background-color: transparent;
       border-color: var(--primary);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--primary);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-primary:hover, .btn-outline-primary:focus-visible {
       background-color: var(--primary);
       color: var(--btn-text-light, #fff);
     }
     .btn-outline-primary {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-primary.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--primary-rgb), 0.3);
     }
     .btn-outline-primary.btn-outline-soft:hover, .btn-outline-primary.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--primary-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--primary-rgb), 0.5);
       color: var(--primary);
     }
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-secondary {
       background-color: var(--secondary);
       border-color: var(--secondary);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--btn-text-light, #fff);
     }
     .btn-secondary:hover, .btn-secondary:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--secondary-hover, color-mix(in srgb, var(--secondary) 85%, black));
       border-color: var(--secondary-hover, color-mix(in srgb, var(--secondary) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-secondary {
       background-color: transparent;
       border-color: var(--secondary);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--secondary);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-secondary:hover, .btn-outline-secondary:focus-visible {
       background-color: var(--secondary);
       color: var(--btn-text-light, #fff);
     }
     .btn-outline-secondary {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-secondary.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--secondary-rgb), 0.3);
     }
     .btn-outline-secondary.btn-outline-soft:hover, .btn-outline-secondary.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--secondary-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--secondary-rgb), 0.5);
       color: var(--secondary);
     }
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-success {
       background-color: var(--success);
       border-color: var(--success);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--semantic-fg);
     }
     .btn-success:hover, .btn-success:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--success-hover, color-mix(in srgb, var(--success) 85%, black));
       border-color: var(--success-hover, color-mix(in srgb, var(--success) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-success {
       background-color: transparent;
       border-color: var(--success);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--success-text);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-success:hover, .btn-outline-success:focus-visible {
       background-color: var(--success);
       color: var(--semantic-fg);
     }
     .btn-outline-success {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-success.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--success-rgb), 0.3);
     }
     .btn-outline-success.btn-outline-soft:hover, .btn-outline-success.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--success-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--success-rgb), 0.5);
       color: var(--success);
     }
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-danger {
       background-color: var(--danger);
       border-color: var(--danger);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--semantic-fg);
     }
     .btn-danger:hover, .btn-danger:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--danger-hover, color-mix(in srgb, var(--danger) 85%, black));
       border-color: var(--danger-hover, color-mix(in srgb, var(--danger) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-danger {
       background-color: transparent;
       border-color: var(--danger);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--danger-text);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-danger:hover, .btn-outline-danger:focus-visible {
       background-color: var(--danger);
       color: var(--semantic-fg);
     }
     .btn-outline-danger {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-danger.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--danger-rgb), 0.3);
     }
     .btn-outline-danger.btn-outline-soft:hover, .btn-outline-danger.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--danger-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--danger-rgb), 0.5);
       color: var(--danger);
     }
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-warning {
       background-color: var(--warning);
       border-color: var(--warning);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--semantic-fg);
     }
     .btn-warning:hover, .btn-warning:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--warning-hover, color-mix(in srgb, var(--warning) 85%, black));
       border-color: var(--warning-hover, color-mix(in srgb, var(--warning) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-warning {
       background-color: transparent;
       border-color: var(--warning);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--warning-text);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-warning:hover, .btn-outline-warning:focus-visible {
       background-color: var(--warning);
       color: var(--semantic-fg);
     }
     .btn-outline-warning {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-warning.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--warning-rgb), 0.3);
     }
     .btn-outline-warning.btn-outline-soft:hover, .btn-outline-warning.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--warning-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--warning-rgb), 0.5);
       color: var(--warning);
     }
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-info {
       background-color: var(--info);
       border-color: var(--info);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--semantic-fg);
     }
     .btn-info:hover, .btn-info:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--info-hover, color-mix(in srgb, var(--info) 85%, black));
       border-color: var(--info-hover, color-mix(in srgb, var(--info) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-info {
       background-color: transparent;
       border-color: var(--info);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--info-text);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-info:hover, .btn-outline-info:focus-visible {
       background-color: var(--info);
       color: var(--semantic-fg);
     }
     .btn-outline-info {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-info.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--info-rgb), 0.3);
     }
     .btn-outline-info.btn-outline-soft:hover, .btn-outline-info.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--info-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--info-rgb), 0.5);
       color: var(--info);
     }
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-light {
       background-color: var(--light);
       border-color: var(--light);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--text-main);
     }
     .btn-light:hover, .btn-light:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--light-hover, color-mix(in srgb, var(--light) 85%, black));
       border-color: var(--light-hover, color-mix(in srgb, var(--light) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-light {
       background-color: transparent;
       border-color: var(--light);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--light);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-light:hover, .btn-outline-light:focus-visible {
       background-color: var(--light);
       color: var(--text-main);
     }
     .btn-outline-light {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-light.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--light-rgb), 0.3);
     }
     .btn-outline-light.btn-outline-soft:hover, .btn-outline-light.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--light-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--light-rgb), 0.5);
       color: var(--light);
     }
-    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
-       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
-       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
-       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
-       odwrotnie niz zwykle --btn-text-light. */
-    /* --- WARIANTY PEŁNE (Solid) --- */
+    /* success/danger/warning/info have THEIR OWN mode-aware text token
+       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+       "Slate Violet" palette they're dark/saturated in light mode (need
+       light text) but light/neon in dark mode (need dark text), i.e. the
+       opposite of the usual --btn-text-light. */
+    /* --- SOLID VARIANTS --- */
     .btn-dark {
       background-color: var(--dark);
       border-color: var(--dark);
-      /* Automatyczny kontrast tekstu */
+      /* Automatic text contrast */
       color: var(--btn-text-light, #fff);
     }
     .btn-dark:hover, .btn-dark:focus-visible {
-      /* Używamy zmiennej -hover z _root.scss, jeśli istnieje, w przeciwnym razie przyciemniamy/rozjaśniamy */
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
       background-color: var(--dark-hover, color-mix(in srgb, var(--dark) 85%, black));
       border-color: var(--dark-hover, color-mix(in srgb, var(--dark) 85%, black));
     }
-    /* --- WARIANTY KONTUROWE (Outline) --- */
+    /* --- OUTLINE VARIANTS --- */
     .btn-outline-dark {
       background-color: transparent;
       border-color: var(--dark);
-      /* Tekst na przezroczystym tle (czyli na tle strony) - te same zasady
-         kontrastu co .text-* (patrz --*-text w _root.scss). */
+      /* Text on a transparent background (i.e. on the page background) -
+         the same contrast rules as .text-* (see --*-text in _root.scss). */
       color: var(--dark);
-      /* Domyślny, pełny hover */
+      /* Default, solid hover */
     }
     .btn-outline-dark:hover, .btn-outline-dark:focus-visible {
       background-color: var(--dark);
       color: var(--btn-text-light, #fff);
     }
     .btn-outline-dark {
-      /* Wariant Soft (Półprzezroczysty hover i złagodzona ramka) */
+      /* Soft variant (semi-transparent hover and a softened border) */
     }
     .btn-outline-dark.btn-outline-soft {
-      /* Domyślnie ramka jest bardzo delikatna (30% krycia) */
+      /* By default the border is very subtle (30% opacity) */
       border-color: rgba(var(--dark-rgb), 0.3);
     }
     .btn-outline-dark.btn-outline-soft:hover, .btn-outline-dark.btn-outline-soft:focus-visible {
-      /* Tło na 10% krycia */
+      /* Background at 10% opacity */
       background-color: rgba(var(--dark-rgb), 0.1);
-      /* Ramka staje się nieco wyraźniejsza (50% krycia), ale wciąż miękka */
+      /* The border becomes slightly more defined (50% opacity), but still soft */
       border-color: rgba(var(--dark-rgb), 0.5);
       color: var(--dark);
     }
     /* =========================================
-       3. ROZMIARY PRZYCISKÓW
+       3. BUTTON SIZES
        ========================================= */
     .btn-xs {
       padding: calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.75);
@@ -2013,12 +2026,12 @@
       font-weight: var(--fw-bold);
     }
     /* =========================================
-       4. BUTTON GROUPS (Zgrupowane przyciski)
+       4. BUTTON GROUPS
        ========================================= */
-    /* Dzieci celuja w $btn-base-selectors (ta sama lista co baza wyzej), nie w
-       literalna klase .btn - odkad kolor implikuje .btn (patrz komentarz przy
-       IMPLIKACJA .btn), sam .btn-primary w grupie nie dostawal tu wczesniej
-       zadnego z tych zaokraglen/nachodzenia obwodek. */
+    /* Children target $btn-base-selectors (the same list as the base
+       above), not the literal .btn class - since a color implies .btn (see
+       the .btn IMPLICATION comment), a bare .btn-primary inside a group
+       used to get none of this radius/border-overlap handling. */
     .btn-group {
       display: inline-flex;
       align-items: stretch;
@@ -2040,7 +2053,7 @@
       z-index: 1;
     }
     /* =========================================
-       5. GHOST BUTTONS (Akcje w tabelach i paskach)
+       5. GHOST BUTTONS (actions in tables and bars)
        ========================================= */
     .btn-action {
       appearance: none;
@@ -2083,7 +2096,7 @@
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: 2px;
     }
-    /* Grupowanie przycisków akcji */
+    /* Grouping action buttons */
     .btn-action-group {
       display: flex;
       align-items: center;
@@ -2118,13 +2131,14 @@
       border-bottom-right-radius: var(--border-radius);
     }
     /* =========================================
-       6. NOWOCZESNE EFEKTY (Modyfikatory)
+       6. MODERN EFFECTS (modifiers)
        ========================================= */
-    /* 1. GLOW (Neonowa poświata)
-       Cień hover NIE transitionuje bezposrednio (reflow) - siedzi na ::after,
-       ktory animuje tylko opacity. Ten sam wzorzec co .hover-gpu-shadow w
-       utilities/_animations.scss. Bazowy (spoczynkowy) cień zostaje na
-       przycisku, bo jest staly - nigdy sie nie zmienia, wiec nie kosztuje. */
+    /* 1. GLOW (neon glow)
+       The hover shadow does NOT transition directly (reflow) - it lives on
+       ::after, which only animates opacity. The same pattern as
+       .hover-gpu-shadow in utilities/_animations.scss. The base (resting)
+       shadow stays on the button itself, since it's static - it never
+       changes, so it costs nothing. */
     .btn-glow {
       position: relative;
       isolation: isolate;
@@ -2148,7 +2162,7 @@
     .btn-glow:hover::after {
       opacity: 1;
     }
-    /* 2. GLASS (Szkło - idealne na ciemne tła i wideo) */
+    /* 2. GLASS (ideal for dark backgrounds and video) */
     .btn-glass {
       background: rgba(255, 255, 255, 0.1) !important;
       backdrop-filter: blur(10px);
@@ -2162,14 +2176,15 @@
       background: rgba(255, 255, 255, 0.2) !important;
       border-color: rgba(255, 255, 255, 0.4) !important;
     }
-    /* 3. 3D PUSH (Fizyczny przycisk)
-       Zamiast animowac Y-offset plaskiego box-shadow (reflow), "podstawa"
-       siedzi na statycznym ::before (solid tlo, offset o 6px pod przyciskiem).
-       Przycisk sam animuje wylacznie transform: translateY() - w miare
-       wciskania "zblizy sie" do statycznej podstawy, dajac identyczny efekt
-       znikajacego cienia bez animowania box-shadow ani razu. */
+    /* 3. 3D PUSH (a physical button)
+       Instead of animating a flat box-shadow's Y-offset (reflow), the
+       "base" lives on a static ::before (solid background, offset 6px
+       below the button). The button itself animates only
+       transform: translateY() - as it's pressed, it "gets closer" to the
+       static base, producing the identical disappearing-shadow effect
+       without ever animating box-shadow. */
     .btn-3d {
-      /* Wymaga zdefiniowania koloru cienia (np. ciemniejszy primary) */
+      /* Requires the shadow color to be defined (e.g. a darker primary) */
       --btn-3d-shadow: var(--primary-hover);
       position: relative;
       isolation: isolate;
@@ -2193,7 +2208,7 @@
     .btn-3d:active {
       transform: translateY(6px);
     }
-    /* 4. SHINE (Przesuwający się błysk) */
+    /* 4. SHINE (a sweeping highlight) */
     .btn-shine {
       position: relative;
       overflow: hidden;
@@ -2217,15 +2232,15 @@
         left: 200%;
       }
     }
-    /* 5. GRADIENT ANIMATED (Płynący gradient)
-       Zamiast animowac background-position (reflow/paint na kazdej klatce),
-       gradient siedzi na ::before dwukrotnie szerszym od przycisku,
-       przesuwanym przez transform: translateX() - identyczny efekt plynacego
-       gradientu, zero animowanych wlasciwosci poza transform/opacity. Cien
-       na hover tak samo jak w .btn-glow: osobny ::after, animowana tylko
-       opacity. Tresc przycisku (z-index:auto) zostaje ponad obiema
-       warstwami (z-index ujemny), bo isolation:isolate tworzy dla nich
-       wlasny kontekst uwarstwienia. */
+    /* 5. GRADIENT ANIMATED (a flowing gradient)
+       Instead of animating background-position (reflow/paint on every
+       frame), the gradient lives on a ::before twice as wide as the
+       button, shifted via transform: translateX() - the identical flowing-
+       gradient effect, zero animated properties besides transform/opacity.
+       The hover shadow works the same way as in .btn-glow: a separate
+       ::after, only opacity animated. The button's content (z-index: auto)
+       stays above both layers (negative z-index), since isolation: isolate
+       creates its own stacking context for them. */
     .btn-gradient {
       position: relative;
       isolation: isolate;
@@ -2275,9 +2290,9 @@
       }
     }
     /* =========================================
-       6. WARIANTY UKŁADU (Layout Modifiers)
+       6. LAYOUT MODIFIERS
        ========================================= */
-    /* Przycisk pionowy (Ikona nad tekstem) - Wzorzec z aplikacji mobilnych */
+    /* Vertical button (icon above text) - a pattern from mobile apps */
     .btn-stacked {
       flex-direction: column;
       justify-content: center;
@@ -2307,12 +2322,12 @@
       width: 100%;
     }
     /* =========================================
-       DOMYŚLNY HOVER PRZYCISKÓW (opt-in)
+       DEFAULT BUTTON HOVER (opt-in)
        =========================================
-       Dodaj JEDNĄ z klas do <body> (lub dowolnego kontenera), aby WSZYSTKIE
-       .btn w środku dostały wspólny efekt hover - twórca wybiera go raz,
-       zamiast oznaczać każdy przycisk osobno. Przyciski z własną klasą
-       hover-* są pomijane (mają pierwszeństwo). GPU: transform + box-shadow. */
+       Add ONE of these classes to <body> (or any container) to give EVERY
+       .btn inside it a shared hover effect - the author picks it once
+       instead of tagging each button individually. Buttons with their own
+       hover-* class are skipped (they take precedence). GPU: transform + box-shadow. */
     .btn-hover-spring .btn:not([class*=hover-]),
     .btn-hover-lift .btn:not([class*=hover-]),
     .btn-hover-glow .btn:not([class*=hover-]) {
@@ -2337,8 +2352,8 @@
     }
   }
   /**
-   * molique - Komponenty formularzy (Hub)
-   * Ten plik ładuje wszystkie mniejsze moduły formularzy z folderu components/
+   * molique - Form components (Hub)
+   * This file loads every smaller form module from the components/ folder
    */
   @layer components {
     /* =========================================
@@ -3344,15 +3359,15 @@
     }
   }
   /**
-   * molique - Komponenty UI (Hub)
-   * Ten plik ładuje wszystkie mniejsze moduły z folderu components/
+   * molique - UI Components (Hub)
+   * This file loads every smaller module from the components/ folder
    */
   /**
    * molique - Zmienne SCSS
    */
   /**
-   * molique - Style Bazowe i Reset
-   * Zawiera reset CSS, style dla html/body i podstawowe kontenery
+   * molique - Base Styles and Reset
+   * Contains the CSS reset, html/body styles, and the base containers
    */
   /**
    * molique - Ikony (Phosphor, sprite SVG selektywny)
@@ -5586,7 +5601,7 @@
       flex-wrap: wrap;
       gap: calc(var(--spacing-unit) * 1);
     }
-  } /* TEGO BRAKOWAŁO */
+  } /* THIS WAS MISSING */
   /* =========================================
      3. COMPACT DATA ROW (List Item / Wariant kompaktowy)
      ========================================= */
@@ -7289,7 +7304,7 @@
       }
     }
     .timeline-labeled .timeline-item {
-      /* TEGO BRAKOWAŁO */
+      /* THIS WAS MISSING */
     }
     .timeline-labeled {
       /* Elementy wewnętrzne Grida */
@@ -8451,14 +8466,14 @@
 @layer utilities {
   /**
    * molique - Utilities (Hub)
-   * Ten plik ładuje wszystkie mniejsze moduły z folderu utilities/
+   * This file loads every smaller module from the utilities/ folder
    */
   /**
    * molique - Zmienne SCSS
    */
   /**
-   * molique - Style Bazowe i Reset
-   * Zawiera reset CSS, style dla html/body i podstawowe kontenery
+   * molique - Base Styles and Reset
+   * Contains the CSS reset, html/body styles, and the base containers
    */
   /**
    * molique - Utilities (Narzędzia)

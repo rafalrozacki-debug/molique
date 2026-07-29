@@ -1,23 +1,23 @@
 @charset "UTF-8";
 /**
- * molique - Plik kompilacyjny dla Modułu E-commerce
- * Ten plik wygeneruje gotowy molique-style-shop.css
+ * molique - Compilation file for the E-commerce Module
+ * This file produces the finished molique-style-shop.css
  */
 @layer modules;
 @layer modules {
   /**
-   * molique - Moduł E-commerce
-   * Zawiera specyficzne komponenty dla sklepów internetowych.
+   * molique - E-commerce Module
+   * Contains components specific to online shops.
    */
   /**
    * molique - Zmienne SCSS
    */
   /**
-   * molique - Moduł E-commerce
-   * Zawiera specyficzne komponenty dla sklepów internetowych.
+   * molique - E-commerce Module
+   * Contains components specific to online shops.
    */
   /* =========================================
-     1. KARTA PRODUKTU (Baza)
+     1. PRODUCT CARD (Base)
      ========================================= */
   .product-card {
     display: flex;
@@ -37,10 +37,10 @@
     position: relative;
     display: block;
     overflow: hidden;
-    /* Tło pod zdjęciem produktu podąża za motywem (w light mode to nadal
-       czysta biel) - literalne #fff dawało jaskrawobiały blok na ciemnej
-       karcie w dark mode, prześwitujący też pod półprzezroczystymi
-       placeholderami typu --card-bg-subtle. */
+    /* The background behind the product image follows the theme (in light
+       mode it's still pure white) - a literal #fff gave a glaring white
+       block on a dark card in dark mode, also showing through under
+       semi-transparent placeholders like --card-bg-subtle. */
     background-color: var(--bg-surface);
   }
   .product-image-wrapper img {
@@ -96,7 +96,7 @@
     text-decoration: line-through;
   }
   /* =========================================
-     2. WIDOK LISTY (Grid / List Toggle)
+     2. LIST VIEW (Grid / List Toggle)
      ========================================= */
   .product-list-view {
     display: flex;
@@ -111,11 +111,11 @@
     width: 250px;
     flex-shrink: 0;
     border-right: 1px solid var(--border-color);
-    display: flex; /* NAPRAWA: Pozwala zdjęciu wypełnić kontener */
+    display: flex; /* FIX: Lets the image fill the container */
   }
   .product-list-view .product-image-wrapper img {
     width: 100%;
-    height: 100% !important; /* NAPRAWA: Nadpisuje inline style z HTML */
+    height: 100% !important; /* FIX: Overrides an inline style from the HTML */
     object-fit: cover;
   }
   .product-list-view .product-content {
@@ -136,23 +136,23 @@
     .product-list-view .product-image-wrapper img {
       height: 250px !important;
     }
-    .product-list-view .product-image-wrapper { /* Na mobile wracamy do stałej wysokości */ }
+    .product-list-view .product-image-wrapper { /* On mobile, revert to a fixed height */ }
   }
   /* =========================================
-     3. STAR RATINGS (Oceny Gwiazdkowe - Czysty CSS)
+     3. STAR RATINGS (pure CSS)
      ========================================= */
   .star-rating {
-    /* Lokalne zmienne API */
-    --rating: 0; /* Wartość od 0 do 5 */
+    /* Local API variables */
+    --rating: 0; /* Value from 0 to 5 */
     --star-size: 16px;
     --star-color: var(--warning);
     --star-bg: var(--border-color);
     display: inline-block;
     width: calc(var(--star-size) * 5);
     height: var(--star-size);
-    /* Tło to gradient, który wypełnia się w zależności od zmiennej --rating */
+    /* The background is a gradient that fills based on the --rating variable */
     background: linear-gradient(to right, var(--star-color) calc(var(--rating) / 5 * 100%), var(--star-bg) calc(var(--rating) / 5 * 100%));
-    /* Maska SVG wycina z tła kształt 5 gwiazdek! */
+    /* An SVG mask cuts a 5-star shape out of the background! */
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/%3E%3C/svg%3E");
     -webkit-mask-size: var(--star-size) var(--star-size);
@@ -161,7 +161,7 @@
     mask-repeat: repeat-x;
   }
   /* =========================================
-     4. COLOR SWATCHES (Wybór koloru)
+     4. COLOR SWATCHES
      ========================================= */
   .product-swatches {
     display: flex;
@@ -173,8 +173,8 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 2px solid var(--bg-surface); /* Wewnętrzna ramka */
-    box-shadow: 0 0 0 1px var(--border-color); /* Zewnętrzna ramka */
+    border: 2px solid var(--bg-surface); /* Inner border */
+    box-shadow: 0 0 0 1px var(--border-color); /* Outer border */
     cursor: pointer;
     transition: box-shadow var(--transition-speed), transform var(--transition-speed);
   }
@@ -185,7 +185,7 @@
     box-shadow: 0 0 0 2px var(--primary);
   }
   /* =========================================
-     5. KOSZYK (Cart Item & Qty Input)
+     5. CART (Cart Item & Qty Input)
      ========================================= */
   .cart-item {
     display: flex;
@@ -207,17 +207,17 @@
     align-items: center;
     gap: calc(var(--spacing-unit) * 3);
   }
-  /* Kontroler Ilości (+ / -) */
+  /* Quantity control (+ / -) */
   .qty-input {
     display: inline-flex;
     align-items: stretch;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     overflow: hidden;
-    height: var(--target-size-min); /* Wymuszone 44px dla B2B */
+    height: var(--target-size-min); /* Enforced 44px for B2B */
     background-color: var(--bg-body);
     transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-    /* Focus ring na całym kontenerze, gdy input jest aktywny */
+    /* Focus ring on the whole container when the input is active */
   }
   .qty-input:focus-within {
     border-color: var(--primary);
@@ -238,9 +238,9 @@
   .qty-btn:focus {
     outline: none;
   }
-  /* Ukrycie natywnych strzałek (spinnera) niezależnie od klasy inputa -
-     kontrolka ma własne przyciski + / -, więc systemowy stepper by się
-     dublował (dotąd chowała je tylko klasa .qty-val). */
+  /* Hides the native spinner arrows regardless of the input's class - the
+     control has its own + / - buttons, so the system stepper would
+     duplicate them (previously only the .qty-val class hid them). */
   .qty-input input[type=number] {
     -moz-appearance: textfield;
     appearance: textfield;
@@ -260,15 +260,15 @@
     background-color: transparent;
     padding: 0;
     margin: 0;
-    min-height: 0 !important; /* Nadpisuje globalne 44px z _base.scss */
-    /* Usuwamy domyślny focus, bo obsługuje go rodzic (.qty-input) */
+    min-height: 0 !important; /* Overrides the global 44px from _base.scss */
+    /* Removes the default focus, since the parent (.qty-input) handles it */
   }
   .qty-val:focus {
     outline: none;
     box-shadow: none;
   }
   .qty-val {
-    /* Ukrywamy strzałki systemowe */
+    /* Hides the system spinner arrows */
     -moz-appearance: textfield;
   }
   .qty-val::-webkit-outer-spin-button, .qty-val::-webkit-inner-spin-button {
@@ -276,14 +276,14 @@
     margin: 0;
   }
   /* =========================================
-     6. SELECTION TILES (Kafelki wyboru)
+     6. SELECTION TILES
      ========================================= */
   .selection-tile {
     display: block;
     position: relative;
     cursor: pointer;
     margin: 0;
-    /* Ukrywamy natywny input, ale zostawiamy go w DOM dla dostępności */
+    /* Hides the native input, but keeps it in the DOM for accessibility */
   }
   .selection-tile input[type=radio],
   .selection-tile input[type=checkbox] {
@@ -292,7 +292,7 @@
     width: 1px;
     height: 1px;
     z-index: -1;
-    /* MAGIA: Kiedy input jest zaznaczony, stylujemy sąsiadujący .tile-content */
+    /* THE TRICK: when the input is checked, style the adjacent .tile-content */
   }
   .selection-tile input[type=radio]:checked + .tile-content,
   .selection-tile input[type=checkbox]:checked + .tile-content {
@@ -302,7 +302,7 @@
   }
   .selection-tile input[type=radio],
   .selection-tile input[type=checkbox] {
-    /* Focus dla nawigacji klawiaturą (A11y) */
+    /* Focus for keyboard navigation (A11y) */
   }
   .selection-tile input[type=radio]:focus-visible + .tile-content,
   .selection-tile input[type=checkbox]:focus-visible + .tile-content {
@@ -313,43 +313,44 @@
     transition: all var(--transition-speed);
     height: 100%;
   }
-  /* Wariant z animowaną ramką (współpracuje z .hover-border-trace) */
+  /* Variant with an animated border (works with .hover-border-trace) */
   .selection-tile-animated input[type=radio]:checked + .tile-content,
   .selection-tile-animated input[type=checkbox]:checked + .tile-content {
-    /* Usuwamy natychmiastową zmianę ramki i cienia, zostawiamy to animacji CSS Houdini */
+    /* Removes the instant border/shadow change, leaving it to the CSS Houdini animation */
     border-color: var(--border-color) !important;
     box-shadow: none;
   }
   /* =========================================
-     GALERIA PRODUKTU (Zdjecie glowne + miniatury)
+     PRODUCT GALLERY (main image + thumbnails)
      =========================================
-     Struktura odtworzona z molique-shop.js, gdzie logika JS istniala od dawna
-     (klik w miniature podmienia glowne zdjecie), ale komponent nigdy nie
-     dostal CSS ani markupu wzorcowego - byl martwym kodem.
+     Structure rebuilt from molique-shop.js, where the JS logic had existed
+     for a long time (clicking a thumbnail swaps the main image), but the
+     component never got CSS or reference markup - it was dead code.
 
-     .gallery-thumb to <button>, nie <a>/<div>: dziala z klawiatury (Tab, Enter)
-     bez dopisywania czegokolwiek, tak jak reszta interaktywnych elementow
-     frameworka. Stan aktywny/przygaszony (.is-active / .opacity-50) nadaje
-     JS - .opacity-50 to gotowa klasa narzedziowa, nie nowa. */
+     .gallery-thumb is a <button>, not an <a>/<div>: it works from the
+     keyboard (Tab, Enter) with nothing extra needed, just like the rest of
+     the framework's interactive elements. The active/dimmed state
+     (.is-active / .opacity-50) is set by JS - .opacity-50 is an existing
+     utility class, not a new one. */
   .product-gallery {
     display: flex;
     flex-direction: column;
     gap: calc(var(--spacing-unit) * 1.5);
   }
-  /* Warianty umiejscowienia miniatur. Domyslnie (bez modyfikatora) sa rzedem
-     POD zdjeciem - dziala wszedzie, w tym na mobile.
+  /* Thumbnail placement variants. By default (no modifier) they're a row
+     BELOW the image - works everywhere, including mobile.
 
-     .product-gallery-left / -right ustawiaja je kolumna OBOK zdjecia, ale
-     TYLKO od `md` w gore - kolumna miniatur obok duzego zdjecia nie miesci
-     sie sensownie na waskim ekranie, wiec ponizej progu obie odmiany
-     wracaja do domyslnego ukladu (rzad pod spodem), zgodnie z reszta
-     frameworka (mobile = jedna kolumna).
+     .product-gallery-left / -right put them in a column NEXT TO the image,
+     but ONLY from `md` upward - a thumbnail column beside a large image
+     doesn't fit sensibly on a narrow screen, so below the breakpoint both
+     variants fall back to the default layout (row below), matching the
+     rest of the framework (mobile = single column).
 
-     Kolejnosc w DOM zostaje ZAWSZE taka sama - najpierw .product-gallery-main,
-     potem .product-gallery-thumbs. .product-gallery-left przestawia tylko
-     kolejnosc WIZUALNA przez `order`, zeby markup nie musial sie zmieniac
-     miedzy wariantami (ten sam powod co --tab-count czy inne modyfikatory
-     ustawiane bez przepisywania HTML). */
+     The DOM order is ALWAYS the same - .product-gallery-main first, then
+     .product-gallery-thumbs. .product-gallery-left only reorders them
+     VISUALLY via `order`, so the markup doesn't need to change between
+     variants (the same reason as --tab-count or other modifiers set
+     without rewriting the HTML). */
   @media (min-width: 768px) {
     .product-gallery-left,
     .product-gallery-right {
@@ -359,18 +360,18 @@
     .product-gallery-left .product-gallery-thumbs,
     .product-gallery-right .product-gallery-thumbs {
       flex-direction: column;
-      /* Bez tego dziedziczy flex-wrap: wrap z reguly bazowej. W ukladzie
-         kolumnowym przegladarka potrafi otworzyc "druga kolumne" miniatur
-         (cross-axis wrap), ktora renderuje sie poza widocznym pasem -
-         ostatnia miniatura wyglada wtedy jakby znikla, mimo poprawnego
-         adresu obrazka. */
+      /* Without this it inherits flex-wrap: wrap from the base rule. In a
+         column layout the browser can open a "second column" of
+         thumbnails (cross-axis wrap), which renders outside the visible
+         strip - the last thumbnail then looks like it vanished, even
+         though its image address is correct. */
       flex-wrap: nowrap;
     }
     .product-gallery-left .product-gallery-main,
     .product-gallery-right .product-gallery-main {
       flex: 1;
-      /* Bez tego flex-item nie kurczy sie ponizej szerokosci swojej
-         tresci (domyslne min-width: auto) i potrafi rozepchac uklad. */
+      /* Without this a flex item won't shrink below its content's width
+         (the default min-width: auto) and can blow out the layout. */
       min-width: 0;
     }
   }
@@ -398,7 +399,7 @@
     flex-wrap: wrap;
   }
   .gallery-thumb {
-    /* Reset stylow przegladarki dla <button> */
+    /* Reset the browser's default <button> styles */
     padding: 0;
     background: none;
     cursor: pointer;

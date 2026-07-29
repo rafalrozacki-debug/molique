@@ -1,6 +1,6 @@
 /**
- * molique - Style Bazowe i Reset
- * Zawiera reset CSS, style dla html/body i podstawowe kontenery
+ * molique - Base Styles and Reset
+ * Contains the CSS reset, html/body styles, and the base containers
  */
 
 @use 'variables' as *;
@@ -8,15 +8,16 @@
 
 @layer base {
   /* =========================================
-     RESET, BAZA & A11Y
+     RESET, BASE & A11Y
      ========================================= */
   html {
     scroll-behavior: smooth;
     scroll-padding-top: var(--scroll-padding);
-    /* Globalna tarcza anty-rozsadzeniowa. UWAGA: musi być "clip", nie "hidden" -
-       "hidden" wymusza overflow-y:auto (sprzężenie osi wg specyfikacji CSS Overflow),
-       przez co html/body stają się nieoczekiwanym "scroll container" i wyłączają
-       position:sticky wszystkim elementom w dokumencie (np. .admin-sidebar). */
+    /* Global anti-blowout shield. NOTE: must be "clip", not "hidden" -
+       "hidden" forces overflow-y:auto (axis coupling per the CSS Overflow
+       spec), which turns html/body into an unexpected "scroll container"
+       and disables position:sticky for every element in the document
+       (e.g. .admin-sidebar). */
     overflow-x: clip;
     width: 100%;
   }
@@ -39,7 +40,7 @@
     position: relative;
   }
 
-  /* Globalny Focus Ring (Dostępność) */
+  /* Global Focus Ring (accessibility) */
   :focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: 2px;
@@ -60,7 +61,7 @@
     }
   }
 
-  /* Wymuszenie dziedziczenia fontów dla elementów formularzy */
+  /* Forces font inheritance for form elements */
   input, button, select, textarea, optgroup, option {
     font-family: inherit;
     font-size: inherit;
@@ -72,7 +73,7 @@
      B2B TARGET SIZE ENFORCEMENT (WCAG 2.2)
      ========================================= */
 
-  /* 1. Domyślny, kompaktowy rozmiar dla Desktopu (myszka) */
+  /* 1. Default, compact size for desktop (mouse) */
   button, 
   input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), 
   select, 
@@ -82,7 +83,7 @@
     padding-bottom: calc(var(--spacing-unit) * 0.5);
   }
 
-  /* 2. Wymuszenie 44px TYLKO na urządzeniach dotykowych (Mobile/Tablet) */
+  /* 2. Enforces 44px ONLY on touch devices (mobile/tablet) */
   @media (pointer: coarse) {
     button, 
     input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), 
@@ -95,24 +96,27 @@
   }
 
   /* =========================================
-     SEKCJE
+     SECTIONS
      ========================================= */
-  /* Goly <section> ma sensowny rytm pionowy bez dokladania klas. Nie ma
-     klasy .section - odstep jest wlasnoscia SEMANTYCZNEGO znacznika.
+  /* A bare <section> gets a sensible vertical rhythm with no extra
+     classes needed. There is no .section class - the spacing is a
+     property of the SEMANTIC tag itself.
 
-     Wartosc odtwarza dotychczasowy rytm: sekcje mialy "pb-5 mb-5", czyli
-     48px paddingu i 48px marginesu = 96px przerwy. Teraz kazda ma 48px gory
-     I dolu, wiec miedzy dwiema sasiednimi nadal wychodzi 96px.
+     The value reproduces the previous rhythm: sections used to have
+     "pb-5 mb-5", i.e. 48px of padding and 48px of margin = 96px of gap.
+     Now each one has 48px top AND bottom, so two adjacent sections still
+     end up with 96px between them.
 
-     Padding, nie margines: tlo sekcji ma obejmowac takze odstep, inaczej
-     kolorowa sekcja mialaby biale pasy. Warstwa base, wiec kazda klasa
-     narzedziowa (.p-0, .py-4) nadpisze to bez walki o specyficznosc. */
+     Padding, not margin: a section's background should also cover the
+     spacing, otherwise a colored section would show white stripes. It's
+     in the base layer, so any utility class (.p-0, .py-4) overrides it
+     without a specificity fight. */
   section {
     padding-block: calc(var(--spacing-unit) * 6);
   }
 
   /* =========================================
-     TYPOGRAFIA - NAGŁÓWKI
+     TYPOGRAPHY - HEADINGS
      ========================================= */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-family-heading);
@@ -137,15 +141,15 @@
     max-width: 75ch;
   }
 
-  /* Reset domyślnego stylu przeglądarki. Bez tego UA-owy
-     "border-style: inset" + "margin-inline: auto" rozjeżdża się jako
-     BEZPOŚREDNIE dziecko flexa (np. .card-body, każdy .d-flex.flex-column):
-     auto-marginesy w osi poprzecznej flexboksa mają pierwszeństwo przed
-     align-items:stretch i "zjadają" całą wolną przestrzeń zamiast
-     rozciągnąć element, więc linia kurczy się do prawie zerowej szerokości
-     (widać ją jako kropkę). Ten sam problem już raz naprawiono lokalnie w
-     .modal-divider (_modal-context.scss) - to jest ta sama poprawka
-     zgeneralizowana na wszystkie <hr>. */
+  /* Reset of the browser's default style. Without this, the UA's
+     "border-style: inset" + "margin-inline: auto" breaks as a DIRECT
+     child of a flex container (e.g. .card-body, any .d-flex.flex-column):
+     auto margins on the flexbox's cross axis take precedence over
+     align-items: stretch and "eat" all the free space instead of
+     stretching the element, so the line shrinks to nearly zero width
+     (it shows up as a dot). This same problem was already fixed once
+     locally in .modal-divider (_modal-context.scss) - this is that same
+     fix generalized to every <hr>. */
   hr {
     width: 100%;
     flex-shrink: 0;
@@ -156,14 +160,14 @@
   }
 
   /* =========================================
-     KONTENERY
+     CONTAINERS
      ========================================= */
   .container {
     width: 100%;
     max-width: var(--container-max-width);
     margin-right: auto;
     margin-left: auto;
-    /* FIX: Bezpieczny, mniejszy padding na mobile (16px) */
+    /* FIX: A safe, smaller padding on mobile (16px) */
     padding-right: calc(var(--spacing-unit) * 2);
     padding-left: calc(var(--spacing-unit) * 2);
   }
@@ -176,7 +180,7 @@
     margin-left: auto;
   }
 
-  /* Na desktopie wracamy do paddingu opartego na grid-gap */
+  /* On desktop we go back to a padding based on grid-gap */
   @include mq(md) {
     .container, .container-fluid {
       padding-right: calc(var(--grid-gap) / 2);

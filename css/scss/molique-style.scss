@@ -1,11 +1,11 @@
 @use "sass:meta";
 
-// Definicja kolejności warstw
+// Layer order definition
 @layer reset, base, layout, components, modules, utilities;
 
-// Wstrzykiwanie kodu bezpośrednio do warstw
+// Injecting code directly into the layers
 @layer reset {
-  @include meta.load-css("root"); // Tylko root ma fizyczny CSS (:root)
+  @include meta.load-css("root"); // Only root has physical CSS (:root)
   @include meta.load-css("fonts"); // @font-face: Poppins
 }
 
@@ -27,7 +27,7 @@
 }
 
 @layer modules {
-  // Moduły opcjonalne (zakomentowane, bo kompilujemy je do osobnych plików!)
+  // Optional modules (commented out, since we compile them into separate files!)
   // @include meta.load-css("shop");
   // @include meta.load-css("blog");
   // @include meta.load-css("admin");

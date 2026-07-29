@@ -1,9 +1,10 @@
-// molique - Odstepy (padding/margin) na progach sm, lg i xl
+// molique - Spacing (padding/margin) at the sm, lg, and xl breakpoints
 //
-// Modul OPT-IN: nie wchodzi do domyslnego bundla ani do presetu "Wszystko"
-// w konfiguratorze. Generuje komplet odstepow razy trzy dodatkowe progi, wiec
-// wazy tyle, co kilka komponentow - wlaczasz go swiadomie albo wcale.
-// Rdzen ma odstepy bazowe i wariant -md-; to jest rozszerzenie ponad to.
+// OPT-IN module: not included in the default bundle or the "Everything"
+// preset in the configurator. It generates the full spacing set times
+// three extra breakpoints, so it weighs as much as several components -
+// you opt into it deliberately or not at all. The core has the base
+// spacing plus the -md- variant; this is an extension on top of that.
 
 @use 'variables' as *;
 @use 'mixins' as *;
@@ -11,13 +12,13 @@
 @use 'sass:list';
 
 /* =========================================
-   UTILITIES - EXTENDED (Włącz na żądanie)
+   UTILITIES - EXTENDED (enable on demand)
    ========================================= */
 
 $space-amounts: (0: 0, 1: $spacing-unit, 2: $spacing-unit * 2, 3: $spacing-unit * 3, 4: $spacing-unit * 4, 5: $spacing-unit * 6);
 $sides: (t: top, b: bottom, l: left, r: right, x: (left, right), y: (top, bottom));
 
-// Generowanie breakpointów pobocznych (sm, lg, xl)
+// Generating the secondary breakpoints (sm, lg, xl)
 $extended-breakpoints: ('sm': sm, 'lg': lg, 'xl': xl);
 
 @each $bp-name, $bp-val in $extended-breakpoints {
