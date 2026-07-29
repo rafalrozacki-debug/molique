@@ -51,6 +51,39 @@ Nie każda zmiana dostaje własny bump wersji + osobny deploy. Rozróżnienie:
   realna zmiana, a poprawka jest publicznie widoczna (np. zła informacja
   w dokumentacji) — zapytaj, zamiast zgadywać.
 
+## Pakiety npm — łatwo o dryf, bo publish jest ręczny
+
+Odkryte 2026-07-29, gdy `molique` na npm okazał się zamrożony na 1.7.7,
+mimo że molique.dev było już przy 1.7.18 (11 wersji różnicy) — nikt nie
+zauważył, bo `npm run build`/deploy strony **nigdy nie dotyka npm**, to
+osobna, ręczna ścieżka.
+
+- **`molique` (framework CSS)** — `npm/molique/` jest w `.gitignore`
+  (generowany na nowo za każdym razem). Przed publikacją zawsze:
+  `node tools/build-npm-molique.mjs` (synchronizuje wersję z korzeniem
+  `package.json`, kopiuje CSS/SCSS/JS/img/flags, tłumaczy komentarze na
+  EN). Zwróć uwagę na log `[en] Brakujące wpisy` — jeśli >0, część
+  nowych komentarzy PL w SCSS nie ma jeszcze tłumaczenia w
+  `tools/i18n-comments/dict.en.json`/`dict.de.json` (workflow opisany w
+  [[feedback_package_comment_language]] — Claude odpowiada za jakość
+  tłumaczeń, nie olewaj tego przy realnej publikacji, ale to osobny,
+  większy krok niż sam release strony, więc nie musi blokować KAŻDEGO
+  bumpa wersji, jeśli akurat nic nowego nie doszło w komentarzach).
+- **`molique-jit` (silnik JIT + CLI)** — źródło w `tools/jit/package/`,
+  wersjonowane bezpośrednio w jego `package.json` (osobna numeracja od
+  frameworka, np. `0.2.1` — nie synchronizuj jej z wersją strony).
+- **Publikacja wymaga 2FA/OTP z przeglądarki użytkownika — Claude NIE
+  MOŻE tego zrobić samodzielnie.** Po przygotowaniu paczki (krok wyżej)
+  zawsze kończy się na: "gotowe do `npm publish` — potrzebuję Twojego
+  OTP, uruchom `cd npm/molique && npm publish` (lub `cd
+  tools/jit/package && npm publish`) i podaj kod, albo zrób to sam".
+- **Kiedy o tym pamiętać:** nie przy KAŻDYM bumpie `package.json` (byłoby
+  to nadgorliwe dla drobnych poprawek), ale zawsze gdy zmiana dotyczy
+  czegoś, co realnie trafia do paczki npm (CSS/SCSS/JS rdzenia, nie
+  strona molique.dev) LUB gdy minęło kilka wersji odkąd ktoś ostatnio
+  sprawdzał `npm view molique version` / `npm view molique-jit version`
+  względem `package.json` w repo.
+
 ## Dyscyplina gita — repo bywa współdzielone przez równoległe sesje
 
 W praktyce w tym repo działa czasem więcej niż jedna sesja Claude Code
