@@ -1,17 +1,17 @@
 /**
- * molique - tlumaczenia UI konfiguratora paczki (builder.html)
+ * molique - package configurator UI translations (builder.html)
  *
- * Etykiety modulow "core" (rdzen) i opisy WSZYSTKICH chunkow sa PL-only
- * w kodzie (etykiety w tools/gen-chunks.js, opisy wyciagane z naglowka
- * kazdego pliku SCSS przez descOf()) - ten plik dostarcza EN/DE warianty,
- * ktore gen-chunks.js dokleja do manifest.json jako labelEn/labelDe/
- * descEn/descDe. Etykiety modulow komponentow (Cards, Modal, Dropdown...)
- * sa auto-generowane z angielskich nazw plikow (labelOf()) i NIE
- * wymagaja tlumaczenia - czytelne we wszystkich trzech jezykach bez zmian.
+ * "Core" module labels and the descriptions of ALL chunks are PL-only in
+ * the code (labels in tools/gen-chunks.js, descriptions pulled from each
+ * SCSS file's header via descOf()) - this file supplies the EN/DE variants
+ * that gen-chunks.js attaches to manifest.json as labelEn/labelDe/descEn/
+ * descDe. Component module labels (Cards, Modal, Dropdown...) are
+ * auto-generated from the English file names (labelOf()) and need NO
+ * translation - they read fine in all three languages unchanged.
  */
 
-// Etykiety modulow "core" (core[] w gen-chunks.js) - jedyne recznie pisane
-// etykiety w calym manifescie, reszta idzie z labelOf().
+// "Core" module labels (core[] in gen-chunks.js) - the only hand-written
+// labels in the whole manifest, everything else comes from labelOf().
 export const CORE_LABELS = {
   root: {
     en: 'Theme variables (:root)',
@@ -55,7 +55,7 @@ export const CORE_LABELS = {
   },
 };
 
-// Opisy - jeden wpis per chunk (core + komponenty), z naglowka pliku SCSS.
+// Descriptions - one entry per chunk (core + components), from the SCSS file's header.
 export const DESCRIPTIONS = {
   root: {
     en: 'Root variables and fonts',
@@ -343,8 +343,8 @@ export const DESCRIPTIONS = {
   },
 };
 
-// Nazwy kategorii z CAT[] w gen-chunks.js (+ core 'Podstawy'/'Layout'/
-// 'Utilities' i fallback 'Inne').
+// Category names from CAT[] in gen-chunks.js (+ core 'Podstawy'/'Layout'/
+// 'Utilities' and the 'Inne' fallback).
 export const CATEGORIES = {
   Podstawy: { en: 'Basics', de: 'Grundlagen' },
   Layout: { en: 'Layout', de: 'Layout' },
@@ -361,7 +361,7 @@ export const CATEGORIES = {
   Inne: { en: 'Other', de: 'Sonstiges' },
 };
 
-// PRESETS z builder.js.
+// PRESETS from builder.js.
 export const PRESETS_I18N = {
   nano: {
     en: { label: 'Nano', desc: 'Just the foundation: variables, reset, grid, buttons.' },
@@ -381,7 +381,7 @@ export const PRESETS_I18N = {
   },
 };
 
-// Drobne stringi UI w builder.js.
+// Small UI strings in builder.js.
 export const UI_STRINGS = {
   toggleAll: { pl: 'Przełącz wszystkie', en: 'Toggle all', de: 'Alle umschalten' },
   requires: { pl: 'wymaga: ', en: 'requires: ', de: 'erfordert: ' },

@@ -1,16 +1,16 @@
 /**
- * molique - przygotowanie danych dla pakietu molique-jit
+ * molique - prepares the data for the molique-jit package
  *
- * Kopiuje juz wygenerowane artefakty (utilities.json z gen-jit-utilities.js,
- * class-index.json + skompilowane chunki komponentow z gen-chunks.js,
- * podstawowa safelist z purgecss.safelist.cjs) do tools/jit/package/data/ -
- * jedynego miejsca, ktore silnik pakietu naprawde czyta w czasie dzialania.
- * Zero logiki tutaj - to czysto kopiowanie, zeby pakiet mogl byc
- * opublikowany i uzywany bez dostepu do tego monorepo/Sassa.
+ * Copies already-generated artifacts (utilities.json from
+ * gen-jit-utilities.js, class-index.json + the compiled component chunks
+ * from gen-chunks.js, the base safelist from purgecss.safelist.cjs) into
+ * tools/jit/package/data/ - the only place the package's engine actually
+ * reads at runtime. Zero logic here - this is pure copying, so the
+ * package can be published and used without access to this monorepo/Sass.
  *
- * Uruchomienie:  node tools/gen-jit-package-data.js   (wymaga wczesniejszego
- *                node tools/gen-chunks.js && node tools/gen-jit-utilities.js)
- * Wyjscie:       tools/jit/package/data/**
+ * Run with:  node tools/gen-jit-package-data.js   (requires having already
+ *            run node tools/gen-chunks.js && node tools/gen-jit-utilities.js)
+ * Output:    tools/jit/package/data/**
  */
 
 import fs from 'node:fs';
@@ -27,23 +27,23 @@ const componentsOut = path.join(dataDir, 'components');
 
 function requireFile(p, hint) {
   if (!fs.existsSync(p)) {
-    console.error(`\nBrak ${p}.\n${hint}\n`);
+    console.error(`\nMissing ${p}.\n${hint}\n`);
     process.exit(1);
   }
 }
 
-requireFile(utilitiesSrc, 'Uruchom najpierw:  node tools/gen-jit-utilities.js');
-requireFile(classIndexSrc, 'Uruchom najpierw:  node tools/gen-chunks.js');
+requireFile(utilitiesSrc, 'Run first:  node tools/gen-jit-utilities.js');
+requireFile(classIndexSrc, 'Run first:  node tools/gen-chunks.js');
 
 fs.rmSync(dataDir, { recursive: true, force: true });
 fs.mkdirSync(componentsOut, { recursive: true });
 
-/* ---------- 1. utilities.json + class-index.json (kopia 1:1) ---------- */
+/* ---------- 1. utilities.json + class-index.json (1:1 copy) ---------- */
 
 fs.copyFileSync(utilitiesSrc, path.join(dataDir, 'utilities.json'));
 fs.copyFileSync(classIndexSrc, path.join(dataDir, 'class-index.json'));
 
-/* ---------- 2. Chunki komponentow uzyte w class-index.json ---------- */
+/* ---------- 2. Component chunks used in class-index.json ---------- */
 
 const classIndex = JSON.parse(fs.readFileSync(classIndexSrc, 'utf8'));
 const componentIds = new Set(Object.values(classIndex.classes));
@@ -51,32 +51,32 @@ const componentIds = new Set(Object.values(classIndex.classes));
 let copiedComponents = 0;
 for (const id of componentIds) {
   const from = path.join(chunksDir, `molique-${id}.css`);
-  requireFile(from, `Brak skompilowanego chunka dla komponentu "${id}" - uruchom node tools/gen-chunks.js.`);
+  requireFile(from, `No compiled chunk for component "${id}" - run node tools/gen-chunks.js.`);
   fs.copyFileSync(from, path.join(componentsOut, `molique-${id}.css`));
   copiedComponents++;
 }
 
-/* ---------- 3. Zmienne motywu + reset/base - zawsze potrzebne ---------- */
-// "root" (zmienne :root + dark mode) i "base" (reset, typografia bazowa,
-// .container/.container-fluid) sa oba oznaczone "mandatory: true" w
-// gen-chunks.js - konfigurator nawet nie pozwala ich odznaczyc, bo bez nich
-// framework nie renderuje sie poprawnie. molique-jit traktuje je tak samo:
-// dolaczane zawsze, niezaleznie od zeskanowanych klas.
+/* ---------- 3. Theme variables + reset/base - always needed ---------- */
+// "root" (:root variables + dark mode) and "base" (reset, base typography,
+// .container/.container-fluid) are both marked "mandatory: true" in
+// gen-chunks.js - the configurator won't even let you uncheck them, since
+// the framework doesn't render correctly without them. molique-jit treats
+// them the same way: always included, regardless of the scanned classes.
 
 for (const id of ['root', 'base']) {
   const chunk = path.join(chunksDir, `molique-${id}.css`);
-  requireFile(chunk, `Brak dist/chunks/molique-${id}.css - uruchom node tools/gen-chunks.js.`);
+  requireFile(chunk, `Missing dist/chunks/molique-${id}.css - run node tools/gen-chunks.js.`);
   fs.copyFileSync(chunk, path.join(dataDir, `molique-${id}.css`));
 }
 
-/* ---------- 4. Bazowa safelist - z purgecss.safelist.cjs, nie ręcznie ---------- */
-// Tylko tier "runtime.standard" (klasy tworzone/przelaczane przez WLASNY JS
-// molique - toasty, lightbox, karuzela, sidebar itd.) - to samo, co
-// purgecss.safelist.cjs oznacza jako "obowiazkowe". Tier "families" w tamtym
-// pliku dotyczy dynamicznych klas SKLADANYCH PRZEZ BACKEND KONSUMENTA
-// (np. `badge-<?= $status ?>`) - specyficzne dla kazdego projektu, wiec nie
-// wchodzi tutaj jako domyslne; konsument dopisuje wlasne w molique.config.mjs
-// (Faza 5).
+/* ---------- 4. Base safelist - from purgecss.safelist.cjs, not by hand ---------- */
+// Only the "runtime.standard" tier (classes created/toggled by molique's
+// OWN JS - toasts, lightbox, carousel, sidebar, etc.) - the same set
+// purgecss.safelist.cjs marks as "mandatory". The "families" tier in that
+// file covers dynamic classes ASSEMBLED BY THE CONSUMER'S OWN BACKEND
+// (e.g. `badge-<?= $status ?>`) - specific to each project, so it's not
+// included here by default; the consumer adds their own in
+// molique.config.mjs (Phase 5).
 const require = createRequire(import.meta.url);
 const safelistSrc = require(path.join(root, 'purgecss.safelist.cjs'));
 fs.writeFileSync(
@@ -84,8 +84,8 @@ fs.writeFileSync(
   JSON.stringify(
     {
       note:
-        'PLIK GENEROWANY AUTOMATYCZNIE - nie edytuj recznie. ' +
-        'Zrodlo: tools/gen-jit-package-data.js, dane z purgecss.safelist.cjs (tier runtime.standard).',
+        'AUTO-GENERATED FILE - do not edit by hand. ' +
+        'Source: tools/gen-jit-package-data.js, data from purgecss.safelist.cjs (runtime.standard tier).',
       standard: safelistSrc.runtime.standard,
     },
     null,
@@ -93,6 +93,6 @@ fs.writeFileSync(
   ) + '\n'
 );
 
-console.log('Skopiowano komponentow (+ buttons/grid/layout): ' + copiedComponents);
-console.log('Skopiowano: utilities.json, class-index.json, molique-root.css, molique-base.css, safelist.json');
-console.log('Zapisano do: ' + path.relative(root, dataDir));
+console.log('Copied components (+ buttons/grid/layout): ' + copiedComponents);
+console.log('Copied: utilities.json, class-index.json, molique-root.css, molique-base.css, safelist.json');
+console.log('Written to: ' + path.relative(root, dataDir));

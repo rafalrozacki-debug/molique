@@ -1,21 +1,23 @@
 /**
- * molique - generator chunkow CSS + manifest dla konfiguratora paczki
+ * molique - CSS chunk generator + manifest for the package configurator
  *
- * Dla kazdego modulu SCSS kompiluje samodzielny plik CSS (chunk) i opisuje go
- * w manifescie: rozmiar, warstwa, kategoria, opis i WYKRYTE ZALEZNOSCI.
+ * For every SCSS module, compiles a standalone CSS file (chunk) and
+ * describes it in the manifest: size, layer, category, description, and
+ * DETECTED DEPENDENCIES.
  *
- * Uruchomienie:  node tools/gen-chunks.js
- * Wyjscie:       dist/chunks/molique-*.css  +  dist/chunks/manifest.json
+ * Run with:  node tools/gen-chunks.js
+ * Output:    dist/chunks/molique-*.css  +  dist/chunks/manifest.json
  *
- * Prefiks molique- w nazwach plikow jest ta sama konwencja co w js/modules/:
- * skrypt synchronizujacy framework do cudzego projektu ma podmieniac WYLACZNIE
- * pliki molique i nie ruszac kodu uzytkownika. Chunki laduja u niego w projekcie
- * (konfigurator paczki je pobiera), wiec dotyczy ich dokladnie tak samo.
+ * The molique- prefix on file names is the same convention as in
+ * js/modules/: a script syncing the framework into someone else's project
+ * should replace ONLY molique's own files and never touch the user's
+ * code. Chunks end up in the user's project too (the package configurator
+ * downloads them), so the same rule applies to them.
  *
- * Dlaczego chunki mozna sklejac w dowolnej kolejnosci: molique deklaruje
- * kolejnosc warstw z gory (@layer reset, base, ... ), wiec o precedencji
- * decyduje deklaracja, a nie kolejnosc wklejenia. Kazdy chunk niesie te
- * deklaracje + wlasny blok @layer.
+ * Why chunks can be concatenated in any order: molique declares the layer
+ * order up front (@layer reset, base, ... ), so precedence is decided by
+ * that declaration, not by paste order. Every chunk carries that
+ * declaration plus its own @layer block.
  */
 
 import fs from 'node:fs';
@@ -28,21 +30,22 @@ import { CORE_LABELS, DESCRIPTIONS, CATEGORIES } from './builder-i18n.data.js';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scssDir = path.join(root, 'css', 'scss');
 const outDir = path.join(root, 'dist', 'chunks');
-// Lokalny sass (devDependency) uruchamiany PRZEZ NODE, a nie przez .bin/sass.cmd:
-// Node 24 odmawia spawnowania plikow .cmd bez shell:true, a shell:true daje
-// ostrzezenie o bezpieczenstwie. Wywolanie sass.js omija problem calkowicie.
+// Local sass (devDependency) run VIA NODE, not via .bin/sass.cmd:
+// Node 24 refuses to spawn .cmd files without shell:true, and shell:true
+// triggers a security warning. Calling sass.js directly sidesteps the
+// problem entirely.
 const sassJs = path.join(root, 'node_modules', 'sass', 'sass.js');
 const tmpDir = path.join(root, '.chunktmp');
 
 const LAYERS = '@layer reset, base, layout, components, modules, utilities;';
 
-// Nazwa pliku chunka. ID zostaje bez prefiksu - na nim opieraja sie kategorie,
-// wykrywanie zaleznosci i stan zaznaczenia w konfiguratorze.
+// Chunk file name. The ID stays prefix-free - categories, dependency
+// detection, and the configurator's checked state all key off it.
 const fileOf = (id) => 'molique-' + id + '.css';
 
-/* ---------- 1. Definicja chunkow ---------- */
+/* ---------- 1. Chunk definitions ---------- */
 
-// Warstwy bazowe. mandatory = konfigurator nie pozwoli odznaczyc.
+// Base layers. mandatory = the configurator won't let you uncheck it.
 const core = [
   { id: 'root',      file: 'root',      layer: 'reset',     cat: 'Podstawy', mandatory: true,  label: 'Zmienne motywu (:root)' },
   { id: 'fonts',     file: 'fonts',     layer: 'reset',     cat: 'Podstawy', mandatory: false, label: 'Fonty (@font-face)' },
@@ -53,14 +56,15 @@ const core = [
   { id: 'layout',    file: 'layout',    layer: 'layout',    cat: 'Layout',   mandatory: false, label: 'Layout: sekcje, flex, pozycjonowanie' },
   { id: 'buttons',   file: 'buttons',   layer: 'components',cat: 'Podstawy', mandatory: false, label: 'Przyciski' },
   { id: 'utilities', file: 'utilities', layer: 'utilities', cat: 'Utilities',mandatory: false, label: 'Klasy narzędziowe' },
-  // optIn = poza presetem "Wszystko" i poza zaznaczaniem calej kategorii.
-  // Ten modul generuje odstepy dla PIECIU progow (sm/md/lg/xl + baza), wiec
-  // sam wazy tyle, co kilka komponentow. Wlaczasz go swiadomie albo wcale -
-  // dlatego nie moze wjechac do paczki przy kliknieciu "zaznacz wszystko".
+  // optIn = excluded from the "Everything" preset and from "select whole
+  // category". This module generates spacing for FIVE breakpoints (sm/md/
+  // lg/xl + base), so it alone weighs as much as several components. You
+  // opt into it deliberately or not at all - that's why it can't sneak
+  // into the package via "select all".
   { id: 'utilities-extended', file: 'utilities-extended', layer: 'utilities', cat: 'Utilities', mandatory: false, optIn: true, label: 'Odstępy na wszystkich progach (sm/lg/xl)' },
 ];
 
-// Kategoria wg nazwy pliku komponentu (dla UI konfiguratora).
+// Category by component file name (for the configurator's UI).
 const CAT = [
   [/^(navbar|mega-menu|dropdown|breadcrumbs|pagination|topbar|scroll-to-top|reading-progress|language-switch)$/, 'Nawigacja'],
   [/^(form-|theme-switch)/,                                    'Formularze'],
@@ -74,7 +78,7 @@ const CAT = [
 ];
 const catOf = (id) => (CAT.find(([re]) => re.test(id)) || [null, 'Inne'])[1];
 
-// Ladny label z id: "form-select-search" -> "Form select search"
+// A pretty label from the id: "form-select-search" -> "Form select search"
 const labelOf = (id) => id.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase());
 
 const components = fs
@@ -93,10 +97,10 @@ const components = fs
 
 const chunks = core.concat(components);
 
-/* ---------- 2. Opis z naglowka pliku (// molique - ...) ---------- */
+/* ---------- 2. Description from the file header (// molique - ...) ---------- */
 
-// W projekcie sa dwie konwencje naglowka: ciche "// molique - X" (pliki po
-// rozbiciu) oraz glosne "/** \n * molique - X". Obslugujemy obie.
+// The project uses two header conventions: the quiet "// molique - X"
+// (files after a split) and the loud "/** \n * molique - X". We handle both.
 function descOf(file) {
   const p = path.join(scssDir, path.dirname(file), '_' + path.basename(file) + '.scss');
   if (!fs.existsSync(p)) return '';
@@ -108,32 +112,32 @@ function descOf(file) {
   return '';
 }
 
-/* ---------- 3. Kompilacja chunkow ---------- */
+/* ---------- 3. Compiling the chunks ---------- */
 
 fs.rmSync(tmpDir, { recursive: true, force: true });
 fs.mkdirSync(tmpDir, { recursive: true });
-// Czyscimy katalog wyjsciowy, zeby po zmianie konwencji nazw nie zostawaly
-// osierocone pliki z poprzedniego przebiegu (np. bez prefiksu molique-).
+// Clear the output directory so a naming-convention change doesn't leave
+// orphaned files from a previous run (e.g. missing the molique- prefix).
 fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(outDir, { recursive: true });
 
 const gzip = (s) => zlib.gzipSync(Buffer.from(s, 'utf8')).length;
 
-// Jeden plik wejsciowy na chunk...
+// One input file per chunk...
 for (const c of chunks) {
-  // Nazwa pliku wejsciowego decyduje o nazwie wyjsciowej (sass w trybie
-  // katalogowym), wiec prefiks nadajemy juz tutaj.
+  // The input file's name decides the output name (Sass in directory
+  // mode), so we apply the prefix right here.
   fs.writeFileSync(
     path.join(tmpDir, 'molique-' + c.id + '.scss'),
-    // Jawna sciezka wzgledna, a NIE samo "root" - inaczej plik wejsciowy
-    // .chunktmp/root.scss zaimportowalby sam siebie (Sass szuka najpierw
-    // w katalogu importujacego) i sass zglasza "Module loop".
+    // An explicit relative path, NOT just "root" - otherwise the input
+    // file .chunktmp/root.scss would import itself (Sass looks in the
+    // importing directory first) and sass would report "Module loop".
     `@use "sass:meta";\n${LAYERS}\n@layer ${c.layer} {\n  @include meta.load-css("../css/scss/${c.file}");\n}\n`
   );
 }
 
-// ...i JEDNO wywolanie sass w trybie katalogowym (66 osobnych procesow trwaloby
-// kilkadziesiat sekund).
+// ...and ONE sass invocation in directory mode (66 separate processes
+// would take tens of seconds).
 execFileSync(
   process.execPath,
   [sassJs, '--load-path=' + scssDir, tmpDir + ':' + outDir,
@@ -149,22 +153,23 @@ for (const c of chunks) {
   c._css = css;
 }
 
-/* ---------- 4. Wykrywanie zaleznosci ---------- */
-// definiuje: klasa wystepujaca jako PIERWSZY czlon selektora
-// uzywa:     kazda inna klasa w selektorze (potomek / zlozenie)
+/* ---------- 4. Dependency detection ---------- */
+// defines: a class appearing as the FIRST part of a selector
+// uses:    every other class in the selector (descendant / compound)
 
-// UWAGA na wzorzec: klasa CSS musi zaczynac sie od litery/_/-, inaczej regex
-// lapie ulamki z minifikatu (".5rem" -> "5", "1.08" -> "08") i produkuje
-// fikcyjne zaleznosci miedzy losowymi chunkami.
+// Watch the pattern: a CSS class must start with a letter/_/-, otherwise
+// the regex catches fractions from the minified output (".5rem" -> "5",
+// "1.08" -> "08") and produces fake dependencies between random chunks.
 const IDENT = '(-?[_a-zA-Z][\\w-]*)';
 const firstOf = (css) => [...css.matchAll(new RegExp('(?:^|[,{}])\\s*\\.' + IDENT, 'g'))].map((m) => m[1]);
 const allOf = (css) => [...css.matchAll(new RegExp('\\.' + IDENT, 'g'))].map((m) => m[1]);
 
-// Wlasciciel klasy: chunk, ktorego id pasuje do nazwy klasy (np. .dropdown-menu
-// -> chunk "dropdown"). Bez tego wlasnosc trafialaby do chunka przetworzonego
-// jako pierwszy - np. _eink ma regule druku dla .dropdown-menu i "przejmowal"
-// ja od wlasciwego modulu. Gdy nazwa nie pasuje - decyduje liczba wystapien.
-const counts = new Map(); // klasa -> Map(chunkId -> ile)
+// Class owner: the chunk whose id matches the class name (e.g.
+// .dropdown-menu -> chunk "dropdown"). Without this, ownership would go to
+// whichever chunk got processed first - e.g. _eink has a print rule for
+// .dropdown-menu and would "steal" it from the real module. When the name
+// doesn't match - the occurrence count decides.
+const counts = new Map(); // class -> Map(chunkId -> count)
 for (const c of chunks) {
   for (const cls of firstOf(c._css)) {
     if (!counts.has(cls)) counts.set(cls, new Map());
@@ -185,8 +190,8 @@ for (const c of chunks) {
   const own = new Set(firstOf(c._css));
   const deps = new Set();
   for (const cls of new Set(allOf(c._css))) {
-    // .is-* to konwencja stanu wspoldzielona przez wiele komponentow,
-    // a nie osobny modul - nie tworzy zaleznosci.
+    // .is-* is a state convention shared across many components, not a
+    // separate module - it doesn't create a dependency.
     if (cls.startsWith('is-') || own.has(cls)) continue;
     const owner = defines.get(cls);
     if (owner && owner !== c.id) deps.add(owner);
@@ -195,23 +200,24 @@ for (const c of chunks) {
   delete c._css;
 }
 
-/* ---------- 5. Tlumaczenia EN/DE (konfigurator paczki, builder.html) ---------- */
-// Etykiety modulow komponentow (labelOf()) sa auto-generowane z angielskich
-// nazw plikow i NIE wymagaja wpisu w CORE_LABELS - czytelne we wszystkich
-// jezykach bez zmian. Opis (desc) i core.label wymagaja wpisu zawsze -
-// bez niego builder.js po angielsku/niemiecku pokazalby polski tekst.
+/* ---------- 5. EN/DE translations (package configurator, builder.html) ---------- */
+// Component module labels (labelOf()) are auto-generated from the
+// English file names and need NO entry in CORE_LABELS - they read fine in
+// every language unchanged. The description (desc) and core.label always
+// need an entry - without it builder.js in English/German would show
+// Polish text.
 const missingI18n = [];
 for (const c of chunks) {
-  if (!DESCRIPTIONS[c.id]) missingI18n.push(`${c.id}: brak wpisu w DESCRIPTIONS`);
+  if (!DESCRIPTIONS[c.id]) missingI18n.push(`${c.id}: missing entry in DESCRIPTIONS`);
   if (core.some((k) => k.id === c.id) && !CORE_LABELS[c.id]) {
-    missingI18n.push(`${c.id}: brak wpisu w CORE_LABELS`);
+    missingI18n.push(`${c.id}: missing entry in CORE_LABELS`);
   }
-  if (!CATEGORIES[c.cat]) missingI18n.push(`${c.id}: kategoria "${c.cat}" brak w CATEGORIES`);
+  if (!CATEGORIES[c.cat]) missingI18n.push(`${c.id}: category "${c.cat}" missing in CATEGORIES`);
 }
 if (missingI18n.length) {
-  console.error('\nGenerator chunkow PRZERWANY - brakuje tlumaczen w tools/builder-i18n.data.js:\n');
+  console.error('\nChunk generator ABORTED - missing translations in tools/builder-i18n.data.js:\n');
   for (const m of missingI18n) console.error('  - ' + m);
-  console.error('\nUzupelnij i uruchom ponownie.');
+  console.error('\nFill them in and run again.');
   process.exit(1);
 }
 
@@ -219,7 +225,7 @@ if (missingI18n.length) {
 
 const manifest = {
   generated: new Date().toISOString().slice(0, 10),
-  note: 'Chunki mozna sklejac w dowolnej kolejnosci - o precedencji decyduje deklaracja @layer na gorze kazdego pliku. Sklejajac, zostaw deklaracje warstw TYLKO RAZ (pierwsza) i pomin @charset.',
+  note: 'Chunks can be concatenated in any order - precedence is decided by the @layer declaration at the top of each file. When concatenating, keep the layer declaration ONLY ONCE (the first one) and skip @charset.',
   layerOrder: ['reset', 'base', 'layout', 'components', 'modules', 'utilities'],
   chunks: chunks.map((c) => ({
     id: c.id,
@@ -240,32 +246,33 @@ const manifest = {
 
 fs.writeFileSync(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
-/* ---------- 7. Class index dla molique-jit (klasa -> chunk "wyzwalany klasa") ---------- */
-// WLASNE liczenie wlasnosci, ograniczone do `classIndexSources` (komponenty +
-// trzy chunki core zachowujace sie jak komponenty, patrz nizej) - celowo NIE
-// reuzywa "defines" z sekcji 4. Ten "defines" liczy pierwszenstwo
-// klas przez WSZYSTKIE chunki (rowniez core: root/a11y/eink/grid/...), a przy
-// remisie liczby wystapien wygrywa kolejnosc przetwarzania (kolejnosc w
-// tablicy `chunks`) - dla samego pola "deps" w manifescie to nieszkodliwe
-// (tylko informacyjne), ale tutaj byloby to zrodlem cichych bledow: np.
-// ".card" wystepuje jako pierwszy token TAKZE w _eink.scss (warianty pod
-// druk), z tym samym licznikiem co w _cards.scss - a poniewaz "eink" jest w
-// core i przetwarzany wczesniej, `defines.get('card')` wskazuje na "eink",
-// czyli NIE-komponent, i klasa "card" po prostu znika z indeksu. Liczac
-// wlasnosc od nowa, tylko na podstawie `components`, taki fantomowy remis
-// z plikami core nigdy nie powstaje.
-// Trzy chunki core, ktore mimo etykiety "core" zachowuja sie jak komponenty
-// z perspektywy JIT-a: uzytkownik "wlacza" je przez UZYCIE konkretnej klasy
-// (.btn-primary, .col-span-6, .d-flex), a nie przez sama obecnosc frameworka.
-// Reszta core (root/fonts/base/a11y/eink/utilities*) albo jest zawsze
-// potrzebna (base wlaczany oddzielnie nizej, patrz baseCssPath), albo nie
-// jest wyzwalana pojedyncza klasa (fonts/a11y/eink) - poza zakresem na razie.
+/* ---------- 7. Class index for molique-jit (class -> chunk "triggered by class") ---------- */
+// OUR OWN ownership counting, scoped to `classIndexSources` (components +
+// three core chunks that behave like components, see below) - deliberately
+// does NOT reuse "defines" from section 4. That "defines" counts class
+// precedence across ALL chunks (including core: root/a11y/eink/grid/...),
+// and on a tie in occurrence count, processing order wins (the order in
+// the `chunks` array) - harmless for the "deps" field in the manifest
+// alone (purely informational), but here it would be a source of silent
+// bugs: e.g. ".card" appears as the first token ALSO in _eink.scss (print
+// variants), with the same count as in _cards.scss - and since "eink" is
+// in core and processed earlier, `defines.get('card')` points to "eink",
+// i.e. a NON-component, and the class "card" simply vanishes from the
+// index. By counting ownership from scratch, based only on `components`,
+// this kind of phantom tie with core files can never happen.
+// Three core chunks that, despite their "core" label, behave like
+// components from the JIT's perspective: the user "opts into" them by
+// USING a specific class (.btn-primary, .col-span-6, .d-flex), not merely
+// by the framework's presence. The rest of core (root/fonts/base/a11y/
+// eink/utilities*) is either always needed (base is included separately
+// below, see baseCssPath) or isn't triggered by a single class (fonts/
+// a11y/eink) - out of scope for now.
 const CLASS_TRIGGERED_CORE_IDS = ['buttons', 'grid', 'layout'];
 const classIndexSources = components.concat(core.filter((c) => CLASS_TRIGGERED_CORE_IDS.includes(c.id)));
 
 const classIndex = {};
 {
-  const compCounts = new Map(); // klasa -> Map(id -> ile)
+  const compCounts = new Map(); // class -> Map(id -> count)
   for (const c of classIndexSources) {
     const css = fs.readFileSync(path.join(outDir, fileOf(c.id)), 'utf8');
     for (const cls of firstOf(css)) {
@@ -287,9 +294,9 @@ fs.writeFileSync(
     {
       generated: manifest.generated,
       note:
-        'PLIK GENEROWANY AUTOMATYCZNIE - nie edytuj recznie. Zrodlo: tools/gen-chunks.js. ' +
-        'Mapuje klase CSS na ID chunka komponentu (dist/chunks/molique-<id>.css), ' +
-        'ktory molique-jit ma dolaczyc w calosci po zeskanowaniu tej klasy w projekcie.',
+        'AUTO-GENERATED FILE - do not edit by hand. Source: tools/gen-chunks.js. ' +
+        'Maps a CSS class to the component chunk ID (dist/chunks/molique-<id>.css) ' +
+        'that molique-jit should include in full once that class is scanned in a project.',
       classes: classIndex,
     },
     null,
@@ -300,8 +307,8 @@ fs.writeFileSync(
 fs.rmSync(tmpDir, { recursive: true, force: true });
 
 const kb = (n) => (n / 1024).toFixed(1) + ' KB';
-console.log('Chunkow: ' + chunks.length);
-console.log('Suma (min): ' + kb(chunks.reduce((s, c) => s + c.bytes, 0)) +
+console.log('Chunks: ' + chunks.length);
+console.log('Total (min): ' + kb(chunks.reduce((s, c) => s + c.bytes, 0)) +
             '  | gzip: ' + kb(chunks.reduce((s, c) => s + c.gzip, 0)));
-console.log('Z zaleznosciami: ' + chunks.filter((c) => c.deps.length).length);
-console.log('Bez opisu: ' + chunks.filter((c) => !c.desc).map((c) => c.id).join(', '));
+console.log('With dependencies: ' + chunks.filter((c) => c.deps.length).length);
+console.log('Without a description: ' + chunks.filter((c) => !c.desc).map((c) => c.id).join(', '));

@@ -1,33 +1,34 @@
 /**
- * molique - generator slownika klas narzedziowych dla molique-jit
+ * molique - utility-class dictionary generator for molique-jit
  *
- * NIE liczy CSS z map Sass drugi raz. Czyta juz skompilowane chunki
- * `dist/chunks/molique-utilities.css` i `dist/chunks/molique-utilities-extended.css`
- * (produkuje je `tools/gen-chunks.js` przez prawdziwego Sassa) i rozbija je
- * na plaska mape klasa -> lista regul CSS. Dzieki temu jest dokladnie JEDNO
- * miejsce, ktore uruchamia Sass (gen-chunks.js) - ten skrypt tylko go
- * konsumuje, wiec matematyka odstepow/kolorow nie moze sie nigdy rozjechac
- * miedzy SCSS a silnikiem JIT.
+ * Does NOT compile CSS from the Sass sources a second time. Reads the
+ * already-compiled chunks `dist/chunks/molique-utilities.css` and
+ * `dist/chunks/molique-utilities-extended.css` (produced by
+ * `tools/gen-chunks.js` via real Sass) and flattens them into a class ->
+ * list-of-CSS-rules map. This keeps exactly ONE place that runs Sass
+ * (gen-chunks.js) - this script only consumes its output, so the spacing/
+ * color math can never drift apart between the SCSS and the JIT engine.
  *
- * Uruchomienie:  node tools/gen-jit-utilities.js   (wymaga wczesniejszego
- *                node tools/gen-chunks.js - inaczej przerywa z komunikatem)
- * Wyjscie:       tools/jit/dist-data/utilities.json
+ * Run with:  node tools/gen-jit-utilities.js   (requires having already
+ *            run node tools/gen-chunks.js - otherwise aborts with a message)
+ * Output:    tools/jit/dist-data/utilities.json
  *
- * Zasada wlasciciela klasy przy selektorach zlozonych (np.
- * `[data-theme="dark"] .bg-glass` albo `.stacking-container-snap .section-stacked`):
- * OSTATNIA klasa w selektorze jest wlascicielem wpisu. To bezpieczne
- * uproszczenie - w najgorszym razie regula zlozona zostanie dolaczona bez
- * uzycia klasy-rodzica (nieszkodliwy, "martwy" fragment CSS, bo selektor
- * potomny i tak nie trafi w zaden element bez rodzica w DOM), nigdy odwrotnie
- * (nigdy nie zgubi reguly, ktora powinna byla zostac dolaczona).
+ * Class-ownership rule for compound selectors (e.g.
+ * `[data-theme="dark"] .bg-glass` or `.stacking-container-snap .section-stacked`):
+ * the LAST class in the selector owns the entry. This is a safe
+ * simplification - at worst a compound rule gets included without its
+ * parent class being scanned (a harmless "dead" CSS fragment, since the
+ * descendant selector won't match any element without the parent in the
+ * DOM anyway), never the other way around (it will never drop a rule that
+ * should have been included).
  *
- * Reguly BEZ zadnej klasy w selektorze (np. @keyframes, @property,
- * ::view-transition-*) nie da sie przypisac do konkretnego zeskanowanego
- * tokenu - trafiaja do osobnej puli "alwaysInclude", ktora silnik JIT ma
- * dolaczac zawsze, niezaleznie od tego, co zostalo zeskanowane. To ten sam
- * wzorzec, co juz istniejacy tier "keyframes" w purgecss.safelist.cjs -
- * male, globalne fragmenty, tansze do zawsze-wlaczenia niz do sledzenia
- * ktora klasa ich uzywa.
+ * Rules with NO class at all in their selector (e.g. @keyframes,
+ * @property, ::view-transition-*) can't be tied to a specific scanned
+ * token - they go into a separate "alwaysInclude" pool, which the JIT
+ * engine always includes regardless of what was scanned. This is the same
+ * pattern as the existing "keyframes" tier in purgecss.safelist.cjs -
+ * small, global fragments that are cheaper to always include than to
+ * track which class uses them.
  */
 
 import fs from 'node:fs';
@@ -41,30 +42,30 @@ const outFile = path.join(outDir, 'utilities.json');
 
 const SOURCES = ['molique-utilities.css', 'molique-utilities-extended.css'];
 
-/* ---------- 1. Wczytanie chunkow ---------- */
+/* ---------- 1. Reading the chunks ---------- */
 
 for (const name of SOURCES) {
   const p = path.join(chunksDir, name);
   if (!fs.existsSync(p)) {
     console.error(
-      `\nBrak ${p}.\nUruchom najpierw:  node tools/gen-chunks.js\n` +
-      'Ten generator NIE kompiluje SCSS sam - czyta wynik gen-chunks.js,' +
-      ' zeby matematyka klas narzedziowych mialy jedno zrodlo prawdy.'
+      `\nMissing ${p}.\nRun first:  node tools/gen-chunks.js\n` +
+      'This generator does NOT compile SCSS itself - it reads gen-chunks.js\'s output,' +
+      ' so the utility-class math has one single source of truth.'
     );
     process.exit(1);
   }
 }
 
-/* ---------- 2. Generyczny walker blokow CSS ---------- */
+/* ---------- 2. Generic CSS block walker ---------- */
 
-// Znajduje pierwszy blok "@nazwa parametry{" (dopuszcza brak spacji miedzy
-// tokenami - Sass --style=compressed nie wstawia bialych znakow) i zwraca
-// jego zawartosc miedzy klamrami (bez nich).
+// Finds the first "@name params{" block (tolerates no whitespace between
+// tokens - Sass's --style=compressed doesn't insert any) and returns its
+// content between the braces (without them).
 function firstBlock(text, matchAtStart) {
   const m = matchAtStart.exec(text);
   if (!m) return null;
   const braceIdx = text.indexOf('{', m.index + m[0].length - 1);
-  if (braceIdx === -1) throw new Error('Niedomknieta klamra po "' + m[0] + '"');
+  if (braceIdx === -1) throw new Error('Unclosed brace after "' + m[0] + '"');
   let depth = 0;
   for (let i = braceIdx; i < text.length; i++) {
     if (text[i] === '{') depth++;
@@ -72,11 +73,11 @@ function firstBlock(text, matchAtStart) {
       return { params: m[1] ? m[1].trim() : '', body: text.slice(braceIdx + 1, i) };
     }
   }
-  throw new Error('Niedomkniety blok "' + m[0] + '"');
+  throw new Error('Unclosed block "' + m[0] + '"');
 }
 
-// Dzieli TOP-LEVEL zawartosc bloku na kolejne instrukcje (reguly CSS albo
-// zagniezdzone at-rules), respektujac glebokosc klamer.
+// Splits the TOP-LEVEL content of a block into its statements (CSS rules
+// or nested at-rules), respecting brace depth.
 function splitTopLevel(body) {
   const stmts = [];
   let depth = 0;
@@ -107,15 +108,15 @@ function ownerOf(selector) {
 const wrapRaw = (raw, wrappers) =>
   wrappers.reduceRight((inner, head) => head + '{' + inner + '}', raw);
 
-// classes: nazwa klasy -> tablica { selector, wrappers, css, source }
-// alwaysInclude: fragmenty bez zadnej klasy - { raw, source } (juz w pelni
-// opakowane we wszystkie warunkowe @media/@supports, gotowe do wklejenia
-// verbatim). Pole "source" (nazwa pliku chunka) pozwala odbiorcom (np.
-// testowi parytetu) odroznic klasy z domyslnego bundla od klas z
-// opt-in "utilities-extended" - ten drugi modul CELOWO nie wchodzi do
-// css/molique-style.css (patrz komentarz "Modul OPT-IN" w
-// _utilities-extended.scss), wiec porownywanie go z pelnym buildem strony
-// zawsze bylo bledne zalozenie, nie prawdziwy dryf.
+// classes: class name -> array of { selector, wrappers, css, source }
+// alwaysInclude: fragments with no class at all - { raw, source } (already
+// fully wrapped in every conditional @media/@supports, ready to paste
+// verbatim). The "source" field (the chunk file's name) lets consumers
+// (e.g. the parity test) distinguish classes from the default bundle from
+// classes in the opt-in "utilities-extended" module - that second module
+// is DELIBERATELY excluded from css/molique-style.css (see the "OPT-IN
+// module" comment in _utilities-extended.scss), so comparing it against
+// the full site build was always a flawed assumption, not real drift.
 function walkRules(body, wrappers, source, classes, alwaysInclude, unmatchedLog) {
   for (const stmt of splitTopLevel(body)) {
     if (stmt.head.startsWith('@media') || stmt.head.startsWith('@supports')) {
@@ -123,22 +124,22 @@ function walkRules(body, wrappers, source, classes, alwaysInclude, unmatchedLog)
       continue;
     }
     if (stmt.head.startsWith('@layer')) {
-      // Zagniezdzony @layer utilities{...} (podwojne opakowanie z
-      // gen-chunks.js + wlasny @layer w pliku zrodlowym) - przezroczysty,
-      // ta sama efektywna warstwa, nie dolicza warunku.
+      // A nested @layer utilities{...} (double-wrapped by gen-chunks.js +
+      // the source file's own @layer) - transparent, the same effective
+      // layer, adds no condition.
       walkRules(stmt.body, wrappers, source, classes, alwaysInclude, unmatchedLog);
       continue;
     }
     if (stmt.head.startsWith('@keyframes') || stmt.head.startsWith('@property')) {
-      // Opakowanie opaczne - NIE wchodzimy w srodek (selektory procentowe
-      // "10%, 90%{...}" wewnatrz @keyframes nie sa klasami CSS).
+      // Wrap it whole - do NOT recurse into it (percentage selectors like
+      // "10%, 90%{...}" inside @keyframes aren't CSS classes).
       alwaysInclude.push({ raw: wrapRaw(stmt.head + '{' + stmt.body + '}', wrappers), source });
       unmatchedLog.push(stmt.head + ' (alwaysInclude)');
       continue;
     }
     if (stmt.head.startsWith('@')) {
       alwaysInclude.push({ raw: wrapRaw(stmt.head + '{' + stmt.body + '}', wrappers), source });
-      unmatchedLog.push(stmt.head + ' (nierozpoznany at-rule, alwaysInclude)');
+      unmatchedLog.push(stmt.head + ' (unrecognized at-rule, alwaysInclude)');
       continue;
     }
     for (const rawSelector of stmt.head.split(',')) {
@@ -147,7 +148,7 @@ function walkRules(body, wrappers, source, classes, alwaysInclude, unmatchedLog)
       const owner = ownerOf(selector);
       if (!owner) {
         alwaysInclude.push({ raw: wrapRaw(selector + '{' + stmt.body + '}', wrappers), source });
-        unmatchedLog.push(selector + ' (brak klasy, alwaysInclude)');
+        unmatchedLog.push(selector + ' (no class, alwaysInclude)');
         continue;
       }
       if (!classes[owner]) classes[owner] = [];
@@ -156,7 +157,7 @@ function walkRules(body, wrappers, source, classes, alwaysInclude, unmatchedLog)
   }
 }
 
-/* ---------- 3. Przetworzenie obu chunkow ---------- */
+/* ---------- 3. Processing both chunks ---------- */
 
 const classes = {};
 const alwaysInclude = [];
@@ -167,19 +168,19 @@ for (const name of SOURCES) {
   const layer = firstBlock(text, /@layer\s+utilities(?![\w-])/);
   if (!layer) {
     console.error(
-      `\n${name}: nie znaleziono bloku "@layer utilities{...}".\n` +
-      'Ksztalt skompilowanego CSS zmienil sie w sposob, ktorego ten generator ' +
-      'nie rozumie - popraw parser zanim polegniesz na wyniku.'
+      `\n${name}: "@layer utilities{...}" block not found.\n` +
+      'The shape of the compiled CSS changed in a way this generator ' +
+      'doesn\'t understand - fix the parser before trusting its output.'
     );
     process.exit(1);
   }
   walkRules(layer.body, [], name, classes, alwaysInclude, unmatchedLog);
 }
 
-// Deduplikacja identycznych wpisow klas (na wypadek, gdyby oba chunki
-// wygenerowaly dokladnie ta sama regule dla tej samej klasy). "source"
-// celowo POZA kluczem - identyczna regula z dwoch chunkow to nadal jeden
-// wpis, pierwsze trafienie decyduje o przypisanym source.
+// Deduplicate identical class entries (in case both chunks produced the
+// exact same rule for the same class). "source" is deliberately OUTSIDE
+// the key - an identical rule from two chunks is still one entry, the
+// first hit decides the assigned source.
 for (const cls of Object.keys(classes)) {
   const seen = new Set();
   classes[cls] = classes[cls].filter((entry) => {
@@ -190,11 +191,11 @@ for (const cls of Object.keys(classes)) {
   });
 }
 
-// Deduplikacja alwaysInclude po tresci (np. gdyby oba chunki mialy ten sam
-// @property - nie w tym przypadku, ale bezpiecznie na przyszlosc).
+// Deduplicate alwaysInclude by content (e.g. if both chunks had the same
+// @property - not the case today, but safe for the future).
 const dedupedAlways = [...new Map(alwaysInclude.map((e) => [e.raw, e])).values()];
 
-/* ---------- 4. Zapis ---------- */
+/* ---------- 4. Write the file ---------- */
 
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -204,9 +205,9 @@ const ruleCount = Object.values(classes).reduce((sum, arr) => sum + arr.length, 
 const payload = {
   generated: new Date().toISOString().slice(0, 10),
   note:
-    'PLIK GENEROWANY AUTOMATYCZNIE - nie edytuj recznie. ' +
-    'Zrodlo: tools/gen-jit-utilities.js, dane z dist/chunks/molique-utilities*.css. ' +
-    'Regeneracja: node tools/gen-chunks.js && node tools/gen-jit-utilities.js',
+    'AUTO-GENERATED FILE - do not edit by hand. ' +
+    'Source: tools/gen-jit-utilities.js, data from dist/chunks/molique-utilities*.css. ' +
+    'Regenerate with: node tools/gen-chunks.js && node tools/gen-jit-utilities.js',
   sources: SOURCES,
   classCount,
   ruleCount,
@@ -217,11 +218,11 @@ const payload = {
 
 fs.writeFileSync(outFile, JSON.stringify(payload, null, 2) + '\n');
 
-console.log('Klas narzedziowych zindeksowanych: ' + classCount);
-console.log('Regul CSS lacznie: ' + ruleCount);
-console.log('Fragmentow bez klasy (alwaysInclude): ' + dedupedAlways.length);
+console.log('Utility classes indexed: ' + classCount);
+console.log('Total CSS rules: ' + ruleCount);
+console.log('Class-less fragments (alwaysInclude): ' + dedupedAlways.length);
 if (unmatchedLog.length) {
-  console.log('\nSzczegoly (co trafilo do alwaysInclude i dlaczego):');
+  console.log('\nDetails (what went into alwaysInclude and why):');
   for (const s of [...new Set(unmatchedLog)]) console.log('  - ' + s);
 }
-console.log('\nZapisano: ' + path.relative(root, outFile));
+console.log('\nWritten to: ' + path.relative(root, outFile));

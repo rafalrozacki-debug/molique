@@ -1,17 +1,28 @@
 /**
- * molique - opisy zmiennych CSS dla docs-variables.html
+ * molique - CSS variable descriptions for docs-variables.html
  *
- * TU są wyłącznie OPISY. Wartości (light + dark), pliki źródłowe i miejsca
- * użycia czyta z SCSS generator tools/gen-variables-doc.js - dzięki temu
- * tabela nie rozjeżdża się po zmianie motywu.
+ * ONLY descriptions live here. Values (light + dark), source files, and
+ * usage locations are read from SCSS by the generator
+ * tools/gen-variables-doc.js - that's what keeps the table from drifting
+ * out of sync after a theme change.
  *
- * Generator PRZERYWA build, gdy:
- *   - w SCSS jest zmienna, której nie ma tutaj (brak opisu),
- *   - tutaj jest zmienna, której nie ma już w SCSS (martwy wpis).
- * To jest cały mechanizm chroniący dokumentację przed rozjechaniem się.
+ * NOTE (currently PL-only content, unlike this file's own code comments):
+ * the description/title/intro strings below are Polish product text
+ * rendered into partials/variables-*.html, which docs-variables.html AND
+ * its .en/.de siblings all currently <include> as-is - i.e. the EN/DE
+ * variable-docs pages show these Polish descriptions today. That's a
+ * pre-existing i18n gap, not something this pass (English-only CODE
+ * comments) is meant to fix - translating these values would need a real
+ * PL/EN/DE data structure (like tools/builder-i18n.data.js has), which is
+ * a separate piece of work.
+ *
+ * The generator ABORTS the build when:
+ *   - a variable exists in SCSS but has no entry here (missing description),
+ *   - an entry exists here for a variable no longer in SCSS (dead entry).
+ * That's the whole mechanism that keeps the docs from drifting out of sync.
  */
 
-/* ---------- Grupy zmiennych globalnych (kolejność = kolejność na stronie) ---------- */
+/* ---------- Global variable groups (order = order on the page) ---------- */
 
 export const GROUPS = [
   { id: 'fonts',      title: 'Fonty i wagi',                 intro: 'Rodziny fontów i skala grubości. Podmiana obu rodzin to najszybszy sposób na zmianę charakteru całego interfejsu.' },
@@ -26,7 +37,7 @@ export const GROUPS = [
   { id: 'zindex',     title: 'Warstwy (z-index)',            intro: 'Ustalona hierarchia nakładania. Trzymaj się tych wartości zamiast wpisywać własne liczby - inaczej modal wyląduje pod navbarem.' },
 ];
 
-/* ---------- Zmienne globalne (:root) ---------- */
+/* ---------- Global variables (:root) ---------- */
 
 export const GLOBAL = {
   /* --- fonts --- */
@@ -150,9 +161,10 @@ export const GLOBAL = {
   '--z-index-skip-link':      ['zindex', 'Link „przejdź do treści” - zawsze na wierzchu, inaczej przestaje działać dla czytników ekranu.'],
 };
 
-/* ---------- Zmienne komponentów ----------
-   kind: 'api'      - ustawiasz je w markupie (style="--x: …")
-         'internal' - framework liczy je sam; opisane, bo widać je w DevTools */
+/* ---------- Component variables ----------
+   kind: 'api'      - you set these in markup (style="--x: …")
+         'internal' - the framework computes these itself; documented
+                       because they're visible in DevTools */
 
 export const COMPONENT = {
   '--btn-border-width':      ['Przyciski', 'api', 'Grubość ramki przycisków. Podnieś dla wariantów <code>.btn-outline-*</code>.'],
@@ -234,10 +246,10 @@ export const COMPONENT = {
   '--trace-angle':      ['Animacje', 'internal', 'Kąt gradientu stożkowego w <code>.hover-border-spin</code>. Animowany dzięki rejestracji w <code>@property</code>.'],
 };
 
-/* ---------- Czyste wejścia z markupu ----------
-   Zmienne, których framework NIGDY nie deklaruje - tylko je czyta.
-   Ustawiasz je sam, zwykle przez style="--x: …". Wartość zapasową
-   (jeśli jest) generator czyta z var(--x, FALLBACK) w SCSS. */
+/* ---------- Pure inputs from markup ----------
+   Variables the framework NEVER declares itself - it only reads them.
+   You set them yourself, usually via style="--x: …". The generator reads
+   the fallback value (if any) from var(--x, FALLBACK) in SCSS. */
 
 export const INPUT = {
   '--val':                 ['Wykresy', 'Wartość wykresu - procent dla <code>.chart-radial</code> i <code>.chart-area</code>, waga etapu w lejkach. <strong>Jedyny sposób podania danych z backendu.</strong>'],

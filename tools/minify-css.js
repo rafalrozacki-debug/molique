@@ -1,20 +1,20 @@
 /**
- * molique - minifikacja CSS w buildzie strony (_site/)
+ * molique - CSS minification for the site build (_site/)
  *
- * vite-plugin-static-copy kopiuje css/*.css do _site/ 1:1 (patrz
- * assetDirs w vite.config.js) - nie minifikuje, bo to statyczne assety,
- * nie modul JS przechodzacy przez pipeline Vite. Bez tego kroku strona
- * serwuje deweloperski, czytelny CSS produkcyjnie (Lighthouse: "Minify
- * CSS", ~28 KiB do zaoszczedzenia na samym molique-style.css).
+ * vite-plugin-static-copy copies css/*.css into _site/ 1:1 (see assetDirs
+ * in vite.config.js) - it doesn't minify, because these are static
+ * assets, not a JS module going through Vite's pipeline. Without this
+ * step the site would serve the readable, dev-style CSS in production
+ * (Lighthouse: "Minify CSS", ~28 KiB to save on molique-style.css alone).
  *
- * Repo-owe css/*.css ZOSTAJA czytelne (--style=expanded) celowo - to
- * ten sam plik, ktory tools/build-packages.ps1 kopiuje 1:1 jako wariant
- * "Pelna CSS (czytelna)" paczki do pobrania. Ten skrypt nadpisuje
- * WYLACZNIE skompilowany build w _site/ (gitignored), rekompilujac
- * bundle od nowa z --style=compressed - nigdy nie dotyka repo-owych
- * css/*.css.
+ * The repo's own css/*.css files STAY readable (--style=expanded) on
+ * purpose - it's the same file that tools/build-packages.ps1 copies 1:1
+ * as the "Full CSS (readable)" variant of the download package. This
+ * script overwrites ONLY the compiled build in _site/ (gitignored),
+ * recompiling the bundles from scratch with --style=compressed - it
+ * never touches the repo's own css/*.css.
  *
- * Uruchomienie:  node tools/minify-css.js   (postbuild, po `vite build`)
+ * Run with:  node tools/minify-css.js   (postbuild, after `vite build`)
  */
 
 import fs from 'node:fs';
@@ -25,21 +25,21 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scssDir = path.join(root, 'css', 'scss');
 const outDir = path.join(root, '_site', 'css');
-// Patrz tools/gen-chunks.js - ten sam powod (Node 24 + .cmd + shell:true).
+// See tools/gen-chunks.js - same reason (Node 24 + .cmd + shell:true).
 const sassJs = path.join(root, 'node_modules', 'sass', 'sass.js');
 
 if (!fs.existsSync(outDir)) {
-  console.log('minify-css: brak _site/css - pomijam (uruchom po `vite build`)');
+  console.log('minify-css: no _site/css - skipping (run after `vite build`)');
   process.exit(0);
 }
 
-// Katalogowy tryb sass kompiluje tylko pliki bez wiodacego "_" (partiale sa
-// pomijane automatycznie), wiec trafiaja tu wylacznie faktyczne bundle -
-// dokladnie te same 8 plikow, ktore static-copy juz skopiowal 1:1.
+// Sass's directory mode only compiles files without a leading "_"
+// (partials are skipped automatically), so only the actual bundles land
+// here - the exact same 8 files static-copy already copied 1:1.
 execFileSync(
   process.execPath,
   [sassJs, '--load-path=' + scssDir, scssDir + ':' + outDir, '--style=compressed', '--no-source-map', '--quiet'],
   { cwd: root, stdio: 'inherit' }
 );
 
-console.log('minify-css: bundle w _site/css/ zminifikowane (--style=compressed)');
+console.log('minify-css: bundles in _site/css/ minified (--style=compressed)');

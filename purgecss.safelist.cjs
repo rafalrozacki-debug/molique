@@ -1,26 +1,26 @@
 /**
- * molique - safelista dla PurgeCSS
+ * molique - PurgeCSS safelist
  *
- * PLIK GENEROWANY AUTOMATYCZNIE - nie edytuj recznie.
- * Zrodlo: tools/gen-safelist.js   |   Regeneracja: node tools/gen-safelist.js
- * Wygenerowano: 2026-07-21
+ * AUTO-GENERATED FILE - do not edit by hand.
+ * Source: tools/gen-safelist.js   |   Regenerate with: node tools/gen-safelist.js
+ * Generated: 2026-07-29
  *
- * PO CO TO: czesc klas molique nie wystepuje w HTML - dodaje je JS w czasie
- * dzialania strony (stany, markup karuzeli/lightboxa/toastow). PurgeCSS ich
- * nie widzi i by je wyciely, psujac komponenty.
+ * WHY THIS EXISTS: some molique classes never appear in the HTML - they're
+ * added by JS at runtime (states, carousel/lightbox/toast markup).
+ * PurgeCSS can't see them and would strip them, breaking the components.
  *
- * UZYCIE (purgecss.config.js albo postcss.config.js):
+ * USAGE (purgecss.config.js or postcss.config.js):
  *
  *   const molique = require('./purgecss.safelist.cjs');
  *
- *   safelist: molique.runtime        // MINIMUM - bez tego molique sie psuje
- *   safelist: molique.all            // runtime + wszystkie rodziny utilities
- *   safelist: molique.merge('colors', 'grid')   // runtime + wybrane rodziny
+ *   safelist: molique.runtime        // MINIMUM - molique breaks without this
+ *   safelist: molique.all            // runtime + every utility family
+ *   safelist: molique.merge('colors', 'grid')   // runtime + selected families
  */
 
 /* =========================================================================
-   TIER 1 - RUNTIME (obowiazkowe)
-   Klasy tworzone/przelaczane przez JS molique. Pominiecie = zepsute komponenty.
+   TIER 1 - RUNTIME (mandatory)
+   Classes created/toggled by molique's own JS. Skipping this = broken components.
    ========================================================================= */
 
 const runtime = {
@@ -29,9 +29,18 @@ const runtime = {
     'btn-hover-glow',
     'btn-hover-lift',
     'btn-hover-spring',
+    'btn-outline-secondary',
+    'btn-primary',
+    'btn-sm',
+    'carousel-bg-sync',
     'carousel-dot',
     'carousel-dots',
+    'file-upload-name',
     'fw-bold',
+    'js-resetting',
+    'lang-suggest-actions',
+    'lang-suggest-bar',
+    'lang-suggest-text',
     'lightbox-close',
     'lightbox-content',
     'lightbox-counter',
@@ -40,12 +49,15 @@ const runtime = {
     'lightbox-overlay',
     'lightbox-prev',
     'lightbox-top-bar',
+    'm-0',
+    'mt-2',
     'opacity-50',
     'select-search',
     'select-search-menu',
     'sidebar-md',
     'sidebar-sm',
-    'text-white',
+    'te-label',
+    'text-4',
     'toast',
     'toast-bottom-center',
     'toast-bottom-left',
@@ -60,42 +72,44 @@ const runtime = {
     'toast-top-right',
     'toast-warning',
   ],
-  // Konwencja stanow molique. Pattern zamiast listy literalow, bo chroni takze
-  // klasy przelaczane z WLASNEGO kodu uzytkownika (np. .step.is-completed).
-  // Pokrywa 16 klas .is-* w CSS.
+  // molique's state-class convention. A pattern instead of a literal list,
+  // since it also protects classes toggled by YOUR OWN code (e.g.
+  // .step.is-completed).
+  // Covers 16 .is-* classes in the CSS.
   greedy: [/^is-/],
-  // Animacja odpalana ze stylu inline w JS - zadna regula CSS jej nie wola,
-  // wiec opcja keyframes:true by ja usunela.
+  // Animation triggered from an inline style in JS - no CSS rule
+  // references it, so the keyframes:true option would remove it.
   keyframes: [
     'toastProgressAnim',
   ],
 };
 
 /* =========================================================================
-   TIER 2 - RODZINY UTILITIES (opcjonalne, wybierz swoje)
-   Molique NIE wie, czy Twoj backend sklada nazwy klas dynamicznie - np.
-   class="opacity-<?= $x ?>" albo status z pola w bazie. Takich klas nie ma
-   w zadnym pliku, wiec PurgeCSS je wytnie. Wlacz TYLKO te grupy, ktore
-   faktycznie generujesz dynamicznie - kazda wlaczona grupa to mniejszy zysk.
+   TIER 2 - UTILITY FAMILIES (optional, pick your own)
+   molique has NO WAY of knowing whether your backend assembles class names
+   dynamically - e.g. class="opacity-<?= $x ?>" or a status from a database
+   field. Such classes don't exist in any file, so PurgeCSS will strip
+   them. Enable ONLY the groups you actually generate dynamically - every
+   enabled group is a smaller win.
    ========================================================================= */
 
 const families = {
-  // .bg-*, .text-*, .border-* - kolory/rozmiary sterowane z CMS
+  // .bg-*, .text-*, .border-* - colors/sizes driven from a CMS
   colors: [/^bg-/, /^text-/, /^border-/],
-  // .col-span-*, .col-md-span-*, .offset-*, .grid-cols-* - layout z pola CMS
+  // .col-span-*, .col-md-span-*, .offset-*, .grid-cols-* - layout from a CMS field
   grid: [/^col-/, /^offset-/, /^grid-cols-/],
-  // marginesy/paddingi/gapy skladane w petli
+  // margins/paddings/gaps assembled in a loop
   spacing: [/^m[trblxy]?-/, /^p[trblxy]?-/, /^gap-/],
-  // statusy z enuma w bazie: .badge-*, .status-*, .stock-bar-*, .opacity-*
+  // statuses from a database enum: .badge-*, .status-*, .stock-bar-*, .opacity-*
   status: [/^badge-/, /^status-/, /^stock-bar-/, /^overlay-/, /^opacity-/],
 };
 
-/* ---------- Skladanie ---------- */
+/* ---------- Assembly ---------- */
 
 function merge(...groups) {
   const greedy = [...runtime.greedy];
   for (const g of groups) {
-    if (!families[g]) throw new Error('Nieznana grupa safelisty: ' + g);
+    if (!families[g]) throw new Error('Unknown safelist group: ' + g);
     greedy.push(...families[g]);
   }
   return { standard: runtime.standard, greedy, keyframes: runtime.keyframes };

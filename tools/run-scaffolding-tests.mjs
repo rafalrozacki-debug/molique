@@ -1,16 +1,17 @@
 /**
- * molique-jit - uruchamia testy scaffoldingu (tools/jit/tests/scaffolding-*.test.mjs)
+ * molique-jit - runs the scaffolding tests (tools/jit/tests/scaffolding-*.test.mjs)
  *
- * `node --test tools/jit/tests/scaffolding-*.test.mjs` w skrypcie npm psuje
- * sie na Windows: npm uruchamia skrypty przez cmd.exe, ktore NIE rozwija
- * gwiazdki (`*`) jak powloka POSIX - trafiaby do node doslowny string z
- * gwiazdka, ktory nie pasuje do zadnego pliku. `node --test <katalog>`
- * tez zawiodl przy weryfikacji (Node probowal `require()` sciezki
- * katalogu zamiast go przeskanowac). Zamiast tego Node SAM wylicza liste
- * plikow (fs.readdirSync, bez powloki) i przekazuje ja jako jawne,
- * pojedyncze argumenty do `node --test` - przenosne na Windows/macOS/Linux.
+ * `node --test tools/jit/tests/scaffolding-*.test.mjs` as an npm script
+ * breaks on Windows: npm runs scripts through cmd.exe, which does NOT
+ * expand the `*` glob like a POSIX shell would - node would receive the
+ * literal string with the asterisk, which matches no file. `node --test
+ * <directory>` also failed during verification (Node tried to `require()`
+ * the directory path instead of scanning it). Instead, Node itself
+ * enumerates the file list (fs.readdirSync, no shell involved) and passes
+ * it as explicit, individual arguments to `node --test` - portable across
+ * Windows/macOS/Linux.
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import fs from 'node:fs';
@@ -28,7 +29,7 @@ const files = fs
   .map((name) => path.join(testsDir, name));
 
 if (files.length === 0) {
-  console.error(`Brak plikow "scaffolding-*.test.mjs" w ${testsDir}.`);
+  console.error(`No "scaffolding-*.test.mjs" files found in ${testsDir}.`);
   process.exit(1);
 }
 

@@ -1,24 +1,24 @@
 /**
- * molique - przygotowanie zawartosci pakietu npm "molique"
+ * molique - prepares the contents of the npm package "molique"
  *
- * Kopiuje juz skompilowane/zrodlowe artefakty (css/*.css, css/scss/**,
+ * Copies already-compiled/source artifacts (css/*.css, css/scss/**,
  * js/molique-script.js + js/modules/*.js, img/flags/*.svg,
- * purgecss.safelist.cjs, LICENSE, NOTICE) do npm/molique/ - jedynego
- * miejsca, ktore trafia do tarballa `npm publish`. Zero logiki tutaj -
- * czyste kopiowanie + jeden krok tlumaczenia komentarzy, dokladnie ta sama
- * infrastruktura, ktorej tools/build-packages.ps1 uzywa dla ZIP-ow z
- * download.html (tools/i18n-comments/apply-translations.mjs) - zeby nie
- * duplikowac logiki tlumaczenia w drugim miejscu.
+ * purgecss.safelist.cjs, LICENSE, NOTICE) into npm/molique/ - the only
+ * place that goes into the `npm publish` tarball. Zero logic here - pure
+ * copying plus one comment-translation step, the exact same
+ * infrastructure tools/build-packages.ps1 uses for the download.html ZIPs
+ * (tools/i18n-comments/apply-translations.mjs) - so the translation logic
+ * isn't duplicated in a second place.
  *
- * npm/molique/package.json i README.md sa WERSJONOWANE w repo (pisane
- * recznie) - ten skrypt tylko synchronizuje pole "version" z korzeniem
- * package.json (jedyne zrodlo prawdy numeru wersji, patrz tez
- * tools/sync-version.js). Foldery css/scss/js/img oraz skopiowane
- * LICENSE/NOTICE/purgecss.safelist.cjs sa GITIGNORED - w pelni odtwarzalne
- * tym skryptem z korzenia repo.
+ * npm/molique/package.json and README.md are VERSIONED in the repo
+ * (hand-written) - this script only syncs the "version" field from the
+ * root package.json (the single source of truth for the version number,
+ * see also tools/sync-version.js). The css/scss/js/img folders and the
+ * copied LICENSE/NOTICE/purgecss.safelist.cjs are GITIGNORED - fully
+ * reproducible by this script from the repo root.
  *
- * Uruchomienie:  node tools/build-npm-molique.mjs
- * Wyjscie:       npm/molique/{css,scss,js,img}/**
+ * Run with:  node tools/build-npm-molique.mjs
+ * Output:    npm/molique/{css,scss,js,img}/**
  */
 
 import fs from 'node:fs';
@@ -32,21 +32,21 @@ const pkgPath = path.join(npmDir, 'package.json');
 
 if (!fs.existsSync(pkgPath)) {
   console.error(
-    `\nBrak ${pkgPath}.\nTen plik jest wersjonowany recznie w repo, nie generowany - ` +
-      'sprawdz, czy katalog npm/molique/ nie zostal przypadkiem usuniety.\n'
+    `\nMissing ${pkgPath}.\nThis file is hand-versioned in the repo, not generated - ` +
+      'check whether the npm/molique/ directory was accidentally deleted.\n'
   );
   process.exit(1);
 }
 
-/* ---------- 1. Czyszczenie wygenerowanej wczesniej zawartosci ---------- */
-// package.json/README.md zostaja - sa wersjonowane recznie, reszta jest
-// w pelni odtwarzalna z korzenia repo.
+/* ---------- 1. Clearing previously generated content ---------- */
+// package.json/README.md stay - they're hand-versioned, everything else
+// is fully reproducible from the repo root.
 
 for (const dir of ['css', 'scss', 'js', 'img']) {
   fs.rmSync(path.join(npmDir, dir), { recursive: true, force: true });
 }
 
-/* ---------- 2. CSS (skompilowane bundle, bez .map - mapy wskazuja na lokalne sciezki dev) ---------- */
+/* ---------- 2. CSS (compiled bundles, no .map - the maps point to local dev paths) ---------- */
 
 const cssOut = path.join(npmDir, 'css');
 fs.mkdirSync(cssOut, { recursive: true });
@@ -58,12 +58,13 @@ for (const name of fs.readdirSync(cssSrc)) {
   copiedCss++;
 }
 
-/* ---------- 2.5. Minifikacja - kazdy bundle tez jako .min.css ---------- */
-// repo-owe css/*.css zostaja czytelne (--style=expanded, patrz tools/minify-css.js) -
-// npm potrzebuje WERSJI PRODUKCYJNEJ tak samo jak paczki ZIP z download.html
-// (tools/build-packages.ps1), wiec rekompilujemy z odpowiadajacego .scss.
-// Wywolanie node_modules/sass/sass.js BEZPOSREDNIO (nie `npx sass`) - ta sama
-// sztuczka co w tools/minify-css.js/tools/gen-chunks.js (Windows + .cmd + shell).
+/* ---------- 2.5. Minification - every bundle also as .min.css ---------- */
+// The repo's own css/*.css stays readable (--style=expanded, see
+// tools/minify-css.js) - npm needs a PRODUCTION VERSION just like the ZIP
+// packages from download.html (tools/build-packages.ps1), so we recompile
+// from the matching .scss. Calling node_modules/sass/sass.js DIRECTLY
+// (not `npx sass`) - the same trick as in tools/minify-css.js/
+// tools/gen-chunks.js (Windows + .cmd + shell).
 
 const sassJs = path.join(root, 'node_modules', 'sass', 'sass.js');
 const bundleNames = fs
@@ -73,7 +74,7 @@ const bundleNames = fs
 
 for (const name of bundleNames) {
   const scssFile = path.join(cssSrc, 'scss', `${name}.scss`);
-  if (!fs.existsSync(scssFile)) continue; // bezpiecznik - pomija bundle bez wlasnego pliku .scss
+  if (!fs.existsSync(scssFile)) continue; // safety net - skips a bundle with no matching .scss file
   execFileSync(
     process.execPath,
     [sassJs, scssFile, path.join(cssOut, `${name}.min.css`), '--style=compressed', '--no-source-map', '--quiet'],
@@ -81,7 +82,7 @@ for (const name of bundleNames) {
   );
 }
 
-/* ---------- 3. SCSS (zrodla) - bez luster .md (dokumentacja/kontekst AI, nie kod) ---------- */
+/* ---------- 3. SCSS (sources) - without the .md mirrors (documentation/AI context, not code) ---------- */
 
 fs.cpSync(path.join(cssSrc, 'scss'), path.join(npmDir, 'scss'), { recursive: true });
 (function stripMarkdown(dir) {
@@ -92,7 +93,7 @@ fs.cpSync(path.join(cssSrc, 'scss'), path.join(npmDir, 'scss'), { recursive: tru
   }
 })(path.join(npmDir, 'scss'));
 
-/* ---------- 4. JS (core + moduly autoloadera) ---------- */
+/* ---------- 4. JS (core + autoloader modules) ---------- */
 
 const jsModulesOut = path.join(npmDir, 'js', 'modules');
 fs.mkdirSync(jsModulesOut, { recursive: true });
@@ -101,7 +102,7 @@ for (const name of fs.readdirSync(path.join(root, 'js', 'modules'))) {
   fs.copyFileSync(path.join(root, 'js', 'modules', name), path.join(jsModulesOut, name));
 }
 
-/* ---------- 5. Flagi (Language Switch) ---------- */
+/* ---------- 5. Flags (Language Switch) ---------- */
 
 const flagsOut = path.join(npmDir, 'img', 'flags');
 fs.mkdirSync(flagsOut, { recursive: true });
@@ -109,11 +110,11 @@ for (const name of fs.readdirSync(path.join(root, 'img', 'flags'))) {
   fs.copyFileSync(path.join(root, 'img', 'flags', name), path.join(flagsOut, name));
 }
 
-/* ---------- 6. Tlumaczenie komentarzy na angielski ---------- */
-// Ta sama infrastruktura co ZIP-y z download.html (tools/build-packages.ps1)
-// - PL jest oryginalem w repo, EN/DE to podmiana tresci komentarzy w
-// skopiowanej kopii. npm celuje w globalny ekosystem JS, wiec EN na stale
-// (w odroznieniu od ZIP-ow, ktore oferuja wszystkie trzy jezyki obok siebie).
+/* ---------- 6. Translating comments to English ---------- */
+// The same infrastructure as the download.html ZIPs (tools/build-packages.ps1)
+// - PL is the original in the repo, EN/DE swap the comment text in the
+// copied copy. npm targets the global JS ecosystem, so it's always EN
+// (unlike the ZIPs, which offer all three languages side by side).
 
 execFileSync(
   process.execPath,
@@ -128,16 +129,16 @@ for (const f of ['LICENSE', 'NOTICE', 'purgecss.safelist.cjs']) {
   if (fs.existsSync(src)) fs.copyFileSync(src, path.join(npmDir, f));
 }
 
-/* ---------- 8. Wersja - korzenny package.json to JEDYNE zrodlo prawdy ---------- */
-// (patrz tez tools/sync-version.js) - synchronizujemy tu zamiast recznie
-// bumpowac dwa numery wersji osobno przy kazdym wydaniu.
+/* ---------- 8. Version - the root package.json is the ONLY source of truth ---------- */
+// (see also tools/sync-version.js) - synced here instead of hand-bumping
+// two version numbers separately on every release.
 
 const rootPkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const npmPkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 if (npmPkg.version !== rootPkg.version) {
   npmPkg.version = rootPkg.version;
   fs.writeFileSync(pkgPath, JSON.stringify(npmPkg, null, 2) + '\n');
-  console.log(`[build-npm-molique] Wersja zsynchronizowana: ${rootPkg.version}`);
+  console.log(`[build-npm-molique] Version synced: ${rootPkg.version}`);
 }
 
-console.log(`[build-npm-molique] Skopiowano ${copiedCss} bundli CSS, scss/, js/, img/flags/ -> ${path.relative(root, npmDir)}`);
+console.log(`[build-npm-molique] Copied ${copiedCss} CSS bundles, scss/, js/, img/flags/ -> ${path.relative(root, npmDir)}`);

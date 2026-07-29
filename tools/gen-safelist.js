@@ -1,13 +1,13 @@
 /**
- * molique - generator safelisty dla PurgeCSS
+ * molique - PurgeCSS safelist generator
  *
- * Skanuje zrodla (css/*.css + js/**\/*.js) i wypisuje purgecss.safelist.cjs.
- * Uruchomienie:  node tools/gen-safelist.js
+ * Scans the sources (css/*.css + js/**\/*.js) and writes purgecss.safelist.cjs.
+ * Run with:  node tools/gen-safelist.js
  *
- * Po co generator, a nie recznie utrzymywana lista: klasy dodawane przez JS
- * molique sa niewidoczne w HTML, wiec PurgeCSS by je wyciely. Lista pisana
- * recznie rozjechalaby sie przy pierwszym nowym module - ta odtwarza sie
- * z kodu.
+ * Why a generator instead of a hand-maintained list: classes added by
+ * molique's own JS are invisible in the HTML, so PurgeCSS would strip
+ * them. A hand-written list would drift out of sync the moment a new
+ * module shipped - this one rebuilds itself from the code.
  */
 
 import fs from 'node:fs';
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-/* ---------- 1. Uniwersum: klasy i keyframes z wszystkich bundli CSS ---------- */
+/* ---------- 1. Universe: classes and keyframes from every CSS bundle ---------- */
 
 const cssFiles = fs.readdirSync(path.join(root, 'css')).filter((f) => f.endsWith('.css'));
 const cssText = cssFiles.map((f) => fs.readFileSync(path.join(root, 'css', f), 'utf8')).join('\n');
@@ -26,7 +26,7 @@ for (const m of cssText.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)) cssClasses.add(m[1])
 
 const keyframesDefined = [...new Set([...cssText.matchAll(/@keyframes\s+([\w-]+)/g)].map((m) => m[1]))];
 
-/* ---------- 2. Zrodla JS ---------- */
+/* ---------- 2. JS sources ---------- */
 
 function walkJs(dir) {
   let out = [];
@@ -39,105 +39,107 @@ function walkJs(dir) {
 }
 const jsText = walkJs(path.join(root, 'js')).map((f) => fs.readFileSync(f, 'utf8')).join('\n');
 
-/* ---------- 3. Klasy, ktorych PurgeCSS nie zobaczy w HTML ---------- */
+/* ---------- 3. Classes PurgeCSS won't see in the HTML ---------- */
 
 const found = new Set();
 const addIfReal = (name) => {
   if (name && cssClasses.has(name)) found.add(name);
 };
 
-// a) przelaczane: classList.add/remove/toggle('x')
+// a) toggled: classList.add/remove/toggle('x')
 for (const m of jsText.matchAll(/classList\.(?:add|remove|toggle)\(\s*['"]([\w-]+)['"]/g)) addIfReal(m[1]);
 
-// b) przypisywane: className = 'a b c'
+// b) assigned: className = 'a b c'
 for (const m of jsText.matchAll(/className\s*=\s*['"]([^'"]+)['"]/g)) m[1].split(/\s+/).forEach(addIfReal);
 
-// c) markup budowany w JS: class="a b c"
+// c) markup built in JS: class="a b c"
 for (const m of jsText.matchAll(/class=["']([^"']+)["']/g)) m[1].split(/\s+/).forEach(addIfReal);
 
-// d) literaly w mapach/stalych (np. TOAST_TYPE) - tylko nazwy z mysnikiem,
-//    zeby nie lapac zwyklych slow ('input', 'js') uzywanych w innym kontekscie.
+// d) literals in maps/constants (e.g. TOAST_TYPE) - only hyphenated names,
+//    so it doesn't catch ordinary words ('input', 'js') used in another context.
 for (const m of jsText.matchAll(/['"]([a-zA-Z][\w]*-[\w-]+)['"]/g)) addIfReal(m[1]);
 
-// e) keyframes uzywane WYLACZNIE z JS (zadna regula CSS ich nie wola)
+// e) keyframes used ONLY from JS (no CSS rule references them)
 const keyframesOnlyJs = keyframesDefined.filter(
   (k) => jsText.includes(k) && !new RegExp(`animation[^;}]*\\b${k}\\b`).test(cssText)
 );
 
-// Klasy stanu (.is-*) pokrywamy patternem, wiec nie duplikujemy ich literalnie.
+// State classes (.is-*) are covered by the pattern, so we don't duplicate them literally.
 const standard = [...found].filter((c) => !c.startsWith('is-')).sort();
 const isStateCount = [...cssClasses].filter((c) => c.startsWith('is-')).length;
 
-/* ---------- 4. Zapis pliku ---------- */
+/* ---------- 4. Write the file ---------- */
 
 const stamp = new Date().toISOString().slice(0, 10);
 const list = (arr) => arr.map((v) => `    '${v}',`).join('\n');
 
 const out = `/**
- * molique - safelista dla PurgeCSS
+ * molique - PurgeCSS safelist
  *
- * PLIK GENEROWANY AUTOMATYCZNIE - nie edytuj recznie.
- * Zrodlo: tools/gen-safelist.js   |   Regeneracja: node tools/gen-safelist.js
- * Wygenerowano: ${stamp}
+ * AUTO-GENERATED FILE - do not edit by hand.
+ * Source: tools/gen-safelist.js   |   Regenerate with: node tools/gen-safelist.js
+ * Generated: ${stamp}
  *
- * PO CO TO: czesc klas molique nie wystepuje w HTML - dodaje je JS w czasie
- * dzialania strony (stany, markup karuzeli/lightboxa/toastow). PurgeCSS ich
- * nie widzi i by je wyciely, psujac komponenty.
+ * WHY THIS EXISTS: some molique classes never appear in the HTML - they're
+ * added by JS at runtime (states, carousel/lightbox/toast markup).
+ * PurgeCSS can't see them and would strip them, breaking the components.
  *
- * UZYCIE (purgecss.config.js albo postcss.config.js):
+ * USAGE (purgecss.config.js or postcss.config.js):
  *
  *   const molique = require('./purgecss.safelist.cjs');
  *
- *   safelist: molique.runtime        // MINIMUM - bez tego molique sie psuje
- *   safelist: molique.all            // runtime + wszystkie rodziny utilities
- *   safelist: molique.merge('colors', 'grid')   // runtime + wybrane rodziny
+ *   safelist: molique.runtime        // MINIMUM - molique breaks without this
+ *   safelist: molique.all            // runtime + every utility family
+ *   safelist: molique.merge('colors', 'grid')   // runtime + selected families
  */
 
 /* =========================================================================
-   TIER 1 - RUNTIME (obowiazkowe)
-   Klasy tworzone/przelaczane przez JS molique. Pominiecie = zepsute komponenty.
+   TIER 1 - RUNTIME (mandatory)
+   Classes created/toggled by molique's own JS. Skipping this = broken components.
    ========================================================================= */
 
 const runtime = {
   standard: [
 ${list(standard)}
   ],
-  // Konwencja stanow molique. Pattern zamiast listy literalow, bo chroni takze
-  // klasy przelaczane z WLASNEGO kodu uzytkownika (np. .step.is-completed).
-  // Pokrywa ${isStateCount} klas .is-* w CSS.
+  // molique's state-class convention. A pattern instead of a literal list,
+  // since it also protects classes toggled by YOUR OWN code (e.g.
+  // .step.is-completed).
+  // Covers ${isStateCount} .is-* classes in the CSS.
   greedy: [/^is-/],
-  // Animacja odpalana ze stylu inline w JS - zadna regula CSS jej nie wola,
-  // wiec opcja keyframes:true by ja usunela.
+  // Animation triggered from an inline style in JS - no CSS rule
+  // references it, so the keyframes:true option would remove it.
   keyframes: [
 ${list(keyframesOnlyJs)}
   ],
 };
 
 /* =========================================================================
-   TIER 2 - RODZINY UTILITIES (opcjonalne, wybierz swoje)
-   Molique NIE wie, czy Twoj backend sklada nazwy klas dynamicznie - np.
-   class="opacity-<?= $x ?>" albo status z pola w bazie. Takich klas nie ma
-   w zadnym pliku, wiec PurgeCSS je wytnie. Wlacz TYLKO te grupy, ktore
-   faktycznie generujesz dynamicznie - kazda wlaczona grupa to mniejszy zysk.
+   TIER 2 - UTILITY FAMILIES (optional, pick your own)
+   molique has NO WAY of knowing whether your backend assembles class names
+   dynamically - e.g. class="opacity-<?= $x ?>" or a status from a database
+   field. Such classes don't exist in any file, so PurgeCSS will strip
+   them. Enable ONLY the groups you actually generate dynamically - every
+   enabled group is a smaller win.
    ========================================================================= */
 
 const families = {
-  // .bg-*, .text-*, .border-* - kolory/rozmiary sterowane z CMS
+  // .bg-*, .text-*, .border-* - colors/sizes driven from a CMS
   colors: [/^bg-/, /^text-/, /^border-/],
-  // .col-span-*, .col-md-span-*, .offset-*, .grid-cols-* - layout z pola CMS
+  // .col-span-*, .col-md-span-*, .offset-*, .grid-cols-* - layout from a CMS field
   grid: [/^col-/, /^offset-/, /^grid-cols-/],
-  // marginesy/paddingi/gapy skladane w petli
+  // margins/paddings/gaps assembled in a loop
   spacing: [/^m[trblxy]?-/, /^p[trblxy]?-/, /^gap-/],
-  // statusy z enuma w bazie: .badge-*, .status-*, .stock-bar-*, .opacity-*
+  // statuses from a database enum: .badge-*, .status-*, .stock-bar-*, .opacity-*
   status: [/^badge-/, /^status-/, /^stock-bar-/, /^overlay-/, /^opacity-/],
 };
 
-/* ---------- Skladanie ---------- */
+/* ---------- Assembly ---------- */
 
 function merge(...groups) {
   const greedy = [...runtime.greedy];
   for (const g of groups) {
-    if (!families[g]) throw new Error('Nieznana grupa safelisty: ' + g);
+    if (!families[g]) throw new Error('Unknown safelist group: ' + g);
     greedy.push(...families[g]);
   }
   return { standard: runtime.standard, greedy, keyframes: runtime.keyframes };
@@ -150,8 +152,8 @@ module.exports = { runtime, families, merge, all };
 
 fs.writeFileSync(path.join(root, 'purgecss.safelist.cjs'), out);
 
-console.log('purgecss.safelist.cjs zapisany');
-console.log('  Tier 1 standard : ' + standard.length + ' klas');
-console.log('  Tier 1 greedy   : /^is-/ (pokrywa ' + isStateCount + ' klas)');
-console.log('  Tier 1 keyframes: ' + (keyframesOnlyJs.join(', ') || '(brak)'));
-console.log('  Tier 2 grup     : 4 (colors, grid, spacing, status)');
+console.log('purgecss.safelist.cjs written');
+console.log('  Tier 1 standard : ' + standard.length + ' classes');
+console.log('  Tier 1 greedy   : /^is-/ (covers ' + isStateCount + ' classes)');
+console.log('  Tier 1 keyframes: ' + (keyframesOnlyJs.join(', ') || '(none)'));
+console.log('  Tier 2 groups   : 4 (colors, grid, spacing, status)');

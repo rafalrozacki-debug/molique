@@ -1,24 +1,25 @@
 /**
- * molique - generator sitemap.xml + aktualizacja linii Sitemap: w robots.txt
+ * molique - sitemap.xml generator + updates the Sitemap: line in robots.txt
  *
- * Jedno zrodlo prawdy dla domeny produkcyjnej: stala SITE_URL ponizej. Strona
- * jest statyczna (zero renderowania przy zadaniu), wiec nie da sie tego
- * rozwiazac "zmienna w locie" - ale MOZNA to rozwiazac na poziomie builda:
- * kazdy plik, ktory potrzebuje domeny, dostaje ja stad. Zmiana domeny w
- * przyszlosci = edycja tej jednej stalej + ponowne uruchomienie skryptu.
+ * One source of truth for the production domain: the SITE_URL constant
+ * below. The site is static (nothing rendered at request time), so this
+ * can't be solved with an "on-the-fly variable" - but it CAN be solved at
+ * build time: every file that needs the domain gets it from here. Changing
+ * the domain in the future = edit this one constant + rerun the script.
  *
- * Skanuje src/*.html (ten sam plaski wzorzec co `input` w vite.config.js -
- * partiale w src/partials/ NIE sa osobnymi stronami, wiec sa pomijane).
- * Ladne URL-e licza sie analogicznie do toPrettyUrl() w vite.config.js
- * i tools/migrate-pretty-urls.js (reszta -> bez ".html"), z ta roznica ze
- * tu skladamy bezwzgledny URL (SITE_URL + "/" + segment), wiec strona
- * glowna dostaje pusty segment zamiast wzglednego "./".
+ * Scans src/*.html (the same flat pattern as `input` in vite.config.js -
+ * partials under src/partials/ are NOT separate pages, so they're
+ * skipped). Pretty URLs are computed the same way as toPrettyUrl() in
+ * vite.config.js and tools/migrate-pretty-urls.js (otherwise -> strip
+ * ".html"), with the difference that here we build an absolute URL
+ * (SITE_URL + "/" + segment), so the homepage gets an empty segment
+ * instead of the relative "./".
  *
- * Uruchomienie:  node tools/gen-sitemap.js
- * Wyjscie:       sitemap.xml (korzen repo)
- *                robots.txt  (tylko linia "Sitemap:", reszta bez zmian)
+ * Run with:  node tools/gen-sitemap.js
+ * Output:    sitemap.xml (repo root)
+ *            robots.txt  (only the "Sitemap:" line, the rest untouched)
  *
- * Podpiety jako `postbuild` w package.json.
+ * Wired in as `postbuild` in package.json.
  */
 
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -30,7 +31,7 @@ const SITE_URL = 'https://molique.dev';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = resolve(root, 'src');
 
-// Strony wykluczone z sitemapy - nie sa tresciam do indeksowania.
+// Pages excluded from the sitemap - not content meant to be indexed.
 const EXCLUDED = new Set(['404']);
 
 function toPrettyUrl(base, locale) {
@@ -40,9 +41,9 @@ function toPrettyUrl(base, locale) {
   return locale ? `${base}.${locale}` : base;
 }
 
-// Priorytet wg tego samego podzialu, co w poprzedniej, recznie pisanej
-// wersji sitemap.xml - strona glowna i glowne narzedzia najwyzej, docs-*
-// wysoko, examples-* nizej (duzo, drugorzedne), blog/changelog najnizej.
+// Priority follows the same breakdown as the previous, hand-written
+// sitemap.xml - homepage and main tools highest, docs-* high, examples-*
+// lower (many of them, secondary), blog/changelog lowest.
 function priorityFor(base) {
   if (base === 'index') return '1.0';
   if (['docs', 'docs-classes', 'theme-editor', 'download'].includes(base)) return '0.9';
@@ -89,5 +90,5 @@ const updatedRobots = robots.replace(
 );
 writeFileSync(robotsPath, updatedRobots, 'utf8');
 
-console.log(`sitemap.xml: ${urls.length} adresow pod ${SITE_URL}`);
-console.log('robots.txt: linia Sitemap: zaktualizowana');
+console.log(`sitemap.xml: ${urls.length} URLs under ${SITE_URL}`);
+console.log('robots.txt: Sitemap: line updated');

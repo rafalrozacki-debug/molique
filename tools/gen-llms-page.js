@@ -1,25 +1,25 @@
 /**
- * molique - generator tresci dla docs-llms.html
+ * molique - content generator for docs-llms.html
  *
- * Czyta llms.txt jako ZRODLO PRAWDY i sklada z niego fragment HTML do
- * wstawienia na docs-llms.html. Jedno zrodlo, zero rozjazdu miedzy tym,
- * co czyta agent AI (surowy /llms.txt), a tym, co widzi czlowiek na
- * stronie - dokladnie ten sam powod, dla ktorego docs-variables.html
- * generuje swoje tabele z _root.scss zamiast trzymac je recznie.
+ * Reads llms.txt as the SOURCE OF TRUTH and assembles an HTML fragment
+ * from it to insert into docs-llms.html. One source, zero drift between
+ * what an AI agent reads (the raw /llms.txt) and what a human sees on the
+ * page - the exact same reason docs-variables.html generates its tables
+ * from _root.scss instead of maintaining them by hand.
  *
- * Parser rozumie WYLACZNIE konstrukcje faktycznie uzywane w llms.txt -
- * nie jest to ogolny parser Markdown:
- *   # ...          -> pomijane (tytul strony pisany recznie w docs-llms.html)
- *   Kontekst: ...  -> pierwszy akapit zwykiego tekstu (linia 2 pliku)
- *   ## N. TYTUL    -> <h2>
- *   ### Tytul      -> <h3>
- *   - **Etykieta:** tekst   -> <li>, z inline **bold** i `code`
- *     - tekst               -> zagniezdzony <li> (jeden poziom, jak w
- *                              sekcji E-commerce)
- *   pusta linia    -> zamyka biezaca liste
+ * The parser understands ONLY the constructs actually used in llms.txt -
+ * it is not a general Markdown parser:
+ *   # ...             -> skipped (page title is hand-written in docs-llms.html)
+ *   Context: ...       -> first plain-text paragraph (line 2 of the file)
+ *   ## N. TITLE        -> <h2>
+ *   ### Title          -> <h3>
+ *   - **Label:** text   -> <li>, with inline **bold** and `code`
+ *     - text            -> nested <li> (one level, as in the E-commerce
+ *                          section)
+ *   blank line          -> closes the current list
  *
- * Uruchomienie:  node tools/gen-llms-page.js
- * Wyjscie:       src/partials/llms-content.html
+ * Run with:  node tools/gen-llms-page.js
+ * Output:    src/partials/llms-content.html
  */
 
 import fs from 'node:fs';
@@ -31,7 +31,7 @@ const srcPath = path.join(root, 'llms.txt');
 const outPath = path.join(root, 'src', 'partials', 'llms-content.html');
 
 if (!fs.existsSync(srcPath)) {
-  console.error('Nie znaleziono llms.txt w korzeniu repo.');
+  console.error('llms.txt not found in the repo root.');
   process.exit(1);
 }
 
@@ -40,23 +40,25 @@ const lines = fs.readFileSync(srcPath, 'utf8').split(/\r?\n/);
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function inline(s) {
-  // Code spany czesto zawieraja literalna gwiazdke (np. `.is-*`, `hover-*`,
-  // `.col-span-*`) - trzeba je schowac PRZED regexem **bold**, inaczej ta
-  // gwiazdka myli go z brakujacym domknieciem pogrubienia (realny przypadek
-  // w tym pliku: "**NIGDY nie uzywaj klas `.col-span-*`**"). Placeholder to
-  // bajt \x00 + indeks + \x00 - nie wystapi w prawdziwej prozie, w
-  // przeciwienstwie np. do samej cyfry otoczonej spacjami.
+  // Code spans often contain a literal asterisk (e.g. `.is-*`, `hover-*`,
+  // `.col-span-*`) - they need to be stashed away BEFORE the **bold**
+  // regex, otherwise that asterisk confuses it for a missing closing bold
+  // marker (a real case in this file: "**NEVER use `.col-span-*`
+  // classes**"). The placeholder is the byte \x00 + index + \x00 - it
+  // never occurs in real prose, unlike e.g. a bare digit surrounded by
+  // spaces.
   const codes = [];
   const stash = (code) => {
     codes.push(code);
     return `\x00${codes.length - 1}\x00`;
   };
   let out = esc(s);
-  // Podwojny apostrof wsteczny - markdown escape dla code-spanu, ktory sam
-  // zawiera znak ` (jedyny taki przypadek w pliku: "`` `col-span-${n}` ``",
-  // cytujacy zle skladany szablon jako przyklad anty-wzorca). Musi isc PRZED
-  // pojedynczym, inaczej wewnetrzne pojedyncze apostrofy zostana blednie
-  // wziete za wlasne delimitery.
+  // Double backtick - the Markdown escape for a code span that itself
+  // contains a ` character (the only such case in the file: "``
+  // `col-span-${n}` ``", quoting a badly-composed template as an
+  // anti-pattern example). Must run BEFORE the single-backtick regex,
+  // otherwise the inner single backticks would be wrongly taken as their
+  // own delimiters.
   out = out.replace(/``\s?(.+?)\s?``/g, (_, code) => stash(code));
   out = out.replace(/`([^`]+)`/g, (_, code) => stash(code));
   out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -123,7 +125,7 @@ for (; i < lines.length; i++) {
 
   if (nested) {
     if (!pendingTopLi) {
-      throw new Error(`gen-llms-page: zagnieżdżona lista bez rodzica w linii ${i + 1}`);
+      throw new Error(`gen-llms-page: nested list with no parent at line ${i + 1}`);
     }
     if (!subListOpen) {
       w('      <ul>');
@@ -144,20 +146,21 @@ for (; i < lines.length; i++) {
     continue;
   }
 
-  // Zwykla linia tekstu poza lista (nie wystepuje dzis w pliku, ale bez
-  // tego fallbacku cichy blad w formacie zrodla zgubilby tresc).
+  // A plain text line outside a list (doesn't occur in the file today,
+  // but without this fallback a silent source-format error would drop
+  // content).
   closeList();
   w(`<p class="text-secondary mb-3">${inline(line.trim())}</p>`);
 }
 closeList();
 
 const HEADER = [
-  '<!-- PLIK GENEROWANY - nie edytuj recznie.',
-  '     Zrodlo: llms.txt (korzen repo).',
-  '     Regeneracja: node tools/gen-llms-page.js -->',
+  '<!-- GENERATED FILE - do not edit by hand.',
+  '     Source: llms.txt (repo root).',
+  '     Regenerate with: node tools/gen-llms-page.js -->',
 ];
 
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, HEADER.concat(out).join('\n') + '\n');
 
-console.log('Zapisano src/partials/llms-content.html (' + out.length + ' linii HTML z ' + lines.length + ' linii zrodla).');
+console.log('Wrote src/partials/llms-content.html (' + out.length + ' HTML lines from ' + lines.length + ' source lines).');

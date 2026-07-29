@@ -1,20 +1,20 @@
-// Jednorazowy skrypt migracyjny: usuwa ".html" z wewnetrznych linkow
-// <a href="..."> w calym src/, przechodzac na ladne URL-e wspierane juz
-// przez regule 3 w .htaccess (^([^\.]+(?:\.(?:en|de))?)$ -> $1.html).
-// Uruchomienie: node tools/migrate-pretty-urls.js
+// One-off migration script: strips ".html" from internal <a href="...">
+// links across src/, switching to the pretty URLs already supported by
+// rule 3 in .htaccess (^([^\.]+(?:\.(?:en|de))?)$ -> $1.html).
+// Run with: node tools/migrate-pretty-urls.js
 //
-// Reguly:
+// Rules:
 //   page.html      -> page
 //   page.en.html   -> page.en
 //   page.de.html   -> page.de
-//   index.html     -> ./            (strona glowna, DirectoryIndex Apache)
+//   index.html     -> ./            (homepage, Apache DirectoryIndex)
 //   index.en.html  -> index.en
 //   index.de.html  -> index.de
 //
-// Idempotentny - drugie uruchomienie na juz zmigrowanych plikach nic nie
-// zmienia (regex dopasowuje wylacznie ".html" na koncu wartosci href).
-// Nie rusza linkow z protokolem, kotwic, ani atrybutow innych niz href
-// (src, action itp. nie sa dotykane).
+// Idempotent - running it a second time on already-migrated files changes
+// nothing (the regex only matches a trailing ".html" in the href value).
+// Doesn't touch links with a protocol, anchors, or attributes other than
+// href (src, action, etc. are left alone).
 
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -43,8 +43,8 @@ function toPrettyUrl(base, locale) {
   return locale ? `${base}.${locale}` : base;
 }
 
-// Dopasowuje wylacznie href="nazwa[.en|.de].html" - bez "/", bez protokolu,
-// bez fragmentu/query (potwierdzone w audycie: takich przypadkow nie ma).
+// Matches only href="name[.en|.de].html" - no "/", no protocol, no
+// fragment/query (confirmed during the audit: no such cases exist).
 const HREF_RE = /href="([a-zA-Z0-9_-]+)(?:\.(en|de))?\.html"/g;
 
 let filesChanged = 0;
@@ -66,4 +66,4 @@ for (const file of walk(srcDir)) {
   }
 }
 
-console.log(`Migracja zakonczona: ${filesChanged} plikow zmienionych, ${totalReplacements} linkow przepisanych.`);
+console.log(`Migration complete: ${filesChanged} files changed, ${totalReplacements} links rewritten.`);

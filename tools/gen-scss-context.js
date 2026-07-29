@@ -1,13 +1,13 @@
 /**
- * molique - generator zbiorczego kontekstu SCSS dla AI
+ * molique - combined SCSS context generator for AI
  *
- * Skleja wszystkie zrodla z css/scss/ w jeden plik _AI_CONTEXT_scss.md.
- * Uruchomienie:  node tools/gen-scss-context.js
+ * Concatenates every source file under css/scss/ into one _AI_CONTEXT_scss.md.
+ * Run with:  node tools/gen-scss-context.js
  *
- * Po co generator: plik jest pelnym zrzutem zrodel, wiec po KAZDYM podziale
- * pliku SCSS rozjezdza sie z rzeczywistoscia. Recznie utrzymywany zaczyna
- * klamac (zostaja sekcje po skasowanych plikach, brakuje nowych) - a to
- * wlasnie kontekst, z ktorego korzysta AI.
+ * Why this exists: the file is a full dump of the sources, so it drifts out
+ * of sync after EVERY SCSS file split. A hand-maintained version starts
+ * lying (stale sections for deleted files, missing new ones) - and that's
+ * exactly the context an AI relies on.
  */
 
 import fs from 'node:fs';
@@ -18,7 +18,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scssDir = path.join(root, 'css', 'scss');
 const outFile = path.join(scssDir, '_AI_CONTEXT_scss.md');
 
-/* Zbierz wszystkie .scss: najpierw podkatalogi (alfabetycznie), potem korzen. */
+/* Collect every .scss file: subdirectories first (alphabetically), then root. */
 function collect(dir, prefix = '') {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort();
@@ -50,23 +50,23 @@ files = files.concat(
 );
 
 const parts = [
-  '# Zbiorczy kontekst projektu dla AI',
+  '# Combined project context for AI',
   '',
-  '**Folder glowny:** `scss`',
-  '**Liczba plikow w paczce:** ' + files.length,
+  '**Root folder:** `scss`',
+  '**Files in this bundle:** ' + files.length,
   '',
-  '## Struktura plikow:',
+  '## File structure:',
   ...files.map((f) => '- `' + f + '`'),
   '',
 ];
 
 for (const f of files) {
   const body = fs.readFileSync(path.join(scssDir, f), 'utf8').replace(/\s+$/, '');
-  parts.push('## Plik: `' + f + '`', '', '```scss', body, '```', '');
+  parts.push('## File: `' + f + '`', '', '```scss', body, '```', '');
 }
 
 fs.writeFileSync(outFile, parts.join('\n') + '\n');
 
-console.log('_AI_CONTEXT_scss.md zregenerowany');
-console.log('  plikow SCSS: ' + files.length);
-console.log('  rozmiar: ' + (fs.statSync(outFile).size / 1024).toFixed(1) + ' KB');
+console.log('_AI_CONTEXT_scss.md regenerated');
+console.log('  SCSS files: ' + files.length);
+console.log('  size: ' + (fs.statSync(outFile).size / 1024).toFixed(1) + ' KB');
