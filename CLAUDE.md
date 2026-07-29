@@ -88,6 +88,22 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   `--warning-text`, `--danger-text`, `--info-text`) dla tekstu/ikon na
   jasnym tle, nigdy gołe `--success`/`--warning` itd. — te drugie są
   dobrane pod tła, nie pod kontrast tekstu.
+- **Nowy plik w `components/` nie powinien owijać się we własny
+  `@layer components { ... }`:** `molique-style.scss` już owija cały
+  import `_components.scss` w `@layer components { ... }` — dodatkowe
+  owinięcie W ŚRODKU pliku komponentu tworzy zagnieżdżoną podwarstwę
+  (`components.components`), która ma NIŻSZY priorytet niż nieowinięte
+  reguły w tym samym zakresie, NIEZALEŻNIE od kolejności w pliku i
+  specyficzności. Realny bug: `.stat-tile` (samo owinięte) ustawiało
+  `flex-direction: row`, ale `.card` (nieowinięte, z `_cards.scss`)
+  ustawiające `column` wygrywało — ikona lądowała nad tekstem zamiast
+  obok niego (naprawione w v1.7.14). Około 26 z 60 plików w
+  `components/` wciąż ma to zbędne owinięcie (zaszłość, nie
+  konwencja) — nie kopiuj tego wzorca do nowych plików. Jeśli
+  komponent ma być łączony z `.card` na tym samym elemencie (jak
+  `.stat-tile`), ten bug jest szczególnie prawdopodobny, bo `.card`
+  jest zawsze nieowinięte — sprawdź to jako pierwsze podejrzenie przy
+  "właściwość z mojego pliku nie działa, mimo że jest w CSS".
 - **Goły `1fr` w CSS Grid to `minmax(auto, 1fr)`, nie `minmax(0, 1fr)`:**
   minimum toru liczy się z min-content potomków (dowolnie głęboko
   zagnieżdżonych), NIE z zera — `min-width: 0` + `overflow-x: hidden` na

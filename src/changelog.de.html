@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Änderungsverlauf, neue Funktionen und Fehlerbehebungen im molique-CSS-Framework - der vollständige Changelog von v0.1.0 bis v1.7.13."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Änderungsverlauf, neue Funktionen und Fehlerbehebungen im molique-CSS-Framework - der vollständige Changelog von v0.1.0 bis v1.7.14."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,55 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.14 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.14</div>
+              <div class="text-muted text-4">Juli 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  <code>.stat-tile</code>: Icon landete über dem Text statt daneben
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Die Ursache lag nicht in <code>.stat-tile</code> selbst,
+                    sondern in den Cascade Layers: <code>_stat-tile.scss</code>
+                    wickelte seinen eigenen Inhalt in
+                    <code>@layer components { ... }</code>, obwohl
+                    <code>molique-style.scss</code> den gesamten
+                    Komponenten-Import bereits in dieselbe benannte Ebene
+                    einwickelt - die zusätzliche Verschachtelung erzeugte
+                    eine Unterebene mit niedrigerer Priorität als
+                    uneingewickelte Regeln im selben Bereich (darunter
+                    <code>.card</code>). Ergebnis: <code>.card</code>'s
+                    <code>flex-direction: column</code> gewann gegen
+                    <code>.stat-tile</code>'s <code>flex-direction: row</code>,
+                    unabhängig von der Reihenfolge in der Datei.
+                  </li>
+                  <li>
+                    Behoben durch Entfernen der unnötigen Verschachtelung -
+                    passend zu den meisten Dateien in
+                    <code>components/</code> (u. a. <code>.card</code>,
+                    <code>.tabs</code>), die sich nicht selbst einwickeln.
+                    Das Icon sitzt jetzt links, der Text ist links daneben
+                    ausgerichtet, genau wie dokumentiert.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.13 -->
           <!-- ============================================================ -->

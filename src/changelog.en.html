@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.13."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.14."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,53 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.14 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.14</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  <code>.stat-tile</code>: icon landed above the text instead of beside it
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The cause wasn't in <code>.stat-tile</code> itself, but in
+                    the cascade layers: <code>_stat-tile.scss</code> wrapped
+                    its own content in <code>@layer components { ... }</code>,
+                    even though <code>molique-style.scss</code> already wraps
+                    the entire component import in that same named layer -
+                    the extra wrapping inside created a nested sub-layer with
+                    lower priority than unwrapped rules in the same scope
+                    (including <code>.card</code>). The result:
+                    <code>.card</code>'s <code>flex-direction: column</code>
+                    beat <code>.stat-tile</code>'s
+                    <code>flex-direction: row</code>, regardless of order in
+                    the file.
+                  </li>
+                  <li>
+                    Fixed by removing the unnecessary wrapper - matching most
+                    files in <code>components/</code> (including
+                    <code>.card</code>, <code>.tabs</code>), which don't
+                    self-wrap. The icon now sits on the left with the text
+                    left-aligned beside it, exactly as documented.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.13 -->
           <!-- ============================================================ -->

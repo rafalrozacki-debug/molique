@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.13."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.14."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -46,6 +46,53 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.14 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.14</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  <code>.stat-tile</code>: ikona lądowała nad tekstem zamiast obok
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Przyczyna nie leżała w samym <code>.stat-tile</code>, tylko
+                    w kaskadzie warstw: <code>_stat-tile.scss</code> owijał
+                    swoją treść we własny <code>@layer components { ... }</code>,
+                    mimo że <code>molique-style.scss</code> już owija cały
+                    import komponentów w tę samą, nazwaną warstwę — dodatkowe
+                    owinięcie w środku tworzyło zagnieżdżoną podwarstwę o
+                    niższym priorytecie niż nieowinięte reguły w tym samym
+                    zakresie (m.in. <code>.card</code>). Efekt:
+                    <code>.card</code>'s <code>flex-direction: column</code>
+                    wygrywało z <code>.stat-tile</code>'s
+                    <code>flex-direction: row</code>, niezależnie od
+                    kolejności w pliku.
+                  </li>
+                  <li>
+                    Naprawione usunięciem zbędnego owinięcia — dopasowane do
+                    większości plików w <code>components/</code> (m.in.
+                    <code>.card</code>, <code>.tabs</code>), które się nie
+                    owijają. Ikona jest teraz po lewej, tekst wyrównany do
+                    lewej, dokładnie jak w dokumentacji.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.13 -->
           <!-- ============================================================ -->
