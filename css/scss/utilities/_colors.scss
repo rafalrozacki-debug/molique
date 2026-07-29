@@ -50,10 +50,10 @@
 
   .bg-primary { background-color: var(--primary) !important; color: var(--btn-text-light) !important; }
   .bg-secondary { background-color: var(--secondary) !important; color: var(--btn-text-light) !important; }
-  .bg-success { background-color: var(--success) !important; color: var(--btn-text-dark) !important; }
-  .bg-danger { background-color: var(--danger) !important; color: var(--btn-text-dark) !important; }
-  .bg-warning { background-color: var(--warning) !important; color: var(--btn-text-dark) !important; }
-  .bg-info { background-color: var(--info) !important; color: var(--btn-text-dark) !important; }
+  .bg-success { background-color: var(--success) !important; color: var(--semantic-fg) !important; }
+  .bg-danger { background-color: var(--danger) !important; color: var(--semantic-fg) !important; }
+  .bg-warning { background-color: var(--warning) !important; color: var(--semantic-fg) !important; }
+  .bg-info { background-color: var(--info) !important; color: var(--semantic-fg) !important; }
   /* bg-dark na literałach: sekcje "zawsze ciemne" (stopki, hero) łączone
      w HTML z .text-white - z flipowanym var(--dark) w ciemnym motywie tło
      robiło się jasne pod białym tekstem. */
@@ -99,13 +99,13 @@
       &:hover {
         background-color: #{$color} !important;
         
-        /* Automatyczny kontrast tekstu - success/danger/warning/info zawsze
-           ciemny (patrz --btn-text-dark w _root.scss), bo te tla sa dosc
-           jasne/pastelowe w OBU motywach. */
+        /* Automatyczny kontrast tekstu - success/danger/warning/info uzywaja
+           --semantic-fg (mode-aware, patrz _root.scss), bo w tej palecie sa
+           ciemne/nasycone w light mode ale jasne/neonowe w dark mode. */
         @if $name == "primary" or $name == "dark" or $name == "secondary" {
           color: var(--btn-text-light) !important;
         } @else if $name == "success" or $name == "danger" or $name == "warning" or $name == "info" {
-          color: var(--btn-text-dark) !important;
+          color: var(--semantic-fg) !important;
         } @else if $name == "light" or $name == "surface" or $name == "body" {
           color: var(--text-main) !important;
         }

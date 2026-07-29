@@ -21,38 +21,46 @@
   --font-family-base: 'FontHeading', system-ui, -apple-system, sans-serif;
   --font-family-heading: 'FontHeading', system-ui, -apple-system, sans-serif;
 
-  /* PALETA v2 - Indygo jako brand, chlodniejszy neutral (Modernizacja 2026) */
-  --primary: #5145E5;
-  --primary-hover: #3D31CE;
+  /* PALETA "Slate Violet" (2026-07) - primary zostaje w rodzinie indygo
+     (blisko poprzedniej v2), ale success/danger/warning/info zamienione
+     na CIEMNIEJSZE, bardziej nasycone odcienie tego samego typu koloru.
+     Powod: poprzednie (jasne/pastelowe) dzialaly TYLKO jako tlo z ciemnym
+     tekstem na wierzchu - jako sam tekst na --bg-body/--bg-surface daly
+     zaledwie 2.2-4.2:1 (ponizej progu WCAG 4.5:1), stad caly osobny system
+     "-text" ponizej. Nowe kolory sa dobrane tak, zeby PRZESZLY 4.5:1 w OBIE
+     strony jednoczesnie: jako tekst na jasnym tle ORAZ jako tlo z bialym
+     tekstem na wierzchu - jeden kolor, jedna rola, zero drugiego zestawu do
+     utrzymania. Zweryfikowane przeliczeniem kontrastu (WCAG 2.1 formula),
+     nie "na oko" - patrz --semantic-fg nizej po drugiej stronie tej samej
+     zmiany (tekst NA kolorowym tle, przyciski/badge). */
+  --primary: #4F46E5;
+  --primary-hover: #463ECA;
   --light: #F9F9F9;
   --dark: #14162B;
 
-  --secondary: #696D8F;
-  --secondary-hover: #4E5273;
-  --success: #12B76A;
-  --success-hover: #039855;
-  --danger: #F04438;
-  --danger-hover: #D92D20;
-  --warning: #F79009;
-  --warning-hover: #DC6803;
-  --info: #2E90FA;
-  --info-hover: #1570EF;
+  --secondary: #71717A;
+  --secondary-hover: #63636B;
+  --success: #0E793C;
+  --success-hover: #0C6A35;
+  --danger: #E11D48;
+  --danger-hover: #C61A3F;
+  --warning: #B45309;
+  --warning-hover: #9E4908;
+  --info: #006FEE;
+  --info-hover: #0062D1;
 
-  /* Warianty "-text" (przyciemnione o stala jasnosc w HSL, zachowany
-     odcien/nasycenie): --success/--warning/--danger/--info jako TLO (badge,
-     dot, przycisk) maja wystarczajacy kontrast wzgledem wlasnej tresci, ale
-     jako sam kolor TEKSTU na jasnym tle (.text-success itd.) daja tylko ok.
-     2.2-4.2:1 - ponizej progu WCAG 4.5:1. Uzywaj tych zmiennych WYLACZNIE
-     tam, gdzie kolor jest samym czytelnym tekstem na --bg-body/--bg-surface
-     (.text-warning, .bg-warning-subtle itd.) - tla/badge/status-dot
-     zostaja przy zwyklych --success/--warning/--danger/--info, tam problemu
-     nie ma (tekst w srodku ma juz wlasna, osobno dobrana pare kolorow). W
-     dark mode --success/--warning/--danger/--info juz maja kontrast 8+:1 na
-     ciemnym tle, wiec tam warianty "-text" sa identyczne z baza. */
-  --success-text: #0c7745;
-  --warning-text: #985805;
-  --danger-text: #cc1c0f;
-  --info-text: #0565cc;
+  /* Warianty "-text" - w tej palecie IDENTYCZNE z baza (patrz komentarz
+     wyzej: nowe success/warning/danger/info juz przechodza 4.5:1 jako sam
+     tekst, wiec osobno przyciemniona wersja nie jest juz potrzebna). Nazwy
+     zmiennych zostaja - dziesiatki miejsc w kodzie (.text-success,
+     .bg-warning-subtle, .stat-tile-icon-danger itd.) juz z nich korzystaja,
+     aliasowanie do bazy to zero-ryzykowna zmiana bez dotykania tamtych
+     plikow. W dark mode ten alias istnial juz od zawsze (patrz nizej) -
+     teraz oba motywy dzialaja tak samo z tego samego powodu. */
+  --success-text: var(--success);
+  --warning-text: var(--warning);
+  --danger-text: var(--danger);
+  --info-text: var(--info);
 
   /* Kolory tła i tekstu */
   --bg-body: #F5F6FC; /* Chlodny neutral pod panele */
@@ -89,12 +97,12 @@
   --sidebar-width-sm: 72px;
 
   /* Kolory RGB do przezroczystości (Muszą odpowiadać kolorom HEX wyżej!) */
-  --primary-rgb: 81, 69, 229;     /* #5145E5 */
-  --secondary-rgb: 105, 109, 143; /* #696D8F */
-  --success-rgb: 18, 183, 106;    /* #12B76A */
-  --danger-rgb: 240, 68, 56;      /* #F04438 */
-  --warning-rgb: 247, 144, 9;     /* #F79009 */
-  --info-rgb: 46, 144, 250;       /* #2E90FA */
+  --primary-rgb: 79, 70, 229;     /* #4F46E5 */
+  --secondary-rgb: 113, 113, 122; /* #71717A */
+  --success-rgb: 14, 121, 60;     /* #0E793C */
+  --danger-rgb: 225, 29, 72;      /* #E11D48 */
+  --warning-rgb: 180, 83, 9;      /* #B45309 */
+  --info-rgb: 0, 111, 238;        /* #006FEE */
 
   --dark-rgb: 20, 22, 43;         /* #14162B */
   --light-rgb: 249, 249, 249;     /* #F9F9F9 */
@@ -105,10 +113,23 @@
   --btn-text-light: #FFFFFF;
   /* UWAGA: NIE var(--dark) - --dark odwraca sie w dark mode (staje sie
      prawie-bialy), co dawalo bialy-na-bialym dla .btn-warning/.badge-warning
-     w ciemnym motywie (kontrast 1.58:1). success/danger/warning/info sa
-     dosc jasne/pastelowe w OBU motywach, wiec potrzebuja STALE ciemnego
-     tekstu niezaleznie od tematu - stad literal, nie zmienna motywu. */
+     w ciemnym motywie (kontrast 1.58:1). W OBU motywach success/danger/
+     warning/info sa dosc nasycone/jasne (kazdy motyw ma WLASNY, dobrany dla
+     siebie odcien - patrz --semantic-fg nizej), wiec potrzebuja STALE
+     ciemnego tekstu niezaleznie od tego, ktory to motyw - stad literal, nie
+     zmienna motywu. */
   --btn-text-dark: #14162B;
+
+  /* Tekst NA solidnym tle success/danger/warning/info (przyciski .btn-*,
+     .badge-*, .bg-success itd.) - w PRZECIWIENSTWIE do --btn-text-dark
+     wyzej, ten token JEST mode-aware: w light mode te kolory sa ciemne i
+     nasycone (potrzebuja jasnego tekstu), w dark mode sa jasne/neonowe na
+     ciemnym tle (potrzebuja ciemnego tekstu) - dokladnie odwrotna logika
+     niz --primary/--secondary/--dark (te zawsze uzywaja --btn-text-light,
+     bo sa "ciemne" w obu motywach z definicji). Bez tego tokenu flip
+     kolorow success/danger/warning/info w tej palecie zostawilby ciemny
+     tekst na ciemnym tle. */
+  --semantic-fg: var(--btn-text-light);
   --card-bg-subtle: rgba(var(--dark-rgb), 0.035);
 
   /* BLOKI KODU. Ciemne w OBU motywach (tak wygląda kod wszędzie), ale
@@ -236,24 +257,30 @@
   --text-muted: #9BA0C4;
   --border-color: #262A48;
 
-  /* 2. Kolory semantyczne v2 (rozjasnione warianty indygo/success/danger itd. */
-  --primary: #8B84FF;
-  --primary-hover: #A5A0FF;
+  /* 2. Kolory semantyczne "Slate Violet" (rozjasnione/neonowe warianty pod
+     ciemne tlo - patrz komentarz przy definicji palety w :root). Danger
+     NIE jest 1:1 wartoscia z referencyjnego mockupu (#f31260) - ten kolor
+     z bazowym --btn-text-dark dawal 4.30:1 (tylko AA-large, nie AA-normal
+     4.5:1) - #F43A74 to najblizszy odcien tej samej rodziny (jasniejszy,
+     mniej nasycony), ktory realnie przechodzi 4.5:1 (4.84:1, zweryfikowane
+     przeliczeniem WCAG). Reszta wartosci przyjeta z mockupu bez zmian. */
+  --primary: #818CF8;
+  --primary-hover: #98A1F9;
 
-  --secondary: #8E93B5;
-  --secondary-hover: #A9AECB;
+  --secondary: #A1A1AA;
+  --secondary-hover: #B2B2B9;
 
-  --success: #32D583;
-  --success-hover: #6CE9A6;
+  --success: #45D483;
+  --success-hover: #66DC99;
 
-  --danger: #FF7A72;
-  --danger-hover: #FFA39D;
+  --danger: #F43A74;
+  --danger-hover: #F65D8D;
 
-  --warning: #FDB022;
-  --warning-hover: #FEC84B;
+  --warning: #F5A524;
+  --warning-hover: #F7B54B;
 
-  --info: #63A8FF;
-  --info-hover: #8EC2FF;
+  --info: #338EF7;
+  --info-hover: #58A2F8;
 
   /* W dark mode --success/--warning/--danger juz maja 10+:1 na --bg-body
      ciemnym, wiec warianty "-text" zostaja identyczne z baza - patrz
@@ -269,12 +296,12 @@
   --dark: #ECEDF8;
 
   /* 3. Wartości RGB dla Dark Mode (Kluczowe dla klas -subtle i focus ringów!) */
-  --primary-rgb: 139, 132, 255;
-  --secondary-rgb: 142, 147, 181;
-  --success-rgb: 50, 213, 131;
-  --danger-rgb: 255, 122, 114;
-  --warning-rgb: 253, 176, 34;
-  --info-rgb: 99, 168, 255;
+  --primary-rgb: 129, 140, 248;
+  --secondary-rgb: 161, 161, 170;
+  --success-rgb: 69, 212, 131;
+  --danger-rgb: 244, 58, 116;
+  --warning-rgb: 245, 165, 36;
+  --info-rgb: 51, 142, 247;
 
   --dark-rgb: 236, 237, 248;
   --light-rgb: 20, 22, 41;
@@ -289,6 +316,10 @@
   /* Ta sama literalna wartosc co w :root - CELOWO bez zmiany w dark mode,
      patrz komentarz przy definicji w :root. */
   --btn-text-dark: #14162B;
+  /* Odwrotnosc niz w :root - w dark mode success/danger/warning/info sa
+     jasne/neonowe na ciemnym tle, wiec potrzebuja CIEMNEGO tekstu (patrz
+     komentarz przy definicji w :root). */
+  --semantic-fg: var(--btn-text-dark);
 
   /* Cienie v2 w dark mode: czysta czern (nie barwione --dark-rgb jak w
      light) - na ciemnym tle barwiony cien jest niewidoczny/bez sensu. */

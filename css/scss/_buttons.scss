@@ -67,10 +67,11 @@
      2. WARIANTY KOLORYSTYCZNE (Pętla SCSS)
      ========================================= */
   @each $name, $color in $theme-colors {
-    /* success/danger/warning/info sa dosc jasne/pastelowe w OBU motywach,
-       zeby --btn-text-light/--text-main (ktore odwracaja sie w dark mode)
-       dawaly zly kontrast w jednym z nich - patrz --btn-text-dark i
-       --*-text w _root.scss. */
+    /* success/danger/warning/info maja WLASNY, mode-aware token tekstu
+       (--semantic-fg w _root.scss) zamiast --btn-text-light - w palecie
+       "Slate Violet" sa ciemne/nasycone w light mode (potrzebuja jasnego
+       tekstu) ale jasne/neonowe w dark mode (potrzebuja ciemnego), czyli
+       odwrotnie niz zwykle --btn-text-light. */
     $text-safe: $name == "success" or $name == "danger" or $name == "warning" or $name == "info";
 
     /* --- WARIANTY PEŁNE (Solid) --- */
@@ -82,7 +83,7 @@
       @if $name == "light" {
         color: var(--text-main);
       } @else if $text-safe {
-        color: var(--btn-text-dark);
+        color: var(--semantic-fg);
       } @else {
         color: var(--btn-text-light, #fff);
       }
@@ -114,7 +115,7 @@
         @if $name == "light" {
           color: var(--text-main);
         } @else if $text-safe {
-          color: var(--btn-text-dark);
+          color: var(--semantic-fg);
         } @else {
           color: var(--btn-text-light, #fff);
         }

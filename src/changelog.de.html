@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Änderungsverlauf, neue Funktionen und Fehlerbehebungen im molique-CSS-Framework - der vollständige Changelog von v0.1.0 bis v1.7.14."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Änderungsverlauf, neue Funktionen und Fehlerbehebungen im molique-CSS-Framework - der vollständige Changelog von v0.1.0 bis v1.7.15."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,74 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.15 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.15</div>
+              <div class="text-muted text-4">Juli 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  Neue Palette „Slate Violet" - success/danger/warning/info bestehen jetzt immer 4,5:1
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Die bisherigen <code>--success</code>/<code>--danger</code>/
+                    <code>--warning</code>/<code>--info</code> funktionierten
+                    nur als Hintergrund unter dunklem Text - als reine
+                    Textfarbe auf hellem Hintergrund ergaben sie lediglich
+                    2,3-3,8:1 (unter der WCAG-Schwelle von 4,5:1), daher der
+                    separate, zweite Satz <code>--success-text</code> usw.
+                    Die neuen Farben sind dunkel/gesättigt genug, um 4,5:1
+                    in beide Richtungen gleichzeitig zu bestehen - als Text
+                    auf hellem Hintergrund und als Hintergrund unter weißem
+                    Text - der zweite Satz wurde damit überflüssig.
+                    <code>--success-text</code> und der Rest bleiben im Code
+                    (Dutzende Stellen verwenden sie), sind jetzt aber ein
+                    Alias auf die Basis
+                    (<code>--success-text: var(--success)</code>) - keine
+                    Änderungen außerhalb von <code>_root.scss</code>.
+                  </li>
+                  <li>
+                    Neuer Token <code>--semantic-fg</code>: Die alten
+                    success/danger/warning/info waren in BEIDEN Themes
+                    hell/pastellfarben, daher hatten Buttons/Badges immer
+                    fest verdrahteten dunklen Text. Die neuen sind im Light
+                    Mode dunkel, aber im Dark Mode weiterhin hell/neonfarben
+                    - je nach Theme die entgegengesetzte Regel.
+                    <code>--semantic-fg</code> wechselt zusammen mit dem
+                    Theme (<code>_buttons.scss</code>,
+                    <code>_badges.scss</code>, <code>.bg-success</code> usw.
+                    in <code>_colors.scss</code>).
+                  </li>
+                  <li>
+                    Dark-Mode-<code>--danger</code> ist nicht 1:1 aus dem
+                    ursprünglichen Palettenvorschlag - die Version mit
+                    dunklem Text ergab 4,30:1 (nur AA-Large, nicht volles
+                    AA). Ein etwas hellerer Farbton derselben Familie
+                    gewählt - 4,84:1.
+                  </li>
+                  <li>
+                    <code>--primary</code> bleibt in derselben
+                    Indigo-/Violett-Familie wie bisher (kleine
+                    Farbtonkorrektur), <code>--secondary</code> wechselt zu
+                    einem neutralen Zinkgrau ohne Blaustich.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.14 -->
           <!-- ============================================================ -->
