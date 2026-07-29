@@ -64,9 +64,10 @@ osobna, ręczna ścieżka.
   `package.json`, kopiuje CSS/SCSS/JS/img/flags, tłumaczy komentarze na
   EN). Zwróć uwagę na log `[en] Brakujące wpisy` — jeśli >0, część
   nowych komentarzy PL w SCSS nie ma jeszcze tłumaczenia w
-  `tools/i18n-comments/dict.en.json`/`dict.de.json` (workflow opisany w
-  [[feedback_package_comment_language]] — Claude odpowiada za jakość
-  tłumaczeń, nie olewaj tego przy realnej publikacji, ale to osobny,
+  `tools/i18n-comments/dict.en.json`/`dict.de.json` (workflow: patrz
+  `tools/i18n-comments/extract-worklist.mjs` + `apply-translations.mjs` —
+  Claude odpowiada za jakość tłumaczeń, nie olewaj tego przy realnej
+  publikacji, ale to osobny,
   większy krok niż sam release strony, więc nie musi blokować KAŻDEGO
   bumpa wersji, jeśli akurat nic nowego nie doszło w komentarzach).
 - **`molique-jit` (silnik JIT + CLI)** — źródło w `tools/jit/package/`,
