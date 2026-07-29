@@ -1,37 +1,37 @@
 /**
- * molique - Utilities (Narzędzia)
- * Klasy tekstowe i nagłówków
+ * molique - Utilities
+ * Text and heading classes
  */
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   2. TYPOGRAFIA (Narzędzia tekstowe)
+   2. TYPOGRAPHY (text utilities)
    ========================================= */
-/* Mikrocopy - CELOWO mniejsze niż tokeny --text-sm/--text-xs (13/12px),
-   których używają komponenty. Klasy narzędziowe .text-sm/.text-xs to
-   najmniejsze rozmiary w systemie (podpisy, prawne dopiski) i leżą
-   PONIŻEJ .text-1. Nie podpinaj ich pod var(--text-sm)/var(--text-xs).
-   clamp() zamiast sztywnego rem - lekko rosną na dużych ekranach (o ok.
-   1px), żeby nie stały się nieczytelne przy ekstremalnej gęstości
-   pikseli, ale zostają wyraźnie mniejsze niż .text-1 nawet przy max. */
+/* Microcopy - DELIBERATELY smaller than the --text-sm/--text-xs tokens
+   (13/12px) that components use. The .text-sm/.text-xs utility classes
+   are the smallest sizes in the system (captions, legal fine print) and
+   sit BELOW .text-1. Don't tie them to var(--text-sm)/var(--text-xs).
+   clamp() instead of a fixed rem - they grow slightly on large screens
+   (by about 1px) so they don't become illegible at extreme pixel
+   density, but stay clearly smaller than .text-1 even at their max. */
 .text-xs { font-size: clamp(0.625rem, 0.6rem + 0.08vw, 0.6875rem) !important; }  /* 10px -> 11px */
 .text-sm { font-size: clamp(0.6875rem, 0.66rem + 0.08vw, 0.75rem) !important; }  /* 11px -> 12px */
 .text-base { font-size: var(--text-base-size) !important; }
 
-/* Skala numeryczna - ROŚNIE, a tekst bazowy to .text-3 (jak akapity).
-   .text-1/.text-2 leżą poniżej bazy (metadane, daty w timeline). */
+/* A numeric scale that INCREASES, with .text-3 as the base text (like
+   paragraphs). .text-1/.text-2 sit below the base (metadata, timeline dates). */
 .text-1 { font-size: var(--text-xs) !important; }        /* 12px */
 .text-2 { font-size: var(--text-sm) !important; }        /* 13px */
-.text-3 { font-size: var(--text-base-size) !important; } /* baza 14-15px */
+.text-3 { font-size: var(--text-base-size) !important; } /* base 14-15px */
 .text-4 { font-size: var(--h5-size) !important; }
 .text-5 { font-size: var(--h4-size) !important; }
 .text-6 { font-size: var(--h3-size) !important; }
 .text-7 { font-size: var(--h2-size) !important; }
 .text-8 { font-size: var(--h1-size) !important; }
 
-/* Gigantyczne rozmiary (np. do liczników, Hero) */
+/* Giant sizes (e.g. for counters, hero) */
 .text-9 { font-size: clamp(2.25rem, 5vw + 1rem, 4.5rem) !important; }
 .text-10 { font-size: clamp(2.5rem, 6vw + 1rem, 5.5rem) !important; }
 .text-11 { font-size: clamp(2.75rem, 7vw + 1rem, 6.5rem) !important; }

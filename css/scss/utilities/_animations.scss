@@ -1,13 +1,13 @@
 /**
- * molique - Utilities (Narzędzia)
- * Animacje i mikrointerakcje
+ * molique - Utilities
+ * Animations and micro-interactions
  */
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   0. CSS HOUDINI (Rejestracja zmiennych)
+   0. CSS HOUDINI (variable registration)
    ========================================= */
 @property --t-top { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
 @property --t-right { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
@@ -16,13 +16,14 @@
 @property --trace-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 
 /* =========================================
-   0.5. PŁYNNA ZMIANA MOTYWU (View Transitions API)
+   0.5. SMOOTH THEME CHANGE (View Transitions API)
    ========================================= */
-/* Cross-fade wyzwalany przez document.startViewTransition() w
-   molique-script.js (przełącznik motywu). Przenikają się dwie migawki
-   całej strony na GPU (czysta opacity) - zgodnie ze złotą zasadą:
-   żadnego animowania kolorów per element. Pseudo-elementy poza @layer,
-   bo dotyczą specjalnego drzewa ::view-transition, nie komponentów. */
+/* A cross-fade triggered by document.startViewTransition() in
+   molique-script.js (the theme switch). Two full-page snapshots blend
+   into each other on the GPU (pure opacity) - following the golden rule:
+   never animate colors per element. The pseudo-elements sit outside
+   @layer, since they belong to the special ::view-transition tree, not
+   to components. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.35s;
@@ -38,7 +39,7 @@
 
 @layer utilities {
   /* =========================================
-     1. ANIMACJE WEJŚCIA (Intersection Observer)
+     1. ENTRANCE ANIMATIONS (Intersection Observer)
      ========================================= */
   .animate {
     opacity: 0;
@@ -83,14 +84,14 @@
   /* =========================================
      2. SCROLL REVEAL (CSS Scroll-Driven Animations)
      ========================================= */
-  
-  /* Domyślnie (na mobile) klasa nic nie robi - zapobiega to glitchom i oszczędza baterię */
+
+  /* By default (on mobile) the class does nothing - this prevents glitches and saves battery */
   .scroll-reveal {
     opacity: 1;
     transform: none;
   }
 
-  /* Animacja włącza się tylko na desktopie (od breakpointu MD) */
+  /* The animation only activates on desktop (from the MD breakpoint) */
   @include mq(md) {
     @supports (animation-timeline: view()) {
       .scroll-reveal {
@@ -107,7 +108,7 @@
   }
 
   /* =========================================
-     3. HOVER EFFECTS (Mikrointerakcje)
+     3. HOVER EFFECTS (micro-interactions)
      ========================================= */
   .hover-spring, .hover-gpu-shadow {
     --hover-y: 0px;
@@ -143,7 +144,7 @@
   }
 
   /* =========================================
-     4. EFEKTY TEKSTOWE
+     4. TEXT EFFECTS
      ========================================= */
   .text-highlight {
     background-image: linear-gradient(transparent 60%, rgba(var(--primary-rgb), 0.3) 60%);
@@ -202,7 +203,7 @@
   @keyframes textGradientFlow { 0% { background-position: 0% center; } 100% { background-position: -300% center; } }
 
   /* =========================================
-     5. INNE (Shake, Parallax, Blobs)
+     5. OTHER (shake, parallax, blobs)
      ========================================= */
   .shake { animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
   @keyframes shakeAnim {
@@ -223,34 +224,36 @@
   .parallax-bg { position: absolute; top: -20%; left: 0; width: 100%; height: 140%; object-fit: cover; z-index: 0; pointer-events: none; will-change: transform; }
   .parallax-content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-  /* API komponentu na zmiennych, nie na klasach: kolor i czas to wartosci
-     CIAGLE i niesemantyczne, wiec kazda klasa byla by arbitralnym punktem na
-     skali (inaczej niz .stock-bar-success, gdzie nazwa niesie stan).
-     Deklarujemy je na kontenerze, zeby dalo sie nadpisac jednym
-     style="--blob-1: #7c3aed" bez siegania do pseudoelementow. */
+  /* Component API via variables, not classes: color and timing are
+     CONTINUOUS, non-semantic values, so every class would be an arbitrary
+     point on a scale (unlike .stock-bar-success, where the name carries
+     the state). Declared on the container so a single
+     style="--blob-1: #7c3aed" can override them without reaching into
+     the pseudo-elements. */
   .bg-blobs {
     --blob-1: rgba(var(--primary-rgb), 0.5);
     --blob-2: rgba(var(--info-rgb), 0.4);
-    /* Czas jednej plamy. Druga jedzie wolniej (mnoznik ponizej), zeby cykle
-       sie rozjezdzaly i uklad nie powtarzal sie w oczywisty sposob. */
+    /* Timing of one blob. The second one runs slower (multiplier below),
+       so the cycles drift apart and the pattern doesn't obviously repeat. */
     --blob-speed: 7s;
 
     position: relative; overflow: hidden; background-color: var(--bg-surface); z-index: 1;
   }
   .bg-blobs::before, .bg-blobs::after {
     content: ''; position: absolute; width: 50vw; height: 50vw; max-width: 600px; max-height: 600px;
-    /* Nieregularny, organiczny kształt zamiast koła. Promienie są STATYCZNE -
-       border-radius nie jest animowalny bez reflow, więc ruch daje wyłącznie
-       transform. Sam kształt pod blurem 80px byłby jednak ledwo czytelny,
-       dlatego w animacji doszedł obrót: obracająca się nieregularna plama
-       zmienia obrys w czasie, czego idealne koło nie potrafi. */
+    /* An irregular, organic shape instead of a circle. The radii are
+       STATIC - border-radius isn't animatable without reflow, so the
+       motion comes entirely from transform. The shape alone under an
+       80px blur would barely be legible, though, which is why rotation
+       was added to the animation: a rotating irregular blob changes its
+       outline over time, something a perfect circle can't do. */
     border-radius: 42% 58% 63% 37% / 45% 38% 62% 55%;
-    /* Rozmycie 50px, nie 80px. Przy 80px kazde rozmycie punktu bylo WIEKSZE
-       niz nieregularnosc obrysu (~60px na plamie 600px), wiec organiczny
-       ksztalt byl zamazany do kola i obrot pozostawal niewidoczny. */
+    /* A 50px blur, not 80px. At 80px each point's blur was BIGGER than
+       the outline's irregularity (~60px on a 600px blob), so the organic
+       shape blurred into a circle and the rotation stayed invisible. */
     filter: blur(50px); z-index: -1;
-    /* Krycie przez zmienna, zeby klatki mogly nim pulsowac, a warianty
-       (np. .bg-blobs-deep) nadal ustawialy wlasny poziom bazowy. */
+    /* Opacity via a variable, so frames can pulse it while variants
+       (e.g. .bg-blobs-deep) still set their own base level. */
     --blob-opacity: 0.4;
     opacity: var(--blob-opacity);
     will-change: transform, opacity; transform: translate3d(0, 0, 0);
@@ -259,14 +262,15 @@
   .bg-blobs::before { background-color: var(--blob-1); top: -10%; left: -10%; }
   .bg-blobs::after {
     background-color: var(--blob-2); bottom: -10%; right: -10%;
-    /* Lustrzany obrys, żeby obie plamy nie były tym samym kształtem. */
+    /* A mirrored outline, so both blobs aren't the same shape. */
     border-radius: 63% 37% 42% 58% / 62% 55% 45% 38%;
-    /* OSOBNE klatki, nie te same z opoznieniem: wczesniej obie plamy jechaly
-       rownolegle w te sama strone, co czytalo sie jako wspolne kolysanie
-       zamiast niezaleznego dryfu. */
+    /* SEPARATE keyframes, not the same ones with a delay: previously both
+       blobs moved in parallel in the same direction, which read as a
+       shared sway instead of independent drift. */
     animation-name: blobFloatAlt;
-    /* 1.3x wolniej od pierwszej plamy. Mnoznik, a nie sztywna wartosc - dzieki
-       temu zmiana --blob-speed przyspiesza obie, zachowujac rozjazd cykli. */
+    /* 1.3x slower than the first blob. A multiplier, not a fixed value -
+       this way changing --blob-speed speeds up both while keeping their
+       cycles offset. */
     animation-duration: calc(var(--blob-speed) * 1.3);
     animation-delay: calc(var(--blob-speed) * -0.6);
   }
@@ -283,33 +287,34 @@
            opacity: calc(var(--blob-opacity) * 0.6); }
   }
 
-  /* A11y: plamy to duży, ciągły ruch w tle - z dodanym obrotem tym bardziej.
-     Przy prefers-reduced-motion zostaje sam statyczny, organiczny kształt.
-     Globalna reguła w tym pliku wycisza tylko przejścia widoku, więc tę
-     animację trzeba zatrzymać osobno. */
+  /* A11y: the blobs are a large, continuous background motion - even more
+     so with the added rotation. Under prefers-reduced-motion, only the
+     static organic shape remains. The global rule in this file only
+     silences view transitions, so this animation has to be stopped separately. */
   @media (prefers-reduced-motion: reduce) {
     .bg-blobs::before, .bg-blobs::after { animation: none; }
   }
 
-  /* Wariant ZAWSZE CIEMNY - tak jak .navbar-pill, i z tego samego powodu:
-     ma być pewnym podkładem pod biały tekst niezależnie od motywu strony.
-     Wartość jest literalna, NIE var(--bg-body) ani var(--dark): te zmienne
-     odwracają się w dark mode, więc w motywie jasnym tło zrobiłoby się jasne
-     i biały tekst by zniknął. Podmiana przez style="--blobs-deep-bg: #123". */
+  /* An ALWAYS-DARK variant - like .navbar-pill, and for the same reason:
+     it needs to be a reliable backdrop for white text regardless of the
+     page's theme. The value is a literal, NOT var(--bg-body) or
+     var(--dark): those variables invert in dark mode, so in the light
+     theme the background would turn light and the white text would
+     vanish. Override via style="--blobs-deep-bg: #123". */
   .bg-blobs-deep {
     --blobs-deep-bg: #0A0B14;
     background-color: var(--blobs-deep-bg);
-    /* Mocniejsze krycie kolorow, bo na ciemnym tle rozmyte barwy gasna.
-       Nadpisujemy --blob-1/--blob-2, wiec wlasny kolor podany w style="..."
-       na tym samym elemencie i tak wygra (kolejnosc deklaracji inline). */
+    /* Stronger color opacity, since blurred colors fade on a dark
+       background. We override --blob-1/--blob-2, so a custom color given
+       via style="..." on the same element still wins (inline declaration order). */
     --blob-1: rgba(var(--primary-rgb), 0.75);
     --blob-2: rgba(var(--info-rgb), 0.65);
-    /* Poziom BAZOWY krycia - klatki pulsują względem niego. */
+    /* The BASE opacity level - frames pulse relative to it. */
     &::before, &::after { --blob-opacity: 0.6; }
   }
 
   /* =========================================
-     6. ANIMACJE RAMEK (Border Effects)
+     6. BORDER ANIMATIONS (border effects)
      ========================================= */
   .hover-border-draw {
     position: relative;

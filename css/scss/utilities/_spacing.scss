@@ -1,18 +1,18 @@
 /**
- * molique - Utilities (Narzędzia)
- * Pętle generujące margines i paddingi dla wszystkich elementów
+ * molique - Utilities
+ * Loops generating margin and padding for every element
  */
- 
+
 @use '../variables' as *;
 @use '../mixins' as *;
 @use 'sass:meta';
 
 @layer utilities {
   /* =========================================
-     1. SPACING (Marginesy i Paddingi)
+     1. SPACING (margins and paddings)
      ========================================= */
-  
-  /* Dodano wartość 'auto' do mapy */
+
+  /* Added the 'auto' value to the map */
   $space-amounts: (
     0: 0, 
     1: var(--spacing-unit), 
@@ -23,7 +23,7 @@
     auto: auto
   );
   
-  /* Klasyczna nomenklatura (Top, Bottom, Left, Right, X, Y) */
+  /* Classic naming (Top, Bottom, Left, Right, X, Y) */
   $sides: (
     t: top, 
     b: bottom, 
@@ -35,7 +35,7 @@
 
   @each $space-key, $space-val in $space-amounts {
     
-    /* Paddingi (pomijamy 'auto', bo padding: auto nie istnieje w CSS) */
+    /* Paddings (skip 'auto', since padding: auto doesn't exist in CSS) */
     @if $space-key != auto {
       .p-#{$space-key} { padding: #{$space-val} !important; }
       
@@ -51,7 +51,7 @@
       }
     }
 
-    /* Marginesy (wspierają 'auto') */
+    /* Margins (support 'auto') */
     .m-#{$space-key} { margin: #{$space-val} !important; }
     
     @each $side-key, $side-val in $sides {
@@ -67,7 +67,7 @@
   }
 
   /* =========================================
-     2. WARIANTY DESKTOPOWE (MD)
+     2. DESKTOP VARIANTS (MD)
      ========================================= */
   @include mq(md) {
     @each $space-key, $space-val in $space-amounts {

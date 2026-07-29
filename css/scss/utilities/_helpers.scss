@@ -1,6 +1,6 @@
 /**
- * molique - Utilities (Narzędzia)
- * Filtry, Embeds, i Stany Hover
+ * molique - Utilities
+ * Filters, Embeds, and Hover States
  */
 
 @use '../variables' as *;
@@ -8,10 +8,10 @@
 
 @layer utilities {
   /* =========================================
-     DISPLAY UTILITIES (Zarządzanie widocznością)
+     DISPLAY UTILITIES (visibility management)
      ========================================= */
-  
-  /* Domyślne (Mobile First) */
+
+  /* Default (mobile-first) */
   .d-none { display: none !important; }
   .d-inline { display: inline !important; }
   .d-inline-block { display: inline-block !important; }
@@ -20,7 +20,7 @@
   .d-inline-flex { display: inline-flex !important; }
   .d-grid { display: grid !important; }
 
-  /* Warianty dla Desktopu (MD) */
+  /* Desktop variants (MD) */
   @include mq(md) {
     .d-md-none { display: none !important; }
     .d-md-inline { display: inline !important; }
@@ -31,7 +31,7 @@
     .d-md-grid { display: grid !important; }
   }
 
-  /* Warianty dla Dużych Ekranów (LG) */
+  /* Large-screen variants (LG) */
   @include mq(lg) {
     .d-lg-none { display: none !important; }
     .d-lg-inline { display: inline !important; }
@@ -43,7 +43,7 @@
   }
 
 /* =========================================
-   5. HELPERS (Filtry, Embeds, Hover States)
+   5. HELPERS (filters, embeds, hover states)
    ========================================= */
 .filter-grayscale { filter: grayscale(100%); transition: filter var(--transition-speed); }
 .filter-blur { filter: blur(4px); transition: filter var(--transition-speed); }
@@ -58,10 +58,11 @@
 .hover-opacity-100 { transition: opacity var(--transition-speed); }
 .hover-opacity-100:hover { opacity: 1; }
 
-/* USUNIETE: .hover-text-primary i .hover-bg-light.
-   Lamaly konwencje nazw (CO-hover-KOLOR, np. text-hover-primary) i byly
-   duplikatami klas z palety w utilities/_colors.scss - tamte dodatkowo maja
-   transition. Uzycia zmigrowane na .text-hover-primary. */
+/* REMOVED: .hover-text-primary and .hover-bg-light.
+   They broke the naming convention (WHAT-hover-COLOR, e.g.
+   text-hover-primary) and duplicated classes from the palette in
+   utilities/_colors.scss - those also have a transition. Usages migrated
+   to .text-hover-primary. */
 
 .embed-responsive { position: relative; display: block; width: 100%; padding: 0; overflow: hidden; }
 .embed-responsive::before { display: block; content: ""; }
@@ -70,7 +71,7 @@
 .embed-responsive-4by3::before { padding-top: 75%; }
 
 /* =========================================
-   6. FILTRY I PRZEZROCZYSTOŚĆ (Logotypy)
+   6. FILTERS AND TRANSPARENCY (logos)
    ========================================= */
 .opacity-0 { opacity: 0 !important; }
 .opacity-25 { opacity: 0.25 !important; }
@@ -84,7 +85,7 @@
 .hover-filter-none:hover { filter: none !important; }
 
 /* =========================================
-   6b. CIENIE (Shadows)
+   6b. SHADOWS
    ========================================= */
 .shadow-sm { box-shadow: var(--shadow-sm) !important; }
 .shadow { box-shadow: var(--shadow-md) !important; }
@@ -92,14 +93,14 @@
 .shadow-none { box-shadow: none !important; }
 
 /* =========================================
-   6c. KURSOR
+   6c. CURSOR
    ========================================= */
 .cursor-pointer { cursor: pointer !important; }
 .cursor-default { cursor: default !important; }
 .cursor-not-allowed { cursor: not-allowed !important; }
 
 /* =========================================
-   7. STACKING SECTIONS (Przyklejone sekcje)
+   7. STACKING SECTIONS (sticky sections)
    ========================================= */
 .stacking-container {
   position: relative;
@@ -114,74 +115,74 @@
   box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* WARIANT: Magnetyczne przeskakiwanie (Scroll Snap) */
+/* VARIANT: Magnetic snapping (Scroll Snap) */
 .stacking-container-snap {
-  /* Kontener musi mieć określoną wysokość i własny scroll */
+  /* The container needs a defined height and its own scrolling */
   height: 100vh;
   height: 100dvh;
   overflow-y: auto;
-  
-  /* MAGIA CSS: Wymusza przeskakiwanie do krawędzi sekcji */
+
+  /* CSS MAGIC: forces snapping to a section's edge */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  
-  /* Ukrywamy pasek przewijania dla efektu "czystej prezentacji" */
+
+  /* Hide the scrollbar for a "clean presentation" effect */
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
 
   .section-stacked {
-    /* Każda sekcja staje się punktem przyciągania */
+    /* Every section becomes a snap point */
     scroll-snap-align: start;
-    scroll-snap-stop: always; /* Wymusza zatrzymanie na każdej sekcji, zapobiega "przelatywaniu" */
+    scroll-snap-stop: always; /* Forces a stop at every section, prevents "flying past" */
   }
 }
 
 /* =========================================
-   8. KNOCKOUT TEXT (Tekst wycinający tło)
+   8. KNOCKOUT TEXT (text that cuts out a background)
    ========================================= */
-/* Kontener ze zdjęciem w tle */
+/* Container with a background image */
 .bg-knockout-wrapper {
   position: relative;
   background-size: cover;
   background-position: center;
-  /* Opcjonalnie: dodaj background-attachment: fixed dla efektu parallax wewnątrz tekstu! */
+  /* Optional: add background-attachment: fixed for a parallax effect inside the text! */
 }
 
-/* Wariant Jasny: Białe tło, przezroczysty tekst */
+/* Light variant: white background, transparent text */
 .text-knockout-light {
   background-color: #fff;
-  color: #000; /* Musi być czarny, żeby mix-blend-mode zadziałał */
-  mix-blend-mode: screen; /* Czarny staje się przezroczysty, biały zostaje biały */
+  color: #000; /* Must be black for mix-blend-mode to work */
+  mix-blend-mode: screen; /* Black becomes transparent, white stays white */
 }
 
-/* Wariant Ciemny: Czarne tło, przezroczysty tekst */
+/* Dark variant: black background, transparent text */
 .text-knockout-dark {
   background-color: #000;
-  color: #fff; /* Musi być biały, żeby mix-blend-mode zadziałał */
-  mix-blend-mode: multiply; /* Biały staje się przezroczysty, czarny zostaje czarny */
+  color: #fff; /* Must be white for mix-blend-mode to work */
+  mix-blend-mode: multiply; /* White becomes transparent, black stays black */
 }
 
   /* =========================================
-     BACKGROUND MEDIA (Wydajne tła: Wideo i Obrazki)
+     BACKGROUND MEDIA (efficient backgrounds: video and images)
      ========================================= */
   .bg-video-container,
   .bg-image-container {
     position: relative;
     overflow: hidden;
-    isolation: isolate; 
+    isolation: isolate;
 
-    /* Domyślny overlay (przyciemnienie) */
+    /* Default overlay (dimming) */
     &::after {
       content: '';
       position: absolute;
       inset: 0;
-      background-color: rgba(0, 0, 0, 0.4); 
+      background-color: rgba(0, 0, 0, 0.4);
       z-index: -1;
       pointer-events: none;
     }
   }
 
-  /* Wspólne style dla wideo, obrazków i tagu <picture> w tle */
+  /* Shared styles for video, images, and a background <picture> tag */
   .bg-video,
   .bg-image,
   picture.bg-image {
@@ -191,8 +192,8 @@
     height: 100%;
     z-index: -2;
     pointer-events: none;
-    
-    /* Jeśli to tag <picture>, musimy ostylować <img> wewnątrz niego */
+
+    /* If this is a <picture> tag, we need to style the <img> inside it */
     img {
       width: 100%;
       height: 100%;
@@ -200,14 +201,14 @@
     }
   }
 
-  /* Specyficzne dla wideo (Akceleracja GPU) */
+  /* Video-specific (GPU acceleration) */
   video.bg-video {
     object-fit: cover;
     transform: translateZ(0);
     will-change: transform;
   }
 
-  /* A11y: Ukrywanie wideo dla prefers-reduced-motion */
+  /* A11y: hide video for prefers-reduced-motion */
   @media (prefers-reduced-motion: reduce) {
     .bg-video-container video.bg-video {
       display: none; 
@@ -219,21 +220,23 @@
   .z-index-3 { z-index: 3 !important; }
 
   /* =========================================
-     9. FULL-BLEED / BREAKOUT (Mobile)
+     9. FULL-BLEED / BREAKOUT (mobile)
      ========================================= */
-  /* Wyrywa element z paddingu .container na mobile, az do krawedzi ekranu -
-     typowo karuzele, galerie zdjec, zdjecia hero wewnatrz tresci artykulu.
-     Dziala TYLKO ponizej md (768px): .container ma tam padding-inline
-     (patrz _base.scss), a na md+ jest juz z zamierzenia wezszy niz viewport,
-     wiec breakout tam tylko psulby uklad.
+  /* Pulls an element out of .container's padding on mobile, all the way
+     to the screen edge - typically carousels, image galleries, hero
+     images inside article content. Works ONLY below md (768px):
+     .container has padding-inline there (see _base.scss), and at md+ it's
+     already deliberately narrower than the viewport, so a breakout there
+     would only break the layout.
 
-     Technika "viewport centering" (width: 100vw + margin-left: 50% +
-     translateX(-50%)) dziala niezaleznie od realnej wartosci paddingu
-     rodzica - nie trzeba go znac ani przeliczac, dziala nawet gdy ktos
-     nadpisze padding .container klasa narzedziowa. html ma juz globalnie
-     overflow-x: clip (patrz _base.scss) - dzieki temu 100vw nie rozsadza
-     ukladu poziomym scrollem, nawet gdy strona ma widoczny pasek przewijania
-     (bez tej tarczy 100vw liczy sie WRAZ z szerokoscia scrollbara). */
+     The "viewport centering" technique (width: 100vw + margin-left: 50% +
+     translateX(-50%)) works regardless of the parent's actual padding
+     value - no need to know or compute it, works even if someone
+     overrides .container's padding with a utility class. html already has
+     a global overflow-x: clip (see _base.scss) - this keeps 100vw from
+     blowing out the layout with horizontal scroll, even when the page has
+     a visible scrollbar (without this shield, 100vw is measured
+     INCLUDING the scrollbar's width). */
   @include mq(sm, max) {
     .breakout-mobile {
       width: 100vw;

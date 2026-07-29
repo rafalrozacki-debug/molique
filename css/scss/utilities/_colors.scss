@@ -1,28 +1,29 @@
 /**
- * molique - Utilities (Narzędzia)
- * Kolory tekstu, tła, hovery i efekty specjalne (Zgodne z Dark Mode)
+ * molique - Utilities
+ * Text colors, backgrounds, hovers, and special effects (dark-mode aware)
  */
 
 @use '../variables' as *;
 
 @layer utilities {
   /* =========================================
-     1. KOLORY TEKSTU
+     1. TEXT COLORS
      ========================================= */
   .text-main { color: var(--text-main) !important; }
   .text-muted { color: var(--text-muted) !important; }
   .text-white { color: #ffffff !important; }
 
-  /* Zwykly link w prozie (akapit, komorka tabeli, pozycja listy) BEZ
-     wlasnej klasy: sam kolor --primary nie daje wystarczajacej ROZNICY od
-     otaczajacego tekstu (--text-main, --text-muted czy --secondary), zeby
-     byc "rozroznialny nie tylko kolorem" (WCAG 1.4.1) - potrzebne
-     podkreslenie jako druga, niekolorowa wskazowka. `:not([class])`
-     celowo wyklucza linki, ktore MAJA wlasna klase (.btn, .card,
-     .admin-nav-link, .dropdown-item itd.) - te sa stylowane jako oddzielne
-     elementy UI (padding, hover-tlo), nie fragmenty zdania, wiec
-     podkreslenie by tam tylko przeszkadzalo. Linki z .text-decoration-none
-     (!important) i tak by wygraly niezaleznie od tego wyjatku. */
+  /* A plain link in prose (a paragraph, table cell, list item) WITHOUT
+     its own class: the --primary color alone doesn't give enough
+     DIFFERENCE from the surrounding text (--text-main, --text-muted, or
+     --secondary) to be "distinguishable by more than color alone" (WCAG
+     1.4.1) - an underline is needed as a second, non-color cue.
+     `:not([class])` deliberately excludes links that DO HAVE their own
+     class (.btn, .card, .admin-nav-link, .dropdown-item, etc.) - those
+     are styled as separate UI elements (padding, hover background), not
+     fragments of a sentence, so an underline there would only get in the
+     way. Links with .text-decoration-none (!important) would still win
+     regardless of this exception. */
   p a:not([class]),
   td a:not([class]),
   li a:not([class]),
@@ -42,7 +43,7 @@
   .text-light { color: var(--light) !important; }
 
   /* =========================================
-     2. KOLORY TŁA
+     2. BACKGROUND COLORS
      ========================================= */
   .bg-body { background-color: var(--bg-body) !important; }
   .bg-surface { background-color: var(--bg-surface) !important; }
@@ -54,14 +55,14 @@
   .bg-danger { background-color: var(--danger) !important; color: var(--semantic-fg) !important; }
   .bg-warning { background-color: var(--warning) !important; color: var(--semantic-fg) !important; }
   .bg-info { background-color: var(--info) !important; color: var(--semantic-fg) !important; }
-  /* bg-dark na literałach: sekcje "zawsze ciemne" (stopki, hero) łączone
-     w HTML z .text-white - z flipowanym var(--dark) w ciemnym motywie tło
-     robiło się jasne pod białym tekstem. */
+  /* bg-dark uses literals: "always dark" sections (footers, hero) are
+     paired in the HTML with .text-white - with a flipped var(--dark) in
+     dark mode the background would turn light under white text. */
   .bg-dark { background-color: #14162B !important; color: #F9F9F9 !important; }
   .bg-light { background-color: var(--light) !important; color: var(--text-main) !important; }
 
-  /* --- TŁA SUBTELNE (10% krycia) --- */
-  /* Wykorzystujemy zmienne RGB z _root.scss do uzyskania przezroczystości */
+  /* --- SUBTLE BACKGROUNDS (10% opacity) --- */
+  /* Using the RGB variables from _root.scss to get transparency */
   .bg-primary-subtle { background-color: rgba(var(--primary-rgb), 0.1) !important; color: var(--primary) !important; }
   .bg-secondary-subtle { background-color: rgba(var(--secondary-rgb), 0.1) !important; color: var(--secondary) !important; }
   .bg-success-subtle { background-color: rgba(var(--success-rgb), 0.1) !important; color: var(--success-text) !important; }
@@ -75,7 +76,7 @@
   .bg-white-subtle { background-color: rgba(255, 255, 255, 0.1) !important; color: var(--text-main) !important; }
 
   /* =========================================
-     3. HOVER UTILITIES (Generowane z pętli)
+     3. HOVER UTILITIES (generated from a loop)
      ========================================= */
   $theme-colors: (
     "primary": var(--primary),
@@ -91,17 +92,18 @@
   );
 
   @each $name, $color in $theme-colors {
-    
-    /* Tło na hover */
+
+    /* Background on hover */
     .bg-hover-#{$name} {
       transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-      
+
       &:hover {
         background-color: #{$color} !important;
-        
-        /* Automatyczny kontrast tekstu - success/danger/warning/info uzywaja
-           --semantic-fg (mode-aware, patrz _root.scss), bo w tej palecie sa
-           ciemne/nasycone w light mode ale jasne/neonowe w dark mode. */
+
+        /* Automatic text contrast - success/danger/warning/info use
+           --semantic-fg (mode-aware, see _root.scss), since in this
+           palette they're dark/saturated in light mode but light/neon in
+           dark mode. */
         @if $name == "primary" or $name == "dark" or $name == "secondary" {
           color: var(--btn-text-light) !important;
         } @else if $name == "success" or $name == "danger" or $name == "warning" or $name == "info" {
@@ -112,13 +114,13 @@
       }
     }
 
-    /* Tekst na hover */
+    /* Text on hover */
     .text-hover-#{$name} {
       transition: color var(--transition-speed) ease;
       &:hover { color: #{$color} !important; }
     }
-    
-    /* Obramowanie na hover */
+
+    /* Border on hover */
     .border-hover-#{$name} {
       transition: border-color var(--transition-speed) ease;
       &:hover { border-color: #{$color} !important; }
@@ -163,28 +165,28 @@
   }
 
   /* =========================================
-     5. ZAAWANSOWANE TŁA
+     5. ADVANCED BACKGROUNDS
      ========================================= */
 
-  /* Narożne gradienty (Efekt łuny) */
+  /* Corner gradients (a glow effect) */
   .bg-gradient-corners {
     position: relative;
-    /* Literal: łuna wymaga zawsze ciemnego tła (flipowany var(--dark)
-       w ciemnym motywie rozjaśniał sekcję pod jasną treścią) */
+    /* A literal: the glow needs an always-dark background (a flipped
+       var(--dark) in dark mode would brighten the section under light content) */
     background-color: #14162B;
     z-index: 1;
-    /* Zabezpieczenie przed wylewaniem się zawartości */
-    overflow: hidden; 
-    
+    /* Guard against content spilling out */
+    overflow: hidden;
+
     &::before {
       content: '';
       position: absolute;
       inset: 0;
       z-index: -1;
-      
-      /* FIX: Pseudo-element musi dziedziczyć zaokrąglenia od rodzica! */
-      border-radius: inherit; 
-      
+
+      /* FIX: the pseudo-element must inherit its parent's rounding! */
+      border-radius: inherit;
+
       background:
         radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.22) 0%, transparent 45%),
         radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.18) 0%, transparent 45%);
@@ -192,9 +194,10 @@
     }
   }
 
-  /* Ta sama łuna co wyżej, ale na jasnym tle - w przeciwienstwie do
-     .bg-gradient-corners TO tlo odwraca sie normalnie z motywem (var(--bg-body)),
-     bo tu nie ma zalozenia o bialym tekscie na wierzchu. */
+  /* The same glow as above, but on a light background - unlike
+     .bg-gradient-corners, THIS background inverts normally with the
+     theme (var(--bg-body)), since there's no assumption of white text on
+     top here. */
   .bg-gradient-corners-light {
     position: relative;
     background-color: var(--bg-body);
@@ -215,7 +218,7 @@
     }
   }
 
-  /* Tekst wycięty z tła (Wymaga zmiennej --clip-img w HTML) */
+  /* Text clipped from a background (requires the --clip-img variable in the HTML) */
   .text-clip-bg {
     background-image: var(--clip-img);
     background-size: cover;
