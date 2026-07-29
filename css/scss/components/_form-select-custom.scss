@@ -11,7 +11,7 @@
     position: relative;
     width: 100%;
 
-    /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+    /* Stan "otwarty" odczytujemy z popovera przez :has() - popover
        (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
        na elemencie nadrzędnym. */
     &:has(.custom-select-dropdown:popover-open) .custom-select-trigger {
@@ -29,7 +29,7 @@
     min-height: var(--target-size-min);
     padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
     text-align: left;
-    /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+    /* Trigger to <button> - w przeciwieństwie do <summary> nie dziedziczy
        fontu automatycznie. */
     font: inherit;
     color: var(--text-main);
@@ -60,7 +60,7 @@
   }
 
   .custom-select-dropdown {
-    /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki —
+    /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki -
        dzięki temu NIE jest przycinany przez overflow przodków (np. przewijany
        .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
        na Esc i klik poza menu obsługuje natywnie light dismiss.
@@ -84,7 +84,7 @@
     left: anchor(left);
     /* Szerokość taka sama jak przycisk */
     width: anchor-size(width);
-    /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+    /* z-index istotny tylko w fallbacku - w top layer o kolejności decyduje
        moment otwarcia, nie z-index (sticky nagłówki tabel z z-index:10
        przestają być problemem). */
     z-index: var(--z-index-dropdown);
@@ -106,7 +106,7 @@
     }
 
     /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-       dropdown otwiera się jako wyśrodkowany panel — nadal w top layer,
+       dropdown otwiera się jako wyśrodkowany panel - nadal w top layer,
        więc nic go nie przycina. */
     @supports not (top: anchor(bottom)) {
       position: fixed;

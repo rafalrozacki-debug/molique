@@ -7,13 +7,13 @@
 @use '../mixins' as *;
 
 /* =========================================
-   3. MEGA MENU (<details> + Anchor Positioning — Zero JS, działa na mobile)
+   3. MEGA MENU (<details> + Anchor Positioning - Zero JS, działa na mobile)
    ========================================= */
 .mega-menu {
   /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
      żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
      (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
-     position:relative — .mega-menu-content ma się pozycjonować względem
+     position:relative - .mega-menu-content ma się pozycjonować względem
      .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
      panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
      krawędzi navbara. */
@@ -56,10 +56,10 @@
     transform: rotate(180deg);
   }
 
-  /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte —
+  /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte -
      klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
      <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
-     powyżej — zero JS potrzebne do zamykania na klik-poza-menu). */
+     powyżej - zero JS potrzebne do zamykania na klik-poza-menu). */
   &::before {
     content: '';
     position: fixed;
@@ -131,7 +131,7 @@
   text-decoration: none;
   transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
 
-  /* Strzałka pojawiająca się na hover — czysto dekoracyjna (opacity/transform,
+  /* Strzałka pojawiająca się na hover - czysto dekoracyjna (opacity/transform,
      GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
   &::after {
     content: '\2192';
@@ -152,7 +152,7 @@
   }
 }
 
-/* Wyróżniona karta (Featured) — jedna "komórka" siatki, wizualnie
+/* Wyróżniona karta (Featured) - jedna "komórka" siatki, wizualnie
    podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
 /* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
    Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
@@ -227,7 +227,7 @@
     position: absolute;
     /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
        wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
-       .navbar (position:relative, patrz sekcja 1) — dzięki temu szeroki
+       .navbar (position:relative, patrz sekcja 1) - dzięki temu szeroki
        panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
        trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
     position-anchor: --mega-menu-trigger;
@@ -236,7 +236,7 @@
     margin-top: calc(var(--spacing-unit) * 1);
     width: min(94vw, 980px);
     /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
-       zrobić się wyższy niż viewport — ograniczamy wysokość i włączamy
+       zrobić się wyższy niż viewport - ograniczamy wysokość i włączamy
        wewnętrzny scroll zamiast wypychania poza ekran. */
     max-height: min(78vh, 680px);
     overflow-y: auto;
@@ -270,7 +270,7 @@
     border: none;
     background-color: rgba(0, 0, 0, 0.02);
 
-    /* Na mobile pokazuje/chowa się natychmiast, bez animacji — spójnie z
+    /* Na mobile pokazuje/chowa się natychmiast, bez animacji - spójnie z
        .admin-nav-submenu, który też jest oparty na <details>. */
     opacity: 1;
     transform: none;

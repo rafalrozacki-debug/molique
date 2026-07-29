@@ -17,10 +17,10 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Admin-Panel (Dashboard)</h1>
             <p class="text-6 text-muted">
-              Ein komplettes Gerüst für CRM, ERP und B2B-Panels — ein
+              Ein komplettes Gerüst für CRM, ERP und B2B-Panels - ein
               Sidebar-Layout, Navigation mit aufklappbarem Baum und ein
               „Faux Cutout"-Header. Erfordert eine eigene Datei
-              <code>molique-style-admin.css</code> — diese Seite (wie jede
+              <code>molique-style-admin.css</code> - diese Seite (wie jede
               Dokumentationsseite) ist selbst ein lebendiges Beispiel dafür.
               Das vollständige Layout finden Sie in den
               <a href="examples-admin-layout.de">Beispielen</a>.
@@ -34,7 +34,7 @@
             <h2 class="text-8 fw-bold mb-3">1. Layout-Struktur</h2>
             <p class="text-muted mb-4">
               Drei Klassen teilen den Bildschirm in Sidebar und Inhalt.
-              <code>.admin-layout</code> ist ein zweispaltiges CSS Grid —
+              <code>.admin-layout</code> ist ein zweispaltiges CSS Grid -
               eine Variable steuert die Sidebar-Breite, sodass die
               Größenvarianten (unten) keine eigenen Grid-Regeln benötigen.
             </p>
@@ -69,7 +69,7 @@
                     <td data-label="Klasse"><code class="fw-bold">.admin-layout</code></td>
                     <td data-label="Was sie macht">
                       Ein zweispaltiges Raster. Unterhalb von 768px
-                      verschwinden die Spalten — die Sidebar wird zu einer
+                      verschwinden die Spalten - die Sidebar wird zu einer
                       horizontalen Leiste am unteren Bildschirmrand (Bottom
                       Nav), <code>.admin-main</code> nimmt die volle Breite ein.
                     </td>
@@ -80,16 +80,16 @@
                       <code>position: sticky</code> auf dem Desktop,
                       <code>position: fixed</code> (unterer Bildschirmrand)
                       auf Mobilgeräten. Hintergrund immer dunkel, unabhängig
-                      vom hellen/dunklen Theme — siehe Fallstrick Nr. 1.
+                      vom hellen/dunklen Theme - siehe Fallstrick Nr. 1.
                     </td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-main</code></td>
-                    <td data-label="Was sie macht">Die Inhaltsspalte. <code>overflow-x: hidden</code> — breite Tabellen brauchen ihren eigenen <code>.table-wrapper</code>.</td>
+                    <td data-label="Was sie macht">Die Inhaltsspalte. <code>overflow-x: hidden</code> - breite Tabellen brauchen ihren eigenen <code>.table-wrapper</code>.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-brand</code></td>
-                    <td data-label="Was sie macht">Das Logo in der Sidebar — nimmt Bild, SVG oder Text auf und sprengt nie die Breite.</td>
+                    <td data-label="Was sie macht">Das Logo in der Sidebar - nimmt Bild, SVG oder Text auf und sprengt nie die Breite.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.sidebar-md</code> / <code>.sidebar-sm</code></td>
@@ -118,7 +118,7 @@
                     <td data-label="Klasse"><code class="fw-bold">.fade-bottom</code></td>
                     <td data-label="Was sie macht">
                       Opt-in auf <code>.admin-sidebar</code> oder
-                      <code>.admin-main</code> — ein Ausblend-Gradient am
+                      <code>.admin-main</code> - ein Ausblend-Gradient am
                       unteren Rand des scrollbaren Bereichs statt eines
                       harten Schnitts. Die vollständige Variablenliste
                       finden Sie in der
@@ -135,7 +135,7 @@
                 Die Farben der Sidebar (<code>--sidebar-bg</code>,
                 <code>--sidebar-text</code>…), die Radien der
                 Floating-Variante und die Höhe des
-                <code>.fade-bottom</code>-Gradienten sind CSS-Variablen —
+                <code>.fade-bottom</code>-Gradienten sind CSS-Variablen -
                 eine vollständige Beschreibung jeder einzelnen finden Sie in
                 der <a href="docs-variables.de">Variablenreferenz</a>,
                 Abschnitte „Admin-Panel" und „Sidebar des Admin-Panels".
@@ -162,7 +162,7 @@
               <p class="text-4 text-muted m-0">
                 Anders als bei den meisten interaktiven Komponenten ist die
                 Steuerung von <code>#molique-sidebar-toggle</code> kein
-                separates, verzögert geladenes Modul — sie sitzt fest in
+                separates, verzögert geladenes Modul - sie sitzt fest in
                 <code>molique-script.js</code>. Es genügt, dem Markup einen
                 Button mit der richtigen ID hinzuzufügen, ohne irgendetwas zu registrieren.
               </p>
@@ -195,7 +195,7 @@
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">#molique-sidebar-toggle</code></td>
                     <td data-label="Was sie macht">
-                      Eine ID, keine Klasse — <code>molique-script.js</code>
+                      Eine ID, keine Klasse - <code>molique-script.js</code>
                       sucht sie über einen
                       <code>getElementById</code>-artigen
                       <code>querySelector</code>. Es muss
@@ -207,7 +207,7 @@
                     <td data-label="Klasse"><code class="fw-bold">.sidebar-toggle-icon</code></td>
                     <td data-label="Was sie macht">
                       Erfordert genau <strong>drei</strong> leere
-                      <code>&lt;span&gt;</code>-Elemente darin — CSS
+                      <code>&lt;span&gt;</code>-Elemente darin - CSS
                       positioniert sie über <code>:nth-child</code>, um drei
                       verschiedene Formen zu erzeugen (Hamburger /
                       asymmetrische Linien / Pfeil).
@@ -222,7 +222,7 @@
               <p class="text-4 text-muted m-0">
                 Die Breitenwahl wird in <code>localStorage</code>
                 gespeichert, aber <code>molique-script.js</code> liest sie
-                erst bei <code>DOMContentLoaded</code> — also NACH dem
+                erst bei <code>DOMContentLoaded</code> - also NACH dem
                 ersten Rendering. Ohne einen zusätzlichen Schritt würde ein
                 wiederkehrender Nutzer mit eingeklappter Sidebar diese
                 zunächst in voller Breite sehen, bevor sie sich verschmälert.
@@ -231,27 +231,27 @@
                 <code>&lt;head&gt;</code>, das <code>localStorage</code>
                 liest und die Klasse <code>sidebar-md</code>/<code>sidebar-sm</code>
                 direkt auf <code>&lt;html&gt;</code> setzt, bevor der Browser
-                irgendetwas zeichnet — derselbe Mechanismus setzt auch
+                irgendetwas zeichnet - derselbe Mechanismus setzt auch
                 <code>data-theme</code> für das helle/dunkle Theme. In
                 diesem Projekt sitzt das Skript in
                 <code>partials/head.html</code> und erreicht automatisch
                 jede Seite; bei einer neuen Implementierung müssen Sie es
                 manuell zusammen mit den gespiegelten CSS-Regeln
                 (<code>:root.sidebar-md</code> / <code>:root.sidebar-sm</code>
-                in <code>_admin-layout.scss</code>) kopieren — ohne diese
+                in <code>_admin-layout.scss</code>) kopieren - ohne diese
                 bewirkt das Speichern in <code>localStorage</code> allein nichts.
               </p>
             </div>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 3. NAVIGATION — LINKS                                 -->
+          <!-- 3. NAVIGATION - LINKS                                 -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">3. Navigation — Links</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Navigation - Links</h2>
             <p class="text-muted mb-4">
               Eine flache Liste von Links. Auf dem Desktop eine Spalte,
-              unterhalb von 768px eine horizontale Leiste (Bottom Nav) —
+              unterhalb von 768px eine horizontale Leiste (Bottom Nav) -
               dasselbe Markup, keine Bedingungen im HTML.
             </p>
 
@@ -280,7 +280,7 @@
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-nav-link.is-active</code></td>
-                    <td data-label="Was sie macht">Die aktuelle Position — Hintergrund <code>--primary</code>. Manuell setzen oder <code>molique-admin-nav-active.js</code> (unten) einbinden.</td>
+                    <td data-label="Was sie macht">Die aktuelle Position - Hintergrund <code>--primary</code>. Manuell setzen oder <code>molique-admin-nav-active.js</code> (unten) einbinden.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-nav-divider</code></td>
@@ -290,14 +290,14 @@
                     <td data-label="Klasse"><code class="fw-bold">.admin-nav-bottom</code></td>
                     <td data-label="Was sie macht">
                       Auf einem separaten <code>&lt;ul class="admin-nav"&gt;</code>
-                      — <code>margin-top: auto</code> drückt es ganz nach
+                      - <code>margin-top: auto</code> drückt es ganz nach
                       unten in der Sidebar (z. B. ein Link „Einstellungen"
                       oder der Umschalter aus Abschnitt 2). Auf Mobilgeräten verborgen.
                     </td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.mobile-only-nav-item</code></td>
-                    <td data-label="Was sie macht">Eine Position, die AUSSCHLIESSLICH im Bottom Nav sichtbar ist — ein duplizierter Link außerhalb der fünf Haupt-Icons (siehe Abschnitt 5).</td>
+                    <td data-label="Was sie macht">Eine Position, die AUSSCHLIESSLICH im Bottom Nav sichtbar ist - ein duplizierter Link außerhalb der fünf Haupt-Icons (siehe Abschnitt 5).</td>
                   </tr>
                 </tbody>
               </table>
@@ -310,25 +310,25 @@
                 kann statt eines manuellen <code>.is-active</code> das
                 Modul <code>js/modules/molique-admin-nav-active.js</code>
                 verwenden (automatisch geladen bei
-                <code>.admin-nav</code>) — es vergibt die Klasse an jedes
+                <code>.admin-nav</code>) - es vergibt die Klasse an jedes
                 <code>.admin-nav-link</code>, das auf die aktuelle URL
                 zeigt, auch an das Duplikat in der mobilen Leiste. Tragen
                 Sie die Aktivität nicht fest in ein gemeinsam genutztes
-                Partial ein — die Sidebar ist oft eine einzige Datei für
+                Partial ein - die Sidebar ist oft eine einzige Datei für
                 viele Unterseiten.
               </p>
             </div>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 4. UNTERMENÜ — BAUM / DRILL-DOWN                      -->
+          <!-- 4. UNTERMENÜ - BAUM / DRILL-DOWN                      -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">4. Untermenü — Baum / Drill-down</h2>
+            <h2 class="text-8 fw-bold mb-3">4. Untermenü - Baum / Drill-down</h2>
             <p class="text-muted mb-4">
               Eine aufklappbare Linkgruppe auf Basis des nativen
               <code>&lt;details&gt;</code>. Dasselbe Markup wird je nach
-              Sidebar-Breite auf drei verschiedene Arten dargestellt — ganz
+              Sidebar-Breite auf drei verschiedene Arten dargestellt - ganz
               ohne Varianten im HTML.
             </p>
 
@@ -343,7 +343,7 @@
                 <tbody>
                   <tr>
                     <td data-label="Kontext">Volle Sidebar (ohne Modifikator)</td>
-                    <td data-label="Verhalten">Klassischer Baum — die Liste fährt unter der Position aus, der Rest der Sidebar rückt nach unten.</td>
+                    <td data-label="Verhalten">Klassischer Baum - die Liste fährt unter der Position aus, der Rest der Sidebar rückt nach unten.</td>
                   </tr>
                   <tr>
                     <td data-label="Kontext"><code>.sidebar-md</code> / <code>.sidebar-sm</code></td>
@@ -408,11 +408,11 @@
                 <tbody>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-nav-submenu</code></td>
-                    <td data-label="Was sie macht">Auf einem <code>&lt;details&gt;</code>. Das Öffnen übernimmt der native Mechanismus — CSS und JS ergänzen nur Aussehen und Animationen.</td>
+                    <td data-label="Was sie macht">Auf einem <code>&lt;details&gt;</code>. Das Öffnen übernimmt der native Mechanismus - CSS und JS ergänzen nur Aussehen und Animationen.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-nav-submenu-list</code></td>
-                    <td data-label="Was sie macht">Direktes Kind von <code>&lt;details&gt;</code>, neben <code>&lt;summary&gt;</code> — nicht tiefer verschachteln, die Regeln zielen auf <code>:scope &gt;</code>.</td>
+                    <td data-label="Was sie macht">Direktes Kind von <code>&lt;details&gt;</code>, neben <code>&lt;summary&gt;</code> - nicht tiefer verschachteln, die Regeln zielen auf <code>:scope &gt;</code>.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-nav-submenu-link</code></td>
@@ -433,8 +433,8 @@
                 sofort aus, daher fügt das Modul für die Dauer der Animation
                 die Klasse <code>.is-closing</code> hinzu und entfernt
                 <code>open</code> erst danach), schließt bei
-                <kbd>Esc</kbd> und — <strong>nur auf mobilen
-                Geräten</strong> — schließt beim Öffnen eines Untermenüs die
+                <kbd>Esc</kbd> und - <strong>nur auf mobilen
+                Geräten</strong> - schließt beim Öffnen eines Untermenüs die
                 übrigen.
               </p>
             </div>
@@ -450,7 +450,7 @@
               <code>.admin-nav</code> wird zu einer horizontalen Icon-Leiste
               am unteren Bildschirmrand. Passen mehr Positionen hinein, als
               in die Leiste passen, versteckt sich der Überschuss hinter
-              einem separaten „Mehr"-Button — ein Checkbox-Hack, kein
+              einem separaten „Mehr"-Button - ein Checkbox-Hack, kein
               <code>&lt;details&gt;</code>, um nicht mit dem Untermenü aus
               Abschnitt 4 zu kollidieren.
             </p>
@@ -479,16 +479,16 @@
                 <tbody>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.mobile-more-toggle</code></td>
-                    <td data-label="Was sie macht">Eine versteckte Checkbox — der Browser hält den Zustand, null JS.</td>
+                    <td data-label="Was sie macht">Eine versteckte Checkbox - der Browser hält den Zustand, null JS.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.mobile-more-label</code></td>
-                    <td data-label="Was sie macht">Ein <code>&lt;label for="…"&gt;</code>, das auf die Checkbox verweist. AUSSCHLIESSLICH auf Mobilgeräten sichtbar — verbirgt sich auf dem Desktop.</td>
+                    <td data-label="Was sie macht">Ein <code>&lt;label for="…"&gt;</code>, das auf die Checkbox verweist. AUSSCHLIESSLICH auf Mobilgeräten sichtbar - verbirgt sich auf dem Desktop.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-nav-dropdown-menu</code></td>
                     <td data-label="Was sie macht">
-                      Auf dem Desktop: <code>display: contents</code> — die
+                      Auf dem Desktop: <code>display: contents</code> - die
                       Links darin verhalten sich, als lägen sie direkt in
                       <code>.admin-nav</code>. Auf Mobilgeräten: eine
                       Schublade, die nach dem Aktivieren der Checkbox von
@@ -507,7 +507,7 @@
             <h2 class="text-8 fw-bold mb-3">6. Faux-Cutout-Header</h2>
             <p class="text-muted mb-4">
               Ein Seitenkopf mit der Illusion eines Ausschnitts um den
-              Aktionsblock — der Effekt entsteht durch zwei Ecken mit
+              Aktionsblock - der Effekt entsteht durch zwei Ecken mit
               <code>radial-gradient</code>, ohne SVG und ohne Masken. Ein
               vollständiges, lebendiges Beispiel finden Sie auf der Seite
               <a href="examples-admin-layout.de">Admin-Layout</a>.
@@ -545,7 +545,7 @@
                       Ein Block mit scheinbarem Ausschnitt in der oberen
                       linken und unteren rechten Ecke. Die Farbe des
                       Ausschnitts ist die Variable
-                      <code>--cutout-bg</code> — siehe Fallstrick Nr. 4.
+                      <code>--cutout-bg</code> - siehe Fallstrick Nr. 4.
                     </td>
                   </tr>
                 </tbody>
@@ -569,10 +569,10 @@
                   <p class="text-muted m-0">
                     <code>--sidebar-bg</code>, <code>--sidebar-text</code>
                     und <code>--sidebar-highlight-rgb</code> haben einen
-                    einzigen, festen Wert — die Sidebar ist immer dunkel,
+                    einzigen, festen Wert - die Sidebar ist immer dunkel,
                     unabhängig vom Theme der Seite. Das ist Absicht
                     (Kontrast zu hellem Inhalt), bedeutet aber, dass Sie sie
-                    nicht über den Hell/Dunkel-Umschalter aufhellen können —
+                    nicht über den Hell/Dunkel-Umschalter aufhellen können -
                     nur durch direktes Überschreiben dieser Variablen.
                   </p>
                 </div>
@@ -588,7 +588,7 @@
                     Das Skript nimmt das erste Element mit dieser ID über
                     <code>querySelector</code>. Ein zweiter Button mit
                     derselben ID (ungültiges HTML, das der Browser aber
-                    trotzdem rendert) bleibt tot — bei einem Klick passiert nichts.
+                    trotzdem rendert) bleibt tot - bei einem Klick passiert nichts.
                   </p>
                 </div>
               </details>
@@ -601,14 +601,14 @@
                 <div class="accordion-body">
                   <p class="text-muted m-0">
                     Auf dem Desktop bei voller Sidebar ist das nur ein
-                    aufgeklappter Baum — harmlos. Aber
+                    aufgeklappter Baum - harmlos. Aber
                     <code>molique-admin-nav.js</code> schließt ein solches
                     <code>&lt;details open&gt;</code> beim Start bewusst,
                     falls Sie sich gerade in der mobilen Ansicht befinden:
                     ohne das würde der Aufruf einer beliebigen Unterseite
                     einen vollflächigen Drill-down statt des Inhalts öffnen.
                     Setzen Sie <code>open</code> nicht manuell, um „das ist
-                    der aktive Abschnitt" zu markieren — das übernimmt
+                    der aktive Abschnitt" zu markieren - das übernimmt
                     <code>.is-active</code> am <code>&lt;summary&gt;</code>,
                     nicht das Attribut <code>open</code>.
                   </p>
@@ -624,7 +624,7 @@
                   <p class="text-muted m-0">
                     Der Ausschnitt in <code>.dashboard-header-actions</code>
                     ist ein Gradient von der Farbe <code>--cutout-bg</code>
-                    zu Transparenz — stimmt sie nicht exakt mit dem
+                    zu Transparenz - stimmt sie nicht exakt mit dem
                     tatsächlichen Hintergrund darunter überein (z. B. in der
                     Variante <code>.admin-layout-floating</code>, in der der
                     Inhaltshintergrund <code>--bg-surface</code> ist, nicht
@@ -645,7 +645,7 @@
                     liegen <code>.chart-funnel</code>,
                     <code>.chart-pipeline</code> und
                     <code>.chart-funnel-true</code> physisch in
-                    <code>molique-style-admin.css</code>, nicht im Kern —
+                    <code>molique-style-admin.css</code>, nicht im Kern -
                     die übrigen Diagramme (<code>.chart-sparkline</code>,
                     <code>.chart-radial</code>…) funktionieren ohne diese
                     Datei, Trichter nicht. Die vollständige
@@ -664,7 +664,7 @@
                   <p class="text-muted m-0">
                     <code>#molique-sidebar-toggle</code> speichert den
                     Zustand in <code>localStorage</code>, verhindert aber
-                    für sich genommen kein Flackern — das ist die Aufgabe
+                    für sich genommen kein Flackern - das ist die Aufgabe
                     des synchronen Inline-Skripts im <code>&lt;head&gt;</code>,
                     das in Abschnitt 2 oben beschrieben ist. Wenn Sie die
                     Sidebar außerhalb dieses Projekts einsetzen (ohne

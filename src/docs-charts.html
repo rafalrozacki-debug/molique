@@ -17,7 +17,7 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Wykresy (Data Viz)</h1>
             <p class="text-6 text-muted">
-              Wykresy budowane w czystym CSS i SVG — bez biblioteki, bez
+              Wykresy budowane w czystym CSS i SVG - bez biblioteki, bez
               JavaScriptu do samego rysowania. Dane wchodzą przez jedną
               zmienną, <code>--val</code>. Gotowe zestawienia:
               <a href="examples-charts-basic">przykłady</a>.
@@ -30,7 +30,7 @@
           <section>
             <h2 class="text-8 fw-bold mb-3">1. Jedna zmienna, wszędzie</h2>
             <p class="text-muted mb-4">
-              Każdy wykres czyta wartość z <code>--val</code> — Ty ustawiasz
+              Każdy wykres czyta wartość z <code>--val</code> - Ty ustawiasz
               ją stylem inline, z szablonu po stronie backendu. Framework nie
               zna Twoich danych; <strong>konwersja liczb na procenty i kąty
               należy do Ciebie</strong>, CSS tylko to rysuje.
@@ -40,7 +40,7 @@
               <h3 class="fw-bold text-5 mb-2">Dlaczego nie biblioteka JS</h3>
               <p class="text-4 text-muted m-0">
                 Wykres w czystym CSS renderuje się <strong>w tej samej
-                klatce co reszta strony</strong> — nie ma migotania „najpierw
+                klatce co reszta strony</strong> - nie ma migotania „najpierw
                 pusty kontener, potem wykres doładowany skryptem" (CLS).
                 Jeśli projekt potrzebuje interaktywnych wykresów z
                 tooltipami i zoomem, te klasy są dobrym fallbackiem na czas
@@ -57,7 +57,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Sparkline</h3>
             <p class="text-muted mb-3">
-              Słupki w rzędzie — trend przy liczbie w karcie statystyk.
+              Słupki w rzędzie - trend przy liczbie w karcie statystyk.
               Każdy słupek to osobny element z własnym <code>--val</code> w
               procentach wysokości.
             </p>
@@ -75,7 +75,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Radial bar</h3>
             <p class="text-muted mb-3">
-              Pierścień wypełniający się do zadanego procentu — jeden
+              Pierścień wypełniający się do zadanego procentu - jeden
               wskaźnik KPI. Płynna animacja wypełniania wymaga rejestracji
               zmiennej w CSS Houdini (<code>@property</code>); bez tego
               przeglądarka nie umie animować wartości procentowej w
@@ -146,7 +146,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Heatmapa</h3>
             <p class="text-muted mb-3">
-              Siatka komórek o zmiennym natężeniu koloru — mapa aktywności w
+              Siatka komórek o zmiennym natężeniu koloru - mapa aktywności w
               stylu GitHuba. Liczbę kolumn ustala <code>grid-template-columns</code>
               na kontenerze; <code>.chart-heatmap</code> tego nie narzuca.
             </p>
@@ -167,7 +167,7 @@
                 Jedyne miejsce w całej rodzinie wykresów, gdzie
                 <code>--val</code> działa inaczej: komórka bierze go jako
                 krycie koloru (<code>rgba(…, var(--val))</code>), więc zakres
-                to <strong>0–1</strong>, nie 0–100. Wpisanie <code>90</code>
+                to <strong>0-1</strong>, nie 0-100. Wpisanie <code>90</code>
                 zamiast <code>0.9</code> daje w pełni nasyconą komórkę
                 niezależnie od rzeczywistej wartości.
               </p>
@@ -175,7 +175,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Wykres warstwowy (SVG)</h3>
             <p class="text-muted mb-3">
-              Krzywa z wypełnieniem pod spodem, rysowana ścieżką SVG — dane to
+              Krzywa z wypełnieniem pod spodem, rysowana ścieżką SVG - dane to
               współrzędne <code>&lt;path&gt;</code>, nie CSS. Klasy dodają
               tylko animację odsłaniania od lewej do prawej i styl linii.
             </p>
@@ -212,7 +212,7 @@
                     <td data-label="Klasa"><code class="fw-bold">.heatmap-cell</code></td>
                     <td data-label="Komponent">Heatmapa</td>
                     <td data-label="Co robi">
-                      Komórka. <code>--val</code> to krycie 0–1, nie procent.
+                      Komórka. <code>--val</code> to krycie 0-1, nie procent.
                     </td>
                   </tr>
                   <tr>
@@ -244,7 +244,7 @@
               Pierścień z <code>&lt;circle&gt;</code> pociętych przez
               <code>stroke-dasharray</code>. Każdy segment potrzebuje dwóch
               liczb: swojego udziału procentowego (<code>--val</code>) i
-              punktu startu (<code>--offset</code>) — sumy udziałów
+              punktu startu (<code>--offset</code>) - sumy udziałów
               wszystkich segmentów <strong>przed</strong> nim. Bez tego
               wszystkie zaczynałyby się w tym samym miejscu i nachodziły na
               siebie.
@@ -290,7 +290,7 @@
                   <tr>
                     <td data-label="Klasa"><code class="fw-bold">.pie-segment</code></td>
                     <td data-label="Co robi">
-                      Segment. Kolor bierze z <code>currentColor</code> — nadaj
+                      Segment. Kolor bierze z <code>currentColor</code> - nadaj
                       go klasą tekstową (<code>.text-primary</code>), nie
                       atrybutem <code>fill</code>.
                     </td>
@@ -304,7 +304,7 @@
                 Grubość pierścienia w kodzie, nie w klasie
               </h3>
               <p class="text-4 text-muted m-0">
-                Nie ma modyfikatora „Pie" ani „Donut" — grubość to
+                Nie ma modyfikatora „Pie" ani „Donut" - grubość to
                 <code>stroke-width</code> na <code>circle</code> w SCSS
                 (domyślnie 6). Pełne koło zamiast pierścienia wymaga edycji
                 źródła frameworka, nie da się tego ustawić z poziomu markupu.
@@ -318,7 +318,7 @@
           <section>
             <h2 class="text-8 fw-bold mb-3">5. Lejki</h2>
             <p class="text-muted mb-4">
-              Trzy kształty tego samego pomysłu — malejąca szerokość
+              Trzy kształty tego samego pomysłu - malejąca szerokość
               odzwierciedla spadek liczby na kolejnym etapie. Wybór zależy od
               tego, ile miejsca masz w pionie i jak dosłowny ma być kształt
               lejka.
@@ -350,7 +350,7 @@
                     <td data-label="Klasa"><code class="fw-bold">.chart-funnel-true</code></td>
                     <td data-label="Układ">Trapez z „nóżką"</td>
                     <td data-label="Kiedy">
-                      Slajd prezentacji, raport — najbardziej dosłowny
+                      Slajd prezentacji, raport - najbardziej dosłowny
                       kształt lejka.
                     </td>
                   </tr>
@@ -440,7 +440,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Pusty stan</h3>
             <p class="text-muted mb-3">
-              Miejsce wykresu, zanim są dane — filtr bez wyników, świeże
+              Miejsce wykresu, zanim są dane - filtr bez wyników, świeże
               konto. Bez tego pusty kontener wygląda jak błąd ładowania.
             </p>
             <div class="component-code mb-4">
@@ -453,7 +453,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Nawigacja zakresu</h3>
             <p class="text-muted mb-3">
-              Segmentowy przełącznik nad wykresem — „Q1 / Q2 / Q3". Stan
+              Segmentowy przełącznik nad wykresem - „Q1 / Q2 / Q3". Stan
               trzyma ukryte pole radio, więc przełączanie działa bez
               linijki JavaScriptu.
             </p>
@@ -557,7 +557,7 @@
                     swojej własnej pozycji w kolejności. Trzeci segment z
                     udziałami 45/30/25 ma <code>--offset: 75</code>
                     (45+30), nie <code>--offset: 2</code>. Błąd objawia się
-                    nachodzącymi na siebie segmentami — dokładnie tak, jakby
+                    nachodzącymi na siebie segmentami - dokładnie tak, jakby
                     <code>--offset</code> w ogóle nie było ustawione.
                   </p>
                 </div>
@@ -571,7 +571,7 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     <code>viewBox="0 0 36 36"</code> i
-                    <code>r="15.9155"</code> nie są przypadkowe — promień
+                    <code>r="15.9155"</code> nie są przypadkowe - promień
                     15,9155 daje obwód okręgu równy dokładnie 100. Dzięki temu
                     <code>--val: 45</code> w <code>stroke-dasharray</code>
                     oznacza wprost 45% obwodu, bez przeliczania. Zmiana
@@ -589,9 +589,9 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     W heatmapie <code>--val</code> to bezpośrednio krycie
-                    koloru (0–1), nie procent jak wszędzie indziej w tej
+                    koloru (0-1), nie procent jak wszędzie indziej w tej
                     rodzinie komponentów. Wpisanie <code>--val: 70</code>
-                    zamiast <code>--val: 0.7</code> nie daje błędu — po
+                    zamiast <code>--val: 0.7</code> nie daje błędu - po
                     prostu każda taka komórka wychodzi maksymalnie nasycona,
                     niezależnie od rzeczywistej różnicy między wartościami.
                   </p>
@@ -608,7 +608,7 @@
                     <code>.pie-segment</code> bierze kolor z
                     <code>currentColor</code>, czyli z koloru tekstu
                     elementu. Atrybut <code>fill="…"</code> wpisany wprost na
-                    <code>&lt;circle&gt;</code> nic nie zrobi — trzeba dodać
+                    <code>&lt;circle&gt;</code> nic nie zrobi - trzeba dodać
                     klasę w rodzaju <code>.text-primary</code>.
                   </p>
                 </div>
@@ -622,12 +622,12 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     Lejek pionowy animuje zmianę <code>--val</code> przejściem
-                    na <code>width</code> — właściwości, której reszta
+                    na <code>width</code> - właściwości, której reszta
                     frameworka celowo unika, bo wymusza przeliczenie układu
                     (patrz <a href="docs-animations">Animacje</a>,
                     sekcja 1). W praktyce dotyczy pojedynczego elementu, który
                     zmienia się rzadko i nie w odpowiedzi na przewijanie, więc
-                    koszt jest pomijalny — ale jeśli budujesz lejek z
+                    koszt jest pomijalny - ale jeśli budujesz lejek z
                     dziesiątek pasków animowanych jednocześnie, rozważ zamianę
                     na <code>.chart-funnel-true</code> lub własną animację
                     przez <code>transform: scaleX()</code>.

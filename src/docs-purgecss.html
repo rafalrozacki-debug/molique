@@ -18,7 +18,7 @@
             <h1 class="text-11 fw-black mb-3">PurgeCSS &amp; safelista</h1>
             <p class="text-6 text-muted">
               Jak bezpiecznie wyciąć z molique CSS, którego nie używasz.
-              Instrukcja krok po kroku — od instalacji po sprawdzenie, czy nic
+              Instrukcja krok po kroku - od instalacji po sprawdzenie, czy nic
               się nie zepsuło.
             </p>
           </div>
@@ -33,7 +33,7 @@
             <p class="text-muted mb-4">
               PurgeCSS wycina reguły CSS, których nie znalazł w Twoich plikach.
               Jest skuteczny, ale wprowadza ryzyko. <strong>Zanim go
-              włączysz</strong>, sprawdź prostszy sposób — molique jest
+              włączysz</strong>, sprawdź prostszy sposób - molique jest
               podzielony na osobne pliki i wystarczy nie ładować tych, których
               nie używasz. To redukcja <strong>bez żadnego ryzyka</strong>.
             </p>
@@ -81,7 +81,7 @@
               <h3 class="fw-bold text-5 mb-2">Prosta zasada</h3>
               <p class="text-4 text-muted m-0">
                 Najpierw usuń moduły, których nie używasz. Dopiero jeśli to
-                nie wystarczy — sięgnij po PurgeCSS. Kolejność ma znaczenie:
+                nie wystarczy - sięgnij po PurgeCSS. Kolejność ma znaczenie:
                 pierwsze jest darmowe, drugie kosztuje uwagę.
               </p>
             </div>
@@ -97,9 +97,9 @@
             <p class="text-muted mb-4">
               PurgeCSS czyta Twoje pliki i zostawia tylko te klasy, które w nich
               znalazł. Problem: <strong>część klas molique nie występuje w
-              żadnym pliku</strong> — dodaje je JavaScript dopiero w przeglądarce
+              żadnym pliku</strong> - dodaje je JavaScript dopiero w przeglądarce
               (np. gdy klikniesz akordeon albo pojawi się powiadomienie).
-              PurgeCSS ich nie widzi, więc je usuwa — i komponent przestaje
+              PurgeCSS ich nie widzi, więc je usuwa - i komponent przestaje
               działać.
             </p>
             <p class="text-muted mb-4">
@@ -140,14 +140,14 @@
               <h3 class="fw-bold text-5 mb-3">Ile to kosztuje (zmierzone)</h3>
               <ul class="list-icons list-icons-check list-icons-success text-4 text-muted m-0">
                 <li>
-                  <strong>Bez PurgeCSS:</strong> 278 KB — wszystko działa.
+                  <strong>Bez PurgeCSS:</strong> 278 KB - wszystko działa.
                 </li>
                 <li>
                   <strong>PurgeCSS + safelista:</strong> 68 KB
-                  (<strong>−75%</strong>) — wszystko nadal działa.
+                  (<strong>−75%</strong>) - wszystko nadal działa.
                 </li>
                 <li>
-                  <strong>PurgeCSS bez safelisty:</strong> 53 KB — mniej, ale
+                  <strong>PurgeCSS bez safelisty:</strong> 53 KB - mniej, ale
                   <span class="text-danger fw-bold">cztery rzeczy powyżej są zepsute</span>.
                 </li>
               </ul>
@@ -181,7 +181,7 @@
             <p class="text-muted mb-3">
               W paczce molique, obok <code>css/</code> i <code>js/</code>, jest
               plik <code>purgecss.safelist.cjs</code>. Skopiuj go do katalogu
-              głównego swojego projektu — tam, gdzie masz
+              głównego swojego projektu - tam, gdzie masz
               <code>package.json</code>.
             </p>
             <div class="component-code mb-4">
@@ -201,7 +201,7 @@
             </h3>
             <p class="text-muted mb-3">
               W katalogu głównym utwórz <code>purgecss.config.js</code> i wklej
-              poniższą zawartość. To jest kompletna, działająca konfiguracja —
+              poniższą zawartość. To jest kompletna, działająca konfiguracja -
               nie musisz nic dopisywać.
             </p>
             <div class="component-code mb-4">
@@ -221,13 +221,13 @@ module.exports = {
   // Gdzie zapisać wynik.
   output: './css/molique-style.purged.css',
 
-  // Lista "tego nie ruszaj" — bez niej komponenty przestaną działać.
+  // Lista "tego nie ruszaj" - bez niej komponenty przestaną działać.
   safelist: molique.runtime,
 
   // Usuwaj nieużywane animacje (bezpieczne dzięki safeliście).
   keyframes: true,
 
-  // NIE zmieniaj na true — na zmiennych CSS stoi cały motyw.
+  // NIE zmieniaj na true - na zmiennych CSS stoi cały motyw.
   variables: false,
 };</code></pre>
             </div>
@@ -261,11 +261,11 @@ module.exports = {
             </p>
             <div class="p-4 bg-surface border rounded-2">
               <ul class="list-icons list-icons-check list-icons-success text-4 text-muted m-0">
-                <li>Rozwiń akordeon i zakładki — czy animacja działa?</li>
+                <li>Rozwiń akordeon i zakładki - czy animacja działa?</li>
                 <li>Otwórz modal i menu rozwijane w navbarze.</li>
                 <li>Kliknij zdjęcie w galerii (lightbox).</li>
-                <li>Wywołaj powiadomienie — czy ma kolor i pasek odliczania?</li>
-                <li>Przejdź na inną podstronę — czy aktywna pozycja menu się podświetla?</li>
+                <li>Wywołaj powiadomienie - czy ma kolor i pasek odliczania?</li>
+                <li>Przejdź na inną podstronę - czy aktywna pozycja menu się podświetla?</li>
                 <li>Przełącz motyw jasny/ciemny.</li>
               </ul>
             </div>
@@ -385,7 +385,7 @@ module.exports = {
             <p class="text-muted mb-4">
               To najczęstsza przyczyna „u mnie połowa stylów zniknęła".
               Jeśli budujesz nazwę klasy z fragmentów, w pliku nie ma jej w
-              całości — PurgeCSS widzi tylko kawałki i wycina regułę.
+              całości - PurgeCSS widzi tylko kawałki i wycina regułę.
             </p>
 
             <div class="grid grid-cols-1 grid-md-cols-2 gap-4 mb-4">
@@ -412,7 +412,7 @@ module.exports = {
             </div>
 
             <p class="text-muted mb-3">
-              Włączaj <strong>tylko te grupy, których faktycznie używasz</strong> —
+              Włączaj <strong>tylko te grupy, których faktycznie używasz</strong> -
               każda zachowuje więcej CSS:
             </p>
             <div class="table-wrapper mb-4">
@@ -461,7 +461,7 @@ safelist: molique.all                          // wszystko (najbezpieczniej)</co
               <h3 class="fw-bold text-5 mb-2">Lepsze rozwiązanie, jeśli możesz</h3>
               <p class="text-4 text-muted m-0">
                 Zamiast sklejać nazwę, wypisz pełne klasy w kodzie i wybierz
-                jedną — wtedy PurgeCSS je zobaczy i nie potrzebujesz żadnej
+                jedną - wtedy PurgeCSS je zobaczy i nie potrzebujesz żadnej
                 dodatkowej grupy:
                 <code>$map = ['ok' =&gt; 'badge-success', 'err' =&gt; 'badge-danger'];</code>
               </p>
@@ -476,7 +476,7 @@ safelist: molique.all                          // wszystko (najbezpieczniej)</co
             <div class="p-4 bg-surface border rounded-2">
               <ul class="list-icons list-icons-cross list-icons-danger text-4 text-muted m-0">
                 <li>
-                  <strong>Nie ustawiaj <code>variables: true</code></strong> —
+                  <strong>Nie ustawiaj <code>variables: true</code></strong> -
                   usunie zmienne CSS, na których stoi cały motyw (kolory, dark
                   mode, zaokrąglenia). Strona straci wygląd.
                 </li>
@@ -486,7 +486,7 @@ safelist: molique.all                          // wszystko (najbezpieczniej)</co
                   używają.
                 </li>
                 <li>
-                  <strong>Nie zapomnij o <code>js/</code> w <code>content</code></strong> —
+                  <strong>Nie zapomnij o <code>js/</code> w <code>content</code></strong> -
                   jeśli Twój własny skrypt dodaje klasy, PurgeCSS musi widzieć
                   ten plik.
                 </li>
@@ -502,7 +502,7 @@ safelist: molique.all                          // wszystko (najbezpieczniej)</co
           <!-- 6. DIAGNOSTYKA                                        -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">6. Coś się zepsuło — co sprawdzić</h2>
+            <h2 class="text-8 fw-bold mb-3">6. Coś się zepsuło - co sprawdzić</h2>
             <p class="text-muted mb-4">
               Rozwiń objaw, który u siebie widzisz.
             </p>
@@ -521,7 +521,7 @@ safelist: molique.all                          // wszystko (najbezpieczniej)</co
                   </p>
                   <p class="text-muted m-0">
                     Szybki test: wyszukaj w wynikowym CSS frazę
-                    <code>lightbox-overlay</code>. Jeśli jej nie ma — safelista
+                    <code>lightbox-overlay</code>. Jeśli jej nie ma - safelista
                     nie zadziałała.
                   </p>
                 </div>
@@ -535,7 +535,7 @@ safelist: molique.all                          // wszystko (najbezpieczniej)</co
                   <p class="text-muted m-0">
                     Masz <code>variables: true</code>. Zmień na
                     <code>false</code> i zbuduj ponownie. Motyw molique opiera
-                    się na zmiennych CSS — ich usunięcie zabiera całą paletę.
+                    się na zmiennych CSS - ich usunięcie zabiera całą paletę.
                   </p>
                 </div>
               </details>
@@ -560,7 +560,7 @@ safelist: molique.all                          // wszystko (najbezpieczniej)</co
                 <div class="accordion-body">
                   <p class="text-muted m-0">
                     Wypadły klasy stanu <code>.is-*</code>. Pokrywa je
-                    <code>molique.runtime</code> — sprawdź, czy safelista jest
+                    <code>molique.runtime</code> - sprawdź, czy safelista jest
                     podpięta i czy nie nadpisujesz jej własną listą.
                   </p>
                 </div>

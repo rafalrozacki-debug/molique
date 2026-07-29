@@ -67,7 +67,7 @@
     --border-color: #E7E8F2;
     /* ZMIENNE SIDEBARA ADMINA.
        UWAGA: sidebar jest ZAWSZE ciemny (--sidebar-bg nie zmienia się
-       w dark mode), więc jego jasne akcenty muszą być literalne — NIE
+       w dark mode), więc jego jasne akcenty muszą być literalne - NIE
        wolno tu używać var(--light) / var(--light-rgb), bo dark mode
        odwraca te zmienne (jasny → ciemny) i tekst oraz podświetlenia
        znikają na ciemnym tle sidebara. sidebar-bg jest teraz polprzezroczysty
@@ -84,7 +84,7 @@
        nie odwraca sie, bo sidebar sam sie nie odwraca. */
     --sidebar-active-accent: #8B84FF;
     /* Jasne akcenty sidebara (hover, separatory, scrollbar, plakietka
-       logo) — niezależne od motywu, w przeciwieństwie do --light-rgb */
+       logo) - niezależne od motywu, w przeciwieństwie do --light-rgb */
     --sidebar-highlight-rgb: 249, 249, 249;
     /* Rozmiary Sidebara */
     --sidebar-width-lg: 280px;
@@ -465,7 +465,7 @@
     html {
       scroll-behavior: smooth;
       scroll-padding-top: var(--scroll-padding);
-      /* Globalna tarcza anty-rozsadzeniowa. UWAGA: musi być "clip", nie "hidden" —
+      /* Globalna tarcza anty-rozsadzeniowa. UWAGA: musi być "clip", nie "hidden" -
          "hidden" wymusza overflow-y:auto (sprzężenie osi wg specyfikacji CSS Overflow),
          przez co html/body stają się nieoczekiwanym "scroll container" i wyłączają
          position:sticky wszystkim elementom w dokumencie (np. .admin-sidebar). */
@@ -1594,16 +1594,16 @@
        ========================================= */
     /* Kolory muszą być zadeklarowane PRZED blokiem bazowym, bo buduje on z nich
        listę selektorów (patrz niżej). */
-    /* IMPLIKACJA .btn — sam .btn-primary wystarczy, bez dopisywania .btn.
+    /* IMPLIKACJA .btn - sam .btn-primary wystarczy, bez dopisywania .btn.
        Listę budujemy z mapy kolorów, więc nowy kolor dostaje bazę automatycznie;
        ręczna lista rozjechałaby się przy pierwszym dodanym wariancie.
 
        CELOWO NIE OBEJMUJE:
        - modyfikatorów wyglądu (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
-         .btn-glow, .btn-stacked, .btn-outline-soft) i rozmiarów (.btn-sm itd.) —
+         .btn-glow, .btn-stacked, .btn-outline-soft) i rozmiarów (.btn-sm itd.) -
          to dodatki do przycisku, nie przyciski,
        - .btn-action, który ŚWIADOMIE łamie regułę 44px na gęste tabele,
-       - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* —
+       - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* -
          mają prefiks btn-, ale przyciskami nie są. */
     .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark {
       --btn-border-width: 1px;
@@ -2405,7 +2405,7 @@
       background-size: 16px 12px;
       padding-right: calc(var(--spacing-unit) * 4);
       cursor: pointer;
-      /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) —
+      /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) -
          tu przywracamy miejsce po prawej na strzałkę, żeby jej nie zasłaniać. */
     }
     select.input.input-sm {
@@ -2444,16 +2444,16 @@
        3. TEXTAREA: TRYB "JEDNA LINIJKA" (Auto-Expand, Zero JS)
        ========================================= */
     .textarea-expandable {
-      /* Do ilu wierszy pole ma się rozwinąć — nadpisywalne per instancja:
+      /* Do ilu wierszy pole ma się rozwinąć - nadpisywalne per instancja:
          style="--textarea-rows-expanded: 10;" */
       --textarea-rows-expanded: 6;
       resize: none;
       overflow-y: hidden;
       /* Zmiana wysokości to reflow, więc zgodnie ze Złotą Zasadą GPU
-         (animujemy tylko transform/opacity) — przełącznik jest natychmiastowy. */
+         (animujemy tylko transform/opacity) - przełącznik jest natychmiastowy. */
       transition: none;
       height: calc(1lh + var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2 + var(--input-border-width) * 2);
-      /* Rozwinięte: pole aktywne LUB posiadające treść — dzięki :not(:placeholder-shown)
+      /* Rozwinięte: pole aktywne LUB posiadające treść - dzięki :not(:placeholder-shown)
          tekst nie znika z powrotem do jednej linijki po samej utracie fokusu.
          WYMAGA atrybutu placeholder (choćby placeholder=" ") na <textarea>. */
     }
@@ -2891,7 +2891,7 @@
       animation: marchingAnts 0.6s linear infinite;
     }
     .file-upload-animated {
-      /* UWAGA: input[type="file"] celowo POZA tą listą — musi zachować
+      /* UWAGA: input[type="file"] celowo POZA tą listą - musi zachować
          position: absolute z bazowego .file-upload (niewidoczny overlay
          na całej karcie, z-index: 2 ma już z bazy). Nadpisanie na relative
          wprowadzało go do układu i spychało zawartość karty w dół. */
@@ -2923,7 +2923,7 @@
     .select-search {
       position: relative;
       width: 100%;
-      /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+      /* Stan "otwarty" odczytujemy z popovera przez :has() - popover
          (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
          na elemencie nadrzędnym. */
     }
@@ -2940,7 +2940,7 @@
       align-items: center;
       width: 100%;
       text-align: left;
-      /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+      /* Trigger to <button> - w przeciwieństwie do <summary> nie dziedziczy
          fontu automatycznie. */
       font: inherit;
       cursor: pointer;
@@ -2954,7 +2954,7 @@
       transition: transform var(--transition-speed);
     }
     .select-search-menu {
-      /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki —
+      /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki -
          dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
          .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
          na Esc i klik poza menu obsługuje natywnie light dismiss.
@@ -2989,7 +2989,7 @@
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
       box-shadow: var(--shadow-md);
-      /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+      /* z-index istotny tylko w fallbacku - w top layer o kolejności decyduje
          moment otwarcia, nie z-index. */
       z-index: var(--z-index-dropdown);
     }
@@ -3000,7 +3000,7 @@
     }
     .select-search-menu {
       /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-         menu otwiera się jako wyśrodkowany panel — nadal w top layer, więc
+         menu otwiera się jako wyśrodkowany panel - nadal w top layer, więc
          nic go nie przycina. */
     }
     @supports not (top: anchor(bottom)) {
@@ -3056,7 +3056,7 @@
     .custom-select {
       position: relative;
       width: 100%;
-      /* Stan "otwarty" odczytujemy z popovera przez :has() — popover
+      /* Stan "otwarty" odczytujemy z popovera przez :has() - popover
          (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
          na elemencie nadrzędnym. */
     }
@@ -3075,7 +3075,7 @@
       min-height: var(--target-size-min);
       padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
       text-align: left;
-      /* Trigger to <button> — w przeciwieństwie do <summary> nie dziedziczy
+      /* Trigger to <button> - w przeciwieństwie do <summary> nie dziedziczy
          fontu automatycznie. */
       font: inherit;
       color: var(--text-main);
@@ -3102,7 +3102,7 @@
       font-weight: var(--fw-medium);
     }
     .custom-select-dropdown {
-      /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki —
+      /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki -
          dzięki temu NIE jest przycinany przez overflow przodków (np. przewijany
          .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
          na Esc i klik poza menu obsługuje natywnie light dismiss.
@@ -3126,7 +3126,7 @@
       left: anchor(left);
       /* Szerokość taka sama jak przycisk */
       width: anchor-size(width);
-      /* z-index istotny tylko w fallbacku — w top layer o kolejności decyduje
+      /* z-index istotny tylko w fallbacku - w top layer o kolejności decyduje
          moment otwarcia, nie z-index (sticky nagłówki tabel z z-index:10
          przestają być problemem). */
       z-index: var(--z-index-dropdown);
@@ -3147,7 +3147,7 @@
     }
     .custom-select-dropdown {
       /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-         dropdown otwiera się jako wyśrodkowany panel — nadal w top layer,
+         dropdown otwiera się jako wyśrodkowany panel - nadal w top layer,
          więc nic go nie przycina. */
     }
     @supports not (top: anchor(bottom)) {
@@ -3428,7 +3428,7 @@
     object-fit: contain;
   }
   .navbar-brand {
-    /* <picture> jest domyślnie elementem inline — jako dziecko flexa dostaje
+    /* <picture> jest domyślnie elementem inline - jako dziecko flexa dostaje
        własny "line box" i wyrównuje <img> do baseline zamiast do środka,
        stąd wizualne przesunięcie logo w górę. display:contents usuwa ten box
        z layoutu, więc <img> w środku staje się bezpośrednim elementem flexa
@@ -3720,7 +3720,7 @@
     }
     /* UWAGA: .navbar-offcanvas-toggle musi być rodzeństwem (bezpośrednim,
        tym samym rodzicem co) .navbar-menu-offcanvas, .navbar-offcanvas-backdrop
-       i .navbar-toggle — czyli wszystkie cztery elementy powinny siedzieć
+       i .navbar-toggle - czyli wszystkie cztery elementy powinny siedzieć
        razem wewnątrz .navbar-container. Kombinator "~" nie sięga w głąb
        dalszych rodzeństw, więc np. checkbox umieszczony PRZED <nav>, a
        .navbar-menu-offcanvas wewnątrz <nav>, nigdy się nie dopasują. */
@@ -3745,7 +3745,7 @@
     /* WARIANTY NAKŁADKOWE A PANEL OFFCANVAS.
        Oba warianty wymuszają jasny kolor linków, bo nad zdjęciem hero leżą na
        ciemnym tle. Ta sama reguła obowiązywała jednak także w panelu mobilnym,
-       który ma tło --bg-surface — efekt: białe linki na białym panelu, menu
+       który ma tło --bg-surface - efekt: białe linki na białym panelu, menu
        praktycznie niewidoczne. Każdy wariant domykamy inaczej, bo tylko
        pastylka ma czym pomalować panel. */
     /* Pastylka: panel przejmuje jej ciemne tło, linki zostają jasne. */
@@ -3759,13 +3759,13 @@
     }
   }
   /* =========================================
-     3. MEGA MENU (<details> + Anchor Positioning — Zero JS, działa na mobile)
+     3. MEGA MENU (<details> + Anchor Positioning - Zero JS, działa na mobile)
      ========================================= */
   .mega-menu {
     /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
        żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
        (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
-       position:relative — .mega-menu-content ma się pozycjonować względem
+       position:relative - .mega-menu-content ma się pozycjonować względem
        .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
        panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
        krawędzi navbara. */
@@ -3805,10 +3805,10 @@
     transform: rotate(180deg);
   }
   .mega-menu[open] > .mega-menu-trigger {
-    /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte —
+    /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte -
        klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
        <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
-       powyżej — zero JS potrzebne do zamykania na klik-poza-menu). */
+       powyżej - zero JS potrzebne do zamykania na klik-poza-menu). */
   }
   .mega-menu[open] > .mega-menu-trigger::before {
     content: "";
@@ -3874,7 +3874,7 @@
     font-size: 0.875rem;
     text-decoration: none;
     transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
-    /* Strzałka pojawiająca się na hover — czysto dekoracyjna (opacity/transform,
+    /* Strzałka pojawiająca się na hover - czysto dekoracyjna (opacity/transform,
        GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
   }
   .mega-menu-link::after {
@@ -3892,7 +3892,7 @@
     opacity: 1;
     transform: translateX(0);
   }
-  /* Wyróżniona karta (Featured) — jedna "komórka" siatki, wizualnie
+  /* Wyróżniona karta (Featured) - jedna "komórka" siatki, wizualnie
      podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
   /* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
      Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
@@ -3960,7 +3960,7 @@
       position: absolute;
       /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
          wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
-         .navbar (position:relative, patrz sekcja 1) — dzięki temu szeroki
+         .navbar (position:relative, patrz sekcja 1) - dzięki temu szeroki
          panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
          trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
       position-anchor: --mega-menu-trigger;
@@ -3969,7 +3969,7 @@
       margin-top: calc(var(--spacing-unit) * 1);
       width: min(94vw, 980px);
       /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
-         zrobić się wyższy niż viewport — ograniczamy wysokość i włączamy
+         zrobić się wyższy niż viewport - ograniczamy wysokość i włączamy
          wewnętrzny scroll zamiast wypychania poza ekran. */
       max-height: min(78vh, 680px);
       overflow-y: auto;
@@ -4002,7 +4002,7 @@
       box-shadow: none;
       border: none;
       background-color: rgba(0, 0, 0, 0.02);
-      /* Na mobile pokazuje/chowa się natychmiast, bez animacji — spójnie z
+      /* Na mobile pokazuje/chowa się natychmiast, bez animacji - spójnie z
          .admin-nav-submenu, który też jest oparty na <details>. */
       opacity: 1;
       transform: none;
@@ -4072,7 +4072,7 @@
     color: var(--primary);
   }
   /* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
-     lewej — niezbędne dla dropdownów siedzących blisko prawej krawędzi
+     lewej - niezbędne dla dropdownów siedzących blisko prawej krawędzi
      ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
   /* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
      Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
@@ -4090,12 +4090,12 @@
   /* Zalecany wariant POZA navbarem (tabele, karty, modale, przewijane
      kontenery): dowolny istniejący przycisk z [popovertarget="ID"] +
      `.dropdown-menu` z atrybutem [popover] i tym samym `id`. Atrybut
-     [popover] przenosi menu do top layer przeglądarki — koniec przycinania
-     przez overflow przodków — a Esc i klik poza menu zamykają je natywnie
+     [popover] przenosi menu do top layer przeglądarki - koniec przycinania
+     przez overflow przodków - a Esc i klik poza menu zamykają je natywnie
      (light dismiss).
 
      Pozycjonowanie: popover otwarty przez [popovertarget] dostaje swój
-     przycisk jako NIEJAWNY anchor (position-anchor: auto — wartość
+     przycisk jako NIEJAWNY anchor (position-anchor: auto - wartość
      domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
      i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
      buttona jedną parą atrybutów. */
@@ -4113,7 +4113,7 @@
     margin: 4px 0 0 0;
     color: var(--text-main);
     /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
-       Firefox): menu otwiera się jako wyśrodkowany panel — nadal w top
+       Firefox): menu otwiera się jako wyśrodkowany panel - nadal w top
        layer, więc nic go nie przycina. */
   }
   @supports not (top: anchor(bottom)) {
@@ -4125,7 +4125,7 @@
       height: fit-content;
     }
   }
-  /* Wyrównanie do prawej krawędzi przycisku — tylko tam, gdzie działa
+  /* Wyrównanie do prawej krawędzi przycisku - tylko tam, gdzie działa
      anchor positioning (w fallbacku menu i tak jest wyśrodkowane). */
   @supports (top: anchor(bottom)) {
     .dropdown-menu-end[popover] {
@@ -4376,7 +4376,7 @@
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius-pill, 999px);
       color: var(--text-main);
-      /* Trigger to <button> — nie dziedziczy rodziny fontów automatycznie */
+      /* Trigger to <button> - nie dziedziczy rodziny fontów automatycznie */
       font-family: inherit;
       font-weight: var(--fw-medium);
       font-size: 0.8125rem;
@@ -4389,7 +4389,7 @@
       display: none;
     }
     .language-switch-trigger {
-      /* Strzałka wskaźnika — ten sam trik co .dropdown-toggle / .mega-menu-trigger */
+      /* Strzałka wskaźnika - ten sam trik co .dropdown-toggle / .mega-menu-trigger */
     }
     .language-switch-trigger::after {
       content: "";
@@ -4413,7 +4413,7 @@
     }
     /* Flaga: plik SVG z img/flags/ w sztywnym pudełku 4:3.
        Wewnętrzna ramka (::after) oddziela jasne pola flag (np. biel PL)
-       od tła — bez niej flaga "rozpływa się" na jasnej pigułce. */
+       od tła - bez niej flaga "rozpływa się" na jasnej pigułce. */
     .language-switch-flag {
       position: relative;
       display: inline-flex;
@@ -4480,7 +4480,7 @@
       background-position: center;
       background-repeat: no-repeat;
     }
-    /* Dodaj do dowolnego kontenera z .overlay w środku — odcina wystające
+    /* Dodaj do dowolnego kontenera z .overlay w środku - odcina wystające
        rogi nakładki i daje jej kontekst pozycjonowania (position:relative). */
     .has-overlay {
       position: relative;
@@ -4584,7 +4584,7 @@
         --cutout-radius: 32px;
       }
       /* Każdy wariant kotwiczy wrapper w danym rogu i wycina PRZECIWLEGŁY
-         (stykający się ze zdjęciem) róg samego wrappera łagodnym łukiem —
+         (stykający się ze zdjęciem) róg samego wrappera łagodnym łukiem -
          stąd "at 0 0" dla br (wycięcie w lewym-górnym rogu wrappera), itd. */
       .cutout-wrapper.cutout-md-br {
         position: absolute;
@@ -4941,7 +4941,7 @@
     /* Przycisk zamykania w nagłówku modala dostaje fokus automatycznie przy
        showModal() (przeglądarka focusuje pierwszy fokusowalny element okna),
        więc pełny pierścień fokusu świeci się od razu po otwarciu i wygląda
-       jak błąd renderowania. Zamieniamy go na subtelniejszy wskaźnik — nadal
+       jak błąd renderowania. Zamieniamy go na subtelniejszy wskaźnik - nadal
        widoczny przy nawigacji klawiaturą (A11y), ale nie krzyczący. */
     .modal-dialog .card-header .btn-action:focus-visible,
     .modal-dialog .card-header .modal-close-btn:focus-visible {
@@ -5954,10 +5954,10 @@
     border-radius: calc(var(--border-radius) * 0.5);
   }
   /* =========================================
-     4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik — Zero JS)
+     4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik - Zero JS)
      ========================================= */
   .tabs-pill {
-    /* Liczba zakładek — nadpisz per instancja: style="--tab-count: 3;" */
+    /* Liczba zakładek - nadpisz per instancja: style="--tab-count: 3;" */
     --tab-count: 2;
   }
   .tabs-pill .tabs-header {
@@ -6011,7 +6011,7 @@
     border-radius: 50rem;
     box-shadow: var(--shadow-sm);
     /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
-       wskaźnika, która = szerokości jednej kolumny grida — stąd przesunięcie
+       wskaźnika, która = szerokości jednej kolumny grida - stąd przesunięcie
        o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     pointer-events: none;
@@ -6361,7 +6361,7 @@
   }
   /**
    * molique - Stat Tile (karta KPI)
-   * Karta statystyki: ikona (bez tła — świadoma decyzja, kolorowe kafle pod
+   * Karta statystyki: ikona (bez tła - świadoma decyzja, kolorowe kafle pod
    * ikonami przetestowane i odrzucone w praktyce) + etykieta + jedna stała
    * wielkość liczby zawsze + opcjonalna delta trendu. Łączyć z .card.
    *
@@ -6382,7 +6382,7 @@
    *
    * Warianty ikony: bazowa = --primary; modyfikatory -success/-warning/-danger/
    * -info przełączają tylko kolor ikony, zawsze przez -text warianty (kontrast
-   * na jasnym tle .card — patrz _root.scss). Delta jest opcjonalna.
+   * na jasnym tle .card - patrz _root.scss). Delta jest opcjonalna.
    *
    * UWAGA: celowo BEZ wlasnego "@layer components { ... }" wokol tresci pliku.
    * molique-style.scss juz owija caly import _components.scss w @layer

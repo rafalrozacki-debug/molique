@@ -19,8 +19,8 @@
             <h1 class="text-11 fw-black mb-3">molique JIT</h1>
             <p class="text-6 text-muted">
               An engine that generates <strong>only the CSS you actually
-              use</strong> — no PurgeCSS, no safelist, no guessing. Driven
-              from the command line — see
+              use</strong> - no PurgeCSS, no safelist, no guessing. Driven
+              from the command line - see
               <a href="docs-cli.en">CLI molique-jit</a>.
             </p>
           </div>
@@ -55,7 +55,7 @@ npx molique-jit build</code></pre>
             <h2 class="text-8 fw-bold mb-3">1. How this differs from PurgeCSS</h2>
             <p class="text-muted mb-4">
               The <a href="docs-purgecss.en">PurgeCSS &amp; safelist</a> page
-              describes a "big to small" approach — you take the full,
+              describes a "big to small" approach - you take the full,
               compiled molique CSS and cut out anything not found in your
               files. It works, but it needs a safelist (because some classes
               are only added by JavaScript) and carries risk: if PurgeCSS
@@ -67,7 +67,7 @@ npx molique-jit build</code></pre>
               starts from nothing and <strong>adds</strong> only the classes
               it actually found as literal text in your HTML/JS files. It
               never deletes anything, so there's nothing to "forget" in a
-              safelist — classes triggered by JavaScript (toasts, lightbox,
+              safelist - classes triggered by JavaScript (toasts, lightbox,
               <code>.is-*</code> states) are built into the engine as
               always-included, exactly like in the ready-made PurgeCSS
               safelist.
@@ -86,12 +86,12 @@ npx molique-jit build</code></pre>
                   <tr>
                     <td>Starting point</td>
                     <td>The full compiled <code>molique-style.css</code></td>
-                    <td>Nothing — only adds matched classes</td>
+                    <td>Nothing - only adds matched classes</td>
                   </tr>
                   <tr>
                     <td>Needs a safelist</td>
                     <td>Yes, wired in manually (<code>purgecss.safelist.cjs</code>)</td>
-                    <td>No — runtime classes are built into the engine</td>
+                    <td>No - runtime classes are built into the engine</td>
                   </tr>
                   <tr>
                     <td>Live watch mode</td>
@@ -113,7 +113,7 @@ npx molique-jit build</code></pre>
                 Both paths solve the same problem (a smaller production CSS
                 file) in different ways. <code>molique-jit</code> is a
                 simpler, zero-config alternative to PurgeCSS for new
-                projects — the PurgeCSS page stays for anyone who'd rather
+                projects - the PurgeCSS page stays for anyone who'd rather
                 plug it into an existing build pipeline.
               </p>
             </div>
@@ -126,10 +126,10 @@ npx molique-jit build</code></pre>
             <h2 class="text-8 fw-bold mb-3">2. How it works (in short)</h2>
             <p class="text-muted mb-4">
               molique's utility classes (<code>.pb-md-4</code>,
-              <code>.text-hover-primary</code>, etc.) aren't arbitrary — they
+              <code>.text-hover-primary</code>, etc.) aren't arbitrary - they
               form a finite, fully known set, computed once when the framework
               is compiled. That's why the JIT engine
-              <strong>never calculates CSS on the fly</strong> — instead it
+              <strong>never calculates CSS on the fly</strong> - instead it
               works like a dictionary:
             </p>
 
@@ -138,7 +138,7 @@ npx molique-jit build</code></pre>
                 <span class="badge badge-primary mb-2">1</span>
                 <h3 class="fw-bold text-5 mb-2">Scans</h3>
                 <p class="text-4 text-muted m-0">
-                  Reads your files (HTML, JS, PHP — whatever you point it at
+                  Reads your files (HTML, JS, PHP - whatever you point it at
                   via <code>content</code>) and pulls out every token that
                   looks like a class name.
                 </p>
@@ -149,7 +149,7 @@ npx molique-jit build</code></pre>
                 <p class="text-4 text-muted m-0">
                   Checks every token against a ready-made dictionary of
                   molique classes (a lookup, not a calculation). A token
-                  outside the dictionary is just your own class — not an
+                  outside the dictionary is just your own class - not an
                   error.
                 </p>
               </div>
@@ -166,7 +166,7 @@ npx molique-jit build</code></pre>
             <p class="text-muted m-0">
               The result: the output file is byte-for-byte identical to what
               the full <code>molique-style.css</code> would give you for the
-              same classes — the engine never invents or recalculates
+              same classes - the engine never invents or recalculates
               anything on its own.
             </p>
           </section>
@@ -182,7 +182,7 @@ npx molique-jit build</code></pre>
               </h2>
               <p class="text-muted m-0">
                 You drive the engine with <code>init</code>/<code>build</code>/<code>watch</code>
-                from the command line — installation, the config file, the
+                from the command line - installation, the config file, the
                 full command reference (with Polish and German aliases) and
                 the HTML component generator are all on a separate CLI page.
               </p>

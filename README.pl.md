@@ -4,7 +4,7 @@
 
 Lekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na
 natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez
-zależności (zero jQuery). Wersja: **1.7.18**.
+zależności (zero jQuery). Wersja: **1.7.19**.
 
 ## Struktura repozytorium
 

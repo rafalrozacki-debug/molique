@@ -17,7 +17,7 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Diagramme (Data Viz)</h1>
             <p class="text-6 text-muted">
-              Diagramme, gebaut in reinem CSS und SVG — ohne Bibliothek, ohne
+              Diagramme, gebaut in reinem CSS und SVG - ohne Bibliothek, ohne
               JavaScript für das eigentliche Zeichnen. Daten kommen über eine
               einzige Variable herein, <code>--val</code>. Fertige
               Zusammenstellungen:
@@ -31,7 +31,7 @@
           <section>
             <h2 class="text-8 fw-bold mb-3">1. Eine Variable, überall</h2>
             <p class="text-muted mb-4">
-              Jedes Diagramm liest seinen Wert aus <code>--val</code> — Sie
+              Jedes Diagramm liest seinen Wert aus <code>--val</code> - Sie
               setzen ihn per Inline-Style, aus einer Vorlage auf der
               Backend-Seite. Das Framework kennt Ihre Daten nicht;
               <strong>die Umrechnung von Zahlen in Prozente und Winkel ist
@@ -42,12 +42,12 @@
               <h3 class="fw-bold text-5 mb-2">Warum keine JS-Bibliothek</h3>
               <p class="text-4 text-muted m-0">
                 Ein reines CSS-Diagramm wird <strong>im selben Frame wie der
-                Rest der Seite</strong> gerendert — es gibt kein Flackern
+                Rest der Seite</strong> gerendert - es gibt kein Flackern
                 nach dem Muster „zuerst leerer Container, dann per Skript
                 nachgeladenes Diagramm" (CLS). Braucht ein Projekt
                 interaktive Diagramme mit Tooltips und Zoom, sind diese
                 Klassen ein guter Fallback für die Ladezeit dieser
-                Bibliothek — kein Ersatz dafür.
+                Bibliothek - kein Ersatz dafür.
               </p>
             </div>
           </section>
@@ -60,7 +60,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Sparkline</h3>
             <p class="text-muted mb-3">
-              Balken in einer Reihe — ein Trend neben einer Zahl in einer
+              Balken in einer Reihe - ein Trend neben einer Zahl in einer
               Statistikkarte. Jeder Balken ist ein eigenes Element mit
               eigenem <code>--val</code> als Prozentsatz der Höhe.
             </p>
@@ -79,7 +79,7 @@
             <h3 class="text-6 fw-bold mb-2 mt-4">Radial Bar</h3>
             <p class="text-muted mb-3">
               Ein Ring, der sich bis zu einem vorgegebenen Prozentsatz füllt
-              — ein einzelner KPI-Indikator. Eine flüssige Füllanimation
+              - ein einzelner KPI-Indikator. Eine flüssige Füllanimation
               erfordert die Registrierung der Variable über CSS Houdini
               (<code>@property</code>); ohne das kann der Browser einen
               Prozentwert innerhalb eines Verlaufs nicht animieren.
@@ -149,7 +149,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Heatmap</h3>
             <p class="text-muted mb-3">
-              Ein Raster von Zellen mit variabler Farbintensität — eine
+              Ein Raster von Zellen mit variabler Farbintensität - eine
               Aktivitätskarte im GitHub-Stil. Die Anzahl der Spalten wird
               über <code>grid-template-columns</code> am Container
               festgelegt; <code>.chart-heatmap</code> erzwingt sie nicht.
@@ -171,7 +171,7 @@
                 Die einzige Stelle in der gesamten Diagrammfamilie, an der
                 <code>--val</code> anders funktioniert: Die Zelle nimmt ihn
                 als Farbdeckkraft (<code>rgba(…, var(--val))</code>), der
-                Bereich ist also <strong>0–1</strong>, nicht 0–100. Die
+                Bereich ist also <strong>0-1</strong>, nicht 0-100. Die
                 Eingabe von <code>90</code> statt <code>0.9</code> ergibt
                 eine voll gesättigte Zelle, unabhängig vom tatsächlichen Wert.
               </p>
@@ -179,7 +179,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Flächendiagramm (SVG)</h3>
             <p class="text-muted mb-3">
-              Eine Kurve mit Füllung darunter, gezeichnet als SVG-Pfad — die
+              Eine Kurve mit Füllung darunter, gezeichnet als SVG-Pfad - die
               Daten sind <code>&lt;path&gt;</code>-Koordinaten, kein CSS. Die
               Klassen fügen nur die Aufdeckungs-Animation von links nach
               rechts und den Linienstil hinzu.
@@ -217,7 +217,7 @@
                     <td data-label="Klasse"><code class="fw-bold">.heatmap-cell</code></td>
                     <td data-label="Komponente">Heatmap</td>
                     <td data-label="Was sie macht">
-                      Eine Zelle. <code>--val</code> ist Deckkraft 0–1, kein Prozentsatz.
+                      Eine Zelle. <code>--val</code> ist Deckkraft 0-1, kein Prozentsatz.
                     </td>
                   </tr>
                   <tr>
@@ -250,7 +250,7 @@
               <code>stroke-dasharray</code> zerschnitten. Jedes Segment
               braucht zwei Zahlen: seinen eigenen prozentualen Anteil
               (<code>--val</code>) und seinen Startpunkt
-              (<code>--offset</code>) — die Summe der Anteile aller Segmente
+              (<code>--offset</code>) - die Summe der Anteile aller Segmente
               <strong>vor</strong> ihm. Ohne das würden alle an derselben
               Stelle beginnen und sich überlappen.
             </p>
@@ -296,7 +296,7 @@
                     <td data-label="Klasse"><code class="fw-bold">.pie-segment</code></td>
                     <td data-label="Was sie macht">
                       Ein Segment. Bezieht seine Farbe aus
-                      <code>currentColor</code> — vergeben Sie sie über eine
+                      <code>currentColor</code> - vergeben Sie sie über eine
                       Textklasse (<code>.text-primary</code>), nicht über ein
                       <code>fill</code>-Attribut.
                     </td>
@@ -310,7 +310,7 @@
                 Ringdicke im Code, nicht in einer Klasse
               </h3>
               <p class="text-4 text-muted m-0">
-                Es gibt keinen „Pie"- oder „Donut"-Modifikator — die Dicke ist
+                Es gibt keinen „Pie"- oder „Donut"-Modifikator - die Dicke ist
                 <code>stroke-width</code> am <code>circle</code> in SCSS
                 (standardmäßig 6). Ein voller Kreis statt eines Rings
                 erfordert eine Bearbeitung des Framework-Quellcodes und lässt
@@ -325,7 +325,7 @@
           <section>
             <h2 class="text-8 fw-bold mb-3">5. Trichter</h2>
             <p class="text-muted mb-4">
-              Drei Formen derselben Idee — eine abnehmende Breite spiegelt
+              Drei Formen derselben Idee - eine abnehmende Breite spiegelt
               den Rückgang der Zahlen bei jeder weiteren Stufe wider. Die
               Wahl hängt davon ab, wie viel vertikaler Platz zur Verfügung
               steht und wie wörtlich die Trichterform sein soll.
@@ -357,7 +357,7 @@
                     <td data-label="Klasse"><code class="fw-bold">.chart-funnel-true</code></td>
                     <td data-label="Layout">Trapez mit „Fuß"</td>
                     <td data-label="Wann">
-                      Eine Präsentationsfolie, ein Bericht — die wörtlichste Trichterform.
+                      Eine Präsentationsfolie, ein Bericht - die wörtlichste Trichterform.
                     </td>
                   </tr>
                 </tbody>
@@ -446,7 +446,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Leerer Zustand</h3>
             <p class="text-muted mb-3">
-              Der Platzhalter für das Diagramm, bevor Daten vorliegen — ein
+              Der Platzhalter für das Diagramm, bevor Daten vorliegen - ein
               Filter ohne Ergebnisse, ein frisches Konto. Ohne ihn sieht ein
               leerer Container wie ein Ladefehler aus.
             </p>
@@ -460,7 +460,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Bereichsnavigation</h3>
             <p class="text-muted mb-3">
-              Ein segmentierter Umschalter über dem Diagramm — „Q1 / Q2 /
+              Ein segmentierter Umschalter über dem Diagramm - „Q1 / Q2 /
               Q3". Der Zustand wird von einem versteckten Radio-Feld
               gehalten, sodass das Umschalten ohne eine einzige Zeile
               JavaScript funktioniert.
@@ -565,7 +565,7 @@
                     eigene Position in der Reihenfolge. Das dritte Segment
                     mit Anteilen von 45/30/25 hat <code>--offset: 75</code>
                     (45+30), nicht <code>--offset: 2</code>. Der Fehler
-                    äußert sich in überlappenden Segmenten — genau so, als
+                    äußert sich in überlappenden Segmenten - genau so, als
                     wäre <code>--offset</code> gar nicht gesetzt.
                   </p>
                 </div>
@@ -579,7 +579,7 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     <code>viewBox="0 0 36 36"</code> und
-                    <code>r="15.9155"</code> sind nicht zufällig — ein Radius
+                    <code>r="15.9155"</code> sind nicht zufällig - ein Radius
                     von 15,9155 ergibt einen Kreisumfang von genau 100.
                     Dadurch bedeutet <code>--val: 45</code> in
                     <code>stroke-dasharray</code> direkt 45 % des Umfangs,
@@ -598,10 +598,10 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     In der Heatmap ist <code>--val</code> direkt die
-                    Farbdeckkraft (0–1), kein Prozentsatz wie sonst überall
+                    Farbdeckkraft (0-1), kein Prozentsatz wie sonst überall
                     in dieser Komponentenfamilie. Die Eingabe von
                     <code>--val: 70</code> statt <code>--val: 0.7</code>
-                    erzeugt keinen Fehler — jede solche Zelle erscheint
+                    erzeugt keinen Fehler - jede solche Zelle erscheint
                     einfach maximal gesättigt, unabhängig vom tatsächlichen
                     Unterschied zwischen den Werten.
                   </p>
@@ -618,7 +618,7 @@
                     <code>.pie-segment</code> bezieht seine Farbe aus
                     <code>currentColor</code>, also der Textfarbe des
                     Elements. Ein direkt am <code>&lt;circle&gt;</code>
-                    gesetztes Attribut <code>fill="…"</code> bewirkt nichts —
+                    gesetztes Attribut <code>fill="…"</code> bewirkt nichts -
                     stattdessen muss eine Klasse wie
                     <code>.text-primary</code> hinzugefügt werden.
                   </p>
@@ -634,14 +634,14 @@
                   <p class="text-muted mb-3">
                     Der vertikale Trichter animiert die Änderung von
                     <code>--val</code> über einen Übergang auf
-                    <code>width</code> — eine Eigenschaft, die der Rest des
+                    <code>width</code> - eine Eigenschaft, die der Rest des
                     Frameworks bewusst meidet, da sie eine
                     Layout-Neuberechnung erzwingt (siehe
                     <a href="docs-animations.de">Animationen</a>,
                     Abschnitt 1). In der Praxis betrifft das ein einzelnes
                     Element, das sich selten und nicht als Reaktion auf
                     Scrollen ändert, sodass der Aufwand vernachlässigbar ist
-                    — bauen Sie jedoch einen Trichter mit Dutzenden
+                    - bauen Sie jedoch einen Trichter mit Dutzenden
                     gleichzeitig animierten Balken, sollten Sie auf
                     <code>.chart-funnel-true</code> oder eine eigene
                     Animation über <code>transform: scaleX()</code> umsteigen.

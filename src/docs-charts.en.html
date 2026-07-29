@@ -17,7 +17,7 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Charts (Data Viz)</h1>
             <p class="text-6 text-muted">
-              Charts built in pure CSS and SVG — no library, no JavaScript for
+              Charts built in pure CSS and SVG - no library, no JavaScript for
               the drawing itself. Data comes in through a single variable,
               <code>--val</code>. Ready-made compilations:
               <a href="examples-charts-basic.en">examples</a>.
@@ -30,7 +30,7 @@
           <section>
             <h2 class="text-8 fw-bold mb-3">1. One variable, everywhere</h2>
             <p class="text-muted mb-4">
-              Every chart reads its value from <code>--val</code> — you set it
+              Every chart reads its value from <code>--val</code> - you set it
               with an inline style, from a backend-side template. The
               framework doesn't know your data; <strong>converting numbers
               into percentages and angles is up to you</strong>, CSS just
@@ -41,7 +41,7 @@
               <h3 class="fw-bold text-5 mb-2">Why not a JS library</h3>
               <p class="text-4 text-muted m-0">
                 A pure-CSS chart renders <strong>in the same frame as the rest
-                of the page</strong> — there's no flicker of "empty container
+                of the page</strong> - there's no flicker of "empty container
                 first, chart loaded in by script later" (CLS). If a project
                 needs interactive charts with tooltips and zoom, these classes
                 make a good fallback for the loading time of that library, not
@@ -58,7 +58,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Sparkline</h3>
             <p class="text-muted mb-3">
-              Bars in a row — a trend next to a number in a stat card. Each
+              Bars in a row - a trend next to a number in a stat card. Each
               bar is a separate element with its own <code>--val</code> as a
               percentage of height.
             </p>
@@ -76,7 +76,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Radial bar</h3>
             <p class="text-muted mb-3">
-              A ring filling up to a given percentage — a single KPI
+              A ring filling up to a given percentage - a single KPI
               indicator. A smooth fill animation requires registering the
               variable with CSS Houdini (<code>@property</code>); without it
               the browser can't animate a percentage value inside a gradient.
@@ -146,7 +146,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Heatmap</h3>
             <p class="text-muted mb-3">
-              A grid of cells with variable color intensity — a
+              A grid of cells with variable color intensity - a
               GitHub-style activity map. The number of columns is set with
               <code>grid-template-columns</code> on the container;
               <code>.chart-heatmap</code> doesn't force one.
@@ -168,7 +168,7 @@
                 The only place in the whole chart family where
                 <code>--val</code> behaves differently: the cell takes it as
                 color opacity (<code>rgba(…, var(--val))</code>), so the
-                range is <strong>0–1</strong>, not 0–100. Typing
+                range is <strong>0-1</strong>, not 0-100. Typing
                 <code>90</code> instead of <code>0.9</code> produces a fully
                 saturated cell regardless of the actual value.
               </p>
@@ -176,7 +176,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Area chart (SVG)</h3>
             <p class="text-muted mb-3">
-              A curve with a fill underneath, drawn with an SVG path — the
+              A curve with a fill underneath, drawn with an SVG path - the
               data is <code>&lt;path&gt;</code> coordinates, not CSS. The
               classes only add the left-to-right reveal animation and line style.
             </p>
@@ -213,7 +213,7 @@
                     <td data-label="Class"><code class="fw-bold">.heatmap-cell</code></td>
                     <td data-label="Component">Heatmap</td>
                     <td data-label="What it does">
-                      A cell. <code>--val</code> is opacity 0–1, not a percentage.
+                      A cell. <code>--val</code> is opacity 0-1, not a percentage.
                     </td>
                   </tr>
                   <tr>
@@ -245,7 +245,7 @@
               A ring made of <code>&lt;circle&gt;</code> elements cut up with
               <code>stroke-dasharray</code>. Every segment needs two numbers:
               its own percentage share (<code>--val</code>) and its starting
-              point (<code>--offset</code>) — the sum of the shares of every
+              point (<code>--offset</code>) - the sum of the shares of every
               segment <strong>before</strong> it. Without that, they'd all
               start in the same place and overlap.
             </p>
@@ -291,7 +291,7 @@
                     <td data-label="Class"><code class="fw-bold">.pie-segment</code></td>
                     <td data-label="What it does">
                       A segment. Takes its color from
-                      <code>currentColor</code> — set it with a text class
+                      <code>currentColor</code> - set it with a text class
                       (<code>.text-primary</code>), not a <code>fill</code>
                       attribute.
                     </td>
@@ -305,7 +305,7 @@
                 Ring thickness lives in code, not in a class
               </h3>
               <p class="text-4 text-muted m-0">
-                There's no "Pie" or "Donut" modifier — thickness is the
+                There's no "Pie" or "Donut" modifier - thickness is the
                 <code>stroke-width</code> on the <code>circle</code> in SCSS
                 (6 by default). A full circle instead of a ring requires
                 editing the framework source; it can't be set from the markup.
@@ -319,7 +319,7 @@
           <section>
             <h2 class="text-8 fw-bold mb-3">5. Funnels</h2>
             <p class="text-muted mb-4">
-              Three shapes for the same idea — a shrinking width reflects the
+              Three shapes for the same idea - a shrinking width reflects the
               drop in numbers at each next stage. The choice depends on how
               much vertical space you have and how literal the funnel shape
               needs to be.
@@ -351,7 +351,7 @@
                     <td data-label="Class"><code class="fw-bold">.chart-funnel-true</code></td>
                     <td data-label="Layout">A trapezoid with a "stem"</td>
                     <td data-label="When">
-                      A presentation slide, a report — the most literal funnel shape.
+                      A presentation slide, a report - the most literal funnel shape.
                     </td>
                   </tr>
                 </tbody>
@@ -440,7 +440,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Empty state</h3>
             <p class="text-muted mb-3">
-              A placeholder for where the chart goes before there's any data —
+              A placeholder for where the chart goes before there's any data -
               a filter with no results, a fresh account. Without it, an empty
               container looks like a loading failure.
             </p>
@@ -454,7 +454,7 @@
 
             <h3 class="text-6 fw-bold mb-2 mt-4">Range navigation</h3>
             <p class="text-muted mb-3">
-              A segmented switch above the chart — "Q1 / Q2 / Q3". State is
+              A segmented switch above the chart - "Q1 / Q2 / Q3". State is
               held by a hidden radio field, so switching works without a
               single line of JavaScript.
             </p>
@@ -558,7 +558,7 @@
                     position in the order. The third segment with shares
                     45/30/25 has <code>--offset: 75</code>
                     (45+30), not <code>--offset: 2</code>. The bug shows up
-                    as overlapping segments — exactly as if
+                    as overlapping segments - exactly as if
                     <code>--offset</code> hadn't been set at all.
                   </p>
                 </div>
@@ -572,7 +572,7 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     <code>viewBox="0 0 36 36"</code> and
-                    <code>r="15.9155"</code> aren't arbitrary — a radius of
+                    <code>r="15.9155"</code> aren't arbitrary - a radius of
                     15.9155 gives a circle circumference of exactly 100.
                     That's what makes <code>--val: 45</code> in
                     <code>stroke-dasharray</code> mean exactly 45% of the
@@ -591,10 +591,10 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     In the heatmap, <code>--val</code> is directly the color
-                    opacity (0–1), not a percentage like everywhere else in
+                    opacity (0-1), not a percentage like everywhere else in
                     this component family. Typing <code>--val: 70</code>
                     instead of <code>--val: 0.7</code> doesn't throw an error
-                    — it just makes every such cell come out fully saturated,
+                    - it just makes every such cell come out fully saturated,
                     regardless of the actual difference between values.
                   </p>
                 </div>
@@ -610,7 +610,7 @@
                     <code>.pie-segment</code> takes its color from
                     <code>currentColor</code>, i.e. the element's text color.
                     A <code>fill="…"</code> attribute written directly on the
-                    <code>&lt;circle&gt;</code> does nothing — you need to add
+                    <code>&lt;circle&gt;</code> does nothing - you need to add
                     a class like <code>.text-primary</code> instead.
                   </p>
                 </div>
@@ -624,13 +624,13 @@
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     The vertical funnel animates the <code>--val</code> change
-                    via a transition on <code>width</code> — a property the
+                    via a transition on <code>width</code> - a property the
                     rest of the framework deliberately avoids, since it forces
                     a layout recalculation (see
                     <a href="docs-animations.en">Animations</a>, section 1).
                     In practice it applies to a single element that rarely
                     changes and never in response to scrolling, so the cost
-                    is negligible — but if you're building a funnel with
+                    is negligible - but if you're building a funnel with
                     dozens of bars animating at once, consider switching to
                     <code>.chart-funnel-true</code> or your own animation via
                     <code>transform: scaleX()</code>.

@@ -19,8 +19,8 @@
             <h1 class="text-11 fw-black mb-3">molique JIT</h1>
             <p class="text-6 text-muted">
               Silnik, który generuje <strong>tylko ten CSS, którego realnie
-              użyłeś</strong> — bez PurgeCSS, bez safelisty, bez zgadywania.
-              Obsługiwany z wiersza poleceń — patrz
+              użyłeś</strong> - bez PurgeCSS, bez safelisty, bez zgadywania.
+              Obsługiwany z wiersza poleceń - patrz
               <a href="docs-cli">CLI molique-jit</a>.
             </p>
           </div>
@@ -40,7 +40,7 @@ npx molique-jit init
 npx molique-jit build</code></pre>
             </div>
             <p class="text-4 text-muted mt-2 m-0">
-              Pełna instalacja, konfiguracja i referencja wszystkich komend —
+              Pełna instalacja, konfiguracja i referencja wszystkich komend -
               na stronie <a href="docs-cli">CLI molique-jit</a>. Strona
               pakietu:
               <a href="https://www.npmjs.com/package/molique-jit"
@@ -55,7 +55,7 @@ npx molique-jit build</code></pre>
             <h2 class="text-8 fw-bold mb-3">1. Czym to się różni od PurgeCSS</h2>
             <p class="text-muted mb-4">
               Na stronie <a href="docs-purgecss">PurgeCSS &amp; safelista</a>
-              opisany jest sposób „od dużego do małego” — bierzesz cały gotowy
+              opisany jest sposób „od dużego do małego” - bierzesz cały gotowy
               CSS molique i wycinasz z niego to, czego nie widać w Twoich
               plikach. Działa, ale wymaga safelisty (bo część klas dodaje
               dopiero JavaScript) i niesie ze sobą ryzyko: jeśli PurgeCSS
@@ -66,7 +66,7 @@ npx molique-jit build</code></pre>
               <strong>molique-jit</strong> idzie w drugą stronę: zaczyna od
               zera i <strong>dokłada</strong> wyłącznie te klasy, które
               faktycznie znalazł jako literalny tekst w Twoich plikach HTML/JS.
-              Nic nie usuwa, więc nie ma czego „zapomnieć” w safeliście —
+              Nic nie usuwa, więc nie ma czego „zapomnieć” w safeliście -
               klasy uruchamiane przez JavaScript (toasty, lightbox, stany
               <code>.is-*</code>) są wbudowane w silnik jako zawsze-dołączane,
               dokładnie tak samo jak w gotowej safeliście PurgeCSS.
@@ -85,12 +85,12 @@ npx molique-jit build</code></pre>
                   <tr>
                     <td>Punkt startowy</td>
                     <td>Cały skompilowany <code>molique-style.css</code></td>
-                    <td>Zero — dokłada tylko dopasowane klasy</td>
+                    <td>Zero - dokłada tylko dopasowane klasy</td>
                   </tr>
                   <tr>
                     <td>Wymaga safelisty</td>
                     <td>Tak, ręcznie podpięta (<code>purgecss.safelist.cjs</code>)</td>
-                    <td>Nie — klasy runtime'owe są wbudowane w silnik</td>
+                    <td>Nie - klasy runtime'owe są wbudowane w silnik</td>
                   </tr>
                   <tr>
                     <td>Tryb na żywo (watch)</td>
@@ -112,7 +112,7 @@ npx molique-jit build</code></pre>
                 Obie ścieżki rozwiązują ten sam problem (mniejszy plik CSS na
                 produkcji) w inny sposób. <code>molique-jit</code> to
                 prostsza, zero-konfiguracyjna alternatywa dla PurgeCSS w
-                nowych projektach — a strona o PurgeCSS zostaje jako opcja
+                nowych projektach - a strona o PurgeCSS zostaje jako opcja
                 dla wszystkich, którzy wolą podpiąć to pod istniejący
                 pipeline budowania.
               </p>
@@ -126,10 +126,10 @@ npx molique-jit build</code></pre>
             <h2 class="text-8 fw-bold mb-3">2. Jak to działa (w skrócie)</h2>
             <p class="text-muted mb-4">
               Klasy narzędziowe molique (<code>.pb-md-4</code>,
-              <code>.text-hover-primary</code> itd.) nie są dowolne — to
+              <code>.text-hover-primary</code> itd.) nie są dowolne - to
               skończony, w pełni znany z góry zbiór, wyliczony raz przy
               kompilacji frameworka. Dzięki temu silnik JIT
-              <strong>nie liczy CSS w locie</strong> — zamiast tego pracuje
+              <strong>nie liczy CSS w locie</strong> - zamiast tego pracuje
               jak słownik:
             </p>
 
@@ -138,7 +138,7 @@ npx molique-jit build</code></pre>
                 <span class="badge badge-primary mb-2">1</span>
                 <h3 class="fw-bold text-5 mb-2">Skanuje</h3>
                 <p class="text-4 text-muted m-0">
-                  Przegląda Twoje pliki (HTML, JS, PHP — cokolwiek wskażesz w
+                  Przegląda Twoje pliki (HTML, JS, PHP - cokolwiek wskażesz w
                   <code>content</code>) i wyłapuje wszystkie tokeny wyglądające
                   jak nazwa klasy.
                 </p>
@@ -149,7 +149,7 @@ npx molique-jit build</code></pre>
                 <p class="text-4 text-muted m-0">
                   Sprawdza każdy token w gotowym słowniku klas molique
                   (odczyt, nie obliczenie). Token spoza słownika to po prostu
-                  Twoja własna klasa — nie błąd.
+                  Twoja własna klasa - nie błąd.
                 </p>
               </div>
               <div class="card p-4">
@@ -165,7 +165,7 @@ npx molique-jit build</code></pre>
 
             <p class="text-muted m-0">
               Efekt: wynikowy plik jest identyczny co do bajta z tym, co dałby
-              pełny <code>molique-style.css</code> dla tych samych klas —
+              pełny <code>molique-style.css</code> dla tych samych klas -
               silnik niczego nie „dogaduje” ani nie przelicza samodzielnie.
             </p>
           </section>
@@ -181,7 +181,7 @@ npx molique-jit build</code></pre>
               </h2>
               <p class="text-muted m-0">
                 Silnik obsługujesz komendami <code>init</code>/<code>build</code>/<code>watch</code>
-                z wiersza poleceń — instalacja, plik konfiguracyjny, pełna
+                z wiersza poleceń - instalacja, plik konfiguracyjny, pełna
                 lista komend (z polskimi i niemieckimi aliasami) i generator
                 gotowych komponentów HTML są opisane na osobnej stronie CLI.
               </p>

@@ -20,7 +20,7 @@
             <p class="text-6 text-muted">
               The command line you use to drive the
               <a href="docs-jit.en">molique JIT</a> engine: building, live
-              watch mode, configuration — plus 8 generators for ready-made
+              watch mode, configuration - plus 8 generators for ready-made
               HTML blocks.
             </p>
           </div>
@@ -77,7 +77,7 @@ export default {
 
   // ONLY classes specific to your project (e.g. composed in PHP).
   // molique's own runtime classes (toasts, carousel, .is-* states) don't
-  // need to be listed here — the engine includes them automatically.
+  // need to be listed here - the engine includes them automatically.
   safelist: ['badge-success', 'badge-danger'],
 
   minify: true,
@@ -88,7 +88,7 @@ export default {
               If your project has several independent pages (e.g. a main site
               and a separate campaign landing page), the <code>targets</code>
               field replaces <code>content</code>/<code>output</code> above
-              and builds each target independently — the landing page gets
+              and builds each target independently - the landing page gets
               its own small CSS file, with nothing else in it:
             </p>
             <div class="component-code mb-4">
@@ -129,11 +129,11 @@ export default {
                   <tr>
                     <td><code>minify</code></td>
                     <td><code>true</code></td>
-                    <td>Currently effectively a no-op — the source data is already compressed at the source.</td>
+                    <td>Currently effectively a no-op - the source data is already compressed at the source.</td>
                   </tr>
                   <tr>
                     <td><code>targets</code></td>
-                    <td>—</td>
+                    <td>-</td>
                     <td>A list of independent builds; when present, replaces <code>content</code>/<code>output</code>.</td>
                   </tr>
                 </tbody>
@@ -150,7 +150,7 @@ export default {
               The binary is called <code>molique-jit</code> (not just
               <code>molique</code>), to avoid colliding with other tools that
               use a shorter name. The CLI understands commands in English,
-              but also their Polish and German equivalents — handy for teams
+              but also their Polish and German equivalents - handy for teams
               that work day-to-day in one of those languages.
             </p>
 
@@ -246,7 +246,7 @@ npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
               <p class="text-4 text-muted m-0">
                 <code>build</code> exits with <code>0</code> on success and
                 <code>1</code> on error (e.g. the config points to a folder
-                that doesn't exist) — handy to wire into CI, e.g. as a step
+                that doesn't exist) - handy to wire into CI, e.g. as a step
                 before publishing.
               </p>
             </div>
@@ -260,10 +260,10 @@ npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
             <p class="text-muted mb-4">
               A separate command family, independent of building CSS. Each
               one runs an interactive wizard in the terminal (arrow keys +
-              Enter) and prints a ready, paste-in HTML block at the end —
+              Enter) and prints a ready, paste-in HTML block at the end -
               matching, character for character, the real, working examples
               in this documentation. <code>make:component</code> itself
-              doesn't generate anything — it prints a list of every
+              doesn't generate anything - it prints a list of every
               available generator, so you don't have to memorize the names:
             </p>
             <div class="component-code mb-4">
@@ -286,19 +286,19 @@ npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
                     <td><code>make:modal</code></td>
                     <td><code>zrob:modal</code></td>
                     <td><code>mache:modal</code></td>
-                    <td>Modal (<code>&lt;dialog&gt;</code>) — Standard / Confirm / Context</td>
+                    <td>Modal (<code>&lt;dialog&gt;</code>) - Standard / Confirm / Context</td>
                   </tr>
                   <tr>
                     <td><code>make:layout</code></td>
                     <td><code>zrob:uklad</code></td>
                     <td><code>mache:layout</code></td>
-                    <td>Page skeleton — Admin Dashboard / Hero (Simple + Cutout) / Bento Grid</td>
+                    <td>Page skeleton - Admin Dashboard / Hero (Simple + Cutout) / Bento Grid</td>
                   </tr>
                   <tr>
                     <td><code>make:nav</code></td>
                     <td><code>zrob:nawigacje</code></td>
                     <td><code>mache:nav</code></td>
-                    <td>Navbar — offcanvas, 3 background variants, optional Mega Menu / Theme Switch / Language Switch</td>
+                    <td>Navbar - offcanvas, 3 background variants, optional Mega Menu / Theme Switch / Language Switch</td>
                   </tr>
                   <tr>
                     <td><code>make:table</code></td>
@@ -310,13 +310,13 @@ npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
                     <td><code>make:chart</code></td>
                     <td><code>zrob:wykres</code></td>
                     <td><code>mache:diagramm</code></td>
-                    <td>CSS/SVG chart — Radial Bar / Funnel / Pipeline / Stock Bar</td>
+                    <td>CSS/SVG chart - Radial Bar / Funnel / Pipeline / Stock Bar</td>
                   </tr>
                   <tr>
                     <td><code>make:form</code></td>
                     <td><code>zrob:formularz</code></td>
                     <td><code>mache:formular</code></td>
-                    <td>Form — Floating Labels / Classic, optional Searchable Select / Premium Multi Select / Drag &amp; Drop File Upload</td>
+                    <td>Form - Floating Labels / Classic, optional Searchable Select / Premium Multi Select / Drag &amp; Drop File Upload</td>
                   </tr>
                   <tr>
                     <td><code>make:popover</code></td>
@@ -332,7 +332,7 @@ npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
                   </tr>
                   <tr>
                     <td><code>make:component</code></td>
-                    <td colspan="2">—</td>
+                    <td colspan="2">-</td>
                     <td>Prints this list (not a generator)</td>
                   </tr>
                 </tbody>
@@ -344,7 +344,7 @@ npx molique-jit beobachten --konfiguration ./custom.config.mjs</code></pre>
               <p class="text-4 text-muted m-0">
                 Every generator that produces a variable-length list (menu
                 items, table rows, chart stages…) accepts
-                <code>-n, --count &lt;n&gt;</code> — it skips ONLY the "how
+                <code>-n, --count &lt;n&gt;</code> - it skips ONLY the "how
                 many?" prompt; the rest of the wizard (labels, variants,
                 colors) still runs interactively:
               </p>
@@ -359,7 +359,7 @@ npx molique-jit make:table --count 5</code></pre>
             <p class="text-muted m-0">
               At the end of each generator you choose whether the code goes
               straight to the console (to copy with your mouse) or gets saved
-              to a file — the tool never overwrites an existing file without
+              to a file - the tool never overwrites an existing file without
               an explicit confirmation.
             </p>
           </section>

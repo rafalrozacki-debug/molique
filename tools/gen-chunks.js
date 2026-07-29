@@ -102,7 +102,7 @@ function descOf(file) {
   if (!fs.existsSync(p)) return '';
   const head = fs.readFileSync(p, 'utf8').split(/\r?\n/).slice(0, 6);
   for (const line of head) {
-    const m = line.match(/^\s*(?:\/\/|\*)\s*molique\s*[-–]\s*(.+?)\s*$/);
+    const m = line.match(/^\s*(?:\/\/|\*)\s*molique\s*[--]\s*(.+?)\s*$/);
     if (m) return m[1];
   }
   return '';

@@ -71,7 +71,7 @@
     padding-right: calc(var(--spacing-unit) * 4);
     cursor: pointer;
 
-    /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) —
+    /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) -
        tu przywracamy miejsce po prawej na strzałkę, żeby jej nie zasłaniać. */
     &.input-sm { padding-right: calc(var(--spacing-unit) * 3); }
     &.input-lg { padding-right: calc(var(--spacing-unit) * 5); }
@@ -107,18 +107,18 @@
      3. TEXTAREA: TRYB "JEDNA LINIJKA" (Auto-Expand, Zero JS)
      ========================================= */
   .textarea-expandable {
-    /* Do ilu wierszy pole ma się rozwinąć — nadpisywalne per instancja:
+    /* Do ilu wierszy pole ma się rozwinąć - nadpisywalne per instancja:
        style="--textarea-rows-expanded: 10;" */
     --textarea-rows-expanded: 6;
 
     resize: none;
     overflow-y: hidden;
     /* Zmiana wysokości to reflow, więc zgodnie ze Złotą Zasadą GPU
-       (animujemy tylko transform/opacity) — przełącznik jest natychmiastowy. */
+       (animujemy tylko transform/opacity) - przełącznik jest natychmiastowy. */
     transition: none;
     height: calc(1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
 
-    /* Rozwinięte: pole aktywne LUB posiadające treść — dzięki :not(:placeholder-shown)
+    /* Rozwinięte: pole aktywne LUB posiadające treść - dzięki :not(:placeholder-shown)
        tekst nie znika z powrotem do jednej linijki po samej utracie fokusu.
        WYMAGA atrybutu placeholder (choćby placeholder=" ") na <textarea>. */
     &:focus,

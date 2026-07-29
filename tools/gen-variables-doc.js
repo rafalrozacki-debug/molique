@@ -97,7 +97,7 @@ for (const f of files) {
   for (const m of f.text.matchAll(/@property\s+(--[\w-]+)\s*\{([^}]*)\}/g)) {
     if (light.has(m[1]) || component.has(m[1])) continue;
     const init = m[2].match(/initial-value\s*:\s*([^;]+)/);
-    component.set(m[1], { value: init ? init[1].trim() : '—', file: f.name });
+    component.set(m[1], { value: init ? init[1].trim() : '-', file: f.name });
   }
 }
 
@@ -190,7 +190,7 @@ const val = (v) => `<code>${esc(v)}</code>`;
 // i rozpycha tabele bardziej, niz pomaga.
 function usage(name) {
   const mods = [...(usedIn.get(name) || [])].filter((m) => m !== 'root').sort();
-  if (!mods.length) return '<span class="text-muted">—</span>';
+  if (!mods.length) return '<span class="text-muted">-</span>';
   const shown = mods.slice(0, 3).map((m) => `<code>${esc(m)}</code>`).join(' ');
   return shown + (mods.length > 3 ? ` <span class="text-muted">+${mods.length - 3}</span>` : '');
 }

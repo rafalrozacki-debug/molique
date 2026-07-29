@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.18."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.19."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,39 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.19 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.19</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-success"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Improvement</span>
+                  Consistent punctuation: plain "-", never "–"/"—"
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Across the whole repository (280 files - the PL/EN/DE
+                    site, SCSS components, tooling, docs), en/em dashes
+                    (<code>–</code>/<code>—</code>) that had crept in over
+                    the years were replaced with one consistent character -
+                    the plain hyphen "-".
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.18 -->
           <!-- ============================================================ -->
@@ -825,7 +858,7 @@
                     <code>robots.txt</code> were never making it into the
                     production build automatically (generated too late in
                     the pipeline, AFTER the root files were already copied)
-                    — now generated before the build, alongside the rest of
+                    - now generated before the build, alongside the rest of
                     the root files.
                   </li>
                 </ul>
@@ -839,7 +872,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     Instead of just a code block, the hero section now shows
-                    a WORKING segmented control — clicking
+                    a WORKING segmented control - clicking
                     SCSS&nbsp;/&nbsp;CSS&nbsp;/&nbsp;HTML shows, in turn, the
                     source snippet, the compiled CSS, and how to use it in
                     HTML, all for the same <code>.hover-spring</code> effect
@@ -862,7 +895,7 @@
                     <code>--info</code> are light/pastel enough in both
                     themes that using them as plain TEXT color
                     (<code>.text-success</code> etc.) didn't have enough
-                    contrast — new, darkened <code>--success-text</code> /
+                    contrast - new, darkened <code>--success-text</code> /
                     <code>--danger-text</code> / <code>--warning-text</code>
                     / <code>--info-text</code> variants fix this without
                     changing how badges, buttons, or status dots look.
@@ -873,12 +906,12 @@
                     <code>.btn-warning</code> / <code>.badge-warning</code>
                     had only 1.58:1 contrast in dark mode (the text color
                     variable flipped along with the theme instead of staying
-                    fixed) — now a literal <code>--btn-text-dark</code>.
+                    fixed) - now a literal <code>--btn-text-dark</code>.
                   </li>
                   <li>
                     <strong>Links in body text.</strong> Links inside
                     paragraphs, table cells, and list items without their own
-                    class now get an underline — color alone wasn't enough
+                    class now get an underline - color alone wasn't enough
                     of a difference from the surrounding text.
                   </li>
                   <li>
@@ -886,7 +919,7 @@
                     "More" dropdown in the docs/examples sidebar had invalid
                     list HTML (elements sitting directly inside a
                     <code>&lt;ul&gt;</code> instead of inside
-                    <code>&lt;li&gt;</code>) — fixed with no visual or
+                    <code>&lt;li&gt;</code>) - fixed with no visual or
                     behavioral change.
                   </li>
                 </ul>
@@ -919,7 +952,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <strong><code>.tab-input</code> had
-                    <code>display: none</code></strong> — that doesn't just
+                    <code>display: none</code></strong> - that doesn't just
                     hide the element visually, it removes it from the tab
                     order and the accessibility tree. Tabs couldn't be
                     switched with the keyboard or read by a screen reader,
@@ -927,7 +960,7 @@
                     compliance.
                   </li>
                   <li>
-                    Hiding switched to the <code>clip</code> technique — the
+                    Hiding switched to the <code>clip</code> technique - the
                     same one <code>.sr-only</code> is built on. The element
                     becomes invisible but stays <strong>focusable</strong>:
                     the radio group regains native arrow-key support, and the
@@ -935,7 +968,7 @@
                     <code>.tab-label</code>.
                   </li>
                   <li>
-                    <strong>Nothing in the markup changes</strong> — the same
+                    <strong>Nothing in the markup changes</strong> - the same
                     <code>.tabs</code> / <code>.tab-input</code> /
                     <code>.tab-label</code> structure, just fixed behavior
                     underneath.
@@ -950,14 +983,14 @@
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
-                    A segmented range switcher built on hidden radio inputs —
+                    A segmented range switcher built on hidden radio inputs -
                     no JavaScript. The component was documented and used in
                     example markup on three pages since the first release,
                     but the CSS rule was never written; now it works.
                   </li>
                   <li>
                     Radios hidden with the <code>clip</code> technique, not
-                    <code>display: none</code> — same principle as the tabs
+                    <code>display: none</code> - same principle as the tabs
                     fix above, so the group is keyboard-accessible right away.
                   </li>
                 </ul>
@@ -975,12 +1008,12 @@
                     <code>class="grid-md-cols-12"</code> is enough. Previously
                     you had to add <code>grid-cols-1</code>, and forgetting it
                     caused a sneaky symptom: the layout looked fine, but
-                    <code>gap</code> stopped working on phones — the element
+                    <code>gap</code> stopped working on phones - the element
                     wasn't a grid at all at that point.
                   </li>
                   <li>
                     <strong>A button color class now implies
-                    <code>.btn</code></strong> — <code>class="btn-primary"</code>
+                    <code>.btn</code></strong> - <code>class="btn-primary"</code>
                     instead of <code>class="btn btn-primary"</code>. This
                     applies to colors and their outline variants. Size and
                     base-look modifiers don't carry it (they're add-ons, not
@@ -991,7 +1024,7 @@
                     <strong>Nothing stops working.</strong> The existing
                     <code>class="btn btn-primary"</code> and
                     <code>class="grid-cols-1 grid-md-cols-12"</code> notation
-                    is still valid — the new rules only add a default
+                    is still valid - the new rules only add a default
                     behavior. Cost: +740 B in the buttons module, +62 B in
                     the grid.
                   </li>
@@ -1008,7 +1041,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <code>404.html</code> loaded <code>css/flex-ui.css</code>
-                    — a file left over from the framework's old name, gone
+                    - a file left over from the framework's old name, gone
                     for months. It also used two classes outside molique
                     (<code>.page-404-wrapper</code>,
                     <code>.max-w-600</code>) and a dead
@@ -1018,7 +1051,7 @@
                   <li>
                     Rewritten using only molique classes, without a single
                     line of custom CSS. It serves both as this site's own
-                    404 page and as a template to copy — a comment at the
+                    404 page and as a template to copy - a comment at the
                     top of the file lists what to swap, plus config for
                     Apache and nginx.
                   </li>
@@ -1047,7 +1080,7 @@
                     <code>.text-hover-primary</code> and
                     <code>.bg-hover-light</code> already exist in the
                     palette, and additionally have a <code>transition</code>
-                    that the removed versions lacked — so the migration is a
+                    that the removed versions lacked - so the migration is a
                     minor improvement, not just tidying up.
                   </li>
                   <li>
@@ -1058,7 +1091,7 @@
                     project. The rest of the <code>hover-*</code> classes
                     (<code>.hover-scale</code>, <code>.hover-shadow</code>,
                     <code>.hover-border-draw</code>, and the rest)
-                    <strong>don't change</strong> — they describe an effect,
+                    <strong>don't change</strong> - they describe an effect,
                     not a color.
                   </li>
                 </ul>
@@ -1071,7 +1104,7 @@
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
-                    <strong>All 148 variables in tables</strong> — 86 theme
+                    <strong>All 148 variables in tables</strong> - 86 theme
                     variables (with light and dark mode values), 56
                     component variables, and 6 markup-driven inputs. For
                     each: what it controls and which SCSS modules use it.
@@ -1079,7 +1112,7 @@
                   <li>
                     <strong>The tables are generated</strong> by
                     <code>tools/gen-variables-doc.js</code> straight from
-                    <code>_root.scss</code> — the values can't drift from
+                    <code>_root.scss</code> - the values can't drift from
                     the code. The generator <strong>fails the build</strong>
                     if a SCSS variable appears without a description, or a
                     description is left after a variable was removed.
@@ -1107,7 +1140,7 @@
                     <strong><code>.bg-glass</code> wasn't rendering its
                     tint layer.</strong> The background referenced
                     <code>rgba(var(--bg-surface-rgb), …)</code>, and that
-                    variable was never declared anywhere — a
+                    variable was never declared anywhere - a
                     <code>var()</code> with no fallback invalidates the
                     whole declaration, so glassmorphism was running on
                     <code>backdrop-filter</code> alone. The variable was
@@ -1146,14 +1179,14 @@
                     <code>_breadcrumbs</code>, <code>_pagination</code>,
                     <code>_topbar</code>, <code>_scroll-to-top</code>,
                     <code>_reading-progress</code>. Each can be skipped in a
-                    bundle without compile errors — the first step toward
+                    bundle without compile errors - the first step toward
                     the package builder and the <code>molique-nano</code>
                     variant from the roadmap.
                   </li>
                   <li>
                     <strong>Verified that nothing was lost:</strong>
                     comparison of the compiled CSS before and after the
-                    split, at the selector→declaration pair level —
+                    split, at the selector→declaration pair level -
                     <strong>1771 pairs, zero lost, zero added, zero
                     changed</strong>. The other bundles (admin, shop,
                     blog…) are bit-for-bit identical.
@@ -1161,7 +1194,7 @@
                   <li>
                     <strong>Removed a modularity leak:</strong> a single
                     <code>.is-active</code> rule tied together the navbar,
-                    dropdown, and mega menu — so a bundle without the mega
+                    dropdown, and mega menu - so a bundle without the mega
                     menu still contained an orphaned
                     <code>.mega-menu-link</code>. Each component now has its
                     own rule.
@@ -1169,7 +1202,7 @@
                   <li>
                     <strong>New generator
                     <code>tools/gen-scss-context.js</code></strong>
-                    rebuilds <code>_AI_CONTEXT_scss.md</code> from source —
+                    rebuilds <code>_AI_CONTEXT_scss.md</code> from source -
                     this file is a full SCSS dump, so it drifted from
                     reality after every split.
                   </li>
@@ -1194,7 +1227,7 @@
                   </li>
                   <li>
                     <strong>No changes needed in your code</strong> if you
-                    use the autoloader — the paths live in
+                    use the autoloader - the paths live in
                     <code>molique-script.js</code> and were updated. Change
                     something only if you're loading a module manually via
                     <code>&lt;script src&gt;</code>.
@@ -1212,7 +1245,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <strong>Removed a dead
-                    <code>js/molique-script-widgets.js</code></strong> — 7
+                    <code>js/molique-script-widgets.js</code></strong> - 7
                     pages were loading a file that isn't in the package
                     (404 in the console). Widgets are pulled in by the
                     autoloader anyway; the docs were fixed, since they
@@ -1222,7 +1255,7 @@
                     <strong><code>llms.txt</code> and the safelist are now
                     served</strong> from the site. Previously the build
                     only copied asset directories, so
-                    <code>/llms.txt</code> returned a 404 — and that's the
+                    <code>/llms.txt</code> returned a 404 - and that's the
                     exact address AI agents fetch it from. Links were also
                     added to the "Resources" menu, a "For Developers"
                     section on the home page, and "Shrink the Package" on
@@ -1242,7 +1275,7 @@
                   <li>
                     The <code>data-bg</code> attribute had been documented
                     and present in example markup since the first release,
-                    but no line of JS ever read it —
+                    but no line of JS ever read it -
                     <code>.carousel-bg-sync</code> rendered with no
                     background, despite ready-made CSS waiting for a
                     <code>background-image</code>.
@@ -1255,7 +1288,7 @@
                     visible slide.
                   </li>
                   <li>
-                    <strong>Nothing in the markup changes</strong> — the
+                    <strong>Nothing in the markup changes</strong> - the
                     same, already-documented <code>data-bg</code> attribute
                     now actually works.
                   </li>
@@ -1272,7 +1305,7 @@
                 <ul class="text-secondary mb-0">
                   <li>
                     The docs claimed the lightbox "natively supports
-                    keyboard navigation (arrows, ESC)" — in reality
+                    keyboard navigation (arrows, ESC)" - in reality
                     <code>molique-lightbox.js</code> didn't have a single
                     <code>keydown</code> listener. A keyboard user who
                     opened a photo had no way to close the modal.
@@ -1280,7 +1313,7 @@
                   <li>
                     Fixed: <kbd>Esc</kbd> closes it, <kbd>←</kbd>/<kbd>→</kbd>
                     switches photos. On open, focus moves to the close
-                    button and returns to the clicked thumbnail on close —
+                    button and returns to the clicked thumbnail on close -
                     standard modal behavior. Missing
                     <code>aria-label</code>s were also added to the
                     navigation and close buttons.
@@ -1296,27 +1329,27 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <strong>~21 links in 8 categories took up too much
-                    space</strong> — the docs sidebar was a long, flat list
+                    space</strong> - the docs sidebar was a long, flat list
                     that needed a lot of scrolling. Six categories (the
                     ones with 2+ items) are now collapsible branches
-                    (<code>.admin-nav-submenu</code>) — collapsed by
+                    (<code>.admin-nav-submenu</code>) - collapsed by
                     default, except the one you're currently in.
                   </li>
                   <li>
                     <code>molique-admin-nav.js</code> now opens the branch
                     containing the current page itself on desktop
-                    (previously it only highlighted it) — keyboard
+                    (previously it only highlighted it) - keyboard
                     navigation and mobile drill-down unchanged.
                   </li>
                   <li>
                     <code>.admin-layout-floating</code> (until now only on
                     the landing page and the Class Reference) is now on
-                    every documentation page — a consistent look
+                    every documentation page - a consistent look
                     throughout.
                   </li>
                   <li>
                     <strong>The Roadmap disappeared only from the docs
-                    tree</strong> — the component reference sidebar no
+                    tree</strong> - the component reference sidebar no
                     longer links to it, since it's an announcements page,
                     not API documentation. The page itself and the
                     navbar/footer links are unchanged.
@@ -1335,11 +1368,11 @@
                   <li>
                     <code>.file-upload</code> is an invisible
                     <code>input[type="file"]</code> stretched over the
-                    whole card — clicking and native drag-and-drop worked,
+                    whole card - clicking and native drag-and-drop worked,
                     but there wasn't a single line of JS anywhere in the
                     repo reacting to a selection. Result: after dropping a
                     photo, nothing happened (not even the browser's "open
-                    in a new tab" fired — the input silently captured the
+                    in a new tab" fired - the input silently captured the
                     file).
                   </li>
                   <li>
@@ -1354,7 +1387,7 @@
                     didn't accept drag &amp; drop</strong> (clicking still
                     worked). The icon, heading, and caption had the same
                     <code>z-index</code> as the hidden input, and sat after
-                    it in the code — so they won the fight for which
+                    it in the code - so they won the fight for which
                     element receives the click exactly where you visually
                     aim while dragging a file. Fixed with
                     <code>pointer-events: none</code> on those elements.
@@ -1378,7 +1411,7 @@
                   <li>
                     The switch must be a <strong>sibling</strong> of
                     <code>.grid-expand</code>, not wrap it in the same
-                    <code>&lt;label&gt;</code> — otherwise clicking the
+                    <code>&lt;label&gt;</code> - otherwise clicking the
                     revealed content also toggles the switch.
                   </li>
                 </ul>
@@ -1397,7 +1430,7 @@
                     <code>molique-sidebar-state</code> from
                     <code>localStorage</code> were only read on
                     <code>DOMContentLoaded</code> in
-                    <code>molique-script.js</code> — i.e. AFTER the
+                    <code>molique-script.js</code> - i.e. AFTER the
                     browser's first paint. A returning user with a
                     collapsed sidebar (<code>.sidebar-md</code>/
                     <code>.sidebar-sm</code>) or dark theme would therefore
@@ -1419,7 +1452,7 @@
                   <li>
                     The existing logic in <code>molique-script.js</code>
                     (switch click, writing to <code>localStorage</code>)
-                    was left unchanged — this fix is purely additive.
+                    was left unchanged - this fix is purely additive.
                     Verified with <code>molique-script.js</code> completely
                     blocked: the page still renders correctly right away.
                   </li>
@@ -1431,11 +1464,11 @@
                   <span class="badge badge-warning text-dark mx-2 text-3"
                     >Fixes</span
                   >
-                  <code>&lt;hr&gt;</code> disappeared in cards — looked like a dot
+                  <code>&lt;hr&gt;</code> disappeared in cards - looked like a dot
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
-                    molique never styled <code>&lt;hr&gt;</code> — the
+                    molique never styled <code>&lt;hr&gt;</code> - the
                     element relied entirely on the browser's default style,
                     which among other things centers it via
                     <code>margin-inline: auto</code>. As a
@@ -1444,7 +1477,7 @@
                     <code>flex-direction: column</code> from the start),
                     those cross-axis auto-margins take priority over
                     <code>align-items: stretch</code> and "eat" all the
-                    free space — the line shrank to nearly zero width,
+                    free space - the line shrank to nearly zero width,
                     showing up as a single dot in the middle of the card.
                   </li>
                   <li>
@@ -1453,11 +1486,11 @@
                     <code>margin-inline: 0</code>,
                     <code>border-top: 1px solid var(--border-color)</code>.
                     Zero auto-margins, so the problem disappears in every
-                    context — not just in cards.
+                    context - not just in cards.
                   </li>
                   <li>
                     <strong>The same bug had already been patched once,
-                    locally</strong>, in <code>.modal-divider</code> — this
+                    locally</strong>, in <code>.modal-divider</code> - this
                     fix generalizes it to every <code>&lt;hr&gt;</code> in
                     the project, without touching any markup.
                   </li>
@@ -1477,14 +1510,14 @@
                     <code>margin-bottom</code> (needed when several fields
                     sit directly in a plain block without a flex wrapper).
                     But <code>.card-body</code> has a <code>gap</code> by
-                    default — as its direct child, a field got the spacing
+                    default - as its direct child, a field got the spacing
                     <strong>twice</strong> (gap + its own margin), so the
                     distance to the next field/button was double what it
                     was between other elements in the same card.
                   </li>
                   <li>
                     Fixed with the rule <code>.card-body &gt; .form-floating {
-                    margin-bottom: 0; }</code> — outside
+                    margin-bottom: 0; }</code> - outside
                     <code>.card-body</code>, the margin behaves exactly as
                     before.
                   </li>
@@ -1500,7 +1533,7 @@
                   <li>
                     A new utility class: pulls an element out of
                     <code>.container</code>'s padding on mobile (below
-                    768px), all the way to the screen edge — a typical case
+                    768px), all the way to the screen edge - a typical case
                     is a carousel, an image gallery, or a hero photo inside
                     an article's body that should touch the phone's edges
                     while the rest of the content keeps a normal margin.
@@ -1511,7 +1544,7 @@
                     (<code>width: 100vw</code> +
                     <code>margin-left: 50%</code> +
                     <code>translateX(-50%)</code>) works regardless of the
-                    parent's actual padding value — you don't need to know
+                    parent's actual padding value - you don't need to know
                     or calculate it. The global guard
                     <code>overflow-x: clip</code> on <code>html</code>
                     (present in molique from the start) prevents the
@@ -1520,7 +1553,7 @@
                   </li>
                   <li>
                     <strong>Requires a direct parent centered in the
-                    viewport</strong> (like <code>.container</code>) — it
+                    viewport</strong> (like <code>.container</code>) - it
                     works correctly as its direct child, but nested deeper
                     (e.g. inside <code>.card-body</code>) it's calculated
                     against the card's width, not the viewport's, and ends
@@ -1538,7 +1571,7 @@
                 <ul class="text-secondary mb-0">
                   <li>
                     <strong>8 ideas</strong> were completed along the way,
-                    as part of other work, and were removed from the list —
+                    as part of other work, and were removed from the list -
                     including the entire "Architecture and Distribution"
                     category (<code>molique-nano</code> as a builder
                     preset, a full system of independent SCSS chunks), a
@@ -1552,7 +1585,7 @@
                   </li>
                   <li>
                     <strong>6 more items were clarified</strong>, since they
-                    turned out to be partially done — the description
+                    turned out to be partially done - the description
                     changed from "build X from scratch" to what's actually
                     missing (e.g. a real checklist with checkable items
                     instead of decorative icons in <code>.list-icons</code>,
@@ -1578,7 +1611,7 @@
                 <ul class="text-secondary mb-0">
                   <li>
                     <strong>The language switcher in the navbar stopped
-                    being decorative</strong> — until now, the links in
+                    being decorative</strong> - until now, the links in
                     <code>.language-switch-menu</code> were
                     <code>href="#"</code>. Now the landing page and
                     "Getting Started" have real English and German
@@ -1601,7 +1634,7 @@
                     language variants exist on disk, and injects ready-made
                     variables (<code>__hasEn</code>, <code>__altEn</code>…)
                     into <strong>all</strong> <code>&lt;include&gt;</code>s
-                    of a page at once — <code>head.html</code> (hreflang)
+                    of a page at once - <code>head.html</code> (hreflang)
                     and <code>navbar.html</code> (the switcher) use the
                     same, once-computed data.
                   </li>
@@ -1618,7 +1651,7 @@
                     <code>posthtml-expressions</code> interpolates
                     <em>every</em> <code><raw>{{ }}</raw></code> in the document in a
                     single pass, before removing <code>&lt;if&gt;</code>
-                    branches with a false condition — a <code>null</code>
+                    branches with a false condition - a <code>null</code>
                     value for a missing translation crashed the whole build
                     (<code>ReferenceError</code>), even though
                     <code>&lt;if&gt;</code> would have hidden it anyway.
@@ -1635,7 +1668,7 @@
                 </h2>
                 <ul class="text-secondary mb-0">
                   <li>
-                    <strong>Continuing the pilot</strong> — using the same
+                    <strong>Continuing the pilot</strong> - using the same
                     mechanism and conventions as above, another 19
                     reference pages were translated:
                     <code>docs-variables</code>, <code>docs-select</code>,
@@ -1650,7 +1683,7 @@
                     <code>docs-buttons</code>, <code>docs-interactive</code>.
                     Deliberately deferred: <code>docs-navbar.html</code>
                     (1072 lines) and <code>docs-classes.html</code> (2325
-                    lines) — two pages clearly bigger than the rest
+                    lines) - two pages clearly bigger than the rest
                     combined.
                   </li>
                   <li>
@@ -1658,7 +1691,7 @@
                     case:</strong> its three variable tables are
                     auto-generated by
                     <code>tools/gen-variables-doc.js</code> and rebuilt
-                    before every build — manually translating their
+                    before every build - manually translating their
                     content would get silently overwritten. The page's
                     static prose was translated normally; the three
                     generated <code>&lt;include&gt;</code>s stay in Polish,
@@ -1668,7 +1701,7 @@
                     <strong>Docs sidebar updated:</strong>
                     <code>docs-sidebar.en.html</code>/<code>.de.html</code>
                     now link to the translated variants everywhere except
-                    the two deferred pages — the fallback to the Polish
+                    the two deferred pages - the fallback to the Polish
                     version, where a translation doesn't exist yet, stays
                     documented with a comment in the files.
                   </li>
@@ -1678,7 +1711,7 @@
                   class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-primary mx-2 text-3">New</span>
-                  i18n: complete — all 22 <code>docs-*.html</code> pages in English and German
+                  i18n: complete - all 22 <code>docs-*.html</code> pages in English and German
                 </h2>
                 <ul class="text-secondary mb-0">
                   <li>
@@ -1692,14 +1725,14 @@
                   </li>
                   <li>
                     <strong><code>docs-classes.html</code> has a different
-                    structure than the rest of the docs</strong> — it's the
+                    structure than the rest of the docs</strong> - it's the
                     only one that doesn't include
                     <code>partials/navbar.html</code>, so it has no
                     language switcher in the top bar; kept identical in
                     PL/EN/DE, this is a pre-existing feature of the page
                     from before i18n, not something to fix. Translation
                     covered only the descriptive content of table cells
-                    and the text in live component previews — CSS class
+                    and the text in live component previews - CSS class
                     names (<code>.btn-primary</code> etc.) and the code in
                     <code>&lt;code&gt;</code> were left unchanged, same as
                     everywhere else in the docs.
@@ -1710,7 +1743,7 @@
                     <code>docs-sidebar.en.html</code>/<code>.de.html</code>,
                     which deliberately pointed to the Polish pages, were
                     switched to <code>.en.html</code>/<code>.de.html</code>
-                    — zero deliberate exceptions left, the entire sidebar
+                    - zero deliberate exceptions left, the entire sidebar
                     now links in the page's own language.
                   </li>
                 </ul>
@@ -1729,7 +1762,7 @@
                   </li>
                   <li>
                     <strong>The license text itself stays in English on
-                    all three versions</strong> — it's the only legally
+                    all three versions</strong> - it's the only legally
                     binding form; an unofficial translation could
                     introduce ambiguity. Only the page chrome (title,
                     intro, navigation buttons) is translated.
@@ -1761,7 +1794,7 @@
                   <li>
                     <strong>Every internal link dropped
                     <code>.html</code></strong> (<code>docs.html</code> →
-                    <code>docs</code>, the homepage → <code>/</code>) —
+                    <code>docs</code>, the homepage → <code>/</code>) -
                     2,310 links across 270 files, rewritten by a one-off
                     script, <code>tools/migrate-pretty-urls.js</code>. The
                     server (<code>.htaccess</code>) already supported this
@@ -1773,7 +1806,7 @@
                     <code>&lt;head&gt;</code> is a <code>&lt;link&gt;</code>
                     tag, and Vite scans <code>href</code> on every
                     <code>&lt;link&gt;</code> as an asset reference (unlike
-                    <code>&lt;a&gt;</code>, which it ignores) — the first
+                    <code>&lt;a&gt;</code>, which it ignores) - the first
                     pass, with <code>href="./"</code> for the homepage,
                     tried to read the <code>src/</code> directory as a
                     file and crashed the entire build.
@@ -1781,7 +1814,7 @@
                   <li>
                     <code>sitemap.xml</code> and <code>robots.txt</code>
                     now carry the real production domain (not a
-                    placeholder) and cover every PL/EN/DE page — generated
+                    placeholder) and cover every PL/EN/DE page - generated
                     by a new <code>tools/gen-sitemap.js</code>, run
                     automatically after every build.
                   </li>
@@ -1799,7 +1832,7 @@
                   <li>
                     <strong>Full-screen overlays</strong> (lightbox,
                     offcanvas, popover) got a shared
-                    <code>--backdrop-rgb</code> — but only as a color
+                    <code>--backdrop-rgb</code> - but only as a color
                     source, not one shared opacity. Each component had a
                     deliberately different value (0.95 / 0.5 / 0.6);
                     forcing one shared value would have genuinely changed
@@ -1808,7 +1841,7 @@
                   <li>
                     <strong>The footer</strong> got local
                     <code>--footer-muted-rgb</code>/<code>--footer-white-rgb</code>
-                    — not the global <code>--light-rgb</code>, since that
+                    - not the global <code>--light-rgb</code>, since that
                     one flips in dark mode while the footer is always
                     dark.
                   </li>
@@ -1817,7 +1850,7 @@
                     pill tabs, the carousel, the admin sidebar, and the
                     code preview now compute from
                     <code>--spacing-unit</code> /
-                    <code>--border-radius</code> — no visual change (same
+                    <code>--border-radius</code> - no visual change (same
                     resulting values).
                   </li>
                   <li>
@@ -1840,11 +1873,11 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     The Production package used to bundle both full and
-                    minified CSS at once — 425 KB of dead weight for
+                    minified CSS at once - 425 KB of dead weight for
                     anyone who only needed one. Now you pick the format (a
                     <code>.tabs-pill</code> segmented control) and
                     optionally the fonts (a <code>.form-switch</code> in
-                    the card header) — the default package dropped from
+                    the card header) - the default package dropped from
                     ~363 KB to ~90 KB.
                   </li>
                   <li>
@@ -1864,7 +1897,7 @@
                   <li>
                     <strong>A real accessibility gap:</strong> the old
                     version, built on a manually controlled
-                    <code>&lt;div&gt;</code>, didn't trap focus — pressing
+                    <code>&lt;div&gt;</code>, didn't trap focus - pressing
                     Tab could take you out of the open lightbox and onto
                     the page behind it. Native
                     <code>showModal()</code>/<code>close()</code> handles
@@ -1879,11 +1912,11 @@
                   </li>
                   <li>
                     <strong>View Transitions API for the image-swap
-                    animation — tried, then reverted.</strong> In testing,
+                    animation - tried, then reverted.</strong> In testing,
                     <code>document.startViewTransition()</code>'s
                     <code>finished</code> promise could simply never
                     settle, and a subsequent call after that happened
-                    would stop firing its callback at all — a real risk of
+                    would stop firing its callback at all - a real risk of
                     permanently freezing the gallery's arrows. Reverted to
                     a manual <code>transform</code>/<code>opacity</code>
                     animation with a time-based throttle (always
@@ -1918,7 +1951,7 @@
                   class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-danger mx-2 text-3">Fix</span>
-                  <code>.table-cards</code> on mobile — text wrapping into
+                  <code>.table-cards</code> on mobile - text wrapping into
                   single letters
                 </h2>
                 <ul class="text-secondary mb-4">

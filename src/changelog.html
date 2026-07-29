@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.18."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.19."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -46,6 +46,40 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.19 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.19</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-success"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-success mx-2 text-3">Ulepszenie</span>
+                  Jednolita interpunkcja: pauzy "-", nigdy "–"/"—"
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    W całym repozytorium (280 plików - strona PL/EN/DE,
+                    komponenty SCSS, skrypty, dokumentacja) ujednolicono
+                    interpunkcję: przypadkowo wkradające się przez lata
+                    pauzy en/em (<code>–</code>/<code>—</code>) zastąpiono
+                    jednym, konsekwentnym znakiem - zwykłym łącznikiem
+                    "-".
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.18 -->
           <!-- ============================================================ -->
@@ -146,7 +180,7 @@
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
-                    Nowa sekcja „Gotowe palety" na górze edytora — Modern
+                    Nowa sekcja „Gotowe palety" na górze edytora - Modern
                     Premium, Eco Sage, Warm Terra, Futuristic Cyber. Jedno
                     kliknięcie ustawia Primary, Secondary, tła, ramkę i
                     tekst dla obu motywów naraz (zamiast ręcznego
@@ -154,7 +188,7 @@
                     zostają wspólne dla wszystkich palet.
                   </li>
                   <li>
-                    Działa dokładnie jak reszta edytora — zmiana widoczna
+                    Działa dokładnie jak reszta edytora - zmiana widoczna
                     tylko na tej stronie (zapisana w
                     <code>localStorage</code> Twojej przeglądarki),
                     eksportowalna przyciskiem „Kopiuj CSS". Nie zmienia
@@ -183,22 +217,22 @@
                   class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-danger mx-2 text-3">Poprawka</span>
-                  Nowa paleta „Slate Violet" — success/danger/warning/info przechodzą 4.5:1 bez wyjątków
+                  Nowa paleta „Slate Violet" - success/danger/warning/info przechodzą 4.5:1 bez wyjątków
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
                     Dotychczasowe <code>--success</code>/<code>--danger</code>/
                     <code>--warning</code>/<code>--info</code> działały tylko
-                    jako tło pod ciemnym tekstem — jako sam kolor tekstu na
-                    jasnym tle dawały zaledwie 2.3–3.8:1 (poniżej progu WCAG
+                    jako tło pod ciemnym tekstem - jako sam kolor tekstu na
+                    jasnym tle dawały zaledwie 2.3-3.8:1 (poniżej progu WCAG
                     4.5:1), stąd osobny, drugi zestaw
                     <code>--success-text</code> itd. Nowe kolory są dość
                     ciemne/nasycone, żeby przejść 4.5:1 w OBIE strony
-                    naraz — jako tekst na jasnym tle i jako tło pod białym
-                    tekstem — więc drugi zestaw stał się zbędny.
+                    naraz - jako tekst na jasnym tle i jako tło pod białym
+                    tekstem - więc drugi zestaw stał się zbędny.
                     <code>--success-text</code> i reszta zostają w kodzie
                     (dziesiątki miejsc ich używa), ale teraz są aliasem do
-                    bazy (<code>--success-text: var(--success)</code>) —
+                    bazy (<code>--success-text: var(--success)</code>) -
                     zero zmian poza <code>_root.scss</code>.
                   </li>
                   <li>
@@ -206,7 +240,7 @@
                     success/danger/warning/info były jasne/pastelowe w OBU
                     motywach, więc przyciski/badge zawsze miały ciemny
                     tekst na sztywno. Nowe są ciemne w light mode, ale
-                    nadal jasne/neonowe w dark mode — odwrotna zasada
+                    nadal jasne/neonowe w dark mode - odwrotna zasada
                     zależnie od motywu. <code>--semantic-fg</code>
                     przełącza się razem z motywem
                     (<code>_buttons.scss</code>, <code>_badges.scss</code>,
@@ -214,9 +248,9 @@
                   </li>
                   <li>
                     Dark-mode <code>--danger</code> nie jest 1:1 z
-                    pierwotnej propozycji palety — wersja z ciemnym tekstem
+                    pierwotnej propozycji palety - wersja z ciemnym tekstem
                     dawała 4.30:1 (tylko AA-large, nie pełne AA). Dobrany
-                    nieco jaśniejszy odcień tej samej rodziny — 4.84:1.
+                    nieco jaśniejszy odcień tej samej rodziny - 4.84:1.
                   </li>
                   <li>
                     <code>--primary</code> zostaje w tej samej rodzinie
@@ -255,7 +289,7 @@
                     w kaskadzie warstw: <code>_stat-tile.scss</code> owijał
                     swoją treść we własny <code>@layer components { ... }</code>,
                     mimo że <code>molique-style.scss</code> już owija cały
-                    import komponentów w tę samą, nazwaną warstwę — dodatkowe
+                    import komponentów w tę samą, nazwaną warstwę - dodatkowe
                     owinięcie w środku tworzyło zagnieżdżoną podwarstwę o
                     niższym priorytecie niż nieowinięte reguły w tym samym
                     zakresie (m.in. <code>.card</code>). Efekt:
@@ -265,7 +299,7 @@
                     kolejności w pliku.
                   </li>
                   <li>
-                    Naprawione usunięciem zbędnego owinięcia — dopasowane do
+                    Naprawione usunięciem zbędnego owinięcia - dopasowane do
                     większości plików w <code>components/</code> (m.in.
                     <code>.card</code>, <code>.tabs</code>), które się nie
                     owijają. Ikona jest teraz po lewej, tekst wyrównany do
@@ -300,16 +334,16 @@
                   <li>
                     Goły <code>1fr</code> w <code>grid-template-columns</code>
                     (mobile, poniżej 768px) to w skrócie
-                    <code>minmax(auto, 1fr)</code> — minimum toru liczy się z
+                    <code>minmax(auto, 1fr)</code> - minimum toru liczy się z
                     min-content potomków, NIE z zera, nawet gdy
                     <code>.admin-main</code> ma już <code>min-width: 0</code>
                     + <code>overflow-x: hidden</code> (to inny mechanizm niż
                     ochrona przed przepełnieniem samego toru grida). Jeśli
-                    jakikolwiek potomek — dowolnie głęboko — ma dużą
+                    jakikolwiek potomek - dowolnie głęboko - ma dużą
                     wewnętrzną intrinsic-size, tor rośnie ponad szerokość
                     ekranu. Ponieważ <code>html</code>/<code>body</code> mają
                     celowo <code>overflow-x: clip</code> (nie
-                    <code>scroll</code> — żeby nie psuć
+                    <code>scroll</code> - żeby nie psuć
                     <code>position: sticky</code>), efektem nie jest widoczny
                     scrollbar, tylko ciche obcinanie treści za krawędzią
                     ekranu. Naprawione przez jednoznaczne
@@ -352,7 +386,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <code>.stat-tile</code> (v1.7.11) dopisany do
-                    <code>llms.txt</code> — brakowało go tam mimo dodania do
+                    <code>llms.txt</code> - brakowało go tam mimo dodania do
                     <a href="docs-cards">docs-cards</a> i cheat-sheeta; strona
                     <a href="docs-llms">Instrukcja dla AI</a> regeneruje się z
                     tego pliku automatycznie.
@@ -392,14 +426,14 @@
                     Kafelek wskaźnika: ikona bez kolorowego tła, etykieta,
                     liczba o zawsze tej samej wielkości (niezależnie od
                     instancji) i opcjonalna delta trendu (<code>-up</code> /
-                    <code>-down</code>). Łączy się z <code>.card</code> —
+                    <code>-down</code>). Łączy się z <code>.card</code> -
                     <code>.stat-tile</code> dokłada tylko wewnętrzny layout.
                     Zobacz <a href="docs-cards">Karty</a>, sekcja 5.
                   </li>
                   <li>
                     Upstreamowany z realnego projektu (panel CRM), gdzie
                     zastąpił ręcznie sklecane karty KPI z niespójną
-                    hierarchią tekstu między instancjami — problem, który
+                    hierarchią tekstu między instancjami - problem, który
                     <code>.stat-tile-value</code> rozwiązuje raz, na poziomie
                     komponentu, zamiast pozwalać mu dryfować przy każdym
                     nowym kafelku.
@@ -435,14 +469,14 @@
                     z domyślnym <code>align-items: stretch</code>, więc
                     <code>.tabs-header</code> (pigułka) i
                     <code>.tabs-content</code> zawsze miały dokładnie tę samą
-                    szerokość — segmentowy przełącznik rozciągał się do pełnej
+                    szerokość - segmentowy przełącznik rozciągał się do pełnej
                     szerokości tego, co przełączał (np. szerokiej tabeli),
                     zamiast zostać kompaktowy.
                   </li>
                   <li>
                     <code>.tabs-pill .tabs-header</code> dostał
                     <code>align-self: flex-start</code> i
-                    <code>width: fit-content</code> — pigułka dopasowuje się
+                    <code>width: fit-content</code> - pigułka dopasowuje się
                     teraz do szerokości etykiet, niezależnie od tego, jak
                     szeroka jest treść zakładki pod spodem.
                     <code>.tabs-content</code> bez zmian.
@@ -476,7 +510,7 @@
                   <li>
                     Sekcja „Dla deweloperów" na stronie głównej pokazywała
                     <code>molique JIT</code> i CLI jako „W przygotowaniu" (bez
-                    linku) — nieaktualne od publikacji na npm. Karty mają
+                    linku) - nieaktualne od publikacji na npm. Karty mają
                     teraz badge „Na npm", opis zgodny z realną funkcjonalnością
                     i przyciski prowadzące do <a href="docs-jit">molique JIT</a>
                     oraz <a href="docs-cli">CLI molique-jit</a>.
@@ -510,7 +544,7 @@
                   <li>
                     Pakiet <a href="https://www.npmjs.com/package/molique-jit" target="_blank" rel="noopener"><code>molique-jit</code></a>
                     jest teraz dostępny na npm (<code>npm install --save-dev molique-jit</code>)
-                    — instrukcje instalacji ze źródeł na stronach
+                    - instrukcje instalacji ze źródeł na stronach
                     <a href="docs-jit">molique JIT</a> i
                     <a href="docs-cli">CLI molique-jit</a> zastąpione realnymi
                     komendami <code>npm install</code>/<code>npx</code>.
@@ -520,15 +554,15 @@
                     ośmiu: <code>make:modal</code>, <code>make:layout</code>,
                     <code>make:nav</code>, <code>make:table</code>,
                     <code>make:chart</code>, <code>make:form</code>,
-                    <code>make:popover</code>, <code>make:widget</code> —
+                    <code>make:popover</code>, <code>make:widget</code> -
                     każdy z polskim i niemieckim aliasem oraz wspólną flagą
                     <code>-n, --count</code> do pominięcia pytania „ile?".
                     Komenda <code>make:component</code> nie generuje już
-                    Modala — wypisuje spis wszystkich dostępnych generatorów.
+                    Modala - wypisuje spis wszystkich dostępnych generatorów.
                   </li>
                   <li>
                     Ramowo: framework molique doczekał się też własnego
-                    pakietu npm (<code>npm install molique</code>) — osobna
+                    pakietu npm (<code>npm install molique</code>) - osobna
                     dystrybucja obok gotowych paczek ZIP z
                     <a href="download">strony pobierania</a>.
                   </li>
@@ -568,7 +602,7 @@
                   </li>
                   <li>
                     Powód: CLI będzie rosło o kolejne komendy (np.
-                    <code>make:table</code>) — osobna strona referencyjna
+                    <code>make:table</code>) - osobna strona referencyjna
                     skaluje się lepiej niż jedna, coraz dłuższa strona
                     łącząca dwa różne tematy. Obie strony linkują się
                     wzajemnie.
@@ -605,7 +639,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     Nowa strona <code>docs-jit</code> opisująca silnik JIT
-                    (tablica przeglądowa zamiast liczenia CSS w locie — patrz
+                    (tablica przeglądowa zamiast liczenia CSS w locie - patrz
                     porównanie z PurgeCSS) oraz CLI <code>molique-jit</code>:
                     komendy <code>init</code>/<code>build</code>/<code>watch</code>
                     z polskimi i niemieckimi aliasami, schemat pliku
@@ -614,7 +648,7 @@
                     wariantach).
                   </li>
                   <li>
-                    Strona oznaczona jako <strong>Podgląd</strong> — silnik i
+                    Strona oznaczona jako <strong>Podgląd</strong> - silnik i
                     CLI działają i są zweryfikowane w repozytorium, ale pakiet
                     <code>molique-jit</code> nie jest jeszcze opublikowany na
                     npm. Do tego czasu dokumentacja opisuje instalację ze
@@ -660,7 +694,7 @@
                     górze (<code>--navbar-h</code>). Przy dłuższej liście
                     (np. na stronach dokumentacji) szuflada wjeżdżała pod
                     navbar, a jej górne pozycje były przez niego przysłonięte
-                    — dotyczyło każdej strony łączącej navbar z panelem
+                    - dotyczyło każdej strony łączącej navbar z panelem
                     bocznym. Dopisane brakujące odjęcie
                     <code>var(--navbar-h)</code> we wzorze na
                     <code>max-height</code>.
@@ -695,7 +729,7 @@
                     Przycisk „Wstecz: [strona]" na dole każdej podstrony
                     dokumentacji i przykładów używał ikony
                     <code>ph-arrow-right</code> zamiast
-                    <code>ph-arrow-left</code> — strzałka wskazywała w prawo,
+                    <code>ph-arrow-left</code> - strzałka wskazywała w prawo,
                     czyli w kierunku „dalej", mimo że przycisk cofa do
                     poprzedniej strony. Poprawione we wszystkich 231
                     wystąpieniach (PL/EN/DE). Przycisk „Następny krok"
@@ -707,14 +741,14 @@
                   class="text-3 text-success fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-success mx-2 text-3">Ulepszenie</span>
-                  Dostępność (WCAG) — komplet, 100/100 na każdej stronie
+                  Dostępność (WCAG) - komplet, 100/100 na każdej stronie
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
                     Domknięcie audytu dostępności: brakujące opisy
                     (<code>aria-label</code>) na przyciskach tylko-ikona
                     (kropki karuzeli naprawione raz w
-                    <code>molique-carousel.js</code> — obejmuje każdą
+                    <code>molique-carousel.js</code> - obejmuje każdą
                     karuzelę na stronie), pola edytora motywu (naprawione
                     raz w <code>molique-theme-editor.js</code>, czyta opis z
                     sąsiadującej etykiety), za mały odstęp między kropkami
@@ -728,7 +762,7 @@
                   <li>
                     Wynik: <strong>wszystkie 90 podstron serwisu (PL) mają
                     teraz 100/100</strong> w audycie Lighthouse Accessibility
-                    — zero pozostałych problemów w jakiejkolwiek kategorii.
+                    - zero pozostałych problemów w jakiejkolwiek kategorii.
                   </li>
                 </ul>
               </div>
@@ -763,14 +797,14 @@
                     pomijając <code>&lt;h2&gt;</code>, a strony
                     <code>docs-*.html</code> miały „dymki" z poradami
                     oznaczone jako <code>&lt;h5&gt;</code> zamiast
-                    <code>&lt;h3&gt;</code> — w obu przypadkach czytnik ekranu
+                    <code>&lt;h3&gt;</code> - w obu przypadkach czytnik ekranu
                     zgłaszał to jako złamaną strukturę dokumentu.
                   </li>
                   <li>
                     Poprawione na wszystkich stronach (PL/EN/DE), łącznie z
                     całą historią <code>changelog.html</code> (74 wpisy od
                     wersji 0.1.0 wzwyż, dotąd bez jednego wspólnego
-                    <code>&lt;h2&gt;</code>) — zero zmian wizualnych, tylko
+                    <code>&lt;h2&gt;</code>) - zero zmian wizualnych, tylko
                     poprawne tagi.
                   </li>
                   <li>
@@ -778,7 +812,7 @@
                     własną, osobną kopię paska bocznego (z tym samym błędem
                     struktury listy, co poprzednio naprawione partiale) oraz
                     jeden link bez podkreślenia w komunikacie
-                    <code>.alert</code> na <code>download.html</code> —
+                    <code>.alert</code> na <code>download.html</code> -
                     oba naprawione.
                   </li>
                 </ul>
@@ -819,7 +853,7 @@
                     <code>sitemap.xml</code> i <code>robots.txt</code> nigdy
                     nie trafiały automatycznie do produkcyjnego builda
                     (generowane za późno w pipeline'ie, PO skopiowaniu plików
-                    startowych) — teraz generowane przed buildem, razem z
+                    startowych) - teraz generowane przed buildem, razem z
                     resztą plików startowych.
                   </li>
                 </ul>
@@ -833,7 +867,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     Sekcja hero zamiast samego bloku kodu pokazuje teraz
-                    DZIAŁający segmented control — kliknięcie
+                    DZIAŁający segmented control - kliknięcie
                     SCSS&nbsp;/&nbsp;CSS&nbsp;/&nbsp;HTML pokazuje kolejno
                     fragment źródła, skompilowany CSS i sposób użycia w
                     HTML-u, na przykładzie tego samego efektu
@@ -857,7 +891,7 @@
                     <code>--warning</code> i <code>--info</code> są dość
                     jasne/pastelowe w obu motywach, żeby jako sam kolor TEKSTU
                     (<code>.text-success</code> itd.) nie mieć wystarczającego
-                    kontrastu — nowe, przyciemnione warianty
+                    kontrastu - nowe, przyciemnione warianty
                     <code>--success-text</code> / <code>--danger-text</code> /
                     <code>--warning-text</code> / <code>--info-text</code>
                     naprawiają to bez zmiany wyglądu badge'y, przycisków i
@@ -869,12 +903,12 @@
                     <code>.btn-warning</code> / <code>.badge-warning</code>
                     miały w ciemnym motywie kontrast tylko 1.58:1 (zmienna
                     tekstu odwracała się razem z motywem, zamiast zostać
-                    stała) — teraz literalny <code>--btn-text-dark</code>.
+                    stała) - teraz literalny <code>--btn-text-dark</code>.
                   </li>
                   <li>
                     <strong>Linki w prozie.</strong> Linki wewnątrz akapitów,
                     komórek tabel i pozycji list bez własnej klasy dostały
-                    podkreślenie — sam kolor nie dawał wystarczającej różnicy
+                    podkreślenie - sam kolor nie dawał wystarczającej różnicy
                     względem otaczającego tekstu.
                   </li>
                   <li>
@@ -882,7 +916,7 @@
                     „Więcej" na mobile w sidebarze dokumentacji/przykładów
                     miało nieprawidłową strukturę listy HTML (elementy poza
                     <code>&lt;li&gt;</code> bezpośrednio w
-                    <code>&lt;ul&gt;</code>) — poprawione bez zmiany wyglądu
+                    <code>&lt;ul&gt;</code>) - poprawione bez zmiany wyglądu
                     ani działania.
                   </li>
                 </ul>
@@ -915,14 +949,14 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <strong><code>.tab-input</code> miał
-                    <code>display: none</code></strong> — to nie tylko chowa
+                    <code>display: none</code></strong> - to nie tylko chowa
                     element wizualnie, ale usuwa go z kolejności tabulacji
                     i z drzewa dostępności. Zakładek nie dało się przełączyć
                     klawiaturą ani odczytać czytnikiem ekranu, mimo że
                     framework deklaruje zgodność z WCAG 2.2 AAA.
                   </li>
                   <li>
-                    Ukrycie zamienione na technikę <code>clip</code> — tę
+                    Ukrycie zamienione na technikę <code>clip</code> - tę
                     samą, na której stoi <code>.sr-only</code>. Element
                     zostaje niewidoczny, ale <strong>fokusowalny</strong>:
                     grupa radio odzyskuje natywną obsługę strzałkami, a
@@ -930,7 +964,7 @@
                     <code>.tab-label</code>.
                   </li>
                   <li>
-                    <strong>Nic w markupie się nie zmienia</strong> — ta sama
+                    <strong>Nic w markupie się nie zmienia</strong> - ta sama
                     struktura <code>.tabs</code> /
                     <code>.tab-input</code> / <code>.tab-label</code>, tylko
                     poprawione zachowanie pod spodem.
@@ -946,13 +980,13 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     Segmentowany przełącznik zakresu na ukrytych polach radio
-                    — bez JavaScriptu. Komponent był opisany w słownikach i
+                    - bez JavaScriptu. Komponent był opisany w słownikach i
                     użyty w markupie trzech stron od pierwszego wydania, ale
                     reguła CSS nigdy nie powstała; teraz działa.
                   </li>
                   <li>
                     Radio ukryte techniką <code>clip</code>, nie
-                    <code>display: none</code> — ta sama zasada co w
+                    <code>display: none</code> - ta sama zasada co w
                     poprawce zakładek powyżej, więc grupa jest od razu
                     dostępna z klawiatury.
                   </li>
@@ -971,12 +1005,12 @@
                     <code>class="grid-md-cols-12"</code> wystarczy. Wcześniej
                     trzeba było dopisywać <code>grid-cols-1</code>, a jego brak
                     dawał podstępny objaw: układ wyglądał dobrze, ale
-                    <code>gap</code> przestawał działać na telefonie — element
+                    <code>gap</code> przestawał działać na telefonie - element
                     nie był wtedy gridem w ogóle.
                   </li>
                   <li>
                     <strong>Klasa koloru przycisku implikuje
-                    <code>.btn</code></strong> — <code>class="btn-primary"</code>
+                    <code>.btn</code></strong> - <code>class="btn-primary"</code>
                     zamiast <code>class="btn btn-primary"</code>. Dotyczy
                     kolorów i ich odmian obrysowych. Modyfikatory rozmiaru i
                     wyglądu bazy nie niosą (to dodatki, nie przyciski), a
@@ -987,7 +1021,7 @@
                     <strong>Nic nie przestaje działać.</strong> Dotychczasowy
                     zapis <code>class="btn btn-primary"</code> i
                     <code>class="grid-cols-1 grid-md-cols-12"</code> jest nadal
-                    poprawny — nowe reguły tylko dokładają zachowanie domyślne.
+                    poprawny - nowe reguły tylko dokładają zachowanie domyślne.
                     Koszt: +740 B w module przycisków, +62 B w siatce.
                   </li>
                 </ul>
@@ -1003,7 +1037,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <code>404.html</code> ładowała <code>css/flex-ui.css</code>
-                    — plik po dawnej nazwie frameworka, który nie istnieje od
+                    - plik po dawnej nazwie frameworka, który nie istnieje od
                     miesięcy. Używała też dwóch klas spoza molique
                     (<code>.page-404-wrapper</code>,
                     <code>.max-w-600</code>) i martwego
@@ -1012,7 +1046,7 @@
                   <li>
                     Przepisana wyłącznie na klasy molique, bez ani jednej
                     linijki własnego CSS. Służy jednocześnie jako strona 404
-                    tego serwisu i szablon do skopiowania — w komentarzu na
+                    tego serwisu i szablon do skopiowania - w komentarzu na
                     górze pliku jest lista rzeczy do podmiany oraz konfiguracja
                     dla Apache i nginx.
                   </li>
@@ -1040,7 +1074,7 @@
                     <code>.text-hover-primary</code> i
                     <code>.bg-hover-light</code> istnieją w palecie i dodatkowo
                     mają <code>transition</code>, którego wersje usunięte nie
-                    miały — migracja jest więc drobnym ulepszeniem, nie tylko
+                    miały - migracja jest więc drobnym ulepszeniem, nie tylko
                     porządkiem.
                   </li>
                   <li>
@@ -1051,7 +1085,7 @@
                     projekcie. Pozostałe klasy <code>hover-*</code>
                     (<code>.hover-scale</code>, <code>.hover-shadow</code>,
                     <code>.hover-border-draw</code> i reszta) <strong>nie
-                    zmieniają się</strong> — one opisują efekt, nie kolor.
+                    zmieniają się</strong> - one opisują efekt, nie kolor.
                   </li>
                 </ul>
 
@@ -1063,7 +1097,7 @@
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
-                    <strong>Wszystkie 148 zmiennych w tabelach</strong> — 86
+                    <strong>Wszystkie 148 zmiennych w tabelach</strong> - 86
                     zmiennych motywu (z wartościami dla trybu jasnego i
                     ciemnego), 56 zmiennych komponentów i 6 wejść z markupu.
                     Dla każdej: co steruje i w których modułach SCSS jest
@@ -1072,7 +1106,7 @@
                   <li>
                     <strong>Tabele są generowane</strong> przez
                     <code>tools/gen-variables-doc.js</code> prosto z
-                    <code>_root.scss</code> — wartości nie mogą rozjechać się z
+                    <code>_root.scss</code> - wartości nie mogą rozjechać się z
                     kodem. Generator <strong>przerywa build</strong>, gdy w SCSS
                     pojawi się zmienna bez opisu albo gdy opis zostanie po
                     usuniętej zmiennej.
@@ -1100,7 +1134,7 @@
                     <strong><code>.bg-glass</code> nie renderował warstwy
                     barwiącej.</strong> Tło sięgało po
                     <code>rgba(var(--bg-surface-rgb), …)</code>, a ta zmienna
-                    nie była nigdzie zadeklarowana — <code>var()</code> bez
+                    nie była nigdzie zadeklarowana - <code>var()</code> bez
                     wartości zapasowej unieważnia całą deklarację, więc
                     glassmorphism działał na samym
                     <code>backdrop-filter</code>. Zmienna doszła do obu motywów.
@@ -1182,7 +1216,7 @@
                   </li>
                   <li>
                     <strong>Nie wymaga zmian w Twoim kodzie</strong>, jeśli
-                    korzystasz z autoloadera — ścieżki są w
+                    korzystasz z autoloadera - ścieżki są w
                     <code>molique-script.js</code> i zostały zaktualizowane.
                     Zmień tylko, jeśli ładujesz któryś moduł ręcznie przez
                     <code>&lt;script src&gt;</code>.
@@ -1200,7 +1234,7 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <strong>Usunięty martwy
-                    <code>js/molique-script-widgets.js</code></strong> — 7 stron
+                    <code>js/molique-script-widgets.js</code></strong> - 7 stron
                     ładowało plik, którego nie ma w paczce (404 w konsoli).
                     Widgety i tak dociąga autoloader; dokumentacja poprawiona,
                     bo instruowała, żeby ten plik dołączyć.
@@ -1208,7 +1242,7 @@
                   <li>
                     <strong><code>llms.txt</code> i safelista są teraz
                     serwowane</strong> ze strony. Wcześniej build kopiował tylko
-                    katalogi zasobów, więc <code>/llms.txt</code> zwracał 404 —
+                    katalogi zasobów, więc <code>/llms.txt</code> zwracał 404 -
                     a to adres, spod którego pobierają go agenty AI. Doszły też
                     linki w menu „Zasoby", sekcja „Dla deweloperów" na stronie
                     głównej i „Zmniejsz paczkę" na stronie pobierania.
@@ -1227,7 +1261,7 @@
                   <li>
                     Atrybut <code>data-bg</code> był udokumentowany i obecny w
                     markupie przykładów od pierwszego wydania, ale żadna linia
-                    JS go nie czytała — <code>.carousel-bg-sync</code>
+                    JS go nie czytała - <code>.carousel-bg-sync</code>
                     renderowała się bez tła, mimo gotowego CSS czekającego na
                     <code>background-image</code>.
                   </li>
@@ -1238,7 +1272,7 @@
                     <code>data-bg</code> aktualnie widocznego slajdu.
                   </li>
                   <li>
-                    <strong>Nic w markupie się nie zmienia</strong> — ten sam,
+                    <strong>Nic w markupie się nie zmienia</strong> - ten sam,
                     już udokumentowany atrybut <code>data-bg</code> teraz
                     faktycznie działa.
                   </li>
@@ -1255,7 +1289,7 @@
                 <ul class="text-secondary mb-0">
                   <li>
                     Dokumentacja twierdziła, że lightbox „natywnie obsługuje
-                    nawigację klawiaturą (strzałki, ESC)" — w rzeczywistości
+                    nawigację klawiaturą (strzałki, ESC)" - w rzeczywistości
                     <code>molique-lightbox.js</code> nie miał ani jednego
                     nasłuchu <code>keydown</code>. Użytkownik klawiatury, który
                     otworzył zdjęcie, nie miał jak zamknąć modala.
@@ -1264,7 +1298,7 @@
                     Naprawione: <kbd>Esc</kbd> zamyka, <kbd>←</kbd>/<kbd>→</kbd>
                     przełącza zdjęcie. Focus przy otwarciu przechodzi na
                     przycisk zamknięcia i wraca do klikniętej miniatury po
-                    zamknięciu — standardowe zachowanie modala. Dołożono też
+                    zamknięciu - standardowe zachowanie modala. Dołożono też
                     brakujące <code>aria-label</code> na przyciskach nawigacji
                     i zamknięcia.
                   </li>
@@ -1279,26 +1313,26 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     <strong>~21 linków w 8 kategoriach zajmowało za dużo
-                    miejsca</strong> — sidebar dokumentacji był długą, płaską
+                    miejsca</strong> - sidebar dokumentacji był długą, płaską
                     listą wymagającą sporo przewijania. Sześć kategorii (te
                     z 2+ pozycjami) to teraz rozwijane gałęzie
-                    (<code>.admin-nav-submenu</code>) — domyślnie zwinięte,
+                    (<code>.admin-nav-submenu</code>) - domyślnie zwinięte,
                     poza tą, w której akurat jesteś.
                   </li>
                   <li>
                     <code>molique-admin-nav.js</code> sam otwiera na
                     desktopie gałąź z bieżącą stroną (wcześniej tylko ją
-                    podświetlał) — nawigacja z klawiatury i drill-down na
+                    podświetlał) - nawigacja z klawiatury i drill-down na
                     mobile bez zmian.
                   </li>
                   <li>
                     <code>.admin-layout-floating</code> (dotąd tylko na
                     stronie startowej i Spisie klas) jest teraz na wszystkich
-                    stronach dokumentacji — spójny wygląd w całości.
+                    stronach dokumentacji - spójny wygląd w całości.
                   </li>
                   <li>
                     <strong>Roadmapa zniknęła tylko z drzewka
-                    dokumentacji</strong> — nie linkuje do niej już sidebar
+                    dokumentacji</strong> - nie linkuje do niej już sidebar
                     referencji komponentów, bo to strona ogłoszeń, nie
                     dokumentacja API. Sama strona i linki w navbarze/stopce
                     zostają bez zmian.
@@ -1317,11 +1351,11 @@
                   <li>
                     <code>.file-upload</code> to niewidoczny
                     <code>input[type="file"]</code> rozciągnięty na całą
-                    kartę — klik i natywne przeciągnięcie pliku działały,
+                    kartę - klik i natywne przeciągnięcie pliku działały,
                     ale w całym repozytorium nie było ani linijki JS
                     reagującej na wybór. Efekt: po upuszczeniu zdjęcia
                     nic się nie działo (nawet przeglądarkowe „otwórz jako
-                    nową kartę" nie odpalało się — input po cichu
+                    nową kartę" nie odpalało się - input po cichu
                     przechwytywał plik).
                   </li>
                   <li>
@@ -1335,7 +1369,7 @@
                     przyjmował drag &amp; drop</strong> (klik nadal działał).
                     Ikona, nagłówek i podpis miały ten sam
                     <code>z-index</code> co ukryty input, a leżały po nim
-                    w kodzie — wygrywały więc o to, co dostanie kliknięcie
+                    w kodzie - wygrywały więc o to, co dostanie kliknięcie
                     dokładnie tam, gdzie wzrokowo celuje się przeciągając
                     plik. Naprawione przez <code>pointer-events: none</code>
                     na tych elementach.
@@ -1359,7 +1393,7 @@
                   <li>
                     Switch musi być <strong>rodzeństwem</strong>
                     <code>.grid-expand</code>, nie zawierać go w tym samym
-                    <code>&lt;label&gt;</code> — inaczej klik w odsłoniętej
+                    <code>&lt;label&gt;</code> - inaczej klik w odsłoniętej
                     treści dodatkowo przełącza switch.
                   </li>
                 </ul>
@@ -1378,7 +1412,7 @@
                     <code>molique-sidebar-state</code> z
                     <code>localStorage</code> były odczytywane wyłącznie na
                     <code>DOMContentLoaded</code> w <code>molique-script.js</code>
-                    — czyli PO pierwszym renderze przeglądarki. Powracający
+                    - czyli PO pierwszym renderze przeglądarki. Powracający
                     użytkownik ze zwężonym sidebarem (<code>.sidebar-md</code>/
                     <code>.sidebar-sm</code>) lub ciemnym motywem widział więc
                     na ułamek sekundy domyślny stan (pełny sidebar, jasny
@@ -1399,7 +1433,7 @@
                   <li>
                     Istniejąca logika w <code>molique-script.js</code> (klik
                     przełącznika, zapis do <code>localStorage</code>) została
-                    bez zmian — poprawka jest czysto addytywna. Zweryfikowana
+                    bez zmian - poprawka jest czysto addytywna. Zweryfikowana
                     z całkowicie zablokowanym <code>molique-script.js</code>:
                     strona i tak renderuje się od razu poprawnie.
                   </li>
@@ -1411,11 +1445,11 @@
                   <span class="badge badge-warning text-dark mx-2 text-3"
                     >Poprawki</span
                   >
-                  <code>&lt;hr&gt;</code> znikał w kartach — wyglądał jak kropka
+                  <code>&lt;hr&gt;</code> znikał w kartach - wyglądał jak kropka
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
-                    Molique nigdy nie stylował <code>&lt;hr&gt;</code> —
+                    Molique nigdy nie stylował <code>&lt;hr&gt;</code> -
                     element polegał wyłącznie na domyślnym stylu przeglądarki,
                     który m.in. wyśrodkowuje go przez
                     <code>margin-inline: auto</code>. Jako
@@ -1424,7 +1458,7 @@
                     <code>flex-direction: column</code> od zawsze) te
                     auto-marginesy w osi poprzecznej mają pierwszeństwo przed
                     <code>align-items: stretch</code> i „zjadają" całą wolną
-                    przestrzeń — linia kurczyła się do prawie zerowej
+                    przestrzeń - linia kurczyła się do prawie zerowej
                     szerokości, widoczna jako pojedyncza kropka pośrodku karty.
                   </li>
                   <li>
@@ -1433,11 +1467,11 @@
                     <code>margin-inline: 0</code>,
                     <code>border-top: 1px solid var(--border-color)</code>.
                     Zero auto-marginesów, więc problem znika w każdym
-                    kontekście — nie tylko w kartach.
+                    kontekście - nie tylko w kartach.
                   </li>
                   <li>
                     <strong>Ten sam błąd był już raz naprawiony punktowo</strong>
-                    w <code>.modal-divider</code> — ta poprawka go generalizuje
+                    w <code>.modal-divider</code> - ta poprawka go generalizuje
                     na wszystkie <code>&lt;hr&gt;</code> w projekcie, bez
                     dotykania markupu.
                   </li>
@@ -1456,7 +1490,7 @@
                     <code>.form-floating</code> ma własny
                     <code>margin-bottom</code> (potrzebny, gdy kilka pól stoi
                     wprost w zwykłym bloku bez wrappera flex). Ale
-                    <code>.card-body</code> ma domyślnie <code>gap</code> —
+                    <code>.card-body</code> ma domyślnie <code>gap</code> -
                     jako jego bezpośrednie dziecko pole dostawało odstęp
                     <strong>podwójnie</strong> (gap + własny margines), więc
                     odległość do kolejnego pola/przycisku była dwa razy
@@ -1464,7 +1498,7 @@
                   </li>
                   <li>
                     Naprawione regułą <code>.card-body &gt; .form-floating {
-                    margin-bottom: 0; }</code> — poza <code>.card-body</code>
+                    margin-bottom: 0; }</code> - poza <code>.card-body</code>
                     margines działa dokładnie jak dotychczas.
                   </li>
                 </ul>
@@ -1479,7 +1513,7 @@
                   <li>
                     Nowa klasa narzędziowa: wyrywa element z paddingu
                     <code>.container</code> na mobile (poniżej 768px), aż do
-                    krawędzi ekranu — typowy przypadek to karuzela, galeria
+                    krawędzi ekranu - typowy przypadek to karuzela, galeria
                     zdjęć albo zdjęcie hero wewnątrz tekstu artykułu, które ma
                     dotykać brzegów telefonu, podczas gdy reszta treści
                     zachowuje normalny margines. Na desktopie bez efektu.
@@ -1488,7 +1522,7 @@
                     Technika „viewport centering" (<code>width: 100vw</code> +
                     <code>margin-left: 50%</code> +
                     <code>translateX(-50%)</code>) działa niezależnie od
-                    realnej wartości paddingu rodzica — nie trzeba jej znać
+                    realnej wartości paddingu rodzica - nie trzeba jej znać
                     ani przeliczać. Globalna tarcza
                     <code>overflow-x: clip</code> na <code>html</code>
                     (obecna w molique od zawsze) zapobiega poziomemu
@@ -1497,7 +1531,7 @@
                   </li>
                   <li>
                     <strong>Wymaga bezpośredniego rodzica wyśrodkowanego w
-                    oknie</strong> (jak <code>.container</code>) — działa
+                    oknie</strong> (jak <code>.container</code>) - działa
                     poprawnie jako jego bezpośrednie dziecko, ale zagnieżdżone
                     głębiej (np. w <code>.card-body</code>) liczy się względem
                     szerokości karty, nie okna, i wychodzi
@@ -1515,7 +1549,7 @@
                 <ul class="text-secondary mb-0">
                   <li>
                     <strong>8 pomysłów</strong> zostało zrealizowanych po
-                    drodze, przy okazji innych prac, i zniknęło z listy —
+                    drodze, przy okazji innych prac, i zniknęło z listy -
                     m.in. cała kategoria „Architektura i dystrybucja"
                     (<code>molique-nano</code> jako preset w konfiguratorze,
                     pełny system niezależnych chunków SCSS), uniwersalna
@@ -1529,7 +1563,7 @@
                   </li>
                   <li>
                     <strong>6 kolejnych pozycji doprecyzowanych</strong>, bo
-                    okazały się częściowo zrobione — opis zmieniony z
+                    okazały się częściowo zrobione - opis zmieniony z
                     „zbuduj X od zera" na to, co realnie brakuje (np. checklist
                     z odhaczanymi pozycjami zamiast dekoracyjnych ikon w
                     <code>.list-icons</code>, spięcie <code>.file-upload-animated</code>
@@ -1553,7 +1587,7 @@
                 <ul class="text-secondary mb-0">
                   <li>
                     <strong>Przełącznik języka w navbarze przestał być
-                    dekoracją</strong> — dotąd linki w
+                    dekoracją</strong> - dotąd linki w
                     <code>.language-switch-menu</code> były
                     <code>href="#"</code>. Teraz strona startowa i
                     „Getting Started" mają realne wersje angielską i
@@ -1576,7 +1610,7 @@
                     istnieją na dysku, i wstrzykuje gotowe zmienne
                     (<code>__hasEn</code>, <code>__altEn</code>…) do
                     <strong>wszystkich</strong> <code>&lt;include&gt;</code>
-                    tej strony naraz — <code>head.html</code> (hreflang) i
+                    tej strony naraz - <code>head.html</code> (hreflang) i
                     <code>navbar.html</code> (przełącznik) korzystają z tych
                     samych, raz policzonych danych.
                   </li>
@@ -1592,7 +1626,7 @@
                     <code>posthtml-expressions</code> interpoluje
                     <em>wszystkie</em> <code><raw>{{ }}</raw></code> w dokumencie w
                     jednym przebiegu, zanim usunie gałęzie
-                    <code>&lt;if&gt;</code> o fałszywym warunku — wartość
+                    <code>&lt;if&gt;</code> o fałszywym warunku - wartość
                     <code>null</code> dla nieistniejącego tłumaczenia wywalała
                     cały build (<code>ReferenceError</code>), mimo że
                     <code>&lt;if&gt;</code> i tak by ją ukrył. Naprawione
@@ -1608,7 +1642,7 @@
                 </h2>
                 <ul class="text-secondary mb-0">
                   <li>
-                    <strong>Kontynuacja pilotażu</strong> — tym samym
+                    <strong>Kontynuacja pilotażu</strong> - tym samym
                     mechanizmem i konwencjami co wyżej przetłumaczono kolejne
                     19 stron referencyjnych:
                     <code>docs-variables</code>, <code>docs-select</code>,
@@ -1622,14 +1656,14 @@
                     <code>docs-components-extra</code>,
                     <code>docs-buttons</code>, <code>docs-interactive</code>.
                     Świadomie odłożone: <code>docs-navbar.html</code> (1072
-                    linii) i <code>docs-classes.html</code> (2325 linii) —
+                    linii) i <code>docs-classes.html</code> (2325 linii) -
                     dwie strony wyraźnie większe od reszty razem wziętej.
                   </li>
                   <li>
                     <strong><code>docs-variables.html</code> jako przypadek
                     specjalny:</strong> trzy tabele zmiennych są
                     auto-generowane przez <code>tools/gen-variables-doc.js</code>
-                    i odtwarzane przed każdym buildem — ręczne tłumaczenie ich
+                    i odtwarzane przed każdym buildem - ręczne tłumaczenie ich
                     treści zostałoby cicho nadpisane. Statyczna proza strony
                     przetłumaczona normalnie; trzy generowane
                     <code>&lt;include&gt;</code> zostają po polsku, z notatką
@@ -1639,7 +1673,7 @@
                     <strong>Sidebar dokumentacji zaktualizowany:</strong>
                     <code>docs-sidebar.en.html</code>/<code>.de.html</code>
                     linkują teraz do przetłumaczonych wariantów wszędzie poza
-                    dwiema odłożonymi stronami — degradacja do polskiej wersji
+                    dwiema odłożonymi stronami - degradacja do polskiej wersji
                     tam, gdzie tłumaczenia jeszcze nie ma, pozostaje
                     udokumentowana komentarzem w plikach.
                   </li>
@@ -1649,7 +1683,7 @@
                   class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-primary mx-2 text-3">Nowość</span>
-                  i18n: komplet — wszystkie 22 strony <code>docs-*.html</code> po angielsku i niemiecku
+                  i18n: komplet - wszystkie 22 strony <code>docs-*.html</code> po angielsku i niemiecku
                 </h2>
                 <ul class="text-secondary mb-0">
                   <li>
@@ -1663,13 +1697,13 @@
                   </li>
                   <li>
                     <strong><code>docs-classes.html</code> ma inną
-                    strukturę niż reszta docs</strong> — jako jedyna nie
+                    strukturę niż reszta docs</strong> - jako jedyna nie
                     includuje <code>partials/navbar.html</code>, więc nie
                     ma na niej przełącznika języka w pasku górnym; zachowane
                     identycznie w PL/EN/DE, to cecha strony sprzed i18n, nie
                     coś do naprawienia. Tłumaczeniu podlegała wyłącznie
                     opisowa treść komórek tabeli i tekst w żywych
-                    podglądach komponentów — nazwy klas CSS
+                    podglądach komponentów - nazwy klas CSS
                     (<code>.btn-primary</code> itd.) i kod w
                     <code>&lt;code&gt;</code> zostały bez zmian, tak jak
                     wszędzie indziej w dokumentacji.
@@ -1678,7 +1712,7 @@
                     <strong>Sidebar dokumentacji domknięty:</strong> dwa
                     ostatnie linki w <code>docs-sidebar.en.html</code>/<code>.de.html</code>,
                     które celowo wskazywały na polskie strony, przełączone
-                    na <code>.en.html</code>/<code>.de.html</code> — zero
+                    na <code>.en.html</code>/<code>.de.html</code> - zero
                     świadomych wyjątków, cały sidebar linkuje w języku strony.
                   </li>
                 </ul>
@@ -1697,7 +1731,7 @@
                   </li>
                   <li>
                     <strong>Sam tekst licencji zostaje po angielsku na
-                    wszystkich trzech wersjach</strong> — to jedyna prawnie
+                    wszystkich trzech wersjach</strong> - to jedyna prawnie
                     wiążąca forma; nieoficjalne tłumaczenie mogłoby wprowadzić
                     niejasności. Tłumaczeniu podlega wyłącznie otoczka strony
                     (tytuł, wstęp, przyciski nawigacji).
@@ -1728,7 +1762,7 @@
                   <li>
                     <strong>Wszystkie wewnętrzne linki straciły
                     <code>.html</code></strong> (<code>docs.html</code> →
-                    <code>docs</code>, strona główna → <code>/</code>) —
+                    <code>docs</code>, strona główna → <code>/</code>) -
                     2310 linków w 270 plikach, przepisanych jednorazowym
                     skryptem <code>tools/migrate-pretty-urls.js</code>.
                     Serwer (<code>.htaccess</code>) wspierał to już od
@@ -1741,14 +1775,14 @@
                     a Vite skanuje <code>href</code> we wszystkich
                     <code>&lt;link&gt;</code> jako odwołanie do zasobu (w
                     odróżnieniu od <code>&lt;a&gt;</code>, których nie
-                    skanuje) — pierwsza wersja z <code>href="./"</code> dla
+                    skanuje) - pierwsza wersja z <code>href="./"</code> dla
                     strony głównej próbowała wczytać katalog <code>src/</code>
                     jako plik i wywalała cały build.
                   </li>
                   <li>
                     <code>sitemap.xml</code> i <code>robots.txt</code> mają
                     teraz realną domenę produkcyjną (nie placeholder) i
-                    obejmują wszystkie strony PL/EN/DE — generowane przez nowy
+                    obejmują wszystkie strony PL/EN/DE - generowane przez nowy
                     <code>tools/gen-sitemap.js</code>, uruchamiany automatycznie
                     po każdym buildzie.
                   </li>
@@ -1766,7 +1800,7 @@
                   <li>
                     <strong>Nakładki pełnoekranowe</strong> (lightbox,
                     offcanvas, popover) dostały wspólny
-                    <code>--backdrop-rgb</code> — ale tylko jako źródło
+                    <code>--backdrop-rgb</code> - ale tylko jako źródło
                     koloru, nie jednej przezroczystości. Każdy komponent miał
                     inną, celowo dobraną wartość (0.95 / 0.5 / 0.6);
                     wymuszenie jednej wspólnej realnie zmieniłoby wygląd
@@ -1775,14 +1809,14 @@
                   <li>
                     <strong>Stopka</strong> dostała lokalne
                     <code>--footer-muted-rgb</code>/<code>--footer-white-rgb</code>
-                    — nie globalne <code>--light-rgb</code>, bo to drugie
+                    - nie globalne <code>--light-rgb</code>, bo to drugie
                     odwraca się w dark mode, a stopka jest zawsze ciemna.
                   </li>
                   <li>
                     Odstępy i zaokrąglenia w paginacji, liście cenowej,
                     zakładkach pill, karuzeli, sidebarze admina i podglądzie
                     kodu przeliczone na <code>--spacing-unit</code> /
-                    <code>--border-radius</code> — bez zmiany wyglądu (te same
+                    <code>--border-radius</code> - bez zmiany wyglądu (te same
                     wartości wynikowe).
                   </li>
                   <li>
@@ -1805,11 +1839,11 @@
                 <ul class="text-secondary mb-4">
                   <li>
                     Paczka Production dublowała pełne i zminifikowane CSS
-                    naraz — 425 KB nadmiaru dla kogoś, kto potrzebuje tylko
+                    naraz - 425 KB nadmiaru dla kogoś, kto potrzebuje tylko
                     jednego z nich. Teraz wybierasz format
                     (segmentowy przełącznik <code>.tabs-pill</code>) i
                     opcjonalnie fonty (przełącznik <code>.form-switch</code> w
-                    nagłówku karty) — domyślna paczka spadła z ~363 KB do
+                    nagłówku karty) - domyślna paczka spadła z ~363 KB do
                     ~90 KB.
                   </li>
                   <li>
@@ -1829,7 +1863,7 @@
                   <li>
                     <strong>Realna luka dostępności:</strong> stara wersja na
                     ręcznie sterowanym <code>&lt;div&gt;</code> nie trapowała
-                    fokusa — klawiszem Tab dało się wyjść z otwartego
+                    fokusa - klawiszem Tab dało się wyjść z otwartego
                     lightboksa na stronę pod spodem. Natywny
                     <code>showModal()</code>/<code>close()</code> robi to (i
                     przywracanie fokusa elementowi wyzwalającemu, i zamykanie
@@ -1842,12 +1876,12 @@
                     animacją.
                   </li>
                   <li>
-                    <strong>View Transitions API dla animacji zdjęć —
+                    <strong>View Transitions API dla animacji zdjęć -
                     wypróbowane i wycofane.</strong> W testach
                     <code>document.startViewTransition()</code>'s
                     <code>finished</code> potrafiło nigdy się nie
                     rozstrzygnąć, a kolejne wywołanie po takim przypadku
-                    przestawało w ogóle odpalać swój callback — realne
+                    przestawało w ogóle odpalać swój callback - realne
                     ryzyko trwałego zacięcia strzałek w galerii. Wrócono do
                     ręcznej animacji <code>transform</code>/<code>opacity</code>
                     z throttlem czasowym (zawsze sam się zwalnia), plus
@@ -1855,7 +1889,7 @@
                     której wcześniej nie było.
                   </li>
                   <li>
-                    Sąsiednie zdjęcia w galerii preloadowane w tle — strzałki
+                    Sąsiednie zdjęcia w galerii preloadowane w tle - strzałki
                     i swipe czują się natychmiastowe.
                   </li>
                 </ul>
@@ -1881,14 +1915,14 @@
                   class="text-3 text-danger fw-bold d-flex align-items-center mb-2"
                 >
                   <span class="badge badge-danger mx-2 text-3">Poprawka</span>
-                  Tabele <code>.table-cards</code> na mobile — tekst łamany na
+                  Tabele <code>.table-cards</code> na mobile - tekst łamany na
                   pojedyncze litery
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
                     Komórka z „bogatą" treścią (kilka <code>&lt;code&gt;</code>
                     naraz, dłuższy opis) w wariancie kart korzystała z
-                    <code>display: flex</code> — każdy element potomny stawał
+                    <code>display: flex</code> - każdy element potomny stawał
                     się WŁASNYM elementem flex i przy braku miejsca zamiast
                     zawijać się jako jeden akapit, każdy z osobna kurczył się
                     do prawie zerowej szerokości: tekst łamał się na
@@ -1897,7 +1931,7 @@
                   <li>
                     Etykieta (<code>data-label</code>) wraca do zwykłego
                     <code>display: block</code> NAD wartością (przez
-                    <code>::before</code>) zamiast obok niej przez flex —
+                    <code>::before</code>) zamiast obok niej przez flex -
                     zwykły block-flow jest odporny na tę usterkę niezależnie
                     od tego, ile elementów inline zawiera wartość komórki.
                   </li>
@@ -1913,7 +1947,7 @@
                   <li>
                     Paczki pobierane z <code>download.en.html</code> i
                     <code>download.de.html</code> zawierały dokładnie te same
-                    pliki co polska strona — komentarze w
+                    pliki co polska strona - komentarze w
                     <code>.scss</code>/<code>.css</code>/<code>.js</code>
                     zostawały po polsku niezależnie od języka strony, z
                     której trafił tam użytkownik.
@@ -1926,7 +1960,7 @@
                     przy pakowaniu ZIP-a przez
                     <code>tools/build-packages.ps1</code>. Kod, klasy CSS,
                     zmienne i nazwy plików zostają nietknięte w każdym
-                    języku — tłumaczona jest wyłącznie otaczająca proza.
+                    języku - tłumaczona jest wyłącznie otaczająca proza.
                   </li>
                   <li>
                     18 paczek zamiast 6 (język × format CSS × fonty).
@@ -1943,7 +1977,7 @@
                 </h2>
                 <ul class="text-secondary mb-4">
                   <li>
-                    Numer wersji bywał gubiony przy wydaniu — wpisywany ręcznie
+                    Numer wersji bywał gubiony przy wydaniu - wpisywany ręcznie
                     w kilkunastu miejscach (strony, <code>download.js</code>,
                     <code>build-packages.ps1</code>, README). Teraz jedyne
                     źródło to pole <code>version</code> w

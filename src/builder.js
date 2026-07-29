@@ -21,9 +21,9 @@ const CHUNK_DIR = 'dist/chunks/';
 const BUILDER_LANG = document.documentElement.lang;
 const BUILDER_STRINGS = {
   done: {
-    pl: (kb) => 'Gotowe — paczka pobrana (' + kb + ').',
-    en: (kb) => 'Done — package downloaded (' + kb + ').',
-    de: (kb) => 'Fertig — Paket heruntergeladen (' + kb + ').',
+    pl: (kb) => 'Gotowe - paczka pobrana (' + kb + ').',
+    en: (kb) => 'Done - package downloaded (' + kb + ').',
+    de: (kb) => 'Fertig - Paket heruntergeladen (' + kb + ').',
   },
   error: {
     pl: (msg) => 'Błąd: ' + msg,

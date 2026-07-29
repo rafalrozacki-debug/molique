@@ -35,7 +35,7 @@ Każda komenda z rodziny `make:*` (np. `molique make:component`) uruchamia nast�
 2. **Kolekcjonowanie danych:** Pytania zmieniają się dynamicznie (tzw. Pytania Warunkowe). Np. Jeśli użytkownik wybrał `Modal`, program dopytuje "Czy to Modal Confirm czy Modal Context?".
 3. **Kompilacja (Render):** System wczytuje plik `.stub` z dysku i podmienia tagi na odpowiedzi użytkownika.
 4. **Wyjście (Output):** Program zapisuje gotowy kod. 
-   *Innowacja UX:* Narzędzie pozwala deweloperowi zdecydować — czy zapisać komponent do nowego pliku (np. `components/my-modal.html`), czy po prostu wyrzucić czysty skopiowany kod wprost na ekran konsoli do zaznaczenia myszką!
+   *Innowacja UX:* Narzędzie pozwala deweloperowi zdecydować - czy zapisać komponent do nowego pliku (np. `components/my-modal.html`), czy po prostu wyrzucić czysty skopiowany kod wprost na ekran konsoli do zaznaczenia myszką!
 
 ---
 

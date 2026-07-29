@@ -17,10 +17,10 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Admin Panel (Dashboard)</h1>
             <p class="text-6 text-muted">
-              A complete skeleton for CRM, ERP and B2B panels — a sidebar
+              A complete skeleton for CRM, ERP and B2B panels - a sidebar
               layout, navigation with an expandable tree, and a "Faux
               Cutout" header. Requires a separate
-              <code>molique-style-admin.css</code> file — this page (like
+              <code>molique-style-admin.css</code> file - this page (like
               every documentation page) is itself a live example of it. The
               full layout is in the
               <a href="examples-admin-layout.en">examples</a>.
@@ -34,7 +34,7 @@
             <h2 class="text-8 fw-bold mb-3">1. Layout structure</h2>
             <p class="text-muted mb-4">
               Three classes split the screen into a sidebar and content.
-              <code>.admin-layout</code> is a two-column CSS Grid — a
+              <code>.admin-layout</code> is a two-column CSS Grid - a
               variable controls the sidebar width, so the size variants
               (below) don't need separate grid rules.
             </p>
@@ -68,7 +68,7 @@
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-layout</code></td>
                     <td data-label="What it does">
-                      A two-column grid. Below 768px the columns disappear —
+                      A two-column grid. Below 768px the columns disappear -
                       the sidebar becomes a horizontal bar at the bottom of
                       the screen (Bottom Nav), and <code>.admin-main</code>
                       takes up the full width.
@@ -80,16 +80,16 @@
                       <code>position: sticky</code> on desktop,
                       <code>position: fixed</code> (bottom of the screen) on
                       mobile. The background is always dark, regardless of
-                      light/dark theme — see pitfall #1.
+                      light/dark theme - see pitfall #1.
                     </td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-main</code></td>
-                    <td data-label="What it does">The content column. <code>overflow-x: hidden</code> — wide tables need their own <code>.table-wrapper</code>.</td>
+                    <td data-label="What it does">The content column. <code>overflow-x: hidden</code> - wide tables need their own <code>.table-wrapper</code>.</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-brand</code></td>
-                    <td data-label="What it does">The sidebar logo — fits an image, SVG, or text, and never breaks the width.</td>
+                    <td data-label="What it does">The sidebar logo - fits an image, SVG, or text, and never breaks the width.</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.sidebar-md</code> / <code>.sidebar-sm</code></td>
@@ -117,7 +117,7 @@
                     <td data-label="Class"><code class="fw-bold">.fade-bottom</code></td>
                     <td data-label="What it does">
                       Opt-in on <code>.admin-sidebar</code> or
-                      <code>.admin-main</code> — a fade gradient at the
+                      <code>.admin-main</code> - a fade gradient at the
                       bottom of the scrollable area instead of a hard cutoff.
                       The full variable list is in the
                       <a href="docs-variables.en">variable reference</a>.
@@ -133,7 +133,7 @@
                 The sidebar's colors (<code>--sidebar-bg</code>,
                 <code>--sidebar-text</code>…), the floating variant's
                 radii, and the height of the <code>.fade-bottom</code>
-                gradient are all CSS variables — a full description of each
+                gradient are all CSS variables - a full description of each
                 is in the
                 <a href="docs-variables.en">variable reference</a>, in
                 the "Admin panel" and "Admin panel sidebar" sections.
@@ -159,7 +159,7 @@
               <p class="text-4 text-muted m-0">
                 Unlike most interactive components, handling
                 <code>#molique-sidebar-toggle</code> isn't a separate,
-                lazily loaded module — it lives permanently in
+                lazily loaded module - it lives permanently in
                 <code>molique-script.js</code>. Just add a button with the
                 right ID to the markup, no registration needed.
               </p>
@@ -192,7 +192,7 @@
                   <tr>
                     <td data-label="Class"><code class="fw-bold">#molique-sidebar-toggle</code></td>
                     <td data-label="What it does">
-                      An ID, not a class —
+                      An ID, not a class -
                       <code>molique-script.js</code> looks for it with a
                       <code>getElementById</code>-style
                       <code>querySelector</code>. It must be
@@ -204,7 +204,7 @@
                     <td data-label="Class"><code class="fw-bold">.sidebar-toggle-icon</code></td>
                     <td data-label="What it does">
                       Requires exactly <strong>three</strong> empty
-                      <code>&lt;span&gt;</code>s inside — CSS positions them
+                      <code>&lt;span&gt;</code>s inside - CSS positions them
                       via <code>:nth-child</code> to produce three different
                       shapes (hamburger / asymmetric lines / arrow).
                     </td>
@@ -218,7 +218,7 @@
               <p class="text-4 text-muted m-0">
                 The width choice is saved to <code>localStorage</code>, but
                 <code>molique-script.js</code> only reads it on
-                <code>DOMContentLoaded</code> — that is, AFTER the first
+                <code>DOMContentLoaded</code> - that is, AFTER the first
                 render. Without an extra step, a returning user with a
                 collapsed sidebar would see it full-width first, then narrow
                 a moment later. The fix: a small,
@@ -228,27 +228,27 @@
                 <code>localStorage</code> and applies the
                 <code>sidebar-md</code>/<code>sidebar-sm</code> class
                 directly to <code>&lt;html&gt;</code> before the browser
-                draws anything — the same mechanism also sets
+                draws anything - the same mechanism also sets
                 <code>data-theme</code> for the light/dark theme. In this
                 project the script lives in
                 <code>partials/head.html</code> and reaches every page
                 automatically; in a new deployment you must copy it by hand
                 along with the mirrored CSS rules
                 (<code>:root.sidebar-md</code> / <code>:root.sidebar-sm</code>
-                in <code>_admin-layout.scss</code>) — without them, saving
+                in <code>_admin-layout.scss</code>) - without them, saving
                 to <code>localStorage</code> alone does nothing.
               </p>
             </div>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 3. NAVIGATION — LINKS                                 -->
+          <!-- 3. NAVIGATION - LINKS                                 -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">3. Navigation — links</h2>
+            <h2 class="text-8 fw-bold mb-3">3. Navigation - links</h2>
             <p class="text-muted mb-4">
               A flat list of links. On desktop a column, below 768px a
-              horizontal bar (Bottom Nav) — the same markup, zero
+              horizontal bar (Bottom Nav) - the same markup, zero
               conditionals in the HTML.
             </p>
 
@@ -277,7 +277,7 @@
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-nav-link.is-active</code></td>
-                    <td data-label="What it does">The current item — <code>--primary</code> background. Set it manually or hook up <code>molique-admin-nav-active.js</code> (below).</td>
+                    <td data-label="What it does">The current item - <code>--primary</code> background. Set it manually or hook up <code>molique-admin-nav-active.js</code> (below).</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-nav-divider</code></td>
@@ -287,14 +287,14 @@
                     <td data-label="Class"><code class="fw-bold">.admin-nav-bottom</code></td>
                     <td data-label="What it does">
                       On a separate <code>&lt;ul class="admin-nav"&gt;</code>
-                      — <code>margin-top: auto</code> pins it to the very
+                      - <code>margin-top: auto</code> pins it to the very
                       bottom of the sidebar (e.g. a "Settings" link or the
                       toggle from section 2). Hidden on mobile.
                     </td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.mobile-only-nav-item</code></td>
-                    <td data-label="What it does">An item visible ONLY in Bottom Nav — a duplicated link outside the five main icons (see section 5).</td>
+                    <td data-label="What it does">An item visible ONLY in Bottom Nav - a duplicated link outside the five main icons (see section 5).</td>
                   </tr>
                 </tbody>
               </table>
@@ -307,24 +307,24 @@
                 page) can use the
                 <code>js/modules/molique-admin-nav-active.js</code> module
                 instead of a manual <code>.is-active</code> (auto-loaded
-                whenever <code>.admin-nav</code> is present) — it applies
+                whenever <code>.admin-nav</code> is present) - it applies
                 the class to whichever <code>.admin-nav-link</code> matches
                 the current URL, including its duplicate in the mobile bar.
-                Don't hard-code the active state into a shared partial —
+                Don't hard-code the active state into a shared partial -
                 the sidebar is often one file shared by many pages.
               </p>
             </div>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 4. SUBMENU — TREE / DRILL-DOWN                        -->
+          <!-- 4. SUBMENU - TREE / DRILL-DOWN                        -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">4. Submenu — tree / drill-down</h2>
+            <h2 class="text-8 fw-bold mb-3">4. Submenu - tree / drill-down</h2>
             <p class="text-muted mb-4">
               An expandable group of links built on native
               <code>&lt;details&gt;</code>. The same markup renders three
-              different ways depending on the sidebar width — no variants
+              different ways depending on the sidebar width - no variants
               needed in the HTML.
             </p>
 
@@ -339,7 +339,7 @@
                 <tbody>
                   <tr>
                     <td data-label="Context">Full sidebar (no modifier)</td>
-                    <td data-label="Behavior">A classic tree — the list slides out below the item, pushing the rest of the sidebar down.</td>
+                    <td data-label="Behavior">A classic tree - the list slides out below the item, pushing the rest of the sidebar down.</td>
                   </tr>
                   <tr>
                     <td data-label="Context"><code>.sidebar-md</code> / <code>.sidebar-sm</code></td>
@@ -404,11 +404,11 @@
                 <tbody>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-nav-submenu</code></td>
-                    <td data-label="What it does">On a <code>&lt;details&gt;</code>. The native mechanism handles opening — CSS and JS only attach the visual style and animations.</td>
+                    <td data-label="What it does">On a <code>&lt;details&gt;</code>. The native mechanism handles opening - CSS and JS only attach the visual style and animations.</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-nav-submenu-list</code></td>
-                    <td data-label="What it does">A direct child of <code>&lt;details&gt;</code>, alongside <code>&lt;summary&gt;</code> — don't nest it deeper, the rules target <code>:scope &gt;</code>.</td>
+                    <td data-label="What it does">A direct child of <code>&lt;details&gt;</code>, alongside <code>&lt;summary&gt;</code> - don't nest it deeper, the rules target <code>:scope &gt;</code>.</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-nav-submenu-link</code></td>
@@ -428,8 +428,8 @@
                 <code>&lt;details&gt;</code> hides its content instantly, so
                 the module adds an <code>.is-closing</code> class for the
                 duration of the animation and only removes <code>open</code>
-                once it's finished), it closes on <kbd>Esc</kbd>, and —
-                <strong>on mobile devices only</strong> — opening one
+                once it's finished), it closes on <kbd>Esc</kbd>, and -
+                <strong>on mobile devices only</strong> - opening one
                 submenu closes the others.
               </p>
             </div>
@@ -444,7 +444,7 @@
               Below 768px the sidebar disappears and <code>.admin-nav</code>
               becomes a horizontal bar of icons at the bottom of the screen.
               When there are more items than fit in the bar, the overflow
-              hides behind a separate "More" button — a checkbox hack, not
+              hides behind a separate "More" button - a checkbox hack, not
               <code>&lt;details&gt;</code>, so it doesn't collide with the
               submenu from section 4.
             </p>
@@ -473,16 +473,16 @@
                 <tbody>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.mobile-more-toggle</code></td>
-                    <td data-label="What it does">A hidden checkbox — the browser holds the state, zero JS.</td>
+                    <td data-label="What it does">A hidden checkbox - the browser holds the state, zero JS.</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.mobile-more-label</code></td>
-                    <td data-label="What it does">A <code>&lt;label for="…"&gt;</code> pointing to the checkbox. Visible EXCLUSIVELY on mobile — it hides on desktop.</td>
+                    <td data-label="What it does">A <code>&lt;label for="…"&gt;</code> pointing to the checkbox. Visible EXCLUSIVELY on mobile - it hides on desktop.</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-nav-dropdown-menu</code></td>
                     <td data-label="What it does">
-                      On desktop: <code>display: contents</code> — the links
+                      On desktop: <code>display: contents</code> - the links
                       inside behave as if they sat directly in
                       <code>.admin-nav</code>. On mobile: a drawer sliding
                       up from the bottom once the checkbox is checked.
@@ -500,7 +500,7 @@
             <h2 class="text-8 fw-bold mb-3">6. Faux Cutout header</h2>
             <p class="text-muted mb-4">
               A page header with the illusion of a cutout around the actions
-              block — the effect is achieved with two <code>radial-gradient</code>
+              block - the effect is achieved with two <code>radial-gradient</code>
               corners, no SVG and no masks. A full, live example is on the
               <a href="examples-admin-layout.en">Admin Layout</a> page.
             </p>
@@ -536,7 +536,7 @@
                     <td data-label="What it does">
                       A block with an apparent cutout in the top-left and
                       bottom-right corners. The cutout's color is the
-                      <code>--cutout-bg</code> variable — see pitfall #4.
+                      <code>--cutout-bg</code> variable - see pitfall #4.
                     </td>
                   </tr>
                 </tbody>
@@ -560,10 +560,10 @@
                   <p class="text-muted m-0">
                     <code>--sidebar-bg</code>, <code>--sidebar-text</code>
                     and <code>--sidebar-highlight-rgb</code> have a single,
-                    fixed value — the sidebar is always dark, regardless of
+                    fixed value - the sidebar is always dark, regardless of
                     the page's theme. This is deliberate (contrast with
                     light content), but it means you can't lighten it via
-                    the light/dark toggle — only by overriding these
+                    the light/dark toggle - only by overriding these
                     variables directly.
                   </p>
                 </div>
@@ -579,7 +579,7 @@
                     The script takes the first element with this ID via
                     <code>querySelector</code>. A second button with the
                     same ID (invalid HTML, but the browser will still render
-                    it) ends up dead — nothing happens when it's clicked.
+                    it) ends up dead - nothing happens when it's clicked.
                   </p>
                 </div>
               </details>
@@ -592,13 +592,13 @@
                 <div class="accordion-body">
                   <p class="text-muted m-0">
                     On desktop with a full sidebar it's just an expanded
-                    tree — harmless. But <code>molique-admin-nav.js</code>
+                    tree - harmless. But <code>molique-admin-nav.js</code>
                     deliberately closes such an
                     <code>&lt;details open&gt;</code> on startup if you
                     happen to be on the mobile view: without that, visiting
                     any subpage would open a full-screen drill-down instead
                     of the content. Don't set <code>open</code> manually to
-                    mark "this is the active section" — that's what
+                    mark "this is the active section" - that's what
                     <code>.is-active</code> on the <code>&lt;summary&gt;</code>
                     is for, not the <code>open</code> attribute.
                   </p>
@@ -614,7 +614,7 @@
                   <p class="text-muted m-0">
                     The cutout in <code>.dashboard-header-actions</code> is a
                     gradient from the <code>--cutout-bg</code> color to
-                    transparent — if it doesn't match the actual background
+                    transparent - if it doesn't match the actual background
                     underneath exactly (e.g. in the
                     <code>.admin-layout-floating</code> variant, where the
                     content background is <code>--bg-surface</code>, not
@@ -634,7 +634,7 @@
                     Even though it's a chart component, <code>.chart-funnel</code>,
                     <code>.chart-pipeline</code> and
                     <code>.chart-funnel-true</code> physically live in
-                    <code>molique-style-admin.css</code>, not in the core —
+                    <code>molique-style-admin.css</code>, not in the core -
                     the rest of the charts (<code>.chart-sparkline</code>,
                     <code>.chart-radial</code>…) work without this file,
                     funnels don't. The full funnel reference is in the
@@ -652,7 +652,7 @@
                   <p class="text-muted m-0">
                     <code>#molique-sidebar-toggle</code> saves its state to
                     <code>localStorage</code>, but on its own it doesn't
-                    prevent flicker — that's the job of the synchronous
+                    prevent flicker - that's the job of the synchronous
                     inline script in <code>&lt;head&gt;</code> described in
                     section 2 above. If you deploy the sidebar outside this
                     project (without <code>partials/head.html</code>) and

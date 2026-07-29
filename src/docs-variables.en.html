@@ -17,8 +17,8 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">CSS Variables</h1>
             <p class="text-6 text-muted">
-              The entire look of molique — colors, spacing, typography, dark
-              mode — rests on CSS variables. You never need to override a
+              The entire look of molique - colors, spacing, typography, dark
+              mode - rests on CSS variables. You never need to override a
               rule to change the theme: just swap the values.
             </p>
           </div>
@@ -30,15 +30,15 @@
             <h2 class="text-8 fw-bold mb-3">1. How it works</h2>
             <p class="text-muted mb-4">
               A CSS variable is a named box for a value. The framework never
-              hardcodes a color — it always reaches for a variable. When you
+              hardcodes a color - it always reaches for a variable. When you
               swap its contents, the change propagates instantly through
               every component that uses it.
             </p>
             <p class="text-muted mb-4">
-              Variables <strong>inherit down the DOM tree</strong> — exactly
+              Variables <strong>inherit down the DOM tree</strong> - exactly
               like text color. That's why the scope of a change depends
               entirely on which element you declare it on. It's also why
-              <strong>PurgeCSS must never remove them</strong> — see pitfall
+              <strong>PurgeCSS must never remove them</strong> - see pitfall
               #3.
             </p>
 
@@ -57,7 +57,7 @@
                     <td><strong>Theme variables</strong></td>
                     <td><span class="badge badge-primary">{{ __globalVarsCount }}</span></td>
                     <td><code>:root</code> in <code>_root.scss</code></td>
-                    <td>You — globally, once per project.</td>
+                    <td>You - globally, once per project.</td>
                   </tr>
                   <tr>
                     <td><strong>Component variables</strong></td>
@@ -68,7 +68,7 @@
                   <tr>
                     <td><strong>Markup inputs</strong></td>
                     <td><span class="badge badge-warning">{{ __inputVarsCount }}</span></td>
-                    <td>Nowhere — they're only read</td>
+                    <td>Nowhere - they're only read</td>
                     <td>
                       You, exclusively. Without them the component has no
                       data to draw from.
@@ -86,7 +86,7 @@
             <h2 class="text-8 fw-bold mb-3">2. How to override a value</h2>
             <p class="text-muted mb-4">
               Three scopes, from widest to narrowest. All of them work
-              without <code>!important</code> — you're not fighting
+              without <code>!important</code> - you're not fighting
               specificity, just supplying a different value.
             </p>
 
@@ -138,7 +138,7 @@
               A single element
             </h3>
             <p class="text-muted mb-3">
-              This is how you pass <strong>data from the backend</strong> —
+              This is how you pass <strong>data from the backend</strong> -
               progress, a rating, a stock level. The numeric value rides in a
               variable, not in a class, because classes must never be
               concatenated dynamically.
@@ -158,7 +158,7 @@
             <h2 class="text-8 fw-bold mb-3">3. Dark mode</h2>
             <p class="text-muted mb-4">
               The dark theme is <strong>nothing but a different set of
-              values</strong> — zero extra rules, zero duplicated components.
+              values</strong> - zero extra rules, zero duplicated components.
               The <code>data-theme="dark"</code> attribute on
               <code>&lt;html&gt;</code> swaps {{ __darkOverrideCount }} of the {{ __globalVarsCount }} theme variables.
             </p>
@@ -182,9 +182,9 @@
               <h3 class="fw-bold text-5 mb-2">Where the system theme comes from</h3>
               <p class="text-4 text-muted m-0">
                 Both blocks also declare <code>color-scheme</code>. That's
-                what makes native controls — scrollbars, the calendar in
+                what makes native controls - scrollbars, the calendar in
                 <code>input[type="date"]</code>, the <code>&lt;dialog&gt;</code>
-                backdrop — follow the theme. Without this declaration, modal
+                backdrop - follow the theme. Without this declaration, modal
                 headings can end up black on a dark card.
               </p>
             </div>
@@ -198,7 +198,7 @@
             <p class="text-muted mb-4">
               Every one of these has already cost someone an afternoon. They
               all boil down to the same thing: a variable doesn't say what it
-              is — you have to know.
+              is - you have to know.
             </p>
 
             <div class="accordion mb-4">
@@ -212,13 +212,13 @@
                     In the light theme <code>--dark</code> is
                     <code>#1E293B</code> (graphite), but in dark mode it
                     <strong>flips</strong> to <code>#F8FAFC</code> (white).
-                    It's not "the dark color" — it's the
+                    It's not "the dark color" - it's the
                     <strong>color that contrasts with the background</strong>.
                     Likewise <code>--light</code> becomes dark in dark mode.
                   </p>
                   <p class="text-muted mb-3">
-                    The consequence: used on an element sitting on a photo —
-                    whose background doesn't change with the theme — it gives
+                    The consequence: used on an element sitting on a photo -
+                    whose background doesn't change with the theme - it gives
                     white text on a white background.
                   </p>
                   <div class="component-code">
@@ -241,13 +241,13 @@
                   <p class="text-muted mb-3">
                     <code>--primary</code> is a ready-made color.
                     <code>--primary-rgb</code> is <strong>just the
-                    channels</strong> (<code>2, 132, 199</code>) — without it
+                    channels</strong> (<code>2, 132, 199</code>) - without it
                     you can't build transparency. It only works
                     <strong>inside <code>rgba()</code></strong>.
                   </p>
                   <p class="text-muted mb-3">
                     Used anywhere else it's not a valid color, so the browser
-                    <strong>discards the entire declaration</strong> —
+                    <strong>discards the entire declaration</strong> -
                     silently, with no console error.
                   </p>
                   <div class="component-code">
@@ -278,7 +278,7 @@
                     This option removes CSS variables PurgeCSS couldn't find
                     in your files. The problem is that molique's variables
                     are used <strong>inside the framework's own rules</strong>,
-                    not in your HTML — so the tool considers them dead and
+                    not in your HTML - so the tool considers them dead and
                     strips them. The result: a page with no colors and no
                     spacing.
                   </p>
@@ -304,14 +304,14 @@ module.exports = {
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     <code>--sidebar-bg</code> deliberately has
-                    <strong>no</strong> dark-mode counterpart — the sidebar
+                    <strong>no</strong> dark-mode counterpart - the sidebar
                     looks the same in both themes. That's why its light
                     accents must be literal values.
                   </p>
                   <p class="text-muted mb-3">
                     Using <code>--light-rgb</code> there looks correct in the
                     light theme, but in dark mode that variable flips to
-                    dark — and the text and highlights disappear against the
+                    dark - and the text and highlights disappear against the
                     sidebar's dark background. That's what the separate
                     <code>--sidebar-highlight-rgb</code> is for.
                   </p>
@@ -338,7 +338,7 @@ module.exports = {
             </h2>
             <p class="text-muted mb-4">
               Declared in <code>:root</code>. The <strong>Dark mode</strong>
-              column shows the value once the dark theme is on —
+              column shows the value once the dark theme is on -
               <em>no change</em> means the variable is shared by both
               themes. The <strong>Used in</strong> column points to the
               Sass modules that use it.
@@ -370,12 +370,12 @@ module.exports = {
             </p>
             <ul class="list-icons list-icons-arrow text-muted mb-4">
               <li>
-                <span class="badge badge-success">markup</span> — meant to be
+                <span class="badge badge-success">markup</span> - meant to be
                 overridden by you, usually via
                 <code>style="--x: …"</code>.
               </li>
               <li>
-                <span class="badge badge-secondary">internal</span> — the
+                <span class="badge badge-secondary">internal</span> - the
                 framework computes these itself. Listed here because they're
                 visible in DevTools, and it's worth knowing this isn't where
                 your changes belong.
@@ -394,7 +394,7 @@ module.exports = {
               <span class="badge badge-warning">{{ __inputVarsCount }}</span>
             </h2>
             <p class="text-muted mb-4">
-              Variables the framework <strong>never declares</strong> — it
+              Variables the framework <strong>never declares</strong> - it
               only reads them. This is the interface for passing data from
               the backend. If the <em>When not set</em> column shows
               <span class="badge badge-warning">required</span>, leaving it

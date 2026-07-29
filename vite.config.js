@@ -7,7 +7,7 @@ import posthtmlInclude from 'posthtml-include';
 import posthtmlExpressions from 'posthtml-expressions';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-// __dirname nie istnieje w ESM ("type": "module") — odtwarzamy z import.meta.url.
+// __dirname nie istnieje w ESM ("type": "module") - odtwarzamy z import.meta.url.
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const srcDir = resolve(__dirname, 'src');
 
@@ -76,7 +76,7 @@ const input = Object.fromEntries(
     .map((file) => [file.replace(/\.html$/, ''), resolve(srcDir, file)])
 );
 
-// Zasoby frameworka NIE są bundlowane ani hashowane — kopiujemy je 1:1 do
+// Zasoby frameworka NIE są bundlowane ani hashowane - kopiujemy je 1:1 do
 // buildu, tak samo jak użytkownik kopiuje je do swojego projektu. Dzięki temu
 // css/molique-style.css zostaje css/molique-style.css (bez sufiksu z hashem),
 // a kompilacja SCSS i tools/build-packages.ps1 nadal celują w root repo.
@@ -86,7 +86,7 @@ const assetDirs = ['css', 'js', 'fonts', 'img', 'dist'];
 
 // Zasoby frameworka celowo nie są w grafie modułów Vite (dowozi je static-copy),
 // więc Vite informuje o każdym z nich "resolved at runtime". To zachowanie
-// pożądane — wyciszamy tylko te linie (×85 stron = szum), realne ostrzeżenia
+// pożądane - wyciszamy tylko te linie (×85 stron = szum), realne ostrzeżenia
 // i podsumowanie builda zostają.
 const logger = createLogger();
 const isRuntimeAssetNotice = (msg) =>
@@ -249,7 +249,7 @@ function computeI18nLocals(filename) {
 
 // Mini-plugin: rozwija <include src="partials/…"> w czasie builda (posthtml +
 // posthtml-include). Własny zamiast vite-plugin-posthtml (porzucony, wywala się
-// na nowym Node). order:'pre' — include musi rozwinąć się ZANIM Vite czyta
+// na nowym Node). order:'pre' - include musi rozwinąć się ZANIM Vite czyta
 // odwołania do zasobów w HTML.
 function moliqueInclude() {
   return {
@@ -299,10 +299,10 @@ function moliqueInclude() {
 export default defineConfig({
   root: 'src',
   customLogger: logger,
-  // Ścieżki względne w wyjściu (css/…, js/…) — strona działa spod dowolnego
+  // Ścieżki względne w wyjściu (css/…, js/…) - strona działa spod dowolnego
   // katalogu hostingu, nie tylko z korzenia domeny.
   base: './',
-  // Wyłączamy domyślny publicDir — zasoby dowozi vite-plugin-static-copy.
+  // Wyłączamy domyślny publicDir - zasoby dowozi vite-plugin-static-copy.
   publicDir: false,
   appType: 'mpa',
   // Stale globalne podmieniane tekstowo w kazdym module JS przechodzacym

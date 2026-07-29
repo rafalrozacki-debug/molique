@@ -17,7 +17,7 @@
           <div class="mb-5 pb-4 border-bottom">
             <h1 class="text-11 fw-black mb-3">Zmienne CSS</h1>
             <p class="text-6 text-muted">
-              Cały wygląd molique — kolory, odstępy, typografia, dark mode —
+              Cały wygląd molique - kolory, odstępy, typografia, dark mode -
               stoi na zmiennych CSS. Nie musisz nadpisywać żadnej reguły, żeby
               zmienić motyw: wystarczy podmienić wartości.
             </p>
@@ -30,15 +30,15 @@
             <h2 class="text-8 fw-bold mb-3">1. Jak to działa</h2>
             <p class="text-muted mb-4">
               Zmienna CSS to nazwane pudełko na wartość. Framework nigdy nie
-              wpisuje koloru na sztywno — wszędzie sięga po zmienną. Gdy
+              wpisuje koloru na sztywno - wszędzie sięga po zmienną. Gdy
               podmienisz jej zawartość, zmiana rozchodzi się natychmiast po
               wszystkich komponentach, które z niej korzystają.
             </p>
             <p class="text-muted mb-4">
-              Zmienne <strong>dziedziczą się w dół drzewa DOM</strong> — dokładnie
+              Zmienne <strong>dziedziczą się w dół drzewa DOM</strong> - dokładnie
               tak jak kolor tekstu. Dlatego zasięg zmiany zależy wyłącznie od
               tego, na którym elemencie ją zadeklarujesz. To także powód, dla
-              którego <strong>PurgeCSS nigdy nie może ich usuwać</strong> —
+              którego <strong>PurgeCSS nigdy nie może ich usuwać</strong> -
               patrz pułapka nr 3.
             </p>
 
@@ -57,7 +57,7 @@
                     <td><strong>Zmienne motywu</strong></td>
                     <td><span class="badge badge-primary">{{ __globalVarsCount }}</span></td>
                     <td><code>:root</code> w <code>_root.scss</code></td>
-                    <td>Ty — globalnie, raz na projekt.</td>
+                    <td>Ty - globalnie, raz na projekt.</td>
                   </tr>
                   <tr>
                     <td><strong>Zmienne komponentów</strong></td>
@@ -68,7 +68,7 @@
                   <tr>
                     <td><strong>Wejścia z markupu</strong></td>
                     <td><span class="badge badge-warning">{{ __inputVarsCount }}</span></td>
-                    <td>Nigdzie — są tylko czytane</td>
+                    <td>Nigdzie - są tylko czytane</td>
                     <td>
                       Wyłącznie Ty. Bez nich komponent nie ma skąd wziąć danych.
                     </td>
@@ -85,7 +85,7 @@
             <h2 class="text-8 fw-bold mb-3">2. Jak nadpisać wartość</h2>
             <p class="text-muted mb-4">
               Trzy zasięgi, od najszerszego do najwęższego. Wszystkie działają
-              bez <code>!important</code> — nie walczysz ze specyficznością,
+              bez <code>!important</code> - nie walczysz ze specyficznością,
               tylko podajesz inną wartość.
             </p>
 
@@ -136,7 +136,7 @@
               Pojedynczy element
             </h3>
             <p class="text-muted mb-3">
-              Tak przekazujesz <strong>dane z backendu</strong> — postęp, ocenę,
+              Tak przekazujesz <strong>dane z backendu</strong> - postęp, ocenę,
               poziom zapasu. Wartość liczbowa jedzie w zmiennej, a nie w klasie,
               bo klas nie wolno sklejać dynamicznie.
             </p>
@@ -154,7 +154,7 @@
           <section>
             <h2 class="text-8 fw-bold mb-3">3. Dark mode</h2>
             <p class="text-muted mb-4">
-              Ciemny motyw to <strong>wyłącznie inny zestaw wartości</strong> —
+              Ciemny motyw to <strong>wyłącznie inny zestaw wartości</strong> -
               zero dodatkowych reguł i zero duplikatów komponentów. Atrybut
               <code>data-theme="dark"</code> na <code>&lt;html&gt;</code>
               podmienia {{ __darkOverrideCount }} z {{ __globalVarsCount }} zmiennych motywu.
@@ -179,9 +179,9 @@
               <h3 class="fw-bold text-5 mb-2">Skąd się bierze motyw systemowy</h3>
               <p class="text-4 text-muted m-0">
                 Oba bloki deklarują też <code>color-scheme</code>. To ono
-                sprawia, że natywne kontrolki — scrollbary, kalendarz w
+                sprawia, że natywne kontrolki - scrollbary, kalendarz w
                 <code>input[type="date"]</code>, tło <code>&lt;dialog&gt;</code>
-                — podążają za motywem. Bez tej deklaracji nagłówki w modalu
+                - podążają za motywem. Bez tej deklaracji nagłówki w modalu
                 potrafią zrobić się czarne na ciemnej karcie.
               </p>
             </div>
@@ -194,7 +194,7 @@
             <h2 class="text-8 fw-bold mb-3">4. Cztery pułapki</h2>
             <p class="text-muted mb-4">
               Każda z nich kosztowała już czyjeś popołudnie. Wszystkie wynikają
-              z tego samego: zmienna nie mówi, czym jest — trzeba to wiedzieć.
+              z tego samego: zmienna nie mówi, czym jest - trzeba to wiedzieć.
             </p>
 
             <div class="accordion mb-4">
@@ -208,13 +208,13 @@
                     W motywie jasnym <code>--dark</code> to
                     <code>#1E293B</code> (grafit), ale w dark mode
                     <strong>odwraca się</strong> na <code>#F8FAFC</code> (biel).
-                    To nie jest „kolor ciemny" — to
+                    To nie jest „kolor ciemny" - to
                     <strong>kolor kontrastowy do tła</strong>. Tak samo
                     <code>--light</code> w dark mode staje się ciemny.
                   </p>
                   <p class="text-muted mb-3">
-                    Skutek: użyty na elemencie leżącym na zdjęciu — którego tło
-                    nie zmienia się z motywem — daje biały tekst na białym tle.
+                    Skutek: użyty na elemencie leżącym na zdjęciu - którego tło
+                    nie zmienia się z motywem - daje biały tekst na białym tle.
                   </p>
                   <div class="component-code">
                     <button class="btn-copy">Kopiuj</button>
@@ -236,13 +236,13 @@
                   <p class="text-muted mb-3">
                     <code>--primary</code> to gotowy kolor.
                     <code>--primary-rgb</code> to <strong>same kanały</strong>
-                    (<code>2, 132, 199</code>) — bez tego nie da się zrobić
+                    (<code>2, 132, 199</code>) - bez tego nie da się zrobić
                     przezroczystości. Działa
                     <strong>wyłącznie wewnątrz <code>rgba()</code></strong>.
                   </p>
                   <p class="text-muted mb-3">
                     Wpisana gdziekolwiek indziej nie jest poprawnym kolorem, więc
-                    przeglądarka <strong>odrzuca całą deklarację</strong> — po
+                    przeglądarka <strong>odrzuca całą deklarację</strong> - po
                     cichu, bez błędu w konsoli.
                   </p>
                   <div class="component-code">
@@ -272,7 +272,7 @@
                     Ta opcja usuwa zmienne CSS, których PurgeCSS nie znalazł w
                     Twoich plikach. Problem w tym, że zmienne molique są używane
                     <strong>wewnątrz reguł frameworka</strong>, a nie w Twoim
-                    HTML-u — więc narzędzie uznaje je za martwe i wycina.
+                    HTML-u - więc narzędzie uznaje je za martwe i wycina.
                     Efekt: strona bez kolorów i odstępów.
                   </p>
                   <div class="component-code">
@@ -297,14 +297,14 @@ module.exports = {
                 <div class="accordion-body">
                   <p class="text-muted mb-3">
                     <code>--sidebar-bg</code> celowo <strong>nie</strong> ma
-                    odpowiednika w dark mode — panel boczny wygląda tak samo w
+                    odpowiednika w dark mode - panel boczny wygląda tak samo w
                     obu motywach. Dlatego jego jasne akcenty muszą być
                     literalne.
                   </p>
                   <p class="text-muted mb-3">
                     Użycie tam <code>--light-rgb</code> wygląda poprawnie w
                     motywie jasnym, ale w ciemnym ta zmienna odwraca się na
-                    ciemną — i tekst oraz podświetlenia znikają na ciemnym tle
+                    ciemną - i tekst oraz podświetlenia znikają na ciemnym tle
                     sidebara. Od tego jest osobna
                     <code>--sidebar-highlight-rgb</code>.
                   </p>
@@ -332,7 +332,7 @@ module.exports = {
             <p class="text-muted mb-4">
               Zadeklarowane w <code>:root</code>. Kolumna
               <strong>Dark mode</strong> pokazuje wartość po włączeniu ciemnego
-              motywu — <em>bez zmian</em> oznacza, że zmienna jest wspólna dla
+              motywu - <em>bez zmian</em> oznacza, że zmienna jest wspólna dla
               obu motywów. Kolumna <strong>Używana w</strong> wskazuje moduły
               SCSS, które z niej korzystają.
             </p>
@@ -354,12 +354,12 @@ module.exports = {
             </p>
             <ul class="list-icons list-icons-arrow text-muted mb-4">
               <li>
-                <span class="badge badge-success">markup</span> — przewidziane do
+                <span class="badge badge-success">markup</span> - przewidziane do
                 nadpisania przez Ciebie, zwykle przez
                 <code>style="--x: …"</code>.
               </li>
               <li>
-                <span class="badge badge-secondary">wewnętrzna</span> — framework
+                <span class="badge badge-secondary">wewnętrzna</span> - framework
                 liczy je sam. Wypisane, bo widać je w DevTools i warto wiedzieć,
                 że to nie miejsce na Twoje zmiany.
               </li>
@@ -377,7 +377,7 @@ module.exports = {
               <span class="badge badge-warning">{{ __inputVarsCount }}</span>
             </h2>
             <p class="text-muted mb-4">
-              Zmienne, których framework <strong>nigdy nie deklaruje</strong> —
+              Zmienne, których framework <strong>nigdy nie deklaruje</strong> -
               tylko je czyta. To interfejs do przekazywania danych z backendu.
               Jeśli w kolumnie <em>Gdy nie ustawisz</em> widnieje
               <span class="badge badge-warning">wymagana</span>, brak wartości
