@@ -15,6 +15,17 @@ const MOLIQUE_JS_BASE = document.currentScript
   ? document.currentScript.src.replace(/[^/]*$/, '')
   : '';
 
+// Ten sam ?v=... z <script src="js/molique-script.js?v=..."> doklejamy do
+// KAŻDEGO modułu ładowanego przez autoloader niżej (sekcja 9) - inaczej
+// cache-busting działałby tylko na tym pliku, a moduły (np.
+// molique-theme-editor.js) i tak zostałyby na rok w cache przeglądarki po
+// każdym kolejnym wydaniu, mimo że sam rdzeń by się odświeżył. Jedno
+// źródło prawdy: wersja w URL-u TEGO tagu, nic nie trzeba synchronizować
+// osobno w tym pliku JS.
+const MOLIQUE_JS_VERSION_QS = document.currentScript && document.currentScript.src.includes('?')
+  ? '?' + document.currentScript.src.split('?')[1]
+  : '';
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================
@@ -315,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector(module.selectors)) {
       const script = document.createElement('script');
       // Bezwzględny adres: katalog tego pliku + względna ścieżka modułu.
-      script.src = MOLIQUE_JS_BASE + module.file;
+      script.src = MOLIQUE_JS_BASE + module.file + MOLIQUE_JS_VERSION_QS;
       script.defer = true;
       
       if (module.init) {

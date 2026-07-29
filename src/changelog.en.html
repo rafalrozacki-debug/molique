@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.16."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"History of changes, new features and fixes in the molique CSS framework - the full changelog from v0.1.0 to v1.7.17."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -47,6 +47,48 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.17 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.17</div>
+              <div class="text-muted text-4">July 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Missing cache-busting on JS files
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>js/molique-script.js</code> and the modules it
+                    loads dynamically (e.g. the theme editor) had a
+                    year-long <code>Cache-Control</code> on the server but
+                    no <code>?v=...</code> in the URL - unlike CSS. Result:
+                    a returning browser could keep an old JS file on disk
+                    for years and never see new features or fixes without a
+                    hard refresh (Ctrl+Shift+R).
+                  </li>
+                  <li>
+                    Every <code>&lt;script&gt;</code> tag loading
+                    <code>molique-script.js</code> now carries
+                    <code>?v={{ __version }}</code>, exactly like CSS
+                    already did; the module autoloader appends the same
+                    parameter to every file it loads.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.16 -->
           <!-- ============================================================ -->
