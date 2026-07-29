@@ -6,8 +6,10 @@
  * img/icons-sprite.svg zawierający WYŁĄCZNIE ikony faktycznie użyte w
  * src/*.html - <symbol> referowany przez <use>, bez JS w runtime.
  *
- * Zrodlo ikon (nie w repo - zbyt duze, ~1500 plikow na wage):
- *   C:/Praca/Materiały/Ikony/phosphor-icons/SVGs/<waga>/<nazwa>-<waga>.svg
+ * Zrodlo ikon (nie w repo - zbyt duze, ~1500 plikow na wage), sciezka do
+ * katalogu <waga>/<nazwa>-<waga>.svg przez MOLIQUE_PHOSPHOR_DIR (patrz
+ * nizej) - bez tej zmiennej i bez lokalnego katalogu autora skrypt
+ * po prostu pomija regeneracje (patrz existsSync na dole tej sekcji).
  * Domyslna waga to "light" (zgodna z tym, czego uzywa reszta strony).
  *
  * Skladnia uzycia w HTML:
@@ -27,8 +29,27 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = path.join(root, 'src');
 const outPath = path.join(root, 'img', 'icons-sprite.svg');
 
-const PHOSPHOR_DIR = 'C:/Praca/Materiały/Ikony/phosphor-icons/SVGs';
+// Zrodlowe SVG-i Phosphor sa lokalne (nie w repo, ~1500 plikow na wage) -
+// dajemy mozliwosc wskazania ich sciezki przez zmienna srodowiskowa, z
+// fallbackiem na katalog na maszynie autora. Kontrybutorzy klonujacy repo
+// publicznie nie maja ani jednego, ani drugiego - patrz sprawdzenie
+// existsSync nizej, ktore w tym wypadku pomija regeneracje zamiast wywalac
+// cala komende `npm run dev`/`npm run build` (img/icons-sprite.svg jest juz
+// wygenerowany i zacommitowany, wiec build i tak dziala na tym, co jest).
+const PHOSPHOR_DIR =
+  process.env.MOLIQUE_PHOSPHOR_DIR || 'C:/Praca/Materiały/Ikony/phosphor-icons/SVGs';
 const DEFAULT_WEIGHT = 'light';
+
+if (!existsSync(PHOSPHOR_DIR)) {
+  console.log(
+    'gen-icon-sprite: nie znaleziono lokalnego zrodla ikon Phosphor (' +
+      PHOSPHOR_DIR +
+      ') - pomijam regeneracje, img/icons-sprite.svg zostaje bez zmian.\n' +
+      'Zeby dodac/zmienic ikone, pobierz SVG-i z phosphoricons.com i wskaz ich ' +
+      'katalog zmienna MOLIQUE_PHOSPHOR_DIR.'
+  );
+  process.exit(0);
+}
 
 /* ---------- 1. Skan src/*.html w poszukiwaniu uzytych ikon ---------- */
 
