@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pl">
   <head>
-    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.19."}'></include>
+    <include src="partials/head.html" locals='{"title":"Changelog - molique Framework","description":"Historia zmian, nowości i poprawek we frameworku CSS molique - pełny changelog wersji od v0.1.0 do v1.7.20."}'></include>
   </head>
   <body>
     <!-- ==========================================
@@ -46,6 +46,50 @@
           class="timeline timeline-labeled m-0"
           style="--timeline-label-width: 110px"
         >
+          <!-- ============================================================ -->
+          <!-- v1.7.20 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.20</div>
+              <div class="text-muted text-4">Lipiec 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Dropdown Popover: reset przycisku i bezpieczne pozycjonowanie
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>.dropdown-item</code> jako <code>&lt;button&gt;</code>
+                    (poprawny semantycznie wybór dla pozycji-akcji jak
+                    „Usuń"/„Edytuj", niebędących nawigacją) dostawał natywny
+                    wygląd przeglądarki — szare tło, ramkę
+                    <code>2px outset</code>, <code>appearance: auto</code>.
+                    Teraz reset jest kompletny; dla dotychczasowych
+                    <code>&lt;a class="dropdown-item"&gt;</code> zmiana jest
+                    bez efektu (już miały te wartości).
+                  </li>
+                  <li>
+                    <code>.dropdown-menu[popover]</code> dostał domyślny
+                    komplet trzech <code>@position-try</code> (odwrócenie w
+                    pionie, w poziomie, i w obu naraz) — menu otwarte blisko
+                    dolnej lub prawej krawędzi ekranu (ostatni wiersz tabeli,
+                    ostatnia kolumna w gridzie kart) samo przeskakuje w
+                    bezpieczne miejsce zamiast wychodzić poza viewport.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
           <!-- ============================================================ -->
           <!-- v1.7.19 -->
           <!-- ============================================================ -->

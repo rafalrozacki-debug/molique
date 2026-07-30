@@ -61,6 +61,18 @@
   color: var(--text-main);
   text-decoration: none;
   transition: background-color var(--transition-speed);
+  /* Reset native <button> appearance - .dropdown-item is legitimately used
+     on actions (not just navigation links), and without this a <button>
+     gets appearance:auto plus a native border/background. A no-op for
+     existing <a class="dropdown-item"> usage across the framework (an
+     anchor already has these values by default). */
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 
   &:hover {
     background-color: var(--card-bg-subtle);
@@ -98,6 +110,33 @@
    domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
    i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
    buttona jedną parą atrybutów. */
+/* Warianty pozycji zapasowej dla przypadku, gdy domyślne umiejscowienie
+   (pod przyciskiem, do lewej) wypchnęłoby menu poza viewport - np. przycisk
+   blisko dolnej lub prawej krawędzi ekranu (ostatni wiersz tabeli, ostatnia
+   kolumna w gridzie kart). WAZNE: przegladarka stosuje fallback z listy
+   TYLKO jesli w PELNI znosi przepelnienie - fallback adresujacy wylacznie
+   jedna os (np. samo odwrocenie pionu) jest calkowicie ignorowany, gdy
+   przepelnienie wystepuje jednoczesnie w pionie I poziomie, mimo ze
+   czesciowo poprawilby sytuacje. Stad KOMPLET trzech kombinacji ponizej,
+   nie tylko odwrocenie pionu. */
+@position-try --dropdown-popover-flip-above {
+  top: auto;
+  bottom: anchor(top);
+  margin: 0 0 4px 0;
+}
+@position-try --dropdown-popover-flip-left {
+  left: auto;
+  right: anchor(right);
+  margin: 4px 0 0 0;
+}
+@position-try --dropdown-popover-flip-above-left {
+  top: auto;
+  bottom: anchor(top);
+  left: auto;
+  right: anchor(right);
+  margin: 0 0 4px 0;
+}
+
 .dropdown-menu[popover] {
   /* position: fixed, nie absolute - patrz pelny opis w
      _form-select-search.scss przy .select-search-menu. W skrocie: popover
@@ -111,6 +150,10 @@
   left: anchor(left);
   margin: 4px 0 0 0;
   color: var(--text-main);
+  position-try-fallbacks:
+    --dropdown-popover-flip-left,
+    --dropdown-popover-flip-above,
+    --dropdown-popover-flip-above-left;
 
   /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
      Firefox): menu otwiera się jako wyśrodkowany panel - nadal w top
