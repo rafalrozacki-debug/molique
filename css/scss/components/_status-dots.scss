@@ -1,15 +1,15 @@
-// molique - Status dots (kropki statusu) + wariant pulsujacy ping.
+// molique - Status dots + a pulsing ping variant.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   4. STATUS DOTS (Kropki statusu i Ping)
+   4. STATUS DOTS (Status dots and Ping)
    ========================================= */
 .status-dot {
-  position: relative; /* punkt odniesienia dla pierscienia .status-ping::after */
+  position: relative; /* reference point for the .status-ping::after ring */
   display: inline-flex;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1);
@@ -25,7 +25,7 @@
     border-radius: 50%;
   }
 
-  /* Definiujemy kolory tła ORAZ zmienną dla cienia (Ping) */
+  /* We define the background colors AND a variable for the shadow (Ping) */
   &.status-draft { 
     --ping-color: var(--border-color);
     &::before { background-color: var(--border-color); }
@@ -44,10 +44,11 @@
   }
 }
 
-/* Animowany Ping - pierscien na ::after (osobny od kropki ::before),
-   animowany wylacznie transform: scale + opacity zamiast box-shadow.
-   Pozycjonowany wzgledem .status-dot (position: relative wyzej), dokladnie
-   nad 8x8px kropka z ::before - lewy brzeg + pionowe wysrodkowanie. */
+/* Animated ping - a ring on ::after (separate from the ::before dot),
+   animated exclusively via transform: scale + opacity instead of
+   box-shadow. Positioned relative to .status-dot (position: relative
+   above), exactly over the 8x8px ::before dot - left edge + vertical
+   centering. */
 .status-ping::after {
   content: '';
   position: absolute;

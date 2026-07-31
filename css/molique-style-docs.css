@@ -7,26 +7,27 @@
 @layer modules {
   /**
    * molique - Documentation Styles
-   * Zawiera tylko style dla bloków prezentacyjnych (Showcase).
+   * Contains only the styles for presentational blocks (Showcase).
    */
   /**
    * molique - Zmienne SCSS
    */
   /**
    * molique - Documentation Styles
-   * Zawiera tylko style dla bloków prezentacyjnych (Showcase).
+   * Contains only the styles for presentational blocks (Showcase).
    */
   @layer modules {
-    /* Ograniczenie szerokości i FIX paddingów na mobile */
+    /* Width constraint and padding FIX on mobile */
     .docs-content-wrapper {
-      /* FIX: .admin-main jest flex-column. Przy width:auto + margin:auto
-         specyfikacja flexboxa WYŁĄCZA stretch na osi poprzecznej (auto-marginesy
-         "zjadają" wolne miejsce), więc element jest liczony na podstawie
-         max-content swojej zawartości - a nie zawijający się <pre> ma bardzo
-         szeroki max-content, co rozpychało całą kolumnę treści i ucinało tekst
-         przez overflow:hidden wyżej w drzewie. Jawne width:100% wymusza
-         wypełnienie dostępnej szerokości niezależnie od kontekstu flex/grid
-         przodka, a margin:auto nadal centruje po osiągnięciu max-width. */
+      /* FIX: .admin-main is flex-column. With width:auto + margin:auto, the
+         flexbox spec DISABLES stretch on the cross axis (auto margins "eat"
+         the free space), so the element is sized from its content's
+         max-content - and a non-wrapping <pre> has a very wide max-content,
+         which was blowing out the whole content column and clipping text via
+         overflow:hidden further up the tree. An explicit width:100% forces
+         it to fill the available width regardless of the ancestor's
+         flex/grid context, while margin:auto still centers it once
+         max-width is reached. */
       width: 100%;
       max-width: 1000px;
       margin: 0 auto;
@@ -56,7 +57,7 @@
    */
   /**
    * molique - Documentation Styles
-   * Zawiera tylko style dla bloków prezentacyjnych (Showcase).
+   * Contains only the styles for presentational blocks (Showcase).
    */
   /**
    * molique - Theme Editor (CSS variable playground)

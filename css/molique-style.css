@@ -2623,7 +2623,7 @@
   }
   @layer components {
     /* =========================================
-       1. CHECKBOXY I RADIO
+       1. CHECKBOXES AND RADIO
        ========================================= */
     .form-check {
       display: flex;
@@ -2673,7 +2673,7 @@
   }
   @layer components {
     /* =========================================
-       1.5. PRZEŁĄCZNIKI (Switche iOS Style)
+       1.5. SWITCHES (iOS-style toggles)
        ========================================= */
     .form-switch {
       display: inline-flex;
@@ -2744,14 +2744,14 @@
   }
   @layer components {
     /* =========================================
-       2. SPECYFICZNE INPUTY (Range, Date, Color)
+       2. SPECIALIZED INPUTS (Range, Date, Color)
        ========================================= */
     .input-range {
       appearance: none;
       width: 100%;
       height: 8px;
       background: var(--border-color);
-      border-radius: 50rem; /* pigulka - ten sam idiom co .tabs-pill */
+      border-radius: 50rem; /* pill shape - the same idiom as .tabs-pill */
       outline: none;
       cursor: pointer;
       overflow: hidden;
@@ -2786,10 +2786,11 @@
     .input-range::-moz-range-thumb:hover {
       transform: scale(1.15);
     }
-    /* Number: chowamy natywne strzałki (spinner) - w gęstych formularzach
-       B2B wyglądają obco i gryzą się z własnymi przyciskami krokowania.
-       Zamiennik to kontrolka .qty-input (przyciski + / -), a wartość nadal
-       można zmieniać klawiaturą (góra/dół) i scrollem. */
+    /* Number: we hide the native arrows (spinner) - in dense B2B forms they
+       look out of place and clash with our own step buttons. The
+       replacement is the .qty-input control (+ / - buttons), and the value
+       can still be changed with the keyboard (up/down) and the scroll
+       wheel. */
     input[type=number].input {
       -moz-appearance: textfield;
       appearance: textfield;
@@ -2907,20 +2908,22 @@
       animation: marchingAnts 0.6s linear infinite;
     }
     .file-upload-animated {
-      /* UWAGA: input[type="file"] celowo POZA tą listą - musi zachować
-         position: absolute z bazowego .file-upload (niewidoczny overlay
-         na całej karcie, z-index: 2 ma już z bazy). Nadpisanie na relative
-         wprowadzało go do układu i spychało zawartość karty w dół. */
+      /* NOTE: input[type="file"] is deliberately OUTSIDE this list - it must
+         keep position: absolute from the base .file-upload (an invisible
+         overlay across the whole card, z-index: 2 already comes from the
+         base). Overriding it to relative pulled it into the flow and pushed
+         the card's content down. */
     }
     .file-upload-animated .file-upload-icon, .file-upload-animated h4, .file-upload-animated p, .file-upload-animated .file-upload-name {
       position: relative;
       z-index: 2;
-      /* Bez tego te elementy (ten sam z-index co input, ale PO nim
-         w DOM - wygrywaja stacking) przechwytywaly klik i drop dokladnie
-         tam, gdzie wzrokowo celuje uzytkownik: na ikonie/tekscie na
-         srodku karty. Klik "dzialal" tylko przypadkiem, gdy trafil w
-         padding wokol nich - drop na sam srodek trafial zawsze w blok
-         tekstu, nigdy w input pod spodem. */
+      /* Without this, these elements (same z-index as the input, but
+         AFTER it in the DOM - so they win the stacking order) were
+         capturing clicks and drops exactly where the user visually aims:
+         the icon/text at the center of the card. A click "worked" only by
+         accident when it landed in the padding around them - a drop
+         aimed dead center always hit the text block, never the input
+         underneath. */
       pointer-events: none;
     }
     @keyframes marchingAnts {
@@ -4200,7 +4203,7 @@
     }
   }
   /* =========================================
-     5. BREADCRUMBS (Nawigacja okruszkowa)
+     5. BREADCRUMBS
      ========================================= */
   .breadcrumb {
     display: flex;
@@ -4319,7 +4322,7 @@
     box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.3);
   }
   /* =========================================
-     7. TOPBAR (Pasek nad nawigacją)
+     7. TOPBAR (The bar above the navigation)
      ========================================= */
   .topbar {
     background-color: var(--bg-surface);
@@ -4356,7 +4359,7 @@
     }
   }
   /* =========================================
-     8. SCROLL TO TOP (Powrót na górę)
+     8. SCROLL TO TOP
      ========================================= */
   .scroll-to-top {
     position: fixed;
@@ -4365,9 +4368,9 @@
     width: var(--target-size-min);
     height: var(--target-size-min);
     background-color: var(--primary);
-    /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
-       primary jaśnieje, więc ikona musi ciemnieć - literal #fff ginął
-       i na jasnym primary, i na hoverze z flipowanym var(--dark)) */
+    /* As in .btn-primary: the text color follows the theme (in dark mode
+       primary lightens, so the icon must darken - a literal #fff got lost
+       both on a light primary and on hover with a flipped var(--dark)) */
     color: var(--btn-text-light);
     border-radius: 50%;
     display: flex;
@@ -4927,13 +4930,13 @@
   }
   @layer components {
     /* =========================================
-       1.1. CONFIRM MODAL (Mały modal potwierdzenia)
+       1.1. CONFIRM MODAL (Small confirmation modal)
        ========================================= */
-    /* Modyfikator szerokości */
+    /* Width modifier */
     .modal-sm {
       max-width: 360px;
     }
-    /* Specyficzny układ dla potwierdzeń (bez nagłówka, wyśrodkowany) */
+    /* A layout specific to confirmations (no header, centered) */
     .modal-confirm .card-body {
       text-align: center;
       padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
@@ -4942,23 +4945,23 @@
       font-size: 3.5rem;
       line-height: 1;
       margin-bottom: calc(var(--spacing-unit) * 2);
-      /* Używamy animacji z _animations.scss dla zwrócenia uwagi */
+      /* We use an animation from _animations.scss to draw attention */
       display: inline-block;
     }
     .modal-confirm .card-footer {
       display: flex;
       gap: calc(var(--spacing-unit) * 2);
-      background-color: transparent; /* Czysty wygląd bez szarego tła */
+      background-color: transparent; /* A clean look with no gray background */
       border-top: none;
       padding: 0 calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 3);
     }
     .modal-confirm .card-footer .btn {
-      flex: 1; /* Przyciski zajmują równo po 50% szerokości */
+      flex: 1; /* The buttons take up an equal 50% width each */
     }
   }
   @layer components {
     /* =========================================
-       2. CONTEXT MODAL (Wąskie menu kontekstowe)
+       2. CONTEXT MODAL (Narrow context menu)
        ========================================= */
     .modal-context {
       max-width: 400px;
@@ -5010,11 +5013,11 @@
     .modal-close-btn:hover {
       color: var(--danger);
     }
-    /* Przycisk zamykania w nagłówku modala dostaje fokus automatycznie przy
-       showModal() (przeglądarka focusuje pierwszy fokusowalny element okna),
-       więc pełny pierścień fokusu świeci się od razu po otwarciu i wygląda
-       jak błąd renderowania. Zamieniamy go na subtelniejszy wskaźnik - nadal
-       widoczny przy nawigacji klawiaturą (A11y), ale nie krzyczący. */
+    /* The close button in the modal header gets focus automatically on
+       showModal() (the browser focuses the window's first focusable element),
+       so a full focus ring lights up right after opening and looks like a
+       rendering glitch. We swap it for a subtler indicator - still visible
+       for keyboard navigation (A11y), but not shouting. */
     .modal-dialog .card-header .btn-action:focus-visible,
     .modal-dialog .card-header .modal-close-btn:focus-visible {
       outline: none;
@@ -5072,8 +5075,8 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         transform: translateY(100%);
-        /* NAPRAWA 5: Bottom Sheet na mobile nie powinien zajmować 100% ekranu, 
-           żeby użytkownik widział, że to modal */
+        /* FIX 5: on mobile, the bottom sheet shouldn't take up 100% of the
+           screen, so the user can see that it's a modal */
         max-height: 90vh;
         max-height: 90dvh;
       }
@@ -5628,15 +5631,15 @@
     }
   }
   /* =========================================
-     2. DATA ROWS (Wiersze tabeli jako karty dla CRM)
+     2. DATA ROWS (Table rows as cards for CRM)
      ========================================= */
   .data-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr auto;
     align-items: center;
     gap: calc(var(--spacing-unit) * 2);
-    /* Kolor powierzchni zamiast literalnego #fff - w dark mode wiersz ma
-       ciemnieć razem z kartami (w light mode bez zmiany: biel). */
+    /* A surface color instead of a literal #fff - in dark mode the row
+       should darken along with the cards (no change in light mode: white). */
     background-color: var(--bg-surface);
     padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
     border: 1px solid var(--border-color);
@@ -6316,7 +6319,7 @@
     transform: translateY(-50%) translateX(0);
   }
   /* =========================================
-     7. LIST GROUPS (Grupy list)
+     7. LIST GROUPS
      ========================================= */
   .list-group {
     display: flex;
@@ -6346,8 +6349,8 @@
   }
   .list-group-item.is-active {
     z-index: 2;
-    /* Jak w .btn-primary: kolor tekstu podąża za motywem (w dark mode
-       primary jaśnieje, literal #fff tracił kontrast) */
+    /* As in .btn-primary: the text color follows the theme (in dark mode
+       primary lightens, a literal #fff was losing contrast) */
     color: var(--btn-text-light);
     background-color: var(--primary);
     border-color: var(--primary);
@@ -6357,7 +6360,7 @@
     z-index: 1;
   }
   /* =========================================
-     8. LIST ICONS (Listy z ikonami)
+     8. LIST ICONS
      ========================================= */
   .list-unstyled {
     padding-left: 0;
@@ -6412,7 +6415,7 @@
     background-color: var(--dark);
   }
   /* =========================================
-     9. COUNTERS (Liczniki)
+     9. COUNTERS
      ========================================= */
   .counter {
     text-align: center;
@@ -6552,7 +6555,7 @@
     font-weight: var(--fw-medium);
   }
   /* =========================================
-     1. BADGES (Pigułki)
+     1. BADGES (Pills)
      ========================================= */
   .badge {
     display: inline-flex;
@@ -6562,7 +6565,7 @@
     font-size: 0.75em;
     font-weight: var(--fw-bold);
     line-height: 1;
-    border-radius: 50rem; /* Kształt pigułki */
+    border-radius: 50rem; /* Pill shape */
     color: var(--btn-text-light);
   }
   .badge-primary {
@@ -6571,9 +6574,9 @@
   .badge-secondary {
     background-color: var(--secondary);
   }
-  /* --semantic-fg (nie --btn-text-dark): mode-aware, patrz komentarz przy
-     definicji w _root.scss - te 4 kolory potrzebuja jasnego tekstu w light
-     mode, ale ciemnego w dark mode. */
+  /* --semantic-fg (not --btn-text-dark): mode-aware, see the comment at its
+     definition in _root.scss - these 4 colors need light text in light
+     mode, but dark text in dark mode. */
   .badge-success {
     background-color: var(--success);
     color: var(--semantic-fg);
@@ -6594,7 +6597,7 @@
     background-color: var(--dark);
   }
   /* =========================================
-     2. ALERTS (Komunikaty)
+     2. ALERTS
      ========================================= */
   .alert {
     padding: calc(var(--spacing-unit) * 2);
@@ -6776,10 +6779,10 @@
     }
   }
   /* =========================================
-     4. STATUS DOTS (Kropki statusu i Ping)
+     4. STATUS DOTS (Status dots and Ping)
      ========================================= */
   .status-dot {
-    position: relative; /* punkt odniesienia dla pierscienia .status-ping::after */
+    position: relative; /* reference point for the .status-ping::after ring */
     display: inline-flex;
     align-items: center;
     gap: calc(var(--spacing-unit) * 1);
@@ -6795,7 +6798,7 @@
     border-radius: 50%;
   }
   .status-dot {
-    /* Definiujemy kolory tła ORAZ zmienną dla cienia (Ping) */
+    /* We define the background colors AND a variable for the shadow (Ping) */
   }
   .status-dot.status-draft {
     --ping-color: var(--border-color);
@@ -6821,10 +6824,11 @@
   .status-dot.status-danger::before {
     background-color: var(--danger);
   }
-  /* Animowany Ping - pierscien na ::after (osobny od kropki ::before),
-     animowany wylacznie transform: scale + opacity zamiast box-shadow.
-     Pozycjonowany wzgledem .status-dot (position: relative wyzej), dokladnie
-     nad 8x8px kropka z ::before - lewy brzeg + pionowe wysrodkowanie. */
+  /* Animated ping - a ring on ::after (separate from the ::before dot),
+     animated exclusively via transform: scale + opacity instead of
+     box-shadow. Positioned relative to .status-dot (position: relative
+     above), exactly over the 8x8px ::before dot - left edge + vertical
+     centering. */
   .status-ping::after {
     content: "";
     position: absolute;
@@ -6889,7 +6893,7 @@
     --stock-color-rgb: var(--danger-rgb);
   }
   /* =========================================
-     5. TOOLTIPS (Dymki podpowiedzi - Czysty CSS)
+     5. TOOLTIPS (Hint bubbles - pure CSS)
      ========================================= */
   .tooltip-element {
     position: relative;
@@ -6906,7 +6910,7 @@
     z-index: var(--z-index-tooltip);
     pointer-events: none;
   }
-  /* Strzałka dymku */
+  /* Bubble arrow */
   .tooltip-element::before {
     content: "";
     bottom: 100%;
@@ -6916,7 +6920,7 @@
     border-top-color: var(--dark);
     margin-bottom: -1px;
   }
-  /* Treść dymku */
+  /* Bubble content */
   .tooltip-element::after {
     content: attr(data-tooltip);
     bottom: 100%;
@@ -7189,11 +7193,11 @@
     text-decoration: line-through;
   }
   /* =========================================
-     2. PASKI POSTĘPU (Progress Bars)
+     2. PROGRESS BARS
      ========================================= */
   .progress {
     display: flex;
-    height: 8px; /* Cienki, nowoczesny pasek */
+    height: 8px; /* A thin, modern bar */
     overflow: hidden;
     background-color: var(--border-color);
     border-radius: 50px;
@@ -7418,7 +7422,7 @@
     }
   }
   /* =========================================
-     4. STEPPER (Pasek postępu formularza)
+     4. STEPPER (Form progress bar)
      ========================================= */
   .stepper {
     display: flex;
@@ -7460,7 +7464,7 @@
   .step.is-active::before {
     background-color: var(--primary);
   }
-  /* Wariant 2: Stepper Numerowany (Kółka i linie) */
+  /* Variant 2: Numbered stepper (circles and lines) */
   .stepper-numbered {
     counter-reset: stepper-counter;
     gap: 0;
@@ -7525,7 +7529,7 @@
     background-color: var(--primary);
   }
   /* =========================================
-     5. TESTIMONIALS (Referencje)
+     5. TESTIMONIALS
      ========================================= */
   .testimonial {
     text-align: center;
@@ -7566,7 +7570,7 @@
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
   /* =========================================
-     6. WORD ROTATOR (Obracający się tekst)
+     6. WORD ROTATOR (Rotating text)
      ========================================= */
   .word-rotator {
     display: inline-flex;
@@ -7586,7 +7590,7 @@
     white-space: nowrap;
   }
   /* =========================================
-     7. NAV FILTERS (Filtry Portfolio)
+     7. NAV FILTERS (Portfolio filters)
      ========================================= */
   .nav-filters {
     display: flex;
@@ -7636,7 +7640,7 @@
     }
   }
   /* =========================================
-     5. PRICING LIST (Lista z kropkami)
+     5. PRICING LIST (Dotted-leader list)
      ========================================= */
   .pricing-list {
     list-style: none;
@@ -8476,11 +8480,12 @@
     }
   }
   /**
-   * molique - Lang Suggest (pasek sugestii zmiany języka)
-   * Markup generowany przez js/modules/molique-lang-suggest.js - wstawiany
-   * na końcu <body>, tylko gdy wykryty język przeglądarki różni się od
-   * języka strony (document.documentElement.lang) i istnieje jej wersja w
-   * tym języku (patrz .language-switch-menu[data-lang] w navbarze).
+   * molique - Lang Suggest (language-switch suggestion bar)
+   * Markup generated by js/modules/molique-lang-suggest.js - inserted at
+   * the end of <body>, only when the detected browser language differs from
+   * the page's language (document.documentElement.lang) and a version of
+   * the page exists in that language (see .language-switch-menu[data-lang]
+   * in the navbar).
    */
   @layer components {
     .lang-suggest-bar {

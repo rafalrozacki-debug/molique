@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /**
  * molique - Compilation file for the Admin Panel
  * This file produces the finished molique-style-admin.css
@@ -7,13 +6,13 @@
 @layer modules {
   @layer layout {
     .admin-layout {
-      /* Zmienne sterujące aktualnym stanem layoutu */
+      /* Variables controlling the layout's current state */
       --current-sidebar-width: var(--sidebar-width-lg);
       --layout-gap: 0px;
       --layout-padding: 0px;
       --sidebar-radius: 0px;
       --main-radius: 0px;
-      /* FIX: Domyślne tło dla głównej treści w trybie standardowym */
+      /* FIX: default background for the main content in standard mode */
       --main-bg: var(--bg-surface);
       display: grid;
       grid-template-columns: var(--current-sidebar-width) 1fr;
@@ -22,14 +21,15 @@
       min-height: 100dvh;
       background-color: var(--bg-body);
       transition: grid-template-columns var(--transition-speed) ease;
-      /* Gdy nad layoutem jest globalny navbar, nie licz jego wysokości do
-         min-height (inaczej strona ma zbędny pasek pustego scrolla u dołu). */
+      /* When there's a global navbar above the layout, don't count its
+         height in min-height (otherwise the page has a needless empty-scroll
+         strip at the bottom). */
     }
     body:has(> .navbar) .admin-layout {
       min-height: calc(100dvh - var(--navbar-h));
     }
     .admin-layout {
-      /* WARIANTY ROZMIARÓW */
+      /* SIZE VARIANTS */
     }
     .admin-layout.sidebar-md {
       --current-sidebar-width: var(--sidebar-width-md);
@@ -44,7 +44,7 @@
       --current-sidebar-width: var(--sidebar-width-sm);
     }
     .admin-layout {
-      /* WARIANT FLOATING (Odsunięty od krawędzi) */
+      /* FLOATING VARIANT (offset from the edge) */
     }
     .admin-layout.admin-layout-floating {
       --layout-gap: calc(var(--spacing-unit) * 3);
@@ -52,7 +52,7 @@
       --sidebar-radius: var(--border-radius-lg);
       --main-radius: var(--border-radius-lg);
       --main-bg: var(--bg-surface);
-      /* Na mobile resetujemy floating */
+      /* Reset floating on mobile */
     }
     @media (max-width: 768px) {
       .admin-layout.admin-layout-floating {
@@ -63,19 +63,21 @@
       }
     }
     .admin-layout {
-      /* Mobile: Przejście na Bottom Nav */
+      /* Mobile: switch to Bottom Nav */
     }
     @media (max-width: 768px) {
       .admin-layout {
-        /* Goly 1fr to w skrocie minmax(auto, 1fr) - minimum toru liczy sie
-           z min-content potomkow (np. tabeli albo pigulki zakladek z dluzsza
-           etykieta), NIE z zera, nawet gdy .admin-main ma juz min-width: 0 +
-           overflow-x: hidden (te dwie wlasciwosci nie chronia przed
-           przepelnieniem SAMEGO toru grida - to inny mechanizm). Efekt: tor
-           rosnie ponad szerokosc ekranu, a przez overflow-x: clip na
-           html/body (celowe, zeby nie psuc position:sticky) nie widac
-           scrollbara - tresc po prostu cicho obcina sie za krawedzia.
-           minmax(0, 1fr) jednoznacznie zeruje minimum toru. */
+        /* A bare 1fr is, in short, minmax(auto, 1fr) - a track's minimum is
+           computed from its descendants' min-content (e.g. a table or a tab
+           pill with a longer label), NOT from zero, even when .admin-main
+           already has min-width: 0 + overflow-x: hidden (those two
+           properties don't protect against the grid TRACK ITSELF
+           overflowing - that's a different mechanism). Effect: the track
+           grows past the screen width, and because of overflow-x: clip on
+           html/body (deliberate, to avoid breaking position:sticky) there's
+           no visible scrollbar - the content just silently gets clipped past
+           the edge. minmax(0, 1fr) unambiguously zeroes out the track's
+           minimum. */
         grid-template-columns: minmax(0, 1fr);
         --current-sidebar-width: 100%;
       }
@@ -83,24 +85,25 @@
     .admin-main {
       background-color: var(--main-bg);
       border-radius: var(--main-radius);
-      /* FIX: Gwarantowany padding niezależnie od trybu */
+      /* FIX: guaranteed padding regardless of mode */
       padding: calc(var(--spacing-unit) * 4);
       padding-bottom: calc(var(--spacing-unit) * 12);
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
       min-width: 0;
-      /* Cień tylko w trybie floating */
+      /* Shadow only in floating mode */
     }
     .admin-layout-floating .admin-main {
       box-shadow: var(--shadow-sm);
     }
-    /* Zanikanie treści na dole głównej kolumny (opt-in: klasa .fade-bottom
-       z warstwy layout). .admin-main nie przewija się sam - przewija się
-       strona - a overflow-x:hidden czyni go scrollportem dla sticky,
-       przez co bazowy wariant nigdy by się nie "przykleił". Dlatego tu
-       gradient jest pozycjonowany fixed względem okna, wyrównany do
-       kolumny treści zmiennymi layoutu (działa też w trybie floating). */
+    /* Fading content at the bottom of the main column (opt-in: the
+       .fade-bottom class from the layout layer). .admin-main doesn't scroll
+       itself - the page scrolls - and overflow-x:hidden makes it a
+       scrollport for sticky, which means the base variant would never
+       actually "stick". That's why the gradient here is positioned fixed
+       relative to the window, aligned to the content column via layout
+       variables (also works in floating mode). */
     .admin-main.fade-bottom {
       --fade-color: var(--main-bg);
     }
@@ -117,7 +120,7 @@
       .admin-main.fade-bottom::after {
         left: 0;
         right: 0;
-        /* Nad mobilnym dolnym paskiem nawigacji (sidebar) */
+        /* Above the mobile bottom navigation bar (sidebar) */
         bottom: calc(70px + env(safe-area-inset-bottom));
         border-radius: 0;
       }
@@ -1327,11 +1330,11 @@
    */
   /**
    * molique - Admin dashboard
-   * Zawiera elementy na dashboardzie, takie jak nakładki, karty i inne komponenty.
+   * Contains dashboard elements such as overlays, cards, and other components.
    */
   @layer components {
     /* =========================================
-       DASHBOARD HEADER (Faux Cutout / Nakładka)
+       DASHBOARD HEADER (Faux Cutout / Overlay)
        ========================================= */
     .dashboard-header {
       --cutout-radius: 32px;
@@ -1345,8 +1348,8 @@
       margin-bottom: calc(var(--spacing-unit) * 4);
       padding-left: calc(var(--spacing-unit) * 4);
       padding-top: calc(var(--spacing-unit) * 4);
-      /* FIX: Resetujemy ujemne marginesy na mobile. 
-         Nie potrzebujemy tu wycięcia, a zapobiega to ucinaniu tekstu! */
+      /* FIX: reset the negative margins on mobile.
+         We don't need the cutout here, and this prevents text from being clipped! */
     }
     @media (max-width: 991px) {
       .dashboard-header {
@@ -1395,12 +1398,12 @@
       }
     }
     .dashboard-header-actions {
-      /* FIX: Na mobile usuwamy tło i wyrównujemy przyciski do lewej krawędzi tekstu */
+      /* FIX: on mobile we remove the background and align the buttons to the text's left edge */
     }
     @media (max-width: 991px) {
       .dashboard-header-actions {
         background-color: transparent;
-        padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Tylko odstęp od góry */
+        padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Top spacing only */
         border-radius: 0;
         width: 100%;
       }

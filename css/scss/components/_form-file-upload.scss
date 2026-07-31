@@ -1,7 +1,7 @@
-// molique - Custom file upload (z wariantem animowanym).
+// molique - Custom file upload (with an animated variant).
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @layer components {
   /* =========================================
@@ -70,19 +70,21 @@
       animation: marchingAnts 0.6s linear infinite;
     }
 
-    /* UWAGA: input[type="file"] celowo POZA tą listą - musi zachować
-       position: absolute z bazowego .file-upload (niewidoczny overlay
-       na całej karcie, z-index: 2 ma już z bazy). Nadpisanie na relative
-       wprowadzało go do układu i spychało zawartość karty w dół. */
+    /* NOTE: input[type="file"] is deliberately OUTSIDE this list - it must
+       keep position: absolute from the base .file-upload (an invisible
+       overlay across the whole card, z-index: 2 already comes from the
+       base). Overriding it to relative pulled it into the flow and pushed
+       the card's content down. */
     .file-upload-icon, h4, p, .file-upload-name {
       position: relative;
       z-index: 2;
-      /* Bez tego te elementy (ten sam z-index co input, ale PO nim
-         w DOM - wygrywaja stacking) przechwytywaly klik i drop dokladnie
-         tam, gdzie wzrokowo celuje uzytkownik: na ikonie/tekscie na
-         srodku karty. Klik "dzialal" tylko przypadkiem, gdy trafil w
-         padding wokol nich - drop na sam srodek trafial zawsze w blok
-         tekstu, nigdy w input pod spodem. */
+      /* Without this, these elements (same z-index as the input, but
+         AFTER it in the DOM - so they win the stacking order) were
+         capturing clicks and drops exactly where the user visually aims:
+         the icon/text at the center of the card. A click "worked" only by
+         accident when it landed in the padding around them - a drop
+         aimed dead center always hit the text block, never the input
+         underneath. */
       pointer-events: none;
     }
   }

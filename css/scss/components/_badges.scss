@@ -1,12 +1,12 @@
-// molique - Badges (pigulki statusow).
+// molique - Badges (status pills).
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   1. BADGES (Pigułki)
+   1. BADGES (Pills)
    ========================================= */
 .badge {
   display: inline-flex;
@@ -16,15 +16,15 @@
   font-size: 0.75em;
   font-weight: var(--fw-bold);
   line-height: 1;
-  border-radius: 50rem; /* Kształt pigułki */
+  border-radius: 50rem; /* Pill shape */
   color: var(--btn-text-light);
 }
 
 .badge-primary { background-color: var(--primary); }
 .badge-secondary { background-color: var(--secondary); }
-/* --semantic-fg (nie --btn-text-dark): mode-aware, patrz komentarz przy
-   definicji w _root.scss - te 4 kolory potrzebuja jasnego tekstu w light
-   mode, ale ciemnego w dark mode. */
+/* --semantic-fg (not --btn-text-dark): mode-aware, see the comment at its
+   definition in _root.scss - these 4 colors need light text in light
+   mode, but dark text in dark mode. */
 .badge-success { background-color: var(--success); color: var(--semantic-fg); }
 .badge-danger { background-color: var(--danger); color: var(--semantic-fg); }
 .badge-warning { background-color: var(--warning); color: var(--semantic-fg); }

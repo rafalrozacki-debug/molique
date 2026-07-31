@@ -1,18 +1,18 @@
-// molique - Specyficzne inputy: range, date, color, number.
+// molique - Specialized inputs: range, date, color, number.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @layer components {
   /* =========================================
-     2. SPECYFICZNE INPUTY (Range, Date, Color)
+     2. SPECIALIZED INPUTS (Range, Date, Color)
      ========================================= */
   .input-range {
     appearance: none;
     width: 100%;
     height: 8px;
     background: var(--border-color);
-    border-radius: 50rem; /* pigulka - ten sam idiom co .tabs-pill */
+    border-radius: 50rem; /* pill shape - the same idiom as .tabs-pill */
     outline: none;
     cursor: pointer;
     overflow: hidden; 
@@ -38,10 +38,11 @@
     &::-moz-range-thumb:hover { transform: scale(1.15); }
   }
 
-  /* Number: chowamy natywne strzałki (spinner) - w gęstych formularzach
-     B2B wyglądają obco i gryzą się z własnymi przyciskami krokowania.
-     Zamiennik to kontrolka .qty-input (przyciski + / -), a wartość nadal
-     można zmieniać klawiaturą (góra/dół) i scrollem. */
+  /* Number: we hide the native arrows (spinner) - in dense B2B forms they
+     look out of place and clash with our own step buttons. The
+     replacement is the .qty-input control (+ / - buttons), and the value
+     can still be changed with the keyboard (up/down) and the scroll
+     wheel. */
   input[type="number"].input {
     -moz-appearance: textfield;
     appearance: textfield;

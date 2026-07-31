@@ -1,13 +1,13 @@
-// molique - Context modal: waski panel boczny/dolny.
+// molique - Context modal: a narrow side/bottom panel.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 @layer components {
 /* =========================================
-   2. CONTEXT MODAL (Wąskie menu kontekstowe)
+   2. CONTEXT MODAL (Narrow context menu)
    ========================================= */
 .modal-context {
   max-width: 400px; 
@@ -55,11 +55,11 @@
   &:hover { color: var(--danger); }
 }
 
-/* Przycisk zamykania w nagłówku modala dostaje fokus automatycznie przy
-   showModal() (przeglądarka focusuje pierwszy fokusowalny element okna),
-   więc pełny pierścień fokusu świeci się od razu po otwarciu i wygląda
-   jak błąd renderowania. Zamieniamy go na subtelniejszy wskaźnik - nadal
-   widoczny przy nawigacji klawiaturą (A11y), ale nie krzyczący. */
+/* The close button in the modal header gets focus automatically on
+   showModal() (the browser focuses the window's first focusable element),
+   so a full focus ring lights up right after opening and looks like a
+   rendering glitch. We swap it for a subtler indicator - still visible
+   for keyboard navigation (A11y), but not shouting. */
 .modal-dialog .card-header .btn-action:focus-visible,
 .modal-dialog .card-header .modal-close-btn:focus-visible {
   outline: none;
@@ -118,8 +118,8 @@
     border-bottom-right-radius: 0;
     transform: translateY(100%);
     
-    /* NAPRAWA 5: Bottom Sheet na mobile nie powinien zajmować 100% ekranu, 
-       żeby użytkownik widział, że to modal */
+    /* FIX 5: on mobile, the bottom sheet shouldn't take up 100% of the
+       screen, so the user can see that it's a modal */
     max-height: 90vh;
     max-height: 90dvh;
     

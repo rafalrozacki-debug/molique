@@ -1,6 +1,6 @@
 /**
  * molique - Admin dashboard
- * Zawiera elementy na dashboardzie, takie jak nakładki, karty i inne komponenty.
+ * Contains dashboard elements such as overlays, cards, and other components.
  */
 
 @use '../variables' as *;
@@ -8,7 +8,7 @@
 
 @layer components {
 /* =========================================
-   DASHBOARD HEADER (Faux Cutout / Nakładka)
+   DASHBOARD HEADER (Faux Cutout / Overlay)
    ========================================= */
 .dashboard-header {
   --cutout-radius: 32px;
@@ -26,8 +26,8 @@
   padding-left: calc(var(--spacing-unit) * 4);
   padding-top: calc(var(--spacing-unit) * 4);
   
-  /* FIX: Resetujemy ujemne marginesy na mobile. 
-     Nie potrzebujemy tu wycięcia, a zapobiega to ucinaniu tekstu! */
+  /* FIX: reset the negative margins on mobile.
+     We don't need the cutout here, and this prevents text from being clipped! */
   @include mq(md, max) {
     flex-direction: column;
     margin-top: 0;
@@ -74,10 +74,10 @@
     }
   }
   
-  /* FIX: Na mobile usuwamy tło i wyrównujemy przyciski do lewej krawędzi tekstu */
+  /* FIX: on mobile we remove the background and align the buttons to the text's left edge */
   @include mq(md, max) {
     background-color: transparent;
-    padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Tylko odstęp od góry */
+    padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Top spacing only */
     border-radius: 0;
     width: 100%;
     &::before, &::after { display: none; }
