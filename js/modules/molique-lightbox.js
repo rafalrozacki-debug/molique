@@ -1,19 +1,28 @@
 /**
- * molique - Moduł Lightbox (Galeria)
+ * molique - Lightbox (Gallery) module
  *
- * Natywny <dialog> (showModal/close) zamiast recznie sterowanego <div>:
- * pulapka fokusa, przywracanie fokusa elementowi wyzwalajacemu i zamykanie
- * Escape sa wbudowane w przegladarke, wiec ten kod ich juz nie implementuje.
+ * A native <dialog> (showModal/close) instead of a hand-managed <div>:
+ * the focus trap, restoring focus to the triggering element, and closing
+ * on Escape are all built into the browser, so this code doesn't
+ * reimplement any of them.
  *
- * UWAGA: zmiana zdjecia w galerii swiadomie NIE korzysta z View Transitions
- * API. Proba pokazala, ze document.startViewTransition()'s .finished
- * potrafi nigdy sie nie rozstrzygnac (mimo ze sama tresc juz sie zmienila),
- * a KOLEJNE wywolanie startViewTransition() po takim przypadku przestawalo
- * w ogole odpalac swoj callback - realne ryzyko trwalego zaciecia strzalek
- * w galerii. Zamiast tego: reczna animacja transform/opacity, dokladnie
- * tak jak reszta frameworka (patrz molique.md: animacje wylacznie na
- * transform/opacity), z throttlem czasowym (zawsze sam sie zwalnia) zamiast
- * blokady sprzezonej z jakakolwiek obietnica.
+ * NOTE: switching images in the gallery deliberately does NOT use the
+ * View Transitions API. Testing showed that
+ * document.startViewTransition()'s .finished can sometimes never
+ * resolve (even though the content itself already changed), and the
+ * NEXT call to startViewTransition() after that happened would stop
+ * firing its callback at all - a real risk of the gallery's arrows
+ * getting permanently stuck. Instead: a manual transform/opacity
+ * animation, exactly like the rest of the framework (see molique.md:
+ * animations only ever touch transform/opacity), with a time-based
+ * throttle (always releases itself) instead of a lock tied to any promise.
+ *
+ * NOTE (pre-existing gap, not touched by this comment-translation pass):
+ * the aria-labels/alt text generated below ("Zamknij", "Poprzednie
+ * zdjęcie", "Następne zdjęcie", "Powiększenie") are hardcoded Polish even
+ * though this module loads on the EN/DE site pages too - a real
+ * accessibility gap that would need a language lookup like
+ * molique-carousel.js's CAROUSEL_LANG pattern.
  */
 const lightboxTriggers = document.querySelectorAll('[data-lightbox]');
 if (lightboxTriggers.length > 0) {
@@ -47,9 +56,8 @@ if (lightboxTriggers.length > 0) {
 
   const SLIDE_MS = 220;
   const SLIDE_DISTANCE = 56;
-  // Throttle czasowy - zawsze sam sie zwalnia po SLIDE_MS, wiec (w
-  // odroznieniu od blokady sprzezonej z animacja/obietnica) nie moze sie
-  // zaciac na trwale.
+  // A time-based throttle - always releases itself after SLIDE_MS, so
+  // (unlike a lock tied to an animation/promise) it can never get stuck permanently.
   let lastChangeAt = 0;
 
   const prefersReducedMotion = () =>
@@ -73,8 +81,8 @@ if (lightboxTriggers.length > 0) {
     return trigger.getAttribute('href') || trigger.getAttribute('data-lightbox');
   }
 
-  // Sasiednie zdjecia w tle, zeby strzalki/swipe czuly sie natychmiastowe
-  // zamiast czekac na siec przy kazdej zmianie.
+  // Preload adjacent images in the background, so the arrows/swipe feel
+  // instant instead of waiting on the network for every change.
   function preloadAdjacent() {
     if (currentGallery.length <= 1) return;
     const nextTrigger = currentGallery[(currentIndex + 1) % currentGallery.length];
@@ -128,7 +136,7 @@ if (lightboxTriggers.length > 0) {
       updateLightbox();
       lightboxImg.style.transition = 'none';
       lightboxImg.style.transform = `translateX(${direction * SLIDE_DISTANCE}px)`;
-      void lightboxImg.offsetWidth; // wymus reflow, zeby kolejny transition faktycznie zadzialal
+      void lightboxImg.offsetWidth; // force reflow, so the next transition actually takes effect
       lightboxImg.style.transition = `transform ${SLIDE_MS}ms ease, opacity ${SLIDE_MS}ms ease`;
       lightboxImg.style.transform = 'translateX(0)';
       lightboxImg.style.opacity = '1';
@@ -144,8 +152,8 @@ if (lightboxTriggers.length > 0) {
     if (e.target === lightboxOverlay || e.target.classList.contains('lightbox-content')) closeLightbox();
   });
 
-  // Nawigacja strzalkami - Escape zamyka natywnie (<dialog>), wiec nie ma go
-  // tutaj. Dziala tylko gdy dialog jest faktycznie otwarty.
+  // Arrow-key navigation - Escape closes natively (<dialog>), so it's not
+  // handled here. Only active while the dialog is actually open.
   document.addEventListener('keydown', (e) => {
     if (!lightboxOverlay.open) return;
     if (e.key === 'ArrowRight') changeSlide(1);

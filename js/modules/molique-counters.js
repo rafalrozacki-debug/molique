@@ -1,5 +1,5 @@
 /**
- * molique - Moduł Liczników (Counters)
+ * molique - Counters module
  */
 const counters = document.querySelectorAll('.counter-value');
 if (counters.length > 0) {
@@ -13,18 +13,18 @@ if (counters.length > 0) {
         const prefix = counter.getAttribute('data-prefix') || '';
         const suffix = counter.getAttribute('data-suffix') || '';
 
-        // .chart-radial wypelnia sie sam przy wczytaniu strony (CSS
-        // @starting-style) - jesli sekcja jest poza pierwszym ekranem,
-        // animacja konczy sie na zawsze niewidoczna. Gdy licznik siedzi
-        // w pierscieniu, resetujemy --val do 0% (bez transition, stad
-        // klasa js-resetting) i od razu wracamy do docelowej wartosci,
-        // zeby wypelnienie odtworzylo sie razem z liczba.
+        // .chart-radial fills itself in on page load (CSS
+        // @starting-style) - if the section is below the fold, the
+        // animation finishes while permanently invisible. When a counter
+        // sits inside a ring, we reset --val to 0% (without a transition,
+        // hence the js-resetting class) and immediately go back to the
+        // target value, so the fill replays together with the number.
         const chart = counter.closest('.chart-radial');
         if (chart) {
           const chartTarget = chart.style.getPropertyValue('--val') || getComputedStyle(chart).getPropertyValue('--val');
           chart.classList.add('js-resetting');
           chart.style.setProperty('--val', '0%');
-          chart.offsetHeight; // force reflow - commituje 0% przed odblokowaniem transition
+          chart.offsetHeight; // force reflow - commits the 0% before re-enabling the transition
           chart.classList.remove('js-resetting');
           requestAnimationFrame(() => chart.style.setProperty('--val', chartTarget));
         }

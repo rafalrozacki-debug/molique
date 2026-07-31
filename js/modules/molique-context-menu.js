@@ -1,6 +1,6 @@
 /**
- * molique - inteligentne pozycjonowanie menu kontekstowego (.popover-context)
- * Odwraca menu nad przycisk, gdy zabraknie miejsca pod nim (np. blisko dołu ekranu).
+ * molique - smart positioning for the context menu (.popover-context)
+ * Flips the menu above the button when there's no room below it (e.g. near the bottom of the screen).
  */
 
 function initContextMenu() {

@@ -1,17 +1,18 @@
 /**
- * molique - Admin Nav (aktywność submenu + mobilny drill-down)
+ * molique - Admin Nav (submenu active state + mobile drill-down)
  *
- * Odrobina vanilla JS wokół natywnego <details class="admin-nav-submenu">:
- *  - wykrywa aktywną pozycję z adresu URL i podświetla ją oraz jej gałąź
- *    klasą .is-active (bez potrzeby atrybutu [open] w markupie),
- *  - na mobile nie pozwala aktywnej gałęzi auto-rozwinąć drill-downu na
- *    starcie (to była główna irytacja: wejście na podstronę = otwarty panel),
- *  - animowane zamknięcie (wyjazd w dół): natywny <details> chowa treść
- *    natychmiast, więc opóźniamy zdjęcie [open] o czas animacji CSS,
- *  - wzajemne wykluczanie: otwarcie jednego submenu zamyka pozostałe,
- *  - Esc zamyka otwarty drill-down, zmiana breakpointu również.
+ * A bit of vanilla JS around the native <details class="admin-nav-submenu">:
+ *  - detects the active item from the URL and highlights it and its
+ *    branch with the .is-active class (no need for an [open] attribute in the markup),
+ *  - on mobile, doesn't let the active branch auto-expand the drill-down
+ *    on load (this was the main annoyance: landing on a page meant an
+ *    already-open panel),
+ *  - animated close (slide down): the native <details> hides its content
+ *    instantly, so we delay removing [open] until the CSS animation finishes,
+ *  - mutual exclusion: opening one submenu closes the others,
+ *  - Esc closes an open drill-down, as does a breakpoint change.
  *
- * Otwieranie i wjazd obsługuje natywny <details> + CSS. Zero zależności.
+ * Opening and the slide-in are handled by the native <details> + CSS. Zero dependencies.
  */
 function initAdminNav() {
   const submenus = Array.from(document.querySelectorAll('.admin-nav-submenu'));
@@ -21,8 +22,8 @@ function initAdminNav() {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const here = normalizePath(location.pathname);
 
-  // Animowane zamknięcie: odtwarza wyjazd (.is-closing), po jego końcu zdejmuje
-  // [open]. Na desktopie i przy reduced-motion zamyka natychmiast.
+  // Animated close: plays the slide-out (.is-closing), removes [open]
+  // once it finishes. Closes instantly on desktop and under reduced-motion.
   const closeAnimated = (details) => {
     if (!details.open) return;
     if (!mobile.matches || reduceMotion.matches) {
@@ -36,8 +37,8 @@ function initAdminNav() {
     const finish = () => {
       if (done) return;
       done = true;
-      // Najpierw [open]=false (natywne ukrycie), dopiero potem zdejmij
-      // .is-closing - inaczej między nimi mrugnęłaby animacja wjazdu.
+      // [open]=false first (native hide), only then remove .is-closing -
+      // otherwise the slide-in animation would flash in between.
       details.open = false;
       details.classList.remove('is-closing');
     };
@@ -45,7 +46,7 @@ function initAdminNav() {
     details.classList.add('is-closing');
     if (panel) {
       panel.addEventListener('animationend', finish, { once: true });
-      // Bezpiecznik, gdyby animationend nie wystrzelił (np. panel bez animacji).
+      // A safety net in case animationend never fires (e.g. a panel with no animation).
       setTimeout(finish, 400);
     } else {
       finish();
@@ -57,7 +58,7 @@ function initAdminNav() {
     const list = details.querySelector(':scope > .admin-nav-submenu-list');
     if (!summary || !list) return;
 
-    // 1. Aktywność z URL - podświetl aktywny link i jego gałąź.
+    // 1. Active state from the URL - highlight the active link and its branch.
     let hasActive = false;
     list.querySelectorAll('.admin-nav-submenu-link').forEach((link) => {
       const raw = link.getAttribute('href');
@@ -77,23 +78,25 @@ function initAdminNav() {
     });
     if (hasActive) {
       summary.classList.add('is-active');
-      // Na desktopie (drzewko) galaz z biezaca strona ma sie rozwinac sama -
-      // bez tego uzytkownik ladowalby strone i nie widzial, gdzie w menu jest.
-      // Krok 2 nizej i tak zamknie to zaraz na mobile (drill-down), wiec nie
-      // trzeba tu warunku na viewport.
+      // On desktop (the tree view) the branch containing the current page
+      // should expand itself - without this the user would land on the
+      // page with no indication of where it sits in the menu. Step 2
+      // below closes this right away on mobile (drill-down) anyway, so
+      // there's no need for a viewport check here.
       details.open = true;
     }
 
-    // 2. Na mobile nie auto-rozwijaj drill-downu na starcie. Jeśli markup
-    //    renderuje <details open> dla aktywnej gałęzi, zachowujemy wskazanie
-    //    przez .is-active, ale panel zamykamy (bez animacji - to stan startowy).
+    // 2. On mobile, don't auto-expand the drill-down on load. If the
+    //    markup renders <details open> for the active branch, we keep the
+    //    indication via .is-active, but close the panel (no animation -
+    //    this is the starting state).
     if (mobile.matches && details.open) {
       summary.classList.add('is-active');
       details.open = false;
     }
 
-    // 3. Zamknięcie przez pasek "Cofnij": przejmujemy natywny toggle, żeby
-    //    zagrać wyjazd. Otwieranie zostawiamy natywnemu <details> (wjazd z CSS).
+    // 3. Closing via the "Back" bar: we take over the native toggle so we
+    //    can play the slide-out. Opening is left to the native <details> (CSS slide-in).
     summary.addEventListener('click', (e) => {
       if (mobile.matches && details.open && !details.classList.contains('is-closing')) {
         e.preventDefault();
@@ -101,8 +104,8 @@ function initAdminNav() {
       }
     });
 
-    // 4. Wzajemne wykluczanie (tylko na mobile) - otwarcie jednego zamyka
-    //    pozostałe (natychmiast; nie animujemy „obcego" panelu).
+    // 4. Mutual exclusion (mobile only) - opening one closes the others
+    //    (instantly; we don't animate the "other" panel).
     details.addEventListener('toggle', () => {
       if (!details.open || !mobile.matches) return;
       submenus.forEach((other) => {
@@ -111,7 +114,7 @@ function initAdminNav() {
     });
   });
 
-  // 5. Esc zamyka otwarty drill-down (z animacją wyjazdu).
+  // 5. Esc closes an open drill-down (with the slide-out animation).
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     submenus.forEach((details) => {
@@ -119,8 +122,8 @@ function initAdminNav() {
     });
   });
 
-  // 6. Zmiana breakpointu - zamykamy otwarte natychmiast, żeby nie zostawić
-  //    zawieszonego panelu drill-downu przy obrocie ekranu / zmianie szerokości.
+  // 6. Breakpoint change - close any open panel instantly, so we don't
+  //    leave a dangling drill-down panel on screen rotation / width change.
   const closeAll = () => submenus.forEach((details) => {
     details.classList.remove('is-closing');
     details.open = false;
@@ -128,11 +131,11 @@ function initAdminNav() {
   if (mobile.addEventListener) {
     mobile.addEventListener('change', closeAll);
   } else if (mobile.addListener) {
-    mobile.addListener(closeAll); // starsze Safari
+    mobile.addListener(closeAll); // older Safari
   }
 }
 
-/* Ujednolica ścieżkę do porównania: bez końcowego slasha, puste => "/". */
+/* Normalizes a path for comparison: no trailing slash, empty => "/". */
 function normalizePath(pathname) {
   return pathname.replace(/\/+$/, '') || '/';
 }

@@ -1,12 +1,17 @@
 /**
- * molique - Custom File Upload (podglad nazwy wybranego pliku)
+ * molique - Custom File Upload (selected file name preview)
  *
- * .file-upload stoi na niewidocznym input[type="file"] rozciagnietym na
- * cala strefe (position:absolute, opacity:0) - dzieki temu klik i
- * przeciagniecie pliku dzialaja natywnie bez dodatkowego kodu. Ten modul
- * dokłada jedyna brakujaca czesc: potwierdzenie, ze plik zostal wybrany.
- * Bez niego input po cichu przyjmuje plik (drop nie otwiera go tez jako
- * nowej karty przegladarki), ale nic tego nie pokazuje.
+ * .file-upload sits on top of an invisible input[type="file"] stretched
+ * across the whole zone (position:absolute, opacity:0) - this makes
+ * click and drag-and-drop work natively with no extra code. This module
+ * adds the one missing piece: confirming that a file was selected.
+ * Without it the input silently accepts the file (a drop also doesn't
+ * open it as a new browser tab), but nothing shows this to the user.
+ *
+ * NOTE (pre-existing gap, not touched by this comment-translation pass):
+ * the "N files selected" string on line ~29 is hardcoded Polish even
+ * though this module loads on the EN/DE site pages too - would need a
+ * real localization pass like molique-carousel.js's CAROUSEL_LANG pattern.
  */
 function initFileUpload() {
   document.querySelectorAll('.file-upload input[type="file"]').forEach((input) => {

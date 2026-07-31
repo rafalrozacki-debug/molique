@@ -1,20 +1,21 @@
 /**
- * molique - Admin Nav Active (podświetlenie bieżącej strony w sidebarze)
+ * molique - Admin Nav Active (highlights the current page in the sidebar)
  *
- * Odpowiednik molique-navbar-active.js dla pionowego menu panelu admina.
- * Sidebar bywa współdzielony między podstronami (jeden partial), więc aktywnej
- * pozycji nie da się zaznaczyć statycznie w markupie - moduł czyta adres URL
- * i nadaje .is-active linkom bieżącej strony.
+ * The vertical-menu counterpart to molique-navbar-active.js for the admin
+ * panel. The sidebar is often shared across pages (one partial), so the
+ * active item can't be marked statically in the markup - this module
+ * reads the URL and adds .is-active to the current page's links.
  *
- * Podświetla WSZYSTKIE wystąpienia adresu, bo ta sama pozycja figuruje zwykle
- * dwa razy: w skróconym pasku mobilnym (.mobile-only-nav-item) i w pełnej
- * liście w szufladzie „Więcej".
+ * Highlights EVERY occurrence of the address, since the same item
+ * typically appears twice: in the condensed mobile bar
+ * (.mobile-only-nav-item) and in the full list inside the "More" drawer.
  *
- * Rozdział odpowiedzialności: rozwijane gałęzie <details class="admin-nav-submenu">
- * obsługuje molique-admin-nav.js (tam aktywność jest sprzężona z drill-downem
- * na mobile). Ten moduł zajmuje się wyłącznie płaskimi linkami.
+ * Division of responsibility: expandable branches
+ * (<details class="admin-nav-submenu">) are handled by
+ * molique-admin-nav.js (there, active state is coupled with the mobile
+ * drill-down). This module only handles flat links.
  *
- * Zero zależności. Auto-ładowany przez molique-script.js przy .admin-nav.
+ * Zero dependencies. Auto-loaded by molique-script.js when .admin-nav is present.
  */
 function initAdminNavActive() {
   const navs = document.querySelectorAll('.admin-nav');
@@ -24,12 +25,12 @@ function initAdminNavActive() {
 
   navs.forEach((nav) => {
     nav.querySelectorAll('.admin-nav-link[href]').forEach((link) => {
-      // Pozycje w submenu zostawiamy molique-admin-nav.js - inaczej dwa moduły
-      // walczyłyby o ten sam element (i o stan rozwinięcia gałęzi).
+      // Leave submenu items to molique-admin-nav.js - otherwise the two
+      // modules would fight over the same element (and the branch's expanded state).
       if (link.closest('.admin-nav-submenu')) return;
 
       const raw = link.getAttribute('href');
-      // Pomijamy kotwice (#...) oraz pełne URL-e z protokołem (http:, mailto:).
+      // Skip anchors (#...) and full URLs with a protocol (http:, mailto:).
       if (!raw || raw.charAt(0) === '#' || /^[a-z][a-z0-9+.-]*:/i.test(raw)) return;
 
       let linkPath;
@@ -44,10 +45,10 @@ function initAdminNavActive() {
   });
 }
 
-/* Ujednolica ścieżkę do porównania: bez końcowego slasha; "" oraz
-   "/index.html" => "/" (strona główna). Nazwa różna od normalizePath
-   z admin-nav.js i normalizeNavPath z navbar-active.js, by uniknąć
-   kolizji funkcji globalnych na stronach ładujących kilka modułów. */
+/* Normalizes a path for comparison: no trailing slash; "" and
+   "/index.html" => "/" (homepage). Named differently from admin-nav.js's
+   normalizePath and navbar-active.js's normalizeNavPath, to avoid a
+   global function collision on pages that load several modules. */
 function normalizeAdminNavPath(pathname) {
   const p = pathname.replace(/\/+$/, '');
   if (p === '' || p === '/index.html') return '/';

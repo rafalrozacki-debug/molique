@@ -1,24 +1,26 @@
 /**
- * molique - Theme Editor (żywy edytor zmiennych CSS)
+ * molique - Theme Editor (live CSS variable editor)
  *
- * Steruje zmiennymi CSS na żywo (document.documentElement) i eksportuje
- * gotowy blok :root { ... } / [data-theme="dark"] { ... } do wklejenia.
+ * Controls CSS variables live (document.documentElement) and exports a
+ * ready-to-paste :root { ... } / [data-theme="dark"] { ... } block.
  *
- * Kluczowe decyzje:
- *  - Nadpisania trzymamy w <style id="te-overrides">, NIE w stylu inline -
- *    dzięki temu poprawnie działa kaskada light/dark (inline nadpisałby oba).
- *  - Zmienne "odwracalne" (paleta, tła) edytujemy w AKTYWNYM motywie: light
- *    trafia do :root, dark do [data-theme="dark"]. Zmienne niezależne od
- *    motywu (sidebar, radius, spacing, typografia) zawsze do :root.
- *  - Pary -rgb wyliczamy z hexa automatycznie; kolory -hover przyciemniamy.
+ * Key decisions:
+ *  - Overrides are kept in a <style id="te-overrides">, NOT in an inline
+ *    style - this is what makes the light/dark cascade work correctly
+ *    (inline would override both).
+ *  - "Invertible" variables (palette, backgrounds) are edited in the
+ *    ACTIVE theme: light goes into :root, dark into [data-theme="dark"].
+ *    Theme-independent variables (sidebar, radius, spacing, typography)
+ *    always go into :root.
+ *  - -rgb pairs are computed from the hex automatically; -hover colors are darkened.
  *
- * Konfiguracja kontrolek siedzi w HTML (atrybuty data-te-*), więc moduł jest
- * generyczny. Zero zależności, zero jQuery.
+ * Control configuration lives in the HTML (data-te-* attributes), so the
+ * module stays generic. Zero dependencies, zero jQuery.
  */
 
-// Ten sam plik JS ląduje na stronie PL/EN/DE, więc teksty toastów nie mogą
-// być zaszyte na sztywno - czytamy jezyk z <html lang> (ten sam wzorzec co
-// molique-lang-suggest.js) i wybieramy z malego slownika.
+// The same JS file loads on the PL/EN/DE site, so toast text can't be
+// hardcoded - we read the language from <html lang> (the same pattern as
+// molique-lang-suggest.js) and pick from a small dictionary.
 const TE_LANG = document.documentElement.lang;
 const TE_STRINGS = {
   noChanges: { pl: 'Brak zmian do skopiowania', en: 'No changes to copy', de: 'Keine Änderungen zum Kopieren' },
@@ -31,23 +33,23 @@ const TE_STRINGS = {
 const teT = (key) => TE_STRINGS[key][TE_LANG] || TE_STRINGS[key].en;
 
 /**
- * Gotowe palety (przycisk "Gotowe palety" w edytorze) - ustawiają OBA
- * motywy naraz (w przeciwieństwie do ręcznej edycji, która dotyka tylko
- * aktualnie widocznego motywu), bo preset ma sens tylko jako kompletna,
- * przemyślana para light/dark, nie osobne przypadki.
+ * Ready-made palettes (the "Ready-made palettes" button in the editor) -
+ * set BOTH themes at once (unlike manual editing, which only touches the
+ * currently visible theme), since a preset only makes sense as a
+ * complete, deliberate light/dark pair, not separate cases.
  *
- * CELOWO nie dotykają --success/--danger/--warning/--info: kolory
- * semantyczne (status "poszło dobrze/źle") zostają wspólne dla
- * wszystkich palet, zmienia się tylko tożsamość marki (primary,
- * secondary, tła, ramka, tekst) - tak jak w referencyjnym podglądzie,
- * z którego te wartości pochodzą (tam też success/danger/warning/info
- * były zdefiniowane RAZ, globalnie, poza poszczególnymi motywami).
+ * DELIBERATELY doesn't touch --success/--danger/--warning/--info:
+ * semantic colors (the "went well/badly" status) stay shared across all
+ * palettes, only the brand identity changes (primary, secondary,
+ * backgrounds, border, text) - just like in the reference mockup these
+ * values come from (there too, success/danger/warning/info were defined
+ * ONCE, globally, outside the individual themes).
  *
- * "Secondary" w każdym presecie to wartość opisana w źródle jako
- * "Accent" (drugi, bardziej charakterystyczny kolor marki) - w
- * edytorze molique nie ma osobnej kontrolki "Accent", a wspólny,
- * neutralny szary dla wszystkich 4 palet wyglądałby mniej odróżnialnie
- * w szybkim podglądzie niż to, po co sięga się po presety.
+ * "Secondary" in each preset is the value described in the source as
+ * "Accent" (the second, more distinctive brand color) - the molique
+ * editor has no separate "Accent" control, and a shared, neutral gray
+ * across all 4 palettes would look less distinguishable in a quick
+ * preview than the very thing presets are reached for.
  */
 const TE_PRESETS = {
   premium: {
@@ -140,11 +142,12 @@ function initThemeEditor() {
   const STORAGE_KEY = 'molique-theme-editor';
   const controls = Array.from(root.querySelectorAll('[data-te-var]'));
 
-  // Kazdy control ma OBOK siebie w tym samym .te-row czytelny opis
-  // (<span class="te-label">), ale to nie jest prawdziwy <label> powiazany
-  // przez for/id - bez tego czytnik ekranu nie wie, czym steruje dany
-  // input[type=color]/input[type=range] itd. Ustawiamy aria-label z tekstu
-  // tego opisu zamiast recznie dopisywac dziesiatki id/for w HTML.
+  // Every control has a readable description right next to it in the
+  // same .te-row (<span class="te-label">), but it isn't a real <label>
+  // linked via for/id - without this a screen reader doesn't know what a
+  // given input[type=color]/input[type=range] etc. controls. We set an
+  // aria-label from that description's text instead of hand-adding
+  // dozens of id/for pairs in the HTML.
   controls.forEach((control) => {
     if (control.hasAttribute('aria-label') || control.hasAttribute('aria-labelledby')) return;
     const row = control.closest('.te-row');
@@ -162,7 +165,7 @@ function initThemeEditor() {
 
   const mode = () => (html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
-  /* --- Domyślny hover przycisków (klasa na <body>, poza mechanizmem zmiennych) --- */
+  /* --- Default button hover (a class on <body>, outside the variable mechanism) --- */
   const BTN_HOVER_KEY = 'molique-theme-editor-btnhover';
   const BTN_HOVER_CLASSES = ['btn-hover-spring', 'btn-hover-lift', 'btn-hover-glow'];
   const btnHoverSel = root.querySelector('[data-te-btn-hover]');
@@ -174,8 +177,8 @@ function initThemeEditor() {
     btnHover = val;
   };
 
-  /* Odwracalna zmienna edytowana w dark => blok [data-theme="dark"];
-     reszta (w tym light) => :root. */
+  /* An invertible variable edited in dark => the [data-theme="dark"] block;
+     everything else (including light) => :root. */
   const bucketFor = (control) =>
     control.dataset.teScope === 'mode' && mode() === 'dark' ? overrides.dark : overrides.light;
 
@@ -209,7 +212,7 @@ function initThemeEditor() {
     styleEl.textContent = block(':root', overrides.light) + block('[data-theme="dark"]', overrides.dark);
   }
 
-  /* Ustawia kontrolki na aktualnie wyliczone wartości (dla aktywnego motywu). */
+  /* Sets the controls to the currently computed values (for the active theme). */
   function syncControls() {
     const cs = getComputedStyle(html);
     controls.forEach((control) => {
@@ -247,12 +250,12 @@ function initThemeEditor() {
       .filter(Boolean)
       .join('\n\n');
     const hint = btnHover
-      ? '/* Domyślny hover przycisków - dodaj klasę do <body>: */\n/* <body class="' + btnHover + '"> */'
+      ? '/* Default button hover - add the class to <body>: */\n/* <body class="' + btnHover + '"> */'
       : '';
     return [css, hint].filter(Boolean).join('\n\n');
   }
 
-  /* --- Akcje: Kopiuj / Reset --- */
+  /* --- Actions: Copy / Reset --- */
   const copyBtn = document.querySelector('[data-te-copy]');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
@@ -280,7 +283,7 @@ function initThemeEditor() {
     });
   }
 
-  /* --- Wpięcia --- */
+  /* --- Wiring up --- */
   controls.forEach((control) => {
     control.addEventListener('input', () => setVar(control));
   });
@@ -293,7 +296,7 @@ function initThemeEditor() {
     });
   }
 
-  /* --- Gotowe palety --- */
+  /* --- Ready-made palettes --- */
   root.querySelectorAll('[data-te-preset]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const preset = TE_PRESETS[btn.dataset.tePreset];
@@ -307,8 +310,8 @@ function initThemeEditor() {
     });
   });
 
-  /* Przełączenie motywu (checkbox #theme-toggle z rdzenia) zmienia data-theme
-     na <html> - obserwujemy i przeładowujemy kontrolki na wartości motywu. */
+  /* Switching the theme (the core's #theme-toggle checkbox) changes
+     data-theme on <html> - we observe it and reload the controls to the theme's values. */
   new MutationObserver(() => {
     updateModeHint();
     syncControls();
@@ -319,7 +322,7 @@ function initThemeEditor() {
   updateModeHint();
   applyBtnHover(btnHover);
 
-  /* ============ pomocnicze ============ */
+  /* ============ helpers ============ */
   function load() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);

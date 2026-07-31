@@ -1,21 +1,21 @@
 /**
- * molique - Lang Suggest (sugestia zmiany języka wg navigator.language)
+ * molique - Lang Suggest (language-switch suggestion based on navigator.language)
  *
- * Nie przekierowuje na siłę - Google odradza automatyczne przekierowania
- * językowe (mogą odciąć Googlebota, który zgłasza się jako en-US, od
- * polskiej wersji i zaszkodzić widoczności). Zamiast tego dyskretny,
- * odrzucalny pasek na dole ekranu, w JĘZYKU WYKRYTYM u użytkownika -
- * nie w języku strony, na której akurat jest.
+ * Doesn't force a redirect - Google advises against automatic language
+ * redirects (they can cut off Googlebot, which reports as en-US, from the
+ * Polish version and hurt visibility). Instead, a discreet, dismissible
+ * bar at the bottom of the screen, in the LANGUAGE DETECTED for the
+ * user - not the language of the page they happen to be on.
  *
- * Cel linku brany jest z gotowego .language-switch-menu w navbarze
- * (atrybut data-lang na każdym .language-switch-item) - zero duplikacji
- * logiki "czy ta strona ma wersję EN/DE", którą już liczy
- * computeI18nLocals w vite.config.js. Strony bez navbara (np.
- * docs-classes.html) nie mają .language-switch-menu, więc moduł się na
- * nich w ogóle nie doładowuje (patrz dynamicModules w molique-script.js).
+ * The link target comes from the existing .language-switch-menu in the
+ * navbar (the data-lang attribute on each .language-switch-item) - zero
+ * duplication of the "does this page have an EN/DE version" logic, which
+ * computeI18nLocals in vite.config.js already computes. Pages without a
+ * navbar (e.g. docs-classes.html) have no .language-switch-menu, so the
+ * module never even loads on them (see dynamicModules in molique-script.js).
  *
- * Wybór użytkownika (przełącz/zostań) zapisywany w localStorage - pasek
- * pokazuje się tylko raz. Auto-ładowany przy .language-switch-menu.
+ * The user's choice (switch/stay) is saved in localStorage - the bar
+ * shows only once. Auto-loaded when .language-switch-menu is present.
  */
 const LANG_SUGGEST_DISMISSED_KEY = "molique-lang-suggest-dismissed";
 
@@ -81,16 +81,16 @@ function showLangSuggestBar(messages, href) {
   });
 
   document.body.appendChild(bar);
-  // Wejście na następnej klatce - element musi się najpierw wyrenderować
-  // w stanie startowym, żeby przejście do .is-visible faktycznie animowało.
+  // Entrance on the next frame - the element must render in its starting
+  // state first, so the transition to .is-visible actually animates.
   requestAnimationFrame(() => bar.classList.add("is-visible"));
 }
 
 function dismissLangSuggest(bar) {
   localStorage.setItem(LANG_SUGGEST_DISMISSED_KEY, "1");
   bar.classList.remove("is-visible");
-  // setTimeout zamiast transitionend - przy prefers-reduced-motion CSS
-  // zeruje transition, więc transitionend nigdy by się nie odpalił.
+  // setTimeout instead of transitionend - under prefers-reduced-motion the
+  // CSS zeroes out the transition, so transitionend would never fire.
   setTimeout(() => bar.remove(), 300);
 }
 

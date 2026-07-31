@@ -1,19 +1,21 @@
 /**
- * molique - Moduł Searchable Select (Combobox)
+ * molique - Searchable Select (Combobox) module
  *
- * Menu jest popoverem (Popover API, top layer) - otwieranie przyciskiem
- * [popovertarget], zamykanie na Esc i klik poza menu (light dismiss)
- * obsługuje natywnie przeglądarka. JS odpowiada wyłącznie za: filtrowanie
- * opcji, obsługę wyboru i zapis wartości do ukrytego pola dla backendu.
+ * The menu is a popover (Popover API, top layer) - opening via the
+ * [popovertarget] button, closing on Esc and a click outside the menu
+ * (light dismiss) are all handled natively by the browser. JS is only
+ * responsible for: filtering options, handling selection, and writing
+ * the value into the hidden field for the backend.
  *
- * Kompatybilność wstecz: markup oparty o <details class="select-search">
- * (wersje przed 1.5.0) jest nadal obsługiwany - wtedy zamykanie odbywa się
- * przez usunięcie atrybutu [open] i nasłuch kliknięć poza komponentem.
+ * Backward compatibility: markup based on <details class="select-search">
+ * (pre-1.5.0 versions) is still supported - in that case closing happens
+ * by removing the [open] attribute and listening for clicks outside the component.
  *
- * Delegacja zdarzeń (input/click na document) zamiast podpinania listenerów
- * per-opcja przy starcie: działa też dla opcji dodanych do DOM PO starcie
- * strony (np. kalendarz dolewa listę klientów z AJAX) - bez tego trzeba by
- * ręcznie re-inicjalizować moduł po każdej takiej zmianie.
+ * Event delegation (input/click on document) instead of attaching a
+ * listener per option at startup: this also works for options added to
+ * the DOM AFTER the page loads (e.g. a calendar streaming in a client
+ * list via AJAX) - without this, the module would need to be manually
+ * re-initialized after every such change.
  */
 document.addEventListener('input', (e) => {
   const searchInput = e.target.closest('.select-search-input');
@@ -65,8 +67,8 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Fokus na polu wyszukiwania zaraz po otwarciu menu (Popover API) - zdarzenie
-// toggle nie bąbelkuje, więc delegacja wymaga fazy przechwytywania.
+// Focus the search field right after the menu opens (Popover API) - the
+// toggle event doesn't bubble, so delegation requires the capture phase.
 document.addEventListener('toggle', (e) => {
   const menu = e.target;
   if (!menu.classList || !menu.classList.contains('select-search-menu')) return;
@@ -76,21 +78,21 @@ document.addEventListener('toggle', (e) => {
   if (searchInput) searchInput.focus({ preventScroll: true });
 }, true);
 
-// Stary markup <details> (bez atrybutu [popover] na menu) nie ma natywnego
-// light dismiss - zamykanie na klik poza komponentem trzeba obsłużyć ręcznie.
+// The old <details> markup (no [popover] attribute on the menu) has no
+// native light dismiss - closing on a click outside the component has to be handled manually.
 document.addEventListener('click', (e) => {
   document.querySelectorAll('.select-search[open]').forEach(select => {
     const menu = select.querySelector('.select-search-menu');
-    if (menu && menu.hasAttribute('popover')) return; // nowy markup - [open] tu nieużywane
+    if (menu && menu.hasAttribute('popover')) return; // new markup - [open] unused here
     if (!select.contains(e.target)) select.removeAttribute('open');
   });
 });
 
 /**
- * Ustawienie wartości z poziomu JS (np. otwarcie modala edycji z danymi
- * konkretnego rekordu) - synchronizuje etykietę na przycisku i podświetlenie
- * wybranej opcji, tak samo jak wybór myszką. Przyjmuje sam
- * <input type="hidden"> danego .select-search.
+ * Sets a value from JS (e.g. opening an edit modal with a specific
+ * record's data) - syncs the trigger's label and the selected option's
+ * highlight, exactly like a mouse selection. Takes the
+ * <input type="hidden"> of the given .select-search.
  */
 window.MoliqueSelectSearch = {
   setValue(hiddenInput, value) {

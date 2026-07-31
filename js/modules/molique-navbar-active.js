@@ -1,15 +1,16 @@
 /**
- * molique - Navbar Active (podświetlenie bieżącej strony wg URL)
+ * molique - Navbar Active (highlights the current page based on the URL)
  *
- * Górny navbar jest współdzielony między podstronami (jeden markup), więc
- * aktywnej pozycji nie da się zaznaczyć statycznie w HTML. Ten moduł czyta
- * adres URL i nadaje .is-active linkowi bieżącej strony ORAZ triggerowi
- * rozwijanego menu (dropdown / mega-menu), w którym ten link się znajduje.
+ * The top navbar is shared across pages (one markup), so the active item
+ * can't be marked statically in the HTML. This module reads the URL and
+ * adds .is-active to the current page's link AND to the trigger of the
+ * dropdown/mega-menu it lives inside.
  *
- * Gdy strona figuruje w kilku menu naraz (np. w dropdownie „Przykłady" i w
- * mega menu „Komponenty"), podświetlane są wszystkie jej wystąpienia.
+ * When a page is listed in several menus at once (e.g. in both the
+ * "Examples" dropdown and the "Components" mega menu), every occurrence
+ * gets highlighted.
  *
- * Zero zależności. Auto-ładowany przez molique-script.js przy .navbar-menu.
+ * Zero dependencies. Auto-loaded by molique-script.js when .navbar-menu is present.
  */
 function initNavbarActive() {
   const menu = document.querySelector('.navbar-menu');
@@ -22,7 +23,7 @@ function initNavbarActive() {
 
   links.forEach((link) => {
     const raw = link.getAttribute('href');
-    // Pomijamy kotwice (#...) oraz pełne URL-e z protokołem (http:, mailto:, tel:).
+    // Skip anchors (#...) and full URLs with a protocol (http:, mailto:, tel:).
     if (!raw || raw.charAt(0) === '#' || /^[a-z][a-z0-9+.-]*:/i.test(raw)) return;
 
     let linkPath;
@@ -35,7 +36,7 @@ function initNavbarActive() {
 
     link.classList.add('is-active');
 
-    // Trigger rozwijanego menu, w którym leży aktywny link.
+    // The trigger of the dropdown/mega-menu the active link lives inside.
     const parent = link.closest('.dropdown, .mega-menu');
     if (parent) {
       const trigger = parent.querySelector(':scope > summary');
@@ -44,9 +45,9 @@ function initNavbarActive() {
   });
 }
 
-/* Ujednolica ścieżkę do porównania: bez końcowego slasha; "" oraz
-   "/index.html" => "/" (strona główna). Nazwa różna od normalizePath z
-   admin-nav.js, by uniknąć kolizji globalnych funkcji na wspólnych stronach. */
+/* Normalizes a path for comparison: no trailing slash; "" and
+   "/index.html" => "/" (homepage). Named differently from admin-nav.js's
+   normalizePath to avoid a global function collision on shared pages. */
 function normalizeNavPath(pathname) {
   const p = pathname.replace(/\/+$/, '');
   if (p === '' || p === '/index.html') return '/';

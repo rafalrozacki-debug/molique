@@ -1,11 +1,12 @@
 /**
- * molique - obfuskacja adresu e-mail w stopce (ochrona przed spam-botami)
+ * molique - footer email address obfuscation (spam-bot protection)
  *
- * Realny adres NIE wystepuje nigdzie w zrodle HTML jako "user@domena" -
- * boty skanujace strony pod katem adresow zazwyczaj przegladaja goly HTML
- * (regex na wzorzec e-mail), nie wykonuja JS. Link buduje sie dopiero w
- * przegladarce z dwoch osobnych atrybutow data-*, wiec statyczna kopia
- * strony nigdy nie ujawnia calego adresu naraz.
+ * The real address does NOT appear anywhere in the HTML source as
+ * "user@domain" - bots scanning pages for addresses typically read the
+ * raw HTML (a regex on the email pattern), they don't execute JS. The
+ * link is only assembled in the browser from two separate data-*
+ * attributes, so a static copy of the page never exposes the whole
+ * address at once.
  */
 function initMailObfuscate() {
   document.querySelectorAll('[data-obfuscate-mail]').forEach((el) => {

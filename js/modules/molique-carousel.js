@@ -1,9 +1,9 @@
 /**
- * molique - Moduł Karuzeli (Slider)
+ * molique - Carousel (Slider) module
  */
-// Kropki nawigacji dostaja aria-label z numerem slajdu - ten sam plik JS
-// laduje na stronie PL/EN/DE, wiec tekst nie moze byc zaszyty na sztywno
-// (ten sam wzorzec co molique-lang-suggest.js/molique-theme-editor.js).
+// The navigation dots get an aria-label with the slide number - the same
+// JS file loads on the PL/EN/DE site, so the text can't be hardcoded
+// (the same pattern as molique-lang-suggest.js/molique-theme-editor.js).
 const CAROUSEL_LANG = document.documentElement.lang;
 const carouselDotLabel = (index) => {
   const n = index + 1;
@@ -21,8 +21,8 @@ document.querySelectorAll('.carousel').forEach(carousel => {
   const btnNext = carousel.querySelector('.carousel-next');
   const isBgSync = carousel.classList.contains('carousel-bg-sync');
 
-  // Tlo pierwszego slajdu ustawiamy od razu - inaczej pierwsza klatka
-  // jest pusta, zanim IntersectionObserver zdazy cokolwiek zaobserwowac.
+  // Set the first slide's background right away - otherwise the first
+  // frame is empty until the IntersectionObserver gets a chance to observe anything.
   if (isBgSync && slides[0]) {
     const firstBg = slides[0].getAttribute('data-bg');
     if (firstBg) carousel.style.backgroundImage = `url("${firstBg}")`;
