@@ -1,3 +1,8 @@
+<div align="center">
+  <img src="img/molique-logo.svg#gh-light-mode-only" alt="molique" width="280">
+  <img src="img/molique-logo-light.svg#gh-dark-mode-only" alt="molique" width="280">
+</div>
+
 🇬🇧 [English](README.md) · 🇵🇱 [Polski](README.pl.md) · 🇩🇪 **Deutsch**
 
 # molique
