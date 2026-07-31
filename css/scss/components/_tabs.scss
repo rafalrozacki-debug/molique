@@ -1,20 +1,20 @@
-// molique - Zakladki (:has() + radio hack) wraz z wariantem pill.
+// molique - Tabs (:has() + radio hack) plus a pill variant.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   4. ZAKŁADKI (CSS :has() + Radio Hack)
+   4. TABS (CSS :has() + radio hack)
    ========================================= */
 .tabs {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* Punkt odniesienia dla ukrytych inputow (position: absolute nizej).
-     Bez tego pozycjonowalyby sie wzgledem okna - niewidoczne i tak, ale
-     lepiej trzymac je w obrebie komponentu. */
+  /* A reference point for the hidden inputs (position: absolute below).
+     Without this they'd position themselves relative to the window -
+     invisible either way, but better to keep them within the component. */
   position: relative;
 }
 
@@ -25,12 +25,12 @@
   margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
-/* UKRYCIE ZACHOWUJACE FOKUSOWALNOSC.
-   Wczesniej bylo tu display:none, ktore wyrzuca pole z kolejnosci tabulacji
-   I z drzewa dostepnosci - zakladek nie dalo sie wtedy przelaczyc klawiatura
-   ani odczytac czytnikiem ekranu. Technika clip (ta sama co w .sr-only)
-   ukrywa wizualnie, ale zostawia element dostepnym: grupa radio odzyskuje
-   natywna obsluge strzalkami. */
+/* A HIDE THAT PRESERVES FOCUSABILITY.
+   This used to be display:none, which removes the field from the tab
+   order AND the accessibility tree - tabs couldn't be switched with the
+   keyboard or read by a screen reader. The clip technique (the same as
+   in .sr-only) hides it visually but leaves the element accessible: the
+   radio group regains native arrow-key handling. */
 .tab-input {
   position: absolute;
   width: 1px;
@@ -62,7 +62,7 @@
   animation: fadeIn var(--transition-speed) ease;
 }
 
-/* Łączenie inputa z panelem na podstawie ID (do 10 zakładek) */
+/* Linking an input to a panel by position (up to 10 tabs) */
 @for $i from 1 through 10 {
   .tab-input:nth-of-type(#{$i}):checked ~ .tabs-content .tab-pane:nth-of-type(#{$i}) {
     display: block;
@@ -74,8 +74,8 @@
     font-weight: var(--fw-bold);
   }
 
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(#{$i}):focus-visible ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -84,37 +84,37 @@
 }
 
 /* =========================================
-   4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik - Zero JS)
+   4b. PILL TABS (segmented control, sliding indicator - zero JS)
    ========================================= */
 .tabs-pill {
-  /* Liczba zakładek - nadpisz per instancja: style="--tab-count: 3;" */
+  /* Number of tabs - override per instance: style="--tab-count: 3;" */
   --tab-count: 2;
 
   .tabs-header {
     position: relative;
     display: grid;
-    /* minmax(0, ...), nie goly 1fr: przy width: fit-content nizej to
-       jedyny sposob, zeby pigulka mogla SKURCZYC SIE ponizej naturalnej
-       szerokosci etykiet, gdy zabraknie miejsca (np. wiele zakladek albo
-       dluzsze etykiety na mobile) - bez minmax(0, ...) kazda kolumna
-       zada swojego min-content, wiec fit-content nie ma jak zejsc ponizej
-       tej sumy i pigulka przepelnia dostepna szerokosc (ten sam mechanizm
-       co przy golym 1fr w .admin-layout, patrz layout/_admin-layout.scss). */
+    /* minmax(0, ...), not a bare 1fr: with width: fit-content below, this
+       is the only way for the pill to be able to SHRINK below the
+       labels' natural width when space runs out (e.g. many tabs or
+       longer labels on mobile) - without minmax(0, ...) every column
+       demands its own min-content, so fit-content has no way to go below
+       that sum and the pill overflows the available width (the same
+       mechanism as the bare 1fr in .admin-layout, see layout/_admin-layout.scss). */
     grid-template-columns: repeat(var(--tab-count), minmax(0, 1fr));
     border-bottom: none;
     background-color: var(--card-bg-subtle);
     border-radius: 50rem;
     padding: calc(var(--spacing-unit) * 0.5);
 
-    /* .tabs (flex-column) domyslnie rozciaga header i content na ta sama
-       szerokosc (align-items: stretch) - dla pigulki to zle wyglada,
-       segmentowany przelacznik ma byc kompaktowy (dopasowany do etykiet),
-       niezaleznie od tego, jak szeroka jest tresc zakladki (np. tabela)
-       pod spodem. Wylaczamy rozciaganie TYLKO dla headera - .tabs-content
-       zostaje na pelnej szerokosci bez zmian. */
+    /* .tabs (flex-column) by default stretches the header and content to
+       the same width (align-items: stretch) - that looks wrong for a
+       pill, a segmented switcher should be compact (fitted to the
+       labels), regardless of how wide the tab's content (e.g. a table)
+       is below it. We disable stretching ONLY for the header -
+       .tabs-content stays at full width, unchanged. */
     align-self: flex-start;
     width: fit-content;
-    max-width: 100%; // zabezpieczenie na mobile przy wielu zakladkach
+    max-width: 100%; // a safeguard on mobile with many tabs
   }
 
   .tab-label {
@@ -124,10 +124,10 @@
     border-bottom: none;
     border-radius: 50rem;
     margin-bottom: 0;
-    /* Kolumna moze skurczyc sie ponizej naturalnej szerokosci etykiety
-       (patrz minmax(0, ...) wyzej) - przy braku miejsca etykieta ma sie
-       przycinac wielokropkiem, nie zawijac do dwoch linii (rozsadzi
-       pigulke) ani przepelniac poza kolumne. */
+    /* A column can shrink below a label's natural width (see minmax(0,
+       ...) above) - when space runs out, the label should truncate with
+       an ellipsis, not wrap to two lines (which would blow out the pill)
+       or overflow past the column. */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -143,14 +143,14 @@
     background-color: var(--bg-surface);
     border-radius: 50rem;
     box-shadow: var(--shadow-sm);
-    /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
-       wskaźnika, która = szerokości jednej kolumny grida - stąd przesunięcie
-       o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
+    /* Sliding the indicator: translateX(%) is measured relative to the
+       indicator's OWN width, which = one grid column's width - hence a
+       shift of "100% * (i-1)" always lands exactly on the i-th tab. */
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     pointer-events: none;
   }
 
-  /* Dopasowanie inputa (po pozycji) do wskaźnika i koloru aktywnej etykiety */
+  /* Matching an input (by position) to the indicator and the active label's color */
   @for $i from 1 through 8 {
     &:has(.tab-input:nth-of-type(#{$i}):checked) .tabs-pill-indicator {
       transform: translateX(calc(100% * #{$i - 1}));

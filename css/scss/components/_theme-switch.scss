@@ -1,7 +1,7 @@
-// molique - Theme Switch: przelacznik motywu light/dark.
+// molique - Theme Switch: light/dark theme toggle.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @layer components {
   /* =========================================
@@ -32,7 +32,7 @@
     transition: background-color var(--transition-speed), border-color var(--transition-speed);
   }
 
-  /* Pływająca pastylka (Tło pod aktywną ikoną) */
+  /* The floating pill (background under the active icon) */
   .theme-switch-thumb {
     position: absolute;
     top: 3px;
@@ -55,7 +55,7 @@
   }
 
 
-  /* Ikony Słońca i Księżyca */
+  /* Sun and Moon icons */
   .theme-icon {
     width: 14px;
     height: 14px;
@@ -71,10 +71,10 @@
     }
   }
 
-  /* --- STAN: LIGHT MODE (Domyślny) --- */
+  /* --- STATE: LIGHT MODE (default) --- */
   .theme-switch-input:not(:checked) + .theme-switch-track {
     .icon-sun {
-      color: var(--warning); /* Słońce świeci na żółto/pomarańczowo */
+      color: var(--warning); /* The sun glows yellow/orange */
       transform: rotate(0deg) scale(1.1);
       opacity: 1;
     }
@@ -84,14 +84,14 @@
     }
   }
 
-  /* --- STAN: DARK MODE (Zaznaczony) --- */
+  /* --- STATE: DARK MODE (checked) --- */
   .theme-switch-input:checked + .theme-switch-track {
-    /* Opcjonalnie: zmiana tła całego przełącznika w dark mode */
+    /* Optional: change the whole switch's background in dark mode */
     background-color: rgba(var(--primary-rgb), 0.1);
     border-color: rgba(var(--primary-rgb), 0.2);
 
     .theme-switch-thumb {
-      transform: translateX(32px); /* Przesunięcie pastylki na prawą stronę */
+      transform: translateX(32px); /* Shift the pill to the right side */
     }
 
     .icon-sun {
@@ -99,13 +99,13 @@
       opacity: 0.4;
     }
     .icon-moon {
-      color: var(--primary); /* Księżyc świeci w kolorze głównym marki */
+      color: var(--primary); /* The moon glows in the brand's primary color */
       transform: rotate(0deg) scale(1.1);
       opacity: 1;
     }
   }
 
-  /* Focus Ring dla dostępności (A11y) */
+  /* Focus ring for accessibility (A11y) */
   .theme-switch-input:focus-visible + .theme-switch-track {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: 2px;

@@ -1,12 +1,12 @@
-// molique - Compact Data Row: kompaktowy wariant listy z ikona i akcjami.
+// molique - Compact Data Row: a compact list variant with an icon and actions.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   3. COMPACT DATA ROW (List Item / Wariant kompaktowy)
+   3. COMPACT DATA ROW (List Item / compact variant)
    ========================================= */
 .data-row-compact {
   display: flex;
@@ -17,39 +17,39 @@
   border-bottom: 1px solid var(--border-color);
   transition: background-color var(--transition-speed);
 
-  /* Ostatni element na liście nie ma dolnej ramki */
+  /* The last item in the list has no bottom border */
   &:last-child {
     border-bottom: none;
   }
 
-  /* Subtelny hover (jak na inspiracji) */
+  /* A subtle hover (as in the reference design) */
   &:hover {
     background-color: var(--card-bg-subtle);
   }
 
-  /* Opcjonalna ikona / awatar po lewej */
+  /* Optional icon / avatar on the left */
   .row-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
     height: 40px;
-    border-radius: 50%; /* Domyślnie kółko (awatar) */
+    border-radius: 50%; /* Circle by default (avatar) */
     background-color: var(--bg-body);
     color: var(--text-muted);
-    flex-shrink: 0; /* Zapobiega zgniataniu ikony */
+    flex-shrink: 0; /* Prevents the icon from being squeezed */
     font-size: 1.25rem;
-    
-    /* Wariant: Kwadratowa ikona (np. dla plików) */
+
+    /* Variant: square icon (e.g. for files) */
     &.icon-square {
       border-radius: var(--border-radius);
     }
   }
 
-  /* Środkowa część (Tytuł + Szczegóły) */
+  /* Middle part (title + details) */
   .row-content {
-    flex: 1; /* Zajmuje całą dostępną przestrzeń */
-    min-width: 0; /* Zapobiega rozpychaniu kontenera przez długi tekst */
+    flex: 1; /* Takes up all the available space */
+    min-width: 0; /* Prevents long text from stretching the container */
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -59,7 +59,7 @@
     font-weight: var(--fw-bold);
     color: var(--text-main);
     font-size: 0.875rem;
-    /* Ucinanie zbyt długiego tekstu (...) */
+    /* Truncate overly long text (...) */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,13 +68,13 @@
   .row-details {
     font-size: 0.75rem;
     color: var(--text-muted);
-    /* Ucinanie zbyt długiego tekstu (...) */
+    /* Truncate overly long text (...) */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  /* Prawa strona (Akcje / Przyciski) */
+  /* Right side (actions / buttons) */
   .row-actions {
     flex-shrink: 0;
     display: flex;

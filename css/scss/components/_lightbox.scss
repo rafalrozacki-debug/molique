@@ -1,24 +1,25 @@
-// molique - Lightbox: galeria pelnoekranowa (markup budowany z JS).
+// molique - Lightbox: full-screen gallery (markup built from JS).
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 //
-// Natywny <dialog> zamiast recznie sterowanego <div> - showModal()/close()
-// daja za darmo: pulapke fokusa (Tab nie wychodzi na strone pod spodem, co
-// stara wersja na div NIE robila), przywrocenie fokusa elementowi
-// wyzwalajacemu po zamknieciu, zamykanie klawiszem Escape i umieszczenie w
-// top layer (zero wojen o z-index). ::backdrop + @starting-style to ten sam
-// wzorzec, ktory _context-menu.scss juz stosuje dla swojego bottom-sheetu.
+// A native <dialog> instead of a manually controlled <div> - showModal()/close()
+// give us for free: a focus trap (Tab doesn't escape to the page underneath,
+// which the old div-based version did NOT do), focus restoration to the
+// triggering element after closing, closing with the Escape key, and
+// placement in the top layer (zero z-index wars). ::backdrop + @starting-style
+// is the same pattern _context-menu.scss already uses for its bottom sheet.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 @layer components {
 /* =========================================
-   3. LIGHTBOX (Galeria pełnoekranowa, natywny <dialog>)
+   3. LIGHTBOX (Full-screen gallery, native <dialog>)
    ========================================= */
 dialog.lightbox-overlay {
-  /* Reset UA-stylesheetu <dialog> (ramka, tlo, wysrodkowanie przez margin:auto,
-     ograniczenia max-width/height) - reszta to normalny flex-overlay. */
+  /* Reset the <dialog> UA stylesheet (border, background, centering via
+     margin:auto, max-width/height constraints) - the rest is a normal
+     flex overlay. */
   border: none;
   padding: 0;
   background: transparent;
@@ -35,11 +36,12 @@ dialog.lightbox-overlay {
   align-items: center;
   justify-content: center;
 
-  /* WAZNE: display:none tutaj musi zostac bezwarunkowy. Reguly autora
-     zawsze biją reguly user-agenta niezaleznie od specyficznosci selektora
-     - gdyby "display: flex" bylo tutaj (bez :modal), wygralaby ZAWSZE z
-     domyslnym "dialog:not([open]) { display:none }" przegladarki, nawet
-     gdy dialog jest zamkniety. Dlatego flex trafia wylacznie do &:modal. */
+  /* IMPORTANT: display:none here must stay unconditional. Author rules
+     always beat user-agent rules regardless of selector specificity - if
+     "display: flex" were here (without :modal), it would ALWAYS win over
+     the browser's default "dialog:not([open]) { display:none }", even
+     while the dialog is closed. That's why flex is scoped exclusively to
+     &:modal. */
   display: none;
   opacity: 0;
   transition: opacity var(--transition-speed), overlay var(--transition-speed) allow-discrete,

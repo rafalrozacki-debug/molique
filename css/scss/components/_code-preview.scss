@@ -1,8 +1,8 @@
 /**
- * molique - Code Preview (podgląd + kod)
- * Bloki prezentacyjne: .component-showcase > .component-preview + .component-code.
- * Przeniesione z modułu docs do rdzenia, żeby działały wszędzie (np. hero na
- * stronie głównej), nie tylko na stronach ładujących bundle dokumentacji.
+ * molique - Code Preview (preview + code)
+ * Presentational blocks: .component-showcase > .component-preview + .component-code.
+ * Moved from the docs module to the core so they work everywhere (e.g. the
+ * hero on the homepage), not just on pages loading the docs bundle.
  */
 
 @use '../variables' as *;
@@ -15,7 +15,7 @@
     border-radius: var(--border-radius);
     overflow: hidden;
     background-color: var(--bg-body);
-    /* Zabezpieczenie przed rozsadzaniem przez zawartość */
+    /* A safeguard against content blowing out the width */
     max-width: 100%;
   }
 
@@ -35,20 +35,20 @@
   .component-code {
     position: relative;
     background-color: var(--code-bg);
-    /* Ramka, bo .component-code bywa uzywany SAMODZIELNIE (bez otoczki
-       .component-showcase, ktora niosla obramowanie) - bez niej blok kodu
-       nie ma zadnej krawedzi. */
+    /* A border, since .component-code is sometimes used STANDALONE
+       (without the .component-showcase wrapper that carried the border) -
+       without it the code block has no edge at all. */
     border: 1px solid var(--code-border);
     border-radius: var(--border-radius);
     margin: 0;
     padding: 0;
-    /* Zabezpieczenie przed rozsadzaniem przez długi kod */
+    /* A safeguard against long code blowing out the width */
     max-width: 100%;
 
     pre {
       margin: 0;
       padding: calc(var(--spacing-unit) * 4);
-      /* Wymuszenie scrollowania w poziomie dla długich linii kodu */
+      /* Force horizontal scrolling for long code lines */
       overflow-x: auto;
       max-width: 100%;
       color: var(--code-text);
@@ -58,8 +58,9 @@
     }
   }
 
-  /* Wewnatrz showcase'u obramowanie niesie juz .component-showcase, a blok
-     kodu przylega do podgladu - zostaje sama kreska rozdzielajaca. */
+  /* Inside a showcase, .component-showcase already carries the border, and
+     the code block sits flush against the preview - only the dividing
+     line remains. */
   .component-showcase > .component-code {
     border: 0;
     border-top: 1px solid var(--code-border);

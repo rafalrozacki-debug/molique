@@ -1271,7 +1271,7 @@
       /* FIX 1: minmax() guarantees 250px, but lets a tile grow if there's too much text */
       grid-auto-rows: minmax(250px, auto);
       gap: var(--grid-gap);
-      /* FIX 2: BENTO MAGIC! Forces the browser to pack smaller tiles into empty gaps */
+      /* FIX 2: forces the browser to pack smaller tiles into empty gaps (dense packing) */
       grid-auto-flow: dense;
       /* Bento Grid children */
     }
@@ -2357,7 +2357,7 @@
    */
   @layer components {
     /* =========================================
-       1. BAZOWY INPUT & SELECT
+       1. BASE INPUT & SELECT
        ========================================= */
     .input {
       --input-border-width: 1px;
@@ -2374,26 +2374,26 @@
       border: var(--input-border-width) solid var(--border-color);
       border-radius: var(--border-radius);
       transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-      /* --- WARIANTY WIELKOŚCI ---
-         Działają na każdym elemencie noszącym klasę .input: input, select i textarea.
-         Sam .input (bez modyfikatora) to wariant środkowy ("md"). */
-      /* Kompaktowy (Idealny do tabel, popoverów i małych widgetów) */
+      /* --- SIZE VARIANTS ---
+         Work on any element carrying the .input class: input, select, and textarea.
+         A bare .input (no modifier) is the middle ("md") variant. */
+      /* Compact (ideal for tables, popovers, and small widgets) */
     }
     .input.input-sm {
       --input-padding-y: calc(var(--spacing-unit) * 0.75);
       padding: var(--input-padding-y) calc(var(--spacing-unit) * 1.5);
-      font-size: 0.8125rem; /* Mniejszy font */
+      font-size: 0.8125rem; /* Smaller font */
       border-radius: calc(var(--border-radius) * 0.8);
-      /* Nadpisujemy globalne 44px dla mobile, jeśli używamy input-sm */
+      /* Override the global 44px mobile target size when using input-sm */
       min-height: 32px !important;
     }
     .input {
-      /* Duży (Idealny do wyszukiwarek Hero i głównych formularzy) */
+      /* Large (ideal for hero search bars and primary forms) */
     }
     .input.input-lg {
       --input-padding-y: calc(var(--spacing-unit) * 1.5);
       padding: var(--input-padding-y) calc(var(--spacing-unit) * 2.5);
-      font-size: 1.125rem; /* Większy font */
+      font-size: 1.125rem; /* Larger font */
       border-radius: calc(var(--border-radius) * 1.2);
       min-height: 56px !important;
     }
@@ -2411,7 +2411,7 @@
       opacity: 0.7;
       cursor: not-allowed;
     }
-    /* Customowa strzałka dla Selecta */
+    /* Custom arrow for the Select */
     select.input {
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
@@ -2420,8 +2420,8 @@
       background-size: 16px 12px;
       padding-right: calc(var(--spacing-unit) * 4);
       cursor: pointer;
-      /* .input-sm/.input-lg nadpisują padding skrótowo (wszystkie strony) -
-         tu przywracamy miejsce po prawej na strzałkę, żeby jej nie zasłaniać. */
+      /* .input-sm/.input-lg override padding as a shorthand (all sides) -
+         here we restore the right-hand space for the arrow so they don't cover it. */
     }
     select.input.input-sm {
       padding-right: calc(var(--spacing-unit) * 3);
@@ -2430,7 +2430,7 @@
       padding-right: calc(var(--spacing-unit) * 5);
     }
     /* =========================================
-       2. NATYWNA WALIDACJA (Bez JS)
+       2. NATIVE VALIDATION (No JS)
        ========================================= */
     .input:user-valid {
       border-color: var(--success);
@@ -2456,28 +2456,28 @@
       animation: fadeIn var(--transition-speed) ease;
     }
     /* =========================================
-       3. TEXTAREA: TRYB "JEDNA LINIJKA" (Auto-Expand, Zero JS)
+       3. TEXTAREA: "SINGLE LINE" MODE (Auto-Expand, Zero JS)
        ========================================= */
     .textarea-expandable {
-      /* Do ilu wierszy pole ma się rozwinąć - nadpisywalne per instancja:
+      /* How many rows the field expands to - overridable per instance:
          style="--textarea-rows-expanded: 10;" */
       --textarea-rows-expanded: 6;
       resize: none;
       overflow-y: hidden;
-      /* Zmiana wysokości to reflow, więc zgodnie ze Złotą Zasadą GPU
-         (animujemy tylko transform/opacity) - przełącznik jest natychmiastowy. */
+      /* A height change is a reflow, so per the GPU Golden Rule (animate
+         only transform/opacity) the switch is instant. */
       transition: none;
       height: calc(1lh + var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2 + var(--input-border-width) * 2);
-      /* Rozwinięte: pole aktywne LUB posiadające treść - dzięki :not(:placeholder-shown)
-         tekst nie znika z powrotem do jednej linijki po samej utracie fokusu.
-         WYMAGA atrybutu placeholder (choćby placeholder=" ") na <textarea>. */
+      /* Expanded: field active OR containing content - :not(:placeholder-shown)
+         keeps the text from collapsing back to a single line on blur alone.
+         REQUIRES a placeholder attribute (even placeholder=" ") on the <textarea>. */
     }
     .textarea-expandable:focus, .textarea-expandable:not(:placeholder-shown) {
       height: calc(var(--textarea-rows-expanded) * 1lh + var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2 + var(--input-border-width) * 2);
       overflow-y: auto;
     }
     .textarea-expandable {
-      /* Fallback: przeglądarki bez wsparcia jednostki `lh` (np. starsze Safari) */
+      /* Fallback: browsers without support for the `lh` unit (e.g. older Safari) */
     }
     @supports not (height: 1lh) {
       .textarea-expandable {
@@ -2490,7 +2490,7 @@
   }
   @layer components {
     /* =========================================
-       1. INPUT GROUPS (Zgrupowane pola i przyciski)
+       1. INPUT GROUPS (Grouped fields and buttons)
        ========================================= */
     .input-group {
       display: flex;
@@ -2498,7 +2498,7 @@
       width: 100%;
       border-radius: var(--border-radius);
       transition: box-shadow var(--transition-speed);
-      /* Focus na całej grupie */
+      /* Focus on the whole group */
     }
     .input-group:focus-within {
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
@@ -2507,16 +2507,16 @@
       border-color: var(--primary) !important;
     }
     .input-group {
-      /* 1. BAZA: Wszystkie elementy w grupie */
+      /* 1. BASE: all elements in the group */
     }
     .input-group > .input,
     .input-group > .btn,
     .input-group > .input-group-text {
       position: relative;
       margin-bottom: 0;
-      /* ŁOPATOLOGICZNIE: Zabijamy wszystkie rogi każdemu elementowi */
+      /* BLUNTLY: kill all corners on every element */
       border-radius: 0 !important;
-      /* Wyłączamy indywidualny focus i walidację */
+      /* Disable individual focus and validation styling */
     }
     .input-group > .input:focus, .input-group > .input:user-valid, .input-group > .input:user-invalid,
     .input-group > .btn:focus,
@@ -2530,7 +2530,7 @@
       z-index: 3;
     }
     .input-group {
-      /* 2. NAKŁADANIE RAMEK: Każdy element (oprócz pierwszego) wsuwa się pod poprzednika */
+      /* 2. OVERLAPPING BORDERS: every element (except the first) slides under its predecessor */
     }
     .input-group > .input + .input,
     .input-group > .input + .btn,
@@ -2544,7 +2544,7 @@
       margin-left: -1px;
     }
     .input-group {
-      /* 3. ODZYSKIWANIE ROGÓW: Tylko skrajne elementy */
+      /* 3. RECOVERING CORNERS: only the outermost elements */
     }
     .input-group > :first-child {
       border-top-left-radius: var(--border-radius) !important;
@@ -2555,7 +2555,7 @@
       border-bottom-right-radius: var(--border-radius) !important;
     }
     .input-group {
-      /* 4. SPECYFIKA ELEMENTÓW */
+      /* 4. ELEMENT-SPECIFIC RULES */
     }
     .input-group > .input {
       flex: 1 1 auto;
@@ -2611,11 +2611,12 @@
       padding-top: 1.625rem;
       padding-bottom: 0.625rem;
     }
-    /* .card-body ma wlasny flex gap (spacing miedzy dziecmi) - wlasny
-       margin-bottom .form-floating wyzej dublowalby ten odstep (gap +
-       margines = podwojna przerwa). Margines wyzej zostaje bez zmian dla
-       pozostalych kontekstow (np. kilka .form-floating wprost w <form> bez
-       .d-flex) - tam to on jedyny odpowiada za odstep miedzy polami. */
+    /* .card-body has its own flex gap (spacing between children) - the
+       .form-floating margin-bottom above would duplicate that spacing (gap +
+       margin = a double gap). The margin above stays unchanged for other
+       contexts (e.g. several .form-floating directly in a <form> without
+       .d-flex) - there it's the only thing providing spacing between
+       fields. */
     .card-body > .form-floating {
       margin-bottom: 0;
     }
@@ -2938,9 +2939,9 @@
     .select-search {
       position: relative;
       width: 100%;
-      /* Stan "otwarty" odczytujemy z popovera przez :has() - popover
-         (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
-         na elemencie nadrzędnym. */
+      /* We read the "open" state from the popover via :has() - a popover
+         (unlike <details>) doesn't leave an [open] attribute on the parent
+         element. */
     }
     .select-search:has(.select-search-menu:popover-open) .select-search-trigger {
       border-color: var(--primary);
@@ -2955,8 +2956,8 @@
       align-items: center;
       width: 100%;
       text-align: left;
-      /* Trigger to <button> - w przeciwieństwie do <summary> nie dziedziczy
-         fontu automatycznie. */
+      /* The trigger is a <button> - unlike <summary> it doesn't inherit the
+         font automatically. */
       font: inherit;
       cursor: pointer;
       user-select: none;
@@ -2969,29 +2970,33 @@
       transition: transform var(--transition-speed);
     }
     .select-search-menu {
-      /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki -
-         dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
-         .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
-         na Esc i klik poza menu obsługuje natywnie light dismiss.
+      /* The [popover] attribute in the HTML moves the menu to the browser's
+         top layer - this means it's NOT clipped by ancestor overflow (e.g. a
+         scrollable .card-body in a modal) and renders above an open
+         <dialog>. Closing on Esc and a click outside the menu is handled
+         natively by light dismiss.
 
-         Kotwica: NIEJAWNA, nie nazwana. Parowanie popovertarget+id (Chrome 133+)
-         samo tworzy relację element-do-elementu miedzy przyciskiem a menu -
-         "auto" tylko wlacza jej uzycie przez anchor().
+         Anchor: IMPLICIT, unnamed. The popovertarget+id pairing (Chrome
+         133+) creates the element-to-element relationship between the
+         button and the menu on its own - "auto" just enables using it via
+         anchor().
 
-         POSITION: FIXED, nie absolute. Zweryfikowane w Playwright (Chromium 149):
-         ten popover, zagniezdzony w otwartym <dialog>, z position:absolute liczyl
-         anchor() poprawnie (top: 409px), ale renderowal sie WZGLEDEM DOKUMENTU,
-         nie viewportu - przy scrollY: 3772 dawalo to realna pozycje y: -3358px
-         (poza ekranem, mimo poprawnie obliczonego top). Do tego natywny .focus()
-         na polu wyszukiwania (w JS), widzac element "niewidoczny", uruchamial
-         plynne przewijanie strony w strone tej blednej pozycji - to byl faktyczny
-         objaw zgloszenia (strona skacze do innego selecta na stronie).
-         position: fixed ma containing block = viewport niezaleznie od promocji
-         do top layer, wiec obie usterki znikaja razem. Druga polowa naprawy:
-         focus({ preventScroll: true }) w molique-select.js. */
+         POSITION: FIXED, not absolute. Verified in Playwright (Chromium
+         149): this popover, nested inside an open <dialog>, with
+         position:absolute computed anchor() correctly (top: 409px), but
+         rendered RELATIVE TO THE DOCUMENT, not the viewport - at scrollY:
+         3772 that gave a real position of y: -3358px (off-screen, despite a
+         correctly computed top). On top of that, a native .focus() on the
+         search field (in JS), seeing an "invisible" element, triggered a
+         smooth scroll of the page toward that wrong position - that was the
+         actual symptom of the bug report (the page jumps to a different
+         select on the page). position: fixed has containing block =
+         viewport regardless of promotion to the top layer, so both defects
+         disappear together. The other half of the fix:
+         focus({ preventScroll: true }) in molique-select.js. */
       position: fixed;
       position-anchor: auto;
-      /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+      /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
       inset: auto;
       top: anchor(bottom);
       left: anchor(left);
@@ -3004,8 +3009,8 @@
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
       box-shadow: var(--shadow-md);
-      /* z-index istotny tylko w fallbacku - w top layer o kolejności decyduje
-         moment otwarcia, nie z-index. */
+      /* z-index only matters in the fallback - in the top layer, opening
+         order decides stacking, not z-index. */
       z-index: var(--z-index-dropdown);
     }
     .select-search-menu:popover-open {
@@ -3014,9 +3019,9 @@
       animation: fadeInDown 0.2s ease;
     }
     .select-search-menu {
-      /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-         menu otwiera się jako wyśrodkowany panel - nadal w top layer, więc
-         nic go nie przycina. */
+      /* Fallback for browsers without CSS Anchor Positioning (older Firefox):
+         the menu opens as a centered panel - still in the top layer, so
+         nothing clips it. */
     }
     @supports not (top: anchor(bottom)) {
       .select-search-menu {
@@ -3066,14 +3071,13 @@
   }
   @layer components {
     /* =========================================
-       5. PREMIUM MULTI SELECT (Wzorowany na UI)
+       5. PREMIUM MULTI SELECT (modeled after a UI reference)
        ========================================= */
     .custom-select {
       position: relative;
       width: 100%;
-      /* Stan "otwarty" odczytujemy z popovera przez :has() - popover
-         (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
-         na elemencie nadrzędnym. */
+      /* We read the "open" state from the popover via :has() - a popover
+         (unlike <details>) doesn't leave an [open] attribute on the parent element. */
     }
     .custom-select:has(.custom-select-dropdown:popover-open) .custom-select-trigger {
       border-color: var(--primary);
@@ -3090,8 +3094,7 @@
       min-height: var(--target-size-min);
       padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
       text-align: left;
-      /* Trigger to <button> - w przeciwieństwie do <summary> nie dziedziczy
-         fontu automatycznie. */
+      /* The trigger is a <button> - unlike <summary> it doesn't inherit the font automatically. */
       font: inherit;
       color: var(--text-main);
       background-color: var(--bg-surface);
@@ -3117,33 +3120,35 @@
       font-weight: var(--fw-medium);
     }
     .custom-select-dropdown {
-      /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki -
-         dzięki temu NIE jest przycinany przez overflow przodków (np. przewijany
-         .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
-         na Esc i klik poza menu obsługuje natywnie light dismiss.
+      /* The [popover] attribute in the HTML moves the dropdown to the
+         browser's top layer - this means it's NOT clipped by ancestor
+         overflow (e.g. a scrollable .card-body in a modal) and renders
+         above an open <dialog>. Closing on Esc and a click outside the
+         menu is handled natively by light dismiss.
 
-         Kotwica: NIEJAWNA, nie nazwana - jak w .select-search-menu (patrz
-         komentarz tam, razem z pelnym opisem zdiagnozowanego bledu). Parowanie
-         popovertarget+id (Chrome 133+) samo tworzy relację element-do-elementu;
-         "auto" tylko włącza jej użycie przez anchor().
+         Anchor: IMPLICIT, unnamed - like in .select-search-menu (see the
+         comment there, along with the full write-up of the diagnosed bug).
+         The popovertarget+id pairing (Chrome 133+) creates the
+         element-to-element relationship on its own; "auto" just enables
+         using it via anchor().
 
-         position: FIXED, nie absolute - z tego samego powodu co w
-         .select-search-menu: w <dialog> position:absolute liczylo anchor()
-         poprawnie, ale renderowalo sie wzgledem dokumentu zamiast viewportu,
-         co przy duzym scrollY dawalo popover daleko poza ekranem. */
+         position: FIXED, not absolute - for the same reason as in
+         .select-search-menu: inside a <dialog>, position:absolute computed
+         anchor() correctly, but rendered relative to the document instead
+         of the viewport, which at a large scrollY put the popover far off-screen. */
       position: fixed;
       position-anchor: auto;
-      /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+      /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
       inset: auto;
-      /* Przyklejamy górę popovera do dołu przycisku (anchor) */
+      /* Pin the popover's top to the button's bottom (anchor) */
       top: anchor(bottom);
-      /* Wyrównujemy lewą krawędź popovera z lewą krawędzią przycisku */
+      /* Align the popover's left edge with the button's left edge */
       left: anchor(left);
-      /* Szerokość taka sama jak przycisk */
+      /* Same width as the button */
       width: anchor-size(width);
-      /* z-index istotny tylko w fallbacku - w top layer o kolejności decyduje
-         moment otwarcia, nie z-index (sticky nagłówki tabel z z-index:10
-         przestają być problemem). */
+      /* z-index only matters in the fallback - in the top layer, opening
+         order decides stacking, not z-index (sticky table headers with
+         z-index:10 stop being a problem). */
       z-index: var(--z-index-dropdown);
       margin: 4px 0 0 0;
       padding: 0;
@@ -3161,9 +3166,9 @@
       animation: fadeInDown 0.2s ease;
     }
     .custom-select-dropdown {
-      /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-         dropdown otwiera się jako wyśrodkowany panel - nadal w top layer,
-         więc nic go nie przycina. */
+      /* Fallback for browsers without CSS Anchor Positioning support
+         (older Firefox): the dropdown opens as a centered panel - still in
+         the top layer, so nothing clips it. */
     }
     @supports not (top: anchor(bottom)) {
       .custom-select-dropdown {
@@ -3291,7 +3296,7 @@
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
       transition: background-color var(--transition-speed), border-color var(--transition-speed);
     }
-    /* Pływająca pastylka (Tło pod aktywną ikoną) */
+    /* The floating pill (background under the active icon) */
     .theme-switch-thumb {
       position: absolute;
       top: 3px;
@@ -3311,7 +3316,7 @@
       justify-content: center;
       z-index: 2;
     }
-    /* Ikony Słońca i Księżyca */
+    /* Sun and Moon icons */
     .theme-icon {
       width: 14px;
       height: 14px;
@@ -3324,9 +3329,9 @@
     .theme-icon.icon-moon {
       margin-left: 4px !important;
     }
-    /* --- STAN: LIGHT MODE (Domyślny) --- */
+    /* --- STATE: LIGHT MODE (default) --- */
     .theme-switch-input:not(:checked) + .theme-switch-track .icon-sun {
-      color: var(--warning); /* Słońce świeci na żółto/pomarańczowo */
+      color: var(--warning); /* The sun glows yellow/orange */
       transform: rotate(0deg) scale(1.1);
       opacity: 1;
     }
@@ -3334,25 +3339,25 @@
       transform: rotate(-30deg) scale(0.85);
       opacity: 0.4;
     }
-    /* --- STAN: DARK MODE (Zaznaczony) --- */
+    /* --- STATE: DARK MODE (checked) --- */
     .theme-switch-input:checked + .theme-switch-track {
-      /* Opcjonalnie: zmiana tła całego przełącznika w dark mode */
+      /* Optional: change the whole switch's background in dark mode */
       background-color: rgba(var(--primary-rgb), 0.1);
       border-color: rgba(var(--primary-rgb), 0.2);
     }
     .theme-switch-input:checked + .theme-switch-track .theme-switch-thumb {
-      transform: translateX(32px); /* Przesunięcie pastylki na prawą stronę */
+      transform: translateX(32px); /* Shift the pill to the right side */
     }
     .theme-switch-input:checked + .theme-switch-track .icon-sun {
       transform: rotate(90deg) scale(0.85);
       opacity: 0.4;
     }
     .theme-switch-input:checked + .theme-switch-track .icon-moon {
-      color: var(--primary); /* Księżyc świeci w kolorze głównym marki */
+      color: var(--primary); /* The moon glows in the brand's primary color */
       transform: rotate(0deg) scale(1.1);
       opacity: 1;
     }
-    /* Focus Ring dla dostępności (A11y) */
+    /* Focus ring for accessibility (A11y) */
     .theme-switch-input:focus-visible + .theme-switch-track {
       outline: var(--focus-ring-width) solid var(--focus-ring-color);
       outline-offset: 2px;
@@ -3370,17 +3375,17 @@
    * Contains the CSS reset, html/body styles, and the base containers
    */
   /**
-   * molique - Ikony (Phosphor, sprite SVG selektywny)
-   * Zero fontu ikon, zero <img> per ikona: jeden plik img/icons-sprite.svg
-   * (generowany przez tools/gen-icon-sprite.js z folderu ikon Phosphor,
-   * TYLKO te faktycznie uzyte w src/*.html), referowany przez <use>.
+   * molique - Icons (Phosphor, selective SVG sprite)
+   * Zero icon fonts, zero <img> per icon: a single img/icons-sprite.svg file
+   * (generated by tools/gen-icon-sprite.js from the Phosphor icon folder,
+   * ONLY the ones actually used in src/*.html), referenced via <use>.
    *
-   * Uzycie:
+   * Usage:
    *   <svg class="icon"><use href="img/icons-sprite.svg#ph-lightning"></use></svg>
    *
-   * Kolor: kazda sciezka ikony ma juz stroke="currentColor" (Phosphor SVG),
-   * wiec .icon dziedziczy kolor tekstu automatycznie - zero CSS potrzebnego
-   * per-instancja, dziala tak samo w dark mode.
+   * Color: every icon path already has stroke="currentColor" (Phosphor SVG),
+   * so .icon inherits the text color automatically - zero CSS needed
+   * per instance, works the same way in dark mode.
    */
   @layer components {
     .icon {
@@ -3389,13 +3394,13 @@
       height: 1em;
       flex-shrink: 0;
       vertical-align: -0.125em;
-      /* Fallback dla wag "fill"/"duotone" (uzywaja fill, nie stroke) -
-         stroke="currentColor" jest juz w SVG per-sciezka, ale fill tutaj
-         zabezpiecza gdyby ktos uzyl symbolu bez wlasnego fill. */
+      /* Fallback for "fill"/"duotone" weights (they use fill, not stroke) -
+         stroke="currentColor" is already in the SVG per-path, but fill here
+         is a safeguard in case someone uses a symbol without its own fill. */
       fill: currentColor;
     }
-    /* Warianty rozmiaru - font-size kontroluje 1em, wiec te klasy dzialaja
-       wszedzie, takze na elementach, ktore same nie ustawiaja font-size. */
+    /* Size variants - font-size controls 1em, so these classes work
+       everywhere, including on elements that don't set their own font-size. */
     .icon-sm {
       width: 0.875em;
       height: 0.875em;
@@ -3780,16 +3785,16 @@
     }
   }
   /* =========================================
-     3. MEGA MENU (<details> + Anchor Positioning - Zero JS, działa na mobile)
+     3. MEGA MENU (<details> + Anchor Positioning - zero JS, works on mobile)
      ========================================= */
   .mega-menu {
-    /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
-       żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
-       (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
-       position:relative - .mega-menu-content ma się pozycjonować względem
-       .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
-       panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
-       krawędzi navbara. */
+    /* Limits the anchor-name below to this component instance, so multiple
+       .mega-menu on one page don't "latch onto" each other (the same trick
+       as .custom-select in _form-advanced.scss). Deliberately WITHOUT
+       position:relative - .mega-menu-content needs to position itself
+       relative to .navbar (see below), not to this small element, so the
+       wide panel doesn't stick out off-screen when the trigger sits close
+       to the navbar's right edge. */
     anchor-scope: --mega-menu-trigger;
   }
   .mega-menu-trigger {
@@ -3802,7 +3807,7 @@
     cursor: pointer;
     list-style: none;
     transition: color var(--transition-speed);
-    /* Punkt zaczepienia dla .mega-menu-content (CSS Anchor Positioning) */
+    /* Anchor point for .mega-menu-content (CSS Anchor Positioning) */
     anchor-name: --mega-menu-trigger;
   }
   .mega-menu-trigger::-webkit-details-marker {
@@ -3826,10 +3831,10 @@
     transform: rotate(180deg);
   }
   .mega-menu[open] > .mega-menu-trigger {
-    /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte -
-       klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
-       <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
-       powyżej - zero JS potrzebne do zamykania na klik-poza-menu). */
+    /* An invisible full-screen "cover" while the menu is open - a click
+       anywhere outside the panel hits the <summary> and natively closes
+       the <details> (the identical trick as .dropdown[open]
+       .dropdown-toggle::before above - zero JS needed to close on a click outside the menu). */
   }
   .mega-menu[open] > .mega-menu-trigger::before {
     content: "";
@@ -3895,8 +3900,8 @@
     font-size: 0.875rem;
     text-decoration: none;
     transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
-    /* Strzałka pojawiająca się na hover - czysto dekoracyjna (opacity/transform,
-       GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
+    /* An arrow that appears on hover - purely decorative (opacity/transform,
+       GPU-safe), signals "go further" without adding images. */
   }
   .mega-menu-link::after {
     content: "→";
@@ -3913,10 +3918,11 @@
     opacity: 1;
     transform: translateX(0);
   }
-  /* Wyróżniona karta (Featured) - jedna "komórka" siatki, wizualnie
-     podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
-  /* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
-     Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+  /* Featured card - one grid "cell", visually elevated above the regular
+     link columns (gradient + CTA). */
+  /* Active item (current page) - the class is assigned by
+     js/modules/molique-navbar-active.js. This rule lives here, not in
+     _navbar.scss, so the module is self-contained. */
   .mega-menu-link.is-active {
     color: var(--primary);
     font-weight: var(--fw-bold);
@@ -3929,10 +3935,10 @@
     gap: calc(var(--spacing-unit) * 1.5);
     padding: calc(var(--spacing-unit) * 3);
     border-radius: var(--border-radius);
-    /* Gradient na literałach, NIE na var(--dark)/var(--primary): karta jest
-       celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
-       odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
-       zmiennymi biały tekst lądował na jasnym tle. */
+    /* Gradient on literals, NOT var(--dark)/var(--primary): the card is
+       deliberately ALWAYS dark with white text (like the sidebar), and dark
+       mode inverts --dark to near-white and lightens --primary - with the
+       flipped variables, white text would land on a light background. */
     background-image: linear-gradient(145deg, #14162B, #5145E5);
     color: #fff;
   }
@@ -3979,25 +3985,25 @@
   @media (min-width: 768px) {
     .mega-menu-content {
       position: absolute;
-      /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
-         wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
-         .navbar (position:relative, patrz sekcja 1) - dzięki temu szeroki
-         panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
-         trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
+      /* Vertical: pinned below the TRIGGER (anchor positioning). Horizontal:
+         we do NOT align to the trigger, we center relative to the whole
+         .navbar (position:relative, see section 1) - this way the wide
+         panel (up to 980px) always fits in the window, regardless of
+         whether the trigger sits on the left, center, or right of the navbar. */
       position-anchor: --mega-menu-trigger;
       top: anchor(bottom);
       left: 50%;
       margin-top: calc(var(--spacing-unit) * 1);
       width: min(94vw, 980px);
-      /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
-         zrobić się wyższy niż viewport - ograniczamy wysokość i włączamy
-         wewnętrzny scroll zamiast wypychania poza ekran. */
+      /* FIX: with many narrow columns (lots of menu items), the panel can
+         end up taller than the viewport - we cap the height and enable
+         internal scroll instead of pushing it off-screen. */
       max-height: min(78vh, 680px);
       overflow-y: auto;
       z-index: calc(var(--z-index-dropdown) + 1);
       transform: translateX(-50%) translateY(-8px);
-      /* Fallback dla przeglądarek bez wsparcia CSS Anchor Positioning:
-         "top" liczony od dołu całego .navbar zamiast od samego triggera. */
+      /* Fallback for browsers without CSS Anchor Positioning support:
+         "top" is measured from the bottom of the whole .navbar instead of the trigger itself. */
     }
     @supports not (top: anchor(bottom)) {
       .mega-menu-content {
@@ -4023,8 +4029,8 @@
       box-shadow: none;
       border: none;
       background-color: rgba(0, 0, 0, 0.02);
-      /* Na mobile pokazuje/chowa się natychmiast, bez animacji - spójnie z
-         .admin-nav-submenu, który też jest oparty na <details>. */
+      /* On mobile it shows/hides instantly, with no animation - consistent
+         with .admin-nav-submenu, which is also based on <details>. */
       opacity: 1;
       transform: none;
       transition: none;
@@ -4037,7 +4043,7 @@
     }
   }
   /* =========================================
-     4. DROPDOWN (Zwykłe menu rozwijane)
+     4. DROPDOWN (Regular dropdown menu)
      ========================================= */
   .dropdown {
     position: relative;
@@ -4104,11 +4110,11 @@
     background-color: var(--card-bg-subtle);
     color: var(--primary);
   }
-  /* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
-     lewej - niezbędne dla dropdownów siedzących blisko prawej krawędzi
-     ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
-  /* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
-     Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+  /* Modifier: the menu opens from the RIGHT edge of the trigger instead of
+     the left - needed for dropdowns sitting near the right edge of the
+     screen (e.g. in the navbar), so the panel doesn't overflow the viewport. */
+  /* Active position (current page) - the class is set by js/modules/molique-navbar-active.js.
+     The rule lives here, not in _navbar.scss, so the module is self-contained. */
   .dropdown-item.is-active {
     color: var(--primary);
     font-weight: var(--fw-bold);
@@ -4118,29 +4124,29 @@
     right: 0;
   }
   /* =========================================
-     4.1. DROPDOWN JAKO POPOVER (Top Layer)
+     4.1. DROPDOWN AS A POPOVER (Top Layer)
      ========================================= */
-  /* Zalecany wariant POZA navbarem (tabele, karty, modale, przewijane
-     kontenery): dowolny istniejący przycisk z [popovertarget="ID"] +
-     `.dropdown-menu` z atrybutem [popover] i tym samym `id`. Atrybut
-     [popover] przenosi menu do top layer przeglądarki - koniec przycinania
-     przez overflow przodków - a Esc i klik poza menu zamykają je natywnie
-     (light dismiss).
+  /* Recommended variant OUTSIDE the navbar (tables, cards, modals, scrollable
+     containers): any existing button with [popovertarget="ID"] +
+     `.dropdown-menu` with a [popover] attribute and the same `id`. The
+     [popover] attribute moves the menu to the browser's top layer - no more
+     clipping from ancestor overflow - and Esc plus a click outside the menu
+     close it natively (light dismiss).
 
-     Pozycjonowanie: popover otwarty przez [popovertarget] dostaje swój
-     przycisk jako NIEJAWNY anchor (position-anchor: auto - wartość
-     domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
-     i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
-     buttona jedną parą atrybutów. */
-  /* Warianty pozycji zapasowej dla przypadku, gdy domyślne umiejscowienie
-     (pod przyciskiem, do lewej) wypchnęłoby menu poza viewport - np. przycisk
-     blisko dolnej lub prawej krawędzi ekranu (ostatni wiersz tabeli, ostatnia
-     kolumna w gridzie kart). WAZNE: przegladarka stosuje fallback z listy
-     TYLKO jesli w PELNI znosi przepelnienie - fallback adresujacy wylacznie
-     jedna os (np. samo odwrocenie pionu) jest calkowicie ignorowany, gdy
-     przepelnienie wystepuje jednoczesnie w pionie I poziomie, mimo ze
-     czesciowo poprawilby sytuacje. Stad KOMPLET trzech kombinacji ponizej,
-     nie tylko odwrocenie pionu. */
+     Positioning: a popover opened via [popovertarget] gets its button as an
+     IMPLICIT anchor (position-anchor: auto - the default value), so anchor()
+     works without a .dropdown wrapper, without anchor-name, and without
+     anchor-scope. That's why this variant can be attached to any button with
+     just one pair of attributes. */
+  /* Fallback-position variants for when the default placement (below the
+     button, to the left) would push the menu outside the viewport - e.g. a
+     button near the bottom or right edge of the screen (the last table row,
+     the last column in a card grid). IMPORTANT: the browser only applies a
+     fallback from the list if it FULLY eliminates the overflow - a fallback
+     addressing only one axis (e.g. just flipping vertically) is completely
+     ignored when the overflow occurs simultaneously vertically AND
+     horizontally, even though it would partially improve things. Hence the
+     FULL set of three combinations below, not just a vertical flip. */
   @position-try --dropdown-popover-flip-above {
     top: auto;
     bottom: anchor(top);
@@ -4159,12 +4165,12 @@
     margin: 0 0 4px 0;
   }
   .dropdown-menu[popover] {
-    /* position: fixed, nie absolute - patrz pelny opis w
-       _form-select-search.scss przy .select-search-menu. W skrocie: popover
-       zagniezdzony w otwartym <dialog>, z position:absolute, liczyl anchor()
-       poprawnie, ale renderowal sie wzgledem dokumentu zamiast viewportu -
-       przy duzym przewinieciu strony ladowal daleko poza ekranem. fixed ma
-       containing block = viewport niezaleznie od promocji do top layer. */
+    /* position: fixed, not absolute - see the full write-up in
+       _form-select-search.scss at .select-search-menu. In short: a popover
+       nested inside an open <dialog>, with position:absolute, computed
+       anchor() correctly but rendered relative to the document instead of
+       the viewport - at a large scrollY it landed far off-screen. fixed has
+       containing block = viewport regardless of promotion to the top layer. */
     position: fixed;
     inset: auto;
     top: anchor(bottom);
@@ -4172,9 +4178,9 @@
     margin: 4px 0 0 0;
     color: var(--text-main);
     position-try-fallbacks: --dropdown-popover-flip-left, --dropdown-popover-flip-above, --dropdown-popover-flip-above-left;
-    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
-       Firefox): menu otwiera się jako wyśrodkowany panel - nadal w top
-       layer, więc nic go nie przycina. */
+    /* Fallback for browsers without CSS Anchor Positioning (older
+       Firefox): the menu opens as a centered panel - still in the top
+       layer, so nothing clips it. */
   }
   @supports not (top: anchor(bottom)) {
     .dropdown-menu[popover] {
@@ -4185,8 +4191,8 @@
       height: fit-content;
     }
   }
-  /* Wyrównanie do prawej krawędzi przycisku - tylko tam, gdzie działa
-     anchor positioning (w fallbacku menu i tak jest wyśrodkowane). */
+  /* Alignment to the button's right edge - only where anchor positioning
+     works (in the fallback the menu is centered anyway). */
   @supports (top: anchor(bottom)) {
     .dropdown-menu-end[popover] {
       left: auto;
@@ -4224,7 +4230,7 @@
     color: var(--text-muted);
   }
   /* =========================================
-     6. PAGINACJA (Pagination)
+     6. PAGINATION
      ========================================= */
   .pagination {
     display: flex;
@@ -4267,16 +4273,16 @@
     pointer-events: none;
     background-color: var(--bg-surface);
   }
-  /* WARIANT: Nowoczesna (Oddzielone kafelki) */
+  /* VARIANT: Modern (separated tiles) */
   .pagination-modern {
-    gap: var(--spacing-unit); /* Odstęp między przyciskami */
+    gap: var(--spacing-unit); /* Spacing between buttons */
   }
   .pagination-modern .page-item {
     margin: 0;
   }
   .pagination-modern .page-link {
     position: relative;
-    border-radius: var(--border-radius) !important; /* Każdy ma zaokrąglenia */
+    border-radius: var(--border-radius) !important; /* Every tile is rounded */
     margin-left: 0;
     border: 1px solid transparent;
     background-color: var(--bg-surface);
@@ -4289,9 +4295,9 @@
     padding: 0 calc(var(--spacing-unit) * 1.5);
     font-weight: var(--fw-medium);
     box-shadow: var(--shadow-sm);
-    /* Wizualny rozmiar (36px) zostaje - niewidoczny obszar klikalny
-       dobity do --target-size-min (44px) przez ::before, bez zmiany
-       wygladu. */
+    /* The visual size (36px) stays - the invisible hit area is topped
+       up to --target-size-min (44px) via ::before, with no visual
+       change. */
   }
   .pagination-modern .page-link::before {
     content: "";
@@ -4527,13 +4533,13 @@
     }
   }
   /**
-   * molique - Sekcje Hero i Nakładki (Overlay)
-   * Sekcje powitalne ze zdjęciem w tle, przyciemniającą nakładką (Overlay)
-   * oraz zaawansowanym systemem wycinanych narożników (Hero Cutout).
+   * molique - Hero Sections and Overlays
+   * Welcome sections with a background image, a dimming overlay, and an
+   * advanced cutout-corners system (Hero Cutout).
    */
   @layer components {
     /* =========================================
-       1. PAGE HEADER (Hero ze zdjęciem w tle)
+       1. PAGE HEADER (hero with a background image)
        ========================================= */
     .page-header {
       position: relative;
@@ -4541,37 +4547,39 @@
       background-position: center;
       background-repeat: no-repeat;
     }
-    /* Dodaj do dowolnego kontenera z .overlay w środku - odcina wystające
-       rogi nakładki i daje jej kontekst pozycjonowania (position:relative). */
+    /* Add to any container with an .overlay inside - clips off the
+       overlay's overhanging corners and gives it a positioning context
+       (position:relative). */
     .has-overlay {
       position: relative;
       overflow: hidden;
     }
     /* =========================================
-       2. OVERLAY (Przyciemniająca nakładka)
+       2. OVERLAY (dimming layer)
        ========================================= */
     .overlay {
       position: absolute;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      /* DOMYSLNY SCRIM. Wczesniej sama .overlay nie miala ani koloru, ani
-         krycia, wiec oba uzycia bez kompletu klas wychodzily zle:
-           .overlay                -> niewidoczna (brak tla),
-           .overlay + .overlay-dark -> W PELNI NIEPRZEZROCZYSTA (opacity 1),
-                                       czyli zdjecie znikalo pod plaskim kolorem.
-         Teraz sama .overlay daje uzyteczne przyciemnienie, a klasy kolorow
-         (.overlay-dark/-primary/-light, .bg-overlay) i krycia (.overlay-10..90)
-         nadpisuja te wartosci - stoja dalej w zrodle przy tej samej
-         specyficznosci. */
+      /* DEFAULT SCRIM. Previously a bare .overlay had neither a color nor
+         an opacity, so both usages without a full set of classes came out
+         wrong:
+           .overlay                -> invisible (no background),
+           .overlay + .overlay-dark -> FULLY OPAQUE (opacity 1),
+                                       i.e. the image vanished under a flat color.
+         Now a bare .overlay gives a useful dimming effect, and the color
+         classes (.overlay-dark/-primary/-light, .bg-overlay) and opacity
+         classes (.overlay-10..90) override these values - they come later
+         in the source at the same specificity. */
       background-color: #14162B;
       opacity: 0.5;
     }
-    /* --- Kolory nakładki --- */
-    /* overlay-dark na literale (jak overlay-light): nakładka ma ZAWSZE
-       przyciemniać zdjęcie pod jasnym tekstem hero, a dark mode odwraca
-       var(--dark) do prawie białego - "przyciemnienie" stawało się
-       rozjaśnieniem i biały tekst lądował na jasnym tle. */
+    /* --- Overlay colors --- */
+    /* overlay-dark uses a literal (like overlay-light): the overlay must
+       ALWAYS dim the image under the hero's light text, and dark mode
+       inverts var(--dark) to near-white - the "dimming" would become a
+       brightening and the white text would land on a light background. */
     .bg-overlay {
       background-color: #000;
     }
@@ -4584,7 +4592,7 @@
     .overlay-light {
       background-color: #fff;
     }
-    /* --- Przezroczystość nakładki (skok co 10) --- */
+    /* --- Overlay opacity (steps of 10) --- */
     .overlay-10 {
       opacity: 0.1;
     }
@@ -4613,7 +4621,7 @@
       opacity: 0.9;
     }
     /* =========================================
-       3. HERO CUTOUT SYSTEM (Wklęsłe narożniki)
+       3. HERO CUTOUT SYSTEM (concave corners)
        ========================================= */
     .hero-with-cutout {
       position: relative;
@@ -4641,12 +4649,13 @@
       }
       .cutout-wrapper {
         z-index: 1;
-        /* Promień "wycięcia" w rogu stykającym się ze zdjęciem */
+        /* The radius of the "cutout" at the corner touching the image */
         --cutout-radius: 32px;
       }
-      /* Każdy wariant kotwiczy wrapper w danym rogu i wycina PRZECIWLEGŁY
-         (stykający się ze zdjęciem) róg samego wrappera łagodnym łukiem -
-         stąd "at 0 0" dla br (wycięcie w lewym-górnym rogu wrappera), itd. */
+      /* Each variant anchors the wrapper to a given corner and cuts out the
+         OPPOSITE corner of the wrapper itself (the one touching the image)
+         with a gentle arc - hence "at 0 0" for br (a cutout at the
+         wrapper's top-left corner), etc. */
       .cutout-wrapper.cutout-md-br {
         position: absolute;
         right: 0;
@@ -4678,11 +4687,11 @@
     }
   }
   /**
-   * molique - Karty i Kontenery
-   * Zawiera bazowe Karty, Featured Boxes, Thumb Info oraz Overlapping Cards.
+   * molique - Cards and Containers
+   * Contains base Cards, Featured Boxes, Thumb Info, and Overlapping Cards.
    */
   /* =========================================
-     1. BAZOWA KARTA (Card)
+     1. BASE CARD (Card)
      ========================================= */
   .card {
     display: flex;
@@ -4690,7 +4699,7 @@
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    overflow: hidden; /* Zapobiega wylewaniu się zdjęć poza zaokrąglone rogi */
+    overflow: hidden; /* Prevents images from spilling past the rounded corners */
     transition: box-shadow var(--transition-speed), transform var(--transition-speed);
   }
   .card-header {
@@ -4702,7 +4711,7 @@
     border-top-right-radius: calc(var(--border-radius) - 1px);
   }
   .card-body {
-    flex: 1 1 auto; /* Pozwala karcie rosnąć i wypełniać miejsce w Gridzie */
+    flex: 1 1 auto; /* Lets the card grow and fill the space in the Grid */
     padding: calc(var(--spacing-unit) * 2);
     display: flex;
     flex-direction: column;
@@ -4717,7 +4726,7 @@
     border-bottom-right-radius: calc(var(--border-radius) - 1px);
   }
   /* =========================================
-     2. FEATURED BOX (Wyróżnione cechy)
+     2. FEATURED BOX (Highlighted features)
      ========================================= */
   .featured-box {
     position: relative;
@@ -4730,8 +4739,8 @@
     border-top: 4px solid var(--primary);
     transition: transform var(--transition-speed);
     height: 100%;
-    /* Cien hover na ::after (animowana tylko opacity) zamiast bezposredniego
-       przejscia box-shadow (reflow) - ten sam wzorzec co .hover-gpu-shadow. */
+    /* A hover shadow on ::after (animating only opacity) instead of a direct
+       box-shadow transition (reflow) - the same pattern as .hover-gpu-shadow. */
   }
   .featured-box::after {
     content: "";
@@ -4759,7 +4768,7 @@
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
   /* =========================================
-     3. THUMB INFO (Karty z obrazkiem w tle)
+     3. THUMB INFO (Cards with a background image)
      ========================================= */
   .thumb-info {
     position: relative;
@@ -4798,7 +4807,7 @@
   .thumb-info:hover .thumb-info-title {
     transform: translateY(0);
   }
-  /* Warianty ułożenia tekstu */
+  /* Text-placement variants */
   .thumb-info-center .thumb-info-wrapper {
     align-items: center;
     justify-content: center;
@@ -4814,20 +4823,20 @@
     color: var(--dark);
   }
   /* =========================================
-     4. OVERLAPPING CARD (Nachodząca karta)
+     4. OVERLAPPING CARD
      ========================================= */
   .overlap-container {
     position: relative;
     z-index: 10;
-    /* Na mobile delikatne przesunięcie w górę */
+    /* A gentle upward shift on mobile */
     margin-top: calc(var(--spacing-unit) * -6);
   }
   @media (min-width: 768px) {
     .overlap-container {
-      /* Domyślne przesunięcie na desktopie (ok. 100px) */
+      /* Default shift on desktop (about 100px) */
       margin-top: calc(var(--spacing-unit) * -12);
     }
-    /* Warianty dla pełnej kontroli (jeśli karta jest bardzo wysoka) */
+    /* Variants for full control (if the card is very tall) */
     .overlap-up-50 {
       margin-top: -50px;
     }
@@ -4840,24 +4849,25 @@
   }
   @layer components {
     /* =========================================
-       1. NATYWNY MODAL (<dialog>)
+       1. NATIVE MODAL (<dialog>)
        ========================================= */
     .modal-dialog {
       border: none;
       padding: 0;
       background: transparent;
-      /* UA daje <dialog> color: CanvasText, co przerywa dziedziczenie
-         koloru z body - jawny kolor motywu przywraca łańcuch dziedziczenia
-         (m.in. dla nagłówków z color: inherit) niezależnie od color-scheme. */
+      /* The UA gives <dialog> color: CanvasText, which breaks color
+         inheritance from body - an explicit theme color restores the
+         inheritance chain (among others for headings with color: inherit)
+         regardless of color-scheme. */
       color: var(--text-main);
       overflow: visible;
       max-width: 600px;
       width: 90%;
       margin: auto;
-      /* NAPRAWA 1: Ograniczamy wysokość modala do wielkości ekranu (z małym marginesem) */
+      /* FIX 1: constrain the modal's height to the screen size (with a small margin) */
       max-height: calc(100vh - 2rem);
-      max-height: calc(100dvh - 2rem); /* Nowoczesne jednostki dla mobile */
-      /* NAPRAWA 2: Modal staje się kontenerem flex */
+      max-height: calc(100dvh - 2rem); /* Modern units for mobile */
+      /* FIX 2: the modal becomes a flex container */
       display: flex;
       flex-direction: column;
     }
@@ -4866,9 +4876,10 @@
       pointer-events: none !important;
     }
     .modal-dialog::backdrop {
-      /* Literal zamiast rgba(var(--dark-rgb)): przyciemnienie tła ma ZAWSZE
-         przyciemniać, a dark mode odwraca --dark-rgb do jasnego - backdrop
-         robił się jasną mgłą, wbrew idei ciemnego motywu. */
+      /* A literal instead of rgba(var(--dark-rgb)): the background dimming
+         must ALWAYS darken, but dark mode inverts --dark-rgb to a light
+         value - the backdrop turned into a light haze, defeating the point
+         of a dark theme. */
       background-color: rgba(30, 41, 59, 0.6);
       backdrop-filter: blur(4px);
     }
@@ -4887,20 +4898,20 @@
         transform: translateY(-20px);
       }
     }
-    /* Karta wewnątrz modala */
+    /* Card inside the modal */
     .modal-dialog .card {
       margin: 0;
       box-shadow: var(--shadow-lg);
-      /* NAPRAWA 3: Karta nie może być wyższa niż sam modal */
+      /* FIX 3: the card can't be taller than the modal itself */
       max-height: 100%;
       display: flex;
       flex-direction: column;
     }
-    /* NAPRAWA 4: MAGIA UX - Tylko ciało karty się scrolluje! */
+    /* FIX 4: only the card body scrolls */
     .modal-dialog .card-body {
       overflow-y: auto;
-      overscroll-behavior: contain; /* Zapobiega scrollowaniu tła strony pod modalem */
-      /* Elegancki, cienki scrollbar */
+      overscroll-behavior: contain; /* Prevents scrolling the page background under the modal */
+      /* An elegant, thin scrollbar */
       scrollbar-width: thin;
     }
     .modal-dialog .card-body::-webkit-scrollbar {
@@ -5082,11 +5093,12 @@
   }
   @layer components {
     /* =========================================
-       3. LIGHTBOX (Galeria pełnoekranowa, natywny <dialog>)
+       3. LIGHTBOX (Full-screen gallery, native <dialog>)
        ========================================= */
     dialog.lightbox-overlay {
-      /* Reset UA-stylesheetu <dialog> (ramka, tlo, wysrodkowanie przez margin:auto,
-         ograniczenia max-width/height) - reszta to normalny flex-overlay. */
+      /* Reset the <dialog> UA stylesheet (border, background, centering via
+         margin:auto, max-width/height constraints) - the rest is a normal
+         flex overlay. */
       border: none;
       padding: 0;
       background: transparent;
@@ -5101,11 +5113,12 @@
       z-index: 2000;
       align-items: center;
       justify-content: center;
-      /* WAZNE: display:none tutaj musi zostac bezwarunkowy. Reguly autora
-         zawsze biją reguly user-agenta niezaleznie od specyficznosci selektora
-         - gdyby "display: flex" bylo tutaj (bez :modal), wygralaby ZAWSZE z
-         domyslnym "dialog:not([open]) { display:none }" przegladarki, nawet
-         gdy dialog jest zamkniety. Dlatego flex trafia wylacznie do &:modal. */
+      /* IMPORTANT: display:none here must stay unconditional. Author rules
+         always beat user-agent rules regardless of selector specificity - if
+         "display: flex" were here (without :modal), it would ALWAYS win over
+         the browser's default "dialog:not([open]) { display:none }", even
+         while the dialog is closed. That's why flex is scoped exclusively to
+         &:modal. */
       display: none;
       opacity: 0;
       transition: opacity var(--transition-speed), overlay var(--transition-speed) allow-discrete, display var(--transition-speed) allow-discrete;
@@ -5224,7 +5237,7 @@
       border-radius: var(--border-radius);
       box-shadow: var(--shadow-md);
       min-width: 160px;
-      /* 2026 MAGIC: CSS Anchor Positioning */
+      /* Positioned via CSS Anchor Positioning (Baseline 2026) */
       position: absolute;
       top: anchor(bottom);
       left: anchor(start);
@@ -5649,7 +5662,7 @@
     }
   } /* THIS WAS MISSING */
   /* =========================================
-     3. COMPACT DATA ROW (List Item / Wariant kompaktowy)
+     3. COMPACT DATA ROW (List Item / compact variant)
      ========================================= */
   .data-row-compact {
     display: flex;
@@ -5659,19 +5672,19 @@
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
     transition: background-color var(--transition-speed);
-    /* Ostatni element na liście nie ma dolnej ramki */
+    /* The last item in the list has no bottom border */
   }
   .data-row-compact:last-child {
     border-bottom: none;
   }
   .data-row-compact {
-    /* Subtelny hover (jak na inspiracji) */
+    /* A subtle hover (as in the reference design) */
   }
   .data-row-compact:hover {
     background-color: var(--card-bg-subtle);
   }
   .data-row-compact {
-    /* Opcjonalna ikona / awatar po lewej */
+    /* Optional icon / avatar on the left */
   }
   .data-row-compact .row-icon {
     display: flex;
@@ -5679,22 +5692,22 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    border-radius: 50%; /* Domyślnie kółko (awatar) */
+    border-radius: 50%; /* Circle by default (avatar) */
     background-color: var(--bg-body);
     color: var(--text-muted);
-    flex-shrink: 0; /* Zapobiega zgniataniu ikony */
+    flex-shrink: 0; /* Prevents the icon from being squeezed */
     font-size: 1.25rem;
-    /* Wariant: Kwadratowa ikona (np. dla plików) */
+    /* Variant: square icon (e.g. for files) */
   }
   .data-row-compact .row-icon.icon-square {
     border-radius: var(--border-radius);
   }
   .data-row-compact {
-    /* Środkowa część (Tytuł + Szczegóły) */
+    /* Middle part (title + details) */
   }
   .data-row-compact .row-content {
-    flex: 1; /* Zajmuje całą dostępną przestrzeń */
-    min-width: 0; /* Zapobiega rozpychaniu kontenera przez długi tekst */
+    flex: 1; /* Takes up all the available space */
+    min-width: 0; /* Prevents long text from stretching the container */
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -5703,7 +5716,7 @@
     font-weight: var(--fw-bold);
     color: var(--text-main);
     font-size: 0.875rem;
-    /* Ucinanie zbyt długiego tekstu (...) */
+    /* Truncate overly long text (...) */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -5711,13 +5724,13 @@
   .data-row-compact .row-details {
     font-size: 0.75rem;
     color: var(--text-muted);
-    /* Ucinanie zbyt długiego tekstu (...) */
+    /* Truncate overly long text (...) */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .data-row-compact {
-    /* Prawa strona (Akcje / Przyciski) */
+    /* Right side (actions / buttons) */
   }
   .data-row-compact .row-actions {
     flex-shrink: 0;
@@ -5726,7 +5739,7 @@
     gap: calc(var(--spacing-unit) * 1);
   }
   /* =========================================
-     3. AKORDEON (Natywny <details>)
+     3. ACCORDION (Native <details>)
      ========================================= */
   .accordion {
     border: 1px solid var(--border-color);
@@ -5741,30 +5754,32 @@
     border-bottom: none;
   }
   .accordion-item {
-    /* MAGIA CSS 2026: Płynne otwieranie natywnego details */
+    /* Smooth opening of a native details element (interpolate-size, Baseline 2026) */
     interpolate-size: allow-keywords;
   }
   .accordion-item::details-content {
-    /* Stan zamknięty ORAZ zamykanie: overflow wraca do hidden natychmiast,
-       więc zwijana treść jest przycinana od pierwszej klatki. */
+    /* Closed state AND closing: overflow reverts to hidden immediately,
+       so the collapsing content is clipped from the very first frame. */
     transition: height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1), content-visibility var(--transition-speed-slow) allow-discrete;
     height: 0;
     overflow: hidden;
   }
   .accordion-item[open]::details-content {
     height: auto;
-    /* Po rozwinięciu zdejmujemy przycinanie. Bez tego treść wyższa niż
-       wysokość policzona przez animację zostaje ucięta na stałe, a przewijalny
-       rodzic (overflow-y: auto) nie widzi, że jest co przewijać.
-       `0s 0.3s` = przełącz dopiero PO zakończeniu animacji wysokości; gdyby
-       overflow stał się widoczny od razu, treść wychodziłaby poza rosnące
-       pudełko i nachodziła na sąsiadów przez cały czas otwierania. */
+    /* After expanding, we remove the clipping. Without this, content
+       taller than the height computed by the animation stays clipped
+       permanently, and a scrollable parent (overflow-y: auto) doesn't see
+       that there's anything to scroll.
+       `0s 0.3s` = switch only AFTER the height animation finishes; if
+       overflow became visible immediately, the content would spill past
+       the growing box and overlap its neighbors for the whole opening
+       duration. */
     overflow: visible;
     transition: height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1), content-visibility var(--transition-speed-slow) allow-discrete, overflow 0s var(--transition-speed-slow) allow-discrete;
   }
   .accordion-item {
-    /* A11y: bez animacji wysokosci dla uzytkownikow z prefers-reduced-motion -
-       akordeon otwiera/zamyka sie od razu, bez plynnego rozwijania. */
+    /* A11y: no height animation for users with prefers-reduced-motion - the
+       accordion opens/closes instantly, without a smooth expand. */
   }
   @media (prefers-reduced-motion: reduce) {
     .accordion-item::details-content, .accordion-item[open]::details-content {
@@ -5773,12 +5788,12 @@
   }
   .accordion-header {
     display: flex;
-    /* BEZ justify-content: space-between. Strzałka ::after jest kolejnym
-       elementem flex, więc space-between rozpychał WSZYSTKIE dzieci nagłówka
-       na całą szerokość - nagłówek z plakietką i kodem (np. "1  Nakładka plus
-       .navbar-sticky") lądował rozstrzelony i wyśrodkowany. Strzałkę dosuwamy
-       do prawej przez margin-left na niej samej, przez co liczba elementów
-       w nagłówku przestaje mieć znaczenie. */
+    /* NO justify-content: space-between. The ::after arrow is another flex
+       item, so space-between was pushing ALL of the header's children apart
+       across the full width - a header with a badge and code (e.g. "1  Overlay
+       plus .navbar-sticky") ended up spread out and centered. We push the
+       arrow to the right via margin-left on itself, which makes the number
+       of elements in the header irrelevant. */
     align-items: center;
     gap: calc(var(--spacing-unit) * 1.5);
     padding: calc(var(--spacing-unit) * 2);
@@ -5813,15 +5828,15 @@
     color: var(--text-muted);
   }
   /* =========================================
-     4. ZAKŁADKI (CSS :has() + Radio Hack)
+     4. TABS (CSS :has() + radio hack)
      ========================================= */
   .tabs {
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* Punkt odniesienia dla ukrytych inputow (position: absolute nizej).
-       Bez tego pozycjonowalyby sie wzgledem okna - niewidoczne i tak, ale
-       lepiej trzymac je w obrebie komponentu. */
+    /* A reference point for the hidden inputs (position: absolute below).
+       Without this they'd position themselves relative to the window -
+       invisible either way, but better to keep them within the component. */
     position: relative;
   }
   .tabs-header {
@@ -5830,12 +5845,12 @@
     border-bottom: 1px solid var(--border-color);
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
-  /* UKRYCIE ZACHOWUJACE FOKUSOWALNOSC.
-     Wczesniej bylo tu display:none, ktore wyrzuca pole z kolejnosci tabulacji
-     I z drzewa dostepnosci - zakladek nie dalo sie wtedy przelaczyc klawiatura
-     ani odczytac czytnikiem ekranu. Technika clip (ta sama co w .sr-only)
-     ukrywa wizualnie, ale zostawia element dostepnym: grupa radio odzyskuje
-     natywna obsluge strzalkami. */
+  /* A HIDE THAT PRESERVES FOCUSABILITY.
+     This used to be display:none, which removes the field from the tab
+     order AND the accessibility tree - tabs couldn't be switched with the
+     keyboard or read by a screen reader. The clip technique (the same as
+     in .sr-only) hides it visually but leaves the element accessible: the
+     radio group regains native arrow-key handling. */
   .tab-input {
     position: absolute;
     width: 1px;
@@ -5863,7 +5878,7 @@
     display: none;
     animation: fadeIn var(--transition-speed) ease;
   }
-  /* Łączenie inputa z panelem na podstawie ID (do 10 zakładek) */
+  /* Linking an input to a panel by position (up to 10 tabs) */
   .tab-input:nth-of-type(1):checked ~ .tabs-content .tab-pane:nth-of-type(1) {
     display: block;
   }
@@ -5872,8 +5887,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(1):focus-visible ~ .tabs-header .tab-label:nth-of-type(1) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5887,8 +5902,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(2):focus-visible ~ .tabs-header .tab-label:nth-of-type(2) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5902,8 +5917,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(3):focus-visible ~ .tabs-header .tab-label:nth-of-type(3) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5917,8 +5932,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(4):focus-visible ~ .tabs-header .tab-label:nth-of-type(4) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5932,8 +5947,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(5):focus-visible ~ .tabs-header .tab-label:nth-of-type(5) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5947,8 +5962,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(6):focus-visible ~ .tabs-header .tab-label:nth-of-type(6) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5962,8 +5977,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(7):focus-visible ~ .tabs-header .tab-label:nth-of-type(7) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5977,8 +5992,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(8):focus-visible ~ .tabs-header .tab-label:nth-of-type(8) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -5992,8 +6007,8 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(9):focus-visible ~ .tabs-header .tab-label:nth-of-type(9) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
@@ -6007,41 +6022,41 @@
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
-  /* Obwodka focusa musi trafic na widoczna etykiete - samo radio jest
-     przyciete do zera, wiec jego wlasny outline bylby niewidoczny. */
+  /* The focus ring must land on the visible label - the radio itself is
+     clipped to zero size, so its own outline would be invisible. */
   .tab-input:nth-of-type(10):focus-visible ~ .tabs-header .tab-label:nth-of-type(10) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
     border-radius: calc(var(--border-radius) * 0.5);
   }
   /* =========================================
-     4b. ZAKŁADKI PILL (Segmented Control, suwający wskaźnik - Zero JS)
+     4b. PILL TABS (segmented control, sliding indicator - zero JS)
      ========================================= */
   .tabs-pill {
-    /* Liczba zakładek - nadpisz per instancja: style="--tab-count: 3;" */
+    /* Number of tabs - override per instance: style="--tab-count: 3;" */
     --tab-count: 2;
   }
   .tabs-pill .tabs-header {
     position: relative;
     display: grid;
-    /* minmax(0, ...), nie goly 1fr: przy width: fit-content nizej to
-       jedyny sposob, zeby pigulka mogla SKURCZYC SIE ponizej naturalnej
-       szerokosci etykiet, gdy zabraknie miejsca (np. wiele zakladek albo
-       dluzsze etykiety na mobile) - bez minmax(0, ...) kazda kolumna
-       zada swojego min-content, wiec fit-content nie ma jak zejsc ponizej
-       tej sumy i pigulka przepelnia dostepna szerokosc (ten sam mechanizm
-       co przy golym 1fr w .admin-layout, patrz layout/_admin-layout.scss). */
+    /* minmax(0, ...), not a bare 1fr: with width: fit-content below, this
+       is the only way for the pill to be able to SHRINK below the
+       labels' natural width when space runs out (e.g. many tabs or
+       longer labels on mobile) - without minmax(0, ...) every column
+       demands its own min-content, so fit-content has no way to go below
+       that sum and the pill overflows the available width (the same
+       mechanism as the bare 1fr in .admin-layout, see layout/_admin-layout.scss). */
     grid-template-columns: repeat(var(--tab-count), minmax(0, 1fr));
     border-bottom: none;
     background-color: var(--card-bg-subtle);
     border-radius: 50rem;
     padding: calc(var(--spacing-unit) * 0.5);
-    /* .tabs (flex-column) domyslnie rozciaga header i content na ta sama
-       szerokosc (align-items: stretch) - dla pigulki to zle wyglada,
-       segmentowany przelacznik ma byc kompaktowy (dopasowany do etykiet),
-       niezaleznie od tego, jak szeroka jest tresc zakladki (np. tabela)
-       pod spodem. Wylaczamy rozciaganie TYLKO dla headera - .tabs-content
-       zostaje na pelnej szerokosci bez zmian. */
+    /* .tabs (flex-column) by default stretches the header and content to
+       the same width (align-items: stretch) - that looks wrong for a
+       pill, a segmented switcher should be compact (fitted to the
+       labels), regardless of how wide the tab's content (e.g. a table)
+       is below it. We disable stretching ONLY for the header -
+       .tabs-content stays at full width, unchanged. */
     align-self: flex-start;
     width: fit-content;
     max-width: 100%;
@@ -6053,10 +6068,10 @@
     border-bottom: none;
     border-radius: 50rem;
     margin-bottom: 0;
-    /* Kolumna moze skurczyc sie ponizej naturalnej szerokosci etykiety
-       (patrz minmax(0, ...) wyzej) - przy braku miejsca etykieta ma sie
-       przycinac wielokropkiem, nie zawijac do dwoch linii (rozsadzi
-       pigulke) ani przepelniac poza kolumne. */
+    /* A column can shrink below a label's natural width (see minmax(0,
+       ...) above) - when space runs out, the label should truncate with
+       an ellipsis, not wrap to two lines (which would blow out the pill)
+       or overflow past the column. */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -6071,14 +6086,14 @@
     background-color: var(--bg-surface);
     border-radius: 50rem;
     box-shadow: var(--shadow-sm);
-    /* Suwanie wskaźnika: translateX(%) liczy się względem WŁASNEJ szerokości
-       wskaźnika, która = szerokości jednej kolumny grida - stąd przesunięcie
-       o "100% * (i-1)" zawsze trafia dokładnie na i-tą zakładkę. */
+    /* Sliding the indicator: translateX(%) is measured relative to the
+       indicator's OWN width, which = one grid column's width - hence a
+       shift of "100% * (i-1)" always lands exactly on the i-th tab. */
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     pointer-events: none;
   }
   .tabs-pill {
-    /* Dopasowanie inputa (po pozycji) do wskaźnika i koloru aktywnej etykiety */
+    /* Matching an input (by position) to the indicator and the active label's color */
   }
   .tabs-pill:has(.tab-input:nth-of-type(1):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 0));
@@ -6129,7 +6144,7 @@
     color: var(--text-main);
   }
   /* =========================================
-     5. GRID EXPAND (Płynne rozwijanie bez JS)
+     5. GRID EXPAND (Smooth expand/collapse without JS)
      ========================================= */
   .grid-expand {
     display: grid;
@@ -6143,7 +6158,7 @@
     grid-template-rows: 1fr;
   }
   /* =========================================
-     6. KARUZELE (Sliders)
+     6. CAROUSELS (Sliders)
      ========================================= */
   .carousel {
     position: relative;
@@ -6186,7 +6201,7 @@
     scroll-snap-align: start;
     flex-shrink: 0;
   }
-  /* Przyciski nawigacyjne (Strzałki) */
+  /* Navigation buttons (arrows) */
   .carousel-nav {
     position: absolute;
     top: 50%;
@@ -6205,8 +6220,8 @@
     cursor: pointer;
     z-index: 10;
     transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
-    /* Wizualny rozmiar (40px) zostaje - niewidoczny obszar klikalny dobity
-       do --target-size-min (44px). */
+    /* The visual size (40px) stays - the invisible hit area is topped up
+       to --target-size-min (44px). */
   }
   .carousel-nav::before {
     content: "";
@@ -6219,8 +6234,8 @@
   }
   .carousel-nav:hover {
     background-color: var(--primary);
-    /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
-       ciemnieć - literal #fff tracił kontrast */
+    /* As in .btn-primary: primary lightens in dark mode, so the text must
+       darken - a literal #fff was losing contrast */
     color: var(--btn-text-light);
     border-color: var(--primary);
   }
@@ -6230,22 +6245,22 @@
   .carousel-next {
     right: -15px;
   }
-  /* Kropki paginacji */
+  /* Pagination dots */
   .carousel-dots {
     display: flex;
     justify-content: center;
-    /* Kropki maja 10px + niewidoczny obszar klikalny --target-size-min (44px)
-       przez ::before ponizej - przy zbyt malym gap te niewidoczne obszary
-       sasiednich kropek zachodza na siebie (WCAG 2.5.8, min. 24px "bezpiecznej"
-       przestrzeni miedzy celami dotyku). */
+    /* The dots are 10px + an invisible hit area of --target-size-min (44px)
+       via the ::before below - with too small a gap, the invisible areas of
+       adjacent dots overlap each other (WCAG 2.5.8, min. 24px of "safe"
+       space between touch targets). */
     gap: calc(var(--spacing-unit) * 2);
     margin-top: calc(var(--spacing-unit) * 3);
   }
   .carousel-dot {
     width: 10px;
     height: 10px;
-    min-height: 10px !important; /* Nadpisuje globalne 44px dla buttonów */
-    flex: 0 0 auto; /* Blokuje rozciąganie we Flexboxie */
+    min-height: 10px !important; /* Overrides the global 44px for buttons */
+    flex: 0 0 auto; /* Prevents stretching in Flexbox */
     border-radius: 50%;
     background-color: var(--border-color);
     border: none;
@@ -6254,7 +6269,7 @@
     margin: 0;
     position: relative;
     transition: background-color var(--transition-speed), transform var(--transition-speed);
-    /* Zwiększenie obszaru klikalnego do --target-size-min (44px) */
+    /* Increase the hit area to --target-size-min (44px) */
   }
   .carousel-dot::before {
     content: "";
@@ -6280,11 +6295,11 @@
       right: 5px;
     }
   }
-  /* Wariant BG-Sync: Strzałki wewnątrz, widoczne tylko na hover */
+  /* BG-Sync variant: arrows inside, visible only on hover */
   .carousel-bg-sync .carousel-nav {
     opacity: 0;
     visibility: hidden;
-    /* Dodajemy lekki przesuw dla płynnego wjazdu */
+    /* Add a slight offset for a smooth entry */
     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .carousel-bg-sync .carousel-prev {
@@ -6608,7 +6623,7 @@
     color: var(--text-main);
   }
   /* =========================================
-     3. TOAST NOTIFICATIONS (Powiadomienia)
+     3. TOAST NOTIFICATIONS
      ========================================= */
   .toast-container {
     position: fixed;
@@ -6618,14 +6633,14 @@
     gap: calc(var(--spacing-unit) * 1.5);
     padding: calc(var(--spacing-unit) * 2);
     pointer-events: none;
-    /* NAPRAWA TOP LAYER: Reset domyślnych stylów Popover API */
+    /* TOP LAYER FIX: reset the Popover API's default styles */
     margin: 0;
     border: none;
     background: transparent;
     overflow: visible;
-    inset: auto; /* Resetujemy domyślne rozciągnięcie popovera */
+    inset: auto; /* Reset the popover's default stretching */
   }
-  /* Pozycje kontenera (Dodano 'auto' dla nieużywanych krawędzi, by nadpisać Popover) */
+  /* Container positions (added 'auto' for the unused edges to override the Popover) */
   .toast-top-right {
     top: 0;
     right: 0;
@@ -6670,7 +6685,7 @@
     transform: translateX(-50%);
     align-items: center;
   }
-  /* Sam Toast */
+  /* The toast itself */
   .toast {
     background-color: var(--bg-surface);
     color: var(--text-main);
@@ -6680,20 +6695,20 @@
     padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
     min-width: 280px;
     max-width: 350px;
-    pointer-events: auto; /* Toast sam w sobie jest klikalny */
+    pointer-events: auto; /* The toast itself is clickable */
     position: relative;
     overflow: hidden;
     font-size: 0.875rem;
     font-weight: var(--fw-medium);
-    /* Animacja wejścia */
+    /* Entry animation */
     animation: toastEnter 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     will-change: transform, opacity;
   }
-  /* Animacja wyjścia (dodawana przez JS) */
+  /* Exit animation (added by JS) */
   .toast.is-closing {
     animation: toastExit 0.3s ease-in forwards;
   }
-  /* Warianty kolorystyczne (B2B style - pasek z boku) */
+  /* Color variants (B2B style - side bar) */
   .toast-success {
     border-left: 4px solid var(--success);
   }
@@ -6706,7 +6721,7 @@
   .toast-warning {
     border-left: 4px solid var(--warning);
   }
-  /* Pasek postępu czasu */
+  /* Time progress bar */
   .toast-progress {
     position: absolute;
     bottom: 0;
@@ -6717,7 +6732,7 @@
     width: 100%;
     transform-origin: left;
   }
-  /* Keyframes dla Toastów */
+  /* Keyframes for toasts */
   @keyframes toastEnter {
     from {
       opacity: 0;
@@ -6746,7 +6761,7 @@
       transform: scaleX(0);
     }
   }
-  /* Na mobile toasty zajmują całą szerokość */
+  /* On mobile, toasts take up the full width */
   @media (max-width: 767px) {
     .toast-container {
       width: 100%;
@@ -6833,16 +6848,16 @@
     }
   }
   /* =========================================
-     4.5. STOCK BAR (Segmentowy poziom zapasu)
+     4.5. STOCK BAR (Segmented stock level)
      ========================================= */
-  /* Pięciosegmentowy wskaźnik poziomu (stany magazynowe, limity, quoty).
-     Zero JS i zero dodatkowego markupu: segmenty rysuje maska SVG (5
-     zaokrąglonych prostokątów), a wypełnienie to zwykły gradient ucinany
-     na granicy segmentu. Liczba wypełnionych segmentów z backendu przez
-     zmienną CSS: style="--stock-filled: 3" (0-5). "Puste" segmenty to
-     tint koloru wariantu (rgba), więc działają też w dark mode.
-     A11y: element jest czysto wizualny - podawaj wartość obok jako tekst
-     lub nadaj role="img" + aria-label="Stan: 3/5". */
+  /* A five-segment level indicator (stock levels, limits, quotas).
+     Zero JS and zero extra markup: an SVG mask draws the segments (5
+     rounded rectangles), and the fill is a plain gradient clipped at the
+     segment boundary. The number of filled segments comes from the backend
+     via a CSS variable: style="--stock-filled: 3" (0-5). "Empty" segments
+     are a tint of the variant color (rgba), so they also work in dark mode.
+     A11y: the element is purely visual - provide the value as text
+     alongside it, or give it role="img" + aria-label="State: 3/5". */
   .stock-bar {
     --stock-segments: 5;
     --stock-filled: 0;
@@ -6854,13 +6869,13 @@
     flex-shrink: 0;
     vertical-align: middle;
     background: linear-gradient(to right, var(--stock-color) 0 calc(var(--stock-filled) / var(--stock-segments) * 100%), rgba(var(--stock-color-rgb), 0.25) 0);
-    /* Maska: 5 segmentów 10x10 (rx=2) z odstępem 2.5 w siatce 60x10.
-       Granica k/5 wypełnienia zawsze wypada w przerwie między segmentami,
-       więc krawędź gradientu nigdy nie tnie segmentu w połowie. */
+    /* Mask: 5 segments of 10x10 (rx=2) with a 2.5 gap on a 60x10 grid.
+       The k/5 fill boundary always lands in the gap between segments, so
+       the gradient's edge never cuts a segment in half. */
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center/100% 100% no-repeat;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center/100% 100% no-repeat;
   }
-  /* Warianty kolorystyczne (semantyka jak w statusach) */
+  /* Color variants (semantics as in status indicators) */
   .stock-bar-success {
     --stock-color: var(--success);
     --stock-color-rgb: var(--success-rgb);
@@ -6924,19 +6939,19 @@
     transform: translate(-50%, 0);
   }
   /* =========================================
-     6. ANIMOWANE IKONY STATUSU (Statyczne)
+     6. ANIMATED STATUS ICONS (Static)
      ========================================= */
   .status-icon {
-    width: 32px; /* Zmniejszono z 64px */
+    width: 32px; /* Reduced from 64px */
     height: 32px;
     border-radius: 50%;
     position: relative;
     display: inline-block;
     transition: all var(--transition-speed);
   }
-  /* Ikona Plus (Dodaj) */
+  /* Plus icon (Add) */
   .status-icon-add {
-    border: 2px solid var(--text-main); /* Cieńsza ramka */
+    border: 2px solid var(--text-main); /* Thinner border */
   }
   .status-icon-add::before, .status-icon-add::after {
     content: "";
@@ -6955,7 +6970,7 @@
     width: 50%;
     height: 2px;
   }
-  /* Ikona Sukces (Checkmark) */
+  /* Success icon (Checkmark) */
   .status-icon-success {
     background-color: var(--success);
   }
@@ -6965,18 +6980,18 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -60%) rotate(45deg);
-    width: 8px; /* Pomniejszony ptaszek */
+    width: 8px; /* Smaller checkmark */
     height: 14px;
     border: solid #fff;
-    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+    border-width: 0 2px 2px 0; /* Thinner checkmark */
   }
   /* =========================================
-     7. INTERAKTYWNA IKONA STATUSU (Plus -> Sukces)
+     7. INTERACTIVE STATUS ICON (Plus -> Success)
      ========================================= */
   .status-icon-toggle {
-    width: 32px; /* Zmniejszono z 64px */
+    width: 32px; /* Reduced from 64px */
     height: 32px;
-    border: 2px solid var(--border-color); /* Cieńsza ramka */
+    border: 2px solid var(--border-color); /* Thinner border */
     border-radius: 50%;
     background-color: transparent;
     position: relative;
@@ -6985,14 +7000,14 @@
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
-    /* Stan początkowy: PLUS */
+    /* Initial state: PLUS */
   }
   .status-icon-toggle::before {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 14px; /* Pomniejszony plus */
+    width: 14px; /* Smaller plus */
     height: 14px;
     background: linear-gradient(var(--text-muted), var(--text-muted)) center/2px 100% no-repeat, linear-gradient(var(--text-muted), var(--text-muted)) center/100% 2px no-repeat;
     transform: translate(-50%, -50%) scale(1) rotate(0deg);
@@ -7000,23 +7015,23 @@
     opacity: 1;
   }
   .status-icon-toggle {
-    /* Stan końcowy: CHECKMARK (Ptaszek) */
+    /* Final state: CHECKMARK */
   }
   .status-icon-toggle::after {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 8px; /* Pomniejszony ptaszek */
+    width: 8px; /* Smaller checkmark */
     height: 14px;
     border: solid #fff;
-    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+    border-width: 0 2px 2px 0; /* Thinner checkmark */
     opacity: 0;
     transform: translate(-50%, -60%) rotate(45deg) scale(0);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   }
   .status-icon-toggle {
-    /* AKCJA: Po dodaniu klasy .is-success */
+    /* ACTION: after adding the .is-success class */
   }
   .status-icon-toggle.is-success {
     background-color: var(--success);
@@ -7030,18 +7045,19 @@
     transform: translate(-50%, -60%) rotate(45deg) scale(1);
     opacity: 1;
   }
-  /* --- Wersja jako natywny Checkbox (Zero JS) --- */
+  /* --- Native Checkbox version (Zero JS) --- */
   .status-checkbox {
     display: inline-flex;
     cursor: pointer;
     margin: 0;
     position: relative;
-    /* .status-icon-toggle w środku ma zajęte oba pseudo-elementy pod grafikę
-       plus/checkmark, więc niewidoczny hit-area do --target-size-min (44px)
-       dokładamy tutaj, na klikalnym <label> - wizualny rozmiar ikony (32px)
-       zostaje bez zmian. Dotyczy tylko wariantu z tym wrapperem; goły
-       <button class="status-icon-toggle"> bez <label> nie ma wolnego
-       pseudo-elementu na ten sam trik (udokumentowane ograniczenie). */
+    /* .status-icon-toggle inside already has both pseudo-elements taken by
+       the plus/checkmark graphic, so we add the invisible hit-area up to
+       --target-size-min (44px) here, on the clickable <label> - the icon's
+       visual size (32px) stays unchanged. Applies only to the variant with
+       this wrapper; a bare <button class="status-icon-toggle"> without a
+       <label> has no free pseudo-element for the same trick (a documented
+       limitation). */
   }
   .status-checkbox::before {
     content: "";
@@ -7076,7 +7092,7 @@
     outline-offset: 2px;
   }
   /* =========================================
-     1. TABELE CENOWE (Pricing Tables)
+     1. PRICING TABLES
      ========================================= */
   .pricing-table {
     background-color: var(--bg-surface);
@@ -7084,11 +7100,12 @@
     border-radius: var(--border-radius);
     padding: calc(var(--spacing-unit) * 4);
     text-align: center;
-    /* Tylko transform w transition - box-shadow na hover zmienia sie od razu
-       (jedno przemalowanie), nie w petli klatek jak przy animowanym
-       przejsciu. Wzorca ::after z .featured-box nie da sie tu uzyc: ten
-       kontener ma overflow:hidden (potrzebne pod wstazke .is-featured
-       ponizej), wiec cien pseudo-elementu zostalby przyciety. */
+    /* Only transform in the transition - the hover box-shadow changes
+       instantly (a single repaint), not through a frame loop like an
+       animated transition. The ::after pattern from .featured-box can't be
+       used here: this container has overflow:hidden (needed for the
+       .is-featured ribbon below), so the pseudo-element's shadow would get
+       clipped. */
     transition: transform var(--transition-speed);
     position: relative;
     overflow: hidden;
@@ -7101,7 +7118,7 @@
     box-shadow: var(--shadow-lg);
   }
   .pricing-table {
-    /* Wyróżniona karta (np. "Najpopularniejsze") */
+    /* Highlighted card (e.g. "Most popular") */
   }
   .pricing-table.is-featured {
     border-color: var(--primary);
@@ -7109,7 +7126,7 @@
     transform: scale(1.05);
     z-index: 2;
     background-color: var(--bg-body);
-    /* Tasiemka (Ribbon) */
+    /* Ribbon */
   }
   .pricing-table.is-featured::before {
     content: "Popularne";
@@ -7151,7 +7168,7 @@
     list-style: none;
     padding: 0;
     margin: 0 0 calc(var(--spacing-unit) * 4) 0;
-    flex-grow: 1; /* Pcha przycisk na sam dół */
+    flex-grow: 1; /* Pushes the button all the way to the bottom */
   }
   .pricing-features li {
     padding: calc(var(--spacing-unit) * 1.5) 0;
@@ -7162,10 +7179,10 @@
     border-bottom: none;
   }
   .pricing-features li {
-    /* Przekreślone, niedostępne funkcje. BEZ dodatkowego opacity - samo
-       --text-muted juz daje 5:1 na bialym tle, a doklejone opacity:0.5
-       scinalo to do 2:1 (zbyt slabe nawet dla drugoplanowej tresci).
-       Przekreslenie samo w sobie wystarczajaco odroznia wizualnie. */
+    /* Struck-through, unavailable features. NO extra opacity - --text-muted
+       alone already gives 5:1 on a white background, and an added
+       opacity:0.5 cut that down to 2:1 (too weak even for secondary
+       content). The strikethrough alone is enough of a visual distinction. */
   }
   .pricing-features li.is-disabled {
     color: var(--text-muted);
@@ -7202,9 +7219,9 @@
   }
   @layer components {
     /* =========================================
-       3. TIMELINE (Oś czasu - Wersja Hybrydowa)
+       3. TIMELINE (hybrid version)
        ========================================= */
-    /* --- WERSJA KLASYCZNA (Pseudo-elementy) --- */
+    /* --- CLASSIC VERSION (pseudo-elements) --- */
     .timeline {
       --timeline-line-color: var(--border-color);
       --timeline-dot-color: var(--primary);
@@ -7214,7 +7231,7 @@
       padding-left: var(--timeline-spacing);
       margin: calc(var(--spacing-unit) * 4) 0;
       list-style: none;
-      /* Główna linia */
+      /* Main line */
     }
     .timeline::before {
       content: "";
@@ -7233,7 +7250,7 @@
       margin-bottom: 0;
     }
     .timeline-item {
-      /* Domyślna kropka */
+      /* Default dot */
     }
     .timeline-item::before {
       content: "";
@@ -7247,7 +7264,7 @@
       border: 2px solid var(--bg-body);
       z-index: 2;
     }
-    /* Wariant 1: Duże kółka na ikony */
+    /* Variant 1: large circles for icons */
     .timeline-large, .timeline-numbered {
       --timeline-dot-size: 48px;
       --timeline-spacing: 70px;
@@ -7278,7 +7295,7 @@
       border-color: var(--primary);
       color: var(--primary);
     }
-    /* Wariant 2: Automatyczna numeracja */
+    /* Variant 2: automatic numbering */
     .timeline-numbered {
       counter-reset: timeline-step;
     }
@@ -7309,10 +7326,10 @@
       background-color: var(--primary);
       color: #fff;
     }
-    /* --- WERSJA ZAAWANSOWANA (Grid / Etykiety po lewej) --- */
+    /* --- ADVANCED VERSION (grid / labels on the left) --- */
     .timeline-labeled {
       --timeline-label-width: 90px;
-      /* Resetujemy klasyczne pseudo-elementy, bo tu używamy Grida */
+      /* Reset the classic pseudo-elements, since we use Grid here */
       padding-left: 0;
     }
     .timeline-labeled::before {
@@ -7325,11 +7342,11 @@
       display: none;
     }
     .timeline-labeled .timeline-item {
-      /* Układ Grida */
+      /* Grid layout */
       display: grid;
       grid-template-columns: var(--timeline-label-width) 24px 1fr;
       gap: calc(var(--spacing-unit) * 2);
-      /* Mobile: Data nad treścią */
+      /* Mobile: date above the content */
     }
     @media (max-width: 991px) {
       .timeline-labeled .timeline-item {
@@ -7353,7 +7370,7 @@
       /* THIS WAS MISSING */
     }
     .timeline-labeled {
-      /* Elementy wewnętrzne Grida */
+      /* Internal grid elements */
     }
     .timeline-labeled .timeline-label {
       text-align: right;
@@ -8174,10 +8191,10 @@
     outline-offset: 2px;
   }
   /**
-   * molique - Code Preview (podgląd + kod)
-   * Bloki prezentacyjne: .component-showcase > .component-preview + .component-code.
-   * Przeniesione z modułu docs do rdzenia, żeby działały wszędzie (np. hero na
-   * stronie głównej), nie tylko na stronach ładujących bundle dokumentacji.
+   * molique - Code Preview (preview + code)
+   * Presentational blocks: .component-showcase > .component-preview + .component-code.
+   * Moved from the docs module to the core so they work everywhere (e.g. the
+   * hero on the homepage), not just on pages loading the docs bundle.
    */
   @layer components {
     .component-showcase {
@@ -8186,7 +8203,7 @@
       border-radius: var(--border-radius);
       overflow: hidden;
       background-color: var(--bg-body);
-      /* Zabezpieczenie przed rozsadzaniem przez zawartość */
+      /* A safeguard against content blowing out the width */
       max-width: 100%;
     }
     .component-preview {
@@ -8205,20 +8222,20 @@
     .component-code {
       position: relative;
       background-color: var(--code-bg);
-      /* Ramka, bo .component-code bywa uzywany SAMODZIELNIE (bez otoczki
-         .component-showcase, ktora niosla obramowanie) - bez niej blok kodu
-         nie ma zadnej krawedzi. */
+      /* A border, since .component-code is sometimes used STANDALONE
+         (without the .component-showcase wrapper that carried the border) -
+         without it the code block has no edge at all. */
       border: 1px solid var(--code-border);
       border-radius: var(--border-radius);
       margin: 0;
       padding: 0;
-      /* Zabezpieczenie przed rozsadzaniem przez długi kod */
+      /* A safeguard against long code blowing out the width */
       max-width: 100%;
     }
     .component-code pre {
       margin: 0;
       padding: calc(var(--spacing-unit) * 4);
-      /* Wymuszenie scrollowania w poziomie dla długich linii kodu */
+      /* Force horizontal scrolling for long code lines */
       overflow-x: auto;
       max-width: 100%;
       color: var(--code-text);
@@ -8226,8 +8243,9 @@
       font-size: 0.875rem;
       line-height: 1.6;
     }
-    /* Wewnatrz showcase'u obramowanie niesie juz .component-showcase, a blok
-       kodu przylega do podgladu - zostaje sama kreska rozdzielajaca. */
+    /* Inside a showcase, .component-showcase already carries the border, and
+       the code block sits flush against the preview - only the dividing
+       line remains. */
     .component-showcase > .component-code {
       border: 0;
       border-top: 1px solid var(--code-border);
@@ -8256,29 +8274,29 @@
     }
   }
   /**
-   * molique - Stopka strony (partials/footer.html)
-   * Stopka jest ZAWSZE ciemna (.bg-dark) niezaleznie od motywu, jak sidebar
-   * admina - dlatego linki i tlo licza sie tu wzgledem literalnych kolorow
-   * .bg-dark (#14162B / #F9F9F9), a nie zmiennych --dark, ktore w dark mode
-   * sie odwracaja.
+   * molique - Site footer (partials/footer.html)
+   * The footer is ALWAYS dark (.bg-dark) regardless of the theme, like the
+   * admin sidebar - so links and background here are computed against the
+   * literal .bg-dark colors (#14162B / #F9F9F9), not the --dark variable,
+   * which inverts in dark mode.
    *
-   * Asymetryczny odstep marka -> kolumny linkow: grid ma jeden wspolny
-   * column-gap, wiec kolumna marki dostaje dodatkowo max-width + margin-right
-   * (tylko od breakpointu lg) - jej TOR (1fr) zostaje nietkniety, tylko
-   * widoczna zawartosc jest ograniczona i domknieta wiekszym odstepem niz
-   * miedzy kolumnami 2-5.
+   * Asymmetric spacing between the brand and the link columns: the grid has
+   * one shared column-gap, so the brand column additionally gets a
+   * max-width + margin-right (from the lg breakpoint only) - its TRACK (1fr)
+   * stays untouched, only the visible content is constrained and closed off
+   * with a larger gap than between columns 2-5.
    */
   @layer components {
-    /* Lokalne zmienne RGB dla stopki - NIE --light-rgb/--dark-rgb globalne,
-       bo te odwracaja sie w dark mode (patrz komentarz na gorze pliku).
-       Kazdy .footer-* nizej zachowuje WLASNA, dobrana dla siebie
-       przezroczystosc - zmieniaja sie tu tylko zrodla koloru. */
+    /* Local RGB variables for the footer - NOT the global --light-rgb/--dark-rgb,
+       since those invert in dark mode (see the comment at the top of the file).
+       Each .footer-* below keeps its OWN chosen opacity - only the color
+       sources change here. */
     footer.bg-dark {
       --footer-muted-rgb: 249, 249, 249;
       --footer-white-rgb: 255, 255, 255;
-      /* Odcien primary z dark mode (#8B84FF), nie var(--primary) light-mode'owy
-         (#5145E5) - ten drugi na literalnie ciemnym tle stopki daje tylko
-         2.82:1 (WCAG wymaga 4.5:1 dla tekstu). */
+      /* The dark-mode primary shade (#8B84FF), not the light-mode var(--primary)
+         (#5145E5) - the latter, on the footer's literally dark background,
+         only reaches 2.82:1 (WCAG requires 4.5:1 for text). */
       --footer-primary: #8B84FF;
       --footer-primary-hover: #A5A0FF;
     }
@@ -8330,7 +8348,7 @@
       }
     }
     .footer-cols {
-      /* kolumna marki na md (2 kolumny) zajmuje caly gorny rzad */
+      /* on md (2 columns) the brand column spans the entire top row */
     }
     @media (min-width: 768px) {
       .footer-cols > *:first-child {
@@ -10674,7 +10692,7 @@
       height: 100vh;
       height: 100dvh;
       overflow-y: auto;
-      /* CSS MAGIC: forces snapping to a section's edge */
+      /* Forces snapping to a section's edge */
       scroll-snap-type: y mandatory;
       scroll-behavior: smooth;
       /* Hide the scrollbar for a "clean presentation" effect */

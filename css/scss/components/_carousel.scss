@@ -1,12 +1,12 @@
-// molique - Karuzele (slidery) + warianty i kontrolki.
+// molique - Carousels (sliders) + variants and controls.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   6. KARUZELE (Sliders)
+   6. CAROUSELS (Sliders)
    ========================================= */
 .carousel {
   position: relative;
@@ -54,7 +54,7 @@
   flex-shrink: 0;
 }
 
-/* Przyciski nawigacyjne (Strzałki) */
+/* Navigation buttons (arrows) */
 .carousel-nav {
   position: absolute;
   top: 50%;
@@ -74,8 +74,8 @@
   z-index: 10;
   transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
 
-  /* Wizualny rozmiar (40px) zostaje - niewidoczny obszar klikalny dobity
-     do --target-size-min (44px). */
+  /* The visual size (40px) stays - the invisible hit area is topped up
+     to --target-size-min (44px). */
   &::before {
     content: '';
     position: absolute;
@@ -88,8 +88,8 @@
 
   &:hover {
     background-color: var(--primary);
-    /* Jak w .btn-primary: w dark mode primary jaśnieje, więc tekst musi
-       ciemnieć - literal #fff tracił kontrast */
+    /* As in .btn-primary: primary lightens in dark mode, so the text must
+       darken - a literal #fff was losing contrast */
     color: var(--btn-text-light);
     border-color: var(--primary);
   }
@@ -98,14 +98,14 @@
 .carousel-prev { left: -15px; }
 .carousel-next { right: -15px; }
 
-/* Kropki paginacji */
+/* Pagination dots */
 .carousel-dots {
   display: flex;
   justify-content: center;
-  /* Kropki maja 10px + niewidoczny obszar klikalny --target-size-min (44px)
-     przez ::before ponizej - przy zbyt malym gap te niewidoczne obszary
-     sasiednich kropek zachodza na siebie (WCAG 2.5.8, min. 24px "bezpiecznej"
-     przestrzeni miedzy celami dotyku). */
+  /* The dots are 10px + an invisible hit area of --target-size-min (44px)
+     via the ::before below - with too small a gap, the invisible areas of
+     adjacent dots overlap each other (WCAG 2.5.8, min. 24px of "safe"
+     space between touch targets). */
   gap: calc(var(--spacing-unit) * 2);
   margin-top: calc(var(--spacing-unit) * 3);
 }
@@ -113,8 +113,8 @@
 .carousel-dot {
   width: 10px;
   height: 10px;
-  min-height: 10px !important; /* Nadpisuje globalne 44px dla buttonów */
-  flex: 0 0 auto; /* Blokuje rozciąganie we Flexboxie */
+  min-height: 10px !important; /* Overrides the global 44px for buttons */
+  flex: 0 0 auto; /* Prevents stretching in Flexbox */
   border-radius: 50%;
   background-color: var(--border-color);
   border: none;
@@ -124,7 +124,7 @@
   position: relative;
   transition: background-color var(--transition-speed), transform var(--transition-speed);
   
-  /* Zwiększenie obszaru klikalnego do --target-size-min (44px) */
+  /* Increase the hit area to --target-size-min (44px) */
   &::before {
     content: '';
     position: absolute;
@@ -148,12 +148,12 @@
   .carousel-next { right: 5px; }
 }
 
-/* Wariant BG-Sync: Strzałki wewnątrz, widoczne tylko na hover */
+/* BG-Sync variant: arrows inside, visible only on hover */
 .carousel-bg-sync {
   .carousel-nav {
     opacity: 0;
     visibility: hidden;
-    /* Dodajemy lekki przesuw dla płynnego wjazdu */
+    /* Add a slight offset for a smooth entry */
     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   

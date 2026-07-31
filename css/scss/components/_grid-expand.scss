@@ -1,12 +1,12 @@
-// molique - Grid Expand: plynne rozwijanie bez JS.
+// molique - Grid Expand: smooth expand/collapse without JS.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   5. GRID EXPAND (Płynne rozwijanie bez JS)
+   5. GRID EXPAND (Smooth expand/collapse without JS)
    ========================================= */
 .grid-expand {
   display: grid;
@@ -17,10 +17,10 @@
     overflow: hidden;
   }
 
-  // Trzeci wyzwalacz: .form-switch tuz PRZED .grid-expand jako rodzenstwo,
-  // nie zagniezdzenie - dzieki temu klik gdziekolwiek w odslonietej tresci
-  // nie przelacza switcha, co nastapiloby, gdyby siedziala w tym samym
-  // <label>.
+  // Third trigger: .form-switch right BEFORE .grid-expand as a sibling,
+  // not nested - this way, clicking anywhere in the revealed content
+  // doesn't toggle the switch, which would happen if it sat inside the
+  // same <label>.
   &.is-open,
   details[open] &,
   .form-switch:has(.form-switch-input:checked) + & {

@@ -1,7 +1,7 @@
 /**
- * molique - Sekcje Hero i Nakładki (Overlay)
- * Sekcje powitalne ze zdjęciem w tle, przyciemniającą nakładką (Overlay)
- * oraz zaawansowanym systemem wycinanych narożników (Hero Cutout).
+ * molique - Hero Sections and Overlays
+ * Welcome sections with a background image, a dimming overlay, and an
+ * advanced cutout-corners system (Hero Cutout).
  */
 
 @use '../variables' as *;
@@ -9,7 +9,7 @@
 
 @layer components {
   /* =========================================
-     1. PAGE HEADER (Hero ze zdjęciem w tle)
+     1. PAGE HEADER (hero with a background image)
      ========================================= */
   .page-header {
     position: relative;
@@ -18,15 +18,16 @@
     background-repeat: no-repeat;
   }
 
-  /* Dodaj do dowolnego kontenera z .overlay w środku - odcina wystające
-     rogi nakładki i daje jej kontekst pozycjonowania (position:relative). */
+  /* Add to any container with an .overlay inside - clips off the
+     overlay's overhanging corners and gives it a positioning context
+     (position:relative). */
   .has-overlay {
     position: relative;
     overflow: hidden;
   }
 
   /* =========================================
-     2. OVERLAY (Przyciemniająca nakładka)
+     2. OVERLAY (dimming layer)
      ========================================= */
   .overlay {
     position: absolute;
@@ -34,30 +35,31 @@
     z-index: 0;
     pointer-events: none;
 
-    /* DOMYSLNY SCRIM. Wczesniej sama .overlay nie miala ani koloru, ani
-       krycia, wiec oba uzycia bez kompletu klas wychodzily zle:
-         .overlay                -> niewidoczna (brak tla),
-         .overlay + .overlay-dark -> W PELNI NIEPRZEZROCZYSTA (opacity 1),
-                                     czyli zdjecie znikalo pod plaskim kolorem.
-       Teraz sama .overlay daje uzyteczne przyciemnienie, a klasy kolorow
-       (.overlay-dark/-primary/-light, .bg-overlay) i krycia (.overlay-10..90)
-       nadpisuja te wartosci - stoja dalej w zrodle przy tej samej
-       specyficznosci. */
+    /* DEFAULT SCRIM. Previously a bare .overlay had neither a color nor
+       an opacity, so both usages without a full set of classes came out
+       wrong:
+         .overlay                -> invisible (no background),
+         .overlay + .overlay-dark -> FULLY OPAQUE (opacity 1),
+                                     i.e. the image vanished under a flat color.
+       Now a bare .overlay gives a useful dimming effect, and the color
+       classes (.overlay-dark/-primary/-light, .bg-overlay) and opacity
+       classes (.overlay-10..90) override these values - they come later
+       in the source at the same specificity. */
     background-color: #14162B;
     opacity: 0.5;
   }
 
-  /* --- Kolory nakładki --- */
-  /* overlay-dark na literale (jak overlay-light): nakładka ma ZAWSZE
-     przyciemniać zdjęcie pod jasnym tekstem hero, a dark mode odwraca
-     var(--dark) do prawie białego - "przyciemnienie" stawało się
-     rozjaśnieniem i biały tekst lądował na jasnym tle. */
+  /* --- Overlay colors --- */
+  /* overlay-dark uses a literal (like overlay-light): the overlay must
+     ALWAYS dim the image under the hero's light text, and dark mode
+     inverts var(--dark) to near-white - the "dimming" would become a
+     brightening and the white text would land on a light background. */
   .bg-overlay { background-color: #000; }
   .overlay-dark { background-color: #14162B; }
   .overlay-primary { background-color: var(--primary); }
   .overlay-light { background-color: #fff; }
 
-  /* --- Przezroczystość nakładki (skok co 10) --- */
+  /* --- Overlay opacity (steps of 10) --- */
   .overlay-10 { opacity: 0.1; }
   .overlay-20 { opacity: 0.2; }
   .overlay-30 { opacity: 0.3; }
@@ -69,7 +71,7 @@
   .overlay-90 { opacity: 0.9; }
 
   /* =========================================
-     3. HERO CUTOUT SYSTEM (Wklęsłe narożniki)
+     3. HERO CUTOUT SYSTEM (concave corners)
      ========================================= */
   .hero-with-cutout {
     position: relative;
@@ -102,13 +104,14 @@
 
     .cutout-wrapper {
       z-index: 1;
-      /* Promień "wycięcia" w rogu stykającym się ze zdjęciem */
+      /* The radius of the "cutout" at the corner touching the image */
       --cutout-radius: 32px;
     }
 
-    /* Każdy wariant kotwiczy wrapper w danym rogu i wycina PRZECIWLEGŁY
-       (stykający się ze zdjęciem) róg samego wrappera łagodnym łukiem -
-       stąd "at 0 0" dla br (wycięcie w lewym-górnym rogu wrappera), itd. */
+    /* Each variant anchors the wrapper to a given corner and cuts out the
+       OPPOSITE corner of the wrapper itself (the one touching the image)
+       with a gentle arc - hence "at 0 0" for br (a cutout at the
+       wrapper's top-left corner), etc. */
     .cutout-wrapper.cutout-md-br {
       position: absolute;
       right: 0;

@@ -1,13 +1,13 @@
-// molique - Dropdown: wariant w navbarze (<details>) oraz wariant Popover API (top layer, poza navbarem).
+// molique - Dropdown: navbar variant (<details>) and Popover API variant (top layer, outside the navbar).
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   4. DROPDOWN (Zwykłe menu rozwijane)
+   4. DROPDOWN (Regular dropdown menu)
    ========================================= */
 .dropdown {
   position: relative;
@@ -80,11 +80,11 @@
   }
 }
 
-/* Modyfikator: menu rozwija się od PRAWEJ krawędzi triggera zamiast od
-   lewej - niezbędne dla dropdownów siedzących blisko prawej krawędzi
-   ekranu (np. w navbarze), żeby panel nie wystawał poza viewport. */
-/* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
-   Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+/* Modifier: the menu opens from the RIGHT edge of the trigger instead of
+   the left - needed for dropdowns sitting near the right edge of the
+   screen (e.g. in the navbar), so the panel doesn't overflow the viewport. */
+/* Active position (current page) - the class is set by js/modules/molique-navbar-active.js.
+   The rule lives here, not in _navbar.scss, so the module is self-contained. */
 .dropdown-item.is-active {
   color: var(--primary);
   font-weight: var(--fw-bold);
@@ -96,29 +96,29 @@
 }
 
 /* =========================================
-   4.1. DROPDOWN JAKO POPOVER (Top Layer)
+   4.1. DROPDOWN AS A POPOVER (Top Layer)
    ========================================= */
-/* Zalecany wariant POZA navbarem (tabele, karty, modale, przewijane
-   kontenery): dowolny istniejący przycisk z [popovertarget="ID"] +
-   `.dropdown-menu` z atrybutem [popover] i tym samym `id`. Atrybut
-   [popover] przenosi menu do top layer przeglądarki - koniec przycinania
-   przez overflow przodków - a Esc i klik poza menu zamykają je natywnie
-   (light dismiss).
+/* Recommended variant OUTSIDE the navbar (tables, cards, modals, scrollable
+   containers): any existing button with [popovertarget="ID"] +
+   `.dropdown-menu` with a [popover] attribute and the same `id`. The
+   [popover] attribute moves the menu to the browser's top layer - no more
+   clipping from ancestor overflow - and Esc plus a click outside the menu
+   close it natively (light dismiss).
 
-   Pozycjonowanie: popover otwarty przez [popovertarget] dostaje swój
-   przycisk jako NIEJAWNY anchor (position-anchor: auto - wartość
-   domyślna), więc anchor() działa bez wrappera .dropdown, bez anchor-name
-   i bez anchor-scope. To dlatego ten wariant można doczepić do dowolnego
-   buttona jedną parą atrybutów. */
-/* Warianty pozycji zapasowej dla przypadku, gdy domyślne umiejscowienie
-   (pod przyciskiem, do lewej) wypchnęłoby menu poza viewport - np. przycisk
-   blisko dolnej lub prawej krawędzi ekranu (ostatni wiersz tabeli, ostatnia
-   kolumna w gridzie kart). WAZNE: przegladarka stosuje fallback z listy
-   TYLKO jesli w PELNI znosi przepelnienie - fallback adresujacy wylacznie
-   jedna os (np. samo odwrocenie pionu) jest calkowicie ignorowany, gdy
-   przepelnienie wystepuje jednoczesnie w pionie I poziomie, mimo ze
-   czesciowo poprawilby sytuacje. Stad KOMPLET trzech kombinacji ponizej,
-   nie tylko odwrocenie pionu. */
+   Positioning: a popover opened via [popovertarget] gets its button as an
+   IMPLICIT anchor (position-anchor: auto - the default value), so anchor()
+   works without a .dropdown wrapper, without anchor-name, and without
+   anchor-scope. That's why this variant can be attached to any button with
+   just one pair of attributes. */
+/* Fallback-position variants for when the default placement (below the
+   button, to the left) would push the menu outside the viewport - e.g. a
+   button near the bottom or right edge of the screen (the last table row,
+   the last column in a card grid). IMPORTANT: the browser only applies a
+   fallback from the list if it FULLY eliminates the overflow - a fallback
+   addressing only one axis (e.g. just flipping vertically) is completely
+   ignored when the overflow occurs simultaneously vertically AND
+   horizontally, even though it would partially improve things. Hence the
+   FULL set of three combinations below, not just a vertical flip. */
 @position-try --dropdown-popover-flip-above {
   top: auto;
   bottom: anchor(top);
@@ -138,12 +138,12 @@
 }
 
 .dropdown-menu[popover] {
-  /* position: fixed, nie absolute - patrz pelny opis w
-     _form-select-search.scss przy .select-search-menu. W skrocie: popover
-     zagniezdzony w otwartym <dialog>, z position:absolute, liczyl anchor()
-     poprawnie, ale renderowal sie wzgledem dokumentu zamiast viewportu -
-     przy duzym przewinieciu strony ladowal daleko poza ekranem. fixed ma
-     containing block = viewport niezaleznie od promocji do top layer. */
+  /* position: fixed, not absolute - see the full write-up in
+     _form-select-search.scss at .select-search-menu. In short: a popover
+     nested inside an open <dialog>, with position:absolute, computed
+     anchor() correctly but rendered relative to the document instead of
+     the viewport - at a large scrollY it landed far off-screen. fixed has
+     containing block = viewport regardless of promotion to the top layer. */
   position: fixed;
   inset: auto;
   top: anchor(bottom);
@@ -155,9 +155,9 @@
     --dropdown-popover-flip-above,
     --dropdown-popover-flip-above-left;
 
-  /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy
-     Firefox): menu otwiera się jako wyśrodkowany panel - nadal w top
-     layer, więc nic go nie przycina. */
+  /* Fallback for browsers without CSS Anchor Positioning (older
+     Firefox): the menu opens as a centered panel - still in the top
+     layer, so nothing clips it. */
   @supports not (top: anchor(bottom)) {
     position: fixed;
     inset: 0;
@@ -167,8 +167,8 @@
   }
 }
 
-/* Wyrównanie do prawej krawędzi przycisku - tylko tam, gdzie działa
-   anchor positioning (w fallbacku menu i tak jest wyśrodkowane). */
+/* Alignment to the button's right edge - only where anchor positioning
+   works (in the fallback the menu is centered anyway). */
 @supports (top: anchor(bottom)) {
   .dropdown-menu-end[popover] {
     left: auto;

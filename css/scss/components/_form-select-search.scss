@@ -1,7 +1,7 @@
-// molique - Searchable Select (combobox na Popover API).
+// molique - Searchable Select (combobox on the Popover API).
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @layer components {
   /* =========================================
@@ -11,9 +11,9 @@
     position: relative;
     width: 100%;
 
-    /* Stan "otwarty" odczytujemy z popovera przez :has() - popover
-       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
-       na elemencie nadrzędnym. */
+    /* We read the "open" state from the popover via :has() - a popover
+       (unlike <details>) doesn't leave an [open] attribute on the parent
+       element. */
     &:has(.select-search-menu:popover-open) .select-search-trigger {
       border-color: var(--primary);
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
@@ -27,8 +27,8 @@
     align-items: center;
     width: 100%;
     text-align: left;
-    /* Trigger to <button> - w przeciwieństwie do <summary> nie dziedziczy
-       fontu automatycznie. */
+    /* The trigger is a <button> - unlike <summary> it doesn't inherit the
+       font automatically. */
     font: inherit;
     cursor: pointer;
     user-select: none;
@@ -43,29 +43,33 @@
   }
 
   .select-search-menu {
-    /* Atrybut [popover] w HTML przenosi menu do top layer przeglądarki -
-       dzięki temu NIE jest przycinane przez overflow przodków (np. przewijany
-       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
-       na Esc i klik poza menu obsługuje natywnie light dismiss.
+    /* The [popover] attribute in the HTML moves the menu to the browser's
+       top layer - this means it's NOT clipped by ancestor overflow (e.g. a
+       scrollable .card-body in a modal) and renders above an open
+       <dialog>. Closing on Esc and a click outside the menu is handled
+       natively by light dismiss.
 
-       Kotwica: NIEJAWNA, nie nazwana. Parowanie popovertarget+id (Chrome 133+)
-       samo tworzy relację element-do-elementu miedzy przyciskiem a menu -
-       "auto" tylko wlacza jej uzycie przez anchor().
+       Anchor: IMPLICIT, unnamed. The popovertarget+id pairing (Chrome
+       133+) creates the element-to-element relationship between the
+       button and the menu on its own - "auto" just enables using it via
+       anchor().
 
-       POSITION: FIXED, nie absolute. Zweryfikowane w Playwright (Chromium 149):
-       ten popover, zagniezdzony w otwartym <dialog>, z position:absolute liczyl
-       anchor() poprawnie (top: 409px), ale renderowal sie WZGLEDEM DOKUMENTU,
-       nie viewportu - przy scrollY: 3772 dawalo to realna pozycje y: -3358px
-       (poza ekranem, mimo poprawnie obliczonego top). Do tego natywny .focus()
-       na polu wyszukiwania (w JS), widzac element "niewidoczny", uruchamial
-       plynne przewijanie strony w strone tej blednej pozycji - to byl faktyczny
-       objaw zgloszenia (strona skacze do innego selecta na stronie).
-       position: fixed ma containing block = viewport niezaleznie od promocji
-       do top layer, wiec obie usterki znikaja razem. Druga polowa naprawy:
-       focus({ preventScroll: true }) w molique-select.js. */
+       POSITION: FIXED, not absolute. Verified in Playwright (Chromium
+       149): this popover, nested inside an open <dialog>, with
+       position:absolute computed anchor() correctly (top: 409px), but
+       rendered RELATIVE TO THE DOCUMENT, not the viewport - at scrollY:
+       3772 that gave a real position of y: -3358px (off-screen, despite a
+       correctly computed top). On top of that, a native .focus() on the
+       search field (in JS), seeing an "invisible" element, triggered a
+       smooth scroll of the page toward that wrong position - that was the
+       actual symptom of the bug report (the page jumps to a different
+       select on the page). position: fixed has containing block =
+       viewport regardless of promotion to the top layer, so both defects
+       disappear together. The other half of the fix:
+       focus({ preventScroll: true }) in molique-select.js. */
     position: fixed;
     position-anchor: auto;
-    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+    /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
     inset: auto;
     top: anchor(bottom);
     left: anchor(left);
@@ -78,8 +82,8 @@
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-md);
-    /* z-index istotny tylko w fallbacku - w top layer o kolejności decyduje
-       moment otwarcia, nie z-index. */
+    /* z-index only matters in the fallback - in the top layer, opening
+       order decides stacking, not z-index. */
     z-index: var(--z-index-dropdown);
 
     &:popover-open {
@@ -88,9 +92,9 @@
       animation: fadeInDown 0.2s ease;
     }
 
-    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-       menu otwiera się jako wyśrodkowany panel - nadal w top layer, więc
-       nic go nie przycina. */
+    /* Fallback for browsers without CSS Anchor Positioning (older Firefox):
+       the menu opens as a centered panel - still in the top layer, so
+       nothing clips it. */
     @supports not (top: anchor(bottom)) {
       position: fixed;
       inset: 0;

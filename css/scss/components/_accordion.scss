@@ -1,12 +1,12 @@
-// molique - Akordeon na natywnym <details> + interpolate-size.
+// molique - Accordion on native <details> + interpolate-size.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   3. AKORDEON (Natywny <details>)
+   3. ACCORDION (Native <details>)
    ========================================= */
 .accordion {
   border: 1px solid var(--border-color);
@@ -22,12 +22,12 @@
     border-bottom: none;
   }
 
-  /* MAGIA CSS 2026: Płynne otwieranie natywnego details */
+  /* Smooth opening of a native details element (interpolate-size, Baseline 2026) */
   interpolate-size: allow-keywords;
-  
+
   &::details-content {
-    /* Stan zamknięty ORAZ zamykanie: overflow wraca do hidden natychmiast,
-       więc zwijana treść jest przycinana od pierwszej klatki. */
+    /* Closed state AND closing: overflow reverts to hidden immediately,
+       so the collapsing content is clipped from the very first frame. */
     transition: height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1), content-visibility var(--transition-speed-slow) allow-discrete;
     height: 0;
     overflow: hidden;
@@ -35,12 +35,14 @@
 
   &[open]::details-content {
     height: auto;
-    /* Po rozwinięciu zdejmujemy przycinanie. Bez tego treść wyższa niż
-       wysokość policzona przez animację zostaje ucięta na stałe, a przewijalny
-       rodzic (overflow-y: auto) nie widzi, że jest co przewijać.
-       `0s 0.3s` = przełącz dopiero PO zakończeniu animacji wysokości; gdyby
-       overflow stał się widoczny od razu, treść wychodziłaby poza rosnące
-       pudełko i nachodziła na sąsiadów przez cały czas otwierania. */
+    /* After expanding, we remove the clipping. Without this, content
+       taller than the height computed by the animation stays clipped
+       permanently, and a scrollable parent (overflow-y: auto) doesn't see
+       that there's anything to scroll.
+       `0s 0.3s` = switch only AFTER the height animation finishes; if
+       overflow became visible immediately, the content would spill past
+       the growing box and overlap its neighbors for the whole opening
+       duration. */
     overflow: visible;
     transition:
       height var(--transition-speed-slow) cubic-bezier(0.4, 0, 0.2, 1),
@@ -48,8 +50,8 @@
       overflow 0s var(--transition-speed-slow) allow-discrete;
   }
 
-  /* A11y: bez animacji wysokosci dla uzytkownikow z prefers-reduced-motion -
-     akordeon otwiera/zamyka sie od razu, bez plynnego rozwijania. */
+  /* A11y: no height animation for users with prefers-reduced-motion - the
+     accordion opens/closes instantly, without a smooth expand. */
   @media (prefers-reduced-motion: reduce) {
     &::details-content,
     &[open]::details-content {
@@ -60,12 +62,12 @@
 
 .accordion-header {
   display: flex;
-  /* BEZ justify-content: space-between. Strzałka ::after jest kolejnym
-     elementem flex, więc space-between rozpychał WSZYSTKIE dzieci nagłówka
-     na całą szerokość - nagłówek z plakietką i kodem (np. "1  Nakładka plus
-     .navbar-sticky") lądował rozstrzelony i wyśrodkowany. Strzałkę dosuwamy
-     do prawej przez margin-left na niej samej, przez co liczba elementów
-     w nagłówku przestaje mieć znaczenie. */
+  /* NO justify-content: space-between. The ::after arrow is another flex
+     item, so space-between was pushing ALL of the header's children apart
+     across the full width - a header with a badge and code (e.g. "1  Overlay
+     plus .navbar-sticky") ended up spread out and centered. We push the
+     arrow to the right via margin-left on itself, which makes the number
+     of elements in the header irrelevant. */
   align-items: center;
   gap: calc(var(--spacing-unit) * 1.5);
   padding: calc(var(--spacing-unit) * 2);

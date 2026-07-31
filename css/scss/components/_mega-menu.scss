@@ -1,22 +1,22 @@
-// molique - Mega Menu: <details> + CSS Anchor Positioning, na mobile degraduje sie do akordeonu w offcanvas.
+// molique - Mega Menu: <details> + CSS Anchor Positioning, degrades to an offcanvas accordion on mobile.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   3. MEGA MENU (<details> + Anchor Positioning - Zero JS, działa na mobile)
+   3. MEGA MENU (<details> + Anchor Positioning - zero JS, works on mobile)
    ========================================= */
 .mega-menu {
-  /* Ogranicza widoczność anchor-name poniżej do tej instancji komponentu,
-     żeby wiele .mega-menu na jednej stronie nie "podpinało się" nawzajem
-     (ten sam trik co .custom-select w _form-advanced.scss). Celowo BEZ
-     position:relative - .mega-menu-content ma się pozycjonować względem
-     .navbar (patrz niżej), nie względem tego małego elementu, żeby szeroki
-     panel nie wystawał poza ekran, gdy trigger siedzi blisko prawej
-     krawędzi navbara. */
+  /* Limits the anchor-name below to this component instance, so multiple
+     .mega-menu on one page don't "latch onto" each other (the same trick
+     as .custom-select in _form-advanced.scss). Deliberately WITHOUT
+     position:relative - .mega-menu-content needs to position itself
+     relative to .navbar (see below), not to this small element, so the
+     wide panel doesn't stick out off-screen when the trigger sits close
+     to the navbar's right edge. */
   anchor-scope: --mega-menu-trigger;
 }
 
@@ -30,7 +30,7 @@
   cursor: pointer;
   list-style: none;
   transition: color var(--transition-speed);
-  /* Punkt zaczepienia dla .mega-menu-content (CSS Anchor Positioning) */
+  /* Anchor point for .mega-menu-content (CSS Anchor Positioning) */
   anchor-name: --mega-menu-trigger;
 
   &::-webkit-details-marker { display: none; }
@@ -56,10 +56,10 @@
     transform: rotate(180deg);
   }
 
-  /* Niewidzialna "przykrywka" na cały ekran, dopóki menu jest otwarte -
-     klik gdziekolwiek poza panelem trafia w <summary> i natywnie zamyka
-     <details> (identyczny trik jak .dropdown[open] .dropdown-toggle::before
-     powyżej - zero JS potrzebne do zamykania na klik-poza-menu). */
+  /* An invisible full-screen "cover" while the menu is open - a click
+     anywhere outside the panel hits the <summary> and natively closes
+     the <details> (the identical trick as .dropdown[open]
+     .dropdown-toggle::before above - zero JS needed to close on a click outside the menu). */
   &::before {
     content: '';
     position: fixed;
@@ -131,8 +131,8 @@
   text-decoration: none;
   transition: background-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
 
-  /* Strzałka pojawiająca się na hover - czysto dekoracyjna (opacity/transform,
-     GPU-safe), sygnalizuje "przejdź dalej" bez dokładania obrazków. */
+  /* An arrow that appears on hover - purely decorative (opacity/transform,
+     GPU-safe), signals "go further" without adding images. */
   &::after {
     content: '\2192';
     opacity: 0;
@@ -152,10 +152,11 @@
   }
 }
 
-/* Wyróżniona karta (Featured) - jedna "komórka" siatki, wizualnie
-   podniesiona ponad zwykłe kolumny linków (gradient + CTA). */
-/* Aktywna pozycja (bieżąca strona) - klasę nadaje js/modules/molique-navbar-active.js.
-   Reguła mieszka tutaj, a nie w _navbar.scss, żeby moduł był samowystarczalny. */
+/* Featured card - one grid "cell", visually elevated above the regular
+   link columns (gradient + CTA). */
+/* Active item (current page) - the class is assigned by
+   js/modules/molique-navbar-active.js. This rule lives here, not in
+   _navbar.scss, so the module is self-contained. */
 .mega-menu-link.is-active {
   color: var(--primary);
   font-weight: var(--fw-bold);
@@ -169,10 +170,10 @@
   gap: calc(var(--spacing-unit) * 1.5);
   padding: calc(var(--spacing-unit) * 3);
   border-radius: var(--border-radius);
-  /* Gradient na literałach, NIE na var(--dark)/var(--primary): karta jest
-     celowo ZAWSZE ciemna z białym tekstem (jak sidebar), a dark mode
-     odwraca --dark do prawie białego i rozjaśnia --primary - z flipowanymi
-     zmiennymi biały tekst lądował na jasnym tle. */
+  /* Gradient on literals, NOT var(--dark)/var(--primary): the card is
+     deliberately ALWAYS dark with white text (like the sidebar), and dark
+     mode inverts --dark to near-white and lightens --primary - with the
+     flipped variables, white text would land on a light background. */
   background-image: linear-gradient(145deg, #14162B, #5145E5);
   color: #fff;
 }
@@ -225,26 +226,26 @@
 @include mq(md) {
   .mega-menu-content {
     position: absolute;
-    /* Pion: przyklejony pod TRIGGEREM (anchor positioning). Poziom: NIE
-       wyrównujemy do triggera, tylko wyśrodkowujemy względem całego
-       .navbar (position:relative, patrz sekcja 1) - dzięki temu szeroki
-       panel (do 980px) zawsze mieści się w oknie, niezależnie od tego, czy
-       trigger siedzi po lewej, w środku czy po prawej stronie navbara. */
+    /* Vertical: pinned below the TRIGGER (anchor positioning). Horizontal:
+       we do NOT align to the trigger, we center relative to the whole
+       .navbar (position:relative, see section 1) - this way the wide
+       panel (up to 980px) always fits in the window, regardless of
+       whether the trigger sits on the left, center, or right of the navbar. */
     position-anchor: --mega-menu-trigger;
     top: anchor(bottom);
     left: 50%;
     margin-top: calc(var(--spacing-unit) * 1);
     width: min(94vw, 980px);
-    /* FIX: przy wielu wąskich kolumnach (dużo pozycji w menu) panel może
-       zrobić się wyższy niż viewport - ograniczamy wysokość i włączamy
-       wewnętrzny scroll zamiast wypychania poza ekran. */
+    /* FIX: with many narrow columns (lots of menu items), the panel can
+       end up taller than the viewport - we cap the height and enable
+       internal scroll instead of pushing it off-screen. */
     max-height: min(78vh, 680px);
     overflow-y: auto;
     z-index: calc(var(--z-index-dropdown) + 1);
     transform: translateX(-50%) translateY(-8px);
 
-    /* Fallback dla przeglądarek bez wsparcia CSS Anchor Positioning:
-       "top" liczony od dołu całego .navbar zamiast od samego triggera. */
+    /* Fallback for browsers without CSS Anchor Positioning support:
+       "top" is measured from the bottom of the whole .navbar instead of the trigger itself. */
     @supports not (top: anchor(bottom)) {
       top: 100%;
     }
@@ -270,8 +271,8 @@
     border: none;
     background-color: rgba(0, 0, 0, 0.02);
 
-    /* Na mobile pokazuje/chowa się natychmiast, bez animacji - spójnie z
-       .admin-nav-submenu, który też jest oparty na <details>. */
+    /* On mobile it shows/hides instantly, with no animation - consistent
+       with .admin-nav-submenu, which is also based on <details>. */
     opacity: 1;
     transform: none;
     transition: none;

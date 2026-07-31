@@ -1,12 +1,12 @@
-// molique - Tabele cenowe (pricing tables) + wariant wyrozniony.
+// molique - Pricing tables + a highlighted variant.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   1. TABELE CENOWE (Pricing Tables)
+   1. PRICING TABLES
    ========================================= */
 .pricing-table {
   background-color: var(--bg-surface);
@@ -14,11 +14,12 @@
   border-radius: var(--border-radius);
   padding: calc(var(--spacing-unit) * 4);
   text-align: center;
-  /* Tylko transform w transition - box-shadow na hover zmienia sie od razu
-     (jedno przemalowanie), nie w petli klatek jak przy animowanym
-     przejsciu. Wzorca ::after z .featured-box nie da sie tu uzyc: ten
-     kontener ma overflow:hidden (potrzebne pod wstazke .is-featured
-     ponizej), wiec cien pseudo-elementu zostalby przyciety. */
+  /* Only transform in the transition - the hover box-shadow changes
+     instantly (a single repaint), not through a frame loop like an
+     animated transition. The ::after pattern from .featured-box can't be
+     used here: this container has overflow:hidden (needed for the
+     .is-featured ribbon below), so the pseudo-element's shadow would get
+     clipped. */
   transition: transform var(--transition-speed);
   position: relative;
   overflow: hidden;
@@ -31,15 +32,15 @@
     box-shadow: var(--shadow-lg);
   }
 
-  /* Wyróżniona karta (np. "Najpopularniejsze") */
+  /* Highlighted card (e.g. "Most popular") */
   &.is-featured {
     border-color: var(--primary);
     box-shadow: var(--shadow-md);
     transform: scale(1.05);
     z-index: 2;
     background-color: var(--bg-body);
-    
-    /* Tasiemka (Ribbon) */
+
+    /* Ribbon */
     &::before {
       content: 'Popularne';
       position: absolute;
@@ -87,19 +88,19 @@
   list-style: none;
   padding: 0;
   margin: 0 0 calc(var(--spacing-unit) * 4) 0;
-  flex-grow: 1; /* Pcha przycisk na sam dół */
-  
+  flex-grow: 1; /* Pushes the button all the way to the bottom */
+
   li {
     padding: calc(var(--spacing-unit) * 1.5) 0;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-main);
-    
+
     &:last-child { border-bottom: none; }
-    
-    /* Przekreślone, niedostępne funkcje. BEZ dodatkowego opacity - samo
-       --text-muted juz daje 5:1 na bialym tle, a doklejone opacity:0.5
-       scinalo to do 2:1 (zbyt slabe nawet dla drugoplanowej tresci).
-       Przekreslenie samo w sobie wystarczajaco odroznia wizualnie. */
+
+    /* Struck-through, unavailable features. NO extra opacity - --text-muted
+       alone already gives 5:1 on a white background, and an added
+       opacity:0.5 cut that down to 2:1 (too weak even for secondary
+       content). The strikethrough alone is enough of a visual distinction. */
     &.is-disabled {
       color: var(--text-muted);
       text-decoration: line-through;

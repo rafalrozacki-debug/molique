@@ -1,13 +1,13 @@
 /**
- * molique - Karty i Kontenery
- * Zawiera bazowe Karty, Featured Boxes, Thumb Info oraz Overlapping Cards.
+ * molique - Cards and Containers
+ * Contains base Cards, Featured Boxes, Thumb Info, and Overlapping Cards.
  */
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   1. BAZOWA KARTA (Card)
+   1. BASE CARD (Card)
    ========================================= */
 .card {
   display: flex;
@@ -15,7 +15,7 @@
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  overflow: hidden; /* Zapobiega wylewaniu się zdjęć poza zaokrąglone rogi */
+  overflow: hidden; /* Prevents images from spilling past the rounded corners */
   transition: box-shadow var(--transition-speed), transform var(--transition-speed);
 }
 
@@ -28,7 +28,7 @@
   border-top-right-radius: calc(var(--border-radius) - 1px);
 }
 .card-body {
-  flex: 1 1 auto; /* Pozwala karcie rosnąć i wypełniać miejsce w Gridzie */
+  flex: 1 1 auto; /* Lets the card grow and fill the space in the Grid */
   padding: calc(var(--spacing-unit) * 2);
   display: flex;
   flex-direction: column;
@@ -45,7 +45,7 @@
 }
 
 /* =========================================
-   2. FEATURED BOX (Wyróżnione cechy)
+   2. FEATURED BOX (Highlighted features)
    ========================================= */
 .featured-box {
   position: relative;
@@ -59,8 +59,8 @@
   transition: transform var(--transition-speed);
   height: 100%;
 
-  /* Cien hover na ::after (animowana tylko opacity) zamiast bezposredniego
-     przejscia box-shadow (reflow) - ten sam wzorzec co .hover-gpu-shadow. */
+  /* A hover shadow on ::after (animating only opacity) instead of a direct
+     box-shadow transition (reflow) - the same pattern as .hover-gpu-shadow. */
   &::after {
     content: '';
     position: absolute;
@@ -92,7 +92,7 @@
 }
 
 /* =========================================
-   3. THUMB INFO (Karty z obrazkiem w tle)
+   3. THUMB INFO (Cards with a background image)
    ========================================= */
 .thumb-info {
   position: relative;
@@ -138,7 +138,7 @@
   transform: translateY(0); 
 }
 
-/* Warianty ułożenia tekstu */
+/* Text-placement variants */
 .thumb-info-center .thumb-info-wrapper {
   align-items: center;
   justify-content: center;
@@ -157,22 +157,22 @@
 }
 
 /* =========================================
-   4. OVERLAPPING CARD (Nachodząca karta)
+   4. OVERLAPPING CARD
    ========================================= */
 .overlap-container {
   position: relative;
   z-index: 10;
-  /* Na mobile delikatne przesunięcie w górę */
-  margin-top: calc(var(--spacing-unit) * -6); 
+  /* A gentle upward shift on mobile */
+  margin-top: calc(var(--spacing-unit) * -6);
 }
 
 @include mq(md) {
   .overlap-container {
-    /* Domyślne przesunięcie na desktopie (ok. 100px) */
-    margin-top: calc(var(--spacing-unit) * -12); 
+    /* Default shift on desktop (about 100px) */
+    margin-top: calc(var(--spacing-unit) * -12);
   }
-  
-  /* Warianty dla pełnej kontroli (jeśli karta jest bardzo wysoka) */
+
+  /* Variants for full control (if the card is very tall) */
   .overlap-up-50 { margin-top: -50px; }
   .overlap-up-100 { margin-top: -100px; }
   .overlap-up-150 { margin-top: -150px; }

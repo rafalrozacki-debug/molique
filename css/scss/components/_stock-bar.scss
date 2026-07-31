@@ -1,21 +1,21 @@
-// molique - Stock bar: segmentowy poziom zapasu (maska SVG, zero JS).
+// molique - Stock bar: segmented stock level (SVG mask, zero JS).
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   4.5. STOCK BAR (Segmentowy poziom zapasu)
+   4.5. STOCK BAR (Segmented stock level)
    ========================================= */
-/* Pięciosegmentowy wskaźnik poziomu (stany magazynowe, limity, quoty).
-   Zero JS i zero dodatkowego markupu: segmenty rysuje maska SVG (5
-   zaokrąglonych prostokątów), a wypełnienie to zwykły gradient ucinany
-   na granicy segmentu. Liczba wypełnionych segmentów z backendu przez
-   zmienną CSS: style="--stock-filled: 3" (0-5). "Puste" segmenty to
-   tint koloru wariantu (rgba), więc działają też w dark mode.
-   A11y: element jest czysto wizualny - podawaj wartość obok jako tekst
-   lub nadaj role="img" + aria-label="Stan: 3/5". */
+/* A five-segment level indicator (stock levels, limits, quotas).
+   Zero JS and zero extra markup: an SVG mask draws the segments (5
+   rounded rectangles), and the fill is a plain gradient clipped at the
+   segment boundary. The number of filled segments comes from the backend
+   via a CSS variable: style="--stock-filled: 3" (0-5). "Empty" segments
+   are a tint of the variant color (rgba), so they also work in dark mode.
+   A11y: the element is purely visual - provide the value as text
+   alongside it, or give it role="img" + aria-label="State: 3/5". */
 .stock-bar {
   --stock-segments: 5;
   --stock-filled: 0;
@@ -32,14 +32,14 @@
     var(--stock-color) 0 calc(var(--stock-filled) / var(--stock-segments) * 100%),
     rgba(var(--stock-color-rgb), 0.25) 0
   );
-  /* Maska: 5 segmentów 10x10 (rx=2) z odstępem 2.5 w siatce 60x10.
-     Granica k/5 wypełnienia zawsze wypada w przerwie między segmentami,
-     więc krawędź gradientu nigdy nie tnie segmentu w połowie. */
+  /* Mask: 5 segments of 10x10 (rx=2) with a 2.5 gap on a 60x10 grid.
+     The k/5 fill boundary always lands in the gap between segments, so
+     the gradient's edge never cuts a segment in half. */
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 10' preserveAspectRatio='none'%3E%3Crect width='10' height='10' rx='2'/%3E%3Crect x='12.5' width='10' height='10' rx='2'/%3E%3Crect x='25' width='10' height='10' rx='2'/%3E%3Crect x='37.5' width='10' height='10' rx='2'/%3E%3Crect x='50' width='10' height='10' rx='2'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
 }
 
-/* Warianty kolorystyczne (semantyka jak w statusach) */
+/* Color variants (semantics as in status indicators) */
 .stock-bar-success { --stock-color: var(--success); --stock-color-rgb: var(--success-rgb); }
 .stock-bar-warning { --stock-color: var(--warning); --stock-color-rgb: var(--warning-rgb); }
 .stock-bar-danger  { --stock-color: var(--danger);  --stock-color-rgb: var(--danger-rgb); }

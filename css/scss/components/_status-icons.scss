@@ -1,15 +1,15 @@
-// molique - Ikony statusu: statyczne animowane oraz interaktywna plus->checkmark.
+// molique - Status icons: static animated and interactive plus->checkmark.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   6. ANIMOWANE IKONY STATUSU (Statyczne)
+   6. ANIMATED STATUS ICONS (Static)
    ========================================= */
 .status-icon {
-  width: 32px; /* Zmniejszono z 64px */
+  width: 32px; /* Reduced from 64px */
   height: 32px;
   border-radius: 50%;
   position: relative;
@@ -17,9 +17,9 @@
   transition: all var(--transition-speed);
 }
 
-/* Ikona Plus (Dodaj) */
+/* Plus icon (Add) */
 .status-icon-add {
-  border: 2px solid var(--text-main); /* Cieńsza ramka */
+  border: 2px solid var(--text-main); /* Thinner border */
   
   &::before,
   &::after {
@@ -36,30 +36,30 @@
   &::after { width: 50%; height: 2px; }
 }
 
-/* Ikona Sukces (Checkmark) */
+/* Success icon (Checkmark) */
 .status-icon-success {
   background-color: var(--success);
-  
+
   &::after {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -60%) rotate(45deg);
-    width: 8px; /* Pomniejszony ptaszek */
+    width: 8px; /* Smaller checkmark */
     height: 14px;
     border: solid #fff;
-    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+    border-width: 0 2px 2px 0; /* Thinner checkmark */
   }
 }
 
 /* =========================================
-   7. INTERAKTYWNA IKONA STATUSU (Plus -> Sukces)
+   7. INTERACTIVE STATUS ICON (Plus -> Success)
    ========================================= */
 .status-icon-toggle {
-  width: 32px; /* Zmniejszono z 64px */
+  width: 32px; /* Reduced from 64px */
   height: 32px;
-  border: 2px solid var(--border-color); /* Cieńsza ramka */
+  border: 2px solid var(--border-color); /* Thinner border */
   border-radius: 50%;
   background-color: transparent;
   position: relative;
@@ -69,13 +69,13 @@
   cursor: pointer;
   transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
 
-  /* Stan początkowy: PLUS */
+  /* Initial state: PLUS */
   &::before {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 14px; /* Pomniejszony plus */
+    width: 14px; /* Smaller plus */
     height: 14px;
     background: 
       linear-gradient(var(--text-muted), var(--text-muted)) center/2px 100% no-repeat,
@@ -85,22 +85,22 @@
     opacity: 1;
   }
 
-  /* Stan końcowy: CHECKMARK (Ptaszek) */
+  /* Final state: CHECKMARK */
   &::after {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 8px; /* Pomniejszony ptaszek */
+    width: 8px; /* Smaller checkmark */
     height: 14px;
     border: solid #fff;
-    border-width: 0 2px 2px 0; /* Cieńszy ptaszek */
+    border-width: 0 2px 2px 0; /* Thinner checkmark */
     opacity: 0;
     transform: translate(-50%, -60%) rotate(45deg) scale(0);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
   }
 
-  /* AKCJA: Po dodaniu klasy .is-success */
+  /* ACTION: after adding the .is-success class */
   &.is-success {
     background-color: var(--success);
     border-color: var(--success);
@@ -117,19 +117,20 @@
   }
 }
 
-/* --- Wersja jako natywny Checkbox (Zero JS) --- */
+/* --- Native Checkbox version (Zero JS) --- */
 .status-checkbox {
   display: inline-flex;
   cursor: pointer;
   margin: 0;
   position: relative;
 
-  /* .status-icon-toggle w środku ma zajęte oba pseudo-elementy pod grafikę
-     plus/checkmark, więc niewidoczny hit-area do --target-size-min (44px)
-     dokładamy tutaj, na klikalnym <label> - wizualny rozmiar ikony (32px)
-     zostaje bez zmian. Dotyczy tylko wariantu z tym wrapperem; goły
-     <button class="status-icon-toggle"> bez <label> nie ma wolnego
-     pseudo-elementu na ten sam trik (udokumentowane ograniczenie). */
+  /* .status-icon-toggle inside already has both pseudo-elements taken by
+     the plus/checkmark graphic, so we add the invisible hit-area up to
+     --target-size-min (44px) here, on the clickable <label> - the icon's
+     visual size (32px) stays unchanged. Applies only to the variant with
+     this wrapper; a bare <button class="status-icon-toggle"> without a
+     <label> has no free pseudo-element for the same trick (a documented
+     limitation). */
   &::before {
     content: '';
     position: absolute;

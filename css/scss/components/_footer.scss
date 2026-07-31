@@ -1,31 +1,31 @@
 /**
- * molique - Stopka strony (partials/footer.html)
- * Stopka jest ZAWSZE ciemna (.bg-dark) niezaleznie od motywu, jak sidebar
- * admina - dlatego linki i tlo licza sie tu wzgledem literalnych kolorow
- * .bg-dark (#14162B / #F9F9F9), a nie zmiennych --dark, ktore w dark mode
- * sie odwracaja.
+ * molique - Site footer (partials/footer.html)
+ * The footer is ALWAYS dark (.bg-dark) regardless of the theme, like the
+ * admin sidebar - so links and background here are computed against the
+ * literal .bg-dark colors (#14162B / #F9F9F9), not the --dark variable,
+ * which inverts in dark mode.
  *
- * Asymetryczny odstep marka -> kolumny linkow: grid ma jeden wspolny
- * column-gap, wiec kolumna marki dostaje dodatkowo max-width + margin-right
- * (tylko od breakpointu lg) - jej TOR (1fr) zostaje nietkniety, tylko
- * widoczna zawartosc jest ograniczona i domknieta wiekszym odstepem niz
- * miedzy kolumnami 2-5.
+ * Asymmetric spacing between the brand and the link columns: the grid has
+ * one shared column-gap, so the brand column additionally gets a
+ * max-width + margin-right (from the lg breakpoint only) - its TRACK (1fr)
+ * stays untouched, only the visible content is constrained and closed off
+ * with a larger gap than between columns 2-5.
  */
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 @layer components {
-  /* Lokalne zmienne RGB dla stopki - NIE --light-rgb/--dark-rgb globalne,
-     bo te odwracaja sie w dark mode (patrz komentarz na gorze pliku).
-     Kazdy .footer-* nizej zachowuje WLASNA, dobrana dla siebie
-     przezroczystosc - zmieniaja sie tu tylko zrodla koloru. */
+  /* Local RGB variables for the footer - NOT the global --light-rgb/--dark-rgb,
+     since those invert in dark mode (see the comment at the top of the file).
+     Each .footer-* below keeps its OWN chosen opacity - only the color
+     sources change here. */
   footer.bg-dark {
     --footer-muted-rgb: 249, 249, 249;
     --footer-white-rgb: 255, 255, 255;
-    /* Odcien primary z dark mode (#8B84FF), nie var(--primary) light-mode'owy
-       (#5145E5) - ten drugi na literalnie ciemnym tle stopki daje tylko
-       2.82:1 (WCAG wymaga 4.5:1 dla tekstu). */
+    /* The dark-mode primary shade (#8B84FF), not the light-mode var(--primary)
+       (#5145E5) - the latter, on the footer's literally dark background,
+       only reaches 2.82:1 (WCAG requires 4.5:1 for text). */
     --footer-primary: #8B84FF;
     --footer-primary-hover: #A5A0FF;
   }
@@ -79,7 +79,7 @@
       column-gap: calc(var(--spacing-unit) * 2.5);
     }
 
-    /* kolumna marki na md (2 kolumny) zajmuje caly gorny rzad */
+    /* on md (2 columns) the brand column spans the entire top row */
     @include mq(md, min) {
       > *:first-child { grid-column: 1 / -1; }
     }

@@ -1,16 +1,16 @@
-// molique - Timeline (os czasu) + warianty large/numbered/labeled.
+// molique - Timeline + large/numbered/labeled variants.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 @layer components {
   /* =========================================
-     3. TIMELINE (Oś czasu - Wersja Hybrydowa)
+     3. TIMELINE (hybrid version)
      ========================================= */
-  
-  /* --- WERSJA KLASYCZNA (Pseudo-elementy) --- */
+
+  /* --- CLASSIC VERSION (pseudo-elements) --- */
   .timeline {
     --timeline-line-color: var(--border-color);
     --timeline-dot-color: var(--primary);
@@ -22,7 +22,7 @@
     margin: calc(var(--spacing-unit) * 4) 0;
     list-style: none;
     
-    /* Główna linia */
+    /* Main line */
     &::before {
       content: '';
       position: absolute;
@@ -40,7 +40,7 @@
     
     &:last-child { margin-bottom: 0; }
     
-    /* Domyślna kropka */
+    /* Default dot */
     &::before {
       content: '';
       position: absolute;
@@ -55,7 +55,7 @@
     }
   }
 
-  /* Wariant 1: Duże kółka na ikony */
+  /* Variant 1: large circles for icons */
   .timeline-large {
     --timeline-dot-size: 48px;
     --timeline-spacing: 70px;
@@ -88,7 +88,7 @@
     color: var(--primary);
   }
 
-  /* Wariant 2: Automatyczna numeracja */
+  /* Variant 2: automatic numbering */
   .timeline-numbered {
     @extend .timeline-large;
     counter-reset: timeline-step;
@@ -124,24 +124,24 @@
     }
   }
 
-  /* --- WERSJA ZAAWANSOWANA (Grid / Etykiety po lewej) --- */
+  /* --- ADVANCED VERSION (grid / labels on the left) --- */
   .timeline-labeled {
     --timeline-label-width: 90px;
-    
-    /* Resetujemy klasyczne pseudo-elementy, bo tu używamy Grida */
+
+    /* Reset the classic pseudo-elements, since we use Grid here */
     padding-left: 0;
     &::before { display: none; }
-    
+
     .timeline-item {
       margin-bottom: 0;
       &::before, &::after { display: none; }
-      
-      /* Układ Grida */
+
+      /* Grid layout */
       display: grid;
       grid-template-columns: var(--timeline-label-width) 24px 1fr;
       gap: calc(var(--spacing-unit) * 2);
-      
-      /* Mobile: Data nad treścią */
+
+      /* Mobile: date above the content */
       @include mq(md, max) {
         grid-template-columns: 24px 1fr;
         
@@ -162,7 +162,7 @@
       }
     }
 
-    /* Elementy wewnętrzne Grida */
+    /* Internal grid elements */
     .timeline-label {
       text-align: right;
       font-size: 0.75rem;

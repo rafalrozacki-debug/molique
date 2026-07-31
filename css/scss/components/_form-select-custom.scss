@@ -1,19 +1,18 @@
-// molique - Premium Multi Select (kategorie + wielokrotny wybor).
+// molique - Premium Multi Select (categories + multiple selection).
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @layer components {
   /* =========================================
-     5. PREMIUM MULTI SELECT (Wzorowany na UI)
+     5. PREMIUM MULTI SELECT (modeled after a UI reference)
      ========================================= */
   .custom-select {
     position: relative;
     width: 100%;
 
-    /* Stan "otwarty" odczytujemy z popovera przez :has() - popover
-       (w przeciwieństwie do <details>) nie zostawia atrybutu [open]
-       na elemencie nadrzędnym. */
+    /* We read the "open" state from the popover via :has() - a popover
+       (unlike <details>) doesn't leave an [open] attribute on the parent element. */
     &:has(.custom-select-dropdown:popover-open) .custom-select-trigger {
       border-color: var(--primary);
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
@@ -29,8 +28,7 @@
     min-height: var(--target-size-min);
     padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
     text-align: left;
-    /* Trigger to <button> - w przeciwieństwie do <summary> nie dziedziczy
-       fontu automatycznie. */
+    /* The trigger is a <button> - unlike <summary> it doesn't inherit the font automatically. */
     font: inherit;
     color: var(--text-main);
     background-color: var(--bg-surface);
@@ -60,33 +58,35 @@
   }
 
   .custom-select-dropdown {
-    /* Atrybut [popover] w HTML przenosi dropdown do top layer przeglądarki -
-       dzięki temu NIE jest przycinany przez overflow przodków (np. przewijany
-       .card-body w modalu) i renderuje się nad otwartym <dialog>. Zamykanie
-       na Esc i klik poza menu obsługuje natywnie light dismiss.
+    /* The [popover] attribute in the HTML moves the dropdown to the
+       browser's top layer - this means it's NOT clipped by ancestor
+       overflow (e.g. a scrollable .card-body in a modal) and renders
+       above an open <dialog>. Closing on Esc and a click outside the
+       menu is handled natively by light dismiss.
 
-       Kotwica: NIEJAWNA, nie nazwana - jak w .select-search-menu (patrz
-       komentarz tam, razem z pelnym opisem zdiagnozowanego bledu). Parowanie
-       popovertarget+id (Chrome 133+) samo tworzy relację element-do-elementu;
-       "auto" tylko włącza jej użycie przez anchor().
+       Anchor: IMPLICIT, unnamed - like in .select-search-menu (see the
+       comment there, along with the full write-up of the diagnosed bug).
+       The popovertarget+id pairing (Chrome 133+) creates the
+       element-to-element relationship on its own; "auto" just enables
+       using it via anchor().
 
-       position: FIXED, nie absolute - z tego samego powodu co w
-       .select-search-menu: w <dialog> position:absolute liczylo anchor()
-       poprawnie, ale renderowalo sie wzgledem dokumentu zamiast viewportu,
-       co przy duzym scrollY dawalo popover daleko poza ekranem. */
+       position: FIXED, not absolute - for the same reason as in
+       .select-search-menu: inside a <dialog>, position:absolute computed
+       anchor() correctly, but rendered relative to the document instead
+       of the viewport, which at a large scrollY put the popover far off-screen. */
     position: fixed;
     position-anchor: auto;
-    /* Reset domyślnych stylów UA popovera (inset: 0 + margin: auto centruje) */
+    /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
     inset: auto;
-    /* Przyklejamy górę popovera do dołu przycisku (anchor) */
+    /* Pin the popover's top to the button's bottom (anchor) */
     top: anchor(bottom);
-    /* Wyrównujemy lewą krawędź popovera z lewą krawędzią przycisku */
+    /* Align the popover's left edge with the button's left edge */
     left: anchor(left);
-    /* Szerokość taka sama jak przycisk */
+    /* Same width as the button */
     width: anchor-size(width);
-    /* z-index istotny tylko w fallbacku - w top layer o kolejności decyduje
-       moment otwarcia, nie z-index (sticky nagłówki tabel z z-index:10
-       przestają być problemem). */
+    /* z-index only matters in the fallback - in the top layer, opening
+       order decides stacking, not z-index (sticky table headers with
+       z-index:10 stop being a problem). */
     z-index: var(--z-index-dropdown);
 
     margin: 4px 0 0 0;
@@ -105,9 +105,9 @@
       animation: fadeInDown 0.2s ease;
     }
 
-    /* Fallback dla przeglądarek bez CSS Anchor Positioning (starszy Firefox):
-       dropdown otwiera się jako wyśrodkowany panel - nadal w top layer,
-       więc nic go nie przycina. */
+    /* Fallback for browsers without CSS Anchor Positioning support
+       (older Firefox): the dropdown opens as a centered panel - still in
+       the top layer, so nothing clips it. */
     @supports not (top: anchor(bottom)) {
       position: fixed;
       inset: 0;

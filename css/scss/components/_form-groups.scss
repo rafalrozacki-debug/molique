@@ -1,7 +1,7 @@
-// molique - Input groups: laczenie pol z przyciskami i prefiksami.
+// molique - Input groups: combining fields with buttons and prefixes.
 @layer components {
   /* =========================================
-     1. INPUT GROUPS (Zgrupowane pola i przyciski)
+     1. INPUT GROUPS (Grouped fields and buttons)
      ========================================= */
   .input-group {
     display: flex;
@@ -10,25 +10,25 @@
     border-radius: var(--border-radius);
     transition: box-shadow var(--transition-speed);
 
-    /* Focus na całej grupie */
+    /* Focus on the whole group */
     &:focus-within {
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-      
+
       > .input, > .btn, > .input-group-text {
         border-color: var(--primary) !important;
       }
     }
 
-    /* 1. BAZA: Wszystkie elementy w grupie */
-    > .input, 
-    > .btn, 
+    /* 1. BASE: all elements in the group */
+    > .input,
+    > .btn,
     > .input-group-text {
       position: relative;
       margin-bottom: 0;
-      /* ŁOPATOLOGICZNIE: Zabijamy wszystkie rogi każdemu elementowi */
-      border-radius: 0 !important; 
-      
-      /* Wyłączamy indywidualny focus i walidację */
+      /* BLUNTLY: kill all corners on every element */
+      border-radius: 0 !important;
+
+      /* Disable individual focus and validation styling */
       &:focus, &:user-valid, &:user-invalid {
         box-shadow: none !important;
         border-color: var(--border-color) !important;
@@ -36,7 +36,7 @@
       }
     }
 
-    /* 2. NAKŁADANIE RAMEK: Każdy element (oprócz pierwszego) wsuwa się pod poprzednika */
+    /* 2. OVERLAPPING BORDERS: every element (except the first) slides under its predecessor */
     > .input + .input,
     > .input + .btn,
     > .input + .input-group-text,
@@ -49,7 +49,7 @@
       margin-left: -1px;
     }
 
-    /* 3. ODZYSKIWANIE ROGÓW: Tylko skrajne elementy */
+    /* 3. RECOVERING CORNERS: only the outermost elements */
     > :first-child {
       border-top-left-radius: var(--border-radius) !important;
       border-bottom-left-radius: var(--border-radius) !important;
@@ -60,7 +60,7 @@
       border-bottom-right-radius: var(--border-radius) !important;
     }
 
-    /* 4. SPECYFIKA ELEMENTÓW */
+    /* 4. ELEMENT-SPECIFIC RULES */
     > .input {
       flex: 1 1 auto;
       width: 1%;
@@ -124,11 +124,12 @@
     }
   }
 
-  /* .card-body ma wlasny flex gap (spacing miedzy dziecmi) - wlasny
-     margin-bottom .form-floating wyzej dublowalby ten odstep (gap +
-     margines = podwojna przerwa). Margines wyzej zostaje bez zmian dla
-     pozostalych kontekstow (np. kilka .form-floating wprost w <form> bez
-     .d-flex) - tam to on jedyny odpowiada za odstep miedzy polami. */
+  /* .card-body has its own flex gap (spacing between children) - the
+     .form-floating margin-bottom above would duplicate that spacing (gap +
+     margin = a double gap). The margin above stays unchanged for other
+     contexts (e.g. several .form-floating directly in a <form> without
+     .d-flex) - there it's the only thing providing spacing between
+     fields. */
   .card-body > .form-floating {
     margin-bottom: 0;
   }
