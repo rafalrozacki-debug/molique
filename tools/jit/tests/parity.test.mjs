@@ -1,22 +1,22 @@
 /**
- * molique-jit - test parytetu (Faza 3)
+ * molique-jit - parity test (Phase 3)
  *
- * Jedyna siatka bezpieczenstwa, jakiej potrzebuje architektura "tablicy
- * przegladowej": tools/jit/dist-data/utilities.json NIE liczy CSS samo,
- * tylko kopiuje juz skompilowane deklaracje z dist/chunks/molique-utilities*.css.
- * Ten test sprawdza, czy to, co jest w utilities.json, faktycznie zgadza
- * sie z NIEZALEZNIE skompilowanym css/molique-style.css (pelny build strony,
- * osobna kompilacja Sass) - jedyny sposob, w jaki mogloby to "nie zgadzac
- * sie", to ktos zmienil SCSS i zapomnial odpalic
- * `npm run gen:chunks && npm run gen:jit-utilities` (albo odwrotnie -
- * css/molique-style.css jest przestarzaly).
+ * The only safety net the "lookup table" architecture needs:
+ * tools/jit/dist-data/utilities.json does NOT compute CSS itself, it only
+ * copies already-compiled declarations from dist/chunks/molique-utilities*.css.
+ * This test checks whether what's in utilities.json actually matches an
+ * INDEPENDENTLY compiled css/molique-style.css (a full site build, a
+ * separate Sass compilation) - the only way this could "not match" is if
+ * someone changed the SCSS and forgot to run
+ * `npm run gen:chunks && npm run gen:jit-utilities` (or the other way
+ * around - css/molique-style.css is stale).
  *
- * CELOWO wlasna, druga implementacja ekstrakcji regul CSS (nie import z
- * tools/gen-jit-utilities.js) - gdyby test uzywal TEJ SAMEJ funkcji co
- * produkcyjny generator, bylby tautologiczny i nigdy nie wykrylby bledu w
- * tamtej funkcji.
+ * DELIBERATELY its own, second implementation of CSS rule extraction (not
+ * an import from tools/gen-jit-utilities.js) - if the test used the SAME
+ * function as the production generator, it would be tautological and
+ * would never catch a bug in that function.
  *
- * Uruchomienie:  node --test tools/jit/tests/
+ * Run:  node --test tools/jit/tests/
  */
 
 import { test } from 'node:test';
@@ -29,58 +29,58 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.
 const utilitiesPath = path.join(root, 'tools', 'jit', 'dist-data', 'utilities.json');
 const siteStylesheetPath = path.join(root, 'css', 'molique-style.css');
 
-/* ---------- Normalizacja (niweluje roznice formatowania compressed/pretty) ---------- */
+/* ---------- Normalization (evens out compressed/pretty formatting differences) ---------- */
 
 const stripComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '');
-// Deklaracje/warunki @media: spacje bez znaczenia semantycznego - usuwamy calkowicie.
-// Kompresja Sass (--style=compressed, uzywana przez gen-chunks.js) dodatkowo:
-//  - skraca "0.4" do ".4" (bezstratne, kosmetyczne),
-//  - male litery w kodach hex (#14162B -> #14162b, tez kosmetyczne),
-//  - zamienia slowo kluczowe "transparent" na "rgba(0,0,0,0)" (udokumentowane
-//    zachowanie Dart Sass compressed - unika znanego bledu interpolacji
-//    "transparent" jako czarnego w starszych przegladarkach; semantycznie
-//    identyczny kolor, nie prawdziwy rozjazd).
-// "Pretty" css/molique-style.css nie robi zadnej z tych trzech rzeczy, wiec
-// trzeba je zniwelowac po obu stronach porownania.
+// @media declarations/conditions: whitespace has no semantic meaning - strip it entirely.
+// Sass compression (--style=compressed, used by gen-chunks.js) additionally:
+//  - shortens "0.4" to ".4" (lossless, cosmetic),
+//  - lowercases hex codes (#14162B -> #14162b, also cosmetic),
+//  - replaces the "transparent" keyword with "rgba(0,0,0,0)" (documented
+//    Dart Sass compressed behavior - avoids a known interpolation bug
+//    where "transparent" is treated as black in older browsers;
+//    semantically the same color, not a real divergence).
+// The "pretty" css/molique-style.css doesn't do any of these three things,
+// so they need to be evened out on both sides of the comparison.
 const norm = (s) =>
   s
     .replace(/\s+/g, '')
     .replace(/(?<![\d.])0+(\.\d+)/g, '$1')
     .replace(/#[0-9A-Fa-f]{3,8}\b/g, (m) => m.toLowerCase())
-    // Kompresja Sass skraca szesciocyfrowy hex do trzycyfrowego, gdy to
-    // mozliwe (#ffffff -> #fff) - identyczny kolor, tylko krotszy zapis.
+    // Sass compression shortens a six-digit hex to three digits when
+    // possible (#ffffff -> #fff) - the same color, just a shorter notation.
     .replace(/#([0-9a-f])\1([0-9a-f])\2([0-9a-f])\3(?![0-9a-f])/g, '#$1$2$3')
     .replace(/\btransparent\b/g, 'rgba(0,0,0,0)')
-    // Dart Sass compressed wybiera hsla() jako kanoniczna forme czystej bieli
-    // z alfa - rgba(255,255,255,x) w "pretty" jest identycznym kolorem.
+    // Dart Sass compressed picks hsla() as the canonical form for pure
+    // white with alpha - rgba(255,255,255,x) in "pretty" is the same color.
     .replace(/rgba\(255,255,255,/g, 'hsla(0,0%,100%,');
-// Selektory: spacja bywa KOMBINATOREM POTOMNYM (".bg-video img" != ".bg-videoimg")
-// - wolno zwinac wielokrotne spacje do jednej, ale nie usunac ich calkiem.
-// PULAPKA zlapana w praniu: ownerOf() MUSI dostac ten wariant, nie norm() -
-// inaczej ".bg-video img" traci spacje i sklejone "bg-videoimg" jest
-// odczytywane jako jeden (falszywy) token klasy.
-// Kombinatory ">"/"+"/"~" maja natomiast spacje WYLACZNIE kosmetyczne
-// ("input:checked + .x" == "input:checked+.x") - kompresja Sass je usuwa,
-// wiec trzeba to zrobic po obu stronach porownania, inaczej falszywy alarm.
+// Selectors: a space can be a DESCENDANT COMBINATOR (".bg-video img" != ".bg-videoimg")
+// - it's fine to collapse multiple spaces into one, but not to remove them entirely.
+// A TRAP caught in the wild: ownerOf() MUST receive this variant, not norm() -
+// otherwise ".bg-video img" loses its space and the merged "bg-videoimg" gets
+// read as a single (false) class token.
+// The ">"/"+"/"~"  combinators, on the other hand, have PURELY cosmetic spacing
+// ("input:checked + .x" == "input:checked+.x") - Sass compression removes it,
+// so it needs to be done on both sides of the comparison, otherwise it's a false alarm.
 const normSelector = (s) =>
   s
     .trim()
     .replace(/\s*([>+~])\s*/g, '$1')
     .replace(/\s+/g, ' ');
 
-/* ---------- Mini-walker (wlasna kopia, nie import - patrz komentarz wyzej) ---------- */
+/* ---------- Mini-walker (its own copy, not an import - see the comment above) ---------- */
 
 function firstBlock(text, matchAtStart) {
   const m = matchAtStart.exec(text);
   if (!m) return null;
   const braceIdx = text.indexOf('{', m.index + m[0].length - 1);
-  if (braceIdx === -1) throw new Error('Niedomknieta klamra po "' + m[0] + '"');
+  if (braceIdx === -1) throw new Error('Unclosed brace after "' + m[0] + '"');
   let depth = 0;
   for (let i = braceIdx; i < text.length; i++) {
     if (text[i] === '{') depth++;
     else if (text[i] === '}' && --depth === 0) return text.slice(braceIdx + 1, i);
   }
-  throw new Error('Niedomkniety blok "' + m[0] + '"');
+  throw new Error('Unclosed block "' + m[0] + '"');
 }
 
 function splitTopLevel(body) {
@@ -110,18 +110,18 @@ function ownerOf(selector) {
 }
 
 /**
- * klasa||selektor(znorm.)||wrappery(znorm., polaczone '>') -> lista wariantow
- * deklaracji (Set per wystapienie). LISTA, nie pojedynczy wpis - niektore
- * selektory (np. ".hover-opacity-100" w _helpers.scss) sa w SCSS zdefiniowane
- * WIECEJ NIZ RAZ z roznymi deklaracjami (druga, pozniejsza wersja z
- * !important wygrywa w kaskadzie) - "pierwsze trafienie wygrywa" gubiloby
- * ta druga, poprawnie zwyciezajaca wersje i falszywie oskarzalo
- * utilities.json (ktory poprawnie przechowuje OBA warianty) o rozjazd.
+ * class||selector(norm.)||wrappers(norm., joined by '>') -> a list of declaration
+ * variants (a Set per occurrence). A LIST, not a single entry - some
+ * selectors (e.g. ".hover-opacity-100" in _helpers.scss) are defined in
+ * SCSS MORE THAN ONCE with different declarations (the second, later
+ * version with !important wins the cascade) - "first match wins" would
+ * lose that second, correctly-winning version and falsely accuse
+ * utilities.json (which correctly stores BOTH variants) of a mismatch.
  */
 function extractReference(cssText) {
   const clean = stripComments(cssText);
   const body = firstBlock(clean, /@layer\s+utilities(?![\w-])/);
-  assert.ok(body, 'Nie znaleziono "@layer utilities{...}" w css/molique-style.css - format pliku sie zmienil, popraw test.');
+  assert.ok(body, '"@layer utilities{...}" not found in css/molique-style.css - the file format changed, fix the test.');
 
   const reference = new Map();
 
@@ -135,7 +135,7 @@ function extractReference(cssText) {
         walk(stmt.body, wrappers);
         continue;
       }
-      if (stmt.head.startsWith('@')) continue; // @keyframes/@property/inne - poza zakresem tego testu (alwaysInclude)
+      if (stmt.head.startsWith('@')) continue; // @keyframes/@property/other - out of scope for this test (alwaysInclude)
       for (const rawSelector of stmt.head.split(',')) {
         const selector = normSelector(rawSelector);
         if (!selector) continue;
@@ -154,18 +154,19 @@ function extractReference(cssText) {
 
 /* ---------- Test ---------- */
 
-test('utilities.json zgadza sie z niezaleznie skompilowanym css/molique-style.css', async (t) => {
-  assert.ok(fs.existsSync(utilitiesPath), `Brak ${utilitiesPath} - uruchom npm run gen:jit-utilities.`);
-  assert.ok(fs.existsSync(siteStylesheetPath), `Brak ${siteStylesheetPath}.`);
+test('utilities.json matches an independently compiled css/molique-style.css', async (t) => {
+  assert.ok(fs.existsSync(utilitiesPath), `Missing ${utilitiesPath} - run npm run gen:jit-utilities.`);
+  assert.ok(fs.existsSync(siteStylesheetPath), `Missing ${siteStylesheetPath}.`);
 
   const utilities = JSON.parse(fs.readFileSync(utilitiesPath, 'utf8'));
   const reference = extractReference(fs.readFileSync(siteStylesheetPath, 'utf8'));
 
-  // "utilities-extended" to modul OPT-IN (patrz naglowek _utilities-extended.scss:
-  // "nie wchodzi do domyslnego bundla") - css/molique-style.css (bundle strony)
-  // CELOWO go nie zawiera, wiec porownywanie tych klas z tym plikiem zawsze
-  // konczyloby sie falszywym alarmem. Dla nich robimy lzejszy sanity-check
-  // (niepusta tresc), nie pelne porownanie z niezaleznym zrodlem.
+  // "utilities-extended" is an OPT-IN module (see the header of
+  // _utilities-extended.scss: "not included in the default bundle") -
+  // css/molique-style.css (the site bundle) DELIBERATELY doesn't include
+  // it, so comparing these classes against this file would always end in
+  // a false alarm. For them we do a lighter sanity check (non-empty
+  // content), not a full comparison against an independent source.
   const EXTENDED_SOURCE = 'molique-utilities-extended.css';
 
   let checkedAgainstSite = 0;
@@ -175,7 +176,7 @@ test('utilities.json zgadza sie z niezaleznie skompilowanym css/molique-style.cs
     await t.test(className, () => {
       for (const rule of rules) {
         if (rule.source === EXTENDED_SOURCE) {
-          assert.ok(rule.css.trim().length > 0, `Pusta regula dla "${rule.selector}" (utilities-extended).`);
+          assert.ok(rule.css.trim().length > 0, `Empty rule for "${rule.selector}" (utilities-extended).`);
           checkedExtendedOnly++;
           continue;
         }
@@ -183,8 +184,8 @@ test('utilities.json zgadza sie z niezaleznie skompilowanym css/molique-style.cs
         const refDecls = reference.get(key);
         assert.ok(
           refDecls,
-          `Brak "${rule.selector}" (warunki: ${rule.wrappers.join(' > ') || 'brak'}) w css/molique-style.css - ` +
-            'utilities.json jest przestarzaly wzgledem SCSS. Uruchom: npm run gen:chunks && npm run gen:jit-utilities.'
+          `Missing "${rule.selector}" (conditions: ${rule.wrappers.join(' > ') || 'none'}) in css/molique-style.css - ` +
+            'utilities.json is stale relative to the SCSS. Run: npm run gen:chunks && npm run gen:jit-utilities.'
         );
         const myDecls = [...new Set(norm(rule.css).split(';').filter(Boolean))].sort();
         const matches = refDecls.some((set) => {
@@ -193,9 +194,9 @@ test('utilities.json zgadza sie z niezaleznie skompilowanym css/molique-style.cs
         });
         assert.ok(
           matches,
-          `Deklaracje "${rule.selector}" nie pasuja do zadnego z ${refDecls.length} wariantow w css/molique-style.css.\n` +
+          `Declarations for "${rule.selector}" don't match any of the ${refDecls.length} variants in css/molique-style.css.\n` +
             `  utilities.json: ${myDecls.join(';')}\n` +
-            refDecls.map((s, i) => `  wariant ${i}: ${[...s].sort().join(';')}`).join('\n')
+            refDecls.map((s, i) => `  variant ${i}: ${[...s].sort().join(';')}`).join('\n')
         );
         checkedAgainstSite++;
       }
@@ -204,7 +205,7 @@ test('utilities.json zgadza sie z niezaleznie skompilowanym css/molique-style.cs
 
   assert.ok(
     checkedAgainstSite > 500,
-    `Podejrzanie malo regul zweryfikowanych wzgledem css/molique-style.css (${checkedAgainstSite}).`
+    `Suspiciously few rules verified against css/molique-style.css (${checkedAgainstSite}).`
   );
-  assert.ok(checkedExtendedOnly > 0, 'Brak jakichkolwiek regul z modulu opt-in "utilities-extended" - sprawdz zakres testu.');
+  assert.ok(checkedExtendedOnly > 0, 'No rules found from the opt-in "utilities-extended" module - check the test\'s scope.');
 });
