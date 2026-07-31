@@ -1,15 +1,15 @@
 /**
- * molique - Language Switch (przełącznik języka)
- * Trigger (pigułka z flagą + kodem języka) otwiera listę języków jako
- * popover w top layer: <button class="language-switch-trigger"
+ * molique - Language Switch
+ * The trigger (a pill with a flag + language code) opens the language
+ * list as a top-layer popover: <button class="language-switch-trigger"
  * popovertarget="ID"> + .dropdown-menu.language-switch-menu[popover]#ID.
- * Menu kotwiczy się automatycznie do przycisku (niejawny anchor) i nie
- * jest przycinane przez overflow. Flagi: osobne mini-pliki SVG w
- * img/flags/ wstawiane przez <img src="img/flags/pl.svg" alt="">
- * (emoji flag NIE renderują się na Windowsie, a zewnętrzny sprite
- * z <use> nie działa m.in. przy file://). Stary markup
- * <details class="dropdown language-switch"> jest nadal obsługiwany
- * (kompatybilność wstecz).
+ * The menu anchors itself to the button automatically (implicit anchor)
+ * and isn't clipped by overflow. Flags: separate mini SVG files in
+ * img/flags/, inserted via <img src="img/flags/pl.svg" alt=""> (emoji
+ * flags do NOT render on Windows, and an external sprite with <use>
+ * doesn't work with file://, among other issues). The old
+ * <details class="dropdown language-switch"> markup is still supported
+ * (backward compatibility).
  */
 
 @use '../variables' as *;
@@ -26,7 +26,7 @@
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-pill, 999px);
     color: var(--text-main);
-    /* Trigger to <button> - nie dziedziczy rodziny fontów automatycznie */
+    /* The trigger is a <button> - it doesn't inherit the font family automatically */
     font-family: inherit;
     font-weight: var(--fw-medium);
     font-size: 0.8125rem;
@@ -37,7 +37,7 @@
 
     &::-webkit-details-marker { display: none; }
 
-    /* Strzałka wskaźnika - ten sam trik co .dropdown-toggle / .mega-menu-trigger */
+    /* The indicator arrow - the same trick as .dropdown-toggle / .mega-menu-trigger */
     &::after {
       content: '';
       display: inline-block;
@@ -55,16 +55,17 @@
     }
   }
 
-  /* Obrót strzałki: wariant popover (menu musi stać bezpośrednio za
-     przyciskiem) oraz legacy <details>. */
+  /* Arrow rotation: the popover variant (the menu must be a direct
+     sibling after the button) and the legacy <details>. */
   .language-switch-trigger:has(+ .language-switch-menu:popover-open)::after,
   .language-switch[open] > .language-switch-trigger::after {
     transform: rotate(180deg);
   }
 
-  /* Flaga: plik SVG z img/flags/ w sztywnym pudełku 4:3.
-     Wewnętrzna ramka (::after) oddziela jasne pola flag (np. biel PL)
-     od tła - bez niej flaga "rozpływa się" na jasnej pigułce. */
+  /* Flag: an SVG file from img/flags/ in a fixed 4:3 box.
+     The inner border (::after) separates a flag's light areas (e.g. the
+     white in the Polish flag) from the background - without it the flag
+     "dissolves" into a light pill. */
   .language-switch-flag {
     position: relative;
     display: inline-flex;
@@ -80,7 +81,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Bez tego flagę dało się przeciągnąć/zaznaczyć kursorem myszy. */
+      /* Without this, the flag could be dragged/selected with the mouse cursor. */
       pointer-events: none;
       user-select: none;
     }
@@ -109,8 +110,8 @@
     flex: 1;
   }
 
-  /* Checkmark aktywnego języka: ikona SVG w currentColor (font-weight
-     zostaje dla legacy markupu ze znakiem tekstowym "✓"). */
+  /* Checkmark for the active language: an SVG icon in currentColor
+     (font-weight stays for legacy markup using the text character "✓"). */
   .language-switch-check {
     display: inline-flex;
     align-items: center;

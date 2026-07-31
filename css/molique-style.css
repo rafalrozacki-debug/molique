@@ -3410,7 +3410,7 @@
     }
   }
   /* =========================================
-     1. NAVBAR (Baza)
+     1. NAVBAR (base)
      ========================================= */
   .navbar {
     position: relative;
@@ -3443,37 +3443,38 @@
     object-fit: contain;
   }
   .navbar-brand {
-    /* <picture> jest domyślnie elementem inline - jako dziecko flexa dostaje
-       własny "line box" i wyrównuje <img> do baseline zamiast do środka,
-       stąd wizualne przesunięcie logo w górę. display:contents usuwa ten box
-       z layoutu, więc <img> w środku staje się bezpośrednim elementem flexa
-       .navbar-brand, dokładnie tak jak bez opakowania w <picture>. */
+    /* <picture> is an inline element by default - as a flex child it gets
+       its own "line box" and aligns the <img> to the baseline instead of
+       the center, hence the visible upward shift of the logo.
+       display:contents removes this box from the layout, so the <img>
+       inside becomes a direct flex item of .navbar-brand, exactly as if it
+       weren't wrapped in a <picture> at all. */
   }
   .navbar-brand picture {
     display: contents;
   }
   .navbar-brand {
-    /* Domyślnie ukrywamy logo dla trybu ciemnego */
+    /* Hide the dark-mode logo by default */
   }
   .navbar-brand .logo-dark {
     display: none;
   }
   /* =========================================
-     ZARZĄDZANIE LOGO W DARK MODE
+     DARK-MODE LOGO MANAGEMENT
      ========================================= */
   [data-theme=dark] .navbar-brand {
-    /* Ukrywamy jasne logo */
+    /* Hide the light logo */
   }
   [data-theme=dark] .navbar-brand .logo-light {
     display: none;
   }
   [data-theme=dark] .navbar-brand {
-    /* Pokazujemy ciemne logo (przywracając display: contents, żeby nie zepsuć flexboxa!) */
+    /* Show the dark logo (restoring display: contents, so flexbox isn't broken!) */
   }
   [data-theme=dark] .navbar-brand .logo-dark {
     display: contents;
   }
-  /* Przycisk Hamburgera (Wymuszone 44x44px dla B2B) */
+  /* Hamburger button (enforced 44x44px for B2B) */
   .navbar-toggle {
     display: none;
     background: transparent;
@@ -3525,19 +3526,19 @@
   .navbar-item:hover {
     color: var(--primary);
   }
-  /* Aktywna pozycja = bieżąca strona. Klasę .is-active nadaje wg URL moduł
-     js/modules/navbar-active.js (auto-ładowany przy .navbar-menu) - linkowi
-     bieżącej strony oraz triggerowi menu, w którym się znajduje. Wyróżnienie
-     mocniejsze niż hover: kolor primary + grubsza waga.
+  /* Active item = current page. The .is-active class is assigned based on
+     the URL by js/modules/navbar-active.js (auto-loaded when .navbar-menu
+     is present) - to the current page's link and to the trigger of the
+     menu it lives inside. Emphasis stronger than hover: primary color + bolder weight.
 
-     Odpowiedniki dla .dropdown-item i .mega-menu-link siedzą w SWOICH plikach,
-     żeby pominięcie tamtych modułów nie zostawiało tu osieroconych selektorów. */
+     The counterparts for .dropdown-item and .mega-menu-link live in THEIR
+     OWN files, so omitting those modules doesn't leave orphaned selectors here. */
   .navbar-item.is-active {
     color: var(--primary);
     font-weight: var(--fw-bold);
   }
   /* =========================================
-     2. NAVBAR - WARIANTY
+     2. NAVBAR - VARIANTS
      ========================================= */
   /* --- Transparent Navbar --- */
   .navbar-transparent {
@@ -3559,10 +3560,10 @@
     background-color: #fff;
   }
   .navbar-transparent {
-    /* Logo: przed scrollem navbar leży na ciemnym hero, więc pokazujemy jasną
-       wersję logo NIEZALEŻNIE od motywu (nadpisuje logikę dark-mode). Po
-       scrollu (.is-scrolled) navbar dostaje tło i logo wraca do wersji
-       zależnej od motywu (reguły bazowe / [data-theme="dark"]). */
+    /* Logo: before scrolling the navbar sits on a dark hero, so we show the
+       light logo version REGARDLESS of the theme (overrides the dark-mode
+       logic). After scrolling (.is-scrolled) the navbar gets a background
+       and the logo goes back to the theme-dependent version (base rules / [data-theme="dark"]). */
   }
   .navbar-transparent:not(.is-scrolled) .navbar-brand .logo-light {
     display: none;
@@ -3582,10 +3583,10 @@
   .navbar-transparent.is-scrolled .navbar-toggle span {
     background-color: var(--text-main);
   }
-  /* --- Sticky Navbar (przyklejony do góry + auto-hide na scrollu w dół) ---
-     Klasy is-scrolled/is-hidden dostaje z JS (molique-script.js, sekcja
-     "STICKY NAVBAR & READING PROGRESS") - stąd brak tu deklaracji position
-     inline, tylko czysty stan wynikający z dodanej klasy. */
+  /* --- Sticky Navbar (pinned to the top + auto-hide on scroll down) ---
+     The is-scrolled/is-hidden classes come from JS (molique-script.js,
+     the "STICKY NAVBAR & READING PROGRESS" section) - hence no inline
+     position declaration here, just a plain state resulting from the added class. */
   .navbar-sticky {
     position: sticky;
     top: 0;
@@ -3596,39 +3597,42 @@
     box-shadow: var(--shadow-sm);
   }
   .navbar-sticky {
-    /* Chowa navbar przy scrollowaniu w dół, pokazuje z powrotem przy scrollu w górę */
+    /* Hides the navbar on scroll down, shows it again on scroll up */
   }
   .navbar-sticky.is-hidden {
     transform: translateY(-100%);
   }
-  /* --- Navbar "Pastylka" (pływająca nad hero -> sticky po scrollu) ---
-     Wariant nakładkowy: navbar jest odsuniętą od krawędzi pastylką leżącą NA
-     treści, więc tło/zdjęcie sekcji pod spodem zaczyna się od samej góry strony
-     (a nie dopiero pod paskiem). Po przescrollowaniu klasa .is-scrolled
-     (molique-script.js) rozkłada pastylkę do zwykłego paska przy krawędzi.
+  /* --- Navbar "Pill" (floating over the hero -> sticky after scroll) ---
+     An overlay variant: the navbar is a pill pulled away from the edge,
+     sitting ON the content, so the section's background/image underneath
+     starts right from the very top of the page (not just below the bar).
+     Once scrolled, the .is-scrolled class (molique-script.js) unfurls the
+     pill into a regular edge-to-edge bar.
 
-     NIE łącz z .navbar-sticky - sticky wraca do przepływu dokumentu i efekt
-     nakładki znika. */
+     Do NOT combine with .navbar-sticky - sticky returns to the document
+     flow and the overlay effect disappears. */
   .navbar-pill {
-    /* --- API kolorów: osobna zmienna na każdy stan -------------------------
+    /* --- Color API: a separate variable for each state -------------------
        <nav class="navbar navbar-pill" style="
               --navbar-pill-bg: #4c1d95;
               --navbar-pill-bg-scrolled: #14162B;
               --navbar-pill-color-scrolled: #fff;">
 
-       Świadomie NIE przedefiniowujemy zmiennych bazowych w .is-scrolled -
-       styl inline (czyli sposób, w jaki się je ustawia) wygrywa z regułą klasy
-       i zablokowałby drugi stan. Stąd osobne pary *-scrolled. */
-    /* Stan pastylki (nad hero). Tło to LITERAŁ, nie var(--dark) - ta zmienna
-       w dark mode jaśnieje, więc pastylka by zbielała, a biały tekst zniknął. */
+       We deliberately do NOT redefine the base variables in .is-scrolled -
+       an inline style (i.e. the way they're set) wins over a class rule and
+       would block the second state. Hence separate *-scrolled pairs. */
+    /* The pill state (over the hero). The background is a LITERAL, not
+       var(--dark) - that variable lightens in dark mode, so the pill would
+       turn white and the white text would vanish. */
     --navbar-pill-bg: #14162B;
     --navbar-pill-color: #fff;
-    /* Stan po scrollu - domyślnie kolory motywu, jak zwykły navbar. */
+    /* The post-scroll state - defaults to the theme colors, like a regular navbar. */
     --navbar-pill-bg-scrolled: var(--bg-surface);
     --navbar-pill-color-scrolled: var(--text-main);
-    /* Wcięcie treści od zaokrąglonych krawędzi. Przy promieniu 999px domyślne
-       16px z .container jest za ciasne - stąd osobna zmienna. Po scrollu wraca
-       do wartości .container, żeby treść równała się z resztą strony. */
+    /* Content inset from the rounded edges. At a 999px radius, .container's
+       default 16px is too tight - hence a separate variable. After
+       scrolling it reverts to .container's value, so the content lines up
+       with the rest of the page. */
     --navbar-pill-padding-x: calc(var(--spacing-unit) * 4);
     --navbar-pill-padding-x-scrolled: calc(var(--spacing-unit) * 2);
     position: absolute;
@@ -3644,7 +3648,7 @@
     background-color: var(--navbar-pill-bg);
     border-radius: 999px;
     padding-block: calc(var(--spacing-unit) * 1.5);
-    /* Nadpisuje poziomy padding .container (wyższa specyficzność). */
+    /* Overrides .container's horizontal padding (higher specificity). */
     padding-inline: var(--navbar-pill-padding-x);
     box-shadow: var(--shadow-lg);
   }
@@ -3659,7 +3663,7 @@
     background-color: var(--navbar-pill-color);
   }
   .navbar-pill {
-    /* Nad ciemną pastylką jasne logo niezależnie od motywu (jak w transparent). */
+    /* Over the dark pill, the light logo regardless of theme (like in transparent). */
   }
   .navbar-pill:not(.is-scrolled) .navbar-brand .logo-light {
     display: none;
@@ -3668,8 +3672,8 @@
     display: contents;
   }
   .navbar-pill {
-    /* Po scrollu: pastylka rozkłada się do krawędzi i przechodzi na drugi
-       komplet zmiennych (*-scrolled). */
+    /* After scrolling: the pill unfurls to the edge and switches to the
+       second set of variables (*-scrolled). */
   }
   .navbar-pill.is-scrolled {
     position: fixed;
@@ -3695,7 +3699,7 @@
   .navbar-pill.is-scrolled .navbar-toggle span {
     background-color: var(--navbar-pill-color-scrolled);
   }
-  /* --- Offcanvas Mobile Menu (Zero JS) --- */
+  /* --- Offcanvas Mobile Menu (zero JS) --- */
   .navbar-offcanvas-toggle {
     display: none;
   }
@@ -3725,20 +3729,20 @@
       padding: calc(var(--spacing-unit) * 8) calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 3);
       margin: 0;
       box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-      /* FIX: panel ma sztywną wysokość (top:0 do bottom:0), więc gdy lista
-         linków jest dłuższa niż ekran, musi się sama przewijać - inaczej
-         dolne pozycje są nieosiągalne. */
+      /* FIX: the panel has a fixed height (top:0 to bottom:0), so when the
+         link list is taller than the screen it must scroll itself -
+         otherwise the bottom items are unreachable. */
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       transform: translateX(100%);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    /* UWAGA: .navbar-offcanvas-toggle musi być rodzeństwem (bezpośrednim,
-       tym samym rodzicem co) .navbar-menu-offcanvas, .navbar-offcanvas-backdrop
-       i .navbar-toggle - czyli wszystkie cztery elementy powinny siedzieć
-       razem wewnątrz .navbar-container. Kombinator "~" nie sięga w głąb
-       dalszych rodzeństw, więc np. checkbox umieszczony PRZED <nav>, a
-       .navbar-menu-offcanvas wewnątrz <nav>, nigdy się nie dopasują. */
+    /* NOTE: .navbar-offcanvas-toggle must be a sibling (direct, same
+       parent as) .navbar-menu-offcanvas, .navbar-offcanvas-backdrop and
+       .navbar-toggle - i.e. all four elements should sit together inside
+       .navbar-container. The "~" combinator doesn't reach into further
+       descendants, so e.g. a checkbox placed BEFORE <nav>, with
+       .navbar-menu-offcanvas inside <nav>, would never match. */
     .navbar-offcanvas-toggle:checked ~ .navbar-menu-offcanvas {
       transform: translateX(0);
     }
@@ -3757,18 +3761,20 @@
       top: 19px;
       transform: rotate(-135deg);
     }
-    /* WARIANTY NAKŁADKOWE A PANEL OFFCANVAS.
-       Oba warianty wymuszają jasny kolor linków, bo nad zdjęciem hero leżą na
-       ciemnym tle. Ta sama reguła obowiązywała jednak także w panelu mobilnym,
-       który ma tło --bg-surface - efekt: białe linki na białym panelu, menu
-       praktycznie niewidoczne. Każdy wariant domykamy inaczej, bo tylko
-       pastylka ma czym pomalować panel. */
-    /* Pastylka: panel przejmuje jej ciemne tło, linki zostają jasne. */
+    /* OVERLAY VARIANTS VS. THE OFFCANVAS PANEL.
+       Both variants force light link colors, since over the hero image they
+       sit on a dark background. That same rule, however, also applied
+       inside the mobile panel, which has a --bg-surface background - the
+       effect: white links on a white panel, the menu practically invisible.
+       Each variant is closed off differently, since only the pill has
+       something to paint the panel with. */
+    /* Pill: the panel takes over its dark background, the links stay light. */
     .navbar-pill .navbar-menu-offcanvas {
       background-color: var(--navbar-pill-bg);
     }
-    /* Transparent: brak własnego tła panelu, więc na czas menu mobilnego
-       linki wracają do koloru motywu (panel zostaje na --bg-surface). */
+    /* Transparent: no background of its own for the panel, so for the
+       duration of the mobile menu the links revert to the theme color (the
+       panel stays on --bg-surface). */
     .navbar-transparent .navbar-menu-offcanvas .navbar-item {
       color: var(--text-main);
     }
@@ -4407,17 +4413,17 @@
     transition: width 0.1s ease-out;
   }
   /**
-   * molique - Language Switch (przełącznik języka)
-   * Trigger (pigułka z flagą + kodem języka) otwiera listę języków jako
-   * popover w top layer: <button class="language-switch-trigger"
+   * molique - Language Switch
+   * The trigger (a pill with a flag + language code) opens the language
+   * list as a top-layer popover: <button class="language-switch-trigger"
    * popovertarget="ID"> + .dropdown-menu.language-switch-menu[popover]#ID.
-   * Menu kotwiczy się automatycznie do przycisku (niejawny anchor) i nie
-   * jest przycinane przez overflow. Flagi: osobne mini-pliki SVG w
-   * img/flags/ wstawiane przez <img src="img/flags/pl.svg" alt="">
-   * (emoji flag NIE renderują się na Windowsie, a zewnętrzny sprite
-   * z <use> nie działa m.in. przy file://). Stary markup
-   * <details class="dropdown language-switch"> jest nadal obsługiwany
-   * (kompatybilność wstecz).
+   * The menu anchors itself to the button automatically (implicit anchor)
+   * and isn't clipped by overflow. Flags: separate mini SVG files in
+   * img/flags/, inserted via <img src="img/flags/pl.svg" alt=""> (emoji
+   * flags do NOT render on Windows, and an external sprite with <use>
+   * doesn't work with file://, among other issues). The old
+   * <details class="dropdown language-switch"> markup is still supported
+   * (backward compatibility).
    */
   @layer components {
     .language-switch-trigger {
@@ -4430,7 +4436,7 @@
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius-pill, 999px);
       color: var(--text-main);
-      /* Trigger to <button> - nie dziedziczy rodziny fontów automatycznie */
+      /* The trigger is a <button> - it doesn't inherit the font family automatically */
       font-family: inherit;
       font-weight: var(--fw-medium);
       font-size: 0.8125rem;
@@ -4443,7 +4449,7 @@
       display: none;
     }
     .language-switch-trigger {
-      /* Strzałka wskaźnika - ten sam trik co .dropdown-toggle / .mega-menu-trigger */
+      /* The indicator arrow - the same trick as .dropdown-toggle / .mega-menu-trigger */
     }
     .language-switch-trigger::after {
       content: "";
@@ -4459,15 +4465,16 @@
       background-color: rgba(var(--primary-rgb), 0.08);
       border-color: rgba(var(--primary-rgb), 0.3);
     }
-    /* Obrót strzałki: wariant popover (menu musi stać bezpośrednio za
-       przyciskiem) oraz legacy <details>. */
+    /* Arrow rotation: the popover variant (the menu must be a direct
+       sibling after the button) and the legacy <details>. */
     .language-switch-trigger:has(+ .language-switch-menu:popover-open)::after,
     .language-switch[open] > .language-switch-trigger::after {
       transform: rotate(180deg);
     }
-    /* Flaga: plik SVG z img/flags/ w sztywnym pudełku 4:3.
-       Wewnętrzna ramka (::after) oddziela jasne pola flag (np. biel PL)
-       od tła - bez niej flaga "rozpływa się" na jasnej pigułce. */
+    /* Flag: an SVG file from img/flags/ in a fixed 4:3 box.
+       The inner border (::after) separates a flag's light areas (e.g. the
+       white in the Polish flag) from the background - without it the flag
+       "dissolves" into a light pill. */
     .language-switch-flag {
       position: relative;
       display: inline-flex;
@@ -4483,7 +4490,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Bez tego flagę dało się przeciągnąć/zaznaczyć kursorem myszy. */
+      /* Without this, the flag could be dragged/selected with the mouse cursor. */
       pointer-events: none;
       user-select: none;
     }
@@ -4506,8 +4513,8 @@
     .language-switch-name {
       flex: 1;
     }
-    /* Checkmark aktywnego języka: ikona SVG w currentColor (font-weight
-       zostaje dla legacy markupu ze znakiem tekstowym "✓"). */
+    /* Checkmark for the active language: an SVG icon in currentColor
+       (font-weight stays for legacy markup using the text character "✓"). */
     .language-switch-check {
       display: inline-flex;
       align-items: center;
@@ -5207,8 +5214,8 @@
          4. ANCHORED CONTEXT MENU (CSS Anchor Positioning)
          ========================================= */
     .popover-context {
-      /* Reset domyślnych stylów Popover API (UA daje [popover]
-         color: CanvasText - patrz komentarz przy .modal-dialog) */
+      /* Reset the Popover API's default styles (the UA gives [popover]
+         color: CanvasText - see the comment at .modal-dialog) */
       margin: 0;
       padding: calc(var(--spacing-unit) * 1);
       color: var(--text-main);
@@ -5217,12 +5224,12 @@
       border-radius: var(--border-radius);
       box-shadow: var(--shadow-md);
       min-width: 160px;
-      /* MAGIA 2026: CSS Anchor Positioning */
+      /* 2026 MAGIC: CSS Anchor Positioning */
       position: absolute;
       top: anchor(bottom);
       left: anchor(start);
       margin-top: 4px;
-      /* Fallback dla starszych przeglądarek */
+      /* Fallback for older browsers */
     }
     @supports not (top: anchor(bottom)) {
       .popover-context {
@@ -5233,7 +5240,7 @@
       }
     }
     .popover-context {
-      /* Animacja wejścia */
+      /* Entrance animation */
       opacity: 0;
       transform: translateY(-10px);
       transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
@@ -5249,7 +5256,7 @@
       }
     }
     .popover-context {
-      /* --- FLIP: menu blisko dolnej krawędzi ekranu (patrz js/modules/context-menu.js) --- */
+      /* --- FLIP: menu close to the bottom edge of the screen (see js/modules/context-menu.js) --- */
     }
     .popover-context.is-flipped {
       top: auto;
@@ -5267,7 +5274,7 @@
       }
     }
     .popover-context {
-      /* --- FIX: KULOODPORNY RESET LISTY --- */
+      /* --- FIX: bulletproof list reset --- */
     }
     .popover-context ul, .popover-context ol {
       list-style: none;
@@ -5282,7 +5289,7 @@
       padding: 0;
     }
     .popover-context {
-      /* --- WSPARCIE DLA STARYCH KLAS (.popover-action-btn) --- */
+      /* --- SUPPORT FOR OLD CLASSES (.popover-action-btn) --- */
     }
     .popover-context .popover-action-btn {
       width: 100%;
@@ -5310,29 +5317,29 @@
     }
     .popover-context {
       /* =========================================
-         MOBILE: BOTTOM SHEET (Szuflada z dołu)
+         MOBILE: BOTTOM SHEET (a drawer from the bottom)
          ========================================= */
     }
     @media (max-width: 768px) {
       .popover-context {
-        /* Resetujemy pozycjonowanie Anchor */
+        /* Reset the Anchor positioning */
         position: fixed !important;
         top: auto !important;
         left: 0 !important;
         right: 0 !important;
         bottom: 0 !important;
-        /* Rozciągamy na całą szerokość */
+        /* Stretch to the full width */
         width: 100% !important;
         min-width: 100%;
         margin: 0;
-        /* Stylizacja szuflady */
+        /* Drawer styling */
         border: none;
         border-top: 1px solid var(--border-color);
         border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
         padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
         padding-bottom: env(safe-area-inset-bottom);
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
-        /* Animacja wjazdu z dołu */
+        /* Slide-in animation from the bottom */
         transform: translateY(100%);
       }
       .popover-context:popover-open {
@@ -5344,7 +5351,7 @@
         }
       }
       .popover-context {
-        /* "Uchwyt" (pill) na górze szuflady */
+        /* A "handle" (pill) at the top of the drawer */
       }
       .popover-context::before {
         content: "";
@@ -5356,7 +5363,7 @@
         margin: 0 auto calc(var(--spacing-unit) * 2) auto;
       }
       .popover-context {
-        /* Powiększamy przyciski dla łatwiejszego klikania palcem */
+        /* Enlarge the buttons for easier finger taps */
       }
       .popover-context .popover-action-btn,
       .popover-context .btn-action {
@@ -5373,7 +5380,7 @@
         margin-right: calc(var(--spacing-unit) * 1);
       }
     }
-    /* Tło przyciemniające (Backdrop) dla Bottom Sheet na mobile */
+    /* Dimming background (backdrop) for the mobile Bottom Sheet */
     @media (max-width: 768px) {
       .popover-context::backdrop {
         background: rgba(var(--backdrop-rgb), 0.5);
@@ -5393,7 +5400,7 @@
   }
   @layer components {
     /* =========================================
-       1. TABELE B2B (Zoptymalizowane pod dane)
+       1. B2B TABLES (optimized for data)
        ========================================= */
     .table-wrapper {
       width: 100%;
@@ -5408,28 +5415,28 @@
       border-collapse: collapse;
       color: var(--text-main);
       font-size: 0.875rem;
-      /* Zmienne sterujące rozmiarem (Domyślnie MD) */
+      /* Variables controlling size (default MD) */
       --table-padding-y: calc(var(--spacing-unit) * 1.5);
       --table-padding-x: calc(var(--spacing-unit) * 2);
       --table-font-size: 0.875rem;
       --table-header-font-size: 0.75rem;
     }
-    /* --- WARIANTY ROZMIARÓW --- */
-    /* Kompaktowa (Gęste dane, np. raporty finansowe) */
+    /* --- SIZE VARIANTS --- */
+    /* Compact (dense data, e.g. financial reports) */
     .table-sm {
       --table-padding-y: calc(var(--spacing-unit) * 0.75);
       --table-padding-x: calc(var(--spacing-unit) * 1.5);
       --table-font-size: 0.8125rem;
       --table-header-font-size: 0.7rem;
     }
-    /* Luźna (Dużo przestrzeni, np. lista użytkowników z awatarami) */
+    /* Loose (lots of space, e.g. a user list with avatars) */
     .table-lg {
       --table-padding-y: calc(var(--spacing-unit) * 1.5);
       --table-padding-x: calc(var(--spacing-unit) * 2);
       --table-font-size: 1rem;
       --table-header-font-size: 0.875rem;
     }
-    /* --- STYLE BAZOWE KOMÓREK --- */
+    /* --- BASE CELL STYLES --- */
     .table th,
     .table td {
       padding: var(--table-padding-y) var(--table-padding-x);
@@ -5448,64 +5455,64 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      /* Zapobiega podwójnemu obramowaniu przy sticky header */
+      /* Prevents a double border with a sticky header */
       box-shadow: 0 1px 0 var(--border-color);
       border-bottom: none;
     }
-    /* --- WARIANTY NAGŁÓWKÓW (THEAD) --- */
-    /* Domyślny / Jasny (Subtelne odcięcie) */
+    /* --- HEADER (THEAD) VARIANTS --- */
+    /* Default / Light (subtle cutoff) */
     .thead-light th {
       background-color: var(--card-bg-subtle);
-      /* NIE --text-muted - na tym prawie-bialym tle daje tylko 4.34:1 (male,
-         pogrubione litery naglowka wymagaja pelnego 4.5:1). --secondary-hover
-         jest wystarczajaco ciemniejszy (6.5+:1 w obu motywach), bez
-         wprowadzania nowej zmiennej. */
+      /* NOT --text-muted - on this near-white background it only gives
+         4.34:1 (small, bold header letters need the full 4.5:1).
+         --secondary-hover is dark enough (6.5+:1 in both themes) without
+         introducing a new variable. */
       color: var(--secondary-hover);
-      border-bottom: 2px solid var(--border-color); /* Mocniejsza linia pod nagłówkiem */
+      border-bottom: 2px solid var(--border-color); /* A stronger line under the header */
     }
-    /* Ciemny (Mocny kontrast) */
+    /* Dark (strong contrast) */
     .thead-dark th {
       background-color: var(--dark);
       color: var(--btn-text-light);
       border-bottom: none;
-      /* Zmieniamy kolor cienia dla sticky header */
+      /* Changes the shadow color for the sticky header */
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
     }
-    /* Primary (Kolor marki) */
+    /* Primary (brand color) */
     .thead-primary th {
       background-color: var(--primary);
       color: var(--btn-text-light);
       border-bottom: none;
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
     }
-    /* --- WARIANTY WIELKOŚCI NAGŁÓWKÓW --- */
-    /* Kompaktowy nagłówek (Mniejsze paddingi i font) */
+    /* --- HEADER SIZE VARIANTS --- */
+    /* Compact header (smaller padding and font) */
     .thead-sm th {
       padding-top: calc(var(--spacing-unit) * 1);
       padding-bottom: calc(var(--spacing-unit) * 1);
       font-size: 0.65rem;
       letter-spacing: 1px;
     }
-    /* Duży nagłówek (Więcej oddechu) */
+    /* Large header (more breathing room) */
     .thead-lg th {
       padding-top: calc(var(--spacing-unit) * 2.5);
       padding-bottom: calc(var(--spacing-unit) * 2.5);
       font-size: 0.875rem;
       letter-spacing: 0;
     }
-    /* --- WARIANTY WIZUALNE --- */
-    /* Paski zebry (Zwiększają czytelność szerokich tabel) */
+    /* --- VISUAL VARIANTS --- */
+    /* Zebra stripes (improve readability of wide tables) */
     .table-striped tbody tr:nth-of-type(odd) {
       background-color: rgba(var(--dark-rgb), 0.02);
     }
-    /* Podświetlanie wiersza na hover */
+    /* Row highlight on hover */
     .table-hover tbody tr {
       transition: background-color var(--transition-speed);
     }
     .table-hover tbody tr:hover {
       background-color: var(--card-bg-subtle);
     }
-    /* Tabele bez bocznych ramek (Czysty, nowoczesny wygląd) */
+    /* Tables with no side borders (clean, modern look) */
     .table-borderless th, .table-borderless td {
       border-bottom: none;
     }
@@ -5515,8 +5522,8 @@
     .table-borderless tbody tr:last-child {
       border-bottom: none;
     }
-    /* --- MIXIN: Transformacja tabeli w karty (Mobile-First Data) --- */
-    /* Wersja Mobilna (Automatyczna) */
+    /* --- MIXIN: turns a table into cards (mobile-first data) --- */
+    /* Mobile version (automatic) */
     @media (max-width: 767px) {
       .table-cards thead {
         display: none;
@@ -5530,18 +5537,18 @@
         border: 1px solid var(--border-color);
         border-radius: var(--border-radius);
         background-color: var(--bg-surface);
-        /* Resetujemy tło z zebry dla kart */
+        /* Reset the zebra-stripe background for cards */
         background-color: var(--bg-surface) !important;
       }
       .table-cards {
-        /* Etykieta NAD wartoscia (nie obok, flexem) - komorki z bogata trescia
-           (kilka <code> na raz, dluzszy opis) psuly sie w wariancie flex:
-           kazdy element potomny (kazdy <code>, kazdy fragment tekstu) staje sie
-           WLASNYM elementem flex i przy braku miejsca zamiast zawijac sie jako
-           jeden akapit, kazdy z nich osobno kurczy sie do prawie zerowej
-           szerokosci - tekst lamie sie na pojedyncze litery. Zwykly block-flow
-           (bez flex/grid na komorce) jest odporny na to niezaleznie od tego,
-           ile elementow inline zawiera wartosc. */
+        /* Label ABOVE the value (not beside it, via flex) - cells with rich
+           content (several <code> at once, a longer description) broke in
+           the flex variant: every child element (every <code>, every text
+           fragment) becomes ITS OWN flex item, and when space runs out,
+           instead of wrapping as one paragraph, each one individually shrinks
+           to nearly zero width - the text breaks into single letters. A plain
+           block-flow (no flex/grid on the cell) is immune to this regardless
+           of how many inline elements the value contains. */
       }
       .table-cards td {
         text-align: left;
@@ -5562,7 +5569,7 @@
         margin-bottom: calc(var(--spacing-unit) * 0.5);
       }
     }
-    /* Wersja Wymuszona (Działa zawsze, nawet na desktopie) */
+    /* Forced version (always active, even on desktop) */
     .table-cards-always thead {
       display: none;
     }
@@ -5575,18 +5582,18 @@
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
       background-color: var(--bg-surface);
-      /* Resetujemy tło z zebry dla kart */
+      /* Reset the zebra-stripe background for cards */
       background-color: var(--bg-surface) !important;
     }
     .table-cards-always {
-      /* Etykieta NAD wartoscia (nie obok, flexem) - komorki z bogata trescia
-         (kilka <code> na raz, dluzszy opis) psuly sie w wariancie flex:
-         kazdy element potomny (kazdy <code>, kazdy fragment tekstu) staje sie
-         WLASNYM elementem flex i przy braku miejsca zamiast zawijac sie jako
-         jeden akapit, kazdy z nich osobno kurczy sie do prawie zerowej
-         szerokosci - tekst lamie sie na pojedyncze litery. Zwykly block-flow
-         (bez flex/grid na komorce) jest odporny na to niezaleznie od tego,
-         ile elementow inline zawiera wartosc. */
+      /* Label ABOVE the value (not beside it, via flex) - cells with rich
+         content (several <code> at once, a longer description) broke in
+         the flex variant: every child element (every <code>, every text
+         fragment) becomes ITS OWN flex item, and when space runs out,
+         instead of wrapping as one paragraph, each one individually shrinks
+         to nearly zero width - the text breaks into single letters. A plain
+         block-flow (no flex/grid on the cell) is immune to this regardless
+         of how many inline elements the value contains. */
     }
     .table-cards-always td {
       text-align: left;
@@ -6414,42 +6421,42 @@
     letter-spacing: 1px;
   }
   /**
-   * molique - Stat Tile (karta KPI)
-   * Karta statystyki: ikona (bez tła - świadoma decyzja, kolorowe kafle pod
-   * ikonami przetestowane i odrzucone w praktyce) + etykieta + jedna stała
-   * wielkość liczby zawsze + opcjonalna delta trendu. Łączyć z .card.
+   * molique - Stat Tile (KPI card)
+   * A statistic card: an icon (no background - a deliberate choice, colored
+   * tiles behind icons were tested and rejected in practice) + a label + a
+   * number always at one fixed size + an optional trend delta. Pair with .card.
    *
-   * Użycie:
+   * Usage:
    *   <div class="card stat-tile">
    *     <div class="stat-tile-icon stat-tile-icon-success">
    *       <svg class="icon icon-lg"><use href="img/icons-sprite.svg#ph-credit-card"></use></svg>
    *     </div>
    *     <div class="stat-tile-body">
-   *       <span class="stat-tile-label">Wartość netto</span>
-   *       <span class="stat-tile-value">18 420<span class="stat-tile-unit">zł</span></span>
+   *       <span class="stat-tile-label">Net value</span>
+   *       <span class="stat-tile-value">18,420<span class="stat-tile-unit">$</span></span>
    *       <span class="stat-tile-delta stat-tile-delta-up">
    *         <svg class="icon"><use href="img/icons-sprite.svg#ph-trend-up"></use></svg>
-   *         +12% <span class="stat-tile-delta-context">vs poprzedni okres</span>
+   *         +12% <span class="stat-tile-delta-context">vs previous period</span>
    *       </span>
    *     </div>
    *   </div>
    *
-   * Warianty ikony: bazowa = --primary; modyfikatory -success/-warning/-danger/
-   * -info przełączają tylko kolor ikony, zawsze przez -text warianty (kontrast
-   * na jasnym tle .card - patrz _root.scss). Delta jest opcjonalna.
+   * Icon variants: base = --primary; the -success/-warning/-danger/-info
+   * modifiers only switch the icon's color, always via the -text variants
+   * (contrast on .card's light background - see _root.scss). The delta is optional.
    *
-   * UWAGA: celowo BEZ wlasnego "@layer components { ... }" wokol tresci pliku.
-   * molique-style.scss juz owija caly import _components.scss w @layer
-   * components - dodatkowe zagniezdzenie tutaj tworzyloby PODWARSTWE
-   * (components.components), ktora ma NIZSZY priorytet niz nieowiniete
-   * reguly w tym samym zakresie (m.in. .card z _cards.scss). Realny,
-   * zaobserwowany skutek: .card ustawia flex-direction: column, a
-   * .stat-tile ponizej ustawia flex-direction: row - bez usuniecia tego
-   * wrappera .card WYGRYWA niezaleznie od kolejnosci w pliku, bo zyje w
-   * "luznej" (nieowinietej) czesci warstwy, a .stat-tile w nazwanej
-   * podwarstwie o nizszym priorytecie. Trzymaj sie wzorca wiekszosci
-   * plikow w components/ (np. _cards.scss, _tabs.scss) - brak wlasnego
-   * @layer.
+   * NOTE: deliberately WITHOUT its own "@layer components { ... }" around
+   * the file's content. molique-style.scss already wraps the entire
+   * _components.scss import in @layer components - nesting another one
+   * here would create a SUB-LAYER (components.components), which has
+   * LOWER priority than unwrapped rules in the same scope (including .card
+   * from _cards.scss). The real, observed effect: .card sets
+   * flex-direction: column, and .stat-tile below sets flex-direction: row
+   * - without removing this wrapper, .card WINS regardless of the order in
+   * the file, because it lives in the "loose" (unwrapped) part of the
+   * layer, while .stat-tile sits in a named sub-layer with lower priority.
+   * Stick to the pattern most files in components/ follow (e.g. _cards.scss,
+   * _tabs.scss) - no own @layer.
    */
   .stat-tile {
     flex-direction: row;
@@ -7645,38 +7652,38 @@
     white-space: nowrap;
   }
   /**
-   * molique - Wykresy i Wizualizacje Danych (Data Viz)
-   * Architektura Progressive Enhancement (Czysty CSS/SVG jako fallback)
+   * molique - Charts and Data Visualization (Data Viz)
+   * Progressive Enhancement architecture (pure CSS/SVG as a fallback)
    */
   /* =========================================
-     0. CSS HOUDINI (Rejestracja zmiennych do animacji)
+     0. CSS HOUDINI (variable registration for animation)
      ========================================= */
-  /* Pozwala przeglądarce płynnie animować wartości procentowe w gradientach! */
+  /* Lets the browser smoothly animate percentage values in gradients! */
   @property --chart-val {
     syntax: "<percentage>";
     inherits: true;
     initial-value: 0%;
   }
   /* =========================================
-     1. BAZOWY KONTENER
+     1. BASE CONTAINER
      ========================================= */
   .r-chart-wrapper {
     position: relative;
     width: 100%;
-    height: 200px; /* Domyślna wysokość dla dużych wykresów */
+    height: 200px; /* Default height for large charts */
     display: flex;
     align-items: flex-end;
-    /* Zabezpieczenie przed rozsadzeniem kontenera */
+    /* Guard against the container blowing out */
     max-width: 100%;
-    /* WARIANT: MICRO CHART (Do kart statystyk i tabel) */
+    /* VARIANT: MICRO CHART (for stat cards and tables) */
   }
   .r-chart-wrapper.chart-micro {
-    width: 80px; /* Sztywna, bezpieczna szerokość */
-    height: 40px; /* Sztywna, bezpieczna wysokość */
-    flex-shrink: 0; /* Zapobiega zgniataniu przez Flexboxa */
+    width: 80px; /* Fixed, safe width */
+    height: 40px; /* Fixed, safe height */
+    flex-shrink: 0; /* Prevents Flexbox from crushing it */
   }
   /* =========================================
-     2. SPARKLINES (Wykresy słupkowe)
+     2. SPARKLINES (bar charts)
      ========================================= */
   .chart-sparkline {
     display: flex;
@@ -7697,7 +7704,7 @@
     opacity: 0.8;
   }
   .sparkline-bar {
-    /* Animacja rośnięcia przy ładowaniu */
+    /* Growth animation on load */
   }
   @starting-style {
     .sparkline-bar {
@@ -7705,8 +7712,8 @@
     }
   }
   .sparkline-bar {
-    /* A11y: bez animacji "rosniecia" dla uzytkownikow z prefers-reduced-motion -
-       slupki pojawiaja sie od razu w docelowej wysokosci. */
+    /* A11y: no "growth" animation for users with prefers-reduced-motion -
+       bars appear immediately at their target height. */
   }
   @media (prefers-reduced-motion: reduce) {
     .sparkline-bar {
@@ -7714,7 +7721,7 @@
     }
   }
   /* =========================================
-     3. RADIAL BAR (Półotwarte pierścienie)
+     3. RADIAL BAR (partial rings)
      ========================================= */
   .chart-radial {
     position: relative;
@@ -7724,25 +7731,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Mapujemy zmienną inline na zarejestrowaną zmienną Houdini */
+    /* Map the inline variable to the registered Houdini variable */
     --chart-val: var(--val, 0%);
-    /* Hak dla JS (molique-counters.js): gdy .chart-radial towarzyszy
-       .counter-value, skrypt resetuje --val do 0% i odtwarza wypelnienie
-       w momencie wejscia w widok (bez tego pierscien wypelnia sie od razu
-       przy wczytaniu strony przez @starting-style nizej - niewidoczne,
-       jesli sekcja jest poza pierwszym ekranem). Reset musi byc SKOKOWY,
-       nie animowany, stad chwilowe wylaczenie transition na ::before. */
+    /* A hook for JS (molique-counters.js): when a .chart-radial accompanies
+       a .counter-value, the script resets --val to 0% and replays the fill
+       the moment it scrolls into view (without this, the ring fills in
+       immediately on page load via the @starting-style below - invisible
+       if the section is below the fold). The reset must be INSTANT, not
+       animated, hence briefly disabling the transition on ::before. */
   }
   .chart-radial.js-resetting::before {
     transition: none !important;
   }
   .chart-radial {
-    /* Animacja wejścia całego kółka (Pop-in) */
+    /* Entrance animation for the whole circle (pop-in) */
     animation: radialPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
-    /* Pierścień (conic-gradient + maska wycinająca środek) żyje na ::before,
-       NIE bezpośrednio na .chart-radial: mask-image ucina render całego
-       elementu WRAZ Z DZIEĆMI, więc na głównym boksie ucinałby też
-       .radial-value w środku - liczba byłaby zawsze niewidoczna. */
+    /* The ring (conic-gradient + a mask cutting out the center) lives on
+       ::before, NOT directly on .chart-radial: mask-image clips the
+       rendering of the whole element INCLUDING ITS CHILDREN, so on the
+       main box it would also clip the .radial-value inside it - the number
+       would always be invisible. */
   }
   .chart-radial::before {
     content: "";
@@ -7752,7 +7760,7 @@
     background: conic-gradient(var(--primary) var(--chart-val), var(--border-color) 0);
     -webkit-mask-image: radial-gradient(transparent 55%, black 56%);
     mask-image: radial-gradient(transparent 55%, black 56%);
-    /* MAGIA: Płynna animacja wypełniania pierścienia */
+    /* THE TRICK: smooth ring-fill animation */
     transition: --chart-val 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   @starting-style {
@@ -7774,11 +7782,11 @@
     font-size: 1.5rem;
     font-weight: var(--fw-black);
     color: var(--text-main);
-    /* Animacja pojawiania się tekstu */
+    /* Text fade-in animation */
     animation: fadeIn 1s ease backwards 0.3s;
   }
   /* =========================================
-     4. HEATMAP (Mapy aktywności)
+     4. HEATMAP (activity maps)
      ========================================= */
   .chart-heatmap {
     display: grid;
@@ -7958,13 +7966,13 @@
     }
   }
   /* =========================================
-     5. SMOOTH AREA CHART (Wykresy warstwowe SVG)
+     5. SMOOTH AREA CHART (SVG layered charts)
      ========================================= */
   .chart-area {
     width: 100%;
     height: 100%;
     overflow: visible;
-    /* MAGIA: Animacja odsłaniania wykresu od lewej do prawej */
+    /* THE TRICK: left-to-right chart reveal animation */
     animation: areaReveal 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
   }
   .chart-area .area-fill {
@@ -7979,30 +7987,30 @@
     stroke-linejoin: round;
   }
   @keyframes areaReveal {
-    /* Ukrywa cały wykres po prawej stronie */
+    /* Hides the whole chart on the right side */
     0% {
       clip-path: inset(0 100% 0 0);
     }
-    /* Odsłania cały wykres */
+    /* Reveals the whole chart */
     100% {
       clip-path: inset(0 0 0 0);
     }
   }
   /* =========================================
-     6. PIE / DONUT CHART (Wykres kołowy SVG)
+     6. PIE / DONUT CHART (SVG)
      ========================================= */
   .chart-pie {
     width: 100%;
     height: 100%;
-    /* Obracamy o -90 stopni, aby wykres zaczynał się na godzinie 12:00 */
+    /* Rotate by -90 degrees so the chart starts at 12 o'clock */
     transform: rotate(-90deg);
     overflow: visible;
   }
   .chart-pie circle {
     fill: transparent;
-    /* Grubość pierścienia. Zmień na 16 dla pełnego koła (Pie), lub zostaw mniejsze dla Donuta */
+    /* Ring thickness. Change to 16 for a full circle (Pie), or keep it smaller for a Donut */
     stroke-width: 6;
-    /* Zaokrąglone końce segmentów (B2B Premium) */
+    /* Rounded segment ends (B2B premium) */
     stroke-linecap: round;
   }
   .chart-pie .pie-bg {
@@ -8012,18 +8020,18 @@
     stroke: currentColor;
     stroke-dasharray: var(--val) calc(100 - var(--val));
     stroke-dashoffset: calc(var(--offset) * -1);
-    /* MAGIA PREMIUM: Transform origin na środek SVG */
+    /* PREMIUM TRICK: transform origin at the SVG's center */
     transform-origin: center;
-    /* Płynna animacja rysowania i hovera */
+    /* Smooth drawing and hover animation */
     animation: pieReveal 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
     transition: stroke-dasharray var(--transition-speed), stroke-dashoffset var(--transition-speed), transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
     cursor: pointer;
-    /* Efekt Hover: Segment rośnie i rzuca cień (Drop Shadow działa na SVG!) */
+    /* Hover effect: the segment grows and casts a shadow (drop-shadow works on SVG!) */
   }
   .chart-pie .pie-segment:hover {
     transform: scale(1.05);
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-    /* Przenosi segment na wierzch */
+    /* Brings the segment to the front */
     z-index: 10;
   }
   @keyframes pieReveal {
@@ -8032,7 +8040,7 @@
     }
   }
   /* =========================================
-     7. STATS CARDS (Karty Statystyk)
+     7. STATS CARDS
      ========================================= */
   .stat-card {
     padding: calc(var(--spacing-unit) * 3);
@@ -8067,8 +8075,8 @@
     gap: 4px;
     font-size: 0.875rem;
     font-weight: var(--fw-bold);
-    /* --success/--danger jako sam kolor TEKSTU nie maja dosc kontrastu
-       (patrz --success-text/--danger-text w _root.scss - ten sam powod co
+    /* --success/--danger as plain TEXT color don't have enough contrast
+       (see --success-text/--danger-text in _root.scss - the same reason as
        .text-success/.text-danger). */
   }
   .stat-trend.is-positive {
@@ -8078,7 +8086,7 @@
     color: var(--danger-text);
   }
   /* =========================================
-     8. EMPTY STATES (Puste stany danych)
+     8. EMPTY STATES
      ========================================= */
   .empty-state {
     display: flex;
@@ -8098,16 +8106,18 @@
     margin-bottom: calc(var(--spacing-unit) * 2);
   }
   /* =========================================
-     NAWIGACJA WYKRESU (segmentowany przelacznik zakresu)
+     CHART NAVIGATION (segmented range switcher)
      =========================================
-     Komponent byl od pierwszego commita opisany w slownikach i uzyty w markupie
-     trzech stron, ale regula CSS nigdy nie powstala. Markup czekal gotowy:
+     This component was described in the dictionaries and used in the
+     markup of three pages since the first commit, but the CSS rule was
+     never actually written. The markup was ready and waiting:
      .chart-nav > .chart-nav-item (label) > input[type=radio] + .nav-label
 
-     Stan trzyma radio, wiec przelaczanie dziala bez JS. Radio jest UKRYTE
-     TECHNIKA CLIP, a nie display:none - to istotna roznica, bo display:none
-     wyrzuca pole z kolejnosci tabulacji i z drzewa dostepnosci. Przy tej
-     technice grupa radio zostaje obslugiwana strzalkami z klawiatury. */
+     State is held by the radio, so switching works without JS. The radio
+     is hidden using the CLIP TECHNIQUE, not display:none - an important
+     difference, since display:none removes the field from the tab order
+     and the accessibility tree. With this technique the radio group stays
+     operable with the keyboard arrows. */
   .chart-nav {
     display: inline-flex;
     gap: 2px;
@@ -8118,7 +8128,7 @@
   }
   .chart-nav-item {
     cursor: pointer;
-    /* Ukrycie zachowujace fokusowalnosc (ta sama technika co .sr-only). */
+    /* A hide that preserves focusability (the same technique as .sr-only). */
   }
   .chart-nav-item input {
     position: absolute;
@@ -8148,7 +8158,7 @@
     color: var(--text-main);
   }
   .chart-nav-item {
-    /* Zaznaczony zakres. Radio jest bezposrednim rodzenstwem etykiety. */
+    /* The selected range. The radio is a direct sibling of the label. */
   }
   .chart-nav-item input:checked + .nav-label {
     background-color: var(--bg-surface);
@@ -8157,7 +8167,7 @@
     box-shadow: var(--shadow-sm);
   }
   .chart-nav-item {
-    /* Obwodka focusa musi trafic na ETYKIETE, bo samo radio jest niewidoczne. */
+    /* The focus ring must land on the LABEL, since the radio itself is invisible. */
   }
   .chart-nav-item input:focus-visible + .nav-label {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);

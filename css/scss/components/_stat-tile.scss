@@ -1,40 +1,40 @@
 /**
- * molique - Stat Tile (karta KPI)
- * Karta statystyki: ikona (bez tła - świadoma decyzja, kolorowe kafle pod
- * ikonami przetestowane i odrzucone w praktyce) + etykieta + jedna stała
- * wielkość liczby zawsze + opcjonalna delta trendu. Łączyć z .card.
+ * molique - Stat Tile (KPI card)
+ * A statistic card: an icon (no background - a deliberate choice, colored
+ * tiles behind icons were tested and rejected in practice) + a label + a
+ * number always at one fixed size + an optional trend delta. Pair with .card.
  *
- * Użycie:
+ * Usage:
  *   <div class="card stat-tile">
  *     <div class="stat-tile-icon stat-tile-icon-success">
  *       <svg class="icon icon-lg"><use href="img/icons-sprite.svg#ph-credit-card"></use></svg>
  *     </div>
  *     <div class="stat-tile-body">
- *       <span class="stat-tile-label">Wartość netto</span>
- *       <span class="stat-tile-value">18 420<span class="stat-tile-unit">zł</span></span>
+ *       <span class="stat-tile-label">Net value</span>
+ *       <span class="stat-tile-value">18,420<span class="stat-tile-unit">$</span></span>
  *       <span class="stat-tile-delta stat-tile-delta-up">
  *         <svg class="icon"><use href="img/icons-sprite.svg#ph-trend-up"></use></svg>
- *         +12% <span class="stat-tile-delta-context">vs poprzedni okres</span>
+ *         +12% <span class="stat-tile-delta-context">vs previous period</span>
  *       </span>
  *     </div>
  *   </div>
  *
- * Warianty ikony: bazowa = --primary; modyfikatory -success/-warning/-danger/
- * -info przełączają tylko kolor ikony, zawsze przez -text warianty (kontrast
- * na jasnym tle .card - patrz _root.scss). Delta jest opcjonalna.
+ * Icon variants: base = --primary; the -success/-warning/-danger/-info
+ * modifiers only switch the icon's color, always via the -text variants
+ * (contrast on .card's light background - see _root.scss). The delta is optional.
  *
- * UWAGA: celowo BEZ wlasnego "@layer components { ... }" wokol tresci pliku.
- * molique-style.scss juz owija caly import _components.scss w @layer
- * components - dodatkowe zagniezdzenie tutaj tworzyloby PODWARSTWE
- * (components.components), ktora ma NIZSZY priorytet niz nieowiniete
- * reguly w tym samym zakresie (m.in. .card z _cards.scss). Realny,
- * zaobserwowany skutek: .card ustawia flex-direction: column, a
- * .stat-tile ponizej ustawia flex-direction: row - bez usuniecia tego
- * wrappera .card WYGRYWA niezaleznie od kolejnosci w pliku, bo zyje w
- * "luznej" (nieowinietej) czesci warstwy, a .stat-tile w nazwanej
- * podwarstwie o nizszym priorytecie. Trzymaj sie wzorca wiekszosci
- * plikow w components/ (np. _cards.scss, _tabs.scss) - brak wlasnego
- * @layer.
+ * NOTE: deliberately WITHOUT its own "@layer components { ... }" around
+ * the file's content. molique-style.scss already wraps the entire
+ * _components.scss import in @layer components - nesting another one
+ * here would create a SUB-LAYER (components.components), which has
+ * LOWER priority than unwrapped rules in the same scope (including .card
+ * from _cards.scss). The real, observed effect: .card sets
+ * flex-direction: column, and .stat-tile below sets flex-direction: row
+ * - without removing this wrapper, .card WINS regardless of the order in
+ * the file, because it lives in the "loose" (unwrapped) part of the
+ * layer, while .stat-tile sits in a named sub-layer with lower priority.
+ * Stick to the pattern most files in components/ follow (e.g. _cards.scss,
+ * _tabs.scss) - no own @layer.
  */
 
 @use '../variables' as *;

@@ -1,23 +1,23 @@
-// molique - Pasek boczny panelu admina: warianty szerokosci, logo kompaktowe.
+// molique - Admin panel sidebar: width variants, compact logo.
 @use '../variables' as *;
 @use '../mixins' as *;
 
-/* Wspólny wygląd kompaktowej wersji logo (plakietka z ikoną/inicjałem).
-   Współdzielony między trybami wąskimi na desktopie (-sm, -md) i mobile,
-   żeby nie duplikować reguł w trzech miejscach. */
+/* The shared look of the compact logo version (a badge with an
+   icon/initial). Shared between the narrow desktop modes (-sm, -md) and
+   mobile, so the rules aren't duplicated in three places. */
 @mixin admin-logo-compact-style {
   img, svg {
     max-width: 32px;
     max-height: 32px;
     width: auto;
     height: auto;
-    margin: auto; /* obrazek/SVG zawsze wyśrodkowany w plakietce, niezależnie od justify-content */
+    margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
   }
 
   display: flex;
   align-items: center;
-  /* flex-start (nie center): przy tekście dłuższym niż plakietka chcemy
-     obciąć koniec, a nie pokazywać losowy fragment ze środka */
+  /* flex-start (not center): with text longer than the badge, we want to
+     cut off the end, not show a random fragment from the middle */
   justify-content: flex-start;
   width: 32px;
   height: 32px;
@@ -45,20 +45,20 @@
     padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
     gap: calc(var(--spacing-unit) * 3);
 
-    /* Wracamy do bezpiecznego ukrywania, bo sidebar sam będzie rósł */
+    /* Back to safely hiding, since the sidebar itself will grow */
     overflow-y: auto;
-    overflow-x: hidden; 
-    
-    /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie.
-       Świadome odstępstwo od reguły GPU-only (transform/opacity):
-       animowanie width wywołuje reflow, ale to jednorazowa, inicjowana
-       kliknięciem zmiana (przełącznik szerokości), nie ciągła/zapętlona
-       animacja - koszt jest jednorazowy, nie per-klatkowy. Ten sam
-       kompromis co .progress-bar/.progress-bar-reading w _progress.scss. */
+    overflow-x: hidden;
+
+    /* FIX: the sidebar has a fixed width and smoothly grows.
+       A deliberate exception to the GPU-only rule (transform/opacity):
+       animating width triggers reflow, but this is a one-off,
+       click-initiated change (the width toggle), not a continuous/looping
+       animation - the cost is one-time, not per-frame. The same tradeoff
+       as .progress-bar/.progress-bar-reading in _progress.scss. */
     width: var(--current-sidebar-width);
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
 
-    /* Elegancki scrollbar */
+    /* An elegant scrollbar */
     scrollbar-width: thin;
     scrollbar-color: rgba(var(--sidebar-highlight-rgb), 0.1) transparent;
     &::-webkit-scrollbar { width: 4px; }
@@ -76,7 +76,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      width: 100%; /* Wymuszamy 100% na mobile */
+      width: 100%; /* Force 100% on mobile */
       height: auto;
       min-height: 70px;
       flex-direction: row;
@@ -90,11 +90,11 @@
   }
 
   /* =========================================
-     KOORDYNACJA Z GLOBALNYM NAVBAREM
+     COORDINATION WITH THE GLOBAL NAVBAR
      =========================================
-     Gdy nad layoutem admina siedzi navbar (body > .navbar), sidebar musi
-     zaczynać się POD nim i wypełniać resztę okna. Tylko desktop - na mobile
-     sidebar to dolny Bottom Nav (position: fixed; bottom). */
+     When a navbar sits above the admin layout (body > .navbar), the
+     sidebar must start BELOW it and fill the rest of the window. Desktop
+     only - on mobile the sidebar is the bottom Bottom Nav (position: fixed; bottom). */
   @include mq(md) {
     body:has(> .navbar) .admin-sidebar {
       top: calc(var(--navbar-h) + var(--layout-padding));
@@ -102,36 +102,37 @@
     }
   }
 
-  /* Na stronach z layoutem admina navbar zostaje przyklejony (nie chowa się
-     przy scrollu w dół), inaczej sidebar odsłaniałby pusty pasek u góry. */
+  /* On pages with the admin layout, the navbar stays pinned (doesn't hide
+     on scroll down), otherwise the sidebar would expose an empty bar at the top. */
   body:has(.admin-layout) .navbar-sticky.is-hidden {
     transform: none;
   }
 
-  /* Zanikanie treści na dole przewijanego sidebara (opt-in: klasa
-     .fade-bottom z warstwy layout). Gradient musi mieć kolor tła
-     sidebara (zawsze ciemny), nie powierzchni strony. */
+  /* Fading content at the bottom of the scrollable sidebar (opt-in: the
+     .fade-bottom class from the layout layer). The gradient must use the
+     sidebar's background color (always dark), not the page surface's. */
   .admin-sidebar.fade-bottom {
     --fade-color: var(--sidebar-bg);
 
-    /* Na mobile sidebar zamienia się w poziomy dolny pasek -
-       pionowy gradient zasłaniałby pigułki nawigacji. */
+    /* On mobile the sidebar turns into a horizontal bottom bar - a
+       vertical gradient would obscure the navigation pills. */
     @media (max-width: 768px) {
       &::after { display: none; }
     }
   }
 
-  /* Logo w sidebarze.
-     Działa niezależnie od typu treści (obrazek, SVG, tekst) - zawsze
-     mieści się w szerokości rodzica i nigdy nie rozsadza sidebara. */
+  /* Sidebar logo.
+     Works regardless of content type (image, SVG, text) - always fits
+     within the parent's width and never blows out the sidebar. */
   .admin-brand {
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: 100%;
     height: var(--target-size-min);
-    flex-shrink: 0; /* FIX: overflow:hidden nadaje elementom flex automatyczne min-height:0 -
-                        bez tego logo zgniata się do zera, gdy .admin-nav jest wyższy niż sidebar */
+    flex-shrink: 0; /* FIX: overflow:hidden gives flex items an automatic
+                        min-height:0 - without this the logo gets crushed
+                        to zero when .admin-nav is taller than the sidebar */
     margin-bottom: calc(var(--spacing-unit) * 4);
     overflow: hidden;
     white-space: nowrap;
@@ -151,30 +152,30 @@
   }
 
   /* =========================================
-     ANIMOWANA IKONA PRZEŁĄCZNIKA (Morphing Hamburger)
+     ANIMATED TOGGLE ICON (morphing hamburger)
      ========================================= */
-  
-  /* 1. Przycisk przełącznika */
+
+  /* 1. The toggle button */
   #molique-sidebar-toggle {
     display: flex;
     align-items: center;
-    /* Domyślnie (LG) ikona jest po lewej stronie, jak reszta linków */
-    justify-content: flex-start; 
-    width: 100%; /* Zawsze zajmuje całą szerokość sidebara */
+    /* By default (LG) the icon is on the left, like the rest of the links */
+    justify-content: flex-start;
+    width: 100%; /* Always fills the sidebar's full width */
     height: var(--target-size-min, 44px);
-    padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding jak w linkach */
+    padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding like the links */
     margin: 0;
     border-radius: var(--border-radius);
   }
 
-  /* W trybie wąskim (MD i SM) środkujemy ikonę */
+  /* In narrow mode (MD and SM), center the icon */
   .admin-layout.sidebar-md #molique-sidebar-toggle,
   .admin-layout.sidebar-sm #molique-sidebar-toggle {
     justify-content: center;
     padding: 0 !important;
   }
 
-  /* 2. Baza ikony */
+  /* 2. The icon's base */
   .sidebar-toggle-icon {
     width: 20px;
     height: 14px;
@@ -192,22 +193,22 @@
       width: 100%;
     }
     
-    /* Domyślny stan (LG) - Klasyczny Hamburger */
+    /* Default state (LG) - classic hamburger */
     span:nth-child(1) { top: 0; }
     span:nth-child(2) { top: 6px; }
     span:nth-child(3) { top: 12px; }
   }
 
-  /* Stan 2 (MD) - Asymetryczny */
+  /* State 2 (MD) - asymmetric */
   .admin-layout.sidebar-md .sidebar-toggle-icon {
     span:nth-child(1) { width: 100%; }
     span:nth-child(2) { width: 75%; }
     span:nth-child(3) { width: 50%; }
   }
 
-  /* Stan 3 (SM) - Strzałka w prawo */
+  /* State 3 (SM) - arrow pointing right */
   .admin-layout.sidebar-sm .sidebar-toggle-icon {
-    /* KOREKTA OPTYCZNA: Przesuwamy całą ikonę o 2px w lewo, żeby zrównoważyć ciężar grota strzałki */
+    /* OPTICAL CORRECTION: shift the whole icon 2px left to balance the weight of the arrowhead */
     transform: translateX(-2px);
     
     span:nth-child(1) {
@@ -231,11 +232,11 @@
   }
 
   /* =========================================
-     ZARZĄDZANIE LOGO - WERSJA RESPONSYWNA
+     LOGO MANAGEMENT - RESPONSIVE VERSION
      ========================================= */
 
-  /* Tryby wąskie na desktopie (-sm, -md): logo zwija się automatycznie,
-     tak samo jak etykiety linków w .admin-nav-link (patrz _admin-nav.scss) */
+  /* Narrow desktop modes (-sm, -md): the logo collapses automatically,
+     just like link labels in .admin-nav-link (see _admin-nav.scss) */
   @include mq(md) {
     .sidebar-sm .admin-logo-hide,
     .sidebar-md .admin-logo-hide {
@@ -248,14 +249,14 @@
     }
   }
 
-  /* Mobile (sidebar zwinięty do dolnego paska): te same zasady */
+  /* Mobile (sidebar collapsed into the bottom bar): the same rules */
   @media (max-width: 768px) {
-    /* Opcja 1: Całkowite ukrycie logo na mobile */
+    /* Option 1: fully hide the logo on mobile */
     .admin-logo-hide {
       display: none !important;
     }
 
-    /* Opcja 2: Wersja kompaktowa (zmniejszona) na mobile */
+    /* Option 2: a compact (shrunk) version on mobile */
     .admin-logo-compact {
       @include admin-logo-compact-style;
     }

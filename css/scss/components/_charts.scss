@@ -1,15 +1,15 @@
 /**
- * molique - Wykresy i Wizualizacje Danych (Data Viz)
- * Architektura Progressive Enhancement (Czysty CSS/SVG jako fallback)
+ * molique - Charts and Data Visualization (Data Viz)
+ * Progressive Enhancement architecture (pure CSS/SVG as a fallback)
  */
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   0. CSS HOUDINI (Rejestracja zmiennych do animacji)
+   0. CSS HOUDINI (variable registration for animation)
    ========================================= */
-/* Pozwala przeglądarce płynnie animować wartości procentowe w gradientach! */
+/* Lets the browser smoothly animate percentage values in gradients! */
 @property --chart-val {
   syntax: '<percentage>';
   inherits: true;
@@ -17,28 +17,28 @@
 }
 
 /* =========================================
-   1. BAZOWY KONTENER
+   1. BASE CONTAINER
    ========================================= */
 .r-chart-wrapper {
   position: relative;
   width: 100%;
-  height: 200px; /* Domyślna wysokość dla dużych wykresów */
+  height: 200px; /* Default height for large charts */
   display: flex;
   align-items: flex-end;
-  
-  /* Zabezpieczenie przed rozsadzeniem kontenera */
+
+  /* Guard against the container blowing out */
   max-width: 100%;
-  
-  /* WARIANT: MICRO CHART (Do kart statystyk i tabel) */
+
+  /* VARIANT: MICRO CHART (for stat cards and tables) */
   &.chart-micro {
-    width: 80px;  /* Sztywna, bezpieczna szerokość */
-    height: 40px; /* Sztywna, bezpieczna wysokość */
-    flex-shrink: 0; /* Zapobiega zgniataniu przez Flexboxa */
+    width: 80px;  /* Fixed, safe width */
+    height: 40px; /* Fixed, safe height */
+    flex-shrink: 0; /* Prevents Flexbox from crushing it */
   }
 }
 
 /* =========================================
-   2. SPARKLINES (Wykresy słupkowe)
+   2. SPARKLINES (bar charts)
    ========================================= */
 .chart-sparkline {
   display: flex;
@@ -58,20 +58,20 @@
 
   &:hover { opacity: 0.8; }
 
-  /* Animacja rośnięcia przy ładowaniu */
+  /* Growth animation on load */
   @starting-style {
     height: 0%;
   }
 
-  /* A11y: bez animacji "rosniecia" dla uzytkownikow z prefers-reduced-motion -
-     slupki pojawiaja sie od razu w docelowej wysokosci. */
+  /* A11y: no "growth" animation for users with prefers-reduced-motion -
+     bars appear immediately at their target height. */
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
 }
 
 /* =========================================
-   3. RADIAL BAR (Półotwarte pierścienie)
+   3. RADIAL BAR (partial rings)
    ========================================= */
 .chart-radial {
   position: relative;
@@ -82,26 +82,27 @@
   align-items: center;
   justify-content: center;
 
-  /* Mapujemy zmienną inline na zarejestrowaną zmienną Houdini */
+  /* Map the inline variable to the registered Houdini variable */
   --chart-val: var(--val, 0%);
 
-  /* Hak dla JS (molique-counters.js): gdy .chart-radial towarzyszy
-     .counter-value, skrypt resetuje --val do 0% i odtwarza wypelnienie
-     w momencie wejscia w widok (bez tego pierscien wypelnia sie od razu
-     przy wczytaniu strony przez @starting-style nizej - niewidoczne,
-     jesli sekcja jest poza pierwszym ekranem). Reset musi byc SKOKOWY,
-     nie animowany, stad chwilowe wylaczenie transition na ::before. */
+  /* A hook for JS (molique-counters.js): when a .chart-radial accompanies
+     a .counter-value, the script resets --val to 0% and replays the fill
+     the moment it scrolls into view (without this, the ring fills in
+     immediately on page load via the @starting-style below - invisible
+     if the section is below the fold). The reset must be INSTANT, not
+     animated, hence briefly disabling the transition on ::before. */
   &.js-resetting::before {
     transition: none !important;
   }
 
-  /* Animacja wejścia całego kółka (Pop-in) */
+  /* Entrance animation for the whole circle (pop-in) */
   animation: radialPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
 
-  /* Pierścień (conic-gradient + maska wycinająca środek) żyje na ::before,
-     NIE bezpośrednio na .chart-radial: mask-image ucina render całego
-     elementu WRAZ Z DZIEĆMI, więc na głównym boksie ucinałby też
-     .radial-value w środku - liczba byłaby zawsze niewidoczna. */
+  /* The ring (conic-gradient + a mask cutting out the center) lives on
+     ::before, NOT directly on .chart-radial: mask-image clips the
+     rendering of the whole element INCLUDING ITS CHILDREN, so on the
+     main box it would also clip the .radial-value inside it - the number
+     would always be invisible. */
   &::before {
     content: '';
     position: absolute;
@@ -116,7 +117,7 @@
     -webkit-mask-image: radial-gradient(transparent 55%, black 56%);
     mask-image: radial-gradient(transparent 55%, black 56%);
 
-    /* MAGIA: Płynna animacja wypełniania pierścienia */
+    /* THE TRICK: smooth ring-fill animation */
     transition: --chart-val 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 
     @starting-style {
@@ -134,12 +135,12 @@
   font-size: 1.5rem;
   font-weight: var(--fw-black);
   color: var(--text-main);
-  /* Animacja pojawiania się tekstu */
+  /* Text fade-in animation */
   animation: fadeIn 1s ease backwards 0.3s;
 }
 
 /* =========================================
-   4. HEATMAP (Mapy aktywności)
+   4. HEATMAP (activity maps)
    ========================================= */
 .chart-heatmap {
   display: grid;
@@ -174,14 +175,14 @@
 }
 
 /* =========================================
-   5. SMOOTH AREA CHART (Wykresy warstwowe SVG)
+   5. SMOOTH AREA CHART (SVG layered charts)
    ========================================= */
 .chart-area {
   width: 100%;
   height: 100%;
   overflow: visible;
-  
-  /* MAGIA: Animacja odsłaniania wykresu od lewej do prawej */
+
+  /* THE TRICK: left-to-right chart reveal animation */
   animation: areaReveal 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
   
   .area-fill {
@@ -199,28 +200,28 @@
 }
 
 @keyframes areaReveal {
-  /* Ukrywa cały wykres po prawej stronie */
+  /* Hides the whole chart on the right side */
   0% { clip-path: inset(0 100% 0 0); }
-  /* Odsłania cały wykres */
+  /* Reveals the whole chart */
   100% { clip-path: inset(0 0 0 0); }
 }
 
 /* =========================================
-   6. PIE / DONUT CHART (Wykres kołowy SVG)
+   6. PIE / DONUT CHART (SVG)
    ========================================= */
 .chart-pie {
   width: 100%;
   height: 100%;
-  /* Obracamy o -90 stopni, aby wykres zaczynał się na godzinie 12:00 */
+  /* Rotate by -90 degrees so the chart starts at 12 o'clock */
   transform: rotate(-90deg);
   overflow: visible;
-  
+
   circle {
     fill: transparent;
-    /* Grubość pierścienia. Zmień na 16 dla pełnego koła (Pie), lub zostaw mniejsze dla Donuta */
-    stroke-width: 6; 
-    /* Zaokrąglone końce segmentów (B2B Premium) */
-    stroke-linecap: round; 
+    /* Ring thickness. Change to 16 for a full circle (Pie), or keep it smaller for a Donut */
+    stroke-width: 6;
+    /* Rounded segment ends (B2B premium) */
+    stroke-linecap: round;
   }
   
   .pie-bg {
@@ -232,25 +233,25 @@
     stroke-dasharray: var(--val) calc(100 - var(--val));
     stroke-dashoffset: calc(var(--offset) * -1);
     
-    /* MAGIA PREMIUM: Transform origin na środek SVG */
+    /* PREMIUM TRICK: transform origin at the SVG's center */
     transform-origin: center;
-    
-    /* Płynna animacja rysowania i hovera */
+
+    /* Smooth drawing and hover animation */
     animation: pieReveal 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
-    transition: 
-      stroke-dasharray var(--transition-speed), 
+    transition:
+      stroke-dasharray var(--transition-speed),
       stroke-dashoffset var(--transition-speed),
       transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
       filter 0.3s ease;
-      
+
     cursor: pointer;
 
-    /* Efekt Hover: Segment rośnie i rzuca cień (Drop Shadow działa na SVG!) */
+    /* Hover effect: the segment grows and casts a shadow (drop-shadow works on SVG!) */
     &:hover {
       transform: scale(1.05);
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-      /* Przenosi segment na wierzch */
-      z-index: 10; 
+      /* Brings the segment to the front */
+      z-index: 10;
     }
   }
 }
@@ -260,7 +261,7 @@
 }
 
 /* =========================================
-   7. STATS CARDS (Karty Statystyk)
+   7. STATS CARDS
    ========================================= */
 .stat-card {
   padding: calc(var(--spacing-unit) * 3);
@@ -300,15 +301,15 @@
   font-size: 0.875rem;
   font-weight: var(--fw-bold);
   
-  /* --success/--danger jako sam kolor TEKSTU nie maja dosc kontrastu
-     (patrz --success-text/--danger-text w _root.scss - ten sam powod co
+  /* --success/--danger as plain TEXT color don't have enough contrast
+     (see --success-text/--danger-text in _root.scss - the same reason as
      .text-success/.text-danger). */
   &.is-positive { color: var(--success-text); }
   &.is-negative { color: var(--danger-text); }
 }
 
 /* =========================================
-   8. EMPTY STATES (Puste stany danych)
+   8. EMPTY STATES
    ========================================= */
 .empty-state {
   display: flex;
@@ -329,16 +330,18 @@
   margin-bottom: calc(var(--spacing-unit) * 2);
 }
 /* =========================================
-   NAWIGACJA WYKRESU (segmentowany przelacznik zakresu)
+   CHART NAVIGATION (segmented range switcher)
    =========================================
-   Komponent byl od pierwszego commita opisany w slownikach i uzyty w markupie
-   trzech stron, ale regula CSS nigdy nie powstala. Markup czekal gotowy:
+   This component was described in the dictionaries and used in the
+   markup of three pages since the first commit, but the CSS rule was
+   never actually written. The markup was ready and waiting:
    .chart-nav > .chart-nav-item (label) > input[type=radio] + .nav-label
 
-   Stan trzyma radio, wiec przelaczanie dziala bez JS. Radio jest UKRYTE
-   TECHNIKA CLIP, a nie display:none - to istotna roznica, bo display:none
-   wyrzuca pole z kolejnosci tabulacji i z drzewa dostepnosci. Przy tej
-   technice grupa radio zostaje obslugiwana strzalkami z klawiatury. */
+   State is held by the radio, so switching works without JS. The radio
+   is hidden using the CLIP TECHNIQUE, not display:none - an important
+   difference, since display:none removes the field from the tab order
+   and the accessibility tree. With this technique the radio group stays
+   operable with the keyboard arrows. */
 .chart-nav {
   display: inline-flex;
   gap: 2px;
@@ -351,7 +354,7 @@
 .chart-nav-item {
   cursor: pointer;
 
-  /* Ukrycie zachowujace fokusowalnosc (ta sama technika co .sr-only). */
+  /* A hide that preserves focusability (the same technique as .sr-only). */
   input {
     position: absolute;
     width: 1px;
@@ -381,7 +384,7 @@
 
   &:hover .nav-label { color: var(--text-main); }
 
-  /* Zaznaczony zakres. Radio jest bezposrednim rodzenstwem etykiety. */
+  /* The selected range. The radio is a direct sibling of the label. */
   input:checked + .nav-label {
     background-color: var(--bg-surface);
     color: var(--primary);
@@ -389,7 +392,7 @@
     box-shadow: var(--shadow-sm);
   }
 
-  /* Obwodka focusa musi trafic na ETYKIETE, bo samo radio jest niewidoczne. */
+  /* The focus ring must land on the LABEL, since the radio itself is invisible. */
   input:focus-visible + .nav-label {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: 2px;

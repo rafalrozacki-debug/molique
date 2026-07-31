@@ -1,13 +1,13 @@
-// molique - Tabele B2B: warianty rozmiaru, naglowki, tryb kart na mobile.
+// molique - B2B tables: size variants, headers, card mode on mobile.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 @layer components {
   /* =========================================
-     1. TABELE B2B (Zoptymalizowane pod dane)
+     1. B2B TABLES (optimized for data)
      ========================================= */
   .table-wrapper {
     width: 100%;
@@ -22,18 +22,18 @@
     width: 100%;
     border-collapse: collapse;
     color: var(--text-main);
-    font-size: 0.875rem; 
-    
-    /* Zmienne sterujące rozmiarem (Domyślnie MD) */
+    font-size: 0.875rem;
+
+    /* Variables controlling size (default MD) */
     --table-padding-y: calc(var(--spacing-unit) * 1.5);
     --table-padding-x: calc(var(--spacing-unit) * 2);
     --table-font-size: 0.875rem;
     --table-header-font-size: 0.75rem;
   }
 
-  /* --- WARIANTY ROZMIARÓW --- */
-  
-  /* Kompaktowa (Gęste dane, np. raporty finansowe) */
+  /* --- SIZE VARIANTS --- */
+
+  /* Compact (dense data, e.g. financial reports) */
   .table-sm {
     --table-padding-y: calc(var(--spacing-unit) * 0.75);
     --table-padding-x: calc(var(--spacing-unit) * 1.5);
@@ -41,7 +41,7 @@
     --table-header-font-size: 0.7rem;
   }
 
-  /* Luźna (Dużo przestrzeni, np. lista użytkowników z awatarami) */
+  /* Loose (lots of space, e.g. a user list with avatars) */
   .table-lg {
     --table-padding-y: calc(var(--spacing-unit) * 1.5);
     --table-padding-x: calc(var(--spacing-unit) * 2);
@@ -49,7 +49,7 @@
     --table-header-font-size: 0.875rem;
   }
 
-  /* --- STYLE BAZOWE KOMÓREK --- */
+  /* --- BASE CELL STYLES --- */
   .table th, 
   .table td {
     padding: var(--table-padding-y) var(--table-padding-x);
@@ -69,34 +69,34 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    /* Zapobiega podwójnemu obramowaniu przy sticky header */
+    /* Prevents a double border with a sticky header */
     box-shadow: 0 1px 0 var(--border-color);
     border-bottom: none;
   }
 
-  /* --- WARIANTY NAGŁÓWKÓW (THEAD) --- */
-  
-  /* Domyślny / Jasny (Subtelne odcięcie) */
+  /* --- HEADER (THEAD) VARIANTS --- */
+
+  /* Default / Light (subtle cutoff) */
   .thead-light th {
     background-color: var(--card-bg-subtle);
-    /* NIE --text-muted - na tym prawie-bialym tle daje tylko 4.34:1 (male,
-       pogrubione litery naglowka wymagaja pelnego 4.5:1). --secondary-hover
-       jest wystarczajaco ciemniejszy (6.5+:1 w obu motywach), bez
-       wprowadzania nowej zmiennej. */
+    /* NOT --text-muted - on this near-white background it only gives
+       4.34:1 (small, bold header letters need the full 4.5:1).
+       --secondary-hover is dark enough (6.5+:1 in both themes) without
+       introducing a new variable. */
     color: var(--secondary-hover);
-    border-bottom: 2px solid var(--border-color); /* Mocniejsza linia pod nagłówkiem */
+    border-bottom: 2px solid var(--border-color); /* A stronger line under the header */
   }
 
-  /* Ciemny (Mocny kontrast) */
+  /* Dark (strong contrast) */
   .thead-dark th {
     background-color: var(--dark);
     color: var(--btn-text-light);
     border-bottom: none;
-    /* Zmieniamy kolor cienia dla sticky header */
+    /* Changes the shadow color for the sticky header */
     box-shadow: 0 1px 0 rgba(255,255,255,0.1);
   }
 
-  /* Primary (Kolor marki) */
+  /* Primary (brand color) */
   .thead-primary th {
     background-color: var(--primary);
     color: var(--btn-text-light);
@@ -104,9 +104,9 @@
     box-shadow: 0 1px 0 rgba(0,0,0,0.1);
   }
 
-  /* --- WARIANTY WIELKOŚCI NAGŁÓWKÓW --- */
-  
-  /* Kompaktowy nagłówek (Mniejsze paddingi i font) */
+  /* --- HEADER SIZE VARIANTS --- */
+
+  /* Compact header (smaller padding and font) */
   .thead-sm th {
     padding-top: calc(var(--spacing-unit) * 1);
     padding-bottom: calc(var(--spacing-unit) * 1);
@@ -114,7 +114,7 @@
     letter-spacing: 1px;
   }
 
-  /* Duży nagłówek (Więcej oddechu) */
+  /* Large header (more breathing room) */
   .thead-lg th {
     padding-top: calc(var(--spacing-unit) * 2.5);
     padding-bottom: calc(var(--spacing-unit) * 2.5);
@@ -122,14 +122,14 @@
     letter-spacing: 0;
   }
 
-  /* --- WARIANTY WIZUALNE --- */
-  
-  /* Paski zebry (Zwiększają czytelność szerokich tabel) */
+  /* --- VISUAL VARIANTS --- */
+
+  /* Zebra stripes (improve readability of wide tables) */
   .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(var(--dark-rgb), 0.02);
   }
 
-  /* Podświetlanie wiersza na hover */
+  /* Row highlight on hover */
   .table-hover tbody tr {
     transition: background-color var(--transition-speed);
     &:hover {
@@ -137,14 +137,14 @@
     }
   }
 
-  /* Tabele bez bocznych ramek (Czysty, nowoczesny wygląd) */
+  /* Tables with no side borders (clean, modern look) */
   .table-borderless {
     th, td { border-bottom: none; }
     tbody tr { border-bottom: 1px solid var(--border-color); }
     tbody tr:last-child { border-bottom: none; }
   }
 
-  /* --- MIXIN: Transformacja tabeli w karty (Mobile-First Data) --- */
+  /* --- MIXIN: turns a table into cards (mobile-first data) --- */
   @mixin make-table-cards {
     thead { display: none; }
     tbody, tr, td { display: block; width: 100%; }
@@ -154,18 +154,18 @@
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
       background-color: var(--bg-surface);
-      /* Resetujemy tło z zebry dla kart */
+      /* Reset the zebra-stripe background for cards */
       background-color: var(--bg-surface) !important;
     }
 
-    /* Etykieta NAD wartoscia (nie obok, flexem) - komorki z bogata trescia
-       (kilka <code> na raz, dluzszy opis) psuly sie w wariancie flex:
-       kazdy element potomny (kazdy <code>, kazdy fragment tekstu) staje sie
-       WLASNYM elementem flex i przy braku miejsca zamiast zawijac sie jako
-       jeden akapit, kazdy z nich osobno kurczy sie do prawie zerowej
-       szerokosci - tekst lamie sie na pojedyncze litery. Zwykly block-flow
-       (bez flex/grid na komorce) jest odporny na to niezaleznie od tego,
-       ile elementow inline zawiera wartosc. */
+    /* Label ABOVE the value (not beside it, via flex) - cells with rich
+       content (several <code> at once, a longer description) broke in
+       the flex variant: every child element (every <code>, every text
+       fragment) becomes ITS OWN flex item, and when space runs out,
+       instead of wrapping as one paragraph, each one individually shrinks
+       to nearly zero width - the text breaks into single letters. A plain
+       block-flow (no flex/grid on the cell) is immune to this regardless
+       of how many inline elements the value contains. */
     td {
       text-align: left;
       border-bottom: 1px solid var(--border-color);
@@ -186,14 +186,14 @@
     }
   }
 
-  /* Wersja Mobilna (Automatyczna) */
+  /* Mobile version (automatic) */
   @include mq(sm, max) {
-    .table-cards { 
-      @include make-table-cards; 
+    .table-cards {
+      @include make-table-cards;
     }
   }
 
-  /* Wersja Wymuszona (Działa zawsze, nawet na desktopie) */
+  /* Forced version (always active, even on desktop) */
   .table-cards-always {
     @include make-table-cards;
   }

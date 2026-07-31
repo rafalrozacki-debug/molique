@@ -1,16 +1,16 @@
-// molique - Nawigacja panelu admina: submenu, drill-down na mobile, bottom nav.
+// molique - Admin panel navigation: submenu, mobile drill-down, bottom nav.
 @use '../variables' as *;
 @use '../mixins' as *;
 
-/* Wysokość bloku logo (.admin-brand: target-size-min + margin-bottom) -
-   drill-down submenu w -sm/-md zaczyna się PONIŻEJ tej wysokości, żeby logo
-   zostawało widoczne zamiast znikać pod panelem "Cofnij". */
+/* Height of the logo block (.admin-brand: target-size-min + margin-bottom)
+   - the submenu drill-down in -sm/-md starts BELOW this height, so the
+   logo stays visible instead of disappearing under the "Back" panel. */
 $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4);
 
-/* Transformacja tagu <summary> w pasek "Cofnij" (drill-down). Współdzielona
-   przez warianty wąskie na desktopie (-sm/-md) oraz mobilny drill-down w
-   Bottom Nav - mixin odpowiada TYLKO za wygląd (strzałka wstecz + napis
-   "Cofnij", kolory, hover/focus). Pozycjonowanie ustala kontekst wywołania. */
+/* Transforms the <summary> tag into a "Back" bar (drill-down). Shared by
+   the narrow desktop variants (-sm/-md) and the mobile drill-down in the
+   Bottom Nav - the mixin is ONLY responsible for appearance (back arrow +
+   "Back" label, colors, hover/focus). Positioning is set by the calling context. */
 @mixin admin-drilldown-back {
   background-color: var(--sidebar-bg);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -21,29 +21,29 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   padding: 0;
   gap: 8px;
   transition: background-color var(--transition-speed);
-  /* summary bywa oznaczone .is-active (kolor --btn-text-light, który w dark
-     mode robi się ciemny). Tło "Cofnij" to zawsze ciemny --sidebar-bg, więc
-     kolor MUSI wrócić do palety sidebara - inaczej strzałka i napis znikają
-     w ciemnym motywie. */
+  /* A summary can be marked .is-active (color --btn-text-light, which
+     turns dark in dark mode). The "Back" background is always the dark
+     --sidebar-bg, so the color MUST fall back to the sidebar palette -
+     otherwise the arrow and label vanish in the dark theme. */
   color: var(--sidebar-text);
 
-  /* Bez tego "Cofnij" nie reaguje na hover/focus. Przyciemniamy (nie
-     rozjaśniamy) - na ciemnym tle jasne podświetlenie wygląda obco. */
+  /* Without this, "Back" doesn't react to hover/focus. We darken (not
+     lighten) - a light highlight looks out of place on a dark background. */
   &:hover {
     color: var(--sidebar-text-active);
     background-color: rgba(0, 0, 0, 0.15);
   }
   &:focus-visible {
     background-color: rgba(0, 0, 0, 0.15);
-    /* nadpisuje jasny pierścień fokusu z _base.scss (oparty o --primary) */
+    /* overrides the light focus ring from _base.scss (based on --primary) */
     outline: none;
     box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
   }
 
-  /* Ukrywamy oryginalną ikonę pozycji */
+  /* Hide the item's original icon */
   > i, > svg { display: none !important; }
 
-  /* Rysujemy ikonę strzałki w lewo (Cofnij) */
+  /* Draw the left-pointing arrow icon (Back) */
   &::before {
     content: '';
     display: block;
@@ -55,12 +55,17 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center / contain;
   }
 
-  /* Zmieniamy tekst pozycji na "Cofnij" */
+  /* Swap the item's text for "Back"
+     NOTE (pre-existing i18n gap, not touched by this comment-translation
+     pass): the "Cofnij" label injected below via content: is hardcoded
+     Polish even though this component is used on the EN/DE site pages
+     too - would need a real localization pass, e.g. reading it from a
+     CSS custom property set per page language instead of a literal. */
   .nav-text {
     display: block !important;
-    /* bez tego .nav-text dziedziczy width:100% z wariantu -md i rozpycha się */
+    /* without this, .nav-text inherits width:100% from the -md variant and stretches */
     width: auto;
-    font-size: 0 !important; /* Ukrywa oryginalny tekst */
+    font-size: 0 !important; /* Hides the original text */
     &::after {
       content: 'Cofnij';
       font-size: 0.875rem;
@@ -81,8 +86,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 
     @media (max-width: 768px) {
       flex-direction: row;
-      /* Równe odstępy dla głównych ikon na pasku */
-      justify-content: space-around; 
+      /* Even spacing for the main icons on the bar */
+      justify-content: space-around;
       width: 100%;
       gap: 0;
     }
@@ -98,7 +103,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     border-radius: var(--border-radius);
     min-height: var(--target-size-min);
     
-    /* Domyślny układ (Standard - .sidebar-lg) */
+    /* Default layout (Standard - .sidebar-lg) */
     flex-direction: row;
     padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
     gap: calc(var(--spacing-unit) * 1.5);
@@ -129,23 +134,23 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
 
     /* =========================================
-       WARIANTY DESKTOPOWE (Ignorowane na mobile!)
+       DESKTOP VARIANTS (ignored on mobile!)
        ========================================= */
     @include mq(md) {
-      
-      /* --- WARIANT: NARROW (Ikona na górze, tekst na dole) --- */
+
+      /* --- VARIANT: NARROW (icon on top, text below) --- */
       .sidebar-md & {
-        /* FIX: Wymuszamy układ pionowy! */
+        /* FIX: force a vertical layout! */
         flex-direction: column;
         justify-content: center;
         padding: calc(var(--spacing-unit) * 1) 4px;
         gap: calc(var(--spacing-unit) * 0.5);
         text-align: center;
-        width: 100%; 
+        width: 100%;
 
         .nav-text {
-          /* FIX: Mały, wyśrodkowany tekst */
-          font-size: 0.6rem; 
+          /* FIX: small, centered text */
+          font-size: 0.6rem;
           text-transform: uppercase;
           letter-spacing: 0.5px;
           white-space: normal;
@@ -155,7 +160,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
         }
       }
 
-      /* --- WARIANT: COMPACT (Tylko ikony) --- */
+      /* --- VARIANT: COMPACT (icons only) --- */
       .sidebar-sm & {
         justify-content: center;
         align-items: center;
@@ -176,11 +181,11 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       justify-content: center;
       padding: calc(var(--spacing-unit) * 1);
       gap: 4px;
-      
-      /* FIX: flex: 1 sprawia, że wszystkie 5 ikon podzieli się miejscem po równo */
+
+      /* FIX: flex: 1 makes all 5 icons split the space evenly */
       flex: 1;
-      min-width: 0; /* Pozwala na zgniatanie, jeśli ekran jest bardzo wąski */
-      
+      min-width: 0; /* Allows shrinking if the screen is very narrow */
+
       .nav-text {
         display: block;
         font-size: 0.65rem;
@@ -188,12 +193,12 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
         text-align: center;
         line-height: 1.1;
       }
-      
+
       &.is-active {
         background-color: transparent;
-        /* NIE var(--primary) - sidebar jest zawsze ciemny, a --primary w
-           light mode (#5145E5) daje tylko 2.3:1 na tym tle. Patrz
-           --sidebar-active-accent w _root.scss. */
+        /* NOT var(--primary) - the sidebar is always dark, and --primary
+           in light mode (#5145E5) only gives 2.3:1 on this background. See
+           --sidebar-active-accent in _root.scss. */
         color: var(--sidebar-active-accent);
         box-shadow: none;
       }
@@ -201,7 +206,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 
   /* =========================================
-     PODZIAŁ I DOLNA NAWIGACJA
+     DIVIDER AND BOTTOM NAVIGATION
      ========================================= */
   .admin-nav-divider {
     display: block;
@@ -221,14 +226,14 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 
   .admin-nav-bottom {
-    margin-top: auto !important; 
-    
+    margin-top: auto !important;
+
     @media (max-width: 768px) {
-      display: none !important; /* Ukrywamy dolną sekcję na mobile */
+      display: none !important; /* Hide the bottom section on mobile */
     }
   }
 
-  /* FIX: Klasa ukrywająca duplikaty linków na desktopie! */
+  /* FIX: a class that hides duplicate links on desktop! */
   .mobile-only-nav-item {
     @include mq(md) {
       display: none !important;
@@ -238,16 +243,16 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   /* =========================================
      MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
      ========================================= */
-  
-  /* Checkbox + label + .admin-nav-dropdown-menu musza (dla selektora
-     rodzenstwa .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu nizej)
-     dzielic wspolnego rodzica - stad razem w jednym <li>, zamiast wprost w
-     <ul class="admin-nav"> (input/label/div jako BEZPOSREDNIE dzieci <ul>
-     lamaly wymog, ze <ul> smie miec tylko <li> - audyt Lighthouse "list").
-     display:contents na tym <li> czyni go niewidocznym w layoucie (jego
-     dzieci ukladaja sie tak, jakby nadal byly bezposrednimi flex-itemami
-     .admin-nav) - identyczny wizualny efekt jak przed zmiana, tylko
-     poprawny w DOM. */
+
+  /* The checkbox + label + .admin-nav-dropdown-menu must (for the sibling
+     selector .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu below)
+     share a common parent - hence grouped together in one <li>, instead
+     of sitting directly inside <ul class="admin-nav"> (input/label/div as
+     DIRECT children of a <ul> broke the rule that a <ul> may only contain
+     <li> - flagged by the Lighthouse "list" audit). display:contents on
+     that <li> makes it invisible in the layout (its children lay out as
+     if they were still direct flex items of .admin-nav) - the identical
+     visual result as before the change, just correct in the DOM. */
   .admin-nav-more-item {
     display: contents;
   }
@@ -264,30 +269,30 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 
   .admin-nav-dropdown-menu {
-    /* Teraz <ul> (bylo <div>) - <li> wewnatrz wymaga prawdziwego rodzica
-       ul/ol/menu (parser HTML5 auto-zamyka najblizszy otwarty <li>, gdy
-       napotka kolejny <li>, POMIJAJAC posrednie <div> - <ul>/<ol> tworzy
-       scope, ktory to blokuje). Domyslny margin/padding <ul> trzeba
-       wyzerowac recznie (list-style:none dziedziczy z .admin-nav, ale to
-       nie). */
+    /* Now a <ul> (was a <div>) - the <li> elements inside require a real
+       ul/ol/menu parent (the HTML5 parser auto-closes the nearest open
+       <li> when it hits another <li>, SKIPPING an intervening <div> - a
+       <ul>/<ol> creates a scope that blocks this). A <ul>'s default
+       margin/padding needs to be zeroed by hand (list-style:none is
+       inherited from .admin-nav, but this isn't). */
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     gap: calc(var(--spacing-unit) * 1);
 
-    /* DESKTOP: Linki na płasko */
+    /* DESKTOP: flat links */
     @include mq(md) {
       display: contents;
     }
 
-    /* MOBILE: Pływająca szuflada */
+    /* MOBILE: floating drawer */
     @include mq(md, max) {
       position: fixed;
-      /* FIX: dolny pasek to min-height 70px PLUS padding-bottom
-         env(safe-area-inset-bottom) - bez wliczenia wcięcia szuflada wchodzi
-         dolną krawędzią pod pasek i ostatnie pozycje są przycięte
-         (identyczna formuła jak w bottom-sheet submenu). */
+      /* FIX: the bottom bar is min-height 70px PLUS padding-bottom
+         env(safe-area-inset-bottom) - without accounting for the inset
+         the drawer's bottom edge slides under the bar and the last items
+         get clipped (the identical formula as in the bottom-sheet submenu). */
       bottom: calc(70px + env(safe-area-inset-bottom));
       left: 0;
       right: 0;
@@ -301,19 +306,19 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       padding-bottom: calc(var(--spacing-unit) * 4);
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
       z-index: 100;
-      /* FIX: Długie listy (np. nawigacja dokumentacji) muszą się przewijać w pionie,
-         inaczej szuflada wystaje ponad górną krawędź ekranu - a na stronach,
-         które mają jednocześnie navbar (partials/navbar.html) NAD tym
-         sidebarem, "górna krawędź ekranu" to w praktyce dół navbara, nie
-         y=0: bez odjęcia --navbar-h szuflada wjeżdżała POD stały navbar i
-         jej górne pozycje (pierwsze grupy w długim menu) były przez niego
-         przysłonięte. */
+      /* FIX: long lists (e.g. docs navigation) must scroll vertically,
+         otherwise the drawer sticks out above the top of the screen - and
+         on pages that also have a navbar (partials/navbar.html) ABOVE
+         this sidebar, the "top of the screen" is in practice the bottom
+         of the navbar, not y=0: without subtracting --navbar-h the drawer
+         would slide UNDER the fixed navbar and its top items (the first
+         groups in a long menu) would be hidden behind it. */
       max-height: calc(
         100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - (var(--spacing-unit) * 4)
       );
       overflow-y: auto;
-      
-      /* FIX: Zamiast display: none, ukrywamy szufladę pod ekranem! */
+
+      /* FIX: instead of display: none, hide the drawer below the screen! */
       visibility: hidden;
       transform: translateY(100%);
       transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1), visibility var(--transition-speed-slow);
@@ -339,7 +344,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
   }
 
-  /* MAGIA: Wsuwanie szuflady po kliknięciu */
+  /* THE TRICK: sliding the drawer in on click */
   .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
     @include mq(md, max) {
       visibility: visible;
@@ -348,7 +353,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
   
   /* =========================================
-     SUBMENU (Rozwijane drzewko linków)
+     SUBMENU (expandable link tree)
      ========================================= */
   .admin-nav-submenu {
     position: relative;
@@ -377,7 +382,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
   }
 
-  /* --- WARIANT DOMYŚLNY (Szeroki Sidebar - Drzewko) --- */
+  /* --- DEFAULT VARIANT (wide sidebar - tree) --- */
   .admin-nav-submenu-list {
     display: flex;
     flex-direction: column;
@@ -434,23 +439,23 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
   }
 
-  /* --- WARIANTY WĄSKIE (Drill-down Menu) --- */
+  /* --- NARROW VARIANTS (Drill-down Menu) --- */
   @include mq(md) {
     .sidebar-md .admin-nav-submenu,
     .sidebar-sm .admin-nav-submenu {
-      
-      /* Uciekamy z kontekstu pozycjonowania, żeby móc przykryć cały sidebar! */
-      position: static; 
-      
+
+      /* Escape the positioning context so we can cover the entire sidebar! */
+      position: static;
+
       summary::after { display: none; }
       .admin-nav-submenu-list { display: none !important; }
 
       /* =========================================
-         STAN OTWARTY (Drill-down Active)
+         OPEN STATE (drill-down active)
          ========================================= */
       &[open] {
 
-        /* 1. Tło przykrywające resztę sidebara PONIŻEJ logo (logo zostaje widoczne) */
+        /* 1. A background covering the rest of the sidebar BELOW the logo (logo stays visible) */
         &::before {
           content: '';
           position: absolute;
@@ -462,7 +467,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           z-index: 100;
         }
 
-        /* 2. Przycisk "Cofnij" (Transformacja tagu <summary>) - pod logo, nie w jego miejscu */
+        /* 2. The "Back" button (transforms the <summary> tag) - below the logo, not in its place */
         > summary {
           position: absolute;
           top: $admin-brand-block-height;
@@ -473,7 +478,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           @include admin-drilldown-back;
         }
 
-        /* 3. Lista linków submenu - zaczyna się pod przyciskiem Cofnij (który jest pod logo) */
+        /* 3. The submenu link list - starts below the Back button (which is below the logo) */
         > .admin-nav-submenu-list {
           display: flex !important;
           position: absolute;
@@ -487,34 +492,35 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           margin: 0;
           overflow-y: auto;
 
-          /* Resetujemy linie drzewka */
+          /* Reset the tree lines */
           &::before { display: none; }
 
           .admin-nav-submenu-link {
             padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
             justify-content: center;
             text-align: center;
-            /* FIX: długie słowa bez naturalnych miejsc łamania (spacji, myślnika)
-               wylewały się poza wąski sidebar -sm - poszerzanie -sm nie wchodzi
-               w grę, więc zamiast tego łamiemy słowo, ale TYLKO gdy faktycznie
-               nie mieści się w wierszu (overflow-wrap, nie word-break: break-word -
-               ten drugi łamie słowa nawet gdy zmieściłyby się w całości) */
+            /* FIX: long words with no natural break points (spaces,
+               hyphens) spilled outside the narrow -sm sidebar - widening
+               -sm isn't an option, so instead we break the word, but ONLY
+               when it genuinely doesn't fit on the line (overflow-wrap,
+               not word-break: break-word - the latter breaks words even
+               when they would have fit whole) */
             overflow-wrap: break-word;
-            &::before { display: none; } /* Ukrywamy poziome kreseczki */
+            &::before { display: none; } /* Hide the horizontal tick marks */
           }
         }
       }
     }
 
-    /* W trybie SM (najwęższym) ukrywamy tekst "Cofnij", zostawiamy samą strzałkę */
+    /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
     .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
       display: none !important;
     }
 
-    /* --- WARIANT -SM: linki na pełną szerokość z separatorem zamiast ramek ---
-       Sidebar -sm jest zbyt wąski (72px), żeby zaokrąglona ramka + padding
-       wokół każdego linku miały sens - tekst dotykał/wylewał się poza ramkę.
-       Zamiast tego: linki na pełną szerokość, oddzielone cienką linią. */
+    /* --- -SM VARIANT: full-width links with a separator instead of borders ---
+       The -sm sidebar is too narrow (72px) for a rounded border + padding
+       around every link to make sense - the text touched/spilled outside
+       the border. Instead: full-width links, separated by a thin line. */
     .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
       padding-left: 0;
       padding-right: 0;
@@ -538,40 +544,43 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 
   /* =========================================
-     MOBILE: SUBMENU JAKO DRILL-DOWN (jak -sm/-md)
+     MOBILE: SUBMENU AS A DRILL-DOWN (like -sm/-md)
      =========================================
-     W poziomym Bottom Nav drzewko nie ma sensu. Klik w trigger podmienia
-     widok na pełnoekranowy panel: <summary> staje się paskiem "Cofnij" na
-     górze ekranu, a lista linków wypełnia resztę - identycznie jak drill-down
-     w wariantach -sm/-md, tylko jako mobilna nakładka. Natywny <details>
-     odpowiada za samo otwieranie; moduł admin-nav.js obsługuje tylko
-     aktywność z URL i wzajemne wykluczanie otwartych submenu. */
+     A tree makes no sense in the horizontal Bottom Nav. Clicking the
+     trigger swaps the view to a full-screen panel: <summary> becomes a
+     "Back" bar at the top of the screen, and the link list fills the
+     rest - identical to the drill-down in the -sm/-md variants, just as a
+     mobile overlay. The native <details> handles opening itself; the
+     admin-nav.js module only handles active state from the URL and
+     mutually excluding open submenus. */
   @media (max-width: 768px) {
     .admin-nav-submenu {
       position: static;
-      /* details rozciąga swój <summary> (trigger) na kafelek paska */
+      /* details stretches its <summary> (trigger) to fill the bar's tile */
       display: flex;
 
-      /* Wysokość użytecznej (dotykalnej) części paska "Cofnij". Do niej
-         dochodzi jeszcze env(safe-area-inset-top) - status bar/notch - żeby
-         napis nie lądował pod paskiem powiadomień, a duży target był daleko
-         od górnej krawędzi (mniej przypadkowych gestów notyfikacji). */
+      /* Height of the usable (tappable) part of the "Back" bar.
+         env(safe-area-inset-top) - the status bar/notch - is added on top
+         of it, so the label doesn't land under the notification bar, and
+         the large target sits comfortably away from the top edge (fewer
+         accidental notification-shade gestures). */
       --drilldown-bar-h: 64px;
 
       > summary {
         width: 100%;
-        /* strzałka rozwinięcia drzewka jest zbędna w poziomym pasku */
+        /* the tree-expand arrow is redundant in a horizontal bar */
         &::after { display: none; }
       }
 
       &[open] {
-        /* 1. Lista -> pełnoekranowy panel (od samej góry ekranu). Jego ciemne
-           tło stanowi CIĄGŁĄ powierzchnię także pod paskiem "Cofnij" - linki
-           odsuwamy paddingiem, żeby nie chowały się pod paskiem. Dzięki temu
-           "Cofnij" i lista są jedną całością niezależnie od tego, jak przeglądarka
-           pomaluje tło samego <summary>. */
+        /* 1. The list -> a full-screen panel (from the very top of the
+           screen). Its dark background forms a CONTINUOUS surface under
+           the "Back" bar too - links are pushed down with padding so they
+           don't hide under the bar. This way "Back" and the list read as
+           one whole, regardless of how the browser paints the <summary>'s
+           own background. */
         > .admin-nav-submenu-list {
-          display: flex !important; /* nadpisuje domyślny stan drzewka */
+          display: flex !important; /* overrides the default tree state */
           flex-direction: column;
           gap: calc(var(--spacing-unit) * 0.5);
           margin: 0;
@@ -583,27 +592,29 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           bottom: 0;
           z-index: 1050;
           background-color: var(--sidebar-bg);
-          /* Wypełnienie na czas "bounce": overshoot unosi panel nieco w górę,
-             odsłaniając pasek u dołu - ten solidny cień (blur 0) domalowuje
-             ciemne tło poniżej panelu, więc przez przeskok nie mignie strona. */
+          /* Padding for the "bounce": the overshoot lifts the panel
+             slightly upward, exposing a gap at the bottom - this solid
+             shadow (blur 0) paints in the dark background below the
+             panel, so the page doesn't flash through during the overshoot. */
           box-shadow: 0 160px 0 var(--sidebar-bg);
-          /* padding-top mieści pasek "Cofnij" (wysokość + status bar) + oddech */
+          /* padding-top makes room for the "Back" bar (height + status bar) + breathing room */
           padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2)
             calc(var(--spacing-unit) * 2)
             calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
           overflow-y: auto;
-          /* Wjazd od dołu z lekkim odbiciem (back-ease: control point > 1) */
+          /* Slides in from the bottom with a slight bounce (back-ease: control point > 1) */
           animation: adminDrilldownPanelIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) both;
 
-          /* Linki wyśrodkowane w pionie (wygodniej dla kciuka na mobile);
-             "safe" cofa do góry i pozwala przewijać, gdy pozycji jest dużo. */
+          /* Links centered vertically (more comfortable for a thumb on
+             mobile); "safe" falls back to the top and allows scrolling
+             when there are many items. */
           justify-content: center;
           justify-content: safe center;
 
-          /* Reset pionowej linii drzewka */
+          /* Reset the vertical tree line */
           &::before { display: none; }
 
-          /* Linki na pełną szerokość, bez poziomych kreseczek drzewka */
+          /* Full-width links, no horizontal tree tick marks */
           .admin-nav-submenu-link {
             justify-content: flex-start;
             text-align: left;
@@ -614,33 +625,34 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
           }
         }
 
-        /* 2. <summary> -> pasek "Cofnij" na górze, NA panelu (leży na jego
-           ciemnym tle). z-index nad panelem. */
+        /* 2. <summary> -> the "Back" bar at the top, ON the panel (sits on
+           its dark background). z-index above the panel. */
         > summary {
           position: fixed;
           top: 0;
           left: 0;
           width: 100%;
           height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
-          z-index: 1051; /* nad panelem i nad dolnym paskiem (1040) */
+          z-index: 1051; /* above the panel and above the bottom bar (1040) */
           @include admin-drilldown-back;
-          /* napis schodzi spod status bara/notcha (env), a duży, niżej
-             położony target jest wygodniejszy dla kciuka */
+          /* the label clears the status bar/notch (env), and a large,
+             lower-positioned target is more thumb-friendly */
           padding-top: env(safe-area-inset-top);
-          /* na dotyku (brak hover) jaśniejszy napis = wyraźny przycisk wstecz */
+          /* on touch (no hover) a brighter label = a clear back button */
           color: var(--sidebar-text-active);
-          /* Napis pojawia się z lekkim opóźnieniem - dopiero gdy panel zdąży
-             już przykryć górę ekranu (inaczej mignąłby nad stroną). */
+          /* The label appears with a slight delay - only once the panel
+             has already covered the top of the screen (otherwise it
+             would flash above the page). */
           animation: adminDrilldownBar 0.24s ease 0.12s both;
         }
       }
 
       /* =========================================
-         WYJAZD (animowane zamknięcie - klasa .is-closing z admin-nav.js)
+         SLIDE-OUT (animated close - the .is-closing class from admin-nav.js)
          =========================================
-         Natywny <details> chowa treść natychmiast, więc moduł JS opóźnia
-         faktyczne zamknięcie: dodaje .is-closing, czeka na koniec animacji
-         i dopiero wtedy zdejmuje [open]. */
+         The native <details> hides its content instantly, so the JS
+         module delays the actual close: it adds .is-closing, waits for
+         the animation to finish, and only then removes [open]. */
       &.is-closing > .admin-nav-submenu-list {
         animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
       }
@@ -649,7 +661,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
       }
     }
 
-    /* Wejście/wyjście drill-downu (GPU: wyłącznie opacity + transform) */
+    /* Drill-down entrance/exit (GPU: opacity + transform only) */
     @keyframes adminDrilldownBar {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -668,8 +680,8 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
   }
 
-  /* A11y: bez animacji dla użytkowników z prefers-reduced-motion
-     (moduł admin-nav.js dodatkowo zamyka natychmiast, bez czekania). */
+  /* A11y: no animation for users with prefers-reduced-motion
+     (the admin-nav.js module also closes instantly, with no waiting). */
   @media (prefers-reduced-motion: reduce) {
     .admin-nav-submenu[open] > summary,
     .admin-nav-submenu[open] > .admin-nav-submenu-list,
@@ -679,4 +691,4 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
   }
 
-} /* ZAMKNIĘCIE @layer components */
+} /* CLOSES @layer components */

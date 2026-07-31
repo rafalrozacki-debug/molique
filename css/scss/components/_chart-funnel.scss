@@ -1,7 +1,7 @@
-// molique - Lejki danych: pionowy, poziomy pipeline i trapezowy.
+// molique - Data funnels: vertical, horizontal pipeline, and trapezoid.
 @layer components {
   /* =========================================
-     1. LEJEK DANYCH (Pionowy, oparty na --val)
+     1. DATA FUNNEL (vertical, based on --val)
      ========================================= */
   .chart-funnel {
     display: flex;
@@ -13,25 +13,25 @@
   }
 
   .funnel-stage {
-    /* Szerokość sterowana z HTML, domyślnie 100% */
+    /* Width controlled from the HTML, defaults to 100% */
     width: var(--val, 100%);
-    min-width: 140px; /* Zapobiega zgnieceniu tekstu na samym dole lejka */
+    min-width: 140px; /* Prevents the text from being crushed at the very bottom of the funnel */
     min-height: var(--target-size-min);
-    
+
     background-color: var(--stage-bg, var(--primary));
     color: var(--stage-text, var(--btn-text-light));
     border-radius: var(--border-radius);
-    
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-    
+
     font-size: 0.875rem;
     font-weight: var(--fw-medium);
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Subtelny efekt hover dla interaktywności */
+
+    /* A subtle hover effect for interactivity */
     &:hover {
       filter: brightness(1.1);
       transform: scale(1.02);
@@ -39,14 +39,14 @@
   }
 
   /* =========================================
-     2. LEJEK PROCESOWY (Poziomy CRM Pipeline)
+     2. PROCESS FUNNEL (horizontal CRM pipeline)
      ========================================= */
   .chart-pipeline {
     display: flex;
     width: 100%;
-    gap: 4px; /* Odstęp między strzałkami */
-    
-    /* Na mobile zamieniamy w pionowy stos */
+    gap: 4px; /* Gap between the arrows */
+
+    /* On mobile, switch to a vertical stack */
     @media (max-width: 768px) {
       flex-direction: column;
     }
@@ -68,39 +68,39 @@
     text-align: center;
     position: relative;
     
-    /* Magia CSS: Kształt strzałki (Chevron) */
+    /* CSS trick: the chevron (arrow) shape */
     clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
-    
-    /* Pierwszy element nie ma wcięcia z lewej */
+
+    /* The first item has no notch on the left */
     &:first-child {
       clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
       border-top-left-radius: var(--border-radius);
       border-bottom-left-radius: var(--border-radius);
     }
-    
-    /* Ostatni element nie ma szpica z prawej */
+
+    /* The last item has no point on the right */
     &:last-child {
       clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
       border-top-right-radius: var(--border-radius);
       border-bottom-right-radius: var(--border-radius);
     }
 
-    /* Aktywny etap */
+    /* Active stage */
     &.is-active {
       --stage-bg: var(--primary);
       --stage-text: var(--btn-text-light);
     }
 
-    /* Reset kształtów na mobile (zwykłe zaokrąglone prostokąty) */
+    /* Reset the shapes on mobile (plain rounded rectangles) */
     @media (max-width: 768px) {
       clip-path: none !important;
       border-radius: var(--border-radius) !important;
-      justify-content: space-between; /* Tekst do lewej, ew. ikona do prawej */
+      justify-content: space-between; /* Text on the left, an optional icon on the right */
     }
   }
 
    /* =========================================
-     3. TRUE FUNNEL (Praktyczny Lejek z nóżką)
+     3. TRUE FUNNEL (a practical funnel with a stem)
      ========================================= */
   .chart-funnel-true {
     display: flex;
@@ -108,40 +108,40 @@
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
-    
-    /* Zmieniamy proporcje na kwadrat - bardziej kompaktowe i praktyczne */
-    aspect-ratio: 1 / 1; 
-    gap: 2px; 
-    
-    /* MAGIA CSS: Rzeźbiony wielokąt - Szersza nóżka (50% szerokości) */
+
+    /* Switch the proportions to a square - more compact and practical */
+    aspect-ratio: 1 / 1;
+    gap: 2px;
+
+    /* CSS trick: a sculpted polygon - a wider stem (50% of the width) */
     clip-path: polygon(
-      /* Górna krawędź i prawe górne zaokrąglenie */
+      /* Top edge and top-right rounding */
       4% 0%, 96% 0%, 98.5% 1%, 100% 4%,
-      
-      /* Prawy skos w dół (kończy się niżej, na 70% wysokości) */
+
+      /* Right slope going down (ends lower, at 70% height) */
       76% 68%,
-      /* Prawe wewnętrzne załamanie */
+      /* Right inner bend */
       75% 72%,
-      
-      /* Prawa pionowa nóżka (szersza, na 75% osi X) */
+
+      /* Right vertical stem (wider, at 75% on the X axis) */
       75% 92%,
-      /* Prawy dolny róg (ścięty wyżej) */
+      /* Right bottom corner (cut higher) */
       73% 96%,
-      
-      /* Ścięty dół (kąt) */
+
+      /* Cut-off bottom (angled) */
       27% 100%,
-      
-      /* Lewy dolny róg (ścięty niżej) */
+
+      /* Left bottom corner (cut lower) */
       25% 98%,
-      /* Lewa pionowa nóżka (szersza, na 25% osi X) */
+      /* Left vertical stem (wider, at 25% on the X axis) */
       25% 72%,
-      
-      /* Lewe wewnętrzne załamanie */
+
+      /* Left inner bend */
       24% 68%,
-      /* Lewy skos w górę */
+      /* Left slope going up */
       0% 4%,
-      
-      /* Lewe górne zaokrąglenie */
+
+      /* Top-left rounding */
       1.5% 1%
     );
   }
@@ -155,7 +155,7 @@
     background-color: var(--stage-bg, var(--primary));
     color: var(--stage-text, var(--btn-text-light));
     
-    /* Zabezpieczenie tekstu w wąskiej nóżce */
+    /* Protects the text inside the narrow stem */
     padding: calc(var(--spacing-unit) * 1) 5%;
     overflow: hidden;
     

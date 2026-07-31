@@ -1,13 +1,13 @@
-// molique - Navbar: baza, logo w dark mode, warianty (transparent / sticky / pastylka) i offcanvas mobile.
+// molique - Navbar: base, dark-mode logo, variants (transparent / sticky / pill), and mobile offcanvas.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
-// Komentarz cichy (//), zeby dokumentacja pliku nie trafiala do CSS.
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
 @use '../variables' as *;
 @use '../mixins' as *;
 
 /* =========================================
-   1. NAVBAR (Baza)
+   1. NAVBAR (base)
    ========================================= */
 .navbar {
   position: relative;
@@ -42,37 +42,38 @@
     object-fit: contain;
   }
 
-  /* <picture> jest domyślnie elementem inline - jako dziecko flexa dostaje
-     własny "line box" i wyrównuje <img> do baseline zamiast do środka,
-     stąd wizualne przesunięcie logo w górę. display:contents usuwa ten box
-     z layoutu, więc <img> w środku staje się bezpośrednim elementem flexa
-     .navbar-brand, dokładnie tak jak bez opakowania w <picture>. */
+  /* <picture> is an inline element by default - as a flex child it gets
+     its own "line box" and aligns the <img> to the baseline instead of
+     the center, hence the visible upward shift of the logo.
+     display:contents removes this box from the layout, so the <img>
+     inside becomes a direct flex item of .navbar-brand, exactly as if it
+     weren't wrapped in a <picture> at all. */
   picture {
     display: contents;
   }
-  /* Domyślnie ukrywamy logo dla trybu ciemnego */
+  /* Hide the dark-mode logo by default */
   .logo-dark {
     display: none;
   }
 }
 
 /* =========================================
-   ZARZĄDZANIE LOGO W DARK MODE
+   DARK-MODE LOGO MANAGEMENT
    ========================================= */
 [data-theme="dark"] {
   .navbar-brand {
-    /* Ukrywamy jasne logo */
+    /* Hide the light logo */
     .logo-light {
       display: none;
     }
-    /* Pokazujemy ciemne logo (przywracając display: contents, żeby nie zepsuć flexboxa!) */
+    /* Show the dark logo (restoring display: contents, so flexbox isn't broken!) */
     .logo-dark {
       display: contents;
     }
   }
 }
 
-/* Przycisk Hamburgera (Wymuszone 44x44px dla B2B) */
+/* Hamburger button (enforced 44x44px for B2B) */
 .navbar-toggle {
   display: none;
   background: transparent;
@@ -124,20 +125,20 @@
   }
 }
 
-/* Aktywna pozycja = bieżąca strona. Klasę .is-active nadaje wg URL moduł
-   js/modules/navbar-active.js (auto-ładowany przy .navbar-menu) - linkowi
-   bieżącej strony oraz triggerowi menu, w którym się znajduje. Wyróżnienie
-   mocniejsze niż hover: kolor primary + grubsza waga.
+/* Active item = current page. The .is-active class is assigned based on
+   the URL by js/modules/navbar-active.js (auto-loaded when .navbar-menu
+   is present) - to the current page's link and to the trigger of the
+   menu it lives inside. Emphasis stronger than hover: primary color + bolder weight.
 
-   Odpowiedniki dla .dropdown-item i .mega-menu-link siedzą w SWOICH plikach,
-   żeby pominięcie tamtych modułów nie zostawiało tu osieroconych selektorów. */
+   The counterparts for .dropdown-item and .mega-menu-link live in THEIR
+   OWN files, so omitting those modules doesn't leave orphaned selectors here. */
 .navbar-item.is-active {
   color: var(--primary);
   font-weight: var(--fw-bold);
 }
 
 /* =========================================
-   2. NAVBAR - WARIANTY
+   2. NAVBAR - VARIANTS
    ========================================= */
 
 /* --- Transparent Navbar --- */
@@ -153,10 +154,10 @@
   .navbar-brand, .navbar-item { color: #fff; }
   .navbar-toggle { color: #fff; span { background-color: #fff; } }
 
-  /* Logo: przed scrollem navbar leży na ciemnym hero, więc pokazujemy jasną
-     wersję logo NIEZALEŻNIE od motywu (nadpisuje logikę dark-mode). Po
-     scrollu (.is-scrolled) navbar dostaje tło i logo wraca do wersji
-     zależnej od motywu (reguły bazowe / [data-theme="dark"]). */
+  /* Logo: before scrolling the navbar sits on a dark hero, so we show the
+     light logo version REGARDLESS of the theme (overrides the dark-mode
+     logic). After scrolling (.is-scrolled) the navbar gets a background
+     and the logo goes back to the theme-dependent version (base rules / [data-theme="dark"]). */
   &:not(.is-scrolled) .navbar-brand {
     .logo-light { display: none; }
     .logo-dark { display: contents; }
@@ -173,10 +174,10 @@
   }
 }
 
-/* --- Sticky Navbar (przyklejony do góry + auto-hide na scrollu w dół) ---
-   Klasy is-scrolled/is-hidden dostaje z JS (molique-script.js, sekcja
-   "STICKY NAVBAR & READING PROGRESS") - stąd brak tu deklaracji position
-   inline, tylko czysty stan wynikający z dodanej klasy. */
+/* --- Sticky Navbar (pinned to the top + auto-hide on scroll down) ---
+   The is-scrolled/is-hidden classes come from JS (molique-script.js,
+   the "STICKY NAVBAR & READING PROGRESS" section) - hence no inline
+   position declaration here, just a plain state resulting from the added class. */
 .navbar-sticky {
   position: sticky;
   top: 0;
@@ -187,43 +188,46 @@
     box-shadow: var(--shadow-sm);
   }
 
-  /* Chowa navbar przy scrollowaniu w dół, pokazuje z powrotem przy scrollu w górę */
+  /* Hides the navbar on scroll down, shows it again on scroll up */
   &.is-hidden {
     transform: translateY(-100%);
   }
 }
 
-/* --- Navbar "Pastylka" (pływająca nad hero -> sticky po scrollu) ---
-   Wariant nakładkowy: navbar jest odsuniętą od krawędzi pastylką leżącą NA
-   treści, więc tło/zdjęcie sekcji pod spodem zaczyna się od samej góry strony
-   (a nie dopiero pod paskiem). Po przescrollowaniu klasa .is-scrolled
-   (molique-script.js) rozkłada pastylkę do zwykłego paska przy krawędzi.
+/* --- Navbar "Pill" (floating over the hero -> sticky after scroll) ---
+   An overlay variant: the navbar is a pill pulled away from the edge,
+   sitting ON the content, so the section's background/image underneath
+   starts right from the very top of the page (not just below the bar).
+   Once scrolled, the .is-scrolled class (molique-script.js) unfurls the
+   pill into a regular edge-to-edge bar.
 
-   NIE łącz z .navbar-sticky - sticky wraca do przepływu dokumentu i efekt
-   nakładki znika. */
+   Do NOT combine with .navbar-sticky - sticky returns to the document
+   flow and the overlay effect disappears. */
 .navbar-pill {
-  /* --- API kolorów: osobna zmienna na każdy stan -------------------------
+  /* --- Color API: a separate variable for each state -------------------
      <nav class="navbar navbar-pill" style="
             --navbar-pill-bg: #4c1d95;
             --navbar-pill-bg-scrolled: #14162B;
             --navbar-pill-color-scrolled: #fff;">
 
-     Świadomie NIE przedefiniowujemy zmiennych bazowych w .is-scrolled -
-     styl inline (czyli sposób, w jaki się je ustawia) wygrywa z regułą klasy
-     i zablokowałby drugi stan. Stąd osobne pary *-scrolled. */
+     We deliberately do NOT redefine the base variables in .is-scrolled -
+     an inline style (i.e. the way they're set) wins over a class rule and
+     would block the second state. Hence separate *-scrolled pairs. */
 
-  /* Stan pastylki (nad hero). Tło to LITERAŁ, nie var(--dark) - ta zmienna
-     w dark mode jaśnieje, więc pastylka by zbielała, a biały tekst zniknął. */
+  /* The pill state (over the hero). The background is a LITERAL, not
+     var(--dark) - that variable lightens in dark mode, so the pill would
+     turn white and the white text would vanish. */
   --navbar-pill-bg: #14162B;
   --navbar-pill-color: #fff;
 
-  /* Stan po scrollu - domyślnie kolory motywu, jak zwykły navbar. */
+  /* The post-scroll state - defaults to the theme colors, like a regular navbar. */
   --navbar-pill-bg-scrolled: var(--bg-surface);
   --navbar-pill-color-scrolled: var(--text-main);
 
-  /* Wcięcie treści od zaokrąglonych krawędzi. Przy promieniu 999px domyślne
-     16px z .container jest za ciasne - stąd osobna zmienna. Po scrollu wraca
-     do wartości .container, żeby treść równała się z resztą strony. */
+  /* Content inset from the rounded edges. At a 999px radius, .container's
+     default 16px is too tight - hence a separate variable. After
+     scrolling it reverts to .container's value, so the content lines up
+     with the rest of the page. */
   --navbar-pill-padding-x: calc(var(--spacing-unit) * 4);
   --navbar-pill-padding-x-scrolled: calc(var(--spacing-unit) * 2);
 
@@ -240,7 +244,7 @@
     background-color: var(--navbar-pill-bg);
     border-radius: 999px;
     padding-block: calc(var(--spacing-unit) * 1.5);
-    /* Nadpisuje poziomy padding .container (wyższa specyficzność). */
+    /* Overrides .container's horizontal padding (higher specificity). */
     padding-inline: var(--navbar-pill-padding-x);
     box-shadow: var(--shadow-lg);
   }
@@ -255,14 +259,14 @@
     span { background-color: var(--navbar-pill-color); }
   }
 
-  /* Nad ciemną pastylką jasne logo niezależnie od motywu (jak w transparent). */
+  /* Over the dark pill, the light logo regardless of theme (like in transparent). */
   &:not(.is-scrolled) .navbar-brand {
     .logo-light { display: none; }
     .logo-dark { display: contents; }
   }
 
-  /* Po scrollu: pastylka rozkłada się do krawędzi i przechodzi na drugi
-     komplet zmiennych (*-scrolled). */
+  /* After scrolling: the pill unfurls to the edge and switches to the
+     second set of variables (*-scrolled). */
   &.is-scrolled {
     position: fixed;
     padding: 0;
@@ -288,7 +292,7 @@
   }
 }
 
-/* --- Offcanvas Mobile Menu (Zero JS) --- */
+/* --- Offcanvas Mobile Menu (zero JS) --- */
 .navbar-offcanvas-toggle {
   display: none;
 }
@@ -322,9 +326,9 @@
     margin: 0;
     box-shadow: -5px 0 15px rgba(0,0,0,0.1);
 
-    /* FIX: panel ma sztywną wysokość (top:0 do bottom:0), więc gdy lista
-       linków jest dłuższa niż ekran, musi się sama przewijać - inaczej
-       dolne pozycje są nieosiągalne. */
+    /* FIX: the panel has a fixed height (top:0 to bottom:0), so when the
+       link list is taller than the screen it must scroll itself -
+       otherwise the bottom items are unreachable. */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 
@@ -332,12 +336,12 @@
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* UWAGA: .navbar-offcanvas-toggle musi być rodzeństwem (bezpośrednim,
-     tym samym rodzicem co) .navbar-menu-offcanvas, .navbar-offcanvas-backdrop
-     i .navbar-toggle - czyli wszystkie cztery elementy powinny siedzieć
-     razem wewnątrz .navbar-container. Kombinator "~" nie sięga w głąb
-     dalszych rodzeństw, więc np. checkbox umieszczony PRZED <nav>, a
-     .navbar-menu-offcanvas wewnątrz <nav>, nigdy się nie dopasują. */
+  /* NOTE: .navbar-offcanvas-toggle must be a sibling (direct, same
+     parent as) .navbar-menu-offcanvas, .navbar-offcanvas-backdrop and
+     .navbar-toggle - i.e. all four elements should sit together inside
+     .navbar-container. The "~" combinator doesn't reach into further
+     descendants, so e.g. a checkbox placed BEFORE <nav>, with
+     .navbar-menu-offcanvas inside <nav>, would never match. */
   .navbar-offcanvas-toggle:checked ~ .navbar-menu-offcanvas {
     transform: translateX(0);
   }
@@ -356,20 +360,22 @@
     top: 19px; transform: rotate(-135deg);
   }
 
-  /* WARIANTY NAKŁADKOWE A PANEL OFFCANVAS.
-     Oba warianty wymuszają jasny kolor linków, bo nad zdjęciem hero leżą na
-     ciemnym tle. Ta sama reguła obowiązywała jednak także w panelu mobilnym,
-     który ma tło --bg-surface - efekt: białe linki na białym panelu, menu
-     praktycznie niewidoczne. Każdy wariant domykamy inaczej, bo tylko
-     pastylka ma czym pomalować panel. */
+  /* OVERLAY VARIANTS VS. THE OFFCANVAS PANEL.
+     Both variants force light link colors, since over the hero image they
+     sit on a dark background. That same rule, however, also applied
+     inside the mobile panel, which has a --bg-surface background - the
+     effect: white links on a white panel, the menu practically invisible.
+     Each variant is closed off differently, since only the pill has
+     something to paint the panel with. */
 
-  /* Pastylka: panel przejmuje jej ciemne tło, linki zostają jasne. */
+  /* Pill: the panel takes over its dark background, the links stay light. */
   .navbar-pill .navbar-menu-offcanvas {
     background-color: var(--navbar-pill-bg);
   }
 
-  /* Transparent: brak własnego tła panelu, więc na czas menu mobilnego
-     linki wracają do koloru motywu (panel zostaje na --bg-surface). */
+  /* Transparent: no background of its own for the panel, so for the
+     duration of the mobile menu the links revert to the theme color (the
+     panel stays on --bg-surface). */
   .navbar-transparent .navbar-menu-offcanvas .navbar-item {
     color: var(--text-main);
   }

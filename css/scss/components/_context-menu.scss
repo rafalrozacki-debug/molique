@@ -1,6 +1,6 @@
-// molique - Anchored context menu (Anchor Positioning + Popover) wraz z zagniezdzonym wariantem bottom sheet na mobile.
+// molique - Anchored context menu (Anchor Positioning + Popover), plus a nested bottom-sheet variant for mobile.
 //
-// Modul niezalezny: mozna go pominac w bundlu bez bledow kompilacji.
+// Independent module: can be omitted from a bundle with no compile errors.
 
 @use '../variables' as *;
 @use '../mixins' as *;
@@ -10,8 +10,8 @@
      4. ANCHORED CONTEXT MENU (CSS Anchor Positioning)
      ========================================= */
   .popover-context {
-    /* Reset domyślnych stylów Popover API (UA daje [popover]
-       color: CanvasText - patrz komentarz przy .modal-dialog) */
+    /* Reset the Popover API's default styles (the UA gives [popover]
+       color: CanvasText - see the comment at .modal-dialog) */
     margin: 0;
     padding: calc(var(--spacing-unit) * 1);
     color: var(--text-main);
@@ -20,14 +20,14 @@
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-md);
     min-width: 160px;
-    
-    /* MAGIA 2026: CSS Anchor Positioning */
+
+    /* 2026 MAGIC: CSS Anchor Positioning */
     position: absolute;
     top: anchor(bottom);
     left: anchor(start);
-    margin-top: 4px; 
-    
-    /* Fallback dla starszych przeglądarek */
+    margin-top: 4px;
+
+    /* Fallback for older browsers */
     @supports not (top: anchor(bottom)) {
       top: 50%;
       left: 50%;
@@ -35,7 +35,7 @@
       margin: 0;
     }
 
-    /* Animacja wejścia */
+    /* Entrance animation */
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.2s ease, transform 0.2s ease, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
@@ -52,7 +52,7 @@
       }
     }
 
-    /* --- FLIP: menu blisko dolnej krawędzi ekranu (patrz js/modules/context-menu.js) --- */
+    /* --- FLIP: menu close to the bottom edge of the screen (see js/modules/context-menu.js) --- */
     &.is-flipped {
       top: auto;
       bottom: anchor(top);
@@ -72,7 +72,7 @@
       }
     }
 
-    /* --- FIX: KULOODPORNY RESET LISTY --- */
+    /* --- FIX: bulletproof list reset --- */
     ul, ol {
       list-style: none;
       padding: 0;
@@ -87,7 +87,7 @@
       padding: 0;
     }
 
-    /* --- WSPARCIE DLA STARYCH KLAS (.popover-action-btn) --- */
+    /* --- SUPPORT FOR OLD CLASSES (.popover-action-btn) --- */
     .popover-action-btn {
       width: 100%;
       text-align: left;
@@ -116,30 +116,30 @@
     }
 
     /* =========================================
-       MOBILE: BOTTOM SHEET (Szuflada z dołu)
+       MOBILE: BOTTOM SHEET (a drawer from the bottom)
        ========================================= */
     @media (max-width: 768px) {
-      /* Resetujemy pozycjonowanie Anchor */
+      /* Reset the Anchor positioning */
       position: fixed !important;
       top: auto !important;
       left: 0 !important;
       right: 0 !important;
       bottom: 0 !important;
-      
-      /* Rozciągamy na całą szerokość */
+
+      /* Stretch to the full width */
       width: 100% !important;
       min-width: 100%;
       margin: 0;
-      
-      /* Stylizacja szuflady */
+
+      /* Drawer styling */
       border: none;
       border-top: 1px solid var(--border-color);
       border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
       padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
-      padding-bottom: env(safe-area-inset-bottom); 
+      padding-bottom: env(safe-area-inset-bottom);
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
-      
-      /* Animacja wjazdu z dołu */
+
+      /* Slide-in animation from the bottom */
       transform: translateY(100%);
       &:popover-open {
         transform: translateY(0);
@@ -148,7 +148,7 @@
         &:popover-open { transform: translateY(100%); }
       }
 
-      /* "Uchwyt" (pill) na górze szuflady */
+      /* A "handle" (pill) at the top of the drawer */
       &::before {
         content: '';
         display: block;
@@ -159,7 +159,7 @@
         margin: 0 auto calc(var(--spacing-unit) * 2) auto;
       }
 
-      /* Powiększamy przyciski dla łatwiejszego klikania palcem */
+      /* Enlarge the buttons for easier finger taps */
       .popover-action-btn,
       .btn-action {
         width: 100%;
@@ -176,7 +176,7 @@
     }
   }
 
-  /* Tło przyciemniające (Backdrop) dla Bottom Sheet na mobile */
+  /* Dimming background (backdrop) for the mobile Bottom Sheet */
   @media (max-width: 768px) {
     .popover-context::backdrop {
       background: rgba(var(--backdrop-rgb), 0.5);

@@ -126,9 +126,9 @@
   /**
    * molique - Zmienne SCSS
    */
-  /* Wspólny wygląd kompaktowej wersji logo (plakietka z ikoną/inicjałem).
-     Współdzielony między trybami wąskimi na desktopie (-sm, -md) i mobile,
-     żeby nie duplikować reguł w trzech miejscach. */
+  /* The shared look of the compact logo version (a badge with an
+     icon/initial). Shared between the narrow desktop modes (-sm, -md) and
+     mobile, so the rules aren't duplicated in three places. */
   @layer components {
     .admin-sidebar {
       background-color: var(--sidebar-bg);
@@ -142,18 +142,18 @@
       z-index: var(--z-index-sticky);
       padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
       gap: calc(var(--spacing-unit) * 3);
-      /* Wracamy do bezpiecznego ukrywania, bo sidebar sam będzie rósł */
+      /* Back to safely hiding, since the sidebar itself will grow */
       overflow-y: auto;
       overflow-x: hidden;
-      /* FIX: Sidebar ma sztywną szerokość i płynnie rośnie.
-         Świadome odstępstwo od reguły GPU-only (transform/opacity):
-         animowanie width wywołuje reflow, ale to jednorazowa, inicjowana
-         kliknięciem zmiana (przełącznik szerokości), nie ciągła/zapętlona
-         animacja - koszt jest jednorazowy, nie per-klatkowy. Ten sam
-         kompromis co .progress-bar/.progress-bar-reading w _progress.scss. */
+      /* FIX: the sidebar has a fixed width and smoothly grows.
+         A deliberate exception to the GPU-only rule (transform/opacity):
+         animating width triggers reflow, but this is a one-off,
+         click-initiated change (the width toggle), not a continuous/looping
+         animation - the cost is one-time, not per-frame. The same tradeoff
+         as .progress-bar/.progress-bar-reading in _progress.scss. */
       width: var(--current-sidebar-width);
       transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-      /* Elegancki scrollbar */
+      /* An elegant scrollbar */
       scrollbar-width: thin;
       scrollbar-color: rgba(var(--sidebar-highlight-rgb), 0.1) transparent;
     }
@@ -177,7 +177,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        width: 100%; /* Wymuszamy 100% na mobile */
+        width: 100%; /* Force 100% on mobile */
         height: auto;
         min-height: 70px;
         flex-direction: row;
@@ -190,46 +190,47 @@
       }
     }
     /* =========================================
-       KOORDYNACJA Z GLOBALNYM NAVBAREM
+       COORDINATION WITH THE GLOBAL NAVBAR
        =========================================
-       Gdy nad layoutem admina siedzi navbar (body > .navbar), sidebar musi
-       zaczynać się POD nim i wypełniać resztę okna. Tylko desktop - na mobile
-       sidebar to dolny Bottom Nav (position: fixed; bottom). */
+       When a navbar sits above the admin layout (body > .navbar), the
+       sidebar must start BELOW it and fill the rest of the window. Desktop
+       only - on mobile the sidebar is the bottom Bottom Nav (position: fixed; bottom). */
     @media (min-width: 768px) {
       body:has(> .navbar) .admin-sidebar {
         top: calc(var(--navbar-h) + var(--layout-padding));
         height: calc(100dvh - var(--navbar-h) - var(--layout-padding) * 2);
       }
     }
-    /* Na stronach z layoutem admina navbar zostaje przyklejony (nie chowa się
-       przy scrollu w dół), inaczej sidebar odsłaniałby pusty pasek u góry. */
+    /* On pages with the admin layout, the navbar stays pinned (doesn't hide
+       on scroll down), otherwise the sidebar would expose an empty bar at the top. */
     body:has(.admin-layout) .navbar-sticky.is-hidden {
       transform: none;
     }
-    /* Zanikanie treści na dole przewijanego sidebara (opt-in: klasa
-       .fade-bottom z warstwy layout). Gradient musi mieć kolor tła
-       sidebara (zawsze ciemny), nie powierzchni strony. */
+    /* Fading content at the bottom of the scrollable sidebar (opt-in: the
+       .fade-bottom class from the layout layer). The gradient must use the
+       sidebar's background color (always dark), not the page surface's. */
     .admin-sidebar.fade-bottom {
       --fade-color: var(--sidebar-bg);
-      /* Na mobile sidebar zamienia się w poziomy dolny pasek -
-         pionowy gradient zasłaniałby pigułki nawigacji. */
+      /* On mobile the sidebar turns into a horizontal bottom bar - a
+         vertical gradient would obscure the navigation pills. */
     }
     @media (max-width: 768px) {
       .admin-sidebar.fade-bottom::after {
         display: none;
       }
     }
-    /* Logo w sidebarze.
-       Działa niezależnie od typu treści (obrazek, SVG, tekst) - zawsze
-       mieści się w szerokości rodzica i nigdy nie rozsadza sidebara. */
+    /* Sidebar logo.
+       Works regardless of content type (image, SVG, text) - always fits
+       within the parent's width and never blows out the sidebar. */
     .admin-brand {
       display: flex;
       align-items: center;
       justify-content: center;
       max-width: 100%;
       height: var(--target-size-min);
-      flex-shrink: 0; /* FIX: overflow:hidden nadaje elementom flex automatyczne min-height:0 -
-    bez tego logo zgniata się do zera, gdy .admin-nav jest wyższy niż sidebar */
+      flex-shrink: 0; /* FIX: overflow:hidden gives flex items an automatic
+    min-height:0 - without this the logo gets crushed
+    to zero when .admin-nav is taller than the sidebar */
       margin-bottom: calc(var(--spacing-unit) * 4);
       overflow: hidden;
       white-space: nowrap;
@@ -247,27 +248,27 @@
       object-fit: contain;
     }
     /* =========================================
-       ANIMOWANA IKONA PRZEŁĄCZNIKA (Morphing Hamburger)
+       ANIMATED TOGGLE ICON (morphing hamburger)
        ========================================= */
-    /* 1. Przycisk przełącznika */
+    /* 1. The toggle button */
     #molique-sidebar-toggle {
       display: flex;
       align-items: center;
-      /* Domyślnie (LG) ikona jest po lewej stronie, jak reszta linków */
+      /* By default (LG) the icon is on the left, like the rest of the links */
       justify-content: flex-start;
-      width: 100%; /* Zawsze zajmuje całą szerokość sidebara */
+      width: 100%; /* Always fills the sidebar's full width */
       height: var(--target-size-min, 44px);
-      padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding jak w linkach */
+      padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding like the links */
       margin: 0;
       border-radius: var(--border-radius);
     }
-    /* W trybie wąskim (MD i SM) środkujemy ikonę */
+    /* In narrow mode (MD and SM), center the icon */
     .admin-layout.sidebar-md #molique-sidebar-toggle,
     .admin-layout.sidebar-sm #molique-sidebar-toggle {
       justify-content: center;
       padding: 0 !important;
     }
-    /* 2. Baza ikony */
+    /* 2. The icon's base */
     .sidebar-toggle-icon {
       width: 20px;
       height: 14px;
@@ -285,7 +286,7 @@
       width: 100%;
     }
     .sidebar-toggle-icon {
-      /* Domyślny stan (LG) - Klasyczny Hamburger */
+      /* Default state (LG) - classic hamburger */
     }
     .sidebar-toggle-icon span:nth-child(1) {
       top: 0;
@@ -296,7 +297,7 @@
     .sidebar-toggle-icon span:nth-child(3) {
       top: 12px;
     }
-    /* Stan 2 (MD) - Asymetryczny */
+    /* State 2 (MD) - asymmetric */
     .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(1) {
       width: 100%;
     }
@@ -306,9 +307,9 @@
     .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(3) {
       width: 50%;
     }
-    /* Stan 3 (SM) - Strzałka w prawo */
+    /* State 3 (SM) - arrow pointing right */
     .admin-layout.sidebar-sm .sidebar-toggle-icon {
-      /* KOREKTA OPTYCZNA: Przesuwamy całą ikonę o 2px w lewo, żeby zrównoważyć ciężar grota strzałki */
+      /* OPTICAL CORRECTION: shift the whole icon 2px left to balance the weight of the arrowhead */
       transform: translateX(-2px);
     }
     .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(1) {
@@ -330,10 +331,10 @@
       transform: rotate(-45deg);
     }
     /* =========================================
-       ZARZĄDZANIE LOGO - WERSJA RESPONSYWNA
+       LOGO MANAGEMENT - RESPONSIVE VERSION
        ========================================= */
-    /* Tryby wąskie na desktopie (-sm, -md): logo zwija się automatycznie,
-       tak samo jak etykiety linków w .admin-nav-link (patrz _admin-nav.scss) */
+    /* Narrow desktop modes (-sm, -md): the logo collapses automatically,
+       just like link labels in .admin-nav-link (see _admin-nav.scss) */
     @media (min-width: 768px) {
       .sidebar-sm .admin-logo-hide,
       .sidebar-md .admin-logo-hide {
@@ -346,14 +347,14 @@
         max-height: 32px;
         width: auto;
         height: auto;
-        margin: auto; /* obrazek/SVG zawsze wyśrodkowany w plakietce, niezależnie od justify-content */
+        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
       }
       .sidebar-sm .admin-logo-compact,
       .sidebar-md .admin-logo-compact {
         display: flex;
         align-items: center;
-        /* flex-start (nie center): przy tekście dłuższym niż plakietka chcemy
-           obciąć koniec, a nie pokazywać losowy fragment ze środka */
+        /* flex-start (not center): with text longer than the badge, we want to
+           cut off the end, not show a random fragment from the middle */
         justify-content: flex-start;
         width: 32px;
         height: 32px;
@@ -367,25 +368,25 @@
         margin: 0 !important;
       }
     }
-    /* Mobile (sidebar zwinięty do dolnego paska): te same zasady */
+    /* Mobile (sidebar collapsed into the bottom bar): the same rules */
     @media (max-width: 768px) {
-      /* Opcja 1: Całkowite ukrycie logo na mobile */
+      /* Option 1: fully hide the logo on mobile */
       .admin-logo-hide {
         display: none !important;
       }
-      /* Opcja 2: Wersja kompaktowa (zmniejszona) na mobile */
+      /* Option 2: a compact (shrunk) version on mobile */
       .admin-logo-compact img, .admin-logo-compact svg {
         max-width: 32px;
         max-height: 32px;
         width: auto;
         height: auto;
-        margin: auto; /* obrazek/SVG zawsze wyśrodkowany w plakietce, niezależnie od justify-content */
+        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
       }
       .admin-logo-compact {
         display: flex;
         align-items: center;
-        /* flex-start (nie center): przy tekście dłuższym niż plakietka chcemy
-           obciąć koniec, a nie pokazywać losowy fragment ze środka */
+        /* flex-start (not center): with text longer than the badge, we want to
+           cut off the end, not show a random fragment from the middle */
         justify-content: flex-start;
         width: 32px;
         height: 32px;
@@ -403,13 +404,13 @@
   /**
    * molique - Zmienne SCSS
    */
-  /* Wysokość bloku logo (.admin-brand: target-size-min + margin-bottom) -
-     drill-down submenu w -sm/-md zaczyna się PONIŻEJ tej wysokości, żeby logo
-     zostawało widoczne zamiast znikać pod panelem "Cofnij". */
-  /* Transformacja tagu <summary> w pasek "Cofnij" (drill-down). Współdzielona
-     przez warianty wąskie na desktopie (-sm/-md) oraz mobilny drill-down w
-     Bottom Nav - mixin odpowiada TYLKO za wygląd (strzałka wstecz + napis
-     "Cofnij", kolory, hover/focus). Pozycjonowanie ustala kontekst wywołania. */
+  /* Height of the logo block (.admin-brand: target-size-min + margin-bottom)
+     - the submenu drill-down in -sm/-md starts BELOW this height, so the
+     logo stays visible instead of disappearing under the "Back" panel. */
+  /* Transforms the <summary> tag into a "Back" bar (drill-down). Shared by
+     the narrow desktop variants (-sm/-md) and the mobile drill-down in the
+     Bottom Nav - the mixin is ONLY responsible for appearance (back arrow +
+     "Back" label, colors, hover/focus). Positioning is set by the calling context. */
   @layer components {
     .admin-nav {
       display: flex;
@@ -422,7 +423,7 @@
     @media (max-width: 768px) {
       .admin-nav {
         flex-direction: row;
-        /* Równe odstępy dla głównych ikon na pasku */
+        /* Even spacing for the main icons on the bar */
         justify-content: space-around;
         width: 100%;
         gap: 0;
@@ -437,7 +438,7 @@
       transition: all var(--transition-speed) ease;
       border-radius: var(--border-radius);
       min-height: var(--target-size-min);
-      /* Domyślny układ (Standard - .sidebar-lg) */
+      /* Default layout (Standard - .sidebar-lg) */
       flex-direction: row;
       padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
       gap: calc(var(--spacing-unit) * 1.5);
@@ -465,15 +466,15 @@
     }
     .admin-nav-link {
       /* =========================================
-         WARIANTY DESKTOPOWE (Ignorowane na mobile!)
+         DESKTOP VARIANTS (ignored on mobile!)
          ========================================= */
     }
     @media (min-width: 768px) {
       .admin-nav-link {
-        /* --- WARIANT: NARROW (Ikona na górze, tekst na dole) --- */
+        /* --- VARIANT: NARROW (icon on top, text below) --- */
       }
       .sidebar-md .admin-nav-link {
-        /* FIX: Wymuszamy układ pionowy! */
+        /* FIX: force a vertical layout! */
         flex-direction: column;
         justify-content: center;
         padding: calc(var(--spacing-unit) * 1) 4px;
@@ -482,7 +483,7 @@
         width: 100%;
       }
       .sidebar-md .admin-nav-link .nav-text {
-        /* FIX: Mały, wyśrodkowany tekst */
+        /* FIX: small, centered text */
         font-size: 0.6rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -492,7 +493,7 @@
         width: 100%;
       }
       .admin-nav-link {
-        /* --- WARIANT: COMPACT (Tylko ikony) --- */
+        /* --- VARIANT: COMPACT (icons only) --- */
       }
       .sidebar-sm .admin-nav-link {
         justify-content: center;
@@ -518,9 +519,9 @@
         justify-content: center;
         padding: calc(var(--spacing-unit) * 1);
         gap: 4px;
-        /* FIX: flex: 1 sprawia, że wszystkie 5 ikon podzieli się miejscem po równo */
+        /* FIX: flex: 1 makes all 5 icons split the space evenly */
         flex: 1;
-        min-width: 0; /* Pozwala na zgniatanie, jeśli ekran jest bardzo wąski */
+        min-width: 0; /* Allows shrinking if the screen is very narrow */
       }
       .admin-nav-link .nav-text {
         display: block;
@@ -531,15 +532,15 @@
       }
       .admin-nav-link.is-active {
         background-color: transparent;
-        /* NIE var(--primary) - sidebar jest zawsze ciemny, a --primary w
-           light mode (#5145E5) daje tylko 2.3:1 na tym tle. Patrz
-           --sidebar-active-accent w _root.scss. */
+        /* NOT var(--primary) - the sidebar is always dark, and --primary
+           in light mode (#5145E5) only gives 2.3:1 on this background. See
+           --sidebar-active-accent in _root.scss. */
         color: var(--sidebar-active-accent);
         box-shadow: none;
       }
     }
     /* =========================================
-       PODZIAŁ I DOLNA NAWIGACJA
+       DIVIDER AND BOTTOM NAVIGATION
        ========================================= */
     .admin-nav-divider {
       display: block;
@@ -563,10 +564,10 @@
     }
     @media (max-width: 768px) {
       .admin-nav-bottom {
-        display: none !important; /* Ukrywamy dolną sekcję na mobile */
+        display: none !important; /* Hide the bottom section on mobile */
       }
     }
-    /* FIX: Klasa ukrywająca duplikaty linków na desktopie! */
+    /* FIX: a class that hides duplicate links on desktop! */
     @media (min-width: 768px) {
       .mobile-only-nav-item {
         display: none !important;
@@ -575,15 +576,15 @@
     /* =========================================
        MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
        ========================================= */
-    /* Checkbox + label + .admin-nav-dropdown-menu musza (dla selektora
-       rodzenstwa .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu nizej)
-       dzielic wspolnego rodzica - stad razem w jednym <li>, zamiast wprost w
-       <ul class="admin-nav"> (input/label/div jako BEZPOSREDNIE dzieci <ul>
-       lamaly wymog, ze <ul> smie miec tylko <li> - audyt Lighthouse "list").
-       display:contents na tym <li> czyni go niewidocznym w layoucie (jego
-       dzieci ukladaja sie tak, jakby nadal byly bezposrednimi flex-itemami
-       .admin-nav) - identyczny wizualny efekt jak przed zmiana, tylko
-       poprawny w DOM. */
+    /* The checkbox + label + .admin-nav-dropdown-menu must (for the sibling
+       selector .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu below)
+       share a common parent - hence grouped together in one <li>, instead
+       of sitting directly inside <ul class="admin-nav"> (input/label/div as
+       DIRECT children of a <ul> broke the rule that a <ul> may only contain
+       <li> - flagged by the Lighthouse "list" audit). display:contents on
+       that <li> makes it invisible in the layout (its children lay out as
+       if they were still direct flex items of .admin-nav) - the identical
+       visual result as before the change, just correct in the DOM. */
     .admin-nav-more-item {
       display: contents;
     }
@@ -599,18 +600,18 @@
       }
     }
     .admin-nav-dropdown-menu {
-      /* Teraz <ul> (bylo <div>) - <li> wewnatrz wymaga prawdziwego rodzica
-         ul/ol/menu (parser HTML5 auto-zamyka najblizszy otwarty <li>, gdy
-         napotka kolejny <li>, POMIJAJAC posrednie <div> - <ul>/<ol> tworzy
-         scope, ktory to blokuje). Domyslny margin/padding <ul> trzeba
-         wyzerowac recznie (list-style:none dziedziczy z .admin-nav, ale to
-         nie). */
+      /* Now a <ul> (was a <div>) - the <li> elements inside require a real
+         ul/ol/menu parent (the HTML5 parser auto-closes the nearest open
+         <li> when it hits another <li>, SKIPPING an intervening <div> - a
+         <ul>/<ol> creates a scope that blocks this). A <ul>'s default
+         margin/padding needs to be zeroed by hand (list-style:none is
+         inherited from .admin-nav, but this isn't). */
       margin: 0;
       padding: 0;
       display: flex;
       flex-direction: column;
       gap: calc(var(--spacing-unit) * 1);
-      /* DESKTOP: Linki na płasko */
+      /* DESKTOP: flat links */
     }
     @media (min-width: 768px) {
       .admin-nav-dropdown-menu {
@@ -618,15 +619,15 @@
       }
     }
     .admin-nav-dropdown-menu {
-      /* MOBILE: Pływająca szuflada */
+      /* MOBILE: floating drawer */
     }
     @media (max-width: 991px) {
       .admin-nav-dropdown-menu {
         position: fixed;
-        /* FIX: dolny pasek to min-height 70px PLUS padding-bottom
-           env(safe-area-inset-bottom) - bez wliczenia wcięcia szuflada wchodzi
-           dolną krawędzią pod pasek i ostatnie pozycje są przycięte
-           (identyczna formuła jak w bottom-sheet submenu). */
+        /* FIX: the bottom bar is min-height 70px PLUS padding-bottom
+           env(safe-area-inset-bottom) - without accounting for the inset
+           the drawer's bottom edge slides under the bar and the last items
+           get clipped (the identical formula as in the bottom-sheet submenu). */
         bottom: calc(70px + env(safe-area-inset-bottom));
         left: 0;
         right: 0;
@@ -639,16 +640,16 @@
         padding-bottom: calc(var(--spacing-unit) * 4);
         box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
         z-index: 100;
-        /* FIX: Długie listy (np. nawigacja dokumentacji) muszą się przewijać w pionie,
-           inaczej szuflada wystaje ponad górną krawędź ekranu - a na stronach,
-           które mają jednocześnie navbar (partials/navbar.html) NAD tym
-           sidebarem, "górna krawędź ekranu" to w praktyce dół navbara, nie
-           y=0: bez odjęcia --navbar-h szuflada wjeżdżała POD stały navbar i
-           jej górne pozycje (pierwsze grupy w długim menu) były przez niego
-           przysłonięte. */
+        /* FIX: long lists (e.g. docs navigation) must scroll vertically,
+           otherwise the drawer sticks out above the top of the screen - and
+           on pages that also have a navbar (partials/navbar.html) ABOVE
+           this sidebar, the "top of the screen" is in practice the bottom
+           of the navbar, not y=0: without subtracting --navbar-h the drawer
+           would slide UNDER the fixed navbar and its top items (the first
+           groups in a long menu) would be hidden behind it. */
         max-height: calc(100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - var(--spacing-unit) * 4);
         overflow-y: auto;
-        /* FIX: Zamiast display: none, ukrywamy szufladę pod ekranem! */
+        /* FIX: instead of display: none, hide the drawer below the screen! */
         visibility: hidden;
         transform: translateY(100%);
         transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1), visibility var(--transition-speed-slow);
@@ -673,7 +674,7 @@
     .admin-nav-dropdown-menu {
       /* THIS WAS MISSING */
     }
-    /* MAGIA: Wsuwanie szuflady po kliknięciu */
+    /* THE TRICK: sliding the drawer in on click */
     @media (max-width: 991px) {
       .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
         visibility: visible;
@@ -684,7 +685,7 @@
       /* THIS WAS MISSING */
     }
     /* =========================================
-       SUBMENU (Rozwijane drzewko linków)
+       SUBMENU (expandable link tree)
        ========================================= */
     .admin-nav-submenu {
       position: relative;
@@ -711,7 +712,7 @@
     .admin-nav-submenu[open] > summary::after {
       transform: rotate(-135deg);
     }
-    /* --- WARIANT DOMYŚLNY (Szeroki Sidebar - Drzewko) --- */
+    /* --- DEFAULT VARIANT (wide sidebar - tree) --- */
     .admin-nav-submenu-list {
       display: flex;
       flex-direction: column;
@@ -762,11 +763,11 @@
       background-color: transparent;
       box-shadow: none !important;
     }
-    /* --- WARIANTY WĄSKIE (Drill-down Menu) --- */
+    /* --- NARROW VARIANTS (Drill-down Menu) --- */
     @media (min-width: 768px) {
       .sidebar-md .admin-nav-submenu,
       .sidebar-sm .admin-nav-submenu {
-        /* Uciekamy z kontekstu pozycjonowania, żeby móc przykryć cały sidebar! */
+        /* Escape the positioning context so we can cover the entire sidebar! */
         position: static;
       }
       .sidebar-md .admin-nav-submenu summary::after,
@@ -780,12 +781,12 @@
       .sidebar-md .admin-nav-submenu,
       .sidebar-sm .admin-nav-submenu {
         /* =========================================
-           STAN OTWARTY (Drill-down Active)
+           OPEN STATE (drill-down active)
            ========================================= */
       }
       .sidebar-md .admin-nav-submenu[open],
       .sidebar-sm .admin-nav-submenu[open] {
-        /* 1. Tło przykrywające resztę sidebara PONIŻEJ logo (logo zostaje widoczne) */
+        /* 1. A background covering the rest of the sidebar BELOW the logo (logo stays visible) */
       }
       .sidebar-md .admin-nav-submenu[open]::before,
       .sidebar-sm .admin-nav-submenu[open]::before {
@@ -800,7 +801,7 @@
       }
       .sidebar-md .admin-nav-submenu[open],
       .sidebar-sm .admin-nav-submenu[open] {
-        /* 2. Przycisk "Cofnij" (Transformacja tagu <summary>) - pod logo, nie w jego miejscu */
+        /* 2. The "Back" button (transforms the <summary> tag) - below the logo, not in its place */
       }
       .sidebar-md .admin-nav-submenu[open] > summary,
       .sidebar-sm .admin-nav-submenu[open] > summary {
@@ -819,13 +820,13 @@
         padding: 0;
         gap: 8px;
         transition: background-color var(--transition-speed);
-        /* summary bywa oznaczone .is-active (kolor --btn-text-light, który w dark
-           mode robi się ciemny). Tło "Cofnij" to zawsze ciemny --sidebar-bg, więc
-           kolor MUSI wrócić do palety sidebara - inaczej strzałka i napis znikają
-           w ciemnym motywie. */
+        /* A summary can be marked .is-active (color --btn-text-light, which
+           turns dark in dark mode). The "Back" background is always the dark
+           --sidebar-bg, so the color MUST fall back to the sidebar palette -
+           otherwise the arrow and label vanish in the dark theme. */
         color: var(--sidebar-text);
-        /* Bez tego "Cofnij" nie reaguje na hover/focus. Przyciemniamy (nie
-           rozjaśniamy) - na ciemnym tle jasne podświetlenie wygląda obco. */
+        /* Without this, "Back" doesn't react to hover/focus. We darken (not
+           lighten) - a light highlight looks out of place on a dark background. */
       }
       .sidebar-md .admin-nav-submenu[open] > summary:hover,
       .sidebar-sm .admin-nav-submenu[open] > summary:hover {
@@ -835,13 +836,13 @@
       .sidebar-md .admin-nav-submenu[open] > summary:focus-visible,
       .sidebar-sm .admin-nav-submenu[open] > summary:focus-visible {
         background-color: rgba(0, 0, 0, 0.15);
-        /* nadpisuje jasny pierścień fokusu z _base.scss (oparty o --primary) */
+        /* overrides the light focus ring from _base.scss (based on --primary) */
         outline: none;
         box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
       }
       .sidebar-md .admin-nav-submenu[open] > summary,
       .sidebar-sm .admin-nav-submenu[open] > summary {
-        /* Ukrywamy oryginalną ikonę pozycji */
+        /* Hide the item's original icon */
       }
       .sidebar-md .admin-nav-submenu[open] > summary > i, .sidebar-md .admin-nav-submenu[open] > summary > svg,
       .sidebar-sm .admin-nav-submenu[open] > summary > i,
@@ -850,7 +851,7 @@
       }
       .sidebar-md .admin-nav-submenu[open] > summary,
       .sidebar-sm .admin-nav-submenu[open] > summary {
-        /* Rysujemy ikonę strzałki w lewo (Cofnij) */
+        /* Draw the left-pointing arrow icon (Back) */
       }
       .sidebar-md .admin-nav-submenu[open] > summary::before,
       .sidebar-sm .admin-nav-submenu[open] > summary::before {
@@ -865,14 +866,19 @@
       }
       .sidebar-md .admin-nav-submenu[open] > summary,
       .sidebar-sm .admin-nav-submenu[open] > summary {
-        /* Zmieniamy tekst pozycji na "Cofnij" */
+        /* Swap the item's text for "Back"
+           NOTE (pre-existing i18n gap, not touched by this comment-translation
+           pass): the "Cofnij" label injected below via content: is hardcoded
+           Polish even though this component is used on the EN/DE site pages
+           too - would need a real localization pass, e.g. reading it from a
+           CSS custom property set per page language instead of a literal. */
       }
       .sidebar-md .admin-nav-submenu[open] > summary .nav-text,
       .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
         display: block !important;
-        /* bez tego .nav-text dziedziczy width:100% z wariantu -md i rozpycha się */
+        /* without this, .nav-text inherits width:100% from the -md variant and stretches */
         width: auto;
-        font-size: 0 !important; /* Ukrywa oryginalny tekst */
+        font-size: 0 !important; /* Hides the original text */
       }
       .sidebar-md .admin-nav-submenu[open] > summary .nav-text::after,
       .sidebar-sm .admin-nav-submenu[open] > summary .nav-text::after {
@@ -883,7 +889,7 @@
       }
       .sidebar-md .admin-nav-submenu[open],
       .sidebar-sm .admin-nav-submenu[open] {
-        /* 3. Lista linków submenu - zaczyna się pod przyciskiem Cofnij (który jest pod logo) */
+        /* 3. The submenu link list - starts below the Back button (which is below the logo) */
       }
       .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list,
       .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
@@ -898,7 +904,7 @@
         padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 1);
         margin: 0;
         overflow-y: auto;
-        /* Resetujemy linie drzewka */
+        /* Reset the tree lines */
       }
       .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list::before,
       .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
@@ -909,11 +915,12 @@
         padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
         justify-content: center;
         text-align: center;
-        /* FIX: długie słowa bez naturalnych miejsc łamania (spacji, myślnika)
-           wylewały się poza wąski sidebar -sm - poszerzanie -sm nie wchodzi
-           w grę, więc zamiast tego łamiemy słowo, ale TYLKO gdy faktycznie
-           nie mieści się w wierszu (overflow-wrap, nie word-break: break-word -
-           ten drugi łamie słowa nawet gdy zmieściłyby się w całości) */
+        /* FIX: long words with no natural break points (spaces,
+           hyphens) spilled outside the narrow -sm sidebar - widening
+           -sm isn't an option, so instead we break the word, but ONLY
+           when it genuinely doesn't fit on the line (overflow-wrap,
+           not word-break: break-word - the latter breaks words even
+           when they would have fit whole) */
         overflow-wrap: break-word;
       }
       .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before,
@@ -921,15 +928,15 @@
         display: none;
       }
       .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link { /* Ukrywamy poziome kreseczki */ }
-      /* W trybie SM (najwęższym) ukrywamy tekst "Cofnij", zostawiamy samą strzałkę */
+      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link { /* Hide the horizontal tick marks */ }
+      /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
       .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
         display: none !important;
       }
-      /* --- WARIANT -SM: linki na pełną szerokość z separatorem zamiast ramek ---
-         Sidebar -sm jest zbyt wąski (72px), żeby zaokrąglona ramka + padding
-         wokół każdego linku miały sens - tekst dotykał/wylewał się poza ramkę.
-         Zamiast tego: linki na pełną szerokość, oddzielone cienką linią. */
+      /* --- -SM VARIANT: full-width links with a separator instead of borders ---
+         The -sm sidebar is too narrow (72px) for a rounded border + padding
+         around every link to make sense - the text touched/spilled outside
+         the border. Instead: full-width links, separated by a thin line. */
       .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
         padding-left: 0;
         padding-right: 0;
@@ -949,41 +956,44 @@
       }
     }
     /* =========================================
-       MOBILE: SUBMENU JAKO DRILL-DOWN (jak -sm/-md)
+       MOBILE: SUBMENU AS A DRILL-DOWN (like -sm/-md)
        =========================================
-       W poziomym Bottom Nav drzewko nie ma sensu. Klik w trigger podmienia
-       widok na pełnoekranowy panel: <summary> staje się paskiem "Cofnij" na
-       górze ekranu, a lista linków wypełnia resztę - identycznie jak drill-down
-       w wariantach -sm/-md, tylko jako mobilna nakładka. Natywny <details>
-       odpowiada za samo otwieranie; moduł admin-nav.js obsługuje tylko
-       aktywność z URL i wzajemne wykluczanie otwartych submenu. */
+       A tree makes no sense in the horizontal Bottom Nav. Clicking the
+       trigger swaps the view to a full-screen panel: <summary> becomes a
+       "Back" bar at the top of the screen, and the link list fills the
+       rest - identical to the drill-down in the -sm/-md variants, just as a
+       mobile overlay. The native <details> handles opening itself; the
+       admin-nav.js module only handles active state from the URL and
+       mutually excluding open submenus. */
     @media (max-width: 768px) {
       .admin-nav-submenu {
         position: static;
-        /* details rozciąga swój <summary> (trigger) na kafelek paska */
+        /* details stretches its <summary> (trigger) to fill the bar's tile */
         display: flex;
-        /* Wysokość użytecznej (dotykalnej) części paska "Cofnij". Do niej
-           dochodzi jeszcze env(safe-area-inset-top) - status bar/notch - żeby
-           napis nie lądował pod paskiem powiadomień, a duży target był daleko
-           od górnej krawędzi (mniej przypadkowych gestów notyfikacji). */
+        /* Height of the usable (tappable) part of the "Back" bar.
+           env(safe-area-inset-top) - the status bar/notch - is added on top
+           of it, so the label doesn't land under the notification bar, and
+           the large target sits comfortably away from the top edge (fewer
+           accidental notification-shade gestures). */
         --drilldown-bar-h: 64px;
       }
       .admin-nav-submenu > summary {
         width: 100%;
-        /* strzałka rozwinięcia drzewka jest zbędna w poziomym pasku */
+        /* the tree-expand arrow is redundant in a horizontal bar */
       }
       .admin-nav-submenu > summary::after {
         display: none;
       }
       .admin-nav-submenu[open] {
-        /* 1. Lista -> pełnoekranowy panel (od samej góry ekranu). Jego ciemne
-           tło stanowi CIĄGŁĄ powierzchnię także pod paskiem "Cofnij" - linki
-           odsuwamy paddingiem, żeby nie chowały się pod paskiem. Dzięki temu
-           "Cofnij" i lista są jedną całością niezależnie od tego, jak przeglądarka
-           pomaluje tło samego <summary>. */
+        /* 1. The list -> a full-screen panel (from the very top of the
+           screen). Its dark background forms a CONTINUOUS surface under
+           the "Back" bar too - links are pushed down with padding so they
+           don't hide under the bar. This way "Back" and the list read as
+           one whole, regardless of how the browser paints the <summary>'s
+           own background. */
       }
       .admin-nav-submenu[open] > .admin-nav-submenu-list {
-        display: flex !important; /* nadpisuje domyślny stan drzewka */
+        display: flex !important; /* overrides the default tree state */
         flex-direction: column;
         gap: calc(var(--spacing-unit) * 0.5);
         margin: 0;
@@ -994,26 +1004,28 @@
         bottom: 0;
         z-index: 1050;
         background-color: var(--sidebar-bg);
-        /* Wypełnienie na czas "bounce": overshoot unosi panel nieco w górę,
-           odsłaniając pasek u dołu - ten solidny cień (blur 0) domalowuje
-           ciemne tło poniżej panelu, więc przez przeskok nie mignie strona. */
+        /* Padding for the "bounce": the overshoot lifts the panel
+           slightly upward, exposing a gap at the bottom - this solid
+           shadow (blur 0) paints in the dark background below the
+           panel, so the page doesn't flash through during the overshoot. */
         box-shadow: 0 160px 0 var(--sidebar-bg);
-        /* padding-top mieści pasek "Cofnij" (wysokość + status bar) + oddech */
+        /* padding-top makes room for the "Back" bar (height + status bar) + breathing room */
         padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
         overflow-y: auto;
-        /* Wjazd od dołu z lekkim odbiciem (back-ease: control point > 1) */
+        /* Slides in from the bottom with a slight bounce (back-ease: control point > 1) */
         animation: adminDrilldownPanelIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) both;
-        /* Linki wyśrodkowane w pionie (wygodniej dla kciuka na mobile);
-           "safe" cofa do góry i pozwala przewijać, gdy pozycji jest dużo. */
+        /* Links centered vertically (more comfortable for a thumb on
+           mobile); "safe" falls back to the top and allows scrolling
+           when there are many items. */
         justify-content: center;
         justify-content: safe center;
-        /* Reset pionowej linii drzewka */
+        /* Reset the vertical tree line */
       }
       .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
         display: none;
       }
       .admin-nav-submenu[open] > .admin-nav-submenu-list {
-        /* Linki na pełną szerokość, bez poziomych kreseczek drzewka */
+        /* Full-width links, no horizontal tree tick marks */
       }
       .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
         justify-content: flex-start;
@@ -1026,8 +1038,8 @@
         display: none;
       }
       .admin-nav-submenu[open] {
-        /* 2. <summary> -> pasek "Cofnij" na górze, NA panelu (leży na jego
-           ciemnym tle). z-index nad panelem. */
+        /* 2. <summary> -> the "Back" bar at the top, ON the panel (sits on
+           its dark background). z-index above the panel. */
       }
       .admin-nav-submenu[open] > summary {
         position: fixed;
@@ -1035,7 +1047,7 @@
         left: 0;
         width: 100%;
         height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
-        z-index: 1051; /* nad panelem i nad dolnym paskiem (1040) */
+        z-index: 1051; /* above the panel and above the bottom bar (1040) */
         background-color: var(--sidebar-bg);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 0;
@@ -1045,13 +1057,13 @@
         padding: 0;
         gap: 8px;
         transition: background-color var(--transition-speed);
-        /* summary bywa oznaczone .is-active (kolor --btn-text-light, który w dark
-           mode robi się ciemny). Tło "Cofnij" to zawsze ciemny --sidebar-bg, więc
-           kolor MUSI wrócić do palety sidebara - inaczej strzałka i napis znikają
-           w ciemnym motywie. */
+        /* A summary can be marked .is-active (color --btn-text-light, which
+           turns dark in dark mode). The "Back" background is always the dark
+           --sidebar-bg, so the color MUST fall back to the sidebar palette -
+           otherwise the arrow and label vanish in the dark theme. */
         color: var(--sidebar-text);
-        /* Bez tego "Cofnij" nie reaguje na hover/focus. Przyciemniamy (nie
-           rozjaśniamy) - na ciemnym tle jasne podświetlenie wygląda obco. */
+        /* Without this, "Back" doesn't react to hover/focus. We darken (not
+           lighten) - a light highlight looks out of place on a dark background. */
       }
       .admin-nav-submenu[open] > summary:hover {
         color: var(--sidebar-text-active);
@@ -1059,18 +1071,18 @@
       }
       .admin-nav-submenu[open] > summary:focus-visible {
         background-color: rgba(0, 0, 0, 0.15);
-        /* nadpisuje jasny pierścień fokusu z _base.scss (oparty o --primary) */
+        /* overrides the light focus ring from _base.scss (based on --primary) */
         outline: none;
         box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
       }
       .admin-nav-submenu[open] > summary {
-        /* Ukrywamy oryginalną ikonę pozycji */
+        /* Hide the item's original icon */
       }
       .admin-nav-submenu[open] > summary > i, .admin-nav-submenu[open] > summary > svg {
         display: none !important;
       }
       .admin-nav-submenu[open] > summary {
-        /* Rysujemy ikonę strzałki w lewo (Cofnij) */
+        /* Draw the left-pointing arrow icon (Back) */
       }
       .admin-nav-submenu[open] > summary::before {
         content: "";
@@ -1083,13 +1095,18 @@
         mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
       }
       .admin-nav-submenu[open] > summary {
-        /* Zmieniamy tekst pozycji na "Cofnij" */
+        /* Swap the item's text for "Back"
+           NOTE (pre-existing i18n gap, not touched by this comment-translation
+           pass): the "Cofnij" label injected below via content: is hardcoded
+           Polish even though this component is used on the EN/DE site pages
+           too - would need a real localization pass, e.g. reading it from a
+           CSS custom property set per page language instead of a literal. */
       }
       .admin-nav-submenu[open] > summary .nav-text {
         display: block !important;
-        /* bez tego .nav-text dziedziczy width:100% z wariantu -md i rozpycha się */
+        /* without this, .nav-text inherits width:100% from the -md variant and stretches */
         width: auto;
-        font-size: 0 !important; /* Ukrywa oryginalny tekst */
+        font-size: 0 !important; /* Hides the original text */
       }
       .admin-nav-submenu[open] > summary .nav-text::after {
         content: "Cofnij";
@@ -1098,22 +1115,23 @@
         letter-spacing: normal;
       }
       .admin-nav-submenu[open] > summary {
-        /* napis schodzi spod status bara/notcha (env), a duży, niżej
-           położony target jest wygodniejszy dla kciuka */
+        /* the label clears the status bar/notch (env), and a large,
+           lower-positioned target is more thumb-friendly */
         padding-top: env(safe-area-inset-top);
-        /* na dotyku (brak hover) jaśniejszy napis = wyraźny przycisk wstecz */
+        /* on touch (no hover) a brighter label = a clear back button */
         color: var(--sidebar-text-active);
-        /* Napis pojawia się z lekkim opóźnieniem - dopiero gdy panel zdąży
-           już przykryć górę ekranu (inaczej mignąłby nad stroną). */
+        /* The label appears with a slight delay - only once the panel
+           has already covered the top of the screen (otherwise it
+           would flash above the page). */
         animation: adminDrilldownBar 0.24s ease 0.12s both;
       }
       .admin-nav-submenu {
         /* =========================================
-           WYJAZD (animowane zamknięcie - klasa .is-closing z admin-nav.js)
+           SLIDE-OUT (animated close - the .is-closing class from admin-nav.js)
            =========================================
-           Natywny <details> chowa treść natychmiast, więc moduł JS opóźnia
-           faktyczne zamknięcie: dodaje .is-closing, czeka na koniec animacji
-           i dopiero wtedy zdejmuje [open]. */
+           The native <details> hides its content instantly, so the JS
+           module delays the actual close: it adds .is-closing, waits for
+           the animation to finish, and only then removes [open]. */
       }
       .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
         animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
@@ -1121,7 +1139,7 @@
       .admin-nav-submenu.is-closing > summary {
         animation: adminDrilldownBarOut 0.18s ease both;
       }
-      /* Wejście/wyjście drill-downu (GPU: wyłącznie opacity + transform) */
+      /* Drill-down entrance/exit (GPU: opacity + transform only) */
       @keyframes adminDrilldownBar {
         from {
           opacity: 0;
@@ -1155,8 +1173,8 @@
         }
       }
     }
-    /* A11y: bez animacji dla użytkowników z prefers-reduced-motion
-       (moduł admin-nav.js dodatkowo zamyka natychmiast, bez czekania). */
+    /* A11y: no animation for users with prefers-reduced-motion
+       (the admin-nav.js module also closes instantly, with no waiting). */
     @media (prefers-reduced-motion: reduce) {
       .admin-nav-submenu[open] > summary,
       .admin-nav-submenu[open] > .admin-nav-submenu-list,
@@ -1165,10 +1183,10 @@
         animation: none;
       }
     }
-  } /* ZAMKNIĘCIE @layer components */
+  } /* CLOSES @layer components */
   @layer components {
     /* =========================================
-       1. LEJEK DANYCH (Pionowy, oparty na --val)
+       1. DATA FUNNEL (vertical, based on --val)
        ========================================= */
     .chart-funnel {
       display: flex;
@@ -1179,9 +1197,9 @@
       padding: calc(var(--spacing-unit) * 2) 0;
     }
     .funnel-stage {
-      /* Szerokość sterowana z HTML, domyślnie 100% */
+      /* Width controlled from the HTML, defaults to 100% */
       width: var(--val, 100%);
-      min-width: 140px; /* Zapobiega zgnieceniu tekstu na samym dole lejka */
+      min-width: 140px; /* Prevents the text from being crushed at the very bottom of the funnel */
       min-height: var(--target-size-min);
       background-color: var(--stage-bg, var(--primary));
       color: var(--stage-text, var(--btn-text-light));
@@ -1193,20 +1211,20 @@
       font-size: 0.875rem;
       font-weight: var(--fw-medium);
       transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      /* Subtelny efekt hover dla interaktywności */
+      /* A subtle hover effect for interactivity */
     }
     .funnel-stage:hover {
       filter: brightness(1.1);
       transform: scale(1.02);
     }
     /* =========================================
-       2. LEJEK PROCESOWY (Poziomy CRM Pipeline)
+       2. PROCESS FUNNEL (horizontal CRM pipeline)
        ========================================= */
     .chart-pipeline {
       display: flex;
       width: 100%;
-      gap: 4px; /* Odstęp między strzałkami */
-      /* Na mobile zamieniamy w pionowy stos */
+      gap: 4px; /* Gap between the arrows */
+      /* On mobile, switch to a vertical stack */
     }
     @media (max-width: 768px) {
       .chart-pipeline {
@@ -1226,9 +1244,9 @@
       font-weight: var(--fw-medium);
       text-align: center;
       position: relative;
-      /* Magia CSS: Kształt strzałki (Chevron) */
+      /* CSS trick: the chevron (arrow) shape */
       clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
-      /* Pierwszy element nie ma wcięcia z lewej */
+      /* The first item has no notch on the left */
     }
     .pipeline-stage:first-child {
       clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
@@ -1236,7 +1254,7 @@
       border-bottom-left-radius: var(--border-radius);
     }
     .pipeline-stage {
-      /* Ostatni element nie ma szpica z prawej */
+      /* The last item has no point on the right */
     }
     .pipeline-stage:last-child {
       clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
@@ -1244,24 +1262,24 @@
       border-bottom-right-radius: var(--border-radius);
     }
     .pipeline-stage {
-      /* Aktywny etap */
+      /* Active stage */
     }
     .pipeline-stage.is-active {
       --stage-bg: var(--primary);
       --stage-text: var(--btn-text-light);
     }
     .pipeline-stage {
-      /* Reset kształtów na mobile (zwykłe zaokrąglone prostokąty) */
+      /* Reset the shapes on mobile (plain rounded rectangles) */
     }
     @media (max-width: 768px) {
       .pipeline-stage {
         clip-path: none !important;
         border-radius: var(--border-radius) !important;
-        justify-content: space-between; /* Tekst do lewej, ew. ikona do prawej */
+        justify-content: space-between; /* Text on the left, an optional icon on the right */
       }
     }
     /* =========================================
-      3. TRUE FUNNEL (Praktyczny Lejek z nóżką)
+      3. TRUE FUNNEL (a practical funnel with a stem)
       ========================================= */
     .chart-funnel-true {
       display: flex;
@@ -1269,10 +1287,10 @@
       width: 100%;
       max-width: 400px;
       margin: 0 auto;
-      /* Zmieniamy proporcje na kwadrat - bardziej kompaktowe i praktyczne */
+      /* Switch the proportions to a square - more compact and practical */
       aspect-ratio: 1/1;
       gap: 2px;
-      /* MAGIA CSS: Rzeźbiony wielokąt - Szersza nóżka (50% szerokości) */
+      /* CSS trick: a sculpted polygon - a wider stem (50% of the width) */
       clip-path: polygon(4% 0%, 96% 0%, 98.5% 1%, 100% 4%, 76% 68%, 75% 72%, 75% 92%, 73% 96%, 27% 100%, 25% 98%, 25% 72%, 24% 68%, 0% 4%, 1.5% 1%);
     }
     .funnel-true-stage {
@@ -1283,7 +1301,7 @@
       justify-content: center;
       background-color: var(--stage-bg, var(--primary));
       color: var(--stage-text, var(--btn-text-light));
-      /* Zabezpieczenie tekstu w wąskiej nóżce */
+      /* Protects the text inside the narrow stem */
       padding: calc(var(--spacing-unit) * 1) 5%;
       overflow: hidden;
       line-height: 1.2;
