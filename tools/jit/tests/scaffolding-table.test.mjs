@@ -1,11 +1,12 @@
 /**
- * molique-jit - testy `make:table` (Etap B.1)
+ * molique-jit - `make:table` tests (Stage B.1)
  *
- * Testuje renderTable() (czysta funkcja z tools/jit/package/src/cli/make-table.ts,
- * skompilowana do dist/cli/make-table.js) - bez prompotow, dokladnie tak
- * jak reczna weryfikacja robiona przy budowie tego generatora.
+ * Tests renderTable() (a pure function from
+ * tools/jit/package/src/cli/make-table.ts, compiled to
+ * dist/cli/make-table.js) - no prompts, exactly like the manual
+ * verification done while building this generator.
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -18,9 +19,9 @@ const { renderTable } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-table.js')).href
 );
 
-test('make:table - domyslne ustawienia (hover + karty mobile, bez paskow zebry)', () => {
+test('make:table - default settings (hover + mobile cards, no zebra stripes)', () => {
   const html = renderTable({
-    columns: ['Nazwa', 'Status'],
+    columns: ['Name', 'Status'],
     rowCount: 2,
     size: '',
     theadVariant: '',
@@ -30,14 +31,14 @@ test('make:table - domyslne ustawienia (hover + karty mobile, bez paskow zebry)'
   });
   assert.match(html, /class="table[^"]*table-hover[^"]*table-cards"/);
   assert.doesNotMatch(html, /table-striped/);
-  assert.match(html, /<th>Nazwa<\/th>/);
+  assert.match(html, /<th>Name<\/th>/);
   assert.match(html, /<th>Status<\/th>/);
-  assert.equal((html.match(/<td /g) ?? []).length, 4); // 2 kolumny x 2 wiersze
-  assert.match(html, /data-label="Nazwa" class="fw-bold">Nazwa 1</);
+  assert.equal((html.match(/<td /g) ?? []).length, 4); // 2 columns x 2 rows
+  assert.match(html, /data-label="Name" class="fw-bold">Name 1</);
   assert.match(html, /data-label="Status">Status 1</);
 });
 
-test('make:table - paski zebry + thead-dark + rozmiar sm', () => {
+test('make:table - zebra stripes + thead-dark + size sm', () => {
   const html = renderTable({
     columns: ['A'],
     rowCount: 1,
@@ -51,7 +52,7 @@ test('make:table - paski zebry + thead-dark + rozmiar sm', () => {
   assert.match(html, /<thead class="thead-dark">/);
 });
 
-test('make:table - thead bez wariantu nie dostaje atrybutu class', () => {
+test('make:table - a thead without a variant gets no class attribute', () => {
   const html = renderTable({
     columns: ['A'],
     rowCount: 1,
@@ -65,7 +66,7 @@ test('make:table - thead bez wariantu nie dostaje atrybutu class', () => {
   assert.doesNotMatch(html, /<thead class=/);
 });
 
-test('make:table - rowCount 0 daje pusty tbody, bez bledu', () => {
+test('make:table - rowCount 0 yields an empty tbody, no error', () => {
   const html = renderTable({
     columns: ['A'],
     rowCount: 0,
@@ -75,13 +76,13 @@ test('make:table - rowCount 0 daje pusty tbody, bez bledu', () => {
     hover: false,
     mobileMode: '',
   });
-  assert.doesNotMatch(html, /<td/); // brak wierszy danych - naglowek uzywa <th>, nie <td
+  assert.doesNotMatch(html, /<td/); // no data rows - the header uses <th>, not <td>
   assert.match(html, /<tbody>/);
 });
 
-test('make:table - tylko pierwsza kolumna dostaje class="fw-bold"', () => {
+test('make:table - only the first column gets class="fw-bold"', () => {
   const html = renderTable({
-    columns: ['Pierwsza', 'Druga', 'Trzecia'],
+    columns: ['First', 'Second', 'Third'],
     rowCount: 1,
     size: '',
     theadVariant: '',
@@ -89,7 +90,7 @@ test('make:table - tylko pierwsza kolumna dostaje class="fw-bold"', () => {
     hover: false,
     mobileMode: '',
   });
-  assert.match(html, /data-label="Pierwsza" class="fw-bold">Pierwsza 1</);
-  assert.match(html, /data-label="Druga">Druga 1</);
-  assert.doesNotMatch(html, /data-label="Druga" class="fw-bold"/);
+  assert.match(html, /data-label="First" class="fw-bold">First 1</);
+  assert.match(html, /data-label="Second">Second 1</);
+  assert.doesNotMatch(html, /data-label="Second" class="fw-bold"/);
 });

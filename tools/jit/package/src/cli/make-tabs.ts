@@ -1,23 +1,24 @@
 /**
  * molique-jit - `make:tabs` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_tabs.scss (Radio
- * Hack - ukryte input[radio].tab-input sterują widocznością .tab-pane
- * przez pozycyjne dopasowanie `:nth-of-type()`, max 10 zakladek w
- * wariancie klasycznym vs max 8 w `.tabs-pill` - dwa OSOBNE limity `@for`
- * w SCSS-ie, wiec generator ogranicza liczbe zakladek per wariant) oraz
+ * Markup verified against css/scss/components/_tabs.scss (Radio Hack -
+ * hidden input[radio].tab-input control the visibility of .tab-pane via
+ * positional `:nth-of-type()` matching, max 10 tabs in the classic
+ * variant vs max 8 in `.tabs-pill` - two SEPARATE `@for` limits in the
+ * SCSS, so the generator caps the number of tabs per variant) and
  * src/examples-tabs.html.
  *
- * Oba warianty (Klasyczny / Segmented Control "pill") maja IDENTYCZNY
- * ksztalt odpowiedzi (nazwa grupy + lista zakladek) - roznia sie tylko
- * renderowaniem (`.tabs-pill` dostaje dodatkowa klase, `style="--tab-count"`
- * i pusty `.tabs-pill-indicator`), wiec to JEDEN typ `TabsAnswers` z polem
- * `type` jako dyskryminatorem renderowania, nie dwa osobne interfejsy.
+ * Both variants (Classic / Segmented Control "pill") have an IDENTICAL
+ * answer shape (group name + list of tabs) - they only differ in
+ * rendering (`.tabs-pill` gets an extra class, `style="--tab-count"`, and
+ * an empty `.tabs-pill-indicator`), so it's ONE `TabsAnswers` type with a
+ * `type` field as the rendering discriminator, not two separate
+ * interfaces.
  *
- * ID pojedynczych inputow (`{groupName}-1`, `{groupName}-2`, ...) sa
- * wyprowadzane automatycznie z indeksu - to czysta hydraulika (musza tylko
- * byc unikalne i spojne z `for=` na labelu), tak samo jak pola formularza
- * w make:form.
+ * IDs for the individual inputs (`{groupName}-1`, `{groupName}-2`, ...)
+ * are derived automatically from the index - pure plumbing (they only
+ * need to be unique and consistent with `for=` on the label), just like
+ * the form fields in make:form.
  */
 
 import type { Command } from 'commander';
@@ -36,27 +37,27 @@ export interface TabItemAnswer {
 
 export interface TabsAnswers {
   type: TabsVariant;
-  /** Atrybut "name" wspolny dla wszystkich input[radio] tej grupy zakladek. */
+  /** The "name" attribute shared by all input[radio] in this tab group. */
   groupName: string;
   tabs: TabItemAnswer[];
 }
 
 export async function collectTabsAnswers(countFlag?: string): Promise<TabsAnswers> {
   const type = await select<TabsVariant>({
-    message: 'Wariant zakladek?',
+    message: 'Tabs variant?',
     choices: [
-      { name: 'Klasyczny', value: 'classic' },
-      { name: 'Segmented Control (suwajacy pill)', value: 'pill' },
+      { name: 'Classic', value: 'classic' },
+      { name: 'Segmented Control (sliding pill)', value: 'pill' },
     ],
     default: 'classic',
   });
 
-  const groupName = await input({ message: 'Nazwa grupy (atrybut "name", laczy input radio):', default: 'my-tabs' });
+  const groupName = await input({ message: 'Group name (the "name" attribute, links the radio inputs):', default: 'my-tabs' });
 
-  // .tabs-pill ma WLASNY, mniejszy limit w SCSS (@for $i from 1 through 8),
-  // klasyczny wariant idzie do 10 - dwa rozne limity w zrodle, dwa rozne max tutaj.
+  // .tabs-pill has its OWN, smaller limit in SCSS (@for $i from 1 through 8),
+  // the classic variant goes up to 10 - two different limits in the source, two different maxima here.
   const count = await promptCount({
-    message: 'Ile zakladek?',
+    message: 'How many tabs?',
     default: '2',
     min: 2,
     max: type === 'pill' ? 8 : 10,
@@ -65,8 +66,8 @@ export async function collectTabsAnswers(countFlag?: string): Promise<TabsAnswer
 
   const tabs: TabItemAnswer[] = [];
   for (let i = 1; i <= count; i++) {
-    const label = await input({ message: `  Etykieta zakladki ${i}:`, default: `Zakladka ${i}` });
-    const content = await input({ message: `  Tresc zakladki ${i}:`, default: `Tresc zakladki ${i}` });
+    const label = await input({ message: `  Tab ${i} label:`, default: `Tab ${i}` });
+    const content = await input({ message: `  Tab ${i} content:`, default: `Tab ${i} content` });
     tabs.push({ label, content });
   }
 
@@ -97,11 +98,11 @@ export function renderTabs(answers: TabsAnswers): string {
 export function registerMakeTabsCommand(program: Command): void {
   program
     .command('make:tabs')
-    .description('Interaktywny generator zakladek (Klasyczny / Segmented Control, Radio Hack, zero JS) (aliasy: zrob:zakladki, mache:tabs)')
-    .option('-n, --count <liczba>', 'Liczba zakladek - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt TabsAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive tabs generator (Classic / Segmented Control, Radio Hack, zero JS) (aliases: zrob:zakladki, mache:tabs)')
+    .option('-n, --count <number>', 'Number of tabs - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (TabsAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<TabsAnswers>(opts);
       const answers = provided ?? (await collectTabsAnswers(opts.count));

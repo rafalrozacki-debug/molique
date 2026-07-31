@@ -1,16 +1,17 @@
 /**
  * molique-jit - `make:card` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_cards.scss (4 realnie
- * rozne komponenty pod wspolnym parasolem "Karty", nie 4 modyfikatory
- * jednego): Klasyczna Karta (.card > .card-header/.card-body/.card-footer),
- * Featured Box (.featured-box - grubsza gorna ramka, ikona), Thumb Info
- * (.thumb-info - zdjecie w tle + naklada; wariant "center" ma ZUPELNIE inna
- * wewnetrzna tresc - ikona lupy, text-6 - niz "bottom"/"light" - opcjonalny
- * badge, text-7 - wiec to dwa OSOBNE stuby, nie jeden z warunkiem),
- * Interaktywna Karta (.card p-4 text-center + klasy hover - INNA struktura
- * wewnetrzna niz Klasyczna Karta, mimo tej samej bazowej klasy .card).
- * Wszystko zweryfikowane wzgledem src/examples-cards.html.
+ * Markup verified against css/scss/components/_cards.scss (4 genuinely
+ * different components under the shared "Cards" umbrella, not 4
+ * modifiers of one): Classic Card (.card > .card-header/.card-body/
+ * .card-footer), Featured Box (.featured-box - thicker top border,
+ * icon), Thumb Info (.thumb-info - background photo + overlay; the
+ * "center" variant has a COMPLETELY different inner content - magnifying
+ * glass icon, text-6 - than "bottom"/"light" - optional badge, text-7 -
+ * so these are two SEPARATE stubs, not one with a condition), Interactive
+ * Card (.card p-4 text-center + hover classes - a DIFFERENT inner
+ * structure than the Classic Card, despite sharing the base .card class).
+ * Everything verified against src/examples-cards.html.
  */
 
 import type { Command } from 'commander';
@@ -19,7 +20,7 @@ import { renderStub } from '../stubs.js';
 import { outputResult } from './output.js';
 import { loadAnswers } from './answers.js';
 
-/* ---------- Klasyczna Karta ---------- */
+/* ---------- Classic Card ---------- */
 
 export interface CardClassicAnswers {
   title: string;
@@ -28,9 +29,9 @@ export interface CardClassicAnswers {
 }
 
 async function collectCardClassicAnswers(): Promise<CardClassicAnswers> {
-  const title = await input({ message: 'Tytul karty:', default: 'Tytul Karty' });
-  const body = await input({ message: 'Tresc karty:', default: 'To jest standardowa karta.' });
-  const footerButtonLabel = await input({ message: 'Etykieta przycisku w stopce:', default: 'Akcja' });
+  const title = await input({ message: 'Card title:', default: 'Card Title' });
+  const body = await input({ message: 'Card content:', default: 'This is a standard card.' });
+  const footerButtonLabel = await input({ message: 'Footer button label:', default: 'Action' });
   return { title, body, footerButtonLabel };
 }
 
@@ -47,7 +48,7 @@ export function renderCardClassic(answers: CardClassicAnswers): string {
 type AccentColor = 'primary' | 'success' | 'danger' | 'warning' | 'info';
 
 const ACCENT_COLOR_CHOICES = [
-  { name: 'Primary (domyslny)', value: 'primary' },
+  { name: 'Primary (default)', value: 'primary' },
   { name: 'Success', value: 'success' },
   { name: 'Danger', value: 'danger' },
   { name: 'Warning', value: 'warning' },
@@ -62,10 +63,10 @@ export interface FeaturedBoxAnswers {
 }
 
 async function collectFeaturedBoxAnswers(): Promise<FeaturedBoxAnswers> {
-  const icon = await input({ message: 'Nazwa ikony (z img/icons-sprite.svg):', default: 'ph-rocket-launch' });
-  const title = await input({ message: 'Tytul cechy:', default: 'Wydajnosc' });
-  const description = await input({ message: 'Opis cechy:', default: 'Krotki opis cechy produktu.' });
-  const accentColor = await select<AccentColor>({ message: 'Kolor akcentu (gorna ramka + ikona)?', choices: ACCENT_COLOR_CHOICES, default: 'primary' });
+  const icon = await input({ message: 'Icon name (from img/icons-sprite.svg):', default: 'ph-rocket-launch' });
+  const title = await input({ message: 'Feature title:', default: 'Performance' });
+  const description = await input({ message: 'Feature description:', default: 'A short description of the product feature.' });
+  const accentColor = await select<AccentColor>({ message: 'Accent color (top border + icon)?', choices: ACCENT_COLOR_CHOICES, default: 'primary' });
   return { icon, title, description, accentColor };
 }
 
@@ -89,9 +90,9 @@ export interface ThumbInfoCenterAnswers {
 }
 
 async function collectThumbInfoCenterAnswers(): Promise<ThumbInfoCenterAnswers> {
-  const imageUrl = await input({ message: 'URL zdjecia:', default: 'img/projekt.jpg' });
-  const imageAlt = await input({ message: 'Tekst alternatywny zdjecia:', default: 'Projekt' });
-  const title = await input({ message: 'Tekst na srodku nakladki:', default: 'Powieksz zdjecie' });
+  const imageUrl = await input({ message: 'Photo URL:', default: 'img/project.jpg' });
+  const imageAlt = await input({ message: 'Photo alt text:', default: 'Project' });
+  const title = await input({ message: 'Text in the center of the overlay:', default: 'Enlarge photo' });
   return { imageUrl, imageAlt, title };
 }
 
@@ -103,24 +104,24 @@ export function renderThumbInfoCenter(answers: ThumbInfoCenterAnswers): string {
   });
 }
 
-/* ---------- Thumb Info - Bottom (+ opcjonalnie Light) ---------- */
+/* ---------- Thumb Info - Bottom (+ optionally Light) ---------- */
 
 export interface ThumbInfoBottomAnswers {
   imageUrl: string;
   imageAlt: string;
   title: string;
-  /** Jasna (85% biel) naklada zamiast ciemnego gradientu. */
+  /** A light (85% white) overlay instead of the dark gradient. */
   light: boolean;
-  /** Tekst plakietki nad tytulem, '' = brak. */
+  /** Badge text above the title, '' = none. */
   badge: string;
 }
 
 async function collectThumbInfoBottomAnswers(): Promise<ThumbInfoBottomAnswers> {
-  const imageUrl = await input({ message: 'URL zdjecia:', default: 'img/projekt.jpg' });
-  const imageAlt = await input({ message: 'Tekst alternatywny zdjecia:', default: 'Projekt' });
-  const title = await input({ message: 'Tytul nad dolna krawedzia:', default: 'Aplikacja Mobilna' });
-  const badge = await input({ message: 'Tekst plakietki nad tytulem (puste = brak):', default: 'Nowosc' });
-  const light = await confirm({ message: 'Jasna naklada (85% biel) zamiast ciemnego gradientu?', default: false });
+  const imageUrl = await input({ message: 'Photo URL:', default: 'img/project.jpg' });
+  const imageAlt = await input({ message: 'Photo alt text:', default: 'Project' });
+  const title = await input({ message: 'Title above the bottom edge:', default: 'Mobile App' });
+  const badge = await input({ message: 'Badge text above the title (empty = none):', default: 'New' });
+  const light = await confirm({ message: 'Light overlay (85% white) instead of the dark gradient?', default: false });
   return { imageUrl, imageAlt, title, badge, light };
 }
 
@@ -137,7 +138,7 @@ export function renderThumbInfoBottom(answers: ThumbInfoBottomAnswers): string {
   });
 }
 
-/* ---------- Interaktywna Karta ---------- */
+/* ---------- Interactive Card ---------- */
 
 type InteractiveEffect = 'spring-shadow' | 'tilt';
 
@@ -149,14 +150,14 @@ export interface InteractiveCardAnswers {
 }
 
 async function collectInteractiveCardAnswers(): Promise<InteractiveCardAnswers> {
-  const icon = await input({ message: 'Nazwa ikony (z img/icons-sprite.svg):', default: 'ph-cursor-click' });
-  const title = await input({ message: 'Tytul:', default: 'Spring Hover' });
-  const description = await input({ message: 'Podpis:', default: '.hover-spring + .hover-gpu-shadow' });
+  const icon = await input({ message: 'Icon name (from img/icons-sprite.svg):', default: 'ph-cursor-click' });
+  const title = await input({ message: 'Title:', default: 'Spring Hover' });
+  const description = await input({ message: 'Caption:', default: '.hover-spring + .hover-gpu-shadow' });
   const effect = await select<InteractiveEffect>({
-    message: 'Efekt hover?',
+    message: 'Hover effect?',
     choices: [
-      { name: 'Spring + cien GPU (.hover-gpu-shadow .hover-spring)', value: 'spring-shadow' },
-      { name: '3D Tilt - wymaga tilt.js (.tilt-card)', value: 'tilt' },
+      { name: 'Spring + GPU shadow (.hover-gpu-shadow .hover-spring)', value: 'spring-shadow' },
+      { name: '3D Tilt - requires tilt.js (.tilt-card)', value: 'tilt' },
     ],
     default: 'spring-shadow',
   });
@@ -170,8 +171,9 @@ export function renderInteractiveCard(answers: InteractiveCardAnswers): string {
     TITLE: answers.title,
     DESCRIPTION: answers.description,
     EFFECT_CLASS: isTilt ? ' tilt-card bg-dark text-white' : ' hover-gpu-shadow hover-spring',
-    // Na ciemnym tle (.bg-dark .text-white) .text-muted jest za mało czytelny -
-    // realny przyklad uzywa .text-white .opacity-50 zamiast .text-muted.
+    // On a dark background (.bg-dark .text-white) .text-muted isn't
+    // legible enough - the real example uses .text-white .opacity-50
+    // instead of .text-muted.
     DESCRIPTION_CLASS: isTilt ? 'text-white opacity-50' : 'text-muted',
   });
 }
@@ -195,13 +197,13 @@ function renderCard(answers: CardAnswers): string {
 
 async function collectCardAnswers(): Promise<CardAnswers> {
   const type = await select<CardAnswers['type']>({
-    message: 'Jaki wariant karty?',
+    message: 'Which card variant?',
     choices: [
-      { name: 'Klasyczna (header/body/footer)', value: 'classic' },
-      { name: 'Featured Box (cecha produktu, ikona)', value: 'featured-box' },
-      { name: 'Thumb Info - tekst na srodku (lupa)', value: 'thumb-info-center' },
-      { name: 'Thumb Info - tekst na dole (opcjonalna plakietka)', value: 'thumb-info-bottom' },
-      { name: 'Interaktywna (hover GPU / 3D Tilt)', value: 'interactive' },
+      { name: 'Classic (header/body/footer)', value: 'classic' },
+      { name: 'Featured Box (product feature, icon)', value: 'featured-box' },
+      { name: 'Thumb Info - centered text (magnifying glass)', value: 'thumb-info-center' },
+      { name: 'Thumb Info - text at the bottom (optional badge)', value: 'thumb-info-bottom' },
+      { name: 'Interactive (GPU hover / 3D Tilt)', value: 'interactive' },
     ],
   });
 
@@ -212,15 +214,15 @@ async function collectCardAnswers(): Promise<CardAnswers> {
   return { type: 'interactive', ...(await collectInteractiveCardAnswers()) };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeCardCommand(program: Command): void {
   program
     .command('make:card')
-    .description('Interaktywny generator kart (Klasyczna / Featured Box / Thumb Info / Interaktywna) (aliasy: zrob:karte, mache:karte)')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt CardAnswers, z polem "type") - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive card generator (Classic / Featured Box / Thumb Info / Interactive) (aliases: zrob:karte, mache:karte)')
+    .option('--answers <json>', 'Answers as JSON (CardAnswers shape, with a "type" field) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<CardAnswers>(opts);
       const answers = provided ?? (await collectCardAnswers());

@@ -1,23 +1,23 @@
 /**
  * molique-jit - `make:table` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_tables.scss (klasy
- * rozmiaru/naglowka/karty mobilne, mechanizm data-label przez
- * `content: attr(data-label)`) i src/examples-tables.html (realny uklad:
- * .table-wrapper > table.table[...] > thead[.thead-*] + tbody, pierwsza
- * kolumna pogrubiona jako identyfikator wiersza).
+ * Markup verified against css/scss/components/_tables.scss (size/header/
+ * mobile-card classes, the data-label mechanism via
+ * `content: attr(data-label)`) and src/examples-tables.html (the real
+ * layout: .table-wrapper > table.table[...] > thead[.thead-*] + tbody,
+ * the first column bolded as the row identifier).
  *
- * Pierwszy generator uzywajacy ZAGNIEZDZONEGO renderList(): wiersz to
- * lista komorek (_table-cell), tabela to lista wierszy (_table-row), gdzie
- * kazdy wiersz sam w sobie jest juz wynikiem wczesniejszego renderList()
- * na komorkach. Zero petli/warunkow w stubach - obie petle (kolumny x
- * wiersze) siedza w TypeScript.
+ * The first generator using NESTED renderList(): a row is a list of
+ * cells (_table-cell), a table is a list of rows (_table-row), where each
+ * row is itself already the result of an earlier renderList() over the
+ * cells. Zero loops/conditionals in the stubs - both loops (columns x
+ * rows) live in TypeScript.
  *
- * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
- * Etap B): `collectTableAnswers()` zawiera WYLACZNIE pytania,
- * `renderTable()` jest czysta i synchroniczna - to ona jest testowana
- * (tools/jit/tests/scaffolding-table.test.mjs) i to ja wywoluje wprost
- * tryb nieinteraktywny (`--answers`/`--answers-file`).
+ * Split into "collect answers" / "render markup" (CLI roadmap, Stage B):
+ * `collectTableAnswers()` contains ONLY the questions, `renderTable()` is
+ * pure and synchronous - it's the one under test
+ * (tools/jit/tests/scaffolding-table.test.mjs) and the one called
+ * directly by non-interactive mode (`--answers`/`--answers-file`).
  */
 
 import type { Command } from 'commander';
@@ -39,8 +39,8 @@ export interface TableAnswers {
 
 export async function collectTableAnswers(countFlag?: string): Promise<TableAnswers> {
   const columnsLine = await input({
-    message: 'Nazwy kolumn (oddzielone przecinkami):',
-    default: 'Nazwa, Status, Data, Kwota',
+    message: 'Column names (comma-separated):',
+    default: 'Name, Status, Date, Amount',
   });
   const columns = columnsLine
     .split(',')
@@ -48,7 +48,7 @@ export async function collectTableAnswers(countFlag?: string): Promise<TableAnsw
     .filter(Boolean);
 
   const rowCount = await promptCount({
-    message: 'Ile przykladowych wierszy wygenerowac?',
+    message: 'How many sample rows to generate?',
     default: '3',
     min: 0,
     max: 20,
@@ -56,35 +56,35 @@ export async function collectTableAnswers(countFlag?: string): Promise<TableAnsw
   });
 
   const size = await select({
-    message: 'Rozmiar tabeli?',
+    message: 'Table size?',
     choices: [
-      { name: 'Small (kompaktowa)', value: 'table-sm' },
-      { name: 'Medium (domyslna)', value: '' },
-      { name: 'Large (luzna)', value: 'table-lg' },
+      { name: 'Small (compact)', value: 'table-sm' },
+      { name: 'Medium (default)', value: '' },
+      { name: 'Large (roomy)', value: 'table-lg' },
     ],
     default: '',
   });
 
   const theadVariant = await select({
-    message: 'Wariant naglowka?',
+    message: 'Header variant?',
     choices: [
-      { name: 'Domyslny', value: '' },
-      { name: 'Jasny (thead-light)', value: 'thead-light' },
-      { name: 'Ciemny (thead-dark)', value: 'thead-dark' },
+      { name: 'Default', value: '' },
+      { name: 'Light (thead-light)', value: 'thead-light' },
+      { name: 'Dark (thead-dark)', value: 'thead-dark' },
       { name: 'Primary (thead-primary)', value: 'thead-primary' },
     ],
     default: '',
   });
 
-  const striped = await confirm({ message: 'Paski zebry (naprzemienne tlo wierszy)?', default: false });
-  const hover = await confirm({ message: 'Podswietlanie wiersza na hover?', default: true });
+  const striped = await confirm({ message: 'Zebra stripes (alternating row background)?', default: false });
+  const hover = await confirm({ message: 'Highlight the row on hover?', default: true });
 
   const mobileMode = await select({
-    message: 'Tryb mobilny?',
+    message: 'Mobile mode?',
     choices: [
-      { name: 'Auto Cards (karty tylko ponizej ~576px)', value: 'table-cards' },
-      { name: 'Zawsze karty (rowniez na desktopie)', value: 'table-cards-always' },
-      { name: 'Klasyczny poziomy scroll (bez kart)', value: '' },
+      { name: 'Auto Cards (cards only below ~576px)', value: 'table-cards' },
+      { name: 'Always cards (on desktop too)', value: 'table-cards-always' },
+      { name: 'Classic horizontal scroll (no cards)', value: '' },
     ],
     default: 'table-cards',
   });
@@ -120,11 +120,11 @@ export function renderTable(answers: TableAnswers): string {
 export function registerMakeTableCommand(program: Command): void {
   program
     .command('make:table')
-    .description('Interaktywny generator tabeli B2B z automatycznym data-label na mobile (aliasy: zrob:tabele, mache:tabelle)')
-    .option('-n, --count <liczba>', 'Liczba przykladowych wierszy - pomija to jedno pytanie, reszta zostaje interaktywna')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt TableAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file - bez nich pytamy interaktywnie)')
+    .description('Interactive B2B table generator with automatic mobile data-label (aliases: zrob:tabele, mache:tabelle)')
+    .option('-n, --count <number>', 'Number of sample rows - skips this one question, the rest stays interactive')
+    .option('--answers <json>', 'Answers as JSON (TableAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file - otherwise we ask interactively)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<TableAnswers>(opts);
       const answers = provided ?? (await collectTableAnswers(opts.count));

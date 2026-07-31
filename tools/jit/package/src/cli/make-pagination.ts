@@ -1,16 +1,16 @@
 /**
  * molique-jit - `make:pagination` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_pagination.scss
- * (.pagination > .page-item.is-active/.is-disabled > .page-link; wariant
- * `.pagination-modern` dodany OBOK `.pagination`, nie zamiast) oraz
- * src/examples-pagination.html (Poprzednia/Nastepna jako zwykle
- * `.page-item`, disabled gdy na skraju zakresu stron).
+ * Markup verified against css/scss/components/_pagination.scss
+ * (.pagination > .page-item.is-active/.is-disabled > .page-link; the
+ * `.pagination-modern` variant is added ALONGSIDE `.pagination`, not
+ * instead of it) and src/examples-pagination.html (Previous/Next as
+ * regular `.page-item`, disabled when at the edge of the page range).
  *
- * `totalPages` ograniczone do 12 - realny komponent nie ma wzorca
- * obcinania/elipsy (`...`) dla duzej liczby stron, wiec generowanie
- * dziesiatek numerow byloby nierealistyczne; 12 to rozsadny sufit dla
- * pojedynczego, plaskiego paska stron.
+ * `totalPages` is capped at 12 - the real component has no
+ * truncation/ellipsis (`...`) pattern for a large number of pages, so
+ * generating dozens of numbers would be unrealistic; 12 is a reasonable
+ * ceiling for a single, flat page bar.
  */
 
 import type { Command } from 'commander';
@@ -21,7 +21,7 @@ import { promptCount } from './prompts.js';
 import { loadAnswers } from './answers.js';
 
 export interface PaginationAnswers {
-  /** .pagination-modern - oddzielone, zaokraglone kafelki zamiast zlaczonego paska. */
+  /** .pagination-modern - separated, rounded tiles instead of a joined bar. */
   modern: boolean;
   totalPages: number;
   /** 1-based. */
@@ -32,12 +32,12 @@ export interface PaginationAnswers {
 
 export async function collectPaginationAnswers(countFlag?: string): Promise<PaginationAnswers> {
   const modern = await confirm({
-    message: 'Wariant Nowoczesny (oddzielone kafelki, .pagination-modern)?',
+    message: 'Modern variant (separated tiles, .pagination-modern)?',
     default: false,
   });
 
   const totalPages = await promptCount({
-    message: 'Ile stron w sumie?',
+    message: 'How many pages in total?',
     default: '5',
     min: 1,
     max: 12,
@@ -45,16 +45,16 @@ export async function collectPaginationAnswers(countFlag?: string): Promise<Pagi
   });
 
   const currentPageStr = await input({
-    message: 'Ktora strona jest aktualnie aktywna?',
+    message: 'Which page is currently active?',
     default: '1',
     validate: (v: string) => {
       const n = Number(v);
-      return (Number.isInteger(n) && n >= 1 && n <= totalPages) || `Podaj liczbe od 1 do ${totalPages}.`;
+      return (Number.isInteger(n) && n >= 1 && n <= totalPages) || `Enter a number from 1 to ${totalPages}.`;
     },
   });
 
-  const prevLabel = await input({ message: 'Etykieta "poprzednia strona":', default: 'Poprzednia' });
-  const nextLabel = await input({ message: 'Etykieta "nastepna strona":', default: 'Nastepna' });
+  const prevLabel = await input({ message: '"Previous page" label:', default: 'Previous' });
+  const nextLabel = await input({ message: '"Next page" label:', default: 'Next' });
 
   return { modern, totalPages, currentPage: Number(currentPageStr), prevLabel, nextLabel };
 }
@@ -77,11 +77,11 @@ export function renderPagination(answers: PaginationAnswers): string {
 export function registerMakePaginationCommand(program: Command): void {
   program
     .command('make:pagination')
-    .description('Interaktywny generator paginacji (Klasyczna / Nowoczesna) (aliasy: zrob:paginacje, mache:seitenzahlen)')
-    .option('-n, --count <liczba>', 'Liczba stron w sumie - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt PaginationAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive pagination generator (Classic / Modern) (aliases: zrob:paginacje, mache:seitenzahlen)')
+    .option('-n, --count <number>', 'Total number of pages - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (PaginationAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<PaginationAnswers>(opts);
       const answers = provided ?? (await collectPaginationAnswers(opts.count));

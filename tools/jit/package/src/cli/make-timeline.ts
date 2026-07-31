@@ -1,17 +1,17 @@
 /**
  * molique-jit - `make:timeline` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_timeline.scss (trzy
- * warianty: `.timeline-large` z `.timeline-badge` na ikone/litere,
- * `.timeline-numbered` - CSS SAM dolicza numer przez `counter()`, zero
- * dodatkowego markupu do numeracji, i `.timeline-labeled` - CSS Grid,
- * data po lewej, `.timeline-line` u OSTATNIEGO elementu chowa sama CSS
- * przez `:last-child`, generator nie robi wyjatku) oraz realnego uzycia w
- * src/examples-timeline.html.
+ * Markup verified against css/scss/components/_timeline.scss (three
+ * variants: `.timeline-large` with `.timeline-badge` for an icon/letter,
+ * `.timeline-numbered` - CSS ITSELF adds the number via `counter()`, zero
+ * extra markup for numbering, and `.timeline-labeled` - CSS Grid, the
+ * date on the left, `.timeline-line` on the LAST item is hidden by CSS
+ * alone via `:last-child`, the generator makes no exception) and real
+ * usage in src/examples-timeline.html.
  *
- * Trzy STRUKTURALNIE rozne ksztalty pozycji (inne pola, inny tag <li> vs
- * <div>), wiec dyskryminujaca unia typu z osobnym stubem per wariant - ta
- * sama zasada co make:modal/make:chart.
+ * Three STRUCTURALLY different item shapes (different fields, different
+ * tag <li> vs <div>), hence a discriminated type union with a separate
+ * stub per variant - the same rule as make:modal/make:chart.
  */
 
 import type { Command } from 'commander';
@@ -21,19 +21,19 @@ import { outputResult } from './output.js';
 import { promptCount } from './prompts.js';
 import { loadAnswers } from './answers.js';
 
-/* ---------- Z ikonami (.timeline-large) ---------- */
+/* ---------- With icons (.timeline-large) ---------- */
 
 export interface TimelineLargeAnswers {
   items: Array<{ badge: string; title: string; description: string }>;
 }
 
 async function collectTimelineLargeAnswers(countFlag?: string): Promise<TimelineLargeAnswers> {
-  const count = await promptCount({ message: 'Ile pozycji na osi?', default: '2', min: 1, max: 8, flagValue: countFlag });
+  const count = await promptCount({ message: 'How many items on the timeline?', default: '2', min: 1, max: 8, flagValue: countFlag });
   const items: TimelineLargeAnswers['items'] = [];
   for (let i = 1; i <= count; i++) {
-    const badge = await input({ message: `  Litera/ikona pozycji ${i} (tresc .timeline-badge):`, default: String.fromCharCode(64 + i) });
-    const title = await input({ message: `  Tytul pozycji ${i}:`, default: `Etap ${i}` });
-    const description = await input({ message: `  Opis pozycji ${i}:`, default: 'Opis etapu.' });
+    const badge = await input({ message: `  Item ${i} letter/icon (the .timeline-badge content):`, default: String.fromCharCode(64 + i) });
+    const title = await input({ message: `  Item ${i} title:`, default: `Stage ${i}` });
+    const description = await input({ message: `  Item ${i} description:`, default: 'Stage description.' });
     items.push({ badge, title, description });
   }
   return { items };
@@ -47,18 +47,18 @@ export function renderTimelineLarge(answers: TimelineLargeAnswers): string {
   return renderStub('timeline-large.stub.html', { ITEMS });
 }
 
-/* ---------- Numerowana (.timeline-numbered) ---------- */
+/* ---------- Numbered (.timeline-numbered) ---------- */
 
 export interface TimelineNumberedAnswers {
   items: Array<{ title: string; description: string }>;
 }
 
 async function collectTimelineNumberedAnswers(countFlag?: string): Promise<TimelineNumberedAnswers> {
-  const count = await promptCount({ message: 'Ile krokow?', default: '3', min: 1, max: 8, flagValue: countFlag });
+  const count = await promptCount({ message: 'How many steps?', default: '3', min: 1, max: 8, flagValue: countFlag });
   const items: TimelineNumberedAnswers['items'] = [];
   for (let i = 1; i <= count; i++) {
-    const title = await input({ message: `  Tytul kroku ${i}:`, default: `Krok ${i}` });
-    const description = await input({ message: `  Opis kroku ${i}:`, default: 'Opis kroku.' });
+    const title = await input({ message: `  Step ${i} title:`, default: `Step ${i}` });
+    const description = await input({ message: `  Step ${i} description:`, default: 'Step description.' });
     items.push({ title, description });
   }
   return { items };
@@ -72,12 +72,12 @@ export function renderTimelineNumbered(answers: TimelineNumberedAnswers): string
   return renderStub('timeline-numbered.stub.html', { ITEMS });
 }
 
-/* ---------- Z datami (.timeline-labeled) ---------- */
+/* ---------- With dates (.timeline-labeled) ---------- */
 
 type NodeColor = '' | 'primary' | 'success' | 'danger';
 
 const NODE_COLOR_CHOICES = [
-  { name: 'Domyslny (neutralny)', value: '' },
+  { name: 'Default (neutral)', value: '' },
   { name: 'Primary', value: 'primary' },
   { name: 'Success', value: 'success' },
   { name: 'Danger', value: 'danger' },
@@ -88,14 +88,14 @@ export interface TimelineLabeledAnswers {
 }
 
 async function collectTimelineLabeledAnswers(countFlag?: string): Promise<TimelineLabeledAnswers> {
-  const count = await promptCount({ message: 'Ile wpisow na osi?', default: '3', min: 1, max: 10, flagValue: countFlag });
+  const count = await promptCount({ message: 'How many timeline entries?', default: '3', min: 1, max: 10, flagValue: countFlag });
   const items: TimelineLabeledAnswers['items'] = [];
   for (let i = 1; i <= count; i++) {
-    const dateLabel = await input({ message: `  Data wpisu ${i}:`, default: '30.06.2026' });
-    const timeLabel = await input({ message: `  Godzina wpisu ${i}:`, default: '12:00' });
-    const nodeColor = await select<NodeColor>({ message: `  Kolor kropki wpisu ${i}?`, choices: NODE_COLOR_CHOICES, default: '' });
-    const title = await input({ message: `  Tytul wpisu ${i}:`, default: `Wpis ${i}` });
-    const description = await input({ message: `  Opis wpisu ${i}:`, default: 'Opis operacji.' });
+    const dateLabel = await input({ message: `  Entry ${i} date:`, default: '06/30/2026' });
+    const timeLabel = await input({ message: `  Entry ${i} time:`, default: '12:00' });
+    const nodeColor = await select<NodeColor>({ message: `  Entry ${i} node color?`, choices: NODE_COLOR_CHOICES, default: '' });
+    const title = await input({ message: `  Entry ${i} title:`, default: `Entry ${i}` });
+    const description = await input({ message: `  Entry ${i} description:`, default: 'Description of the action.' });
     items.push({ dateLabel, timeLabel, nodeColor, title, description });
   }
   return { items };
@@ -130,11 +130,11 @@ function renderTimeline(answers: TimelineAnswers): string {
 
 async function collectTimelineAnswers(countFlag?: string): Promise<TimelineAnswers> {
   const type = await select<TimelineAnswers['type']>({
-    message: 'Jaki wariant osi czasu?',
+    message: 'Which timeline variant?',
     choices: [
-      { name: 'Z ikonami/literami (.timeline-large)', value: 'large' },
-      { name: 'Numerowana automatycznie (.timeline-numbered)', value: 'numbered' },
-      { name: 'Z datami po lewej, Grid (.timeline-labeled)', value: 'labeled' },
+      { name: 'With icons/letters (.timeline-large)', value: 'large' },
+      { name: 'Automatically numbered (.timeline-numbered)', value: 'numbered' },
+      { name: 'With dates on the left, Grid (.timeline-labeled)', value: 'labeled' },
     ],
   });
 
@@ -143,16 +143,16 @@ async function collectTimelineAnswers(countFlag?: string): Promise<TimelineAnswe
   return { type: 'labeled', ...(await collectTimelineLabeledAnswers(countFlag)) };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeTimelineCommand(program: Command): void {
   program
     .command('make:timeline')
-    .description('Interaktywny generator osi czasu (Z ikonami / Numerowana / Z datami-Grid) (aliasy: zrob:os-czasu, mache:zeitleiste)')
-    .option('-n, --count <liczba>', 'Liczba pozycji na osi - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt TimelineAnswers, z polem "type") - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive timeline generator (With icons / Numbered / With dates-Grid) (aliases: zrob:os-czasu, mache:zeitleiste)')
+    .option('-n, --count <number>', 'Number of items on the timeline - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (TimelineAnswers shape, with a "type" field) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<TimelineAnswers>(opts);
       const answers = provided ?? (await collectTimelineAnswers(opts.count));

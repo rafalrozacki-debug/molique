@@ -1,71 +1,71 @@
 # Molique CLI - Scaffolding Engine (DevTools)
 
-> **Ten dokument to WCZESNY SZKIC z etapu planowania**, sprzed budowy
-> realnego scaffoldingu - opisuje kształt `make:page` +
-> `make:component`-z-pod-trybami, ktory zostal PORZUCONY na rzecz jednej
-> oddzielnej komendy na rodzine komponentow (`make:table`, `make:modal`,
+> **This document is an EARLY DRAFT from the planning stage**, predating the
+> build of the actual scaffolding - it describes the shape of `make:page` +
+> `make:component`-with-sub-modes, which was ABANDONED in favor of one
+> separate command per component family (`make:table`, `make:modal`,
 > `make:layout`, `make:nav`, `make:chart`, `make:form`, `make:popover`,
-> `make:widget` - `make:component` sluzy dzis wylacznie do WYPISANIA listy
-> dostepnych generatorow, patrz `src/cli/list.ts`). **Aktualna,
-> autorytatywna dokumentacja komend `make:*` (flagi, `-n/--count`,
-> `--answers`/`--answers-file`) zyje w `cli-spec.md`, sekcja 6** -
-> rozbudowywana przyrostowo, po jednej komendzie, w miare przerabiania
-> kazdego pliku `src/cli/make-*.ts` na ksztalt collect/render (plan
-> rozwoju CLI). Sekcja 1 ponizej (architektura stubow) nadal jest trafna;
-> sekcje 2-3 opisuja ten porzucony ksztalt i zostaja tu jako zapis
-> historyczny procesu projektowania, nie jako biezaca prawda.
+> `make:widget` - today `make:component` serves ONLY to PRINT the list of
+> available generators, see `src/cli/list.ts`). **The current, authoritative
+> documentation for the `make:*` commands (flags, `-n/--count`,
+> `--answers`/`--answers-file`) lives in `cli-spec.md`, section 6** -
+> expanded incrementally, one command at a time, as each `src/cli/make-*.ts`
+> file is reworked into the collect/render shape (the CLI development plan).
+> Section 1 below (stub architecture) is still accurate; sections 2-3
+> describe this abandoned shape and remain here as a historical record of
+> the design process, not as current fact.
 
-Ten dokument opisuje architekturę systemu generowania komponentów (Scaffolding) z wiersza poleceń dla Molique CSS. 
+This document describes the architecture of the component generation system (Scaffolding) for the Molique CSS command line.
 
-Celem Scaffoldingu jest znaczne przyspieszenie pracy programisty poprzez interaktywne pytania (kreatory) w terminalu i wypluwanie gotowych, zoptymalizowanych bloków HTML (z pełnym wsparciem A11y, ARIA i natywnych rozwiązań CSS, na których opiera się Molique).
+The goal of Scaffolding is to significantly speed up developer workflow through interactive terminal prompts (wizards) that spit out ready-made, optimized HTML blocks (with full A11y support, ARIA, and the native CSS solutions Molique is built on).
 
-## 1. Architektura Generowania (Stubs System)
+## 1. Generation Architecture (Stubs System)
 
-Zamiast sklejać potężne stringi z kodem w plikach TypeScript (co jest nieczytelne i podatne na błędy), CLI wykorzystuje architekturę **Stubs** (Szablonów).
+Instead of gluing together massive strings of code in TypeScript files (which is unreadable and error-prone), the CLI uses a **Stubs** (Templates) architecture.
 
-- **Szablony (Stubs):** Czyste pliki HTML z "tagami zastępczymi" (np. `{{ ID }}`, `{{ CLASSES }}`, `{{ SLOT }}`). 
-- **Lokalizacja:** Zawsze przetrzymywane wewnątrz narzędzia CLI w `src/stubs/`.
-- **Silnik renderowania:** Lekki regex-replacer (np. wymieniający `{{ ZMIENNA }}` na treść). Nie używamy ciężkich silników typu Handlebars czy Twig.
+- **Stubs (Templates):** Plain HTML files with "placeholder tags" (e.g. `{{ ID }}`, `{{ CLASSES }}`, `{{ SLOT }}`).
+- **Location:** Always kept inside the CLI tool at `src/stubs/`.
+- **Rendering engine:** A lightweight regex-replacer (e.g. replacing `{{ VARIABLE }}` with content). We don't use heavyweight engines like Handlebars or Twig.
 
-## 2. Główny Przepływ Akcji (Flow)
+## 2. Main Action Flow
 
-Każda komenda z rodziny `make:*` (np. `molique make:component`) uruchamia następujący proces:
+Every command in the `make:*` family (e.g. `molique make:component`) runs through the following process:
 
-1. **Prompting (Wybór interaktywny):** CLI wykorzystuje pakiet `@inquirer/prompts` lub `enquirer` do wyświetlenia menu wyboru strzałkami w terminalu.
-2. **Kolekcjonowanie danych:** Pytania zmieniają się dynamicznie (tzw. Pytania Warunkowe). Np. Jeśli użytkownik wybrał `Modal`, program dopytuje "Czy to Modal Confirm czy Modal Context?".
-3. **Kompilacja (Render):** System wczytuje plik `.stub` z dysku i podmienia tagi na odpowiedzi użytkownika.
-4. **Wyjście (Output):** Program zapisuje gotowy kod. 
-   *Innowacja UX:* Narzędzie pozwala deweloperowi zdecydować - czy zapisać komponent do nowego pliku (np. `components/my-modal.html`), czy po prostu wyrzucić czysty skopiowany kod wprost na ekran konsoli do zaznaczenia myszką!
+1. **Prompting (Interactive selection):** The CLI uses the `@inquirer/prompts` or `enquirer` package to display an arrow-key selection menu in the terminal.
+2. **Data collection:** The questions change dynamically (so-called Conditional Questions). E.g. if the user picked `Modal`, the program asks a follow-up: "Is this a Confirm Modal or a Context Modal?"
+3. **Compilation (Render):** The system loads a `.stub` file from disk and replaces the tags with the user's answers.
+4. **Output:** The program writes the finished code.
+   *UX innovation:* The tool lets the developer decide - save the component to a new file (e.g. `components/my-modal.html`), or just dump the clean, copyable code straight to the console screen for a mouse-click selection!
 
 ---
 
-## 3. Komendy Scaffoldingowe
+## 3. Scaffolding Commands
 
-### `molique make:page` (Zrób:Stronę)
-Generuje szkielet całej strony (HTML5 Boilerplate) z wpiętym i przygotowanym layoutem.
+### `molique make:page` (Make:Page)
+Generates the skeleton of an entire page (HTML5 Boilerplate) with a wired-up, prepared layout.
 
-**Parametry pobierane od dewelopera:**
-- **Nazwa pliku:** (np. `dashboard.html`)
-- **Rodzaj układu:** 
-  1. *Klasyczny (Header -> Content -> Footer)*
-  2. *Admin Layout (Floating, ze zoptymalizowanym Sidebarem na mobile)*
-- **Wariant Navbara (jeśli Klasyczny):** Transparent / Sticky / Pill
-- **Theme Switcher:** Dodaj natywny przełącznik Dark Mode? (Tak/Nie)
+**Parameters collected from the developer:**
+- **File name:** (e.g. `dashboard.html`)
+- **Layout type:**
+  1. *Classic (Header -> Content -> Footer)*
+  2. *Admin Layout (Floating, with a mobile-optimized Sidebar)*
+- **Navbar variant (if Classic):** Transparent / Sticky / Pill
+- **Theme Switcher:** Add a native Dark Mode toggle? (Yes/No)
 
-### `molique make:component` (Zrób:Komponent)
-Główne działo CLI. Tworzy powtarzalne struktury złożone.
+### `molique make:component` (Make:Component)
+The CLI's main workhorse. Creates reusable composite structures.
 
-**Obsługiwane struktury (Przykłady interakcji):**
+**Supported structures (Interaction examples):**
 
-#### A. Tabela (B2B Table)
-- "Rozmiar tabeli?" (Small / Medium / Large)
-- "Zastosować mobile-first table-cards?" (Auto / Zawsze / Nigdy)
-- "Wariant nagłówka?" (Light / Dark / Primary)
-- *Wynik:* Generuje `<div class="table-wrapper"><table class="...">` uzupełniając poprawnie `data-label` na `<td>`.
+#### A. Table (B2B Table)
+- "Table size?" (Small / Medium / Large)
+- "Apply mobile-first table-cards?" (Auto / Always / Never)
+- "Header variant?" (Light / Dark / Primary)
+- *Result:* Generates `<div class="table-wrapper"><table class="...">`, correctly filling in `data-label` on each `<td>`.
 
-#### B. Modal (Natywny `<dialog>`)
-- "Typ modala?" (Standard / Dialog potwierdzający / Boczny Context)
-- *Wynik:* Generuje poprawnie ukryty, niedostępny przez TAB modal oparty na natywnym HTML:
+#### B. Modal (Native `<dialog>`)
+- "Modal type?" (Standard / Confirmation Dialog / Side Context)
+- *Result:* Generates a properly hidden, tab-inaccessible modal based on native HTML:
   ```html
   <dialog class="modal-dialog modal-confirm" id="myModal">
     <div class="card">

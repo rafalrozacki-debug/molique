@@ -1,6 +1,6 @@
-// molique-jit - kopiuje src/stubs/*.stub.html do dist/stubs/ po kompilacji
-// TypeScript (tsc kompiluje tylko *.ts, stuby trzeba przenies osobno).
-// Uruchamiane jako czesc "npm run build" (patrz package.json).
+// molique-jit - copies src/stubs/*.stub.html to dist/stubs/ after the
+// TypeScript compile (tsc only compiles *.ts, stubs need to be moved
+// separately). Run as part of "npm run build" (see package.json).
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,4 +17,4 @@ for (const f of files) {
   fs.copyFileSync(path.join(srcStubs, f), path.join(distStubs, f));
 }
 
-console.log(`copy-stubs: skopiowano ${files.length} szablon(y/ow) do dist/stubs/`);
+console.log(`copy-stubs: copied ${files.length} template(s) to dist/stubs/`);

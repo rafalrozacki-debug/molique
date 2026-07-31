@@ -1,26 +1,28 @@
 /**
  * molique-jit - `make:nav` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem: src/examples-navbar.html (offcanvas,
- * transparent, pill + krytyczna uwaga "nie lacz z navbar-sticky"),
- * src/examples-mega-menu.html i src/partials/navbar.html (mega menu),
- * src/examples-language-switch.html (language switch + checkmark SVG),
- * src/partials/navbar.html (theme switch, w tym wymog id="theme-toggle").
+ * Markup verified against: src/examples-navbar.html (offcanvas,
+ * transparent, pill + the critical "don't combine with navbar-sticky"
+ * note), src/examples-mega-menu.html and src/partials/navbar.html (mega
+ * menu), src/examples-language-switch.html (language switch + checkmark
+ * SVG), src/partials/navbar.html (theme switch, including the
+ * id="theme-toggle" requirement).
  *
- * W odroznieniu od make:layout (gdzie warianty byly STRUKTURALNIE rozne
- * pliki), tu trzy warianty navbara (Standard/Transparent/Pastylka) roznia
- * sie WYLACZNIE klasa i atrybutem style na tym samym <nav> - wiec to JEDEN
- * stub (navbar.stub.html) z {{ NAV_CLASS }}/{{ NAV_STYLE_ATTR }} obliczanymi
- * w TS, a nie trzy prawie identyczne pliki.
+ * Unlike make:layout (where the variants were STRUCTURALLY different
+ * files), here the three navbar variants (Standard/Transparent/Pill)
+ * differ ONLY by class and a style attribute on the same <nav> - so it's
+ * ONE stub (navbar.stub.html) with {{ NAV_CLASS }}/{{ NAV_STYLE_ATTR }}
+ * computed in TS, rather than three nearly identical files.
  *
- * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
- * Etap B, ostatni/najbardziej zlozony z 8 istniejacych komend): jeden
- * plaski `NavAnswers` (jak make:form) - wariant tla + trzy NIEZALEZNIE
- * wlaczalne moduly (mega menu / theme switch / language switch, pole
- * `undefined`/`false` = pominiete). Ostrzezenie o plikach img/flags/
- * zostaje WYLACZNIE w collectLanguageSwitch() (interaktywne) - render
- * jest celowo bez I/O, zgodnie z zasada przyjeta w calym tym refaktorze;
- * uzytkownik --answers/--answers-file juz zna swoje kody flag.
+ * Split into "collect answers" / "render markup" (CLI roadmap, Stage B,
+ * the last/most complex of the 8 existing commands): one flat
+ * `NavAnswers` (like make:form) - a background variant + three
+ * INDEPENDENTLY enabled modules (mega menu / theme switch / language
+ * switch, an `undefined`/`false` field = skipped). The warning about
+ * img/flags/ files stays EXCLUSIVELY in collectLanguageSwitch()
+ * (interactive) - the render function is deliberately free of I/O, per
+ * the rule followed throughout this refactor; an --answers/--answers-file
+ * user already knows their flag codes.
  */
 
 import type { Command } from 'commander';
@@ -35,51 +37,53 @@ const CHECK_SVG =
   '<path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/>' +
   '</svg></span>';
 
-// Wspolna uwaga dla Transparent/Pastylka - obie sa "position: absolute"
-// (naklada sie na tresc), wiec obie maja te same dwie pulapki.
+// Shared note for Transparent/Pill - both are "position: absolute"
+// (overlay on the content), so both share the same two pitfalls.
 const OVERLAY_NOTE =
-  '<!-- WAZNE: nie dodawaj .navbar-sticky do tej klasy - sticky wraca do\n' +
-  '     przeplywu dokumentu i caly efekt nakladki znika (klase .is-scrolled\n' +
-  '     nadaje JS automatycznie). Odsun tresc hero o var(--navbar-h), np.\n' +
-  '     <header style="padding-top: calc(var(--navbar-h) + 4rem)">, bo navbar\n' +
-  '     jest position:absolute i bez tego naglowek wejdzie pod nim. -->\n';
+  '<!-- IMPORTANT: do not add .navbar-sticky to this class - sticky returns to\n' +
+  '     the document flow and the whole overlay effect disappears (JS adds the\n' +
+  '     .is-scrolled class automatically). Push the hero content down by\n' +
+  '     var(--navbar-h), e.g.\n' +
+  '     <header style="padding-top: calc(var(--navbar-h) + 4rem)">, because the\n' +
+  '     navbar is position:absolute and without this the header will sit under it. -->\n';
 
-/* ---------- Warianty tla navbara ---------- */
+/* ---------- Navbar background variants ---------- */
 
 type NavVariant = 'standard' | 'transparent' | 'pill';
 
 interface VariantAnswers {
   variant: NavVariant;
-  /** Ustawione TYLKO gdy variant === 'pill' i uzytkownik zdecydowal sie dostosowac kolory. */
+  /** Set ONLY when variant === 'pill' and the user chose to customize the colors. */
   pillBg?: string;
   pillBgScrolled?: string;
 }
 
 async function collectVariantAnswers(): Promise<VariantAnswers> {
   const variant = await select<NavVariant>({
-    message: 'Wariant navbara?',
+    message: 'Navbar variant?',
     choices: [
-      { name: 'Standardowy', value: 'standard' },
-      { name: 'Transparent (nakladkowy, sticky po scrollu)', value: 'transparent' },
-      { name: 'Pastylka (floating pill)', value: 'pill' },
+      { name: 'Standard', value: 'standard' },
+      { name: 'Transparent (overlay, sticky after scroll)', value: 'transparent' },
+      { name: 'Pill (floating pill)', value: 'pill' },
     ],
   });
 
   if (variant !== 'pill') return { variant };
 
-  // Pastylka - dokumentowane domyslne kolory (ciemna pastylka, bialy tekst)
-  // sa sensowne same w sobie; pytamy TYLKO o dwa tla (nad hero / po scrollu),
-  // reszte zmiennych (kolor tekstu, padding) zostawiamy na wartosciach
-  // domyslnych z CSS, zamiast prosic o wszystkie 6 na raz.
+  // Pill - the documented default colors (dark pill, white text) are
+  // sensible on their own; we ONLY ask about the two backgrounds (over the
+  // hero / after scrolling), leaving the rest of the variables (text
+  // color, padding) at their CSS defaults, instead of asking about all 6
+  // at once.
   const customize = await confirm({
-    message: 'Dostosowac kolory pastylki do marki? (inaczej zostaja domyslne: ciemna nad hero, motyw po scrollu)',
+    message: 'Customize the pill colors for your brand? (otherwise they stay default: dark over the hero, theme-aware after scroll)',
     default: false,
   });
   if (!customize) return { variant };
 
-  const pillBg = await input({ message: 'Kolor tla pastylki nad hero (hex):', default: '#1e293b' });
+  const pillBg = await input({ message: 'Pill background color over the hero (hex):', default: '#1e293b' });
   const pillBgScrolledRaw = await input({
-    message: 'Kolor tla po zescrollowaniu (hex, zwykle zostaw motyw):',
+    message: 'Background color after scrolling (hex, usually leave it theme-aware):',
     default: '',
   });
   return { variant, pillBg, pillBgScrolled: pillBgScrolledRaw || undefined };
@@ -111,12 +115,12 @@ export interface MegaMenuAnswers {
 }
 
 async function collectMegaMenu(): Promise<MegaMenuAnswers | undefined> {
-  const wanted = await confirm({ message: 'Dodac Mega Menu?', default: false });
+  const wanted = await confirm({ message: 'Add a Mega Menu?', default: false });
   if (!wanted) return undefined;
 
-  const title = await input({ message: 'Etykieta wyzwalacza Mega Menu:', default: 'Produkty' });
+  const title = await input({ message: 'Mega Menu trigger label:', default: 'Products' });
   const countStr = await input({
-    message: 'Ile kolumn ma miec Mega Menu?',
+    message: 'How many columns should the Mega Menu have?',
     default: '2',
     validate: countValidator(1, 4),
   });
@@ -124,9 +128,9 @@ async function collectMegaMenu(): Promise<MegaMenuAnswers | undefined> {
 
   const groups: MegaMenuAnswers['groups'] = [];
   for (let i = 1; i <= count; i++) {
-    const colTitle = await input({ message: `  Tytul kolumny ${i}:`, default: `Kategoria ${i}` });
+    const colTitle = await input({ message: `  Column ${i} title:`, default: `Category ${i}` });
     const linksLine = await input({
-      message: `  Linki w kolumnie ${i} (oddzielone przecinkami):`,
+      message: `  Links in column ${i} (comma-separated):`,
       default: 'Link 1, Link 2, Link 3',
     });
     const links = linksLine
@@ -151,7 +155,7 @@ function renderMegaMenu(mod: MegaMenuAnswers): string {
 /* ---------- Theme Switch ---------- */
 
 async function collectThemeSwitch(): Promise<boolean> {
-  return confirm({ message: 'Dodac przelacznik Light/Dark Mode?', default: false });
+  return confirm({ message: 'Add a Light/Dark Mode switch?', default: false });
 }
 
 function renderThemeSwitch(wanted: boolean): string {
@@ -161,16 +165,16 @@ function renderThemeSwitch(wanted: boolean): string {
 /* ---------- Language Switch ---------- */
 
 export interface LanguageSwitchAnswers {
-  /** Pierwszy jezyk na liscie jest aktywny (dostaje CHECK_SVG). */
+  /** The first language in the list is active (gets CHECK_SVG). */
   languages: Array<{ flagCode: string; label: string }>;
 }
 
 async function collectLanguageSwitch(): Promise<LanguageSwitchAnswers | undefined> {
-  const wanted = await confirm({ message: 'Dodac Language Switch (Popover API)?', default: false });
+  const wanted = await confirm({ message: 'Add a Language Switch (Popover API)?', default: false });
   if (!wanted) return undefined;
 
   const countStr = await input({
-    message: 'Ile jezykow?',
+    message: 'How many languages?',
     default: '2',
     validate: countValidator(2, 5),
   });
@@ -180,17 +184,17 @@ async function collectLanguageSwitch(): Promise<LanguageSwitchAnswers | undefine
   for (let i = 1; i <= count; i++) {
     const isFirst = i === 1;
     const flagCode = await input({
-      message: `  Kod jezyka ${i}${isFirst ? ' (aktywny)' : ''} (nazwa pliku w img/flags/, np. pl):`,
+      message: `  Language ${i} code${isFirst ? ' (active)' : ''} (file name in img/flags/, e.g. pl):`,
       default: isFirst ? 'pl' : '',
-      validate: (v: string) => /^[a-z]{2}$/.test(v) || 'Podaj dwuliterowy kod (np. pl, gb, de).',
+      validate: (v: string) => /^[a-z]{2}$/.test(v) || 'Enter a two-letter code (e.g. pl, gb, de).',
     });
-    const label = await input({ message: `  Pelna nazwa jezyka ${i}:`, default: isFirst ? 'Polski' : '' });
+    const label = await input({ message: `  Language ${i} full name:`, default: isFirst ? 'Polish' : '' });
     languages.push({ flagCode, label });
   }
 
   console.log(
-    `Uwaga: upewnij sie, ze pliki img/flags/${languages.map((l) => l.flagCode + '.svg').join(', img/flags/')} ` +
-      'istnieja w Twoim projekcie - molique dostarcza tylko flagi jezykow faktycznie oferowanych.'
+    `Note: make sure the files img/flags/${languages.map((l) => l.flagCode + '.svg').join(', img/flags/')} ` +
+      'exist in your project - molique only ships flags for languages actually offered.'
   );
 
   return { languages };
@@ -239,11 +243,11 @@ export function renderNav(answers: NavAnswers): string {
 
 async function collectNavAnswers(countFlag?: string): Promise<NavAnswers> {
   const variantAnswers = await collectVariantAnswers();
-  const brand = await input({ message: 'Nazwa/logo w navbarze:', default: 'Logo' });
-  const toggleId = await input({ message: 'ID checkboxa offcanvas (unikalne na stronie):', default: 'navToggle' });
+  const brand = await input({ message: 'Name/logo in the navbar:', default: 'Logo' });
+  const toggleId = await input({ message: 'Offcanvas checkbox ID (unique on the page):', default: 'navToggle' });
 
   const count = await promptCount({
-    message: 'Ile zwyklych pozycji menu (bez Mega Menu)?',
+    message: 'How many plain menu items (excluding the Mega Menu)?',
     default: '3',
     min: 0,
     max: 8,
@@ -251,7 +255,7 @@ async function collectNavAnswers(countFlag?: string): Promise<NavAnswers> {
   });
   const items: string[] = [];
   for (let i = 1; i <= count; i++) {
-    items.push(await input({ message: `  Etykieta pozycji ${i}:`, default: `Pozycja ${i}` }));
+    items.push(await input({ message: `  Item ${i} label:`, default: `Item ${i}` }));
   }
 
   const megaMenu = await collectMegaMenu();
@@ -261,19 +265,19 @@ async function collectNavAnswers(countFlag?: string): Promise<NavAnswers> {
   return { ...variantAnswers, brand, toggleId, items, megaMenu, themeSwitch, languageSwitch };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeNavCommand(program: Command): void {
   program
     .command('make:nav')
-    .description('Interaktywny generator navbara (offcanvas, mega menu, theme/language switch) (aliasy: zrob:nawigacje, mache:nav)')
+    .description('Interactive navbar generator (offcanvas, mega menu, theme/language switch) (aliases: zrob:nawigacje, mache:nav)')
     .option(
-      '-n, --count <liczba>',
-      'Liczba zwyklych pozycji menu (bez Mega Menu) - pomija to jedno pytanie, reszta (mega menu, jezyki...) zostaje interaktywna'
+      '-n, --count <number>',
+      'Number of plain menu items (excluding the Mega Menu) - skips this one question, the rest (mega menu, languages...) stays interactive'
     )
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt NavAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .option('--answers <json>', 'Answers as JSON (NavAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<NavAnswers>(opts);
       const answers = provided ?? (await collectNavAnswers(opts.count));

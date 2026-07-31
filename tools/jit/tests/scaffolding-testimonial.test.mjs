@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:testimonial`
+ * molique-jit - `make:testimonial` tests
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,18 +14,18 @@ const { renderTestimonial } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-testimonial.js')).href
 );
 
-test('make:testimonial - 5 gwiazdek renderuje 5 ikon SVG, bez separatora (skleja jak zywy podglad)', () => {
+test('make:testimonial - 5 stars render 5 SVG icons, with no separator (joined like in the live preview)', () => {
   const html = renderTestimonial({ starCount: 5, quote: 'Q', avatarUrl: 'a.jpg', avatarAlt: 'A', name: 'N', role: 'R' });
   assert.equal((html.match(/ph-star--fill/g) ?? []).length, 5);
   assert.match(html, /<div class="testimonial-stars"><svg[^>]*><use[^>]*><\/use><\/svg><svg/);
 });
 
-test('make:testimonial - 0 gwiazdek daje pusty .testimonial-stars', () => {
+test('make:testimonial - 0 stars produce an empty .testimonial-stars', () => {
   const html = renderTestimonial({ starCount: 0, quote: 'Q', avatarUrl: 'a.jpg', avatarAlt: 'A', name: 'N', role: 'R' });
   assert.match(html, /<div class="testimonial-stars"><\/div>/);
 });
 
-test('make:testimonial - cytat jest owiniety w cudzyslowy przez stub, uzytkownik ich nie wpisuje', () => {
-  const html = renderTestimonial({ starCount: 3, quote: 'Swietny framework!', avatarUrl: 'a.jpg', avatarAlt: 'A', name: 'N', role: 'R' });
-  assert.match(html, /<p class="testimonial-quote">"Swietny framework!"<\/p>/);
+test('make:testimonial - the quote is wrapped in quotation marks by the stub, the user does not type them', () => {
+  const html = renderTestimonial({ starCount: 3, quote: 'Great framework!', avatarUrl: 'a.jpg', avatarAlt: 'A', name: 'N', role: 'R' });
+  assert.match(html, /<p class="testimonial-quote">"Great framework!"<\/p>/);
 });

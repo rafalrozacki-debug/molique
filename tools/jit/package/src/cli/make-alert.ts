@@ -1,13 +1,13 @@
 /**
  * molique-jit - `make:alert` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_alerts.scss
- * (.alert + .alert-<kolor>, dokladnie 4 warianty: info/success/danger/
- * warning) oraz src/examples-alerts.html. WAZNE: statyczny komunikat w
- * tresci strony, BEZ przycisku zamykania i BEZ JS - to `.toast` pojawia
- * sie i znika automatycznie, `.alert` nie ma tej mechaniki wcale
- * (dokumentacja wprost to rozroznia). Generator nie wymysla wiec
- * nieistniejacego przycisku "x".
+ * Markup verified against css/scss/components/_alerts.scss (.alert +
+ * .alert-<color>, exactly 4 variants: info/success/danger/warning) and
+ * src/examples-alerts.html. IMPORTANT: a static message in the page
+ * content, WITHOUT a close button and WITHOUT JS - it's `.toast` that
+ * appears and disappears automatically, `.alert` has none of that
+ * mechanics (the docs explicitly distinguish the two). So the generator
+ * doesn't invent a nonexistent "x" button.
  */
 
 import type { Command } from 'commander';
@@ -31,8 +31,8 @@ export interface AlertAnswers {
 }
 
 export async function collectAlertAnswers(): Promise<AlertAnswers> {
-  const message = await input({ message: 'Tresc komunikatu:', default: 'Zmiany zostaly zapisane pomyslnie.' });
-  const color = await select<AlertColor>({ message: 'Kolor?', choices: COLOR_CHOICES, default: 'info' });
+  const message = await input({ message: 'Message content:', default: 'The changes were saved successfully.' });
+  const color = await select<AlertColor>({ message: 'Color?', choices: COLOR_CHOICES, default: 'info' });
   return { message, color };
 }
 
@@ -43,10 +43,10 @@ export function renderAlert(answers: AlertAnswers): string {
 export function registerMakeAlertCommand(program: Command): void {
   program
     .command('make:alert')
-    .description('Interaktywny generator statycznego komunikatu (.alert) (aliasy: zrob:komunikat, mache:hinweis)')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt AlertAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive static message (.alert) generator (aliases: zrob:komunikat, mache:hinweis)')
+    .option('--answers <json>', 'Answers as JSON (AlertAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<AlertAnswers>(opts);
       const answers = provided ?? (await collectAlertAnswers());

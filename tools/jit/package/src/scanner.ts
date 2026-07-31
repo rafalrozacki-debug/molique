@@ -1,13 +1,14 @@
 /**
  * molique-jit - Scanner
  *
- * Wydobywa surowe tokeny (kandydatow na klasy molique) z plikow projektu.
- * Bezkontekstowy regex - celowo: molique zabrania sklejania nazw klas w JS
- * ("NIGDY nie sklejaj nazw klas dynamicznie", molique.md), wiec kazda
- * realna klasa istnieje gdzies jako literalny string. Cache per-plik
- * (`Map<sciezka, Set<token>>`) jest tu od razu, mimo ze tryb watch to
- * dopiero kolejna faza - przebudowa jednego pliku w watchu ma polegac na
- * podmianie jednego wpisu w tej mapie, a nie ponownym skanowaniu wszystkiego.
+ * Extracts raw tokens (candidate molique classes) from project files.
+ * A context-free regex - deliberately: molique forbids concatenating
+ * class names in JS ("NEVER concatenate class names dynamically",
+ * molique.md), so every real class exists somewhere as a literal string.
+ * The per-file cache (`Map<path, Set<token>>`) is here from the start,
+ * even though watch mode is only a later phase - rebuilding a single file
+ * in watch mode should mean swapping one entry in this map, not
+ * rescanning everything.
  */
 
 import fs from 'node:fs';
@@ -21,9 +22,9 @@ export interface ScanOptions {
 }
 
 export interface ScanResult {
-  /** Suma tokenow ze wszystkich zeskanowanych plikow. */
+  /** Union of tokens from all scanned files. */
   tokens: Set<string>;
-  /** Token cache per plik - podstawa pod przyszly tryb watch. */
+  /** Per-file token cache - the basis for the future watch mode. */
   fileCache: Map<string, Set<string>>;
 }
 
@@ -54,7 +55,7 @@ export async function scan(options: ScanOptions): Promise<ScanResult> {
   return { tokens, fileCache };
 }
 
-/** Reskanuje POJEDYNCZY plik i zwraca zaktualizowany zbior tokenow - do uzycia w przyszlym trybie watch. */
+/** Rescans a SINGLE file and returns the updated token set - for use by the future watch mode. */
 export function rescanFile(file: string, fileCache: Map<string, Set<string>>): Set<string> {
   const text = fs.readFileSync(file, 'utf8');
   const found = tokensOf(text);
@@ -62,7 +63,7 @@ export function rescanFile(file: string, fileCache: Map<string, Set<string>>): S
   return found;
 }
 
-/** Sumuje wszystkie tokeny z aktualnego stanu cache - wywolywane po kazdej zmianie w trybie watch. */
+/** Sums all tokens from the current cache state - called after every change in watch mode. */
 export function unionTokens(fileCache: Map<string, Set<string>>): Set<string> {
   const tokens = new Set<string>();
   for (const set of fileCache.values()) {

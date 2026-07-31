@@ -1,30 +1,31 @@
 /**
  * molique-jit - `make:chart` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_charts.scss (Radial
- * Bar - .r-chart-wrapper > .chart-radial > .radial-value, --val przez CSS
- * Houdini), _chart-funnel.scss (.chart-funnel/.funnel-stage - pionowy,
- * szerokosc przez --val malejaca stopniowo; .chart-pipeline/.pipeline-stage
- * - poziomy CRM, strzalki przez clip-path, .is-active bez zadnego stylu
- * inline bo CSS sam podmienia --stage-bg/--stage-text), _stock-bar.scss
- * (.stock-bar, --stock-filled 0-5, maska SVG - zero dodatkowego markupu).
- * Realne uzycie potwierdzone w src/examples-charts-basic.html i
+ * Markup verified against css/scss/components/_charts.scss (Radial Bar -
+ * .r-chart-wrapper > .chart-radial > .radial-value, --val via CSS
+ * Houdini), _chart-funnel.scss (.chart-funnel/.funnel-stage - vertical,
+ * width via --val decreasing gradually; .chart-pipeline/.pipeline-stage -
+ * horizontal CRM, arrows via clip-path, .is-active with no inline style
+ * at all because CSS itself swaps --stage-bg/--stage-text), _stock-bar.scss
+ * (.stock-bar, --stock-filled 0-5, an SVG mask - zero extra markup). Real
+ * usage confirmed in src/examples-charts-basic.html and
  * src/examples-funnels.html.
  *
- * `.chart-funnel-true` (trapezowy) i cala reszta _charts.scss (sparkline,
- * heatmap, area, pie, stat-card) sa POZA zakresem - propozycja
- * uzytkownika wymienia dokladnie 4 typy (Radial/Funnel/Pipeline/Stock
- * Bar), nie cala rodzine Data Viz.
+ * `.chart-funnel-true` (trapezoidal) and the rest of _charts.scss
+ * (sparkline, heatmap, area, pie, stat-card) are OUT of scope - the
+ * user's request lists exactly 4 types (Radial/Funnel/Pipeline/Stock
+ * Bar), not the whole Data Viz family.
  *
- * A11y: _stock-bar.scss w komentarzu zrodlowym wprost wymaga
- * `role="img"` + `aria-label` (element jest czysto wizualny) - generator
- * dodaje to zawsze, nie jako opcje do wlaczenia.
+ * A11y: the source comment in _stock-bar.scss explicitly requires
+ * `role="img"` + `aria-label` (the element is purely visual) - the
+ * generator adds this always, not as an option to enable.
  *
- * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
- * Etap B): kazdy z 4 wariantow dostaje wlasny typ `XxxAnswers` i wlasna
- * czysta `renderXxx()`. Przy okazji: Stock Bar wolal `promptCount()` bez
- * przekazania `flagValue` (komenda w ogole nie rejestrowala `-n/--count`) -
- * naprawione tutaj, zgodnie z konwencja reszty komend.
+ * Split into "collect answers" / "render markup" (CLI roadmap, Stage B):
+ * each of the 4 variants gets its own `XxxAnswers` type and its own pure
+ * `renderXxx()`. Along the way: Stock Bar was calling `promptCount()`
+ * without passing `flagValue` (the command didn't register `-n/--count`
+ * at all) - fixed here, in line with the convention used by the rest of
+ * the commands.
  */
 
 import type { Command } from 'commander';
@@ -36,11 +37,11 @@ import { loadAnswers } from './answers.js';
 
 type ChartColor = 'primary' | 'success' | 'danger' | 'warning' | 'info';
 
-// Ta sama klasyfikacja jasny/ciemny tekst na tle koloru co petla hover w
-// _colors.scss ($theme-colors): primary/dark/secondary -> jasny tekst,
-// success/danger/warning/info -> ciemny tekst.
+// The same light/dark text classification against a colored background
+// as the hover loop in _colors.scss ($theme-colors): primary/dark/
+// secondary -> light text, success/danger/warning/info -> dark text.
 const COLOR_CHOICES = [
-  { name: 'Primary (domyslny)', value: 'primary' },
+  { name: 'Primary (default)', value: 'primary' },
   { name: 'Success', value: 'success' },
   { name: 'Danger', value: 'danger' },
   { name: 'Warning', value: 'warning' },
@@ -56,14 +57,14 @@ export interface RadialAnswers {
 
 export async function collectRadialAnswers(): Promise<RadialAnswers> {
   const valueStr = await input({
-    message: 'Wartosc procentowa (0-100):',
+    message: 'Percentage value (0-100):',
     default: '75',
     validate: (v: string) => {
       const n = Number(v);
-      return (Number.isInteger(n) && n >= 0 && n <= 100) || 'Podaj liczbe calkowita od 0 do 100.';
+      return (Number.isInteger(n) && n >= 0 && n <= 100) || 'Enter a whole number from 0 to 100.';
     },
   });
-  const color = await select<ChartColor>({ message: 'Kolor pierscienia?', choices: COLOR_CHOICES, default: 'primary' });
+  const color = await select<ChartColor>({ message: 'Ring color?', choices: COLOR_CHOICES, default: 'primary' });
   return { value: Number(valueStr), color };
 }
 
@@ -74,10 +75,10 @@ export function renderRadial(answers: RadialAnswers): string {
   return renderStub('chart-radial.stub.html', { VALUE: String(value), COLOR_STYLE, VALUE_CLASS });
 }
 
-/* ---------- Funnel (pionowy) ---------- */
+/* ---------- Funnel (vertical) ---------- */
 
-// Kolejne kolory etapow (cyklicznie) + czy potrzebuja ciemnego tekstu -
-// ta sama zasada co w radial/_colors.scss.
+// Successive stage colors (cyclic) + whether they need dark text - the
+// same rule as in radial/_colors.scss.
 const FUNNEL_PALETTE: Array<{ bg: string; darkText: boolean }> = [
   { bg: 'primary', darkText: false },
   { bg: 'info', darkText: true },
@@ -91,8 +92,8 @@ export interface FunnelAnswers {
 
 export async function collectFunnelAnswers(): Promise<FunnelAnswers> {
   const labelsLine = await input({
-    message: 'Etykiety etapow, od najszerszego do najwezszego (oddzielone przecinkami):',
-    default: 'Odwiedziny, Rejestracje, Zakupy',
+    message: 'Stage labels, from widest to narrowest (comma-separated):',
+    default: 'Visits, Signups, Purchases',
   });
   const labels = labelsLine
     .split(',')
@@ -103,8 +104,8 @@ export async function collectFunnelAnswers(): Promise<FunnelAnswers> {
 
 export function renderFunnel(answers: FunnelAnswers): string {
   const { labels } = answers;
-  // Szerokosc maleje rownomiernie od 100% do 45% - realny przyklad w
-  // examples-funnels.html robi dokladnie to samo (100%, 75%, ...).
+  // Width decreases evenly from 100% to 45% - the real example in
+  // examples-funnels.html does exactly the same thing (100%, 75%, ...).
   const floor = 45;
   const stages = labels.map((LABEL, i) => {
     const VALUE = labels.length === 1 ? 100 : Math.round(100 - (i * (100 - floor)) / (labels.length - 1));
@@ -117,18 +118,18 @@ export function renderFunnel(answers: FunnelAnswers): string {
   return renderStub('chart-funnel.stub.html', { STAGES });
 }
 
-/* ---------- Pipeline (poziomy CRM) ---------- */
+/* ---------- Pipeline (horizontal CRM) ---------- */
 
 export interface PipelineAnswers {
   steps: string[];
-  /** Etykieta aktualnie aktywnego kroku, '' = brak aktywnego. */
+  /** Label of the currently active step, '' = none active. */
   activeLabel: string;
 }
 
 export async function collectPipelineAnswers(): Promise<PipelineAnswers> {
   const stepsLine = await input({
-    message: 'Nazwy krokow procesu (oddzielone przecinkami):',
-    default: 'Nowy, Kontakt, Wycena, Negocjacje, Umowa',
+    message: 'Process step names (comma-separated):',
+    default: 'New, Contact, Quote, Negotiation, Contract',
   });
   const steps = stepsLine
     .split(',')
@@ -136,8 +137,8 @@ export async function collectPipelineAnswers(): Promise<PipelineAnswers> {
     .filter(Boolean);
 
   const activeLabel = await select({
-    message: 'Ktory krok jest aktualnie aktywny?',
-    choices: [...steps.map((s) => ({ name: s, value: s })), { name: '(brak)', value: '' }],
+    message: 'Which step is currently active?',
+    choices: [...steps.map((s) => ({ name: s, value: s })), { name: '(none)', value: '' }],
     default: steps[0] ?? '',
   });
 
@@ -163,7 +164,7 @@ export interface StockBarAnswers {
 
 export async function collectStockBarAnswers(countFlag?: string): Promise<StockBarAnswers> {
   const filled = await promptCount({
-    message: 'Ile z 5 segmentow wypelnionych?',
+    message: 'How many of the 5 segments are filled?',
     default: '3',
     min: 0,
     max: 5,
@@ -171,17 +172,17 @@ export async function collectStockBarAnswers(countFlag?: string): Promise<StockB
   });
 
   const variant = await select<StockBarVariant>({
-    message: 'Wariant koloru?',
+    message: 'Color variant?',
     choices: [
-      { name: 'Domyslny (neutralny)', value: '' },
-      { name: 'Success (wysoki stan)', value: 'stock-bar-success' },
-      { name: 'Warning (niski stan)', value: 'stock-bar-warning' },
-      { name: 'Danger (krytyczny stan)', value: 'stock-bar-danger' },
+      { name: 'Default (neutral)', value: '' },
+      { name: 'Success (high stock)', value: 'stock-bar-success' },
+      { name: 'Warning (low stock)', value: 'stock-bar-warning' },
+      { name: 'Danger (critical stock)', value: 'stock-bar-danger' },
     ],
     default: '',
   });
 
-  const ariaLabel = await input({ message: 'Tekst dla czytnikow ekranu (aria-label):', default: `Stan: ${filled}/5` });
+  const ariaLabel = await input({ message: 'Text for screen readers (aria-label):', default: `Stock: ${filled}/5` });
 
   return { filled, variant, ariaLabel };
 }
@@ -209,12 +210,12 @@ function renderChart(answers: ChartAnswers): string {
 
 async function collectChartAnswers(countFlag?: string): Promise<ChartAnswers> {
   const chartType = await select<ChartAnswers['type']>({
-    message: 'Jaki wykres chcesz wygenerowac?',
+    message: 'Which chart do you want to generate?',
     choices: [
-      { name: 'Radial Bar (kolko z progresem)', value: 'radial' },
-      { name: 'Funnel (pionowy lejek)', value: 'funnel' },
-      { name: 'Pipeline (poziomy proces CRM)', value: 'pipeline' },
-      { name: 'Stock Bar (segmentowy poziom zapasu)', value: 'stock-bar' },
+      { name: 'Radial Bar (progress ring)', value: 'radial' },
+      { name: 'Funnel (vertical funnel)', value: 'funnel' },
+      { name: 'Pipeline (horizontal CRM process)', value: 'pipeline' },
+      { name: 'Stock Bar (segmented stock level)', value: 'stock-bar' },
     ],
   });
 
@@ -224,19 +225,19 @@ async function collectChartAnswers(countFlag?: string): Promise<ChartAnswers> {
   return { type: 'stock-bar', ...(await collectStockBarAnswers(countFlag)) };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeChartCommand(program: Command): void {
   program
     .command('make:chart')
     .description(
-      'Interaktywny generator wykresow CSS/SVG (Radial Bar / Funnel / Pipeline / Stock Bar) ' +
-        '(aliasy: zrob:wykres, mache:diagramm)'
+      'Interactive CSS/SVG chart generator (Radial Bar / Funnel / Pipeline / Stock Bar) ' +
+        '(aliases: zrob:wykres, mache:diagramm)'
     )
-    .option('-n, --count <liczba>', 'Liczba wypelnionych segmentow w Stock Bar (dotyczy tylko tego wariantu) - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt ChartAnswers, z polem "type") - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .option('-n, --count <number>', 'Number of filled segments in the Stock Bar (only applies to that variant) - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (ChartAnswers shape, with a "type" field) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<ChartAnswers>(opts);
       const answers = provided ?? (await collectChartAnswers(opts.count));

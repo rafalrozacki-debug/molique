@@ -1,14 +1,14 @@
 /**
  * molique-jit - `make:badge` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_badges.scss
- * (.badge + .badge-<kolor>, ksztalt piguly) i src/examples-badges.html
- * (`<span class="badge badge-primary">Tekst</span>`).
+ * Markup verified against css/scss/components/_badges.scss (.badge +
+ * .badge-<color>, pill shape) and src/examples-badges.html
+ * (`<span class="badge badge-primary">Text</span>`).
  *
- * Pierwszy z nowej fali generatorow (plan rozwoju CLI, Etap C) - budowany
- * od razu w ksztalcie collect/render + --answers/--answers-file, bez
- * osobnego refaktoru pozniej (w odroznieniu od 8 istniejacych komend z
- * Etapu B, ktore mialy ten podzial dopisany wstecz).
+ * The first of the new wave of generators (CLI roadmap, Stage C) - built
+ * from the start in the collect/render + --answers/--answers-file shape,
+ * with no separate refactor later (unlike the 8 existing commands from
+ * Stage B, which had this split retrofitted).
  */
 
 import type { Command } from 'commander';
@@ -35,8 +35,8 @@ export interface BadgeAnswers {
 }
 
 export async function collectBadgeAnswers(): Promise<BadgeAnswers> {
-  const text = await input({ message: 'Tekst na pigulce:', default: 'Nowość' });
-  const color = await select<BadgeColor>({ message: 'Kolor?', choices: COLOR_CHOICES, default: 'primary' });
+  const text = await input({ message: 'Pill text:', default: 'New' });
+  const color = await select<BadgeColor>({ message: 'Color?', choices: COLOR_CHOICES, default: 'primary' });
   return { text, color };
 }
 
@@ -47,10 +47,10 @@ export function renderBadge(answers: BadgeAnswers): string {
 export function registerMakeBadgeCommand(program: Command): void {
   program
     .command('make:badge')
-    .description('Interaktywny generator pigulki statusu (.badge) (aliasy: zrob:odznake, mache:abzeichen)')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt BadgeAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive status pill (.badge) generator (aliases: zrob:odznake, mache:abzeichen)')
+    .option('--answers <json>', 'Answers as JSON (BadgeAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<BadgeAnswers>(opts);
       const answers = provided ?? (await collectBadgeAnswers());

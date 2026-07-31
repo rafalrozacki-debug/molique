@@ -1,14 +1,13 @@
 /**
  * molique-jit - Lookup
  *
- * Zero matematyki. Klasy narzedziowe molique sa skonczonym, w pelni
- * wyliczalnym zbiorem (petle @each nad stalymi mapami Sass) - caly ten
- * zbior zostal juz raz skompilowany przez prawdziwego Sassa i splaszczony
- * do utilities.json (patrz tools/gen-jit-utilities.js w repo molique).
- * Ten modul robi wylacznie odpytanie mapy: token -> gotowa regula CSS.
- * Zadnej reimplementacji `$space-amounts`, `-md-`, wariantow hover itd. -
- * to jedyny sposob, w jaki ten silnik nigdy nie moze rozjechac sie z
- * frameworkiem.
+ * Zero math. molique's utility classes are a finite, fully enumerable set
+ * (@each loops over fixed Sass maps) - that entire set has already been
+ * compiled once by real Sass and flattened into utilities.json (see
+ * tools/gen-jit-utilities.js in the molique repo). This module does
+ * nothing but query the map: token -> ready-made CSS rule. No
+ * reimplementation of `$space-amounts`, `-md-`, hover variants, etc. -
+ * this is the only reason this engine can never drift from the framework.
  */
 
 import fs from 'node:fs';
@@ -17,9 +16,10 @@ import { fileURLToPath } from 'node:url';
 import type { UtilitiesDictionary, ClassIndex, Safelist } from './types.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-// Po kompilacji ten plik siedzi w dist/lookup.js, a dane w ../data - czyli
-// wzgledem package/ jest to zawsze "obok dist/", niezaleznie od tego, czy
-// uruchamiamy zrodlo (ts-node) czy skompilowany JS.
+// After compilation this file lives in dist/lookup.js, and the data in
+// ../data - so relative to package/ it's always "next to dist/",
+// regardless of whether we're running the source (ts-node) or the
+// compiled JS.
 const dataDir = path.resolve(here, '..', 'data');
 
 export interface LoadedData {
@@ -27,18 +27,18 @@ export interface LoadedData {
   classIndex: ClassIndex;
   safelist: Safelist;
   componentsDir: string;
-  /** Zmienne motywu (:root + dark mode) - "mandatory" w gen-chunks.js, zawsze dolaczane. */
+  /** Theme variables (:root + dark mode) - "mandatory" in gen-chunks.js, always included. */
   rootCssPath: string;
-  /** Reset, typografia bazowa, .container/.container-fluid - tez "mandatory", zawsze dolaczane. */
+  /** Reset, base typography, .container/.container-fluid - also "mandatory", always included. */
   baseCssPath: string;
 }
 
 function readJson<T>(file: string): T {
   if (!fs.existsSync(file)) {
     throw new Error(
-      `molique-jit: brak pliku danych "${file}". ` +
-        'Ten pakiet nie jest kompletny bez tools/jit/package/data/ - ' +
-        'w repo molique uruchom "npm run gen:jit-package-data" po gen:chunks i gen:jit-utilities.'
+      `molique-jit: missing data file "${file}". ` +
+        'This package is not complete without tools/jit/package/data/ - ' +
+        'in the molique repo run "npm run gen:jit-package-data" after gen:chunks and gen:jit-utilities.'
     );
   }
   return JSON.parse(fs.readFileSync(file, 'utf8')) as T;
@@ -62,11 +62,11 @@ export interface ResolveResult {
 }
 
 /**
- * Dopasowuje zeskanowane tokeny do slownika. Token moze jednoczesnie trafic
- * w klase narzedziowa I byc wyzwalaczem komponentu (rzadkie, ale nie
- * wykluczone nazewniczo) - oba dopasowania sa wtedy uwzgledniane. Token bez
- * zadnego trafienia to po prostu klasa spoza molique (bootstrap, wlasny BEM
- * itd.) - nie jest to blad.
+ * Matches scanned tokens against the dictionary. A token can hit a
+ * utility class AND be a component trigger at the same time (rare, but
+ * not ruled out by naming) - both matches are then taken into account. A
+ * token with no match at all is simply a class outside molique
+ * (Bootstrap, a project's own BEM, etc.) - not an error.
  */
 export function resolve(tokens: Set<string>, data: LoadedData, extraSafelist: string[] = []): ResolveResult {
   const effectiveTokens = new Set(tokens);

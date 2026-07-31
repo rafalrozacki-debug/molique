@@ -1,7 +1,7 @@
-// Reczna weryfikacja Fazy 2 - NIE jest czescia publikowanego pakietu.
-// Uruchamia silnik na realnych stronach repo molique (src/**/*.html) i
-// drukuje statystyki + kilka spot-checkow, zeby potwierdzic, ze dopasowanie
-// dziala na prawdziwej tresci, nie tylko na syntetycznych przykladach.
+// Manual Phase 2 verification - NOT part of the published package.
+// Runs the engine against the real molique repo pages (src/**/*.html) and
+// prints stats + a few spot-checks, to confirm matching works on real
+// content, not just synthetic examples.
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from '../dist/index.js';
@@ -17,22 +17,22 @@ const result = await build({
   verbose: true,
 });
 
-console.log('\nRozmiar wygenerowanego CSS: ' + (Buffer.byteLength(result.css, 'utf8') / 1024).toFixed(1) + ' KB');
-console.log('Zapisano do: ' + path.relative(repoRoot, outFile));
+console.log('\nGenerated CSS size: ' + (Buffer.byteLength(result.css, 'utf8') / 1024).toFixed(1) + ' KB');
+console.log('Saved to: ' + path.relative(repoRoot, outFile));
 
 const checks = {
-  ':root obecny': result.css.includes(':root{'),
-  'dark mode obecny': result.css.includes('data-theme=dark]') || result.css.includes('[data-theme="dark"]'),
-  '.card dopasowany': result.matchedUtilityClasses.includes('card') || result.matchedComponents.includes('cards'),
-  '.p-md-4 (utility -md-) w wyjsciu': result.css.includes('.p-md-4{') || result.css.includes(',.p-md-4{') || result.css.includes('.p-md-4,'),
-  'm-5 uzywa *6 (nie *5)': (() => {
+  ':root present': result.css.includes(':root{'),
+  'dark mode present': result.css.includes('data-theme=dark]') || result.css.includes('[data-theme="dark"]'),
+  '.card matched': result.matchedUtilityClasses.includes('card') || result.matchedComponents.includes('cards'),
+  '.p-md-4 (-md- utility) in output': result.css.includes('.p-md-4{') || result.css.includes(',.p-md-4{') || result.css.includes('.p-md-4,'),
+  'm-5 uses *6 (not *5)': (() => {
     const m = result.css.match(/\.m-5\{margin:calc\(var\(--spacing-unit\) \* (\d+)\)/);
-    return m ? m[1] === '6' : 'klasa m-5 nie zostala uzyta na zeskanowanych stronach';
+    return m ? m[1] === '6' : 'class m-5 was not used on the scanned pages';
   })(),
-  '@keyframes scrollRevealAnim obecny (alwaysInclude)': result.css.includes('@keyframes scrollRevealAnim'),
+  '@keyframes scrollRevealAnim present (alwaysInclude)': result.css.includes('@keyframes scrollRevealAnim'),
 };
 
-console.log('\nSpot-checki:');
+console.log('\nSpot-checks:');
 for (const [name, ok] of Object.entries(checks)) {
   console.log('  ' + (ok === true ? 'OK  ' : ok === false ? 'FAIL' : 'INFO') + ' - ' + name + (typeof ok === 'string' ? ' (' + ok + ')' : ''));
 }

@@ -1,26 +1,27 @@
 /**
  * molique-jit - `make:status-icon` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_status-icons.scss
- * (.status-icon-add/.status-icon-success - statyczne, czysty CSS;
- * .status-icon-toggle - interaktywna wersja Plus->Checkmark, animacje
- * sterowane KLASA `.is-success` LUB natywnym `:checked` gdy owinieta w
- * `.status-checkbox` - "udokumentowane ograniczenie" w SCSS: goly
- * <button class="status-icon-toggle"> bez <label>.status-checkbox NIE MA
- * wolnego pseudo-elementu na powiekszenie hit-area do 44px, wiec
- * generator scaffolduje TYLKO dwa realnie uzyte w
- * src/examples-status-feedback.html warianty: statyczny span i zero-JS
- * checkbox - nie samodzielny <button> (gorsza dostepnosc, nieudokumentowany
- * wzorzec w realnym przykladzie).
+ * Markup verified against css/scss/components/_status-icons.scss
+ * (.status-icon-add/.status-icon-success - static, plain CSS;
+ * .status-icon-toggle - the interactive Plus->Checkmark version, the
+ * animation is driven by the `.is-success` CLASS OR native `:checked`
+ * when wrapped in `.status-checkbox` - a "documented limitation" in
+ * SCSS: a bare <button class="status-icon-toggle"> without a
+ * <label>.status-checkbox has NO free pseudo-element to enlarge the
+ * hit-area to 44px, so the generator only scaffolds the two variants
+ * actually used in src/examples-status-feedback.html: a static span and
+ * the zero-JS checkbox - not a standalone <button> (worse accessibility,
+ * an undocumented pattern in the real example).
  *
- * Poprawka wzgledem "copy" bloku kodu w realnym przykladzie: tam
- * `<input type="checkbox">` NIE MA `aria-label`, mimo ze widoczny obok
- * `.status-icon-toggle` to czysto dekoracyjny `<span>` bez tekstu - bez
- * aria-label taki checkbox jest NIEDOSTEPNY dla czytnikow ekranu (brak
- * accessible name). ZYWY PODGLAD na tej samej stronie ma juz poprawnie
- * `aria-label="Zaznacz mnie"` na inpucie - generator idzie za tym
- * pelniejszym wariantem i wymaga aria-label zawsze (a11y-by-default,
- * ta sama dyscyplina co przy make:carousel).
+ * Fix relative to the "copy" code block in the real example: there
+ * `<input type="checkbox">` has NO `aria-label`, even though the
+ * `.status-icon-toggle` shown next to it is a purely decorative `<span>`
+ * with no text - without an aria-label such a checkbox is INACCESSIBLE
+ * to screen readers (no accessible name). The LIVE PREVIEW on the same
+ * page already correctly has `aria-label="Zaznacz mnie"` on the input -
+ * the generator follows this more complete variant and requires an
+ * aria-label always (a11y-by-default, the same discipline as in
+ * make:carousel).
  */
 
 import type { Command } from 'commander';
@@ -29,7 +30,7 @@ import { renderStub } from '../stubs.js';
 import { outputResult } from './output.js';
 import { loadAnswers } from './answers.js';
 
-/* ---------- Statyczna ---------- */
+/* ---------- Static ---------- */
 
 type StatusIconState = 'add' | 'success';
 
@@ -39,10 +40,10 @@ export interface StatusIconStaticAnswers {
 
 async function collectStatusIconStaticAnswers(): Promise<StatusIconStaticAnswers> {
   const state = await select<StatusIconState>({
-    message: 'Jaki stan ikony?',
+    message: 'Which icon state?',
     choices: [
-      { name: 'Dodaj (plus)', value: 'add' },
-      { name: 'Sukces (checkmark)', value: 'success' },
+      { name: 'Add (plus)', value: 'add' },
+      { name: 'Success (checkmark)', value: 'success' },
     ],
     default: 'add',
   });
@@ -58,16 +59,16 @@ export function renderStatusIconStatic(answers: StatusIconStaticAnswers): string
 export interface StatusIconCheckboxAnswers {
   name: string;
   value: string;
-  /** Accessible name - .status-icon-toggle jest czysto dekoracyjny (brak tekstu), bez tego checkbox jest niedostepny. */
+  /** Accessible name - .status-icon-toggle is purely decorative (no text), without this the checkbox is inaccessible. */
   ariaLabel: string;
 }
 
 async function collectStatusIconCheckboxAnswers(): Promise<StatusIconCheckboxAnswers> {
-  const name = await input({ message: 'Atrybut name pola:', default: 'opcja' });
-  const value = await input({ message: 'Atrybut value pola:', default: '1' });
+  const name = await input({ message: 'Field name attribute:', default: 'option' });
+  const value = await input({ message: 'Field value attribute:', default: '1' });
   const ariaLabel = await input({
-    message: 'aria-label (checkbox nie ma widocznego tekstu - to jedyny opis dla czytnika ekranu):',
-    default: 'Zaznacz',
+    message: 'aria-label (the checkbox has no visible text - this is the only description for a screen reader):',
+    default: 'Check',
   });
   return { name, value, ariaLabel };
 }
@@ -93,10 +94,10 @@ function renderStatusIcon(answers: StatusIconAnswers): string {
 
 async function collectStatusIconAnswers(): Promise<StatusIconAnswers> {
   const type = await select<StatusIconAnswers['type']>({
-    message: 'Jaki wariant ikony statusu?',
+    message: 'Which status icon variant?',
     choices: [
-      { name: 'Statyczna (.status-icon - czysty CSS, bez interakcji)', value: 'static' },
-      { name: 'Interaktywna, zero-JS (.status-checkbox - Plus -> Checkmark)', value: 'checkbox' },
+      { name: 'Static (.status-icon - plain CSS, no interaction)', value: 'static' },
+      { name: 'Interactive, zero-JS (.status-checkbox - Plus -> Checkmark)', value: 'checkbox' },
     ],
   });
 
@@ -104,15 +105,15 @@ async function collectStatusIconAnswers(): Promise<StatusIconAnswers> {
   return { type: 'checkbox', ...(await collectStatusIconCheckboxAnswers()) };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeStatusIconCommand(program: Command): void {
   program
     .command('make:status-icon')
-    .description('Interaktywny generator ikony statusu (Statyczna / Checkbox Plus-Checkmark) (aliasy: zrob:ikone-statusu, mache:statussymbol)')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt StatusIconAnswers, z polem "type") - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive status icon generator (Static / Checkbox Plus-Checkmark) (aliases: zrob:ikone-statusu, mache:statussymbol)')
+    .option('--answers <json>', 'Answers as JSON (StatusIconAnswers shape, with a "type" field) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<StatusIconAnswers>(opts);
       const answers = provided ?? (await collectStatusIconAnswers());

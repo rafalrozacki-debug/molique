@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:timeline`
+ * molique-jit - `make:timeline` tests
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,11 +14,11 @@ const { renderTimelineLarge, renderTimelineNumbered, renderTimelineLabeled } = a
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-timeline.js')).href
 );
 
-test('make:timeline - Large: kazda pozycja ma timeline-badge z tekstem', () => {
+test('make:timeline - Large: every item has a timeline-badge with text', () => {
   const html = renderTimelineLarge({
     items: [
-      { badge: 'A', title: 'Etap 1', description: 'Opis 1' },
-      { badge: 'B', title: 'Etap 2', description: 'Opis 2' },
+      { badge: 'A', title: 'Stage 1', description: 'Description 1' },
+      { badge: 'B', title: 'Stage 2', description: 'Description 2' },
     ],
   });
   assert.match(html, /class="timeline timeline-large m-0"/);
@@ -26,29 +26,29 @@ test('make:timeline - Large: kazda pozycja ma timeline-badge z tekstem', () => {
   assert.match(html, /class="timeline-badge">B</);
 });
 
-test('make:timeline - Numbered: brak timeline-badge, CSS sam numeruje', () => {
+test('make:timeline - Numbered: no timeline-badge, CSS numbers it automatically', () => {
   const html = renderTimelineNumbered({
     items: [
-      { title: 'Krok 1', description: 'Opis 1' },
-      { title: 'Krok 2', description: 'Opis 2' },
+      { title: 'Step 1', description: 'Description 1' },
+      { title: 'Step 2', description: 'Description 2' },
     ],
   });
   assert.match(html, /class="timeline timeline-numbered m-0"/);
   assert.doesNotMatch(html, /timeline-badge/);
 });
 
-test('make:timeline - Labeled: kolor kropki dodaje klase node-<kolor>, pusty = bez klasy', () => {
+test('make:timeline - Labeled: the node color adds a node-<color> class, empty = no class', () => {
   const html = renderTimelineLabeled({
     items: [
-      { dateLabel: '30.06.2026', timeLabel: '16:44', nodeColor: 'success', title: 'A', description: 'B' },
-      { dateLabel: '29.06.2026', timeLabel: '7:15', nodeColor: '', title: 'C', description: 'D' },
+      { dateLabel: '06/30/2026', timeLabel: '16:44', nodeColor: 'success', title: 'A', description: 'B' },
+      { dateLabel: '06/29/2026', timeLabel: '7:15', nodeColor: '', title: 'C', description: 'D' },
     ],
   });
   assert.match(html, /class="timeline-node node-success">/);
   assert.match(html, /class="timeline-node">/);
 });
 
-test('make:timeline - Labeled: kazda pozycja ma timeline-line (CSS sam ukrywa u ostatniej)', () => {
+test('make:timeline - Labeled: every item has timeline-line (CSS hides it on the last one itself)', () => {
   const html = renderTimelineLabeled({
     items: [
       { dateLabel: 'A', timeLabel: 'A', nodeColor: '', title: 'A', description: 'A' },

@@ -1,127 +1,128 @@
-# Molique JIT - Specyfikacja (stan faktyczny po Fazach 1-5)
+# Molique JIT - Specification (actual state after Phases 1-5)
 
-> Ten dokument opisywał pierwotnie zamierzoną architekturę (silnik liczący
-> CSS w locie ze słowników matematycznych). Po implementacji okazało się, że
-> lepsze, bezpieczniejsze podejście jest możliwe - patrz "Kluczowa zmiana
-> architektoniczna" niżej. Ten plik opisuje architekturę TAKĄ, JAKA
-> FAKTYCZNIE POWSTAŁA, nie pierwotny plan.
+> This document originally described the intended architecture (an engine
+> computing CSS on the fly from mathematical dictionaries). After
+> implementation it turned out that a better, safer approach was possible -
+> see "Key architectural change" below. This file describes the architecture
+> AS IT ACTUALLY TURNED OUT, not the original plan.
 
-Molique JIT (pakiet npm `molique-jit`, `tools/jit/package/`) analizuje pliki
-projektu konsumenta, wydobywa użyte tokeny (kandydatów na klasy molique) i
-generuje wyłącznie potrzebny CSS. Silnik jest w Node.js/TypeScript.
+Molique JIT (npm package `molique-jit`, `tools/jit/package/`) analyzes the
+consumer project's files, extracts the tokens used (candidates for molique
+classes) and generates only the CSS that's needed. The engine is written in
+Node.js/TypeScript.
 
-## 0. Kluczowa zmiana architektoniczna: tablica przeglądowa zamiast silnika matematycznego
+## 0. Key architectural change: lookup table instead of a mathematical engine
 
-Klasy narzędziowe molique (`.pb-md-4`, `.text-hover-primary` itd.) **nie są
-dowolne** jak w Tailwindzie (`w-[137px]`) - to skończony, w pełni wyliczalny
-zbiór, zdefiniowany pętlami `@each` nad stałymi mapami Sass. Zamiast
-odtwarzać tę matematykę w drugim miejscu (co pierwotny plan zakładał -
-patrz `ast-schema.md`, sekcja historyczna), silnik **w ogóle nie liczy CSS
-w locie**. Zamiast tego:
+Molique's utility classes (`.pb-md-4`, `.text-hover-primary` etc.) are **not
+arbitrary** like in Tailwind (`w-[137px]`) - they're a finite, fully
+enumerable set, defined by `@each` loops over fixed Sass maps. Instead of
+reimplementing this math in a second place (which the original plan called
+for - see `ast-schema.md`, historical section), the engine **doesn't compute
+CSS on the fly at all**. Instead:
 
-1. **W tym repozytorium** (raz, przy każdej zmianie SCSS) skrypty
-   `tools/gen-chunks.js` (już istniejący, produkuje skompilowane chunki
-   `dist/chunks/molique-*.css` przez prawdziwego Sassa) i
-   `tools/gen-jit-utilities.js` (nowy) spłaszczają warstwę `utilities` do
-   płaskiej mapy `nazwa-klasy -> gotowa reguła CSS`
-   (`tools/jit/dist-data/utilities.json`, commitowany do gita jak
+1. **In this repository** (once, on every SCSS change) the scripts
+   `tools/gen-chunks.js` (already existing, produces compiled chunks
+   `dist/chunks/molique-*.css` via real Sass) and
+   `tools/gen-jit-utilities.js` (new) flatten the `utilities` layer into a
+   flat map of `class-name -> ready-made CSS rule`
+   (`tools/jit/dist-data/utilities.json`, committed to git just like
    `purgecss.safelist.cjs`).
-2. `tools/gen-jit-package-data.js` pakuje ten słownik + mapę klasa-komponent
-   (`dist/chunks/class-index.json`, też produkowaną przez `gen-chunks.js`) +
-   skompilowane pliki komponentów + zmienne motywu w dane pakietu
-   (`tools/jit/package/data/`, gitignored, odtwarzalne w każdej chwili).
-3. **W pakiecie `molique-jit`** silnik robi wyłącznie: skanuj -> dopasuj
-   token do mapy (odczyt O(1), zero matematyki) -> skopiuj gotowy CSS
-   verbatim.
+2. `tools/gen-jit-package-data.js` packages this dictionary + the
+   class-to-component map (`dist/chunks/class-index.json`, also produced by
+   `gen-chunks.js`) + the compiled component files + the theme variables into
+   the package data (`tools/jit/package/data/`, gitignored, reproducible at
+   any time).
+3. **In the `molique-jit` package** the engine does nothing but: scan ->
+   match the token against the map (O(1) lookup, zero math) -> copy the
+   ready-made CSS verbatim.
 
-Efekt: zero reimplementacji `$space-amounts`, wariantów hover, logiki
-infiksów `-md-`/`-lg-` - jeśli SCSS się zmieni, wystarczy ponownie
-uruchomić generatory, a silnik JIT automatycznie odzwierciedla zmianę.
-Bezpieczeństwo tego podejścia pilnuje automatyczny test parytetu
-(`tools/jit/tests/parity.test.mjs`, `npm run test:jit-parity`) - dla
-każdej klasy w słowniku porównuje ją z niezależnie skompilowanym
+The result: zero reimplementation of `$space-amounts`, hover variants, or the
+`-md-`/`-lg-` infix logic - if the SCSS changes, you just re-run the
+generators and the JIT engine automatically reflects the change. The safety
+of this approach is guaranteed by an automated parity test
+(`tools/jit/tests/parity.test.mjs`, `npm run test:jit-parity`) - for every
+class in the dictionary it compares it against the independently compiled
 `css/molique-style.css`.
 
-## 1. Architektura pipeline'u
+## 1. Pipeline architecture
 
-### 1.1 Generatory (w tym repozytorium, nie w pakiecie)
+### 1.1 Generators (in this repository, not in the package)
 
-- **`tools/gen-chunks.js`** (rozszerzony w Fazie 1) - poza swoją
-  pierwotną rolą (chunki CSS dla konfiguratora `builder.html`) generuje
-  teraz też `dist/chunks/class-index.json`: mapę `klasa -> ID chunka`, dla
-  komponentów (`css/scss/components/*.scss`) ORAZ trzech chunków core,
-  które zachowują się jak komponenty (`buttons`, `grid`, `layout` -
-  wyzwalane pojedynczą klasą, w odróżnieniu od `root`/`base`/`fonts`/
-  `a11y`/`eink`, które są albo zawsze potrzebne, albo nie są
-  wyzwalane klasą wcale).
-- **`tools/gen-jit-utilities.js`** (nowy) - czyta już skompilowane
+- **`tools/gen-chunks.js`** (extended in Phase 1) - besides its
+  original role (CSS chunks for the `builder.html` configurator) it now also
+  generates `dist/chunks/class-index.json`: a `class -> chunk ID` map, for
+  components (`css/scss/components/*.scss`) AND three core chunks that
+  behave like components (`buttons`, `grid`, `layout` - triggered by a
+  single class, unlike `root`/`base`/`fonts`/`a11y`/`eink`, which are either
+  always needed or never triggered by a class at all).
+- **`tools/gen-jit-utilities.js`** (new) - reads the already compiled
   `dist/chunks/molique-utilities.css` + `molique-utilities-extended.css`,
-  rozbija je na `tools/jit/dist-data/utilities.json`. Ręczny (bez nowej
-  zależności) parser blokowy CSS - brace-depth matching, tak jak
-  `gen-variables-doc.js` robi to dla `_root.scss`.
-- **`tools/gen-jit-package-data.js`** (nowy) - kopiuje oba powyższe +
-  skompilowane pliki komponentów + `molique-root.css`/`molique-base.css`
-  (oba "mandatory", zawsze dołączane) + safelistę wyciągniętą z
-  `purgecss.safelist.cjs` (tier `runtime.standard`) do
+  splits them into `tools/jit/dist-data/utilities.json`. A manual (no new
+  dependency) block-level CSS parser - brace-depth matching, the same way
+  `gen-variables-doc.js` does it for `_root.scss`.
+- **`tools/gen-jit-package-data.js`** (new) - copies both of the above +
+  the compiled component files + `molique-root.css`/`molique-base.css`
+  (both "mandatory", always included) + the safelist extracted from
+  `purgecss.safelist.cjs` (tier `runtime.standard`) into
   `tools/jit/package/data/`.
 
-Wszystkie trzy wpięte w `predev`/`prebuild` w kolejności zależności
+All three are wired into `predev`/`prebuild` in dependency order
 (`gen:chunks` -> `gen:jit-utilities` -> `gen:jit-package-data`).
 
 ### 1.2 Scanner (`tools/jit/package/src/scanner.ts`)
 
-Zgodnie z pierwotnym planem: bezkontekstowe wyrażenie regularne
-`/[a-zA-Z0-9_:-]+/g` na plikach z `content` (glob przez `fast-glob`).
-Cache `Map<sciezka, Set<token>>` per plik - podstawa pod tryb watch
-(re-skanowanie tylko zmienionego pliku, `rescanFile`/`unionTokens`).
+As per the original plan: a context-free regular expression
+`/[a-zA-Z0-9_:-]+/g` over the files matched by `content` (glob via
+`fast-glob`). A `Map<path, Set<token>>` cache per file - the basis for watch
+mode (re-scanning only the changed file, `rescanFile`/`unionTokens`).
 
 ### 1.3 Lookup (`tools/jit/package/src/lookup.ts`)
 
-Zastępuje pierwotnie planowany "Rule Parser". Żadnej logiki - `resolve()`
-odpytuje wczytane dane (`utilities.json`, `class-index.json`) po kluczu
-(dokładne dopasowanie tokenu do nazwy klasy) i zwraca listę dopasowanych
-klas narzędziowych + ID komponentów. Token bez dopasowania to po prostu
-klasa spoza molique - nie błąd. Domyślna safelist (`purgecss.safelist.cjs`
--> `runtime.standard`) oraz `molique.config.mjs` -> `safelist` (klasy
-specyficzne dla projektu konsumenta) są dołączane zawsze, niezależnie od
-skanu.
+Replaces the originally planned "Rule Parser". No logic at all - `resolve()`
+queries the loaded data (`utilities.json`, `class-index.json`) by key
+(exact match of the token against the class name) and returns a list of
+matched utility classes + component IDs. A token with no match is simply a
+class outside molique - not an error. The default safelist
+(`purgecss.safelist.cjs` -> `runtime.standard`) and `molique.config.mjs` ->
+`safelist` (classes specific to the consumer project) are always included,
+regardless of the scan.
 
 ### 1.4 Emitter (`tools/jit/package/src/emitter.ts`)
 
-Składa finalny CSS zachowując kolejność warstw
+Assembles the final CSS while preserving layer order
 (`@layer reset, base, layout, components, modules, utilities;`):
 
-1. Zmienne motywu (`molique-root.css`) + reset/typografia bazowa/
-   `.container` (`molique-base.css`) - ZAWSZE, verbatim.
-2. Dopasowane komponenty jako CAŁE, już skompilowane pliki chunków -
-   nigdy nie wycinane częściowo (komponenty mają selektory zależne od
-   struktury DOM, np. `:has()`, sąsiedztwo elementów, których sam skan
-   klas nie potrafi bezpiecznie odtworzyć fragmentarycznie).
-3. Dopasowane klasy narzędziowe, pogrupowane wg identycznego zestawu
-   warunków (`@media`/`@supports`) - żeby np. 30 dopasowanych klas
-   `-md-` trafiło do JEDNEGO bloku `@media`, nie 30 osobnych.
-4. Pula `alwaysInclude` z `utilities.json` (fragmenty bez klasy w
-   selektorze: `@keyframes`, `@property`, `::view-transition-*`) -
-   dołączana zawsze, bo nie da się jej powiązać z konkretnym tokenem.
+1. Theme variables (`molique-root.css`) + reset/base typography/
+   `.container` (`molique-base.css`) - ALWAYS, verbatim.
+2. Matched components as WHOLE, already compiled chunk files - never
+   sliced partially (components have selectors that depend on DOM
+   structure, e.g. `:has()`, element adjacency, which a plain class scan
+   cannot safely reconstruct in fragments).
+3. Matched utility classes, grouped by identical sets of conditions
+   (`@media`/`@supports`) - so that, e.g., 30 matched `-md-` classes end up
+   in ONE `@media` block, not 30 separate ones.
+4. The `alwaysInclude` pool from `utilities.json` (fragments with no class
+   in the selector: `@keyframes`, `@property`, `::view-transition-*`) -
+   always included, since it can't be tied to a specific token.
 
 ### 1.5 Build / Watch (`build.ts` / `watch.ts`)
 
-`build()` - jednorazowe uruchomienie całego pipeline'u, zapis do pliku.
-`watch()` - pierwszy build natychmiast, potem `chokidar` (v3 - v4 usunęła
-natywne wsparcie glob) nasłuchuje tych samych wzorców `content`. Po
-zmianie pliku: `rescanFile()` odświeża TYLKO jego wpis w cache, debounce
-50ms, przebudowa z pełnego `unionTokens()`.
+`build()` - a one-off run of the whole pipeline, writing to a file.
+`watch()` - an immediate first build, then `chokidar` (v3 - v4 removed
+native glob support) watches the same `content` patterns. After a file
+change: `rescanFile()` refreshes only its entry in the cache, a 50ms
+debounce, then a rebuild from the full `unionTokens()`.
 
 ## 2. CLI
 
-Zobacz `cli-spec.md` (zaktualizowany o faktyczny schemat
-`molique.config.mjs` i sposób lokalizacji komend).
+See `cli-spec.md` (updated with the actual `molique.config.mjs` schema and
+how commands are localized).
 
-## 3. Zarządzanie danymi (nie "cache" w pamięci między procesami)
+## 3. Data management (not an in-memory "cache" between processes)
 
-W odróżnieniu od pierwotnego planu (Context Cache jako jedyny mechanizm),
-dane słownikowe są **plikami na dysku** (`tools/jit/package/data/*.json` +
-skompilowane CSS), generowanymi raz w tym repozytorium i dystrybuowanymi
-razem z pakietem npm. Cache w pamięci (`Map<sciezka, Set<token>>` w
-Scannerze) dotyczy wyłącznie WYNIKÓW SKANOWANIA plików konsumenta w trybie
-watch, nie samego słownika klas molique.
+Unlike the original plan (a Context Cache as the sole mechanism), the
+dictionary data lives as **files on disk** (`tools/jit/package/data/*.json` +
+compiled CSS), generated once in this repository and distributed together
+with the npm package. The in-memory cache (`Map<path, Set<token>>` in the
+Scanner) applies only to the RESULTS OF SCANNING the consumer's files in
+watch mode, not to the molique class dictionary itself.

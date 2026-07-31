@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:pagination` (Etap C.4 - ostatnia z pierwszej fali)
+ * molique-jit - `make:pagination` tests (Stage C.4 - the last of the first wave)
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,37 +14,37 @@ const { renderPagination } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-pagination.js')).href
 );
 
-test('make:pagination - strona 1: "Poprzednia" disabled, "1" aktywna', () => {
-  const html = renderPagination({ modern: false, totalPages: 3, currentPage: 1, prevLabel: 'Poprzednia', nextLabel: 'Następna' });
-  assert.match(html, /class="page-item is-disabled">\s*<a class="page-link" href="#">Poprzednia/);
+test('make:pagination - page 1: "Previous" disabled, "1" active', () => {
+  const html = renderPagination({ modern: false, totalPages: 3, currentPage: 1, prevLabel: 'Previous', nextLabel: 'Next' });
+  assert.match(html, /class="page-item is-disabled">\s*<a class="page-link" href="#">Previous/);
   assert.match(html, /class="page-item is-active">\s*<a class="page-link" href="#">1</);
-  assert.doesNotMatch(html, /Następna[\s\S]{0,5}is-disabled/);
+  assert.doesNotMatch(html, /Next[\s\S]{0,5}is-disabled/);
 });
 
-test('make:pagination - ostatnia strona: "Nastepna" disabled', () => {
-  const html = renderPagination({ modern: false, totalPages: 3, currentPage: 3, prevLabel: 'Poprzednia', nextLabel: 'Następna' });
+test('make:pagination - last page: "Next" disabled', () => {
+  const html = renderPagination({ modern: false, totalPages: 3, currentPage: 3, prevLabel: 'Previous', nextLabel: 'Next' });
   const nextItemIndex = html.lastIndexOf('<li class="page-item');
   assert.match(html.slice(nextItemIndex), /is-disabled/);
 });
 
-test('make:pagination - strona srodkowa: ani prev, ani next nie sa disabled', () => {
-  const html = renderPagination({ modern: false, totalPages: 5, currentPage: 3, prevLabel: 'Poprzednia', nextLabel: 'Następna' });
+test('make:pagination - a middle page: neither prev nor next is disabled', () => {
+  const html = renderPagination({ modern: false, totalPages: 5, currentPage: 3, prevLabel: 'Previous', nextLabel: 'Next' });
   assert.equal((html.match(/is-disabled/g) ?? []).length, 0);
   assert.match(html, /class="page-item is-active">\s*<a class="page-link" href="#">3</);
 });
 
-test('make:pagination - wariant modern dodaje klase OBOK .pagination, nie zamiast', () => {
+test('make:pagination - the modern variant adds a class ALONGSIDE .pagination, not instead of it', () => {
   const html = renderPagination({ modern: true, totalPages: 2, currentPage: 1, prevLabel: 'P', nextLabel: 'N' });
   assert.match(html, /class="pagination pagination-modern m-0"/);
 });
 
-test('make:pagination - wariant klasyczny bez dodatkowej klasy', () => {
+test('make:pagination - the classic variant has no extra class', () => {
   const html = renderPagination({ modern: false, totalPages: 2, currentPage: 1, prevLabel: 'P', nextLabel: 'N' });
   assert.match(html, /class="pagination m-0"/);
   assert.doesNotMatch(html, /pagination-modern/);
 });
 
-test('make:pagination - liczba pozycji = totalPages + 2 (prev/next)', () => {
+test('make:pagination - number of items = totalPages + 2 (prev/next)', () => {
   const html = renderPagination({ modern: false, totalPages: 4, currentPage: 2, prevLabel: 'P', nextLabel: 'N' });
   assert.equal((html.match(/page-item/g) ?? []).length, 6);
 });

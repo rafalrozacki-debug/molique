@@ -2,14 +2,13 @@
 /**
  * molique-jit - CLI
  *
- * Komendy glowne (angielskie, kanoniczne) + aliasy polskie/niemieckie wg
- * tools/jit/docs/cli-spec.md. Lokalizacja NIE jest robiona przez alias()
- * Commandera (rozne nazwy per jezyk dla TEJ SAMEJ flagi to gimnastyka,
- * ktorej Commander nie robi wygodnie) - zamiast tego argv jest
- * TLUMACZONE na kanoniczne angielskie nazwy PRZED przekazaniem do
- * Commandera, ktory zna tylko jeden, angielski wariant kazdej
- * komendy/flagi. Prostsze i latwiejsze do przetestowania niz zaleznosc od
- * wewnetrznej obslugi aliasow biblioteki.
+ * Main commands (English, canonical) + Polish/German aliases per
+ * tools/jit/docs/cli-spec.md. Localization is NOT done via Commander's
+ * alias() (different names per language for the SAME flag is a gymnastic
+ * Commander doesn't do conveniently) - instead argv is TRANSLATED to the
+ * canonical English names BEFORE being passed to Commander, which only
+ * knows a single, English variant of each command/flag. Simpler and
+ * easier to test than relying on the library's internal alias handling.
  */
 
 import { Command } from 'commander';
@@ -51,12 +50,12 @@ import { registerMakeStatusIconCommand } from './cli/make-status-icon.js';
 import { registerMakeCodePreviewCommand } from './cli/make-code-preview.js';
 import { registerMakeComponentListCommand } from './cli/list.js';
 
-/* ---------- Tlumaczenie argv (PL/DE -> EN) ---------- */
+/* ---------- argv translation (PL/DE -> EN) ---------- */
 
 const COMMAND_ALIASES: Record<string, string> = {
   pomoc: 'help', // PL
   hilfe: 'help', // DE
-  start: 'init', // PL i DE dziela to samo slowo dla "init"
+  start: 'init', // PL and DE share the same word for "init"
   buduj: 'build', // PL
   bauen: 'build', // DE
   obserwuj: 'watch', // PL
@@ -128,9 +127,9 @@ const FLAG_ALIASES: Record<string, string> = {
   '--minifizieren': '--minify',
   '--konfiguracja': '--config',
   '--konfiguration': '--config',
-  // Flagi wspoldzielone przez komendy make:* (plan rozwoju CLI) - dodane
-  // dla pelnej spojnosci z reszta CLI, mimo ze w praktyce te flagi czesciej
-  // trafiaja do skryptow/CI niz do reki na zywo w terminalu.
+  // Flags shared by the make:* commands (CLI roadmap) - added for full
+  // consistency with the rest of the CLI, even though in practice these
+  // flags are more often used in scripts/CI than typed live in a terminal.
   '--liczba': '--count', // PL
   '--anzahl': '--count', // DE
   '--odpowiedzi': '--answers', // PL
@@ -141,11 +140,10 @@ const FLAG_ALIASES: Record<string, string> = {
   '--ausgabe': '--out', // DE
 };
 
-// argv = [nodePath, scriptPath, ...userArgs] - slowo komendy zaczyna sie
-// dopiero od indeksu 2. Pominiecie tego dawalo prawdziwego buga: petla
-// sprawdzala argv[0] ("node", nie zaczyna sie od "-") jako "slowo komendy",
-// oznaczala je jako sprawdzone i nigdy nie docierala do prawdziwej komendy
-// pod argv[2].
+// argv = [nodePath, scriptPath, ...userArgs] - the command word only
+// starts at index 2. Skipping this caused a real bug: the loop checked
+// argv[0] ("node", doesn't start with "-") as the "command word", marked
+// it as handled, and never reached the actual command at argv[2].
 export function translateArgv(argv: string[]): string[] {
   const out = argv.slice();
   let commandTranslated = false;
@@ -156,7 +154,7 @@ export function translateArgv(argv: string[]): string[] {
       out[i] = FLAG_ALIASES[flagPart] + (eq === -1 ? '' : out[i].slice(eq));
       continue;
     }
-    // Pierwszy token (od indeksu 2), ktory nie zaczyna sie od "-", to slowo komendy.
+    // The first token (from index 2) that doesn't start with "-" is the command word.
     if (!commandTranslated && !out[i].startsWith('-')) {
       if (out[i] in COMMAND_ALIASES) out[i] = COMMAND_ALIASES[out[i]];
       commandTranslated = true;
@@ -165,7 +163,7 @@ export function translateArgv(argv: string[]): string[] {
   return out;
 }
 
-/* ---------- Wspolne ---------- */
+/* ---------- Shared ---------- */
 
 function targetsCwd(configPath: string): string {
   return path.dirname(path.resolve(configPath));
@@ -173,38 +171,38 @@ function targetsCwd(configPath: string): string {
 
 /* ---------- Program ---------- */
 
-// Wersja czytana z wlasnego package.json (jedyne zrodlo prawdy) - zamiast
-// duplikowac numer na sztywno tutaj, gdzie latwo zapomniec o aktualizacji
-// przy kazdym wydaniu.
+// Version read from our own package.json (the single source of truth) -
+// instead of duplicating the number hardcoded here, where it's easy to
+// forget to update it with every release.
 const packageJsonPath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'package.json');
 const { version } = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')) as { version: string };
 
 const program = new Command();
 program
   .name('molique-jit')
-  .description('Silnik JIT dla frameworka molique - generuje wylacznie potrzebny CSS.')
-  .version(version, '-V, --version', 'Wypisz numer wersji');
+  .description('JIT engine for the molique framework - generates only the CSS you need.')
+  .version(version, '-V, --version', 'Print the version number');
 
 program
   .command('init')
-  .description('Tworzy plik molique.config.mjs (alias: start)')
+  .description('Creates the molique.config.mjs file (alias: start)')
   .action(() => {
     const target = path.resolve(process.cwd(), DEFAULT_CONFIG_FILE);
     if (fs.existsSync(target)) {
-      console.error(`${DEFAULT_CONFIG_FILE} juz istnieje - nie nadpisuje.`);
+      console.error(`${DEFAULT_CONFIG_FILE} already exists - not overwriting.`);
       process.exitCode = 1;
       return;
     }
     fs.writeFileSync(target, INIT_TEMPLATE);
-    console.log(`Utworzono ${DEFAULT_CONFIG_FILE}.`);
+    console.log(`Created ${DEFAULT_CONFIG_FILE}.`);
   });
 
 program
   .command('build')
-  .description('Kompiluje CSS do pliku(ow) wyjsciowego(ych) (aliasy: buduj, bauen)')
-  .option('-c, --config <path>', 'Sciezka do pliku konfiguracyjnego', DEFAULT_CONFIG_FILE)
-  .option('-m, --minify', 'Wymus kompresje wyjscia (patrz uwaga w molique.config.mjs)')
-  .option('-v, --verbose', 'Wypisz statystyki dopasowania')
+  .description('Compiles CSS to the output file(s) (aliases: buduj, bauen)')
+  .option('-c, --config <path>', 'Path to the configuration file', DEFAULT_CONFIG_FILE)
+  .option('-m, --minify', 'Force output minification (see the note in molique.config.mjs)')
+  .option('-v, --verbose', 'Print matching stats')
   .action(async (opts: { config: string; minify?: boolean; verbose?: boolean }) => {
     const config = await loadConfig(opts.config);
     const targets = resolveTargets(config);
@@ -221,11 +219,11 @@ program
           verbose: opts.verbose,
         });
         console.log(
-          `OK  ${target.output} - ${result.matchedUtilityClasses.length} klas narzedziowych, ` +
-            `${result.matchedComponents.length} komponentow.`
+          `OK  ${target.output} - ${result.matchedUtilityClasses.length} utility classes, ` +
+            `${result.matchedComponents.length} components.`
         );
       } catch (err) {
-        console.error(`BLAD ${target.output}: ${(err as Error).message}`);
+        console.error(`ERROR ${target.output}: ${(err as Error).message}`);
         hadError = true;
       }
     }
@@ -235,9 +233,9 @@ program
 
 program
   .command('watch')
-  .description('Tryb deweloperski - nasluchuje zmian na zywo (aliasy: obserwuj, beobachten)')
-  .option('-c, --config <path>', 'Sciezka do pliku konfiguracyjnego', DEFAULT_CONFIG_FILE)
-  .option('-v, --verbose', 'Wypisz statystyki po kazdej przebudowie', true)
+  .description('Development mode - listens for changes live (aliases: obserwuj, beobachten)')
+  .option('-c, --config <path>', 'Path to the configuration file', DEFAULT_CONFIG_FILE)
+  .option('-v, --verbose', 'Print stats after every rebuild', true)
   .action(async (opts: { config: string; verbose?: boolean }) => {
     const config = await loadConfig(opts.config);
     const targets = resolveTargets(config);
@@ -255,7 +253,7 @@ program
       )
     );
 
-    console.log(`Nasluchuje (${targets.length} cel(e/ow))... Ctrl+C, zeby zakonczyc.`);
+    console.log(`Watching (${targets.length} target(s))... Ctrl+C to stop.`);
 
     let shuttingDown = false;
     const shutdown = async () => {
@@ -298,10 +296,11 @@ registerMakeToastCommand(program);
 registerMakeBreadcrumbCommand(program);
 registerMakeStatusIconCommand(program);
 registerMakeCodePreviewCommand(program);
-// Rejestrowana na koncu (kolejnosc bez znaczenia funkcjonalnego - lista w
-// cli/list.ts czyta program.commands dopiero w momencie wywolania akcji,
-// gdy wszystkie komendy juz sa zarejestrowane), ale czytelniej trzymac
-// "spis" jako ostatnia pozycje w kolejnosci rejestracji.
+// Registered last (order has no functional significance - the list in
+// cli/list.ts only reads program.commands when the action is actually
+// invoked, by which point all commands are already registered), but it's
+// more readable to keep the "listing" command as the last entry in
+// registration order.
 registerMakeComponentListCommand(program);
 
 program.parseAsync(translateArgv(process.argv)).catch((err) => {

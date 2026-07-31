@@ -1,24 +1,25 @@
 /**
  * molique-jit - `make:modal` (Scaffolding)
  *
- * Zobacz tools/jit/docs/scaffolding-spec.md, punkt 3.B. Trzy warianty
- * (Standard / Confirm / Context), markup w stubach (src/stubs/modal-*.stub.html)
- * jest 1:1 z realnym, dzialajacym przykladem w src/examples-modals.html tego
- * repo - nie z ilustracyjnego pseudokodu w scaffolding-spec.md - zeby
- * wygenerowany kod byl gwarantowanie zgodny z tym, co faktycznie wspiera CSS
- * (patrz css/scss/components/_modal*.scss).
+ * See tools/jit/docs/scaffolding-spec.md, point 3.B. Three variants
+ * (Standard / Confirm / Context), the markup in the stubs
+ * (src/stubs/modal-*.stub.html) is 1:1 with the real, working example in
+ * src/examples-modals.html of this repo - not with the illustrative
+ * pseudocode in scaffolding-spec.md - so that the generated code is
+ * guaranteed to match what the CSS actually supports (see
+ * css/scss/components/_modal*.scss).
  *
- * Nazwa komendy byla wczesniej "make:component" (kiedy Modal byl jedynym
- * generatorem) - przemianowana na "make:modal" po dodaniu kolejnych rodzin
- * (make:layout itd.), zeby pasowac do konwencji "jedna komenda = jeden
- * typ komponentu". "make:component" teraz listuje dostepne generatory
- * (patrz cli/list.ts).
+ * The command was previously named "make:component" (when Modal was the
+ * only generator) - renamed to "make:modal" after further families were
+ * added (make:layout etc.), to match the "one command = one component
+ * type" convention. "make:component" now lists the available generators
+ * (see cli/list.ts).
  *
- * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
- * Etap B): kazdy wariant dostaje WLASNY typ `ModalXxxAnswers` i WLASNA
- * czysta `renderModalXxx()`, zgodnie z zasada "osobny stub/typ per
- * wariant, zero warunkow w srodku". `ModalAnswers` (unia z polem `type`)
- * to ksztalt oczekiwany przez `--answers`/`--answers-file`.
+ * Split into "collect answers" / "render markup" (CLI roadmap, Stage B):
+ * each variant gets its OWN `ModalXxxAnswers` type and its OWN pure
+ * `renderModalXxx()`, following the "separate stub/type per variant,
+ * zero conditionals inside" rule. `ModalAnswers` (a union with a "type"
+ * field) is the shape expected by `--answers`/`--answers-file`.
  */
 
 import type { Command } from 'commander';
@@ -28,7 +29,7 @@ import { outputResult } from './output.js';
 import { loadAnswers } from './answers.js';
 
 const ID_VALIDATE = (v: string) =>
-  /^[a-zA-Z][\w-]*$/.test(v) || 'ID musi zaczynac sie od litery i zawierac tylko litery/cyfry/-/_ (bez spacji).';
+  /^[a-zA-Z][\w-]*$/.test(v) || 'The ID must start with a letter and contain only letters/digits/-/_ (no spaces).';
 
 type TriggerVariant = 'btn-primary' | 'btn-secondary' | 'btn-danger';
 
@@ -38,9 +39,9 @@ interface TriggerAnswers {
 }
 
 async function collectTriggerAnswers(): Promise<TriggerAnswers> {
-  const triggerLabel = await input({ message: 'Etykieta przycisku otwierajacego:', default: 'Otworz' });
+  const triggerLabel = await input({ message: 'Opening button label:', default: 'Open' });
   const triggerVariant = await select<TriggerVariant>({
-    message: 'Kolor przycisku otwierajacego:',
+    message: 'Opening button color:',
     choices: [
       { name: 'Primary', value: 'btn-primary' },
       { name: 'Secondary', value: 'btn-secondary' },
@@ -68,8 +69,8 @@ export interface ModalStandardAnswers extends TriggerAnswers {
 }
 
 export async function collectModalStandardAnswers(id: string): Promise<ModalStandardAnswers> {
-  const title = await input({ message: 'Tytul modala:', default: 'Tytul' });
-  const body = await input({ message: 'Tresc modala:', default: 'Tresc modala...' });
+  const title = await input({ message: 'Modal title:', default: 'Title' });
+  const body = await input({ message: 'Modal content:', default: 'Modal content...' });
   const trigger = await collectTriggerAnswers();
   return { id, title, body, ...trigger };
 }
@@ -96,26 +97,26 @@ export interface ModalConfirmAnswers extends TriggerAnswers {
 }
 
 export async function collectModalConfirmAnswers(id: string): Promise<ModalConfirmAnswers> {
-  const title = await input({ message: 'Pytanie (tytul):', default: 'Na pewno?' });
-  const message = await input({ message: 'Opis:', default: 'Tej operacji nie mozna cofnac.' });
-  const cancelLabel = await input({ message: 'Etykieta przycisku anulowania:', default: 'Anuluj' });
-  const confirmLabel = await input({ message: 'Etykieta przycisku potwierdzenia:', default: 'Potwierdz' });
+  const title = await input({ message: 'Question (title):', default: 'Are you sure?' });
+  const message = await input({ message: 'Description:', default: 'This action cannot be undone.' });
+  const cancelLabel = await input({ message: 'Cancel button label:', default: 'Cancel' });
+  const confirmLabel = await input({ message: 'Confirm button label:', default: 'Confirm' });
   const confirmVariant = await select<ConfirmVariant>({
-    message: 'Kolor przycisku potwierdzenia:',
+    message: 'Confirm button color:',
     choices: [
-      { name: 'Danger (akcja niszczaca, np. usuwanie)', value: 'btn-danger' },
+      { name: 'Danger (a destructive action, e.g. deletion)', value: 'btn-danger' },
       { name: 'Primary', value: 'btn-primary' },
       { name: 'Success', value: 'btn-success' },
     ],
     default: 'btn-danger',
   });
   const icon = await select<ConfirmIcon>({
-    message: 'Ikona (Phosphor, img/icons-sprite.svg):',
+    message: 'Icon (Phosphor, img/icons-sprite.svg):',
     choices: [
-      { name: 'Ostrzezenie', value: 'ph-warning' },
-      { name: 'Pytanie', value: 'ph-question' },
-      { name: 'Kosz', value: 'ph-trash' },
-      { name: 'Informacja', value: 'ph-info' },
+      { name: 'Warning', value: 'ph-warning' },
+      { name: 'Question', value: 'ph-question' },
+      { name: 'Trash', value: 'ph-trash' },
+      { name: 'Info', value: 'ph-info' },
     ],
     default: 'ph-warning',
   });
@@ -150,16 +151,16 @@ export interface ModalContextAnswers extends TriggerAnswers {
 }
 
 export async function collectModalContextAnswers(id: string): Promise<ModalContextAnswers> {
-  const title = await input({ message: 'Tytul menu:', default: 'Opcje' });
-  console.log('Dwie pozycje akcji na start - kolejne dopiszesz recznie w wygenerowanym kodzie (skopiuj <li>).');
-  const action1Label = await input({ message: '  Etykieta akcji 1:', default: 'Edytuj' });
+  const title = await input({ message: 'Menu title:', default: 'Options' });
+  console.log('Two action items to start - add more later by hand in the generated code (copy the <li>).');
+  const action1Label = await input({ message: '  Action 1 label:', default: 'Edit' });
   const action1Icon = await input({
-    message: '  Ikona akcji 1 (nazwa z img/icons-sprite.svg, np. ph-pencil):',
+    message: '  Action 1 icon (name from img/icons-sprite.svg, e.g. ph-pencil):',
     default: 'ph-pencil',
   });
-  const action2Label = await input({ message: '  Etykieta akcji 2:', default: 'Usun' });
-  const action2Icon = await input({ message: '  Ikona akcji 2:', default: 'ph-trash' });
-  const action2Danger = await confirm({ message: '  Czy akcja 2 jest niszczaca (kolor danger)?', default: true });
+  const action2Label = await input({ message: '  Action 2 label:', default: 'Delete' });
+  const action2Icon = await input({ message: '  Action 2 icon:', default: 'ph-trash' });
+  const action2Danger = await confirm({ message: '  Is action 2 destructive (danger color)?', default: true });
   const trigger = await collectTriggerAnswers();
   return { id, title, action1Label, action1Icon, action2Label, action2Icon, action2Danger, ...trigger };
 }
@@ -193,15 +194,15 @@ function renderModal(answers: ModalAnswers): string {
 
 async function collectModalAnswers(): Promise<ModalAnswers> {
   const modalType = await select<ModalAnswers['type']>({
-    message: 'Typ modala?',
+    message: 'Modal type?',
     choices: [
       { name: 'Standard', value: 'standard' },
-      { name: 'Dialog potwierdzajacy (Confirm)', value: 'confirm' },
-      { name: 'Boczny / kontekstowy (Context)', value: 'context' },
+      { name: 'Confirmation dialog (Confirm)', value: 'confirm' },
+      { name: 'Side / contextual (Context)', value: 'context' },
     ],
   });
   const id = await input({
-    message: 'ID modala (atrybut id, uzywany tez w onclick):',
+    message: 'Modal ID (the id attribute, also used in onclick):',
     default: 'myModal',
     validate: ID_VALIDATE,
   });
@@ -215,12 +216,12 @@ export function registerMakeModalCommand(program: Command): void {
   program
     .command('make:modal')
     .description(
-      'Interaktywny generator modala (<dialog>) - Standard / Confirm / Context ' +
-        '(aliasy: zrob:modal, mache:modal)'
+      'Interactive modal (<dialog>) generator - Standard / Confirm / Context ' +
+        '(aliases: zrob:modal, mache:modal)'
     )
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt ModalAnswers, z polem "type") - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .option('--answers <json>', 'Answers as JSON (ModalAnswers shape, with a "type" field) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<ModalAnswers>(opts);
       const answers = provided ?? (await collectModalAnswers());

@@ -1,46 +1,49 @@
 /**
- * molique-jit - Konfiguracja (molique.config.mjs)
+ * molique-jit - Configuration (molique.config.mjs)
  *
- * Schemat pliku konfiguracyjnego uzytkownika - nigdzie wczesniej formalnie
- * nie zdefiniowany (oryginalny cli-spec.md tylko o nim wspominal). Plik jest
- * zwyklym modulem ESM z domyslnym eksportem obiektu {@link MoliqueConfig}.
+ * Schema of the user configuration file - never formally defined anywhere
+ * before (the original cli-spec.md only mentioned it). The file is a
+ * regular ESM module with a default export of the {@link MoliqueConfig}
+ * object.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-/** Jeden niezalezny cel budowania: wlasny zestaw plikow zrodlowych i wlasny plik wyjsciowy. */
+/** One independent build target: its own set of source files and its own output file. */
 export interface ConfigTarget {
   content: string[];
   output: string;
 }
 
 export interface MoliqueConfig {
-  /** Globy (wzgledem lokalizacji pliku konfiguracyjnego) do zeskanowania. */
+  /** Globs (relative to the config file's location) to scan. */
   content?: string[];
-  /** Sciezka pliku wyjsciowego CSS (wzgledem lokalizacji pliku konfiguracyjnego). */
+  /** Output CSS file path (relative to the config file's location). */
   output?: string;
   /**
-   * Wlasne, dynamicznie skladane klasy (np. backend PHP:
-   * `badge-<?= $status ?>`), ktorych sam skan literalow nie znajdzie.
-   * Klasy runtime'owe SAMEGO molique (toasty, karuzela, lightbox itd.) sa
-   * dolaczane automatycznie i NIE trzeba ich tu dublowac - to lista TYLKO
-   * na klasy specyficzne dla projektu konsumenta.
+   * Custom, dynamically composed classes (e.g. PHP backend:
+   * `badge-<?= $status ?>`) that a plain literal scan cannot find.
+   * molique's OWN runtime classes (toasts, carousel, lightbox, etc.) are
+   * included automatically and do NOT need to be duplicated here - this
+   * list is ONLY for classes specific to the consuming project.
    */
   safelist?: string[];
   /**
-   * Kompresja wyjscia. Domyslnie true - dane zrodlowe (chunki komponentow,
-   * warstwa utilities) sa juz kompresowane u zrodla (gen-chunks.js,
-   * --style=compressed), wiec w praktyce ta flaga dzis niczego dodatkowo
-   * nie ubija - zostaje w schemacie dla zgodnosci z cli-spec.md i na
-   * wypadek przyszlych zrodel danych, ktore moglyby nie byc juz skompresowane.
+   * Output minification. Defaults to true - the source data (component
+   * chunks, the utilities layer) is already compressed at the source
+   * (gen-chunks.js, --style=compressed), so in practice this flag doesn't
+   * squeeze out anything extra today - it stays in the schema for
+   * consistency with cli-spec.md and in case future data sources are not
+   * already compressed.
    */
   minify?: boolean;
   /**
-   * Kilka niezaleznych celow z jednego configu (np. osobny, mniejszy plik
-   * CSS na kazda landing page kampanii). Gdy podane i niepuste, ZASTEPUJE
-   * pola `content`/`output` powyzej - kazdy target ma wlasny komplet.
+   * Several independent targets from a single config (e.g. a separate,
+   * smaller CSS file for each campaign landing page). When provided and
+   * non-empty, REPLACES the `content`/`output` fields above - each target
+   * has its own complete set.
    */
   targets?: ConfigTarget[];
 }
@@ -49,7 +52,7 @@ export const DEFAULT_CONFIG_FILE = 'molique.config.mjs';
 export const DEFAULT_CONTENT = ['**/*.html', '**/*.php'];
 export const DEFAULT_OUTPUT = 'css/molique-jit.css';
 
-/** Rozwija config do listy konkretnych celow - zawsze co najmniej jeden. */
+/** Expands the config into a list of concrete targets - always at least one. */
 export function resolveTargets(config: MoliqueConfig): ConfigTarget[] {
   if (config.targets && config.targets.length > 0) return config.targets;
   return [
@@ -64,38 +67,38 @@ export async function loadConfig(configPath: string): Promise<MoliqueConfig> {
   const resolved = path.resolve(configPath);
   if (!fs.existsSync(resolved)) {
     throw new Error(
-      `Brak pliku konfiguracyjnego: ${resolved}\nUruchom "molique-jit init" (lub "molique-jit start"), zeby go utworzyc.`
+      `Configuration file not found: ${resolved}\nRun "molique-jit init" (or "molique-jit start") to create it.`
     );
   }
   const mod = (await import(pathToFileURL(resolved).href)) as { default?: MoliqueConfig };
   if (!mod.default) {
-    throw new Error(`${resolved} nie ma domyslnego eksportu (export default { ... }).`);
+    throw new Error(`${resolved} has no default export (export default { ... }).`);
   }
   return mod.default;
 }
 
 export const INIT_TEMPLATE = `export default {
-  // Pliki projektu do zeskanowania w poszukiwaniu klas molique.
+  // Project files to scan for molique classes.
   content: ${JSON.stringify(DEFAULT_CONTENT)},
 
-  // Gdzie zapisac wygenerowany CSS.
+  // Where to save the generated CSS.
   output: ${JSON.stringify(DEFAULT_OUTPUT)},
 
-  // Wlasne, dynamicznie skladane klasy (np. backend PHP:
-  // \`badge-<?= $status ?>\`), ktorych skaner nie znajdzie jako literalu.
-  // Klasy runtime'owe SAMEGO molique (toasty, karuzela, lightbox itd.)
-  // dolaczane sa automatycznie - tej listy NIE trzeba nimi dublowac.
+  // Custom, dynamically composed classes (e.g. PHP backend:
+  // \`badge-<?= $status ?>\`) that the scanner cannot find as a literal.
+  // molique's OWN runtime classes (toasts, carousel, lightbox, etc.) are
+  // included automatically - this list does NOT need to duplicate them.
   safelist: [],
 
-  // Kompresja wyjscia (patrz komentarz w dokumentacji - dane sa juz
-  // skompresowane u zrodla).
+  // Output minification (see the comment in the docs - the data is
+  // already compressed at the source).
   minify: true,
 
-  // Opcjonalnie: kilka niezaleznych plikow CSS z jednego configu, np.
-  // osobny, dedykowany plik dla landing page kampanii reklamowej. Gdy
-  // podane, ZASTEPUJE pola content/output powyzej.
+  // Optional: several independent CSS files from a single config, e.g. a
+  // separate, dedicated file for an ad campaign landing page. When
+  // provided, REPLACES the content/output fields above.
   // targets: [
-  //   { content: ['landing-kampania.html'], output: 'css/landing-kampania.css' },
+  //   { content: ['landing-campaign.html'], output: 'css/landing-campaign.css' },
   // ],
 };
 `;

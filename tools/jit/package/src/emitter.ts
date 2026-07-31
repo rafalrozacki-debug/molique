@@ -1,12 +1,13 @@
 /**
  * molique-jit - Emitter
  *
- * Skleja dopasowane fragmenty w gotowy arkusz CSS, zachowujac kolejnosc
- * warstw frameworka (reset, base, layout, components, modules, utilities).
- * Zmienne motywu (:root + [data-theme="dark"]) sa dolaczane ZAWSZE, bez
- * wzgledu na to, co zostalo zeskanowane - filtrowanie ich ryzykowaloby
- * ciche zepsucie dark mode / anti-FOUC u konsumenta, a ich koszt (kilka KB)
- * jest znikomy w porownaniu do tego ryzyka.
+ * Assembles the matched fragments into a finished CSS stylesheet,
+ * preserving the framework's layer order (reset, base, layout,
+ * components, modules, utilities). Theme variables (:root +
+ * [data-theme="dark"]) are ALWAYS included, regardless of what was
+ * scanned - filtering them would risk silently breaking dark mode /
+ * anti-FOUC for the consumer, and their cost (a few KB) is negligible
+ * compared to that risk.
  */
 
 import fs from 'node:fs';
@@ -15,14 +16,15 @@ import type { LoadedData } from './lookup.js';
 
 const LAYER_DECLARATION = '@layer reset, base, layout, components, modules, utilities;';
 
-// Kazdy chunk w dist/chunks/ niesie WLASNA kopie LAYER_DECLARATION na
-// poczatku pliku (gen-chunks.js dopisuje ja do kazdego, zeby dzialal tez
-// uzyty samodzielnie, poza tym emitterem) - przy sklejaniu wielu chunkow
-// trzeba ja usunac ze WSZYSTKICH oprocz jednej, ktora sama dopisujemy
-// wyzej. Dokladnie ta sama zasada i regex co w konfiguratorze
-// (src/builder.js, LAYER_DECL) - patrz tez notatka w dist/chunks/manifest.json:
-// "Sklejajac, zostaw deklaracje warstw TYLKO RAZ (pierwsza)". Bez tego
-// typowy build dublowal ja dziesiatki razy (raz na chunk).
+// Every chunk in dist/chunks/ carries its OWN copy of LAYER_DECLARATION at
+// the start of the file (gen-chunks.js adds it to each one so it also
+// works when used standalone, outside this emitter) - when concatenating
+// multiple chunks it has to be stripped from ALL but the one we add
+// ourselves above. Exactly the same rule and regex as in the configurator
+// (src/builder.js, LAYER_DECL) - see also the note in
+// dist/chunks/manifest.json: "When concatenating, keep the layer
+// declaration ONLY ONCE (the first)." Without this, a typical build would
+// duplicate it dozens of times (once per chunk).
 const LAYER_DECL_RE = /@layer\s+reset\s*,\s*base\s*,\s*layout\s*,\s*components\s*,\s*modules\s*,\s*utilities\s*;/g;
 
 function stripLayerDeclaration(css: string): string {
@@ -33,16 +35,17 @@ export function emit(data: LoadedData, matchedUtilityClasses: string[], matchedC
   const parts: string[] = [LAYER_DECLARATION];
 
   parts.push(stripLayerDeclaration(fs.readFileSync(data.rootCssPath, 'utf8')));
-  // "base" (reset, typografia bazowa, .container/.container-fluid) jest tak
-  // samo "mandatory" jak zmienne motywu - bez niego strona nie renderuje sie
-  // poprawnie niezaleznie od tego, jakie klasy zostaly zeskanowane.
+  // "base" (reset, base typography, .container/.container-fluid) is just
+  // as "mandatory" as the theme variables - without it the page won't
+  // render correctly no matter which classes were scanned.
   parts.push(stripLayerDeclaration(fs.readFileSync(data.baseCssPath, 'utf8')));
 
-  // Komponenty jako CALE, juz skompilowane pliki chunkow (dokladnie ta sama
-  // tresc, ktora dzis produkuje tools/gen-chunks.js) - nie probujemy wycinac
-  // pojedynczych regul, bo komponenty zawieraja selektory zlozone i
-  // zalezne od struktury DOM (np. ":has()", sasiedztwo elementow), ktorych
-  // sam skan klas nie potrafi bezpiecznie odtworzyc czesciowo.
+  // Components as WHOLE, already-compiled chunk files (the exact same
+  // content that tools/gen-chunks.js produces today) - we don't try to
+  // cut out individual rules, because components contain composite
+  // selectors dependent on DOM structure (e.g. ":has()", element
+  // adjacency) that a plain class scan cannot safely reconstruct
+  // partially.
   for (const id of matchedComponentIds) {
     const file = path.join(data.componentsDir, `molique-${id}.css`);
     if (fs.existsSync(file)) parts.push(stripLayerDeclaration(fs.readFileSync(file, 'utf8')));
@@ -54,9 +57,9 @@ export function emit(data: LoadedData, matchedUtilityClasses: string[], matchedC
 }
 
 function utilitiesLayerBody(data: LoadedData, matchedUtilityClasses: string[]): string {
-  // Grupowanie po identycznym zestawie warunkow (wrappers), zeby np. 30
-  // dopasowanych klas "-md-" wylladowalo w JEDNYM @media, a nie w 30
-  // powtorzonych blokach.
+  // Grouping by identical condition set (wrappers), so that e.g. 30
+  // matched "-md-" classes land in a SINGLE @media block, not 30
+  // repeated blocks.
   const groups = new Map<string, { wrappers: string[]; body: string[] }>();
 
   for (const cls of matchedUtilityClasses) {

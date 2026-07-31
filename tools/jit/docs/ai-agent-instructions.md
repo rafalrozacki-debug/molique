@@ -1,109 +1,108 @@
-# AI Agent Context: Molique JIT Compiler (stan po Fazach 1-5)
+# AI Agent Context: Molique JIT Compiler (state after Phases 1-5)
 
-> Ten dokument pierwotnie instruował agenta, JAK ZBUDOWAĆ `molique-jit` od
-> zera. Silnik jest już zbudowany, przetestowany (test parytetu 672/672,
-> pełna ręczna weryfikacja CLI) i działający. Ten plik teraz opisuje
-> architekturę TAKĄ, JAKA JEST, żeby kolejna sesja (lub kolejny agent) nie
-> musiała jej odkrywać od nowa - i żeby nikt nie próbował budować
-> "RuleParsera" opisanego w pierwotnej wersji tego pliku, bo to podejście
-> zostało świadomie ODRZUCONE na rzecz czegoś prostszego i bezpieczniejszego.
+> This document originally instructed the agent on HOW TO BUILD `molique-jit`
+> from scratch. The engine is now built, tested (parity test 672/672, full
+> manual CLI verification) and working. This file now describes the
+> architecture AS IT IS, so that the next session (or the next agent) doesn't
+> have to rediscover it from scratch - and so that nobody tries to build the
+> "RuleParser" described in the original version of this file, since that
+> approach was deliberately REJECTED in favor of something simpler and safer.
 
-## Rola
+## Role
 
-Pracujesz nad `molique-jit` - pakietem npm, silnikiem JIT dla frameworka
-molique CSS, zlokalizowanym w tym monorepo w `tools/jit/`. Zanim zaczniesz
-COKOLWIEK zmieniać, przeczytaj `jit-spec.md` i `ast-schema.md` (oba
-zaktualizowane pod rzeczywistą architekturę) oraz `cli-spec.md` (schemat
-`molique.config.mjs` + mechanizm lokalizacji CLI).
+You are working on `molique-jit` - an npm package, the JIT engine for the
+molique CSS framework, located in this monorepo at `tools/jit/`. Before you
+change ANYTHING, read `jit-spec.md` and `ast-schema.md` (both updated to
+reflect the actual architecture) and `cli-spec.md` (the `molique.config.mjs`
+schema + the CLI localization mechanism).
 
-## Najważniejsza decyzja architektoniczna - NIE odwracaj jej bez powodu
+## The most important architectural decision - don't reverse it without a reason
 
-Pierwotny plan zakładał "Rule Parser" odtwarzający matematykę Sass
-(skalę odstępów, warianty kolorów) w ręcznie pisanych słownikach
-TypeScript - DRUGIE źródło prawdy obok SCSS. To zostało uznane za
-niebezpieczne (ryzyko dryfu) i ZASTĄPIONE tablicą przeglądową: cały
-możliwy zestaw klas narzędziowych jest kompilowany RAZ przez prawdziwego
-Sassa (w tym repo, nie w pakiecie), spłaszczany do JSON, a silnik w
-pakiecie robi wyłącznie odczyt po kluczu. Zero logiki matematycznej w
-TypeScript. Jeśli widzisz pokusę, żeby "przyspieszyć" coś przez
-zakodowanie wartości na sztywno zamiast czytać je z wygenerowanych danych
-- to jest dokładnie ten błąd, którego unikaliśmy. Nie rób tego.
+The original plan called for a "Rule Parser" that reimplemented Sass math
+(the spacing scale, color variants) in hand-written TypeScript dictionaries
+- a SECOND source of truth alongside SCSS. This was judged unsafe (drift
+risk) and REPLACED with a lookup table: the entire possible set of utility
+classes is compiled ONCE by real Sass (in this repo, not in the package),
+flattened to JSON, and the engine in the package does nothing but read by
+key. Zero mathematical logic in TypeScript. If you feel tempted to "speed
+something up" by hardcoding a value instead of reading it from the
+generated data - that's exactly the mistake we avoided. Don't do it.
 
-## Struktura repozytorium
+## Repository structure
 
 ```
 tools/
-  gen-chunks.js              # (juz istniejacy) chunki CSS + manifest.json + class-index.json
-  gen-jit-utilities.js       # (Faza 1) utilities.json ze skompilowanych chunkow
-  gen-jit-package-data.js    # (Faza 2) pakuje dane do tools/jit/package/data/
+  gen-chunks.js              # (already existing) CSS chunks + manifest.json + class-index.json
+  gen-jit-utilities.js       # (Phase 1) utilities.json from compiled chunks
+  gen-jit-package-data.js    # (Phase 2) packages data into tools/jit/package/data/
   jit/
     dist-data/
-      utilities.json         # COMMITOWANY - jedyne trwale zrodlo slownika utilities
+      utilities.json         # COMMITTED - the only persistent source of the utilities dictionary
     tests/
-      parity.test.mjs        # (Faza 3) node:test, npm run test:jit-parity
-    docs/                    # ten plik + jit-spec.md + ast-schema.md + cli-spec.md
-    package/                 # sam pakiet npm "molique-jit"
+      parity.test.mjs        # (Phase 3) node:test, npm run test:jit-parity
+    docs/                    # this file + jit-spec.md + ast-schema.md + cli-spec.md
+    package/                 # the npm package "molique-jit" itself
       src/
-        scanner.ts           # regex + fast-glob, cache per-plik
-        lookup.ts            # odczyt map JSON, zero matematyki
-        emitter.ts           # sklejanie finalnego CSS wg kolejnosci warstw
-        build.ts / watch.ts  # orkiestracja (jednorazowa / chokidar)
-        config.ts            # schemat molique.config.mjs
-        cli.ts                # bin: molique-jit (Commander + tlumaczenie argv PL/DE)
-        types.ts             # ZRODLO PRAWDY dla ksztaltow danych (patrz ast-schema.md)
-      data/                  # GITIGNORED - kopia wygenerowana przez gen-jit-package-data.js
+        scanner.ts           # regex + fast-glob, per-file cache
+        lookup.ts            # reads JSON maps, zero math
+        emitter.ts           # assembles the final CSS according to layer order
+        build.ts / watch.ts  # orchestration (one-off / chokidar)
+        config.ts            # molique.config.mjs schema
+        cli.ts                # bin: molique-jit (Commander + PL/DE argv translation)
+        types.ts             # SOURCE OF TRUTH for data shapes (see ast-schema.md)
+      data/                  # GITIGNORED - copy generated by gen-jit-package-data.js
 ```
 
-## Kolejność regeneracji (wazne przy kazdej zmianie SCSS)
+## Regeneration order (important on every SCSS change)
 
 ```
-node tools/gen-chunks.js            # 1. kompiluje SCSS -> dist/chunks/*.css + class-index.json
-node tools/gen-jit-utilities.js     # 2. czyta dist/chunks/molique-utilities*.css -> utilities.json
-node tools/gen-jit-package-data.js  # 3. kopiuje wszystko do tools/jit/package/data/
+node tools/gen-chunks.js            # 1. compiles SCSS -> dist/chunks/*.css + class-index.json
+node tools/gen-jit-utilities.js     # 2. reads dist/chunks/molique-utilities*.css -> utilities.json
+node tools/gen-jit-package-data.js  # 3. copies everything into tools/jit/package/data/
 ```
 
-Wszystkie trzy wpięte w `npm run predev`/`prebuild` w tej kolejności - w
-większości przypadków wystarczy `npm run predev`. Po zmianie w
-`tools/jit/package/src/*.ts` trzeba dodatkowo `cd tools/jit/package && npm run build` (tsc).
+All three are wired into `npm run predev`/`prebuild` in this order - in
+most cases `npm run predev` is enough. After a change in
+`tools/jit/package/src/*.ts` you additionally need `cd tools/jit/package && npm run build` (tsc).
 
-## Test parytetu - uruchamiaj po KAŻDEJ zmianie w generatorach
+## Parity test - run after EVERY change to the generators
 
 ```
 npm run test:jit-parity
 ```
 
-Dla każdej klasy w `utilities.json` porównuje ją z niezależnie
-skompilowanym `css/molique-style.css`. To jedyna siatka bezpieczeństwa,
-jakiej potrzebuje architektura tablicy przeglądowej - jeśli test jest
-czerwony, albo `css/molique-style.css` jest przestarzały (przekompiluj:
+For every class in `utilities.json` it compares it against the
+independently compiled `css/molique-style.css`. This is the only safety
+net the lookup-table architecture needs - if the test goes red, either
+`css/molique-style.css` is stale (recompile it:
 `node node_modules/sass/sass.js css/scss/molique-style.scss
-css/molique-style.css --style=expanded --no-source-map`), albo faktycznie
-wprowadziłeś rozjazd w generatorach.
+css/molique-style.css --style=expanded --no-source-map`), or you actually
+introduced a discrepancy in the generators.
 
-## Znane, świadome luki (nie próbuj ich "naprawić" bez decyzji użytkownika)
+## Known, deliberate gaps (don't try to "fix" them without a decision from the user)
 
-- **`fonts`/`a11y`/`eink`** (chunki core w `gen-chunks.js`) nie są
-  dołączane przez `molique-jit` w żaden sposób - nie są naturalnie
-  wyzwalane pojedynczą klasą (fonts = włącz/wyłącz, a11y = głównie
-  globalne reguły focus/reduced-motion, eink = tryb `@media print`).
-  Wymagałoby to prawdziwego projektu opt-in w configu, nie szybkiej łatki.
-- **`minify` w `molique.config.mjs`** jest dziś efektywnie no-op - dane są
-  już skompresowane u źródła. Zostaje w schemacie dla zgodności z
-  `cli-spec.md`.
-- **Brak automatycznych testów CLI** (`node:test` na `cli.ts`) - dotąd
-  weryfikowane wyłącznie ręcznie, na scratch-projektach poza repo.
-- **Pakiet ma `"private": true`** - nie jest jeszcze gotowy do
-  `npm publish` (brak README pakietu, nie podjęto decyzji czy zostaje w
-  tym monorepo czy dostaje własne repo).
+- **`fonts`/`a11y`/`eink`** (core chunks in `gen-chunks.js`) are not
+  included by `molique-jit` in any way - they aren't naturally triggered by
+  a single class (fonts = enable/disable, a11y = mostly global focus/
+  reduced-motion rules, eink = a `@media print` mode). This would require a
+  real opt-in design in the config, not a quick patch.
+- **`minify` in `molique.config.mjs`** is effectively a no-op today - the
+  data is already compressed at the source. It stays in the schema for
+  compatibility with `cli-spec.md`.
+- **No automated CLI tests** (`node:test` on `cli.ts`) - so far verified
+  only manually, on scratch projects outside the repo.
+- **The package has `"private": true`** - it's not yet ready for
+  `npm publish` (no package README, no decision made on whether it stays in
+  this monorepo or gets its own repo).
 
-## Konwencje techniczne (nadal aktualne z pierwotnego planu)
+## Technical conventions (still valid from the original plan)
 
-1. **Technologia:** Node.js, TypeScript (ESM, `tsc`, bez bundlera - CLI
-   jest wystarczająco małe, żeby go nie potrzebować).
-2. **Zależności pakietu:** `fast-glob` (skaner), `chokidar` ^3.x (watch -
-   CELOWO nie v4, bo usunęła natywne wsparcie glob), `commander` (CLI).
-   Zero zależności w generatorach `tools/gen-jit-*.js` (ten sam
-   zero-dependency styl, co `tools/gen-chunks.js`/`tools/gen-variables-doc.js`).
-3. **Molique NIE jest Tailwindem:** infiksy (`p-md-4`, `col-lg-span-6`),
-   natywne warstwy `@layer` (nie ma wyliczania specyficzności), moduły
-   komponentów jako wyizolowane, prekompilowane pliki.
+1. **Technology:** Node.js, TypeScript (ESM, `tsc`, no bundler - the CLI is
+   small enough not to need one).
+2. **Package dependencies:** `fast-glob` (scanner), `chokidar` ^3.x (watch -
+   DELIBERATELY not v4, since it removed native glob support), `commander`
+   (CLI). Zero dependencies in the `tools/gen-jit-*.js` generators (the same
+   zero-dependency style as `tools/gen-chunks.js`/`tools/gen-variables-doc.js`).
+3. **Molique is NOT Tailwind:** infixes (`p-md-4`, `col-lg-span-6`), native
+   `@layer` layers (no specificity calculation), component modules as
+   isolated, precompiled files.

@@ -1,19 +1,19 @@
 /**
  * molique-jit - Stub Renderer (Scaffolding)
  *
- * Zgodnie z tools/jit/docs/scaffolding-spec.md: "Lekki regex-replacer, nie
- * Handlebars/Twig". Zadnej logiki warunkowej WEWNATRZ szablonu - warianty
- * (np. Standard/Confirm/Context modala) to OSOBNE pliki .stub.html, nie
- * jeden plik z {{#if}}. Ten modul tylko podmienia "{{ KLUCZ }}" na wartosc
- * z mapy - nic wiecej.
+ * Per tools/jit/docs/scaffolding-spec.md: "A lightweight regex replacer,
+ * not Handlebars/Twig." No conditional logic INSIDE the template -
+ * variants (e.g. Standard/Confirm/Context of a modal) are SEPARATE
+ * .stub.html files, not one file with {{#if}}. This module only replaces
+ * "{{ KEY }}" with a value from the map - nothing more.
  *
- * Stuby zyja w src/stubs/ (kod zrodlowy, commitowany do gita - to sa
- * TEMPLATE'y autorskie, nie wygenerowane dane jak tools/jit/package/data/).
- * `tsc` kompiluje tylko *.ts, wiec *.stub.html trzeba skopiowac do dist/
- * osobno (patrz scripts/copy-stubs.mjs, wpiete w "npm run build") - dzieki
- * temu silnik dziala identycznie z zrodla i po zbudowaniu, a w przyszlosci
- * (prawdziwy `npm publish`) paczka niesie stuby ze soba w dist/, bez
- * zaleznosci od folderu src/.
+ * Stubs live in src/stubs/ (source code, committed to git - these are
+ * authored TEMPLATES, not generated data like tools/jit/package/data/).
+ * `tsc` only compiles *.ts, so *.stub.html has to be copied to dist/
+ * separately (see scripts/copy-stubs.mjs, wired into "npm run build") -
+ * this makes the engine behave identically from source and after
+ * building, and in the future (a real `npm publish`) the package carries
+ * the stubs with it in dist/, with no dependency on the src/ folder.
  */
 
 import fs from 'node:fs';
@@ -26,39 +26,39 @@ const stubsDir = path.resolve(here, 'stubs');
 const PLACEHOLDER = /\{\{\s*([A-Z0-9_]+)\s*\}\}/g;
 
 /**
- * Renderuje pojedynczy stub. Rzuca blad na KAZDY placeholder bez podanej
- * wartosci - lepiej gtosno wywalic sie przy literowce w szablonie/promptcie
- * niz cicho zostawic "{{ TYTUL }}" w wygenerowanym kodzie.
+ * Renders a single stub. Throws on EVERY placeholder without a supplied
+ * value - better to fail loudly on a typo in the template/prompt than to
+ * silently leave "{{ TITLE }}" in the generated code.
  */
 export function renderStub(stubName: string, values: Record<string, string>): string {
   const file = path.join(stubsDir, stubName);
   if (!fs.existsSync(file)) {
-    throw new Error(`molique-jit: brak szablonu "${stubName}" w ${stubsDir}.`);
+    throw new Error(`molique-jit: missing template "${stubName}" in ${stubsDir}.`);
   }
   const raw = fs.readFileSync(file, 'utf8');
   return raw.replace(PLACEHOLDER, (match, key: string) => {
     if (!(key in values)) {
-      throw new Error(`molique-jit: szablon "${stubName}" uzywa "{{ ${key} }}", ale nie podano wartosci.`);
+      throw new Error(`molique-jit: template "${stubName}" uses "{{ ${key} }}", but no value was supplied.`);
     }
     return values[key];
   });
 }
 
-/** Sklejenie kilku wyrenderowanych fragmentow (np. przycisk + modal) pustą linia miedzy nimi. */
+/** Joins several rendered fragments (e.g. button + modal) with a blank line between them. */
 export function joinBlocks(...blocks: string[]): string {
   return blocks.map((b) => b.trimEnd()).join('\n\n') + '\n';
 }
 
 /**
- * Renderuje TEN SAM maly stub osobno dla kazdego elementu tablicy i skleja
- * wyniki - do list o zmiennej dlugosci zadeklarowanej przez uzytkownika
- * (N kolumn tabeli, N krokow lejka, N pod-przyciskow Speed Diala).
+ * Renders the SAME small stub separately for each array item and joins
+ * the results - for user-declared lists of variable length (N table
+ * columns, N funnel steps, N Speed Dial sub-buttons).
  *
- * Petla siedzi w TypeScript, NIE w szablonie - stub sam w sobie zostaje
- * plaski, bez skladni "kazdy"/"jesli" (patrz naglowek pliku). Wynik tej
- * funkcji trafia zwykle jako WARTOSC jednego placeholdera w szablonie
- * nadrzednym (np. {{ WIERSZ }} w modal-table.stub.html), nie jest
- * uzywany samodzielnie.
+ * The loop lives in TypeScript, NOT in the template - the stub itself
+ * stays flat, with no "each"/"if" syntax (see the file header). The
+ * result of this function usually ends up as the VALUE of a single
+ * placeholder in a parent template (e.g. {{ ROW }} in
+ * modal-table.stub.html) - it's not used standalone.
  */
 export function renderList(stubName: string, items: Record<string, string>[]): string {
   return items.map((values) => renderStub(stubName, values).trimEnd()).join('\n');

@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:progress` (Etap C.2)
+ * molique-jit - `make:progress` tests (Stage C.2)
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,19 +14,19 @@ const { renderProgress } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-progress.js')).href
 );
 
-test('make:progress - primary (domyslny) nie dostaje dodatkowej klasy bg-*', () => {
-  const html = renderProgress({ label: 'Rozwoj', value: 85, color: 'primary' });
+test('make:progress - primary (default) gets no extra bg-* class', () => {
+  const html = renderProgress({ label: 'Progress', value: 85, color: 'primary' });
   assert.match(html, /class="progress-bar" style="width: 85%"/);
   assert.doesNotMatch(html, /bg-primary/);
 });
 
-test('make:progress - inny kolor dodaje klase narzedziowa bg-<kolor>', () => {
+test('make:progress - another color adds the bg-<color> utility class', () => {
   const html = renderProgress({ label: 'SEO', value: 60, color: 'success' });
   assert.match(html, /class="progress-bar bg-success" style="width: 60%"/);
 });
 
-test('make:progress - etykieta i wartosc procentowa w progress-label', () => {
-  const html = renderProgress({ label: 'Zuzycie serwera', value: 92, color: 'danger' });
-  assert.match(html, /<span>Zuzycie serwera<\/span>/);
+test('make:progress - label and percentage value in progress-label', () => {
+  const html = renderProgress({ label: 'Server usage', value: 92, color: 'danger' });
+  assert.match(html, /<span>Server usage<\/span>/);
   assert.match(html, /<span>92%<\/span>/);
 });

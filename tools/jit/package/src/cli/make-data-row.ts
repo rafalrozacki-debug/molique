@@ -1,42 +1,42 @@
 /**
  * molique-jit - `make:data-row` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_data-rows.scss
- * (.data-row - CSS Grid, 5 kolumn: 2fr 1fr 1fr 1fr auto, wlasny
- * margin-bottom - NIE potrzebuje zadnego wrappera, wiersze staja jeden
- * pod drugim jako zwykle elementy blokowe) i
- * css/scss/components/_data-row-compact.scss (.data-row-compact - Flexbox,
- * separacja przez border-bottom + :last-child { border-bottom: none } -
- * WYMAGA wspolnego rodzica, zeby :last-child dzialal) oraz
- * src/examples-data-rows.html.
+ * Markup verified against css/scss/components/_data-rows.scss (.data-row
+ * - CSS Grid, 5 columns: 2fr 1fr 1fr 1fr auto, its own margin-bottom -
+ * does NOT need any wrapper, rows stack one below the other as regular
+ * block elements) and css/scss/components/_data-row-compact.scss
+ * (.data-row-compact - Flexbox, separation via border-bottom +
+ * :last-child { border-bottom: none } - REQUIRES a shared parent for
+ * :last-child to work) and src/examples-data-rows.html.
  *
- * Dwie NIEZALEZNE sekcje w realnym przykladzie ('.data-row' i
- * '.data-row-compact'), stad dwa STRUKTURALNIE rozne warianty (pole
- * "type", splaszczone jak w make:card/make:timeline/make:carousel).
+ * Two INDEPENDENT sections in the real example ('.data-row' and
+ * '.data-row-compact'), hence two STRUCTURALLY different variants (a
+ * "type" field, flattened like in make:card/make:timeline/make:carousel).
  *
- * DWIE POPRAWKI wzgledem realnego przykladu (ta sama dyscyplina co przy
- * make:carousel - naprawiamy potwierdzone niezalezne bledy, nie
- * powielamy ich):
- * 1. Ikony w sekcji "Kompaktowe Wiersze" uzywaja `class="icon-file-text"`/
- *    `class="icon-x"` - stary system fontow ikon, ktory NIE ISTNIEJE
- *    nigdzie w SCSS frameworka (brak jakiegokolwiek @font-face lub reguly
- *    ".icon-*" dla tych klas - potwierdzone grepem). To scisle rownolegle
- *    do "btn btn-primary" - zapomniana migracja na aktualny system
+ * TWO FIXES relative to the real example (the same discipline as
+ * make:carousel - we fix confirmed independent bugs, not replicate
+ * them):
+ * 1. Icons in the "Compact Rows" section use `class="icon-file-text"`/
+ *    `class="icon-x"` - an old icon font system that does NOT EXIST
+ *    anywhere in the framework's SCSS (no @font-face or ".icon-*" rule
+ *    for these classes at all - confirmed by grep). This is exactly
+ *    parallel to "btn btn-primary" - a forgotten migration to the
+ *    current system
  *    (<svg class="icon"><use href="img/icons-sprite.svg#ph-..."></use></svg>),
- *    ktory generator konsekwentnie stosuje wszedzie indziej (karty,
- *    lightbox, karuzela, timeline). Generator uzywa TEGO systemu.
- * 2. Przycisk akcji w tej samej sekcji ma tekst pomocniczy w
- *    `class="text-muted text-4 m-r-2"` - "m-r-2" NIE ISTNIEJE w
- *    _spacing.scss (poprawna klasa to "mr-2", bez dodatkowego myslnika -
- *    potwierdzone grepem po utilities/_spacing.scss). Generator uzywa
- *    "mr-2".
- * Dodatkowo: `class="btn btn-action ..."` w tej samej sekcji ma zbedny
- * prefiks "btn " - .btn-action ma WLASNA, kompletna definicje w
- * _buttons.scss (appearance/background/border/padding wlasne), nigdy nie
- * potrzebowala bazowego .btn (w odroznieniu od .btn-outline-soft, ktora
- * BYLA czystym modyfikatorem) - pierwsza sekcja tego samego pliku
- * (".data-row") juz pokazuje poprawny zapis "btn-action" bez prefiksu,
- * generator jest z nim spojny.
+ *    which the generator applies consistently everywhere else (cards,
+ *    lightbox, carousel, timeline). The generator uses THIS system.
+ * 2. The action button in the same section has helper text in
+ *    `class="text-muted text-4 m-r-2"` - "m-r-2" does NOT EXIST in
+ *    _spacing.scss (the correct class is "mr-2", without the extra
+ *    hyphen - confirmed by grepping utilities/_spacing.scss). The
+ *    generator uses "mr-2".
+ * Additionally: `class="btn btn-action ..."` in the same section has a
+ * redundant "btn " prefix - .btn-action has its OWN, complete definition
+ * in _buttons.scss (its own appearance/background/border/padding), it
+ * never needed the base .btn (unlike .btn-outline-soft, which WAS a pure
+ * modifier) - the first section of the same file (".data-row") already
+ * shows the correct "btn-action" without the prefix, the generator stays
+ * consistent with it.
  */
 
 import type { Command } from 'commander';
@@ -51,10 +51,10 @@ import { loadAnswers } from './answers.js';
 type StatusState = 'draft' | 'pending' | 'done' | 'danger';
 
 const STATUS_CHOICES = [
-  { name: 'Szkic (draft)', value: 'draft' },
-  { name: 'Oczekuje (pending)', value: 'pending' },
-  { name: 'Zrobione (done)', value: 'done' },
-  { name: 'Blad (danger)', value: 'danger' },
+  { name: 'Draft', value: 'draft' },
+  { name: 'Pending', value: 'pending' },
+  { name: 'Done', value: 'done' },
+  { name: 'Danger', value: 'danger' },
 ] as const;
 
 export interface DataRowGridAnswers {
@@ -64,24 +64,24 @@ export interface DataRowGridAnswers {
     value: string;
     statusText: string;
     statusState: StatusState;
-    /** Etykiety przyciskow akcji - gdy > 1, OSTATNIA dostaje automatycznie text-danger (wzorzec Edytuj/Usun z realnego przykladu). */
+    /** Action button labels - when > 1, the LAST one automatically gets text-danger (the Edit/Delete pattern from the real example). */
     actionLabels: string[];
   }>;
 }
 
 async function collectDataRowGridAnswers(countFlag?: string): Promise<DataRowGridAnswers> {
-  const count = await promptCount({ message: 'Ile wierszy?', default: '2', min: 1, max: 20, flagValue: countFlag });
+  const count = await promptCount({ message: 'How many rows?', default: '2', min: 1, max: 20, flagValue: countFlag });
 
   const rows: DataRowGridAnswers['rows'] = [];
   for (let i = 1; i <= count; i++) {
-    const title = await input({ message: `  Tytul wiersza ${i}:`, default: `Pozycja ${i}` });
-    const subtitle = await input({ message: `  Podtytul/parametry wiersza ${i}:`, default: 'Podtytul' });
-    const value = await input({ message: `  Wartosc wiersza ${i} (np. cena):`, default: '0 zl' });
-    const statusText = await input({ message: `  Tekst statusu wiersza ${i}:`, default: 'Szkic' });
-    const statusState = await select<StatusState>({ message: `  Stan statusu wiersza ${i}?`, choices: STATUS_CHOICES, default: 'draft' });
+    const title = await input({ message: `  Row ${i} title:`, default: `Item ${i}` });
+    const subtitle = await input({ message: `  Row ${i} subtitle/parameters:`, default: 'Subtitle' });
+    const value = await input({ message: `  Row ${i} value (e.g. price):`, default: '$0' });
+    const statusText = await input({ message: `  Row ${i} status text:`, default: 'Draft' });
+    const statusState = await select<StatusState>({ message: `  Row ${i} status state?`, choices: STATUS_CHOICES, default: 'draft' });
     const actionsLine = await input({
-      message: `  Etykiety akcji wiersza ${i} (oddzielone przecinkami, ostatnia = czerwona):`,
-      default: 'Edytuj, Usun',
+      message: `  Row ${i} action labels (comma-separated, last one = red):`,
+      default: 'Edit, Delete',
     });
     const actionLabels = actionsLine.split(',').map((s) => s.trim()).filter(Boolean);
     rows.push({ title, subtitle, value, statusText, statusState, actionLabels });
@@ -116,7 +116,7 @@ export function renderDataRowGrid(answers: DataRowGridAnswers): string {
 type RowIconColor = '' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'dark';
 
 const ICON_COLOR_CHOICES = [
-  { name: 'Domyslny (var(--bg-body), bez koloru)', value: '' },
+  { name: 'Default (var(--bg-body), no color)', value: '' },
   { name: 'Primary', value: 'primary' },
   { name: 'Secondary', value: 'secondary' },
   { name: 'Success', value: 'success' },
@@ -133,7 +133,7 @@ export interface DataRowCompactAnswers {
     iconSquare: boolean;
     title: string;
     details: string;
-    /** Tekst pomocniczy przed przyciskiem akcji (np. "Can view"), '' = brak. */
+    /** Helper text before the action button (e.g. "Can view"), '' = none. */
     leadingText: string;
     actionIcon: string;
     actionAriaLabel: string;
@@ -141,18 +141,18 @@ export interface DataRowCompactAnswers {
 }
 
 async function collectDataRowCompactAnswers(countFlag?: string): Promise<DataRowCompactAnswers> {
-  const count = await promptCount({ message: 'Ile kompaktowych wierszy?', default: '2', min: 1, max: 20, flagValue: countFlag });
+  const count = await promptCount({ message: 'How many compact rows?', default: '2', min: 1, max: 20, flagValue: countFlag });
 
   const items: DataRowCompactAnswers['items'] = [];
   for (let i = 1; i <= count; i++) {
-    const icon = await input({ message: `  Nazwa ikony wiersza ${i} (z img/icons-sprite.svg):`, default: 'ph-file-text' });
-    const iconColor = await select<RowIconColor>({ message: `  Kolor tla ikony wiersza ${i}?`, choices: ICON_COLOR_CHOICES, default: '' });
-    const iconSquare = await confirm({ message: `  Kwadratowa ikona wiersza ${i} (zamiast okragleej)?`, default: false });
-    const title = await input({ message: `  Tytul wiersza ${i}:`, default: `Pozycja ${i}` });
-    const details = await input({ message: `  Szczegoly wiersza ${i}:`, default: '' });
-    const leadingText = await input({ message: `  Tekst przed przyciskiem akcji wiersza ${i} (puste = brak):`, default: '' });
-    const actionIcon = await input({ message: `  Nazwa ikony przycisku akcji wiersza ${i}:`, default: 'ph-trash' });
-    const actionAriaLabel = await input({ message: `  aria-label przycisku akcji wiersza ${i}:`, default: 'Usun' });
+    const icon = await input({ message: `  Row ${i} icon name (from img/icons-sprite.svg):`, default: 'ph-file-text' });
+    const iconColor = await select<RowIconColor>({ message: `  Row ${i} icon background color?`, choices: ICON_COLOR_CHOICES, default: '' });
+    const iconSquare = await confirm({ message: `  Square icon for row ${i} (instead of round)?`, default: false });
+    const title = await input({ message: `  Row ${i} title:`, default: `Item ${i}` });
+    const details = await input({ message: `  Row ${i} details:`, default: '' });
+    const leadingText = await input({ message: `  Text before row ${i}'s action button (empty = none):`, default: '' });
+    const actionIcon = await input({ message: `  Row ${i} action button icon name:`, default: 'ph-trash' });
+    const actionAriaLabel = await input({ message: `  Row ${i} action button aria-label:`, default: 'Delete' });
     items.push({ icon, iconColor, iconSquare, title, details, leadingText, actionIcon, actionAriaLabel });
   }
 
@@ -189,10 +189,10 @@ function renderDataRow(answers: DataRowAnswers): string {
 
 async function collectDataRowAnswers(countFlag?: string): Promise<DataRowAnswers> {
   const type = await select<DataRowAnswers['type']>({
-    message: 'Jaki wariant wiersza danych?',
+    message: 'Which data row variant?',
     choices: [
-      { name: 'Wiersz Grid, CRM (.data-row)', value: 'row' },
-      { name: 'Kompaktowy, lista/panel boczny (.data-row-compact)', value: 'compact' },
+      { name: 'Grid row, CRM (.data-row)', value: 'row' },
+      { name: 'Compact, list/side panel (.data-row-compact)', value: 'compact' },
     ],
   });
 
@@ -200,16 +200,16 @@ async function collectDataRowAnswers(countFlag?: string): Promise<DataRowAnswers
   return { type: 'compact', ...(await collectDataRowCompactAnswers(countFlag)) };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeDataRowCommand(program: Command): void {
   program
     .command('make:data-row')
-    .description('Interaktywny generator wierszy danych (Grid CRM / Kompaktowy) (aliasy: zrob:wiersz-danych, mache:datenzeile)')
-    .option('-n, --count <liczba>', 'Liczba wierszy - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt DataRowAnswers, z polem "type") - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive data row generator (Grid CRM / Compact) (aliases: zrob:wiersz-danych, mache:datenzeile)')
+    .option('-n, --count <number>', 'Number of rows - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (DataRowAnswers shape, with a "type" field) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<DataRowAnswers>(opts);
       const answers = provided ?? (await collectDataRowAnswers(opts.count));

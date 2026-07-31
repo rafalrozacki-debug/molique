@@ -1,33 +1,34 @@
 /**
  * molique-jit - `make:popover` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_context-menu.scss
- * (.popover-context - CSS Anchor Positioning + Popover API, auto-flip nad
- * przycisk blisko dolnej krawedzi obsluguje js/modules/molique-context-menu.js,
- * na mobile automatycznie degraduje do bottom sheet - zero dodatkowego
- * markupu do tego) oraz realnego uzycia w src/examples-context-menu.html.
+ * Markup verified against css/scss/components/_context-menu.scss
+ * (.popover-context - CSS Anchor Positioning + Popover API, auto-flip
+ * when near the bottom edge is handled by
+ * js/modules/molique-context-menu.js, on mobile it automatically
+ * degrades to a bottom sheet - zero extra markup for that) and real
+ * usage in src/examples-context-menu.html.
  *
- * WAZNE: `.popover-context` jest uzywany w CALYM repo TYLKO na jednej
- * dedykowanej stronie przykladow - nie ma udokumentowanego parowania z np.
- * `.btn-action` (ghost button w tabelach), wiec generator trzyma sie
- * dokladnie tego, co pokazuje realny przyklad: zwykly `<button
- * class="btn-{kolor}">`. Klasa koloru implikuje juz `.btn` we frameworku
- * (patrz `_buttons.scss`, "IMPLIKACJA .btn") - baza NIE jest dopisywana
- * osobno.
+ * IMPORTANT: `.popover-context` is used across the WHOLE repo ONLY on
+ * one dedicated examples page - there's no documented pairing with e.g.
+ * `.btn-action` (a ghost button in tables), so the generator sticks
+ * exactly to what the real example shows: a plain `<button
+ * class="btn-{color}">`. The color class already implies `.btn` in the
+ * framework (see `_buttons.scss`, "the .btn implication") - the base
+ * class is NOT added separately.
  *
- * Kotwica: real markup rozdziela `id` (na popoverze, parowany z
- * `popovertarget`) od nazwanej kotwicy CSS (`anchor-name` na przycisku /
- * `position-anchor` na popoverze) - to DWIE rozne wartosci
- * (`id="ctxMenu1"` vs `anchor-name: --btn-ctx-1`). Tu ANCHOR_NAME jest
- * wyprowadzany automatycznie z ID (`--anchor-{id}`), zeby nie pytac o
- * druga wartosc bez ktorej uzytkownik i tak nie ma realnego wyboru - musi
- * tylko byc unikalna i spojna miedzy przyciskiem a popoverem, co
- * automatyczne wyprowadzenie gwarantuje.
+ * Anchor: the real markup separates the `id` (on the popover, paired
+ * with `popovertarget`) from the named CSS anchor (`anchor-name` on the
+ * button / `position-anchor` on the popover) - these are TWO different
+ * values (`id="ctxMenu1"` vs `anchor-name: --btn-ctx-1`). Here
+ * ANCHOR_NAME is derived automatically from the ID (`--anchor-{id}`), so
+ * as not to ask for a second value the user has no real choice about
+ * anyway - it only needs to be unique and consistent between the button
+ * and the popover, which automatic derivation guarantees.
  *
- * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
- * Etap B): `PopoverAnswers` trzyma SUROWE dane (nazwa ikony, flaga
- * `danger`), nie gotowe fragmenty HTML - te (ICON_HTML, DANGER_CLASS,
- * dzielacy <hr>) sa wyliczane wewnatrz czystej `renderPopover()`.
+ * Split into "collect answers" / "render markup" (CLI roadmap, Stage B):
+ * `PopoverAnswers` holds RAW data (icon name, the `danger` flag), not
+ * ready-made HTML fragments - those (ICON_HTML, DANGER_CLASS, the
+ * dividing <hr>) are computed inside the pure `renderPopover()`.
  */
 
 import type { Command } from 'commander';
@@ -38,31 +39,31 @@ import { promptCount } from './prompts.js';
 import { loadAnswers } from './answers.js';
 
 const TRIGGER_COLOR_CHOICES = [
-  { name: 'Secondary (domyslny)', value: 'btn-secondary' },
+  { name: 'Secondary (default)', value: 'btn-secondary' },
   { name: 'Primary', value: 'btn-primary' },
   { name: 'Light', value: 'btn-light' },
-  // .btn-outline-soft SAMO W SOBIE nie ma zadnego koloru - to modyfikator
-  // zagniezdzony w SCSS wewnatrz KAZDEGO .btn-outline-<kolor> (zlagodzona
-  // ramka/hover), nie samodzielna klasa. Poprzednia wersja tego wyboru
-  // (`'btn-outline-soft'` jako pojedyncza wartosc) dawala przycisk bez
-  // zadnego realnego koloru - naprawione przez sparowanie z primary.
+  // .btn-outline-soft BY ITSELF has no color of its own - it's a
+  // modifier nested in SCSS inside EVERY .btn-outline-<color> (a
+  // softened border/hover), not a standalone class. The previous version
+  // of this choice (`'btn-outline-soft'` as a single value) produced a
+  // button with no real color at all - fixed by pairing it with primary.
   { name: 'Outline (soft)', value: 'btn-outline-primary btn-outline-soft' },
 ] as const;
 
 export interface PopoverItemAnswer {
   label: string;
-  /** Nazwa ikony z img/icons-sprite.svg (bez "#"), puste = brak ikony. */
+  /** Icon name from img/icons-sprite.svg (without "#"), empty = no icon. */
   icon: string;
-  /** Akcja destrukcyjna (np. "Usun") - dostaje .text-danger i dzielacy <hr> przed soba. */
+  /** A destructive action (e.g. "Delete") - gets .text-danger and a dividing <hr> before it. */
   danger: boolean;
 }
 
 export interface PopoverAnswers {
   triggerLabel: string;
   triggerColor: 'btn-secondary' | 'btn-primary' | 'btn-light' | 'btn-outline-primary btn-outline-soft';
-  /** Nazwa ikony przy przycisku, puste = brak ikony. */
+  /** Icon next to the button, empty = no icon. */
   triggerIcon: string;
-  /** ID popovera (unikalne na stronie) - ANCHOR_NAME jest z niego wyprowadzany automatycznie. */
+  /** Popover ID (unique on the page) - ANCHOR_NAME is derived from it automatically. */
   id: string;
   items: PopoverItemAnswer[];
 }
@@ -72,17 +73,17 @@ function iconHtml(icon: string): string {
 }
 
 export async function collectPopoverAnswers(countFlag?: string): Promise<PopoverAnswers> {
-  const triggerLabel = await input({ message: 'Etykieta przycisku wyzwalajacego:', default: 'Opcje' });
-  const triggerColor = await select({ message: 'Kolor przycisku?', choices: TRIGGER_COLOR_CHOICES, default: 'btn-secondary' });
-  const addTriggerIcon = await confirm({ message: 'Dodac ikone przy przycisku?', default: true });
+  const triggerLabel = await input({ message: 'Trigger button label:', default: 'Options' });
+  const triggerColor = await select({ message: 'Button color?', choices: TRIGGER_COLOR_CHOICES, default: 'btn-secondary' });
+  const addTriggerIcon = await confirm({ message: 'Add an icon next to the button?', default: true });
   const triggerIcon = addTriggerIcon
-    ? await input({ message: '  Nazwa ikony (bez "#", z img/icons-sprite.svg):', default: 'ph-gear' })
+    ? await input({ message: '  Icon name (without "#", from img/icons-sprite.svg):', default: 'ph-gear' })
     : '';
 
-  const id = await input({ message: 'ID popovera (unikalne na stronie):', default: 'ctxMenu1' });
+  const id = await input({ message: 'Popover ID (unique on the page):', default: 'ctxMenu1' });
 
   const count = await promptCount({
-    message: 'Ile pozycji w menu?',
+    message: 'How many menu items?',
     default: '3',
     min: 1,
     max: 8,
@@ -91,12 +92,12 @@ export async function collectPopoverAnswers(countFlag?: string): Promise<Popover
 
   const items: PopoverItemAnswer[] = [];
   for (let i = 1; i <= count; i++) {
-    const label = await input({ message: `  Etykieta pozycji ${i}:`, default: i === 1 ? 'Podglad' : `Akcja ${i}` });
+    const label = await input({ message: `  Item ${i} label:`, default: i === 1 ? 'View' : `Action ${i}` });
     const icon = await input({
-      message: `  Ikona pozycji ${i} (nazwa z img/icons-sprite.svg, puste = brak):`,
+      message: `  Item ${i} icon (name from img/icons-sprite.svg, empty = none):`,
       default: i === 1 ? 'ph-eye' : '',
     });
-    const danger = await confirm({ message: `  Pozycja ${i} to akcja destrukcyjna (np. Usun)?`, default: false });
+    const danger = await confirm({ message: `  Is item ${i} a destructive action (e.g. Delete)?`, default: false });
     items.push({ label, icon, danger });
   }
 
@@ -110,9 +111,9 @@ export function renderPopover(answers: PopoverAnswers): string {
   const TRIGGER_CLASS = triggerColor;
   const TRIGGER_CONTENT = [triggerLabel, triggerIcon ? iconHtml(triggerIcon).trim() : ''].filter(Boolean).join(' ');
 
-  // Dzielacy <hr> pojawia sie w realnym przykladzie DOKLADNIE raz, tuz
-  // przed pierwsza akcja destrukcyjna (o ile nie jest to pierwsza pozycja
-  // w ogole - wtedy nie ma czego oddzielac).
+  // The dividing <hr> appears in the real example EXACTLY once, right
+  // before the first destructive action (unless it's the very first item
+  // - then there's nothing to separate).
   const itemBlocks: string[] = [];
   let dividerInserted = false;
   items.forEach((item, i) => {
@@ -137,13 +138,13 @@ export function registerMakePopoverCommand(program: Command): void {
   program
     .command('make:popover')
     .description(
-      'Interaktywny generator menu kontekstowego (.popover-context - CSS Anchor Positioning, auto-flip, ' +
-        'bottom sheet na mobile) (aliasy: zrob:popover, mache:popover)'
+      'Interactive context menu generator (.popover-context - CSS Anchor Positioning, auto-flip, ' +
+        'bottom sheet on mobile) (aliases: zrob:popover, mache:popover)'
     )
-    .option('-n, --count <liczba>', 'Liczba pozycji w menu - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt PopoverAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .option('-n, --count <number>', 'Number of menu items - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (PopoverAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<PopoverAnswers>(opts);
       const answers = provided ?? (await collectPopoverAnswers(opts.count));

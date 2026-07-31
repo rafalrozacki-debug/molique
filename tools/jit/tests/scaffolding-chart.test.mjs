@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:chart` (Etap B.4)
+ * molique-jit - `make:chart` tests (Stage B.4)
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,21 +14,21 @@ const { renderRadial, renderFunnel, renderPipeline, renderStockBar } = await imp
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-chart.js')).href
 );
 
-test('make:chart - Radial: kolor primary nie dodaje nadpisania zmiennej ani klasy', () => {
+test('make:chart - Radial: the primary color adds no variable override or class', () => {
   const html = renderRadial({ value: 75, color: 'primary' });
   assert.match(html, /--val: 75%/);
   assert.doesNotMatch(html, /--primary: var/);
   assert.doesNotMatch(html, /text-primary/);
 });
 
-test('make:chart - Radial: inny kolor nadpisuje --primary i dodaje klase text-*', () => {
+test('make:chart - Radial: another color overrides --primary and adds a text-* class', () => {
   const html = renderRadial({ value: 42, color: 'danger' });
   assert.match(html, /--val: 42%/);
   assert.match(html, /--primary: var\(--danger\);/);
   assert.match(html, /text-danger/);
 });
 
-test('make:chart - Funnel: szerokosc maleje rownomiernie 100% -> 45%, kolory cykliczne', () => {
+test('make:chart - Funnel: width decreases evenly 100% -> 45%, colors cycle', () => {
   const html = renderFunnel({ labels: ['A', 'B', 'C'] });
   assert.match(html, /--val: 100%.*A/s);
   assert.match(html, /--val: 73%.*B/s);
@@ -37,32 +37,32 @@ test('make:chart - Funnel: szerokosc maleje rownomiernie 100% -> 45%, kolory cyk
   assert.match(html, /--stage-bg: var\(--info\); --stage-text: var\(--btn-text-dark\)/);
 });
 
-test('make:chart - Funnel: pojedyncza etykieta = 100%, bez dzielenia przez zero', () => {
-  const html = renderFunnel({ labels: ['Jedyny'] });
+test('make:chart - Funnel: a single label = 100%, no division by zero', () => {
+  const html = renderFunnel({ labels: ['Only one'] });
   assert.match(html, /--val: 100%/);
 });
 
-test('make:chart - Pipeline: aktywny krok dostaje is-active, reszta bez zadnego stylu inline', () => {
-  const html = renderPipeline({ steps: ['Nowy', 'Kontakt', 'Umowa'], activeLabel: 'Kontakt' });
-  assert.match(html, /<div class="pipeline-stage is-active">Kontakt<\/div>/);
-  assert.match(html, /<div class="pipeline-stage">Nowy<\/div>/);
+test('make:chart - Pipeline: the active step gets is-active, the rest have no inline style', () => {
+  const html = renderPipeline({ steps: ['New', 'Contact', 'Contract'], activeLabel: 'Contact' });
+  assert.match(html, /<div class="pipeline-stage is-active">Contact<\/div>/);
+  assert.match(html, /<div class="pipeline-stage">New<\/div>/);
   assert.doesNotMatch(html, /style=/);
 });
 
-test('make:chart - Pipeline: brak aktywnego kroku (activeLabel puste)', () => {
+test('make:chart - Pipeline: no active step (activeLabel empty)', () => {
   const html = renderPipeline({ steps: ['A', 'B'], activeLabel: '' });
   assert.doesNotMatch(html, /is-active/);
 });
 
-test('make:chart - Stock Bar: role="img" i aria-label ZAWSZE obecne', () => {
-  const html = renderStockBar({ filled: 3, variant: '', ariaLabel: 'Stan: 3/5' });
+test('make:chart - Stock Bar: role="img" and aria-label are ALWAYS present', () => {
+  const html = renderStockBar({ filled: 3, variant: '', ariaLabel: 'Stock: 3/5' });
   assert.match(html, /role="img"/);
-  assert.match(html, /aria-label="Stan: 3\/5"/);
+  assert.match(html, /aria-label="Stock: 3\/5"/);
   assert.match(html, /--stock-filled: 3/);
-  assert.doesNotMatch(html, /stock-bar-/); // brak wariantu = tylko bazowa klasa .stock-bar
+  assert.doesNotMatch(html, /stock-bar-/); // no variant = only the base .stock-bar class
 });
 
-test('make:chart - Stock Bar: wariant koloru dodaje druga klase', () => {
-  const html = renderStockBar({ filled: 1, variant: 'stock-bar-danger', ariaLabel: 'Krytyczny' });
+test('make:chart - Stock Bar: a color variant adds a second class', () => {
+  const html = renderStockBar({ filled: 1, variant: 'stock-bar-danger', ariaLabel: 'Critical' });
   assert.match(html, /class="stock-bar stock-bar-danger"/);
 });

@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:tabs`
+ * molique-jit - `make:tabs` tests
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,50 +14,50 @@ const { renderTabs } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-tabs.js')).href
 );
 
-test('make:tabs - Klasyczny: pierwszy input dostaje checked, reszta nie', () => {
+test('make:tabs - Classic: the first input gets checked, the rest do not', () => {
   const html = renderTabs({
     type: 'classic',
     groupName: 'my-tabs',
     tabs: [
-      { label: 'Opis', content: 'Tresc 1' },
-      { label: 'Specyfikacja', content: 'Tresc 2' },
+      { label: 'Description', content: 'Content 1' },
+      { label: 'Specification', content: 'Content 2' },
     ],
   });
   assert.match(html, /<div class="tabs w-100">/);
   assert.match(html, /id="my-tabs-1" class="tab-input" checked/);
   assert.doesNotMatch(html, /id="my-tabs-2" class="tab-input" checked/);
-  assert.match(html, /<label for="my-tabs-1" class="tab-label">Opis<\/label>/);
+  assert.match(html, /<label for="my-tabs-1" class="tab-label">Description<\/label>/);
   assert.doesNotMatch(html, /tabs-pill/);
 });
 
-test('make:tabs - wszystkie inputy dziela ta sama nazwe grupy (name=)', () => {
+test('make:tabs - all inputs share the same group name (name=)', () => {
   const html = renderTabs({
     type: 'classic',
-    groupName: 'grupa-x',
+    groupName: 'group-x',
     tabs: [
       { label: 'A', content: 'a' },
       { label: 'B', content: 'b' },
       { label: 'C', content: 'c' },
     ],
   });
-  assert.equal((html.match(/name="grupa-x"/g) ?? []).length, 3);
+  assert.equal((html.match(/name="group-x"/g) ?? []).length, 3);
 });
 
-test('make:tabs - Pill: dodaje klase, --tab-count rowny liczbie zakladek, i pusty wskaznik', () => {
+test('make:tabs - Pill: adds the class, --tab-count equal to the number of tabs, and an empty indicator', () => {
   const html = renderTabs({
     type: 'pill',
     groupName: 'pill-tabs',
     tabs: [
-      { label: 'Dzien', content: 'A' },
-      { label: 'Tydzien', content: 'B' },
-      { label: 'Miesiac', content: 'C' },
+      { label: 'Day', content: 'A' },
+      { label: 'Week', content: 'B' },
+      { label: 'Month', content: 'C' },
     ],
   });
   assert.match(html, /class="tabs tabs-pill w-100" style="--tab-count: 3;"/);
   assert.match(html, /<div class="tabs-pill-indicator"><\/div>/);
 });
 
-test('make:tabs - ID inputow i for= etykiet sa spojne (para {groupName}-{i})', () => {
+test('make:tabs - input IDs and label for= are consistent (a {groupName}-{i} pair)', () => {
   const html = renderTabs({
     type: 'classic',
     groupName: 'g',

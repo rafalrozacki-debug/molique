@@ -1,12 +1,12 @@
 /**
  * molique-jit - `make:accordion` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_accordion.scss
- * (natywny `<details class="accordion-item" name="...">` - atrybut
- * `name` grupuje panele, przegladarka sama pilnuje "tylko jeden otwarty
- * naraz w tej samej grupie", zero JS) oraz src/examples-accordions.html.
- * Zaden panel nie jest domyslnie otwarty w realnym przykladzie (brak
- * atrybutu `open`), wiec generator tego nie wymysla.
+ * Markup verified against css/scss/components/_accordion.scss (a native
+ * `<details class="accordion-item" name="...">` - the `name` attribute
+ * groups the panels, the browser itself enforces "only one open at a
+ * time within the same group", zero JS) and
+ * src/examples-accordions.html. No panel is open by default in the real
+ * example (no `open` attribute), so the generator doesn't invent one.
  */
 
 import type { Command } from 'commander';
@@ -17,16 +17,16 @@ import { promptCount } from './prompts.js';
 import { loadAnswers } from './answers.js';
 
 export interface AccordionAnswers {
-  /** Atrybut `name` - grupuje panele (przegladarka pilnuje "tylko jeden otwarty naraz"). */
+  /** The `name` attribute - groups the panels (the browser enforces "only one open at a time"). */
   groupName: string;
   panels: Array<{ question: string; answer: string }>;
 }
 
 export async function collectAccordionAnswers(countFlag?: string): Promise<AccordionAnswers> {
-  const groupName = await input({ message: 'Nazwa grupy (atrybut "name", laczy panele):', default: 'faq' });
+  const groupName = await input({ message: 'Group name (the "name" attribute, links the panels):', default: 'faq' });
 
   const count = await promptCount({
-    message: 'Ile paneli ma miec akordeon?',
+    message: 'How many panels should the accordion have?',
     default: '3',
     min: 1,
     max: 15,
@@ -35,8 +35,8 @@ export async function collectAccordionAnswers(countFlag?: string): Promise<Accor
 
   const panels: AccordionAnswers['panels'] = [];
   for (let i = 1; i <= count; i++) {
-    const question = await input({ message: `  Pytanie panelu ${i}:`, default: `Pytanie ${i}` });
-    const answer = await input({ message: `  Odpowiedz panelu ${i}:`, default: `Odpowiedz ${i}` });
+    const question = await input({ message: `  Panel ${i} question:`, default: `Question ${i}` });
+    const answer = await input({ message: `  Panel ${i} answer:`, default: `Answer ${i}` });
     panels.push({ question, answer });
   }
 
@@ -56,11 +56,11 @@ export function renderAccordion(answers: AccordionAnswers): string {
 export function registerMakeAccordionCommand(program: Command): void {
   program
     .command('make:accordion')
-    .description('Interaktywny generator akordeonu FAQ (natywny <details>, zero JS) (aliasy: zrob:akordeon, mache:akkordeon)')
-    .option('-n, --count <liczba>', 'Liczba paneli - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt AccordionAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive FAQ accordion generator (native <details>, zero JS) (aliases: zrob:akordeon, mache:akkordeon)')
+    .option('-n, --count <number>', 'Number of panels - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (AccordionAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<AccordionAnswers>(opts);
       const answers = provided ?? (await collectAccordionAnswers(opts.count));

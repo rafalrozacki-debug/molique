@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:layout` (Etap B.6)
+ * molique-jit - `make:layout` tests (Stage B.6)
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,56 +14,56 @@ const { renderAdminDashboard, renderHeroSimple, renderHeroCutout, renderBento } 
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-layout.js')).href
 );
 
-test('make:layout - Admin: pierwsza pozycja menu dostaje is-active, reszta nie', () => {
-  const html = renderAdminDashboard({ floating: false, logo: 'Logo', items: ['Dashboard', 'Klienci', 'Ustawienia'] });
+test('make:layout - Admin: the first menu item gets is-active, the rest do not', () => {
+  const html = renderAdminDashboard({ floating: false, logo: 'Logo', items: ['Dashboard', 'Customers', 'Settings'] });
   assert.doesNotMatch(html, /admin-layout-floating/);
   assert.match(html, /class="admin-nav-link is-active">Dashboard/);
-  assert.doesNotMatch(html, /class="admin-nav-link is-active">Klienci/);
-  assert.match(html, /class="admin-nav-link">Klienci/);
+  assert.doesNotMatch(html, /class="admin-nav-link is-active">Customers/);
+  assert.match(html, /class="admin-nav-link">Customers/);
 });
 
-test('make:layout - Admin: floating dodaje klase admin-layout-floating', () => {
+test('make:layout - Admin: floating adds the admin-layout-floating class', () => {
   const html = renderAdminDashboard({ floating: true, logo: 'Logo', items: ['Dashboard'] });
   assert.match(html, /class="admin-layout admin-layout-floating"/);
 });
 
-test('make:layout - Hero Simple: ostatni breadcrumb bez linku, z aria-current i is-active', () => {
+test('make:layout - Hero Simple: the last breadcrumb item has no link, with aria-current and is-active', () => {
   const html = renderHeroSimple({
-    title: 'Tytul',
+    title: 'Title',
     imageUrl: 'img/hero-bg.jpg',
     overlayColorClass: 'overlay-dark',
     overlayOpacityClass: 'overlay-70',
-    breadcrumbLabels: ['Start', 'Ta strona'],
+    breadcrumbLabels: ['Start', 'This page'],
   });
   assert.match(html, /overlay overlay-dark overlay-70/);
   assert.match(html, /<a href="#" class="text-white opacity-75">Start<\/a>/);
-  assert.match(html, /class="breadcrumb-item is-active" aria-current="page">Ta strona</);
-  assert.doesNotMatch(html, /<a[^>]*>Ta strona<\/a>/); // ostatni element NIE jest linkiem
+  assert.match(html, /class="breadcrumb-item is-active" aria-current="page">This page</);
+  assert.doesNotMatch(html, /<a[^>]*>This page<\/a>/); // the last item is NOT a link
 });
 
-test('make:layout - Hero Cutout: wybrany rog trafia do klasy i komentarza', () => {
+test('make:layout - Hero Cutout: the chosen corner lands in the class and the comment', () => {
   const html = renderHeroCutout({
-    title: 'Zbuduj to',
-    message: 'Opis',
+    title: 'Build it',
+    message: 'Description',
     imageUrl: 'img/hero-bg.jpg',
-    imageAlt: 'Tlo',
+    imageAlt: 'Background',
     cutoutVariant: 'cutout-md-tl',
   });
   assert.match(html, /class="cutout-wrapper cutout-md-tl w-100 w-md-50"/);
-  assert.match(html, /<img src="img\/hero-bg\.jpg" alt="Tlo" \/>/);
+  assert.match(html, /<img src="img\/hero-bg\.jpg" alt="Background" \/>/);
 });
 
-test('make:layout - Bento: rozmiar kafelka mapuje sie na poprawne klasy bento-col/row', () => {
+test('make:layout - Bento: tile size maps to the correct bento-col/row classes', () => {
   const html = renderBento({
     tiles: [
-      { label: 'Duzy', size: 'big' },
-      { label: 'Szeroki', size: 'wide' },
-      { label: 'Wysoki', size: 'tall' },
-      { label: 'Normalny', size: 'normal' },
+      { label: 'Big', size: 'big' },
+      { label: 'Wide', size: 'wide' },
+      { label: 'Tall', size: 'tall' },
+      { label: 'Normal', size: 'normal' },
     ],
   });
-  assert.match(html, /class="bento-col-2 bento-row-2 hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Duzy/);
-  assert.match(html, /class="bento-col-2 hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Szeroki/);
-  assert.match(html, /class="bento-row-2 hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Wysoki/);
-  assert.match(html, /class="hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Normalny/);
+  assert.match(html, /class="bento-col-2 bento-row-2 hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Big/);
+  assert.match(html, /class="bento-col-2 hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Wide/);
+  assert.match(html, /class="bento-row-2 hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Tall/);
+  assert.match(html, /class="hover-gpu-shadow p-4">\s*<h2 class="fw-bold">Normal/);
 });

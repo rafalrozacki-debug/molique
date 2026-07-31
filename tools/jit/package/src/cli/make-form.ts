@@ -1,33 +1,36 @@
 /**
  * molique-jit - `make:form` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_form-groups.scss
- * (.form-floating - wymaga placeholder=" "; .input-group-inline),
+ * Markup verified against css/scss/components/_form-groups.scss
+ * (.form-floating - requires placeholder=" "; .input-group-inline),
  * _form-select-search.scss (.select-search - Popover API, top layer),
- * _form-select-custom.scss (.custom-select - Premium Multi Select, kategorie),
- * _form-file-upload.scss (.file-upload / .file-upload-animated) oraz realnego
- * uzycia w src/examples-forms-basics.html, src/examples-input-groups.html
+ * _form-select-custom.scss (.custom-select - Premium Multi Select,
+ * categories), _form-file-upload.scss (.file-upload /
+ * .file-upload-animated), and real usage in
+ * src/examples-forms-basics.html, src/examples-input-groups.html
  * (.input-group-inline), src/examples-select.html (.select-search,
- * .custom-select) i src/examples-file-upload.html.
+ * .custom-select), and src/examples-file-upload.html.
  *
- * WAZNE: js/modules/molique-select.js obsluguje TYLKO .select-search - nie ma
- * zadnego modulu JS dla .custom-select (pills/checkboxy sa tam czysto
- * statyczne w dokumentacji, podswietlenie karty na :checked to czysty CSS
- * `:has()`). Dlatego wygenerowany .custom-select startuje PUSTY (bez
- * podbitych "przykladowych" pozycji jak w docs) - haerdkodowanie fikcyjnego
- * zaznaczenia byloby mylace w prawdziwym formularzu.
+ * IMPORTANT: js/modules/molique-select.js handles ONLY .select-search -
+ * there is no JS module for .custom-select (the pills/checkboxes are
+ * purely static there in the docs, the card highlight on :checked is
+ * plain CSS `:has()`). That's why the generated .custom-select starts
+ * EMPTY (without any pre-checked "example" items like in the docs) -
+ * hardcoding a fake selection would be misleading in a real form.
  *
- * Style podstawowych pol (Floating / Klasyczny) roznia sie STRUKTURALNIE
- * (inny tag-wrapper, .form-floating vs .input-group-inline), wiec to dwa
- * osobne zestawy stubow - zgodnie z zasada z make:layout. Typ pola
- * (text/email/number/tel vs textarea) rozni sie tagiem (<input> vs
- * <textarea>), wiec rowniez osobne pliki, nie {{ TAG }} w jednym.
+ * The styling of the basic fields (Floating / Classic) differs
+ * STRUCTURALLY (a different wrapper tag, .form-floating vs
+ * .input-group-inline), so these are two separate sets of stubs -
+ * following the same rule as make:layout. The field type (text/email/
+ * number/tel vs textarea) differs by tag (<input> vs <textarea>), so it
+ * also gets separate files, not a {{ TAG }} in one.
  *
- * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
- * Etap B): w odroznieniu od modal/chart/widget/layout, `make:form` NIE ma
- * dyskryminujacej unii wariantow - to JEDEN plaski `FormAnswers` z trzema
- * OPCJONALNYMI modulami (pole `undefined` = modul pominiety), bo tak
- * naprawde dziala: styl + pola + do trzech niezaleznie wlaczalnych bloków.
+ * Split into "collect answers" / "render markup" (CLI roadmap, Stage B):
+ * unlike modal/chart/widget/layout, `make:form` has NO discriminated
+ * union of variants - it's ONE flat `FormAnswers` with three OPTIONAL
+ * modules (an `undefined` field = the module was skipped), because
+ * that's really how it works: style + fields + up to three
+ * independently-enabled blocks.
  */
 
 import type { Command } from 'commander';
@@ -41,11 +44,11 @@ type FieldStyle = 'floating' | 'classic';
 type FieldType = 'text' | 'email' | 'number' | 'tel' | 'textarea';
 
 const TYPE_CHOICES = [
-  { name: 'Tekst', value: 'text' },
+  { name: 'Text', value: 'text' },
   { name: 'Email', value: 'email' },
-  { name: 'Numer', value: 'number' },
-  { name: 'Telefon', value: 'tel' },
-  { name: 'Wieloliniowe (textarea)', value: 'textarea' },
+  { name: 'Number', value: 'number' },
+  { name: 'Phone', value: 'tel' },
+  { name: 'Multi-line (textarea)', value: 'textarea' },
 ] as const;
 
 export interface FormFieldAnswer {
@@ -77,18 +80,18 @@ export interface FileUploadModuleAnswers {
 export interface FormAnswers {
   style: FieldStyle;
   fields: FormFieldAnswer[];
-  /** undefined = modul pominiety. */
+  /** undefined = the module was skipped. */
   selectSearch?: SelectSearchModuleAnswers;
   customSelect?: CustomSelectModuleAnswers;
   fileUpload?: FileUploadModuleAnswers;
   submitLabel: string;
 }
 
-/* ---------- Podstawowe pola ---------- */
+/* ---------- Basic fields ---------- */
 
 async function collectFields(style: FieldStyle, countFlag?: string): Promise<FormFieldAnswer[]> {
   const count = await promptCount({
-    message: 'Ile podstawowych pol ma miec formularz?',
+    message: 'How many basic fields should the form have?',
     default: '3',
     min: 1,
     max: 8,
@@ -97,9 +100,9 @@ async function collectFields(style: FieldStyle, countFlag?: string): Promise<For
 
   const fields: FormFieldAnswer[] = [];
   for (let i = 1; i <= count; i++) {
-    const label = await input({ message: `  Etykieta pola ${i}:`, default: `Pole ${i}` });
-    const type = await select<FieldType>({ message: `  Typ pola ${i}?`, choices: TYPE_CHOICES, default: 'text' });
-    const required = await confirm({ message: `  Pole ${i} wymagane?`, default: false });
+    const label = await input({ message: `  Field ${i} label:`, default: `Field ${i}` });
+    const type = await select<FieldType>({ message: `  Field ${i} type?`, choices: TYPE_CHOICES, default: 'text' });
+    const required = await confirm({ message: `  Is field ${i} required?`, default: false });
     fields.push({ label, type, required });
   }
 
@@ -112,11 +115,11 @@ function renderFields(style: FieldStyle, fields: FormFieldAnswer[]): string {
       const i = idx + 1;
       const ID = `form-field-${i}`;
       const REQUIRED_ATTR = field.required ? ' required' : '';
-      // Jedyny udokumentowany wzorzec komunikatu bledu (examples-forms-basics.html,
-      // sekcja "Natywna Walidacja") wystepuje tylko przy .form-floating - dlatego
-      // .input-group-inline nigdy nie dostaje .feedback-invalid.
+      // The only documented error message pattern (examples-forms-basics.html,
+      // "Native Validation" section) only occurs with .form-floating - that's
+      // why .input-group-inline never gets .feedback-invalid.
       const FEEDBACK =
-        field.required && style === 'floating' ? '\n    <div class="feedback-invalid">To pole jest wymagane.</div>' : '';
+        field.required && style === 'floating' ? '\n    <div class="feedback-invalid">This field is required.</div>' : '';
 
       const stubName =
         style === 'floating'
@@ -132,16 +135,16 @@ function renderFields(style: FieldStyle, fields: FormFieldAnswer[]): string {
     .join('\n');
 }
 
-/* ---------- Modul: Searchable Select ---------- */
+/* ---------- Module: Searchable Select ---------- */
 
 async function collectSelectSearchModule(): Promise<SelectSearchModuleAnswers | undefined> {
-  const wanted = await confirm({ message: 'Dodac Searchable Select (Combobox)?', default: false });
+  const wanted = await confirm({ message: 'Add a Searchable Select (Combobox)?', default: false });
   if (!wanted) return undefined;
 
-  const label = await input({ message: '  Etykieta nad selectem:', default: 'Wybierz opcje' });
-  const placeholder = await input({ message: '  Tekst na przycisku, zanim cos wybrano:', default: 'Wybierz z listy...' });
-  const fieldName = await input({ message: '  Nazwa pola (name ukrytego inputu dla backendu):', default: 'wybor' });
-  const optionsLine = await input({ message: '  Opcje do wyboru (oddzielone przecinkami):', default: 'Opcja 1, Opcja 2, Opcja 3' });
+  const label = await input({ message: '  Label above the select:', default: 'Choose an option' });
+  const placeholder = await input({ message: '  Button text before anything is chosen:', default: 'Choose from the list...' });
+  const fieldName = await input({ message: '  Field name (the hidden input\'s name for the backend):', default: 'choice' });
+  const optionsLine = await input({ message: '  Options to choose from (comma-separated):', default: 'Option 1, Option 2, Option 3' });
   const options = optionsLine
     .split(',')
     .map((s) => s.trim())
@@ -161,20 +164,21 @@ function renderSelectSearchModule(mod: SelectSearchModuleAnswers): string {
   });
 }
 
-/* ---------- Modul: Premium Multi Select ---------- */
+/* ---------- Module: Premium Multi Select ---------- */
 
-// Cykl kolorow kart opcji - ta sama zasada co FUNNEL_PALETTE w make-chart.ts:
-// examples-select.html pokazuje tylko 3 przyklady (danger/info/warning), tu
-// rozszerzone o success dla wiekszej liczby opcji, bez lamania konwencji.
+// Color cycle for the option cards - the same rule as FUNNEL_PALETTE in
+// make-chart.ts: examples-select.html shows only 3 examples (danger/info/
+// warning), extended here with success for a larger number of options,
+// without breaking the convention.
 const CUSTOM_SELECT_COLORS = ['danger', 'info', 'success', 'warning'];
 
 async function collectCustomSelectModule(): Promise<CustomSelectModuleAnswers | undefined> {
-  const wanted = await confirm({ message: 'Dodac Premium Multi Select (kategorie + checkboxy)?', default: false });
+  const wanted = await confirm({ message: 'Add a Premium Multi Select (categories + checkboxes)?', default: false });
   if (!wanted) return undefined;
 
-  const label = await input({ message: '  Etykieta nad selectem:', default: 'Filtruj wyniki' });
-  const placeholder = await input({ message: '  Tekst na przycisku, zanim cos wybrano:', default: 'Wybierz...' });
-  const categoriesLine = await input({ message: '  Nazwy kategorii (oddzielone przecinkami):', default: 'Popularne, Inne' });
+  const label = await input({ message: '  Label above the select:', default: 'Filter results' });
+  const placeholder = await input({ message: '  Button text before anything is chosen:', default: 'Choose...' });
+  const categoriesLine = await input({ message: '  Category names (comma-separated):', default: 'Popular, Other' });
   const categoryNames = categoriesLine
     .split(',')
     .map((s) => s.trim())
@@ -182,7 +186,7 @@ async function collectCustomSelectModule(): Promise<CustomSelectModuleAnswers | 
 
   const categories: CustomSelectModuleAnswers['categories'] = [];
   for (const name of categoryNames) {
-    const itemsLine = await input({ message: `  Opcje w kategorii "${name}" (oddzielone przecinkami):`, default: 'Opcja 1, Opcja 2' });
+    const itemsLine = await input({ message: `  Options in the "${name}" category (comma-separated):`, default: 'Option 1, Option 2' });
     const items = itemsLine
       .split(',')
       .map((s) => s.trim())
@@ -210,16 +214,16 @@ function renderCustomSelectModule(mod: CustomSelectModuleAnswers): string {
   return renderStub('form-module-custom-select.stub.html', { LABEL: mod.label, PLACEHOLDER: mod.placeholder, CATEGORIES });
 }
 
-/* ---------- Modul: Drag & Drop File Upload ---------- */
+/* ---------- Module: Drag & Drop File Upload ---------- */
 
 async function collectFileUploadModule(): Promise<FileUploadModuleAnswers | undefined> {
-  const wanted = await confirm({ message: 'Dodac strefe Drag & Drop File Upload?', default: false });
+  const wanted = await confirm({ message: 'Add a Drag & Drop File Upload zone?', default: false });
   if (!wanted) return undefined;
 
-  const animated = await confirm({ message: '  Wariant animowany (biegnaca linia na hover)?', default: false });
-  const title = await input({ message: '  Naglowek strefy:', default: 'Upusc plik tutaj' });
-  const subtitle = await input({ message: '  Podpis pod naglowkiem:', default: 'lub kliknij, aby wybrac' });
-  const fieldName = await input({ message: '  Nazwa pola (name inputu pliku):', default: 'plik' });
+  const animated = await confirm({ message: '  Animated variant (running line on hover)?', default: false });
+  const title = await input({ message: '  Zone heading:', default: 'Drop a file here' });
+  const subtitle = await input({ message: '  Caption below the heading:', default: 'or click to choose' });
+  const fieldName = await input({ message: '  Field name (the file input\'s name):', default: 'file' });
 
   return { animated, title, subtitle, fieldName };
 }
@@ -248,10 +252,10 @@ export function renderForm(answers: FormAnswers): string {
 
 async function collectFormAnswers(countFlag?: string): Promise<FormAnswers> {
   const style = await select<FieldStyle>({
-    message: 'Styl podstawowych pol?',
+    message: 'Style of the basic fields?',
     choices: [
-      { name: 'Floating Labels (etykieta plywa do gory)', value: 'floating' },
-      { name: 'Klasyczny (etykieta obok pola)', value: 'classic' },
+      { name: 'Floating Labels (label floats up)', value: 'floating' },
+      { name: 'Classic (label next to the field)', value: 'classic' },
     ],
   });
 
@@ -259,24 +263,24 @@ async function collectFormAnswers(countFlag?: string): Promise<FormAnswers> {
   const selectSearch = await collectSelectSearchModule();
   const customSelect = await collectCustomSelectModule();
   const fileUpload = await collectFileUploadModule();
-  const submitLabel = await input({ message: 'Etykieta przycisku wysylki:', default: 'Wyslij' });
+  const submitLabel = await input({ message: 'Submit button label:', default: 'Send' });
 
   return { style, fields, selectSearch, customSelect, fileUpload, submitLabel };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeFormCommand(program: Command): void {
   program
     .command('make:form')
     .description(
-      'Interaktywny generator formularzy (Floating Labels / Klasyczny + opcjonalny Searchable Select, ' +
-        'Premium Multi Select, Drag & Drop File Upload) (aliasy: zrob:formularz, mache:formular)'
+      'Interactive form generator (Floating Labels / Classic + optional Searchable Select, ' +
+        'Premium Multi Select, Drag & Drop File Upload) (aliases: zrob:formularz, mache:formular)'
     )
-    .option('-n, --count <liczba>', 'Liczba podstawowych pol formularza - pomija to jedno pytanie')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt FormAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .option('-n, --count <number>', 'Number of basic form fields - skips this one question')
+    .option('--answers <json>', 'Answers as JSON (FormAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<FormAnswers>(opts);
       const answers = provided ?? (await collectFormAnswers(opts.count));

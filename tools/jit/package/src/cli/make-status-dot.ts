@@ -1,9 +1,9 @@
 /**
  * molique-jit - `make:status-dot` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_status-dots.scss
- * (.status-dot + .status-<stan>, opcjonalnie .status-ping dla animowanego
- * pierscienia - obie klasy wspoldziela sie na tym samym elemencie) oraz
+ * Markup verified against css/scss/components/_status-dots.scss
+ * (.status-dot + .status-<state>, optionally .status-ping for an
+ * animated ring - both classes are shared on the same element) and
  * src/examples-status-dots.html.
  */
 
@@ -16,23 +16,23 @@ import { loadAnswers } from './answers.js';
 type StatusDotColor = 'draft' | 'pending' | 'done' | 'danger';
 
 const STATUS_CHOICES = [
-  { name: 'Szkic (draft)', value: 'draft' },
-  { name: 'Oczekuje (pending)', value: 'pending' },
-  { name: 'Zakonczone (done)', value: 'done' },
-  { name: 'Krytyczny (danger)', value: 'danger' },
+  { name: 'Draft', value: 'draft' },
+  { name: 'Pending', value: 'pending' },
+  { name: 'Done', value: 'done' },
+  { name: 'Critical (danger)', value: 'danger' },
 ] as const;
 
 export interface StatusDotAnswers {
   text: string;
   status: StatusDotColor;
-  /** .status-ping - pulsujacy pierscien wokol kropki. */
+  /** .status-ping - a pulsing ring around the dot. */
   ping: boolean;
 }
 
 export async function collectStatusDotAnswers(): Promise<StatusDotAnswers> {
-  const text = await input({ message: 'Tekst przy kropce:', default: 'Zakonczone' });
+  const text = await input({ message: 'Text next to the dot:', default: 'Done' });
   const status = await select<StatusDotColor>({ message: 'Status?', choices: STATUS_CHOICES, default: 'done' });
-  const ping = await confirm({ message: 'Dodac pulsujaca animacje (.status-ping)?', default: false });
+  const ping = await confirm({ message: 'Add a pulsing animation (.status-ping)?', default: false });
   return { text, status, ping };
 }
 
@@ -47,10 +47,10 @@ export function renderStatusDot(answers: StatusDotAnswers): string {
 export function registerMakeStatusDotCommand(program: Command): void {
   program
     .command('make:status-dot')
-    .description('Interaktywny generator kropki statusu (.status-dot) (aliasy: zrob:kropke-statusu, mache:statuspunkt)')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt StatusDotAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive status dot generator (.status-dot) (aliases: zrob:kropke-statusu, mache:statuspunkt)')
+    .option('--answers <json>', 'Answers as JSON (StatusDotAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<StatusDotAnswers>(opts);
       const answers = provided ?? (await collectStatusDotAnswers());

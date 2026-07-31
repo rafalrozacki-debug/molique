@@ -1,20 +1,21 @@
 /**
- * molique-jit - testy silnika szablonow scaffoldingu (Etap A)
+ * molique-jit - tests for the scaffolding template engine (Stage A)
  *
- * Testuje renderStub()/renderList()/joinBlocks() z tools/jit/package/src/stubs.ts
- * (skompilowane do dist/stubs.js) - fundament, na ktorym stoi kazda komenda
- * make:*. Zero zaleznosci od jakiejkolwiek konkretnej komendy, wiec moze
- * powstac przed refaktorem opisanym w Etapie B.
+ * Tests renderStub()/renderList()/joinBlocks() from
+ * tools/jit/package/src/stubs.ts (compiled to dist/stubs.js) - the
+ * foundation every make:* command is built on. Zero dependency on any
+ * specific command, so it can exist before the refactor described in
+ * Stage B.
  *
- * renderStub() czyta pliki .stub.html z dist/stubs/ (kopiowane tam przez
- * scripts/copy-stubs.mjs w ramach "npm run build") - katalog nie jest
- * parametryzowalny z zewnatrz, wiec test tworzy WLASNY, tymczasowy plik
- * fixture bezposrednio w dist/stubs/ (nazwa z prefiksem, ktory nigdy nie
- * kolioduje z prawdziwymi stubami) i usuwa go po sobie w hooku `after` -
- * dzieki temu test cwiczy PRAWDZIWA sciezke odczytu z dysku, a nie
- * zaleznosc od tresci konkretnego, prawdziwego komponentu.
+ * renderStub() reads .stub.html files from dist/stubs/ (copied there by
+ * scripts/copy-stubs.mjs as part of "npm run build") - the directory
+ * isn't configurable from outside, so the test creates its OWN, temporary
+ * fixture file directly in dist/stubs/ (a name with a prefix that never
+ * collides with real stubs) and removes it afterwards in the `after`
+ * hook - this way the test exercises the REAL disk-read path, rather
+ * than depending on the content of a specific, real component.
  *
- * Uruchomienie:  node --test tools/jit/tests/
+ * Run with:  node --test tools/jit/tests/
  */
 
 import { test, before, after } from 'node:test';
@@ -31,7 +32,7 @@ const fixturePath = path.join(stubsDistDir, fixtureName);
 before(() => {
   if (!fs.existsSync(stubsDistDir)) {
     throw new Error(
-      `Brak ${stubsDistDir} - uruchom najpierw "npm run build" w tools/jit/package/ (scripts/copy-stubs.mjs kopiuje tam .stub.html).`
+      `Missing ${stubsDistDir} - run "npm run build" in tools/jit/package/ first (scripts/copy-stubs.mjs copies the .stub.html files there).`
     );
   }
   fs.writeFileSync(fixturePath, '<li class="{{ CLASS }}">{{ LABEL }}</li>\n');
@@ -41,45 +42,45 @@ after(() => {
   fs.rmSync(fixturePath, { force: true });
 });
 
-// pathToFileURL() jest wymagane na Windows - goly string "C:/..." wywala
-// ERR_UNSUPPORTED_ESM_URL_SCHEME (patrz tez notatka o tym samym problemie
-// przy weryfikacji generatorow scaffoldingu w tej sesji).
+// pathToFileURL() is required on Windows - a bare "C:/..." string throws
+// ERR_UNSUPPORTED_ESM_URL_SCHEME (see also the note about the same issue
+// when verifying the scaffolding generators in this session).
 const { renderStub, renderList, joinBlocks } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'stubs.js')).href
 );
 
-test('renderStub() - podstawia wszystkie placeholdery', () => {
-  const html = renderStub(fixtureName, { CLASS: 'is-active', LABEL: 'Krok 1' });
-  assert.equal(html, '<li class="is-active">Krok 1</li>\n');
+test('renderStub() - substitutes all placeholders', () => {
+  const html = renderStub(fixtureName, { CLASS: 'is-active', LABEL: 'Step 1' });
+  assert.equal(html, '<li class="is-active">Step 1</li>\n');
 });
 
-test('renderStub() - rzuca blad przy brakujacej wartosci dla placeholdera', () => {
+test('renderStub() - throws when a placeholder value is missing', () => {
   assert.throws(() => renderStub(fixtureName, { CLASS: 'is-active' }), /LABEL/);
 });
 
-test('renderStub() - rzuca blad przy nieistniejacym pliku stuba', () => {
-  assert.throws(() => renderStub('_nie-istnieje-nigdy.stub.html', {}), /brak szablonu/);
+test('renderStub() - throws for a non-existent stub file', () => {
+  assert.throws(() => renderStub('_never-exists.stub.html', {}), /missing template/);
 });
 
-test('renderList() - renderuje ten sam stub raz na element i laczy wynik', () => {
+test('renderList() - renders the same stub once per item and joins the result', () => {
   const items = [
-    { CLASS: '', LABEL: 'Pierwszy' },
-    { CLASS: 'is-active', LABEL: 'Drugi' },
-    { CLASS: '', LABEL: 'Trzeci' },
+    { CLASS: '', LABEL: 'First' },
+    { CLASS: 'is-active', LABEL: 'Second' },
+    { CLASS: '', LABEL: 'Third' },
   ];
   const html = renderList(fixtureName, items);
-  assert.equal(html, '<li class="">Pierwszy</li>\n<li class="is-active">Drugi</li>\n<li class="">Trzeci</li>');
+  assert.equal(html, '<li class="">First</li>\n<li class="is-active">Second</li>\n<li class="">Third</li>');
 });
 
-test('renderList() - pusta lista daje pusty string', () => {
+test('renderList() - an empty list yields an empty string', () => {
   assert.equal(renderList(fixtureName, []), '');
 });
 
-test('joinBlocks() - laczy bloki pusta linia, z jednym trailing newline', () => {
+test('joinBlocks() - joins blocks with a blank line, with a single trailing newline', () => {
   const joined = joinBlocks('<a>1</a>\n', '<b>2</b>');
   assert.equal(joined, '<a>1</a>\n\n<b>2</b>\n');
 });
 
-test('joinBlocks() - pojedynczy blok dostaje dokladnie jeden trailing newline', () => {
+test('joinBlocks() - a single block gets exactly one trailing newline', () => {
   assert.equal(joinBlocks('<a>1</a>'), '<a>1</a>\n');
 });

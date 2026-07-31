@@ -1,19 +1,20 @@
 /**
  * molique-jit - Watch
  *
- * Nasluchuje zmian w plikach projektu i przebudowuje wyjscie inkrementalnie:
- * po zmianie JEDNEGO pliku re-skanujemy TYLKO ten plik (`rescanFile`),
- * aktualizujemy jego wpis w cache Scannera, sumujemy wszystkie tokeny
- * (`unionTokens`) i dopiero na tej podstawie odpytujemy slownik/emitujemy
- * CSS - dokladnie architektura opisana w oryginalnym jit-spec.md.
+ * Listens for changes in project files and rebuilds the output
+ * incrementally: after a SINGLE file changes, we re-scan ONLY that file
+ * (`rescanFile`), update its entry in the Scanner's cache, sum all tokens
+ * (`unionTokens`), and only then query the dictionary / emit CSS - exactly
+ * the architecture described in the original jit-spec.md.
  *
- * Debounce (~50ms): zapis kilku plikow naraz (np. "Save All" w edytorze)
- * ma wywolac JEDNA przebudowe, nie serie osobnych.
+ * Debounce (~50ms): saving several files at once (e.g. "Save All" in an
+ * editor) should trigger ONE rebuild, not a series of separate ones.
  *
- * UWAGA na wersje chokidar: v4 usunela natywne wsparcie dla wzorcow glob
- * (trzeba by samemu rozwijac je do konkretnych sciezek). Pakiet celowo
- * trzyma sie chokidar v3, ktory glob rozumie natywnie - te same globy
- * `content`, ktorych uzywa Scanner, mozna przekazac wprost do chokidar.watch().
+ * NOTE on the chokidar version: v4 removed native glob support (patterns
+ * would have to be expanded to concrete paths by hand). The package
+ * deliberately sticks to chokidar v3, which understands glob natively -
+ * the same `content` globs the Scanner uses can be passed straight to
+ * chokidar.watch().
  */
 
 import fs from 'node:fs';
@@ -27,12 +28,12 @@ import type { BuildOptions, BuildResult } from './types.js';
 const DEBOUNCE_MS = 50;
 
 export interface WatchOptions extends BuildOptions {
-  /** Wywolywane po kazdej (przedebounce'owanej) przebudowie. */
+  /** Called after every (debounced) rebuild. */
   onBuild?: (result: BuildResult) => void;
 }
 
 export interface WatchHandle {
-  /** Zatrzymuje watcher i anuluje oczekujacy debounce. */
+  /** Stops the watcher and cancels any pending debounce. */
   close(): Promise<void>;
 }
 
@@ -63,8 +64,8 @@ export async function watch(options: WatchOptions): Promise<WatchHandle> {
 
     if (options.verbose) {
       console.log(
-        `molique-jit (watch): ${matchedUtilityClasses.length} klas narzedziowych, ` +
-          `${matchedComponentIds.length} komponentow.`
+        `molique-jit (watch): ${matchedUtilityClasses.length} utility classes, ` +
+          `${matchedComponentIds.length} components.`
       );
     }
 
@@ -76,7 +77,7 @@ export async function watch(options: WatchOptions): Promise<WatchHandle> {
     debounceTimer = setTimeout(rebuild, DEBOUNCE_MS);
   }
 
-  // Pierwszy build - natychmiast, bez debounce (nie ma jeszcze na co czekac).
+  // First build - immediately, no debounce (there's nothing to wait for yet).
   rebuild();
 
   const watcher = chokidar.watch(options.content, {

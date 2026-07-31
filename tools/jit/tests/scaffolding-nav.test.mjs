@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:nav` (Etap B.8 - ostatnia z 8 istniejacych komend)
+ * molique-jit - `make:nav` tests (Stage B.8 - the last of the 8 existing commands)
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,32 +14,32 @@ const { renderNav } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-nav.js')).href
 );
 
-test('make:nav - Standard: brak dodatkowej klasy, brak ostrzezenia o navbar-sticky', () => {
+test('make:nav - Standard: no extra class, no navbar-sticky warning', () => {
   const html = renderNav({
     variant: 'standard',
     brand: 'Logo',
     toggleId: 'navToggle',
-    items: ['Start', 'O nas'],
+    items: ['Home', 'About'],
     themeSwitch: false,
   });
   assert.match(html, /<nav class="navbar">/);
-  assert.doesNotMatch(html, /nie dodawaj \.navbar-sticky/);
-  assert.match(html, /<a href="#" class="navbar-item">Start<\/a>/);
-  assert.match(html, /<a href="#" class="navbar-item">O nas<\/a>/);
+  assert.doesNotMatch(html, /do not add \.navbar-sticky/);
+  assert.match(html, /<a href="#" class="navbar-item">Home<\/a>/);
+  assert.match(html, /<a href="#" class="navbar-item">About<\/a>/);
 });
 
-test('make:nav - Transparent: dostaje ostrzezenie o navbar-sticky', () => {
+test('make:nav - Transparent: gets the navbar-sticky warning', () => {
   const html = renderNav({ variant: 'transparent', brand: 'Logo', toggleId: 'navToggle', items: [], themeSwitch: false });
   assert.match(html, /class="navbar navbar-transparent"/);
-  assert.match(html, /nie dodawaj \.navbar-sticky/);
+  assert.match(html, /do not add \.navbar-sticky/);
 });
 
-test('make:nav - Pill bez customizacji: brak atrybutu style', () => {
+test('make:nav - Pill without customization: no style attribute', () => {
   const html = renderNav({ variant: 'pill', brand: 'Logo', toggleId: 'navToggle', items: [], themeSwitch: false });
-  assert.match(html, /class="navbar navbar-pill">/); // brak style="..." przed >
+  assert.match(html, /class="navbar navbar-pill">/); // no style="..." before >
 });
 
-test('make:nav - Pill z customizacja: oba kolory w stylu, gdy oba podane', () => {
+test('make:nav - Pill with customization: both colors in the style when both are given', () => {
   const html = renderNav({
     variant: 'pill',
     pillBg: '#123456',
@@ -52,45 +52,45 @@ test('make:nav - Pill z customizacja: oba kolory w stylu, gdy oba podane', () =>
   assert.match(html, /style="--navbar-pill-bg: #123456; --navbar-pill-bg-scrolled: #abcdef;"/);
 });
 
-test('make:nav - bez zadnego opcjonalnego modulu, MENU_CONTENT to tylko pozycje', () => {
+test('make:nav - without any optional module, MENU_CONTENT is just the items', () => {
   const html = renderNav({ variant: 'standard', brand: 'Logo', toggleId: 'navToggle', items: ['A'], themeSwitch: false });
   assert.doesNotMatch(html, /mega-menu/);
   assert.doesNotMatch(html, /theme-switch/);
   assert.doesNotMatch(html, /language-switch/);
 });
 
-test('make:nav - Mega Menu: grupy i linki w kolejnosci', () => {
+test('make:nav - Mega Menu: groups and links in order', () => {
   const html = renderNav({
     variant: 'standard',
     brand: 'Logo',
     toggleId: 'navToggle',
     items: [],
-    megaMenu: { title: 'Produkty', groups: [{ title: 'Kategoria 1', links: ['Link 1', 'Link 2'] }] },
+    megaMenu: { title: 'Products', groups: [{ title: 'Category 1', links: ['Link 1', 'Link 2'] }] },
     themeSwitch: false,
   });
-  assert.match(html, /mega-menu-trigger">Produkty</);
-  assert.match(html, /mega-menu-col-title">Kategoria 1</);
+  assert.match(html, /mega-menu-trigger">Products</);
+  assert.match(html, /mega-menu-col-title">Category 1</);
   assert.match(html, /mega-menu-link">Link 1</);
   assert.match(html, /mega-menu-link">Link 2</);
 });
 
-test('make:nav - Theme Switch: obecny tylko gdy wlaczony', () => {
+test('make:nav - Theme Switch: present only when enabled', () => {
   const withSwitch = renderNav({ variant: 'standard', brand: 'Logo', toggleId: 'navToggle', items: [], themeSwitch: true });
   const withoutSwitch = renderNav({ variant: 'standard', brand: 'Logo', toggleId: 'navToggle', items: [], themeSwitch: false });
   assert.match(withSwitch, /id="theme-toggle"/);
   assert.doesNotMatch(withoutSwitch, /theme-switch/);
 });
 
-test('make:nav - Language Switch: pierwszy jezyk aktywny (CHECK_SVG), reszta bez', () => {
+test('make:nav - Language Switch: the first language is active (CHECK_SVG), the rest are not', () => {
   const html = renderNav({
     variant: 'standard',
     brand: 'Logo',
     toggleId: 'navToggle',
     items: [],
-    languageSwitch: { languages: [{ flagCode: 'pl', label: 'Polski' }, { flagCode: 'gb', label: 'English' }] },
+    languageSwitch: { languages: [{ flagCode: 'pl', label: 'Polish' }, { flagCode: 'gb', label: 'English' }] },
     themeSwitch: false,
   });
   assert.match(html, /language-switch-flag"><img src="img\/flags\/pl\.svg"/);
-  assert.match(html, /Polski<\/span><span class="language-switch-check">/);
+  assert.match(html, /Polish<\/span><span class="language-switch-check">/);
   assert.doesNotMatch(html, /English<\/span><span class="language-switch-check">/);
 });

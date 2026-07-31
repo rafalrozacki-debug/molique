@@ -1,31 +1,31 @@
 /**
- * molique-jit - wspolne typy danych
+ * molique-jit - shared data types
  *
- * Ksztalty ponizej musza zgadzac sie 1:1 z tym, co zapisuja skrypty w
- * repozytorium molique (tools/gen-jit-utilities.js, tools/gen-chunks.js,
- * tools/gen-jit-package-data.js) do tools/jit/package/data/. molique-jit
- * NIGDY nie liczy tych danych samodzielnie - tylko je czyta.
+ * The shapes below must match 1:1 what the scripts in the molique
+ * repository (tools/gen-jit-utilities.js, tools/gen-chunks.js,
+ * tools/gen-jit-package-data.js) write to tools/jit/package/data/.
+ * molique-jit NEVER computes this data itself - it only reads it.
  */
 
-/** Pojedyncza skompilowana regula CSS nalezaca do jednej klasy narzedziowej. */
+/** A single compiled CSS rule belonging to one utility class. */
 export interface UtilityRule {
-  /** Pelny tekst selektora, np. ".text-hover-primary:hover". */
+  /** Full selector text, e.g. ".text-hover-primary:hover". */
   selector: string;
   /**
-   * Warunki opakowujace regule, od zewnetrznego do wewnetrznego, np.
+   * Conditions wrapping the rule, from outermost to innermost, e.g.
    * ["@media (min-width: 768px)", "@supports (animation-timeline: view())"].
-   * Pusta tablica = brak warunku.
+   * Empty array = no condition.
    */
   wrappers: string[];
-  /** Deklaracje CSS (bez selektora i klamer), np. "color:var(--primary) !important". */
+  /** CSS declarations (without selector and braces), e.g. "color:var(--primary) !important". */
   css: string;
-  /** Nazwa chunka zrodlowego, np. "molique-utilities-extended.css" (modul opt-in). */
+  /** Name of the source chunk, e.g. "molique-utilities-extended.css" (opt-in module). */
   source: string;
 }
 
-/** Fragment CSS bez zadnej klasy w selektorze (np. @keyframes, @property) - zawsze dolaczany. */
+/** A CSS fragment with no class in its selector (e.g. @keyframes, @property) - always included. */
 export interface AlwaysIncludeEntry {
-  /** Kompletny, juz opakowany fragment CSS, gotowy do wklejenia verbatim. */
+  /** Complete, already-wrapped CSS fragment, ready to be inserted verbatim. */
   raw: string;
   source: string;
 }
@@ -40,25 +40,25 @@ export interface UtilitiesDictionary {
   alwaysInclude: AlwaysIncludeEntry[];
 }
 
-/** Klasa CSS -> ID chunka komponentu (np. "card" -> "cards"). */
+/** CSS class -> component chunk ID (e.g. "card" -> "cards"). */
 export interface ClassIndex {
   generated: string;
   classes: Record<string, string>;
 }
 
-/** Klasy zawsze wlaczane, niezaleznie od tego, co zeskanowano (tier "runtime" z purgecss.safelist.cjs). */
+/** Classes always included, regardless of what was scanned (the "runtime" tier from purgecss.safelist.cjs). */
 export interface Safelist {
   standard: string[];
 }
 
 export interface BuildOptions {
-  /** Globy fast-glob wskazujace pliki projektu do zeskanowania (HTML/PHP/JS). */
+  /** fast-glob patterns pointing to the project files to scan (HTML/PHP/JS). */
   content: string[];
-  /** Katalog, wzgledem ktorego rozwiazywane sa globy z `content`. */
+  /** Directory the `content` globs are resolved against. */
   cwd: string;
-  /** Sciezka pliku wyjsciowego CSS. */
+  /** Output CSS file path. */
   outFile: string;
-  /** Dodatkowe, zawsze dolaczane klasy (z molique.config.mjs -> safelist) - poza wbudowana safelista runtime molique. */
+  /** Extra, always-included classes (from molique.config.mjs -> safelist) - on top of molique's built-in runtime safelist. */
   safelist?: string[];
   verbose?: boolean;
 }

@@ -1,19 +1,20 @@
 /**
- * molique-jit - pomocniki promptow wspoldzielone przez komendy `make:*`.
+ * molique-jit - prompt helpers shared by the `make:*` commands.
  *
- * `promptCount()` odpowiada na pytanie uzytkownika: "czy CLI moze miec
- * dopisek z iloscia komponentow do wygenerowania?" - tak, przez opcje
- * `-n, --count <liczba>` zarejestrowana per komenda. Gdy podana, ODPOWIADA
- * na TO JEDNO pytanie "ile?" bez pytania interaktywnie, ale reszta promptow
- * (etykiety, warianty, kolory) nadal dziala normalnie - `--count` skraca
- * TYLKO liczbe powtarzalnych elementow, nie caly interaktywny flow.
+ * `promptCount()` answers the user's question: "can the CLI take a flag
+ * for how many components to generate?" - yes, via the `-n, --count
+ * <number>` option registered per command. When supplied, it ANSWERS that
+ * ONE "how many?" question without prompting interactively, but the rest
+ * of the prompts (labels, variants, colors) still work normally -
+ * `--count` ONLY shortcuts the number of repeatable items, not the whole
+ * interactive flow.
  */
 
 import { input } from '@inquirer/prompts';
 
 export const countValidator = (min: number, max: number) => (v: string) => {
   const n = Number(v);
-  return (Number.isInteger(n) && n >= min && n <= max) || `Podaj liczbe calkowita od ${min} do ${max}.`;
+  return (Number.isInteger(n) && n >= min && n <= max) || `Enter a whole number from ${min} to ${max}.`;
 };
 
 export interface PromptCountOptions {
@@ -21,7 +22,7 @@ export interface PromptCountOptions {
   default: string;
   min: number;
   max: number;
-  /** Wartosc z flagi --count (opts.count z Commandera) - jesli podana, pytanie interaktywne jest pomijane. */
+  /** Value from the --count flag (opts.count from Commander) - if provided, the interactive question is skipped. */
   flagValue?: string;
 }
 
@@ -30,10 +31,10 @@ export async function promptCount(options: PromptCountOptions): Promise<number> 
     const n = Number(options.flagValue);
     if (!Number.isInteger(n) || n < options.min || n > options.max) {
       throw new Error(
-        `--count musi byc liczba calkowita od ${options.min} do ${options.max} (otrzymano "${options.flagValue}").`
+        `--count must be a whole number from ${options.min} to ${options.max} (got "${options.flagValue}").`
       );
     }
-    console.log(`${options.message} ${n}  (z flagi --count)`);
+    console.log(`${options.message} ${n}  (from the --count flag)`);
     return n;
   }
   const answer = await input({

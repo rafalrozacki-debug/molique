@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:alert`
+ * molique-jit - `make:alert` tests
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,12 +14,12 @@ const { renderAlert } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-alert.js')).href
 );
 
-test('make:alert - laczy klase koloru z trescia komunikatu', () => {
-  const html = renderAlert({ message: 'Zmiany zostaly zapisane pomyslnie.', color: 'success' });
-  assert.equal(html, '<div class="alert alert-success">Zmiany zostaly zapisane pomyslnie.</div>\n');
+test('make:alert - combines the color class with the message content', () => {
+  const html = renderAlert({ message: 'The changes were saved successfully.', color: 'success' });
+  assert.equal(html, '<div class="alert alert-success">The changes were saved successfully.</div>\n');
 });
 
-test('make:alert - kazdy z 4 kolorow daje poprawna klase alert-<kolor>', () => {
+test('make:alert - each of the 4 colors produces the correct alert-<color> class', () => {
   for (const color of ['info', 'success', 'danger', 'warning']) {
     const html = renderAlert({ message: 'X', color });
     assert.match(html, new RegExp(`class="alert alert-${color}"`));

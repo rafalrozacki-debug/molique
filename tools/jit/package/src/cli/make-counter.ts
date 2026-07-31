@@ -1,18 +1,19 @@
 /**
  * molique-jit - `make:counter` (Scaffolding)
  *
- * Markup zweryfikowany wzgledem css/scss/components/_counters.scss
- * (.counter > .counter-value + .counter-title) oraz
- * js/modules/molique-counters.js (auto-ladowany przy klasie .counter-value):
- * tresc .counter-value to LICZBA docelowa (JS parsuje ja przez
- * parseFloat() i animuje liczenie od 0 po wejsciu w viewport, IntersectionObserver),
- * opcjonalne atrybuty data-prefix/data-suffix (np. "$"/"+", "%") sa
- * dopisywane do wyniku bez zmiany logiki liczenia.
+ * Markup verified against css/scss/components/_counters.scss (.counter >
+ * .counter-value + .counter-title) and js/modules/molique-counters.js
+ * (auto-loaded when the .counter-value class is present): the content of
+ * .counter-value is the TARGET NUMBER (JS parses it via parseFloat() and
+ * animates counting up from 0 once it enters the viewport,
+ * IntersectionObserver), optional data-prefix/data-suffix attributes
+ * (e.g. "$"/"+", "%") are appended to the result without changing the
+ * counting logic.
  *
- * BRAK dedykowanej strony examples-* dla samego .counter (jedyne realne
- * uzycie w repo to polaczenie z .chart-radial na stronie glownej,
- * src/index.html) - grunt tego generatora to SCSS + faktyczne zachowanie
- * JS-a, nie przyklad strony docs.
+ * There is NO dedicated examples-* page for .counter alone (the only
+ * real usage in the repo is paired with .chart-radial on the homepage,
+ * src/index.html) - this generator is grounded in the SCSS + the actual
+ * JS behavior, not a docs example page.
  */
 
 import type { Command } from 'commander';
@@ -22,24 +23,24 @@ import { outputResult } from './output.js';
 import { loadAnswers } from './answers.js';
 
 export interface CounterAnswers {
-  /** Liczba docelowa - JS animuje liczenie od 0 do tej wartosci. */
+  /** Target number - JS animates counting from 0 up to this value. */
   value: number;
   title: string;
-  /** np. "$", puste = brak. */
+  /** e.g. "$", empty = none. */
   prefix: string;
-  /** np. "+", "%", puste = brak. */
+  /** e.g. "+", "%", empty = none. */
   suffix: string;
 }
 
 export async function collectCounterAnswers(): Promise<CounterAnswers> {
   const valueStr = await input({
-    message: 'Docelowa liczba (JS animuje liczenie od 0):',
+    message: 'Target number (JS animates counting up from 0):',
     default: '1500',
-    validate: (v: string) => !Number.isNaN(Number(v)) || 'Podaj liczbe.',
+    validate: (v: string) => !Number.isNaN(Number(v)) || 'Enter a number.',
   });
-  const title = await input({ message: 'Podpis pod liczba:', default: 'Zadowolonych klientow' });
-  const prefix = await input({ message: 'Prefiks (np. "$"), puste = brak:', default: '' });
-  const suffix = await input({ message: 'Sufiks (np. "+", "%"), puste = brak:', default: '+' });
+  const title = await input({ message: 'Caption below the number:', default: 'Satisfied customers' });
+  const prefix = await input({ message: 'Prefix (e.g. "$"), empty = none:', default: '' });
+  const suffix = await input({ message: 'Suffix (e.g. "+", "%"), empty = none:', default: '+' });
   return { value: Number(valueStr), title, prefix, suffix };
 }
 
@@ -55,10 +56,10 @@ export function renderCounter(answers: CounterAnswers): string {
 export function registerMakeCounterCommand(program: Command): void {
   program
     .command('make:counter')
-    .description('Interaktywny generator animowanego licznika (.counter) (aliasy: zrob:licznik, mache:zaehler)')
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt CounterAnswers) - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .description('Interactive animated counter (.counter) generator (aliases: zrob:licznik, mache:zaehler)')
+    .option('--answers <json>', 'Answers as JSON (CounterAnswers shape) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<CounterAnswers>(opts);
       const answers = provided ?? (await collectCounterAnswers());

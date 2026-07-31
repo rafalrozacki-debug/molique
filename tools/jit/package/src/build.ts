@@ -1,11 +1,11 @@
 /**
  * molique-jit - Build
  *
- * Sklejenie calego pipeline'u: Scanner -> Lookup -> Emitter -> zapis pliku.
- * Tryb jednorazowy (`build`) - watch mode i CLI to kolejne, osobne fazy,
- * ktore beda korzystac z tej samej funkcji (watch bedzie po prostu wywolywac
- * `build` ponownie po kazdej zmianie, na start; optymalizacja przez
- * ScanResult.fileCache przyjdzie razem z realnym watcherem).
+ * Assembles the whole pipeline: Scanner -> Lookup -> Emitter -> write
+ * file. One-shot mode (`build`) - watch mode and the CLI are later,
+ * separate phases that will use this same function (watch will initially
+ * just call `build` again after every change; optimization via
+ * ScanResult.fileCache will arrive together with the real watcher).
  */
 
 import fs from 'node:fs';
@@ -30,8 +30,8 @@ export async function build(options: BuildOptions): Promise<BuildResult> {
 
   if (options.verbose) {
     console.log(
-      `molique-jit: ${matchedUtilityClasses.length} klas narzedziowych, ` +
-        `${matchedComponentIds.length} komponentow, ${unmatchedTokenCount} tokenow spoza molique.`
+      `molique-jit: ${matchedUtilityClasses.length} utility classes, ` +
+        `${matchedComponentIds.length} components, ${unmatchedTokenCount} tokens outside molique.`
     );
   }
 

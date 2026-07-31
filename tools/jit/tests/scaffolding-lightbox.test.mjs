@@ -1,7 +1,7 @@
 /**
- * molique-jit - testy `make:lightbox`
+ * molique-jit - `make:lightbox` tests
  *
- * Uruchomienie:  node tools/run-scaffolding-tests.mjs
+ * Run with:  node tools/run-scaffolding-tests.mjs
  */
 
 import { test } from 'node:test';
@@ -14,28 +14,28 @@ const { renderLightbox } = await import(
   pathToFileURL(path.join(root, 'tools', 'jit', 'package', 'dist', 'cli', 'make-lightbox.js')).href
 );
 
-test('make:lightbox - kazdy link ma data-lightbox i wspolna data-gallery', () => {
+test('make:lightbox - every link has data-lightbox and a shared data-gallery', () => {
   const html = renderLightbox({
-    gallery: 'realizacje',
+    gallery: 'projects',
     items: [
-      { thumbImg: 'mini-1.jpg', fullImg: 'pelne-1.jpg', alt: 'Foto 1' },
-      { thumbImg: 'mini-2.jpg', fullImg: 'pelne-2.jpg', alt: 'Foto 2' },
+      { thumbImg: 'mini-1.jpg', fullImg: 'full-1.jpg', alt: 'Photo 1' },
+      { thumbImg: 'mini-2.jpg', fullImg: 'full-2.jpg', alt: 'Photo 2' },
     ],
   });
   assert.equal((html.match(/data-lightbox/g) ?? []).length, 2);
-  assert.equal((html.match(/data-gallery="realizacje"/g) ?? []).length, 2);
+  assert.equal((html.match(/data-gallery="projects"/g) ?? []).length, 2);
 });
 
-test('make:lightbox - href to PELNE zdjecie, src <img> to MINIATURA (rozne wartosci)', () => {
+test('make:lightbox - href points to the FULL photo, <img> src to the THUMBNAIL (different values)', () => {
   const html = renderLightbox({
     gallery: 'g',
-    items: [{ thumbImg: 'mini.jpg', fullImg: 'pelne.jpg', alt: 'X' }],
+    items: [{ thumbImg: 'mini.jpg', fullImg: 'full.jpg', alt: 'X' }],
   });
-  assert.match(html, /href="pelne\.jpg"/);
+  assert.match(html, /href="full\.jpg"/);
   assert.match(html, /src="mini\.jpg"/);
 });
 
-test('make:lightbox - brak zadnego markupu modala/overlay (buduje go JS)', () => {
+test('make:lightbox - no modal/overlay markup at all (JS builds it)', () => {
   const html = renderLightbox({ gallery: 'g', items: [{ thumbImg: 'a.jpg', fullImg: 'b.jpg', alt: 'X' }] });
   assert.doesNotMatch(html, /lightbox-overlay|lightbox-content|lightbox-nav/);
 });

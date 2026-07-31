@@ -1,65 +1,65 @@
 # Molique CLI Specification
 
-> Stan po Fazie 5: zaimplementowane i ręcznie zweryfikowane end-to-end
-> (`tools/jit/package/src/cli.ts`, `bin: molique-jit`). Ta specyfikacja
-> okazała się w praktyce bardzo bliska pierwotnemu planowi - komendy i
-> aliasy poniżej odpowiadają dokładnie temu, co powstało. Dopisano
-> wyłącznie brakujący wcześniej schemat `molique.config.mjs` (sekcja 4) i
-> doprecyzowano mechanizm lokalizacji (sekcja 5).
+> State after Phase 5: implemented and manually verified end-to-end
+> (`tools/jit/package/src/cli.ts`, `bin: molique-jit`). In practice this
+> specification turned out to be very close to the original plan - the
+> commands and aliases below correspond exactly to what was built. The only
+> addition was the previously missing `molique.config.mjs` schema (section 4)
+> and a clarification of the localization mechanism (section 5).
 
-Ten dokument opisuje interfejs linii poleceń oparty na Node.js. Pełni on rolę głównego silnika budującego styl z trybem nasłuchującym zmian (Watch). Narzędzie natywnie wspiera środowiska wielojęzyczne.
+This document describes a Node.js-based command line interface. It serves as the main engine that builds the stylesheet, with a file-watching mode (Watch). The tool natively supports multilingual environments.
 
-Nazwa binarki: `molique-jit` (nie samo `molique`) - zgodna z nazwą pakietu
-npm, żeby uniknąć kolizji z ewentualnymi innymi narzędziami o krótszej
-nazwie.
+Binary name: `molique-jit` (not just `molique`) - matching the npm package
+name, to avoid a collision with any other tools that might use a shorter
+name.
 
-## 1. Komendy Główne i Aliasy
+## 1. Main Commands and Aliases
 
-| Angielski (Standard) | Polski Alias       | Niemiecki Alias      | Akcja                              |
-| :------------------- | :----------------- | :------------------- | :--------------------------------- |
-| `molique init`       | `molique start`    | `molique start`      | Tworzy bazowy plik konfiguracyjny  |
-| `molique build`      | `molique buduj`    | `molique bauen`      | Kompiluje CSS do pliku wyjściowego |
-| `molique watch`      | `molique obserwuj` | `molique beobachten` | Nasłuchuje zmian na żywo           |
-| `molique help`       | `molique pomoc`    | `molique hilfe`      | Wypisuje pomoc (dla calego CLI albo jednej komendy) |
-| `--minify` / `-m`    | `--minifikuj`      | `--minifizieren`     | Kompresja (usuwa białe znaki)      |
-| `--config` / `-c`    | `--konfiguracja`   | `--konfiguration`    | Wskazuje własny plik `.config`     |
-| `--version` / `-V`   | *(bez aliasu - uniwersalny skrot)* | *(jw.)* | Wypisuje wersje zainstalowanego pakietu |
+| English (Standard)   | Polish Alias       | German Alias          | Action                                              |
+| :-------------------- | :----------------- | :--------------------- | :--------------------------------------------------- |
+| `molique init`       | `molique start`    | `molique start`      | Creates the base configuration file                |
+| `molique build`      | `molique buduj`    | `molique bauen`      | Compiles CSS to the output file                    |
+| `molique watch`      | `molique obserwuj` | `molique beobachten` | Watches for changes live                           |
+| `molique help`       | `molique pomoc`    | `molique hilfe`      | Prints help (for the whole CLI or a single command) |
+| `--minify` / `-m`    | `--minifikuj`      | `--minifizieren`     | Compression (removes whitespace)                   |
+| `--config` / `-c`    | `--konfiguracja`   | `--konfiguration`    | Points to a custom `.config` file                  |
+| `--version` / `-V`   | *(no alias - universal shorthand)* | *(same)* | Prints the installed package version |
 
-## 2. Działanie komend
+## 2. Command behavior
 
 ### `init` / `start`
 
-- **Zachowanie:** Zrzuca w głównym folderze plik `molique.config.mjs` ze wzorcową konfiguracją i predefiniowaną safelistą dla frameworka (niezbędną dla JS).
+- **Behavior:** Drops a `molique.config.mjs` file in the root folder with a sample configuration and a predefined safelist for the framework (needed for JS).
 
 ### `build` / `buduj` / `bauen`
 
-- **Zachowanie:** Skanuje cały glob podany w sekcji `content` z pliku konfiguracyjnego. Ładuje moduły, generuje ostateczny CSS, opcjonalnie przepuszcza przez minifikator i zapisuje na dysk. Standard wyjścia: Exit Code 0 (sukces) / 1 (błąd).
+- **Behavior:** Scans the entire glob given in the `content` section of the config file. Loads the modules, generates the final CSS, optionally runs it through the minifier, and writes it to disk. Output standard: Exit Code 0 (success) / 1 (error).
 
 ### `watch` / `obserwuj` / `beobachten`
 
-- **Zachowanie:** Tryb deweloperski nasłuchujący modyfikacji plików (oparty na bibliotece `chokidar`, wersja 3.x - v4 usunęła natywne wsparcie dla wzorców glob, potrzebne tutaj). JIT wykonuje _Debounce_ (~50ms) przed przebudową, re-skanuje tylko zmieniony plik i aktualizuje Context Cache, generując ostateczny plik w milisekundach. Działa dla wszystkich `targets` z configu jednocześnie (osobny watcher na każdy), zamyka się na `Ctrl+C`.
+- **Behavior:** A developer mode that watches for file modifications (based on the `chokidar` library, version 3.x - v4 removed native glob support, which is needed here). The JIT performs a _Debounce_ (~50ms) before rebuilding, re-scans only the changed file and updates the Context Cache, generating the final file in milliseconds. It runs for all `targets` from the config simultaneously (a separate watcher for each), and shuts down on `Ctrl+C`.
 
-## 3. Przykłady Użycia
+## 3. Usage Examples
 
-Wszystkie komendy można ze sobą dowolnie łączyć w wybranych językach:
+All commands can be freely combined with each other in the chosen language:
 
 ```bash
 # Standard
 npx molique-jit build --minify
 npx molique-jit watch --config ./custom.config.mjs
 
-# Język polski
+# Polish
 npx molique-jit buduj --minifikuj
 npx molique-jit obserwuj --konfiguracja ./custom.config.mjs
 
-# Język niemiecki
+# German
 npx molique-jit bauen --minifizieren
 npx molique-jit beobachten
 ```
 
-## 4. Schemat `molique.config.mjs`
+## 4. `molique.config.mjs` Schema
 
-Zwykły moduł ESM z domyślnym eksportem obiektu (źródło prawdy:
+A plain ESM module with a default object export (source of truth:
 `tools/jit/package/src/config.ts`):
 
 ```typescript
@@ -69,28 +69,28 @@ export interface ConfigTarget {
 }
 
 export interface MoliqueConfig {
-  content?: string[]; // domyslnie ['**/*.html', '**/*.php']
-  output?: string; // domyslnie 'css/molique-jit.css'
-  safelist?: string[]; // WLASNE dynamiczne klasy projektu (np. `badge-<?= $status ?>`)
-  minify?: boolean; // patrz uwaga nizej
-  targets?: ConfigTarget[]; // patrz "Wiele celow" nizej
+  content?: string[]; // defaults to ['**/*.html', '**/*.php']
+  output?: string; // defaults to 'css/molique-jit.css'
+  safelist?: string[]; // the consumer project's OWN dynamic classes (e.g. `badge-<?= $status ?>`)
+  minify?: boolean; // see note below
+  targets?: ConfigTarget[]; // see "Multiple targets" below
 }
 ```
 
-- **`safelist`** to lista TYLKO klas specyficznych dla projektu konsumenta.
-  Klasy runtime'owe samego molique (toasty, karuzela, lightbox, sidebar
-  itd.) dołączane są automatycznie z wbudowanej safelisty pakietu (tier
-  `runtime.standard` z `purgecss.safelist.cjs`) - tej listy NIE trzeba
-  dublować.
-- **`minify`**: w obecnej implementacji efektywnie no-op - dane źródłowe
-  (chunki komponentów, warstwa utilities) są już skompresowane u źródła
-  (`tools/gen-chunks.js`, `--style=compressed`), więc nie ma dodatkowych
-  białych znaków do usunięcia. Pole zostaje w schemacie dla zgodności z
-  tą specyfikacją i na wypadek przyszłych źródeł danych.
-- **Wiele celów (`targets`)**: gdy podane i niepuste, ZASTĘPUJE pola
-  `content`/`output` powyżej. Każdy element to niezależny build - typowy
-  przypadek: osobny, dedykowany (mały) plik CSS dla landing page
-  kampanii reklamowej, obok głównego pliku strony:
+- **`safelist`** is a list containing ONLY classes specific to the consumer
+  project. molique's own runtime classes (toasts, carousel, lightbox,
+  sidebar, etc.) are included automatically from the package's built-in
+  safelist (tier `runtime.standard` from `purgecss.safelist.cjs`) - this
+  list does NOT need to be duplicated.
+- **`minify`**: effectively a no-op in the current implementation - the
+  source data (component chunks, the utilities layer) is already compressed
+  at the source (`tools/gen-chunks.js`, `--style=compressed`), so there's no
+  additional whitespace to remove. The field stays in the schema for
+  consistency with this specification and in case of future data sources.
+- **Multiple targets (`targets`)**: when provided and non-empty, it
+  REPLACES the `content`/`output` fields above. Each entry is an independent
+  build - a typical case: a separate, dedicated (small) CSS file for an ad
+  campaign landing page, alongside the site's main file:
 
   ```javascript
   export default {
@@ -101,118 +101,121 @@ export interface MoliqueConfig {
   };
   ```
 
-  `molique-jit build`/`watch` budują/nasłuchują KAŻDY target niezależnie -
-  plik `landing-kampania.css` zawiera wyłącznie klasy użyte w
-  `landing-kampania.html`, nie całą resztę strony.
+  `molique-jit build`/`watch` build/watch EVERY target independently -
+  the `landing-kampania.css` file contains only the classes used in
+  `landing-kampania.html`, not the rest of the site.
 
-`molique-jit init` (alias `start`) tworzy plik startowy z komentarzami
-wyjaśniającymi każde pole (`INIT_TEMPLATE` w `config.ts`) - odmawia
-nadpisania, jeśli `molique.config.mjs` już istnieje.
+`molique-jit init` (alias `start`) creates a starter file with comments
+explaining each field (`INIT_TEMPLATE` in `config.ts`) - it refuses to
+overwrite if `molique.config.mjs` already exists.
 
-## 5. Mechanizm lokalizacji (implementacja)
+## 5. Localization Mechanism (implementation)
 
-Aliasy PL/DE komend i flag NIE są realizowane przez wbudowany mechanizm
-aliasów biblioteki CLI (Commander) - różne nazwy per język dla TEJ SAMEJ
-flagi to niewygodna gimnastyka z jego API. Zamiast tego `process.argv`
-jest TŁUMACZONE na kanoniczne angielskie nazwy komend/flag PRZED
-przekazaniem do Commandera (`translateArgv()` w `cli.ts`) - biblioteka
-zna tylko jeden, angielski wariant każdej komendy i flagi. Prostsze,
-łatwiejsze do jednostkowego przetestowania niż poleganie na wewnętrznej
-obsłudze aliasów Commandera.
+The PL/DE aliases for commands and flags are NOT implemented through the
+CLI library's (Commander) built-in alias mechanism - different names per
+language for the SAME flag is awkward gymnastics with its API. Instead,
+`process.argv` is TRANSLATED into canonical English command/flag names
+BEFORE being passed to Commander (`translateArgv()` in `cli.ts`) - the
+library only knows a single, English variant of each command and flag.
+Simpler, and easier to unit test, than relying on Commander's internal
+alias handling.
 
-## 6. Komendy Scaffoldingowe (`make:*`)
+## 6. Scaffolding Commands (`make:*`)
 
-> Sekcja rozbudowywana przyrostowo, po jednej komendzie na raz, w miare
-> przerabiania kazdego `src/cli/make-*.ts` na ksztalt collect/render (plan
-> rozwoju CLI, Etap B/C). Zastepuje `scaffolding-spec.md`, ktorego opis
-> `make:page`/`make:component`-z-pod-trybami zostal porzucony na rzecz
-> jednej oddzielnej komendy na rodzine komponentow.
+> Section expanded incrementally, one command at a time, as each
+> `src/cli/make-*.ts` file is reworked into the collect/render shape (CLI
+> development plan, Stage B/C). Replaces `scaffolding-spec.md`, whose
+> description of `make:page`/`make:component`-with-sub-modes was abandoned
+> in favor of one separate command per component family.
 
-Kazda komenda scaffoldingowa wspiera TRZY niezalezne tryby zbierania
-odpowiedzi, ktore mozna laczyc:
+Every scaffolding command supports THREE independent modes for collecting
+answers, which can be combined:
 
-1. **Interaktywny** (domyslny) - pytania w terminalu (`@inquirer/prompts`).
-2. **`-n, --count <liczba>`** - tam, gdzie komenda generuje liste o
-   zmiennej dlugosci, pomija TYLKO pytanie "ile?"; reszta pytan zostaje
-   interaktywna. Implementacja: `promptCount()` w `cli/prompts.ts`.
-3. **`--answers <json>` / `--answers-file <path>`** - pomija WSZYSTKIE
-   pytania na raz, podajac gotowy obiekt odpowiedzi (ksztalt
-   udokumentowany per komenda ponizej). Wynik trafia na stdout, chyba ze
-   dodano `-o, --out <path>` - wtedy zapisuje do pliku bez pytania "konsola
-   czy plik?". Gdy podano oba `-n/--count` i `--answers`/`--answers-file`,
-   wygrywa JSON (juz koduje liczbe elementow). Blad w JSON-ie (`--answers`
-   badz plik z `--answers-file`) daje czytelny komunikat wskazujacy KTORA
-   flaga zawiodla, nie goly `SyntaxError` z V8. Implementacja:
-   `loadAnswers()` w `cli/answers.ts`, `outputResult()` w `cli/output.ts`.
+1. **Interactive** (default) - questions in the terminal (`@inquirer/prompts`).
+2. **`-n, --count <number>`** - where the command generates a variable-length
+   list, it skips ONLY the "how many?" question; the rest of the questions
+   remain interactive. Implementation: `promptCount()` in `cli/prompts.ts`.
+3. **`--answers <json>` / `--answers-file <path>`** - skips ALL the
+   questions at once, by supplying a ready-made answers object (the shape is
+   documented per command below). The result goes to stdout, unless
+   `-o, --out <path>` was added - in that case it's written to a file
+   without asking "console or file?". When both `-n/--count` and
+   `--answers`/`--answers-file` are given, the JSON wins (it already encodes
+   the number of items). An error in the JSON (from `--answers` or a file
+   from `--answers-file`) produces a readable message pointing out WHICH
+   flag failed, not a bare `SyntaxError` from V8. Implementation:
+   `loadAnswers()` in `cli/answers.ts`, `outputResult()` in `cli/output.ts`.
 
-Aliasy PL/DE dla tych flag (pelna spojnosc z aliasami komend z Sekcji 1):
+PL/DE aliases for these flags (fully consistent with the command aliases
+from Section 1):
 
-| Angielski | Polski | Niemiecki |
+| English | Polish | German |
 | :-- | :-- | :-- |
 | `--count` / `-n` | `--liczba` | `--anzahl` |
 | `--answers` | `--odpowiedzi` | `--antworten` |
 | `--answers-file` | `--plik-odpowiedzi` | `--antwortdatei` |
 | `--out` / `-o` | `--wyjscie` | `--ausgabe` |
 
-Krotkie warianty (`-n`, `-o`) NIE maja osobnych aliasow PL/DE - to
-pojedyncze litery, jednakowe niezaleznie od jezyka.
+The short variants (`-n`, `-o`) do NOT have separate PL/DE aliases - they
+are single letters, identical regardless of language.
 
-### `make:table` (aliasy: `zrob:tabele`, `mache:tabelle`)
+### `make:table` (aliases: `zrob:tabele`, `mache:tabelle`)
 
-Generuje tabele B2B (`.table-wrapper > table.table[...] > thead + tbody`)
-z automatycznym `data-label` na komorkach (mechanizm mobile-first
-`.table-cards`).
+Generates a B2B table (`.table-wrapper > table.table[...] > thead + tbody`)
+with automatic `data-label` on cells (the `.table-cards` mobile-first
+mechanism).
 
 ```typescript
 interface TableAnswers {
-  columns: string[]; // nazwy kolumn, w kolejnosci
-  rowCount: number; // liczba przykladowych wierszy (0 = pusty tbody)
+  columns: string[]; // column names, in order
+  rowCount: number; // number of sample rows (0 = empty tbody)
   size: '' | 'table-sm' | 'table-lg';
   theadVariant: '' | 'thead-light' | 'thead-dark' | 'thead-primary';
   striped: boolean; // .table-striped
   hover: boolean; // .table-hover
-  mobileMode: 'table-cards' | 'table-cards-always' | ''; // '' = klasyczny scroll, bez kart
+  mobileMode: 'table-cards' | 'table-cards-always' | ''; // '' = classic scroll, no cards
 }
 ```
 
 ```bash
 npx molique-jit make:table -n 5
-npx molique-jit make:table --answers '{"columns":["Nazwa","Status"],"rowCount":2,"size":"","theadVariant":"thead-dark","striped":true,"hover":true,"mobileMode":"table-cards"}'
+npx molique-jit make:table --answers '{"columns":["Name","Status"],"rowCount":2,"size":"","theadVariant":"thead-dark","striped":true,"hover":true,"mobileMode":"table-cards"}'
 npx molique-jit make:table --answers-file ./table.json -o components/table.html
 ```
 
-### `make:popover` (aliasy: `zrob:popover`, `mache:popover`)
+### `make:popover` (aliases: `zrob:popover`, `mache:popover`)
 
-Generuje menu kontekstowe `.popover-context` (CSS Anchor Positioning +
-Popover API, auto-flip nad przycisk blisko dolnej krawedzi i bottom sheet
-na mobile - zero dodatkowego markupu do obu). `triggerColor` implikuje
-juz `.btn` we frameworku - baza nie jest dopisywana osobno.
+Generates a `.popover-context` context menu (CSS Anchor Positioning +
+Popover API, auto-flip above the button near the bottom edge, and a bottom
+sheet on mobile - zero extra markup needed for either). `triggerColor`
+already implies `.btn` in the framework - the base class isn't added
+separately.
 
 ```typescript
 interface PopoverAnswers {
   triggerLabel: string;
   triggerColor: 'btn-secondary' | 'btn-primary' | 'btn-light' | 'btn-outline-primary btn-outline-soft';
-  triggerIcon: string; // nazwa ikony z img/icons-sprite.svg, '' = brak
-  id: string; // ID popovera (unikalne na stronie) - ANCHOR_NAME wyprowadzany z niego automatycznie
+  triggerIcon: string; // icon name from img/icons-sprite.svg, '' = none
+  id: string; // popover ID (unique on the page) - ANCHOR_NAME is derived from it automatically
   items: Array<{
     label: string;
-    icon: string; // '' = brak ikony
-    danger: boolean; // akcja destrukcyjna - dostaje .text-danger + dzielacy <hr> przed soba (raz, przed PIERWSZA taka pozycja)
+    icon: string; // '' = no icon
+    danger: boolean; // destructive action - gets .text-danger + a dividing <hr> before it (once, before the FIRST such item)
   }>;
 }
 ```
 
 ```bash
 npx molique-jit make:popover -n 5
-npx molique-jit make:popover --answers '{"triggerLabel":"Opcje","triggerColor":"btn-secondary","triggerIcon":"ph-gear","id":"ctxMenu1","items":[{"label":"Podglad","icon":"ph-eye","danger":false},{"label":"Usun","icon":"ph-trash","danger":true}]}'
+npx molique-jit make:popover --answers '{"triggerLabel":"Options","triggerColor":"btn-secondary","triggerIcon":"ph-gear","id":"ctxMenu1","items":[{"label":"View","icon":"ph-eye","danger":false},{"label":"Delete","icon":"ph-trash","danger":true}]}'
 ```
 
-### `make:modal` (aliasy: `zrob:modal`, `mache:modal`)
+### `make:modal` (aliases: `zrob:modal`, `mache:modal`)
 
-Generuje natywny `<dialog class="modal-dialog">` + przycisk otwierajacy
-(`showModal()`, zero wlasnego JS). Trzy WARIANTY, kazdy z wlasnym ksztaltem
-odpowiedzi (pole `"type"` w JSON-ie wybiera wariant) - wszystkie trzy maja
-wspolne pola `triggerLabel`/`triggerVariant` (przycisk otwierajacy).
+Generates a native `<dialog class="modal-dialog">` + a trigger button
+(`showModal()`, zero custom JS). Three VARIANTS, each with its own answer
+shape (the `"type"` field in the JSON selects the variant) - all three
+share the `triggerLabel`/`triggerVariant` fields (the trigger button).
 
 ```typescript
 type ModalAnswers =
@@ -222,79 +225,79 @@ type ModalAnswers =
 ```
 
 ```bash
-npx molique-jit make:modal --answers '{"type":"standard","id":"myModal","title":"Tytul","body":"Tresc...","triggerLabel":"Otworz","triggerVariant":"btn-primary"}'
-npx molique-jit make:modal --answers '{"type":"confirm","id":"delModal","title":"Na pewno?","message":"Nie mozna cofnac.","cancelLabel":"Anuluj","confirmLabel":"Usun","confirmVariant":"btn-danger","icon":"ph-trash","triggerLabel":"Usun","triggerVariant":"btn-danger"}'
+npx molique-jit make:modal --answers '{"type":"standard","id":"myModal","title":"Title","body":"Content...","triggerLabel":"Open","triggerVariant":"btn-primary"}'
+npx molique-jit make:modal --answers '{"type":"confirm","id":"delModal","title":"Are you sure?","message":"This cannot be undone.","cancelLabel":"Cancel","confirmLabel":"Delete","confirmVariant":"btn-danger","icon":"ph-trash","triggerLabel":"Delete","triggerVariant":"btn-danger"}'
 ```
 
-### `make:chart` (aliasy: `zrob:wykres`, `mache:diagramm`)
+### `make:chart` (aliases: `zrob:wykres`, `mache:diagramm`)
 
-Cztery WARIANTY (pole `"type"`): Radial Bar, Funnel (pionowy lejek),
-Pipeline (poziomy proces CRM), Stock Bar. `-n/--count` dotyczy WYLACZNIE
-wariantu Stock Bar (liczba wypelnionych segmentow, 0-5).
+Four VARIANTS (the `"type"` field): Radial Bar, Funnel (vertical funnel),
+Pipeline (horizontal CRM process), Stock Bar. `-n/--count` applies ONLY to
+the Stock Bar variant (number of filled segments, 0-5).
 
 ```typescript
 type ChartAnswers =
   | { type: 'radial'; value: number; color: 'primary' | 'success' | 'danger' | 'warning' | 'info' }
   | { type: 'funnel'; labels: string[] }
-  | { type: 'pipeline'; steps: string[]; activeLabel: string } // '' = brak aktywnego kroku
+  | { type: 'pipeline'; steps: string[]; activeLabel: string } // '' = no active step
   | { type: 'stock-bar'; filled: number; variant: '' | 'stock-bar-success' | 'stock-bar-warning' | 'stock-bar-danger'; ariaLabel: string };
 ```
 
 ```bash
 npx molique-jit make:chart --answers '{"type":"radial","value":75,"color":"success"}'
-npx molique-jit make:chart --answers '{"type":"funnel","labels":["Odwiedziny","Rejestracje","Zakupy"]}'
-npx molique-jit make:chart --answers '{"type":"pipeline","steps":["Nowy","Kontakt","Umowa"],"activeLabel":"Kontakt"}'
-npx molique-jit make:chart -n 4   # Stock Bar - pyta interaktywnie o reszte, "ile segmentow?" pominiete
+npx molique-jit make:chart --answers '{"type":"funnel","labels":["Visits","Signups","Purchases"]}'
+npx molique-jit make:chart --answers '{"type":"pipeline","steps":["New","Contact","Contract"],"activeLabel":"Contact"}'
+npx molique-jit make:chart -n 4   # Stock Bar - asks interactively for the rest, "how many segments?" skipped
 ```
 
-### `make:widget` (aliasy: `zrob:widget`, `mache:widget`)
+### `make:widget` (aliases: `zrob:widget`, `mache:widget`)
 
-Cztery NIEPOWIAZANE ze soba widgety pod jedna komenda: Speed Dial,
-Before/After Slider, Stepper, Share Bar. `-n/--count` dotyczy WYLACZNIE
-liczby akcji w Speed Dial.
+Four UNRELATED widgets under one command: Speed Dial, Before/After Slider,
+Stepper, Share Bar. `-n/--count` applies ONLY to the number of actions in
+Speed Dial.
 
 ```typescript
 type WidgetAnswers =
   | { type: 'speed-dial'; mainSymbol: string; actions: Array<{ label: string; icon: string }> }
   | { type: 'before-after'; afterImg: string; afterAlt: string; beforeImg: string; beforeAlt: string; maxWidth: string; aspectRatio: string }
   | { type: 'stepper'; variant: 'classic' | 'numbered'; labels: string[]; activeLabel: string }
-  | { type: 'share-bar'; networks: string[] }; // podzbior 'facebook'|'twitter'|'linkedin'|'whatsapp'|'native', w dowolnej kolejnosci
+  | { type: 'share-bar'; networks: string[] }; // subset of 'facebook'|'twitter'|'linkedin'|'whatsapp'|'native', in any order
 ```
 
 ```bash
-npx molique-jit make:widget -n 5   # Speed Dial - "ile akcji?" pominiete
+npx molique-jit make:widget -n 5   # Speed Dial - "how many actions?" skipped
 npx molique-jit make:widget --answers '{"type":"stepper","variant":"numbered","labels":["Wymiary","Konstrukcja","Dach"],"activeLabel":"Konstrukcja"}'
 npx molique-jit make:widget --answers '{"type":"share-bar","networks":["facebook","native"]}'
 ```
 
-### `make:layout` (aliasy: `zrob:uklad`, `mache:layout`)
+### `make:layout` (aliases: `zrob:uklad`, `mache:layout`)
 
-Cztery PLASKIE warianty (mimo ze w trybie interaktywnym Hero ma wlasny
-pod-wybor Prosty/Cutout, w `--answers` wybiera sie od razu docelowy typ):
-`admin`, `hero-simple`, `hero-cutout`, `bento`. `-n/--count` dotyczy
-pozycji menu (`admin`) / breadcrumb (`hero-simple`) / kafelkow (`bento`) -
-`hero-cutout` nie ma listy o zmiennej dlugosci.
+Four FLAT variants (even though in interactive mode Hero has its own
+Simple/Cutout sub-choice, in `--answers` you pick the target type
+directly): `admin`, `hero-simple`, `hero-cutout`, `bento`. `-n/--count`
+applies to menu items (`admin`) / breadcrumb (`hero-simple`) / tiles
+(`bento`) - `hero-cutout` has no variable-length list.
 
 ```typescript
 type LayoutAnswers =
-  | { type: 'admin'; floating: boolean; logo: string; items: string[] } // PIERWSZA pozycja dostaje .is-active automatycznie
-  | { type: 'hero-simple'; title: string; imageUrl: string; overlayColorClass: string; overlayOpacityClass: string; breadcrumbLabels: string[] } // OSTATNIA = biezaca strona, auto is-active + aria-current
+  | { type: 'admin'; floating: boolean; logo: string; items: string[] } // the FIRST item gets .is-active automatically
+  | { type: 'hero-simple'; title: string; imageUrl: string; overlayColorClass: string; overlayOpacityClass: string; breadcrumbLabels: string[] } // the LAST one = current page, auto is-active + aria-current
   | { type: 'hero-cutout'; title: string; message: string; imageUrl: string; imageAlt: string; cutoutVariant: 'cutout-md-br' | 'cutout-md-bl' | 'cutout-md-tr' | 'cutout-md-tl' }
   | { type: 'bento'; tiles: Array<{ label: string; size: 'normal' | 'wide' | 'tall' | 'big' }> };
 ```
 
 ```bash
-npx molique-jit make:layout -n 5   # Admin Dashboard - "ile pozycji menu?" pominiete
-npx molique-jit make:layout --answers '{"type":"bento","tiles":[{"label":"Kafelek 1","size":"big"},{"label":"Kafelek 2","size":"wide"}]}'
-npx molique-jit make:layout --answers '{"type":"hero-cutout","title":"Zbuduj to","message":"Opis","imageUrl":"img/hero-bg.jpg","imageAlt":"Tlo","cutoutVariant":"cutout-md-br"}'
+npx molique-jit make:layout -n 5   # Admin Dashboard - "how many menu items?" skipped
+npx molique-jit make:layout --answers '{"type":"bento","tiles":[{"label":"Tile 1","size":"big"},{"label":"Tile 2","size":"wide"}]}'
+npx molique-jit make:layout --answers '{"type":"hero-cutout","title":"Build it","message":"Description","imageUrl":"img/hero-bg.jpg","imageAlt":"Background","cutoutVariant":"cutout-md-br"}'
 ```
 
-### `make:form` (aliasy: `zrob:formularz`, `mache:formular`)
+### `make:form` (aliases: `zrob:formularz`, `mache:formular`)
 
-W odroznieniu od pozostalych komend - BEZ dyskryminujacej unii wariantow.
-Jeden plaski `FormAnswers`: styl podstawowych pol + lista pol + do TRZECH
-niezaleznie wlaczalnych modulow (pole `undefined`/pominiete = modul
-niedodany). `-n/--count` dotyczy liczby podstawowych pol.
+Unlike the other commands - NO discriminated union of variants. One flat
+`FormAnswers`: the basic fields style + the field list + up to THREE
+independently toggleable modules (an `undefined`/omitted field = module not
+added). `-n/--count` applies to the number of basic fields.
 
 ```typescript
 interface FormAnswers {
@@ -309,28 +312,28 @@ interface FormAnswers {
 
 ```bash
 npx molique-jit make:form -n 5
-npx molique-jit make:form --answers '{"style":"floating","fields":[{"label":"Imie","type":"text","required":true}],"fileUpload":{"animated":true,"title":"Upusc plik","subtitle":"lub kliknij","fieldName":"plik"},"submitLabel":"Wyslij"}'
+npx molique-jit make:form --answers '{"style":"floating","fields":[{"label":"Name","type":"text","required":true}],"fileUpload":{"animated":true,"title":"Drop a file","subtitle":"or click","fieldName":"file"},"submitLabel":"Send"}'
 ```
 
-### `make:nav` (aliasy: `zrob:nawigacje`, `mache:nav`) - ostatnia z 8 podstawowych komend
+### `make:nav` (aliases: `zrob:nawigacje`, `mache:nav`) - the last of the 8 basic commands
 
-Jeden plaski `NavAnswers`: wariant tla (Standard/Transparent/Pastylka -
-roznia sie WYLACZNIE klasa/atrybutem `style` na tym samym `<nav>`, jeden
-stub) + pozycje menu + do TRZECH niezaleznie wlaczalnych modulow (Mega
-Menu / Theme Switch / Language Switch). `-n/--count` dotyczy WYLACZNIE
-zwyklych pozycji menu (bez Mega Menu).
+One flat `NavAnswers`: background variant (Standard/Transparent/Pill - they
+differ ONLY in the class/`style` attribute on the same `<nav>`, one stub) +
+menu items + up to THREE independently toggleable modules (Mega Menu /
+Theme Switch / Language Switch). `-n/--count` applies ONLY to regular menu
+items (not Mega Menu).
 
 ```typescript
 interface NavAnswers {
   variant: 'standard' | 'transparent' | 'pill';
-  pillBg?: string;          // tylko variant === 'pill', po dostosowaniu kolorow
-  pillBgScrolled?: string;  // jw., opcjonalne nawet wtedy
+  pillBg?: string;          // only for variant === 'pill', after adjusting colors
+  pillBgScrolled?: string;  // same as above, optional even then
   brand: string;
-  toggleId: string;         // ID checkboxa offcanvas - MUSI byc unikalne na stronie
+  toggleId: string;         // offcanvas checkbox ID - MUST be unique on the page
   items: string[];
   megaMenu?: { title: string; groups: Array<{ title: string; links: string[] }> };
   themeSwitch: boolean;
-  languageSwitch?: { languages: Array<{ flagCode: string; label: string }> }; // PIERWSZY jezyk = aktywny
+  languageSwitch?: { languages: Array<{ flagCode: string; label: string }> }; // the FIRST language = active
 }
 ```
 
@@ -341,18 +344,18 @@ npx molique-jit make:nav --answers '{"variant":"pill","pillBg":"#123456","brand"
 
 ---
 
-**Wszystkie 8 pierwotnie zaplanowanych komend `make:*` maja juz podzial na
-`collect`/`render`, tryb `--answers`/`--answers-file` i wlasny plik testow
-w `tools/jit/tests/scaffolding-*.test.mjs`** - Etap B planu rozwoju CLI
-jest kompletny. Kolejne generatory (Etap C: `make:badge`, `make:progress`,
-`make:accordion`, `make:pagination`) dokladaja sie do tej listy ponizej, w
-miare powstawania.
+**All 8 originally planned `make:*` commands now have the `collect`/
+`render` split, the `--answers`/`--answers-file` mode, and their own test
+file in `tools/jit/tests/scaffolding-*.test.mjs`** - Stage B of the CLI
+development plan is complete. The next generators (Stage C: `make:badge`,
+`make:progress`, `make:accordion`, `make:pagination`) get added to the list
+below as they're built.
 
-### `make:badge` (aliasy: `zrob:odznake`, `mache:abzeichen`)
+### `make:badge` (aliases: `zrob:odznake`, `mache:abzeichen`)
 
-Generuje pojedyncza pigulke statusu (`.badge.badge-<kolor>`). Najprostszy
-z generatorow - jeden stub, zero list, zbudowany od razu w ksztalcie
-docelowym (Etap C).
+Generates a single status pill (`.badge.badge-<color>`). The simplest of
+the generators - one stub, no lists, built directly in its target shape
+(Stage C).
 
 ```typescript
 interface BadgeAnswers {
@@ -362,17 +365,16 @@ interface BadgeAnswers {
 ```
 
 ```bash
-npx molique-jit make:badge --answers '{"text":"Nowość","color":"success"}'
+npx molique-jit make:badge --answers '{"text":"New","color":"success"}'
 ```
 
-### `make:progress` (aliasy: `zrob:pasek-postepu`, `mache:fortschritt`)
+### `make:progress` (aliases: `zrob:pasek-postepu`, `mache:fortschritt`)
 
-Generuje pasek postepu z etykieta (`.progress-label` + `.progress >
-.progress-bar`). Kolor NIE ma wlasnych klas komponentu - dokleja sie
-ogolna klase narzedziowa `bg-<kolor>` (dokladnie jak realny przyklad w
-`examples-progress-bars.html`); `primary` jest juz kolorem domyslnym
-wbudowanym w baze `.progress-bar`, wiec nie dostaje zadnej dodatkowej
-klasy.
+Generates a progress bar with a label (`.progress-label` + `.progress >
+.progress-bar`). The color has NO dedicated component classes - a generic
+`bg-<color>` utility class is appended (exactly like the real example in
+`examples-progress-bars.html`); `primary` is already the default color
+built into the `.progress-bar` base, so it doesn't get any extra class.
 
 ```typescript
 interface ProgressAnswers {
@@ -386,31 +388,31 @@ interface ProgressAnswers {
 npx molique-jit make:progress --answers '{"label":"Optymalizacja SEO","value":60,"color":"success"}'
 ```
 
-### `make:accordion` (aliasy: `zrob:akordeon`, `mache:akkordeon`)
+### `make:accordion` (aliases: `zrob:akordeon`, `mache:akkordeon`)
 
-Generuje akordeon FAQ na natywnym `<details>`/`<summary>` - zero JS,
-zero atrybutu `open` domyslnie (jak w realnym przykladzie). `-n/--count`
-dotyczy liczby paneli.
+Generates an FAQ accordion on native `<details>`/`<summary>` - zero JS, no
+`open` attribute by default (as in the real example). `-n/--count` applies
+to the number of panels.
 
 ```typescript
 interface AccordionAnswers {
-  groupName: string; // atrybut "name" - grupuje panele (przegladarka pilnuje "tylko jeden otwarty naraz")
+  groupName: string; // the "name" attribute - groups panels (the browser enforces "only one open at a time")
   panels: Array<{ question: string; answer: string }>;
 }
 ```
 
 ```bash
 npx molique-jit make:accordion -n 5
-npx molique-jit make:accordion --answers '{"groupName":"faq","panels":[{"question":"Jak zainstalowac?","answer":"Podepnij CSS."}]}'
+npx molique-jit make:accordion --answers '{"groupName":"faq","panels":[{"question":"How do I install it?","answer":"Link the CSS."}]}'
 ```
 
-### `make:pagination` (aliasy: `zrob:paginacje`, `mache:seitenzahlen`) - ostatnia z pierwszej fali (Etap C)
+### `make:pagination` (aliases: `zrob:paginacje`, `mache:seitenzahlen`) - the last of the first wave (Stage C)
 
-Generuje pasek paginacji (`.pagination` + opcjonalnie `.pagination-modern`
-OBOK niej, nie zamiast). "Poprzednia"/"Nastepna" to zwykle `.page-item`,
-automatycznie `is-disabled` na skraju zakresu stron. `-n/--count` dotyczy
-calkowitej liczby stron (limit 12 - realny komponent nie ma wzorca
-obcinania/elipsy dla wiekszej liczby).
+Generates a pagination bar (`.pagination` + optionally `.pagination-modern`
+ALONGSIDE it, not instead of it). "Previous"/"Next" are regular `.page-item`
+elements, automatically `is-disabled` at the edge of the page range.
+`-n/--count` applies to the total number of pages (limit 12 - the real
+component has no truncation/ellipsis pattern for a larger number).
 
 ```typescript
 interface PaginationAnswers {
@@ -424,18 +426,18 @@ interface PaginationAnswers {
 
 ```bash
 npx molique-jit make:pagination -n 8
-npx molique-jit make:pagination --answers '{"modern":true,"totalPages":5,"currentPage":3,"prevLabel":"Poprzednia","nextLabel":"Następna"}'
+npx molique-jit make:pagination --answers '{"modern":true,"totalPages":5,"currentPage":3,"prevLabel":"Previous","nextLabel":"Next"}'
 ```
 
-### `make:tooltip` (aliasy: `zrob:podpowiedz`, `mache:tooltip`)
+### `make:tooltip` (aliases: `zrob:podpowiedz`, `mache:tooltip`)
 
-Generuje dymek podpowiedzi w 100% CSS (`.tooltip-element`, tresc dymku z
-`attr(data-tooltip)`, zero JS).
+Generates a 100% CSS tooltip bubble (`.tooltip-element`, bubble content
+from `attr(data-tooltip)`, zero JS).
 
 ```typescript
 interface TooltipAnswers {
-  text: string;    // widoczny tekst
-  tooltip: string; // tresc dymku
+  text: string;    // visible text
+  tooltip: string; // bubble content
 }
 ```
 
@@ -443,12 +445,12 @@ interface TooltipAnswers {
 npx molique-jit make:tooltip --answers '{"text":"PUM","tooltip":"Powierzchnia Uzytkowa Mieszkalna"}'
 ```
 
-### `make:alert` (aliasy: `zrob:komunikat`, `mache:hinweis`)
+### `make:alert` (aliases: `zrob:komunikat`, `mache:hinweis`)
 
-Generuje statyczny komunikat w tresci strony (`.alert.alert-<kolor>`).
-BEZ przycisku zamykania i BEZ JS - to `.toast` znika automatycznie,
-`.alert` w ogole nie ma tej mechaniki (dokumentacja realnego przykladu
-wprost to rozroznia).
+Generates a static message inline in the page content (`.alert.alert-
+<color>`). WITHOUT a close button and WITHOUT JS - `.toast` is the one that
+disappears automatically, `.alert` has no such mechanism at all (the real
+example's documentation explicitly distinguishes between the two).
 
 ```typescript
 interface AlertAnswers {
@@ -461,15 +463,15 @@ interface AlertAnswers {
 npx molique-jit make:alert --answers '{"message":"Zmiany zostaly zapisane pomyslnie.","color":"success"}'
 ```
 
-### `make:dropdown` (aliasy: `zrob:rozwijane`, `mache:dropdown`)
+### `make:dropdown` (aliases: `zrob:rozwijane`, `mache:dropdown`)
 
-Dwie STRUKTURALNIE rozne wersje (pole `"type"`): Klasyczny na
-`<details>`/`<summary>` (navbar) i Popover w top layer (zalecany poza
-navbarem - tabele, karty, modale, nie przycinany przez `overflow`).
-`.dropdown-menu-end` (wyrownanie do prawej) dziala identycznie w obu.
-`triggerClass` to SAMA klasa koloru (np. `btn-outline-dark`) - implikuje
-juz `.btn` we frameworku (`_buttons.scss`, "IMPLIKACJA .btn"), wiec baza
-nie jest dopisywana osobno.
+Two STRUCTURALLY different versions (the `"type"` field): Classic based on
+`<details>`/`<summary>` (navbar) and a top-layer Popover (recommended
+outside the navbar - tables, cards, modals, not clipped by `overflow`).
+`.dropdown-menu-end` (right alignment) works identically in both.
+`triggerClass` is JUST the color class (e.g. `btn-outline-dark`) - it
+already implies `.btn` in the framework (`_buttons.scss`, "`.btn`
+IMPLICATION"), so the base class isn't added separately.
 
 ```typescript
 type DropdownAnswers =
@@ -479,23 +481,24 @@ type DropdownAnswers =
 
 ```bash
 npx molique-jit make:dropdown -n 5
-npx molique-jit make:dropdown --answers '{"type":"popover","triggerLabel":"Opcje","triggerClass":"btn-outline-dark","alignEnd":false,"id":"pop-menu-1","items":[{"label":"Edytuj","danger":false},{"label":"Usun","danger":true}]}'
+npx molique-jit make:dropdown --answers '{"type":"popover","triggerLabel":"Options","triggerClass":"btn-outline-dark","alignEnd":false,"id":"pop-menu-1","items":[{"label":"Edit","danger":false},{"label":"Delete","danger":true}]}'
 ```
 
-### `make:tabs` (aliasy: `zrob:zakladki`, `mache:tabs`)
+### `make:tabs` (aliases: `zrob:zakladki`, `mache:tabs`)
 
-Zakladki na Radio Hack (ukryte `input[radio].tab-input` steruja
-widocznoscia `.tab-pane` przez pozycyjne `:nth-of-type()`, zero JS). Dwa
-warianty (`type`) maja IDENTYCZNY ksztalt odpowiedzi (roznia sie tylko
-renderowaniem - `pill` dostaje `.tabs-pill`, `style="--tab-count"` i pusty
-`.tabs-pill-indicator`). WAZNE: `.tabs-pill` ma WLASNY, mniejszy limit w
-SCSS (max 8 zakladek) nizszy niz klasyczny wariant (max 10) - `-n/--count`
-respektuje wlasciwy limit w zaleznosci od wybranego wariantu.
+Tabs based on the Radio Hack (hidden `input[radio].tab-input` control the
+visibility of `.tab-pane` via positional `:nth-of-type()`, zero JS). The
+two variants (`type`) have an IDENTICAL answer shape (they only differ in
+rendering - `pill` gets `.tabs-pill`, `style="--tab-count"` and an empty
+`.tabs-pill-indicator`). IMPORTANT: `.tabs-pill` has its OWN, smaller limit
+in SCSS (max 8 tabs), lower than the classic variant (max 10) -
+`-n/--count` respects the appropriate limit depending on the selected
+variant.
 
 ```typescript
 interface TabsAnswers {
   type: 'classic' | 'pill';
-  groupName: string; // atrybut "name" wspolny dla wszystkich input[radio]
+  groupName: string; // the "name" attribute shared by all input[radio]
   tabs: Array<{ label: string; content: string }>;
 }
 ```
@@ -505,10 +508,10 @@ npx molique-jit make:tabs -n 3
 npx molique-jit make:tabs --answers '{"type":"pill","groupName":"my-pill-tabs","tabs":[{"label":"Dzien","content":"Statystyki z dnia."},{"label":"Tydzien","content":"Statystyki z tygodnia."}]}'
 ```
 
-### `make:status-dot` (aliasy: `zrob:kropke-statusu`, `mache:statuspunkt`)
+### `make:status-dot` (aliases: `zrob:kropke-statusu`, `mache:statuspunkt`)
 
-Generuje kropke statusu (`.status-dot.status-<stan>`), opcjonalnie z
-pulsujacym pierscieniem (`.status-ping`, ta sama warstwa co Stock Bar w
+Generates a status dot (`.status-dot.status-<state>`), optionally with a
+pulsing ring (`.status-ping`, the same layer as Stock Bar in
 `make:chart`).
 
 ```typescript
@@ -523,21 +526,23 @@ interface StatusDotAnswers {
 npx molique-jit make:status-dot --answers '{"text":"Live","status":"done","ping":true}'
 ```
 
-### `make:counter` (aliasy: `zrob:licznik`, `mache:zaehler`)
+### `make:counter` (aliases: `zrob:licznik`, `mache:zaehler`)
 
-Generuje animowany licznik (`.counter > .counter-value + .counter-title`).
-Tresc `.counter-value` to SAMA liczba docelowa - `js/modules/molique-counters.js`
-parsuje ja przez `parseFloat()` i animuje liczenie od 0 po wejsciu w viewport
-(IntersectionObserver). Opcjonalne `data-prefix`/`data-suffix` (np. "$"/"+")
-dopisuja sie do wyniku bez zmiany logiki liczenia. Brak dedykowanej strony
-przykladow dla samego `.counter` - grunt to SCSS + faktyczne zachowanie JS.
+Generates an animated counter (`.counter > .counter-value + .counter-
+title`). The content of `.counter-value` is JUST the target number -
+`js/modules/molique-counters.js` parses it with `parseFloat()` and animates
+counting up from 0 once it enters the viewport (IntersectionObserver).
+Optional `data-prefix`/`data-suffix` (e.g. "$"/"+") get appended to the
+result without changing the counting logic. There is no dedicated examples
+page for `.counter` alone - the ground truth is the SCSS + the actual JS
+behavior.
 
 ```typescript
 interface CounterAnswers {
   value: number;
   title: string;
-  prefix: string; // '' = brak
-  suffix: string; // '' = brak
+  prefix: string; // '' = none
+  suffix: string; // '' = none
 }
 ```
 
@@ -545,13 +550,13 @@ interface CounterAnswers {
 npx molique-jit make:counter --answers '{"value":1500,"title":"Zadowolonych klientow","prefix":"","suffix":"+"}'
 ```
 
-### `make:timeline` (aliasy: `zrob:os-czasu`, `mache:zeitleiste`)
+### `make:timeline` (aliases: `zrob:os-czasu`, `mache:zeitleiste`)
 
-Trzy STRUKTURALNIE rozne warianty (pole `"type"`): `large` (ikony/litery w
-`.timeline-badge`), `numbered` (CSS SAM dolicza numer przez `counter()`,
-zero dodatkowego markupu), `labeled` (CSS Grid, data po lewej -
-`.timeline-line` u ostatniej pozycji chowa sama CSS przez `:last-child`,
-generator zawsze generuje ja dla kazdej pozycji).
+Three STRUCTURALLY different variants (the `"type"` field): `large`
+(icons/letters in `.timeline-badge`), `numbered` (CSS ITSELF adds the
+number via `counter()`, zero extra markup), `labeled` (CSS Grid, date on
+the left - `.timeline-line` on the last item is hidden by CSS alone via
+`:last-child`, the generator always generates it for every item).
 
 ```typescript
 type TimelineAnswers =
@@ -565,15 +570,16 @@ npx molique-jit make:timeline -n 4
 npx molique-jit make:timeline --answers '{"type":"labeled","items":[{"dateLabel":"30.06.2026","timeLabel":"16:44","nodeColor":"success","title":"Rafal Rozacki","description":"Przyjecie towaru."}]}'
 ```
 
-### `make:carousel` (aliasy: `zrob:karuzele`, `mache:karussell`)
+### `make:carousel` (aliases: `zrob:karuzele`, `mache:karussell`)
 
-Dwa STRUKTURALNIE rozne warianty (pole `"type"`): Podstawowa (karty z
-tekstem, kolor tla per slajd) i Hero/Background Sync (tlo pod slajdem
-przez `data-bg`, naklada przyciemniajaca). Natywny `scroll-snap` - zero JS
-do samego przewijania. WAZNE: kropki paginacji (`.carousel-dots`) generuje
-`js/modules/molique-carousel.js` SAM, gdy slajdow > 1 - generator ich NIE
-dopisuje (nie ma ich w zrodle realnego przykladu, mimo ze widac je w
-renderowanym podgladzie).
+Two STRUCTURALLY different variants (the `"type"` field): Basic (cards with
+text, background color per slide) and Hero/Background Sync (background
+under the slide via `data-bg`, with a darkening overlay). Native
+`scroll-snap` - zero JS for the scrolling itself. IMPORTANT: the pagination
+dots (`.carousel-dots`) are generated by `js/modules/molique-carousel.js`
+ITSELF, when there's more than 1 slide - the generator does NOT add them
+(they're absent from the real example's source, even though they're
+visible in the rendered preview).
 
 ```typescript
 type CarouselAnswers =
@@ -586,15 +592,15 @@ npx molique-jit make:carousel -n 4
 npx molique-jit make:carousel --answers '{"type":"bg-sync","height":"400px","slides":[{"bg":"img/architektura.jpg","heading":"Architektura"}]}'
 ```
 
-### `make:lightbox` (aliasy: `zrob:lightbox`, `mache:lightbox`)
+### `make:lightbox` (aliases: `zrob:lightbox`, `mache:lightbox`)
 
-Caly modal (`.lightbox-overlay`, strzalki, licznik) BUDUJE
-`js/modules/molique-lightbox.js` - generator dopisuje tylko `data-lightbox`
-+ `data-gallery` do zwyklych linkow ze zdjeciami, zero markupu modala.
+The entire modal (`.lightbox-overlay`, arrows, counter) is BUILT by
+`js/modules/molique-lightbox.js` - the generator only adds `data-lightbox`
++ `data-gallery` to regular links with images, zero modal markup.
 
 ```typescript
 interface LightboxAnswers {
-  gallery: string; // atrybut data-gallery - laczy zdjecia w jedna galerie
+  gallery: string; // the data-gallery attribute - groups images into one gallery
   items: Array<{ thumbImg: string; fullImg: string; alt: string }>;
 }
 ```
@@ -604,22 +610,23 @@ npx molique-jit make:lightbox -n 5
 npx molique-jit make:lightbox --answers '{"gallery":"realizacje","items":[{"thumbImg":"img/m1.jpg","fullImg":"img/p1.jpg","alt":"Foto 1"}]}'
 ```
 
-### `make:card` (aliasy: `zrob:karte`, `mache:karte`)
+### `make:card` (aliases: `zrob:karte`, `mache:karte`)
 
-Piec STRUKTURALNIE roznych wariantow (pole `"type"`, splaszczone do
-top-level zgodnie z konwencja z `make:layout`/`make:timeline`/
-`make:carousel`): Klasyczna (header/body/footer), Featured Box (cecha
-produktu z ikona, kolor primary nie dodaje ani `style`, ani klasy koloru -
-tylko warianty inne niz primary dostaja `style="border-top-color: var(--
-<kolor>)"` + `bg-<kolor> text-white` na ikonie), Thumb Info Center (zdjecie
-+ naklada wysrodkowana, ikona lupy, `text-6`) i Thumb Info Bottom (naklada
-przy dole, opcjonalna plakietka `.badge`, `text-7`, opcjonalny wariant
-`.thumb-info-light` zamiast domyslnego ciemnego gradientu) - to DWA OSOBNE
-stuby, bo maja inna wewnetrzna tresc, nie jeden z flaga - oraz Interaktywna
-(`.card p-4 text-center` + efekt hover: spring+cien GPU LUB `.tilt-card`
-na ciemnym tle; UWAGA: przy `tilt` opis uzywa `text-white opacity-50`
-zamiast `text-muted`, bo na `bg-dark` `text-muted` jest nieczytelny -
-zweryfikowane wzgledem realnego przykladu).
+Five STRUCTURALLY different variants (the `"type"` field, flattened to
+top-level following the convention from `make:layout`/`make:timeline`/
+`make:carousel`): Classic (header/body/footer), Featured Box (a product
+feature with an icon; the primary color adds neither `style` nor a color
+class - only variants other than primary get `style="border-top-color:
+var(--<color>)"` + `bg-<color> text-white` on the icon), Thumb Info Center
+(image + a centered overlay, magnifying-glass icon, `text-6`), and Thumb
+Info Bottom (overlay at the bottom, optional `.badge` tag, `text-7`, an
+optional `.thumb-info-light` variant instead of the default dark gradient)
+- these are TWO SEPARATE stubs, since they have different inner content,
+not one with a flag - and Interactive (`.card p-4 text-center` + a hover
+effect: spring+GPU shadow OR `.tilt-card` on a dark background; NOTE: for
+`tilt`, the description uses `text-white opacity-50` instead of
+`text-muted`, because on `bg-dark` `text-muted` is unreadable - verified
+against the real example).
 
 ```typescript
 type CardAnswers =
@@ -632,36 +639,36 @@ type CardAnswers =
 
 ```bash
 npx molique-jit make:card
-npx molique-jit make:card --answers '{"type":"featured-box","icon":"ph-rocket-launch","title":"Wydajnosc","description":"Framework jest ekstremalnie lekki.","accentColor":"success"}'
+npx molique-jit make:card --answers '{"type":"featured-box","icon":"ph-rocket-launch","title":"Performance","description":"The framework is extremely lightweight.","accentColor":"success"}'
 ```
 
-### `make:data-row` (aliasy: `zrob:wiersz-danych`, `mache:datenzeile`)
+### `make:data-row` (aliases: `zrob:wiersz-danych`, `mache:datenzeile`)
 
-Dwa STRUKTURALNIE rozne warianty (pole `"type"`): Grid CRM (`.data-row` -
-CSS Grid, 5 kolumn stale, wlasny `margin-bottom` - generator NIE dodaje
-zadnego wrappera, wiersze staja jeden pod drugim jako zwykle elementy
-blokowe, dokladnie jak w realnym przykladzie) i Kompaktowy
-(`.data-row-compact` - Flexbox, separacja przez `border-bottom` +
-`:last-child` - WYMAGA wspolnego rodzica, generator owija w
-`.card border-0 shadow-sm` zgodnie z rekomendowanym wzorcem z realnego
-przykladu). W wariancie Grid CRM, gdy etykiet akcji jest wiecej niz jedna,
-OSTATNIA dostaje automatycznie `text-danger` (wzorzec Edytuj/Usun z
-realnego przykladu) - pojedyncza akcja nigdy nie dostaje tego koloru
-automatycznie.
+Two STRUCTURALLY different variants (the `"type"` field): Grid CRM
+(`.data-row` - CSS Grid, 5 fixed columns, its own `margin-bottom` - the
+generator does NOT add any wrapper, rows stack one below another as plain
+block elements, exactly as in the real example) and Compact
+(`.data-row-compact` - Flexbox, separated via `border-bottom` +
+`:last-child` - REQUIRES a shared parent, the generator wraps them in
+`.card border-0 shadow-sm` following the recommended pattern from the real
+example). In the Grid CRM variant, when there is more than one action
+label, the LAST one automatically gets `text-danger` (the Edit/Delete
+pattern from the real example) - a single action never gets this color
+automatically.
 
-**Dwie niezalezne poprawki wzgledem realnego przykladu** (ta sama
-dyscyplina co przy `make:carousel`): (1) sekcja "Kompaktowe Wiersze" uzywa
-tam `class="icon-file-text"`/`class="icon-x"` - stary system fontow ikon
-bez ZADNEGO wsparcia w SCSS (potwierdzone grepem - zero `@font-face` lub
-regul `.icon-*`), zapomniana migracja na aktualny SVG-sprite system
-(`<svg class="icon"><use href="img/icons-sprite.svg#ph-...">`), ktorego
-generator uzywa konsekwentnie; (2) tekst pomocniczy w tej samej sekcji ma
-`class="... m-r-2"` - ta klasa nie istnieje w `utilities/_spacing.scss`
-(poprawna to `mr-2`, bez dodatkowego myslnika), generator uzywa `mr-2`.
-Dodatkowo `.btn-action` tam ma zbedny prefiks `btn ` (ta klasa ma WLASNA
-kompletna definicje, nigdy nie potrzebowala `.btn`) - generator konsekwentnie
-pomija ten prefiks, tak jak juz poprawnie robi to pierwsza sekcja tego
-samego pliku.
+**Two independent corrections relative to the real example** (the same
+discipline as with `make:carousel`): (1) the "Compact Rows" section there
+uses `class="icon-file-text"`/`class="icon-x"` - an old icon-font system
+with NO support in SCSS whatsoever (confirmed via grep - zero `@font-face`
+or `.icon-*` rules), a forgotten migration to the current SVG-sprite system
+(`<svg class="icon"><use href="img/icons-sprite.svg#ph-...">`), which the
+generator uses consistently; (2) the helper text in the same section has
+`class="... m-r-2"` - this class doesn't exist in `utilities/_spacing.scss`
+(the correct one is `mr-2`, without the extra hyphen), the generator uses
+`mr-2`. Additionally, `.btn-action` there has a redundant `btn ` prefix
+(this class has its OWN complete definition, it never needed `.btn`) - the
+generator consistently omits this prefix, the same way the first section of
+that same file already correctly does.
 
 ```typescript
 type DataRowAnswers =
@@ -671,32 +678,33 @@ type DataRowAnswers =
 
 ```bash
 npx molique-jit make:data-row -n 3
-npx molique-jit make:data-row --answers '{"type":"compact","items":[{"icon":"ph-user","iconColor":"primary","iconSquare":false,"title":"James Brown","details":"james@alignui.com","leadingText":"Can view","actionIcon":"ph-caret-down","actionAriaLabel":"Zmien poziom dostepu"}]}'
+npx molique-jit make:data-row --answers '{"type":"compact","items":[{"icon":"ph-user","iconColor":"primary","iconSquare":false,"title":"James Brown","details":"james@alignui.com","leadingText":"Can view","actionIcon":"ph-caret-down","actionAriaLabel":"Change access level"}]}'
 ```
 
-### `make:pricing-table` (aliasy: `zrob:cennik`, `mache:preisliste`)
+### `make:pricing-table` (aliases: `zrob:cennik`, `mache:preisliste`)
 
-Dwa STRUKTURALNIE rozne warianty (pole `"type"`): Karty cenowe
-(`.pricing-table` - wlasny nagrodek, lista cech z opcjonalnym
-przekresleniem `.is-disabled`, przycisk; wyroznienie `.is-featured`
-dodaje `text-primary` do tytulu i `btn-primary w-100 hover-spring` zamiast
-`btn-outline-primary w-100` na przycisku - wstazka "Popularne" jest CZYSTO
-w CSS przez `content: 'Popularne'` na `::before`, generator jej NIE
-dopisuje do markupu) i Pozioma Lista z Kropkami (`.pricing-list` - li >
-`.pricing-list-title` + pusty `.pricing-list-dots` (dekoracyjna kropkowana
-linia, czysty CSS) + `.pricing-list-price`). Liczba kolumn siatki karier
-(`grid-md-cols-<N>`) dopasowuje sie automatycznie do liczby pakietow.
+Two STRUCTURALLY different variants (the `"type"` field): Pricing Cards
+(`.pricing-table` - its own header, a feature list with optional
+strikethrough via `.is-disabled`, a button; the `.is-featured` highlight
+adds `text-primary` to the title and `btn-primary w-100 hover-spring`
+instead of `btn-outline-primary w-100` on the button - the "Popularne"
+ribbon is done PURELY in CSS via `content: 'Popularne'` on `::before`, the
+generator does NOT add it to the markup) and Horizontal List with Dots
+(`.pricing-list` - li > `.pricing-list-title` + an empty `.pricing-list-
+dots` (decorative dotted line, pure CSS) + `.pricing-list-price`). The
+number of columns in the plans grid (`grid-md-cols-<N>`) is automatically
+matched to the number of plans.
 
-`.pricing-list` NIE MA wlasnej strony `examples-*.html` (jedyne wzmianki
-to wiersz w tabeli klas `docs-classes.html` i lista bundli w
-`builder.js`) - budowa wprost z `_pricing-list.scss`, ten sam wyjatek co
-przy `make:counter`.
+`.pricing-list` has NO dedicated `examples-*.html` page (the only mentions
+are a row in the class table in `docs-classes.html` and the bundle list in
+`builder.js`) - built directly from `_pricing-list.scss`, the same
+exception as with `make:counter`.
 
-Poprawka wzgledem realnego przykladu Kart Cenowych: przyciski tam maja
-zbedny prefiks `btn ` (`class="btn btn-outline-primary w-100"`) - ta sama
-juz ustalona w tej sesji konwencja (`.btn-<kolor>` implikuje `.btn`),
-generator uzywa samego `btn-outline-primary w-100` / `btn-primary w-100
-hover-spring`.
+Correction relative to the real Pricing Cards example: the buttons there
+have a redundant `btn ` prefix (`class="btn btn-outline-primary w-100"`) -
+the same convention already established in this session (`.btn-<color>`
+implies `.btn`), the generator uses just `btn-outline-primary w-100` /
+`btn-primary w-100 hover-spring`.
 
 ```typescript
 type PricingTableAnswers =
@@ -706,16 +714,16 @@ type PricingTableAnswers =
 
 ```bash
 npx molique-jit make:pricing-table -n 3
-npx molique-jit make:pricing-table --answers '{"type":"table","plans":[{"title":"Pro","price":"99","priceSuffix":"zl / msc","featured":true,"features":[{"text":"Nielimitowane Projekty","disabled":false}],"buttonLabel":"Wybierz Pro"}]}'
+npx molique-jit make:pricing-table --answers '{"type":"table","plans":[{"title":"Pro","price":"99","priceSuffix":"$ / mo","featured":true,"features":[{"text":"Unlimited Projects","disabled":false}],"buttonLabel":"Choose Pro"}]}'
 ```
 
-### `make:list-group` (aliasy: `zrob:liste-grupowa`, `mache:listengruppe`)
+### `make:list-group` (aliases: `zrob:liste-grupowa`, `mache:listengruppe`)
 
-Jeden ksztalt: `.list-group` > `.list-group-item` (link lub przycisk),
-pozycja biezaca dostaje `.is-active`. `.list-group` NIE MA wlasnej strony
-`examples-*.html` (jedyne realne uzycie to trzecia sekcja "Prosta Lista"
-w `src/examples-data-rows.html`), markup stamtad jest jednak kompletny i
-wprost odtwarzalny.
+One shape: `.list-group` > `.list-group-item` (link or button), the current
+item gets `.is-active`. `.list-group` has NO dedicated `examples-*.html`
+page (the only real usage is the third section "Simple List" in
+`src/examples-data-rows.html`), but the markup there is complete and
+directly reproducible.
 
 ```typescript
 interface ListGroupAnswers {
@@ -725,23 +733,23 @@ interface ListGroupAnswers {
 
 ```bash
 npx molique-jit make:list-group -n 4
-npx molique-jit make:list-group --answers '{"items":[{"label":"Ustawienia konta","href":"#","active":true},{"label":"Powiadomienia","href":"#","active":false}]}'
+npx molique-jit make:list-group --answers '{"items":[{"label":"Account Settings","href":"#","active":true},{"label":"Notifications","href":"#","active":false}]}'
 ```
 
-### `make:testimonial` (aliasy: `zrob:referencje`, `mache:referenz`)
+### `make:testimonial` (aliases: `zrob:referencje`, `mache:referenz`)
 
-Jeden ksztalt (jedna karta referencji, bez `-n/--count` - jak
+One shape (a single testimonial card, no `-n/--count` - like
 `make:badge`/`make:progress`): `.testimonial` > `.testimonial-stars` +
 `.testimonial-quote` + `.testimonial-author` > `.testimonial-avatar` +
-imie/rola.
+name/role.
 
-Poprawka wzgledem realnego przykladu: LIVE PODGLAD strony renderuje
-gwiazdki jako SVG (`ph-star--fill`), ale skopiowany blok kodu na tej
-samej stronie pokazuje literalny tekst "★★★★★" - dwa rozne zapisy tego
-samego komponentu w jednym pliku. Generator uzywa SVG-sprite, spojnego z
-cala reszta frameworka (karty, lightbox, data-row, pricing-table),
-powtorzonego dokladnie tyle razy, ile gwiazdek wybrano (0-5), bez
-separatora - dokladnie jak w zywym podgladzie.
+Correction relative to the real example: the page's LIVE PREVIEW renders
+the stars as SVG (`ph-star--fill`), but the copied code block on the same
+page shows the literal text "★★★★★" - two different representations of
+the same component in one file. The generator uses the SVG sprite,
+consistent with the rest of the framework (cards, lightbox, data-row,
+pricing-table), repeated exactly as many times as the number of stars
+chosen (0-5), with no separator - exactly like the live preview.
 
 ```typescript
 interface TestimonialAnswers {
@@ -759,25 +767,25 @@ npx molique-jit make:testimonial
 npx molique-jit make:testimonial --answers '{"starCount":5,"quote":"Swietny framework!","avatarUrl":"img/avatar.jpg","avatarAlt":"Klient","name":"Jan Kowalski","role":"Dyrektor"}'
 ```
 
-### `make:toast` (aliasy: `zrob:powiadomienie`, `mache:benachrichtigung`)
+### `make:toast` (aliases: `zrob:powiadomienie`, `mache:benachrichtigung`)
 
-Jedyny komponent w rodzinie molique w calosci sterowany przez JS - nie ma
-zadnego trwalego markupu do wypelnienia (`.toast-container`/`.toast`
-buduje `window.MoliqueToast.show()` w `js/molique-script.js` w locie).
-Generator zwraca wiec KOMPLETNY, dzialajacy przyklad: przycisk
-wyzwalajacy + wywolanie API, zweryfikowane wzgledem sygnatury
-`MoliqueToast.show({ message, type, position, duration })` (domyslne
-wartosci w JS: `message='Powiadomienie'`, `type='info'`,
-`position='top-right'`, `duration=4000`).
+The only component in the molique family entirely driven by JS - there's no
+persistent markup to fill in (`.toast-container`/`.toast` is built by
+`window.MoliqueToast.show()` in `js/molique-script.js` on the fly). The
+generator therefore returns a COMPLETE, working example: a trigger button +
+an API call, verified against the signature
+`MoliqueToast.show({ message, type, position, duration })` (default values
+in JS: `message='Powiadomienie'`, `type='info'`, `position='top-right'`,
+`duration=4000`).
 
-Realny przyklad wywoluje API przez inline `onclick="..."` na przycisku
-(dopuszczalne w demo strony dokumentacji, ale nie do powielania w kodzie
-produkcyjnym) - jego WLASNY blok "Kopiuj kod" na tej samej stronie pokazuje
-za to poprawny wzorzec (`<script>` + wywolanie API), ktorego generator
-sie trzyma, dodajac `addEventListener` zamiast inline `onclick`. Kolor
-przycisku wyzwalajacego dopasowany do typu powiadomienia (`btn-<type>` -
-success/danger/warning/info sa jednoczesnie prawidlowymi kolorami
-przyciskow motywu), tak jak w realnym przykladzie.
+The real example calls the API via an inline `onclick="..."` on the button
+(acceptable in the documentation site's demo, but not to be replicated in
+production code) - its OWN "Copy code" block on the same page shows the
+correct pattern instead (`<script>` + an API call), which the generator
+follows, adding `addEventListener` instead of inline `onclick`. The trigger
+button's color is matched to the notification type (`btn-<type>` -
+success/danger/warning/info are also valid theme button colors), just like
+in the real example.
 
 ```typescript
 interface ToastAnswers {
@@ -792,55 +800,56 @@ interface ToastAnswers {
 
 ```bash
 npx molique-jit make:toast
-npx molique-jit make:toast --answers '{"triggerId":"toast-trigger","triggerLabel":"Zapisz zmiany","message":"Zapisano pomyslnie!","type":"success","position":"top-right","duration":4000}'
+npx molique-jit make:toast --answers '{"triggerId":"toast-trigger","triggerLabel":"Save changes","message":"Saved successfully!","type":"success","position":"top-right","duration":4000}'
 ```
 
-### `make:breadcrumb` (aliasy: `zrob:okruszki`, `mache:brotkrumen`)
+### `make:breadcrumb` (aliases: `zrob:okruszki`, `mache:brotkrumen`)
 
-`.breadcrumb` > `.breadcrumb-item`, separator "/" czysto w CSS
-(`.breadcrumb-item + .breadcrumb-item::before`), pozycja biezaca dostaje
-`.is-active` + `aria-current="page"` i jest zwyklym tekstem (nie linkiem).
+`.breadcrumb` > `.breadcrumb-item`, the "/" separator is pure CSS
+(`.breadcrumb-item + .breadcrumb-item::before`), the current item gets
+`.is-active` + `aria-current="page"` and is plain text (not a link).
 
-`.breadcrumb` NIE MA wlasnej strony `examples-*.html` (jedyne realne
-uzycie to wariant Hero Simple w `make:layout`, gdzie linki sa
-`text-white opacity-75`, bo lezy na przyciemnionym zdjeciu - kontekst
-niewlasciwy dla samodzielnego uzycia nad tytulem strony). Generator
-reuzywa TEGO SAMEGO `_breadcrumb-item.stub.html` co `make:layout`
-(element jest generyczny), ale liczy `INNER` bez klas nadkladu - zwykly
-link w domyslnym kolorze `--primary` z SCSS. Wrapper
-`<nav aria-label="breadcrumb"><ol class="breadcrumb">` - wzorzec
-WAI-ARIA "breadcrumb", ten sam, ktorego juz uzywa `layout-hero-simple.stub.html`.
+`.breadcrumb` has NO dedicated `examples-*.html` page (the only real usage
+is the Hero Simple variant in `make:layout`, where the links are
+`text-white opacity-75`, since it sits on a darkened image - an unsuitable
+context for standalone use above a page title). The generator reuses the
+SAME `_breadcrumb-item.stub.html` as `make:layout` (the element is
+generic), but computes `INNER` without the overlay classes - a plain link
+in the default `--primary` color from SCSS. Wrapper
+`<nav aria-label="breadcrumb"><ol class="breadcrumb">` - the WAI-ARIA
+"breadcrumb" pattern, the same one `layout-hero-simple.stub.html` already
+uses.
 
 ```typescript
 interface BreadcrumbAnswers {
-  items: Array<{ label: string; href: string }>; // ostatnia pozycja: href ignorowany, renderowany jako tekst
+  items: Array<{ label: string; href: string }>; // last item: href is ignored, rendered as text
 }
 ```
 
 ```bash
 npx molique-jit make:breadcrumb -n 3
-npx molique-jit make:breadcrumb --answers '{"items":[{"label":"Strona glowna","href":"/"},{"label":"Blog","href":"/blog"},{"label":"Biezaca strona","href":""}]}'
+npx molique-jit make:breadcrumb --answers '{"items":[{"label":"Home","href":"/"},{"label":"Blog","href":"/blog"},{"label":"Current page","href":""}]}'
 ```
 
-### `make:status-icon` (aliasy: `zrob:ikone-statusu`, `mache:statussymbol`)
+### `make:status-icon` (aliases: `zrob:ikone-statusu`, `mache:statussymbol`)
 
-Dwa STRUKTURALNIE rozne warianty (pole `"type"`): Statyczna (czysty CSS,
-`<span class="status-icon status-icon-add">` lub `status-icon-success`)
-i Interaktywna zero-JS (`.status-checkbox` > `input[checkbox]` +
-`<span class="status-icon-toggle">`, animacja Plus->Checkmark sterowana
-natywnym `:checked`). Generator scaffolduje TYLKO te dwa warianty
-faktycznie uzyte w `src/examples-status-feedback.html` - NIE samodzielny
-`<button class="status-icon-toggle">` bez `<label>`, ktory SCSS sam
-opisuje jako "udokumentowane ograniczenie" (brak wolnego pseudo-elementu
-na powiekszenie hit-area do 44px).
+Two STRUCTURALLY different variants (the `"type"` field): Static (pure CSS,
+`<span class="status-icon status-icon-add">` or `status-icon-success`) and
+zero-JS Interactive (`.status-checkbox` > `input[checkbox]` +
+`<span class="status-icon-toggle">`, a Plus->Checkmark animation driven by
+native `:checked`). The generator scaffolds ONLY these two variants, which
+are actually used in `src/examples-status-feedback.html` - NOT a standalone
+`<button class="status-icon-toggle">` without a `<label>`, which the SCSS
+itself describes as a "documented limitation" (no free pseudo-element left
+to enlarge the hit area to 44px).
 
-Poprawka wzgledem "copy" bloku kodu w realnym przykladzie: tam
-`<input type="checkbox">` nie ma `aria-label`, mimo ze
-`.status-icon-toggle` obok to czysto dekoracyjny `<span>` bez tekstu -
-bez `aria-label` taki checkbox jest niedostepny dla czytnikow ekranu
-(brak accessible name). Zywy podglad na tej samej stronie ma juz
-poprawnie `aria-label="Zaznacz mnie"` - generator idzie za tym
-pelniejszym wariantem i wymaga `aria-label` zawsze.
+Correction relative to the "copy" code block in the real example: there,
+`<input type="checkbox">` has no `aria-label`, even though the adjacent
+`.status-icon-toggle` is a purely decorative `<span>` with no text -
+without `aria-label` such a checkbox is inaccessible to screen readers (no
+accessible name). The live preview on the same page already correctly has
+`aria-label="Zaznacz mnie"` - the generator follows this more complete
+variant and always requires `aria-label`.
 
 ```typescript
 type StatusIconAnswers =
@@ -850,35 +859,35 @@ type StatusIconAnswers =
 
 ```bash
 npx molique-jit make:status-icon
-npx molique-jit make:status-icon --answers '{"type":"checkbox","name":"opcja_premium","value":"1","ariaLabel":"Zaznacz mnie"}'
+npx molique-jit make:status-icon --answers '{"type":"checkbox","name":"premium_option","value":"1","ariaLabel":"Zaznacz mnie"}'
 ```
 
-### `make:code-preview` (aliasy: `zrob:podglad-kodu`, `mache:codevorschau`)
+### `make:code-preview` (aliases: `zrob:podglad-kodu`, `mache:codevorschau`)
 
 `.component-showcase` > `.component-preview` + `.component-code` >
-`.btn-copy` + `<pre><code>` - DOKLADNIE wzorzec "podglad + kod", ktorego
-uzywa KAZDA strona `src/examples-*.html` w calym repo (przeniesiony z
-modulu docs do rdzenia SCSS wlasnie po to, zeby dzialal wszedzie).
-`.btn-copy` NIE wymaga zadnego JS per-instancja - kopiowanie obsluguje
-globalnie `js/molique-script.js` ("KULOODPORNE KOPIOWANIE KODU",
-`document.querySelectorAll('.btn-copy')`), generator wypisuje wiec
-wylacznie markup.
+`.btn-copy` + `<pre><code>` - EXACTLY the "preview + code" pattern that
+EVERY `src/examples-*.html` page in the whole repo uses (moved from the
+docs module into the SCSS core precisely so it works everywhere).
+`.btn-copy` requires NO per-instance JS - copying is handled globally by
+`js/molique-script.js` ("BULLETPROOF CODE COPYING",
+`document.querySelectorAll('.btn-copy')`), so the generator only outputs
+markup.
 
-Praktyczny cel: opakowanie wyniku INNEJ komendy `make:*` w standardowy
-showcase do wlasnej strony stylu (np. wewnetrzny style guide). PIERWSZY
-generator w calej rodzinie wymagajacy realnego escapowania HTML -
-`.component-code` pokazuje kod jako TEKST (`&amp;`/`&lt;`/`&gt;` wewnatrz
-`<pre><code>`), podczas gdy `.component-preview` renderuje TEN SAM markup
-NA ZYWO (bez escapowania) - dwa rozne cele, jedno zrodlo danych.
+Practical purpose: wrapping the output of ANOTHER `make:*` command in a
+standard showcase for your own style page (e.g. an internal style guide).
+The FIRST generator in the whole family that requires real HTML escaping -
+`.component-code` shows the code as TEXT (`&amp;`/`&lt;`/`&gt;` inside
+`<pre><code>`), while `.component-preview` renders the SAME markup LIVE
+(without escaping) - two different purposes, one data source.
 
-Ograniczenie: `input()` z `@inquirer/prompts` jest jednoliniowy - do
-wieloliniowych fragmentow (np. cala karta czy modal) uzyj
-`--answers`/`--answers-file` zamiast trybu interaktywnego.
+Limitation: `input()` from `@inquirer/prompts` is single-line - for
+multi-line fragments (e.g. a whole card or modal) use
+`--answers`/`--answers-file` instead of interactive mode.
 
 ```typescript
 interface CodePreviewAnswers {
-  html: string; // surowy HTML komponentu
-  previewExtraClass: string; // np. "w-100 bg-surface", puste = brak
+  html: string; // raw component HTML
+  previewExtraClass: string; // e.g. "w-100 bg-surface", empty = none
 }
 ```
 
@@ -888,25 +897,25 @@ npx molique-jit make:code-preview --answers '{"html":"<span class=\"badge badge-
 
 ---
 
-**Pierwsza fala nowych generatorow (Etap C) jest kompletna: `make:badge`,
-`make:progress`, `make:accordion`, `make:pagination`** - kazdy zbudowany
-od razu w docelowym ksztalcie (collect/render, `--answers`/
-`--answers-file`, wlasny plik testow).
+**The first wave of new generators (Stage C) is complete: `make:badge`,
+`make:progress`, `make:accordion`, `make:pagination`** - each built
+directly in its target shape (collect/render, `--answers`/
+`--answers-file`, its own test file).
 
-**Druga (niewielka) fala jest tez kompletna: `make:tooltip`, `make:alert`,
-`make:dropdown`, `make:tabs`** - ten sam wzorzec.
+**The second (small) wave is also complete: `make:tooltip`, `make:alert`,
+`make:dropdown`, `make:tabs`** - the same pattern.
 
-**Trzecia fala jest tez kompletna: `make:status-dot`, `make:counter`,
-`make:timeline`, `make:carousel`** - ten sam wzorzec.
+**The third wave is also complete: `make:status-dot`, `make:counter`,
+`make:timeline`, `make:carousel`** - the same pattern.
 
-**Czwarta fala jest tez kompletna: `make:lightbox`, `make:card`,
-`make:data-row`, `make:pricing-table`** - ten sam wzorzec.
+**The fourth wave is also complete: `make:lightbox`, `make:card`,
+`make:data-row`, `make:pricing-table`** - the same pattern.
 
-**Piata (niewielka) fala jest tez kompletna: `make:list-group`,
-`make:testimonial`, `make:toast`** - ten sam wzorzec.
+**The fifth (small) wave is also complete: `make:list-group`,
+`make:testimonial`, `make:toast`** - the same pattern.
 
-**Szosta fala jest tez kompletna: `make:breadcrumb`, `make:status-icon`,
-`make:code-preview`** - ten sam wzorzec. Lacznie **29 komend `make:*`**.
-Wszystkie pojedyncze/male komponenty molique maja teraz wlasna komende
-scaffoldingowa. E-commerce i blog (duze, wieloczesciowe rodziny) swiadomie
-odlozone na kolejna fale planowania (na prosbe uzytkownika).
+**The sixth wave is also complete: `make:breadcrumb`, `make:status-icon`,
+`make:code-preview`** - the same pattern. **29 `make:*` commands** in
+total. All of molique's single/small components now have their own
+scaffolding command. E-commerce and blog (large, multi-part families) were
+deliberately deferred to a future planning wave (at the user's request).

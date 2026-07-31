@@ -1,24 +1,26 @@
 /**
  * molique-jit - `make:layout` (Scaffolding)
  *
- * Trzy warianty (Admin Dashboard / Classic SaaS-Landing / Bento Grid),
- * markup zweryfikowany 1:1 wzgledem realnych, dzialajacych przykladow:
+ * Three variants (Admin Dashboard / Classic SaaS-Landing / Bento Grid),
+ * markup verified 1:1 against real, working examples:
  * src/examples-admin-layout.html (.admin-layout), src/examples-hero-sections.html
- * (.page-header + .overlay ORAZ osobno .hero-with-cutout + .cutout-wrapper -
- * to DWA rozne, niekompatybilne ze soba warianty hero, mimo ze oryginalna
- * propozycja opisywala je jako jedno), src/examples-layout.html (.bento-grid).
+ * (.page-header + .overlay AND separately .hero-with-cutout +
+ * .cutout-wrapper - these are TWO different, mutually incompatible hero
+ * variants, even though the original proposal described them as one),
+ * src/examples-layout.html (.bento-grid).
  *
- * "Classic SaaS/Landing" ma WLASNY podwybor (Prosty/Cutout), bo to naprawde
- * dwa rozne komponenty w SCSS (_hero.scss: .page-header vs .hero-with-cutout),
- * nie jeden z opcjonalnym wycieciem.
+ * "Classic SaaS/Landing" has its OWN sub-choice (Simple/Cutout), because
+ * these really are two different components in SCSS (_hero.scss:
+ * .page-header vs .hero-with-cutout), not one with an optional cutout.
  *
- * Rozdzial "zbierz odpowiedzi" / "wyrenderuj markup" (plan rozwoju CLI,
- * Etap B): 4 plaskie typy `LayoutAnswers` (admin/hero-simple/hero-cutout/
- * bento) zamiast zagniezdzonego wyboru "hero -> simple/cutout" - spojne z
- * plaska unia typu uzywana w make-modal.ts/make-chart.ts/make-widget.ts.
- * Wybor "prosty czy cutout" zostaje interaktywnie jako DRUGIE pytanie po
- * "jaki uklad" (patrz collectLayoutAnswers), ale --answers/--answers-file
- * podaje docelowy, juz splaszczony typ wprost w polu "type".
+ * Split into "collect answers" / "render markup" (CLI roadmap, Stage B):
+ * 4 flat `LayoutAnswers` types (admin/hero-simple/hero-cutout/bento)
+ * instead of a nested "hero -> simple/cutout" choice - consistent with
+ * the flat type union used in make-modal.ts/make-chart.ts/make-widget.ts.
+ * The "simple or cutout" choice remains interactively as the SECOND
+ * question after "which layout" (see collectLayoutAnswers), but
+ * --answers/--answers-file supplies the target, already-flattened type
+ * directly in the "type" field.
  */
 
 import type { Command } from 'commander';
@@ -33,18 +35,18 @@ import { loadAnswers } from './answers.js';
 export interface AdminAnswers {
   floating: boolean;
   logo: string;
-  /** Etykiety pozycji menu, w kolejnosci - PIERWSZA dostaje .is-active automatycznie. */
+  /** Menu item labels, in order - the FIRST one gets .is-active automatically. */
   items: string[];
 }
 
 export async function collectAdminAnswers(countFlag?: string): Promise<AdminAnswers> {
   const floating = await confirm({
-    message: 'Wariant Floating (panel odsuniety od krawedzi ekranu)?',
+    message: 'Floating variant (panel pulled away from the screen edge)?',
     default: false,
   });
-  const logo = await input({ message: 'Nazwa/logo w sidebarze:', default: 'Logo' });
+  const logo = await input({ message: 'Name/logo in the sidebar:', default: 'Logo' });
   const count = await promptCount({
-    message: 'Ile pozycji w menu bocznym?',
+    message: 'How many items in the side menu?',
     default: '3',
     min: 1,
     max: 10,
@@ -53,7 +55,7 @@ export async function collectAdminAnswers(countFlag?: string): Promise<AdminAnsw
 
   const items: string[] = [];
   for (let i = 1; i <= count; i++) {
-    items.push(await input({ message: `  Etykieta pozycji ${i}:`, default: i === 1 ? 'Dashboard' : `Pozycja ${i}` }));
+    items.push(await input({ message: `  Item ${i} label:`, default: i === 1 ? 'Dashboard' : `Item ${i}` }));
   }
 
   return { floating, logo, items };
@@ -70,32 +72,32 @@ export function renderAdminDashboard(answers: AdminAnswers): string {
   return renderStub('layout-admin.stub.html', { LAYOUT_CLASSES, LOGO: logo, NAV_ITEMS });
 }
 
-/* ---------- Classic SaaS / Landing (Hero) - Prosty ---------- */
+/* ---------- Classic SaaS / Landing (Hero) - Simple ---------- */
 
 export interface HeroSimpleAnswers {
   title: string;
   imageUrl: string;
   overlayColorClass: string;
   overlayOpacityClass: string;
-  /** Etykiety breadcrumb, w kolejnosci - OSTATNIA to biezaca strona (auto .is-active + aria-current). */
+  /** Breadcrumb labels, in order - the LAST one is the current page (auto .is-active + aria-current). */
   breadcrumbLabels: string[];
 }
 
 export async function collectHeroSimpleAnswers(countFlag?: string): Promise<HeroSimpleAnswers> {
-  const title = await input({ message: 'Tytul sekcji hero:', default: 'Tytul Strony' });
-  const imageUrl = await input({ message: 'URL zdjecia w tle:', default: 'img/hero-bg.jpg' });
+  const title = await input({ message: 'Hero section title:', default: 'Page Title' });
+  const imageUrl = await input({ message: 'Background photo URL:', default: 'img/hero-bg.jpg' });
   const overlayColorClass = await select({
-    message: 'Kolor naklada przyciemniajacego:',
+    message: 'Dimming overlay color:',
     choices: [
-      { name: 'Czarny (literal)', value: 'bg-overlay' },
-      { name: 'Ciemny (motyw)', value: 'overlay-dark' },
+      { name: 'Black (literal)', value: 'bg-overlay' },
+      { name: 'Dark (theme-aware)', value: 'overlay-dark' },
       { name: 'Primary', value: 'overlay-primary' },
-      { name: 'Jasny', value: 'overlay-light' },
+      { name: 'Light', value: 'overlay-light' },
     ],
     default: 'bg-overlay',
   });
   const overlayOpacityClass = await select({
-    message: 'Krycie nakladu:',
+    message: 'Overlay opacity:',
     choices: [
       { name: '30%', value: 'overlay-30' },
       { name: '50%', value: 'overlay-50' },
@@ -106,7 +108,7 @@ export async function collectHeroSimpleAnswers(countFlag?: string): Promise<Hero
   });
 
   const count = await promptCount({
-    message: 'Ile pozycji w breadcrumb (wliczajac biezaca strone)?',
+    message: 'How many breadcrumb items (including the current page)?',
     default: '2',
     min: 1,
     max: 6,
@@ -118,8 +120,8 @@ export async function collectHeroSimpleAnswers(countFlag?: string): Promise<Hero
     const isLast = i === count;
     breadcrumbLabels.push(
       await input({
-        message: `  Etykieta pozycji breadcrumb ${i}${isLast ? ' (biezaca strona)' : ''}:`,
-        default: isLast ? 'Biezaca strona' : `Krok ${i}`,
+        message: `  Breadcrumb item ${i} label${isLast ? ' (current page)' : ''}:`,
+        default: isLast ? 'Current page' : `Step ${i}`,
       })
     );
   }
@@ -159,17 +161,17 @@ export interface HeroCutoutAnswers {
 }
 
 export async function collectHeroCutoutAnswers(): Promise<HeroCutoutAnswers> {
-  const title = await input({ message: 'Tytul:', default: 'Zbuduj to z molique' });
-  const message = await input({ message: 'Opis:', default: 'Krotki opis pod tytulem.' });
-  const imageUrl = await input({ message: 'URL zdjecia w tle:', default: 'img/hero-bg.jpg' });
-  const imageAlt = await input({ message: 'Tekst alternatywny zdjecia:', default: 'Tlo' });
+  const title = await input({ message: 'Title:', default: 'Build it with molique' });
+  const message = await input({ message: 'Description:', default: 'A short description below the title.' });
+  const imageUrl = await input({ message: 'Background photo URL:', default: 'img/hero-bg.jpg' });
+  const imageAlt = await input({ message: 'Photo alt text:', default: 'Background' });
   const cutoutVariant = await select<HeroCutoutAnswers['cutoutVariant']>({
-    message: 'Ktory rog ma byc wyciety (dotyka zdjecia)?',
+    message: 'Which corner should be cut out (touches the photo)?',
     choices: [
-      { name: 'Prawy dolny', value: 'cutout-md-br' },
-      { name: 'Lewy dolny', value: 'cutout-md-bl' },
-      { name: 'Prawy gorny', value: 'cutout-md-tr' },
-      { name: 'Lewy gorny', value: 'cutout-md-tl' },
+      { name: 'Bottom right', value: 'cutout-md-br' },
+      { name: 'Bottom left', value: 'cutout-md-bl' },
+      { name: 'Top right', value: 'cutout-md-tr' },
+      { name: 'Top left', value: 'cutout-md-tl' },
     ],
     default: 'cutout-md-br',
   });
@@ -203,7 +205,7 @@ export interface BentoAnswers {
 
 export async function collectBentoAnswers(countFlag?: string): Promise<BentoAnswers> {
   const count = await promptCount({
-    message: 'Z ilu kafelkow ma sie skladac baza?',
+    message: 'How many tiles should the base consist of?',
     default: '4',
     min: 2,
     max: 8,
@@ -212,14 +214,14 @@ export async function collectBentoAnswers(countFlag?: string): Promise<BentoAnsw
 
   const tiles: BentoAnswers['tiles'] = [];
   for (let i = 1; i <= count; i++) {
-    const label = await input({ message: `  Tresc kafelka ${i}:`, default: `Kafelek ${i}` });
+    const label = await input({ message: `  Tile ${i} content:`, default: `Tile ${i}` });
     const size = await select<BentoSize>({
-      message: `  Rozmiar kafelka ${i}:`,
+      message: `  Tile ${i} size:`,
       choices: [
-        { name: 'Normalny', value: 'normal' },
-        { name: 'Szeroki (2x szerokosci)', value: 'wide' },
-        { name: 'Wysoki (2x wysokosci)', value: 'tall' },
-        { name: 'Duzy (2x2)', value: 'big' },
+        { name: 'Normal', value: 'normal' },
+        { name: 'Wide (2x width)', value: 'wide' },
+        { name: 'Tall (2x height)', value: 'tall' },
+        { name: 'Big (2x2)', value: 'big' },
       ],
       default: i === 1 ? 'big' : 'normal',
     });
@@ -255,7 +257,7 @@ function renderLayout(answers: LayoutAnswers): string {
 
 async function collectLayoutAnswers(countFlag?: string): Promise<LayoutAnswers> {
   const layoutType = await select({
-    message: 'Jaki uklad chcesz wygenerowac?',
+    message: 'Which layout do you want to generate?',
     choices: [
       { name: 'Admin Dashboard', value: 'admin' },
       { name: 'Classic SaaS / Landing (Hero)', value: 'hero' },
@@ -266,34 +268,34 @@ async function collectLayoutAnswers(countFlag?: string): Promise<LayoutAnswers> 
   if (layoutType === 'admin') return { type: 'admin', ...(await collectAdminAnswers(countFlag)) };
   if (layoutType === 'bento') return { type: 'bento', ...(await collectBentoAnswers(countFlag)) };
 
-  // Cutout nie ma listy o zmiennej dlugosci - countFlag dotyczy tylko wariantu Prosty (breadcrumb).
+  // Cutout has no variable-length list - countFlag only applies to the Simple variant (breadcrumb).
   const heroVariant = await select({
-    message: 'Ktory wariant hero?',
+    message: 'Which hero variant?',
     choices: [
-      { name: 'Prosty (naklada przyciemniajaca + breadcrumb)', value: 'simple' },
-      { name: 'Z wycietym rogiem (Cutout)', value: 'cutout' },
+      { name: 'Simple (dimming overlay + breadcrumb)', value: 'simple' },
+      { name: 'With a cut-out corner (Cutout)', value: 'cutout' },
     ],
   });
   if (heroVariant === 'simple') return { type: 'hero-simple', ...(await collectHeroSimpleAnswers(countFlag)) };
   return { type: 'hero-cutout', ...(await collectHeroCutoutAnswers()) };
 }
 
-/* ---------- Rejestracja komendy ---------- */
+/* ---------- Command registration ---------- */
 
 export function registerMakeLayoutCommand(program: Command): void {
   program
     .command('make:layout')
     .description(
-      'Interaktywny generator szkieletow stron (Admin Dashboard / Hero / Bento Grid) ' +
-        '(aliasy: zrob:uklad, mache:layout)'
+      'Interactive page skeleton generator (Admin Dashboard / Hero / Bento Grid) ' +
+        '(aliases: zrob:uklad, mache:layout)'
     )
     .option(
-      '-n, --count <liczba>',
-      'Liczba powtarzalnych elementow (pozycje menu / breadcrumb / kafelki, zaleznie od wybranego ukladu) - pomija to jedno pytanie'
+      '-n, --count <number>',
+      'Number of repeatable items (menu items / breadcrumb / tiles, depending on the chosen layout) - skips this one question'
     )
-    .option('--answers <json>', 'Odpowiedzi jako JSON (ksztalt LayoutAnswers, z polem "type") - pomija WSZYSTKIE pytania')
-    .option('--answers-file <path>', 'Sciezka do pliku JSON z odpowiedziami - pomija WSZYSTKIE pytania')
-    .option('-o, --out <path>', 'Zapisz wynik do pliku (dziala tylko razem z --answers/--answers-file)')
+    .option('--answers <json>', 'Answers as JSON (LayoutAnswers shape, with a "type" field) - skips ALL questions')
+    .option('--answers-file <path>', 'Path to a JSON file with answers - skips ALL questions')
+    .option('-o, --out <path>', 'Save the result to a file (only works together with --answers/--answers-file)')
     .action(async (opts: { count?: string; answers?: string; answersFile?: string; out?: string }) => {
       const provided = loadAnswers<LayoutAnswers>(opts);
       const answers = provided ?? (await collectLayoutAnswers(opts.count));
