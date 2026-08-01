@@ -3,7 +3,7 @@
  *
  * AUTO-GENERATED FILE - do not edit by hand.
  * Source: tools/gen-safelist.js   |   Regenerate with: node tools/gen-safelist.js
- * Generated: 2026-07-29
+ * Generated: 2026-08-01
  *
  * WHY THIS EXISTS: some molique classes never appear in the HTML - they're
  * added by JS at runtime (states, carousel/lightbox/toast markup).
@@ -37,6 +37,7 @@ const runtime = {
     'carousel-dots',
     'file-upload-name',
     'fw-bold',
+    'icon',
     'js-resetting',
     'lang-suggest-actions',
     'lang-suggest-bar',
@@ -51,6 +52,22 @@ const runtime = {
     'lightbox-top-bar',
     'm-0',
     'mt-2',
+    'onboarding-card',
+    'onboarding-dialog',
+    'onboarding-dot',
+    'onboarding-dots',
+    'onboarding-footer',
+    'onboarding-nav',
+    'onboarding-next',
+    'onboarding-prev',
+    'onboarding-skip',
+    'onboarding-slide',
+    'onboarding-slide-desc',
+    'onboarding-slide-icon',
+    'onboarding-slide-image',
+    'onboarding-slide-media',
+    'onboarding-slide-title',
+    'onboarding-step-count',
     'opacity-50',
     'select-search',
     'select-search-menu',
@@ -71,6 +88,19 @@ const runtime = {
     'toast-top-left',
     'toast-top-right',
     'toast-warning',
+    'tour-dialog',
+    'tour-dot',
+    'tour-dots',
+    'tour-nav',
+    'tour-next',
+    'tour-prev',
+    'tour-skip',
+    'tour-spotlight',
+    'tour-step-count',
+    'tour-tooltip',
+    'tour-tooltip-desc',
+    'tour-tooltip-footer',
+    'tour-tooltip-title',
   ],
   // molique's state-class convention. A pattern instead of a literal list,
   // since it also protects classes toggled by YOUR OWN code (e.g.

@@ -68,10 +68,10 @@ const core = [
 const CAT = [
   [/^(navbar|mega-menu|dropdown|breadcrumbs|pagination|topbar|scroll-to-top|reading-progress|language-switch)$/, 'Nawigacja'],
   [/^(form-|theme-switch)/,                                    'Formularze'],
-  [/^(badges|alerts|toasts|status-|stock-bar|tooltips)/,        'Feedback'],
+  [/^(badges|alerts|toasts|status-|stock-bar|tooltips|spotlight-tour)/,        'Feedback'],
   [/^(tables|data-row|list-|counters|grid-expand)/,             'Dane'],
   [/^(pricing|progress|timeline|stepper|testimonials|word-rotator|nav-filters)/, 'Biznes'],
-  [/^(modal|lightbox|context-menu|accordion|tabs|carousel)/,    'Okna i media'],
+  [/^(modal|lightbox|onboarding-slides|context-menu|accordion|tabs|carousel)/,    'Okna i media'],
   [/^(cards|hero|code-preview|charts|chart-)/,                  'Prezentacja'],
   [/^(admin-|dashboard)/,                                       'Panel admina'],
   [/^theme-editor$/,                                            'Narzędzia'],

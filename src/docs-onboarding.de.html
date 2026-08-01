@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Onboarding - molique Docs","description":"Onboarding Slides (Vollbild-Willkommens-Slideshow) und Spotlight Tour (Element-Hervorhebung plus Sprechblase) - zwei unabhängige, optionale Komponenten zur Einführung neuer Nutzer in B2B-Panels."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SEITENLEISTE -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Onboarding</h1>
+            <p class="text-6 text-muted">
+              Zwei unabhängige, vollständig optionale Komponenten zur
+              Einführung neuer Nutzer - keine setzt die andere voraus.
+              Beide laufen auf einem nativen <code>&lt;dialog&gt;</code>
+              (<code>showModal()</code>), sodass Fokus-Trap,
+              Fokus-Wiederherstellung und Schließen mit <kbd>Esc</kbd>
+              ohne eigenen Code funktionieren.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. WAS WÄHLEN                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Was wählen</h2>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Komponente</th>
+                    <th>Wann</th>
+                    <th>Inhalt definieren</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Komponente"><code>.onboarding-dialog</code></td>
+                    <td data-label="Wann">Erster Einstieg ins Panel - ein kurzes "was ist das", bevor der Nutzer die Oberfläche sieht.</td>
+                    <td data-label="Inhalt"><code>data-onboarding-*</code> ODER <code>MoliqueOnboarding.start()</code></td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.tour-dialog</code></td>
+                    <td data-label="Wann">Der Nutzer sieht die Oberfläche bereits - Sie müssen zeigen, wo eine bestimmte Funktion liegt.</td>
+                    <td data-label="Inhalt"><code>data-tour</code> auf echten Elementen ODER <code>MoliqueTour.start()</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h3 class="fw-bold text-5 mb-2">Beide zu einem Ablauf verketten</h3>
+              <p class="text-4 text-muted m-0">
+                Beide APIs geben ein <code>Promise</code> zurück, das nach
+                dem Schließen des Dialogs (Überspringen, Escape oder
+                Abschluss des letzten Schritts) aufgelöst wird - so lässt
+                sich die Tour direkt nach den Slides starten:
+              </p>
+              <pre class="mt-3 mb-0"><code>MoliqueOnboarding.start(slides).then(() => MoliqueTour.start(steps));</code></pre>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. ONBOARDING SLIDES                                  -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Onboarding Slides</h2>
+            <p class="text-muted mb-4">
+              Vollbild-Willkommens-Slides: ein Icon oder Bild + Titel +
+              Beschreibung, mit Weiter-/Zurück-/Überspringen-Buttons und
+              Fortschritts-Punkten. Im deklarativen Modus erscheinen sie
+              automatisch einmal pro Browser (<code>localStorage</code>) -
+              der Integrator schreibt keine einzige Zeile JS.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 justify-content-center py-5">
+                <button type="button" class="btn-primary btn-lg" id="docs-onboarding-demo-btn">
+                  Willkommens-Slideshow starten
+                </button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Deklarative Variante (kein JS) --&gt;
+&lt;div data-onboarding hidden&gt;
+  &lt;div data-onboarding-slide
+       data-onboarding-icon="ph-hand-waving"
+       data-onboarding-title="Willkommen im Panel"
+       data-onboarding-desc="Kurze Beschreibung des ersten Schritts."&gt;&lt;/div&gt;
+  &lt;div data-onboarding-slide
+       data-onboarding-image="img/onboarding/bestellungen.png"
+       data-onboarding-image-alt="Screenshot der Bestellliste"
+       data-onboarding-title="Bestellungen"
+       data-onboarding-desc="Hier verwalten Sie Bestellungen."&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- JS-Variante (dynamische Inhalte) --&gt;
+&lt;script&gt;
+  MoliqueOnboarding.start([
+    { icon: 'ph-hand-waving', title: 'Willkommen im Panel', description: '…' },
+    { image: 'bestellungen.png', imageAlt: '…', title: 'Bestellungen', description: '…' },
+  ], {
+    onSkip: () =&gt; {},
+    onComplete: () =&gt; {},
+  });
+&lt;/script&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse / Attribut</th>
+                    <th>Was es macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.onboarding-dialog</code></td>
+                    <td data-label="Was es macht">Der native <code>&lt;dialog&gt;</code>, von JS erzeugt - Sie schreiben ihn nie von Hand.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">data-onboarding</code></td>
+                    <td data-label="Was es macht">Umschließt die Slides. Optional <code>data-onboarding-key="name"</code> - eigener <code>localStorage</code>-Schlüssel (Standard: der Seitenpfad).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">data-onboarding-slide</code></td>
+                    <td data-label="Was es macht">Ein Slide. Reihenfolge = DOM-Reihenfolge. Attribute: <code>data-onboarding-icon</code> (ein Fragment aus dem Icon-Sprite, z. B. <code>ph-hand-waving</code>) ODER <code>data-onboarding-image</code> + <code>data-onboarding-image-alt</code> (schließen sich gegenseitig aus), <code>data-onboarding-title</code>, <code>data-onboarding-desc</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">MoliqueOnboarding.start(slides, options)</code></td>
+                    <td data-label="Was es macht"><code>slides</code>: ein Array von Objekten wie oben. <code>options.onSkip</code> / <code>options.onComplete</code>. Gibt ein <code>Promise</code> zurück.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. SPOTLIGHT TOUR                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Spotlight Tour</h2>
+            <p class="text-muted mb-4">
+              Eine Schrittfolge über echte Oberflächenelemente: der Rest
+              des Bildschirms wird abgedunkelt, das hervorgehobene Element
+              bleibt sichtbar, aber <strong>nicht anklickbar</strong> -
+              <code>showModal()</code> macht das gesamte Dokument
+              außerhalb des Dialogs wirklich <code>inert</code>
+              (Browser-Spezifikation, kein <code>pointer-events</code>-Trick).
+              Nur die eigenen Weiter-/Zurück-/Überspringen-Buttons der
+              Sprechblase steuern die Navigation.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface">
+                <div class="grid-cols-1 grid-md-cols-3 gap-3 w-100">
+                  <div class="card" id="docs-tour-demo-1">
+                    <div class="card-body text-center">
+                      <div class="fw-bold text-6">128</div>
+                      <div class="text-muted text-3">Neue Bestellungen</div>
+                    </div>
+                  </div>
+                  <div class="card" id="docs-tour-demo-2">
+                    <div class="card-body text-center">
+                      <div class="fw-bold text-6">4.200 €</div>
+                      <div class="text-muted text-3">Umsatz heute</div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-outline-primary" id="docs-tour-demo-3">
+                    Einstellungen
+                  </button>
+                </div>
+              </div>
+              <div class="component-preview w-100 justify-content-center border-top">
+                <button type="button" class="btn-primary" id="docs-tour-demo-btn">
+                  Spotlight Tour starten
+                </button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Deklarative Variante (kein JS) - direkt auf echten Elementen --&gt;
+&lt;div class="card" data-tour
+     data-tour-title="Neue Bestellungen"
+     data-tour-desc="Hier sehen Sie die Anzahl der noch zu bearbeitenden Bestellungen."&gt;
+  …
+&lt;/div&gt;
+&lt;button class="btn-outline-primary" data-tour
+        data-tour-title="Einstellungen"
+        data-tour-desc="Hier konfigurieren Sie Benachrichtigungen und Integrationen."&gt;
+  Einstellungen
+&lt;/button&gt;
+
+&lt;!-- JS-Variante (dynamische Ziele) --&gt;
+&lt;script&gt;
+  MoliqueTour.start([
+    { target: '#stat-orders', title: 'Neue Bestellungen', description: '…' },
+    { target: document.querySelector('.settings-btn'), title: 'Einstellungen', description: '…' },
+  ]);
+&lt;/script&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse / Attribut</th>
+                    <th>Was es macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.tour-dialog</code></td>
+                    <td data-label="Was es macht">Der native <code>&lt;dialog&gt;</code>, von JS erzeugt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.tour-spotlight</code></td>
+                    <td data-label="Was es macht">Das "Loch" in der Abdunkelung - Position/Größe werden bei jedem Schritt aus <code>getBoundingClientRect()</code> des Ziels berechnet (die klassische Technik <code>box-shadow: 0 0 0 9999px</code>, keine SVG-Maske).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.tour-tooltip</code></td>
+                    <td data-label="Was es macht">Die Sprechblase mit Titel/Beschreibung, positioniert über natives CSS Anchor Positioning (ein per JS auf dem Ziel gesetzter <code>anchor-name</code> + eine 5-fache <code>@position-try</code>-Fallback-Kette, damit sie nie über den Viewport hinausragt).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">data-tour</code></td>
+                    <td data-label="Was es macht">Markiert ein echtes Element als Tour-Schritt. Optional <code>data-tour-group="name"</code> (Standard <code>"default"</code>) - mehrere unabhängige Touren auf einer Seite.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">data-tour-title</code> / <code>data-tour-desc</code></td>
+                    <td data-label="Was es macht">Der Sprechblasen-Inhalt für diesen Schritt. Schrittreihenfolge = DOM-Reihenfolge (dieselbe Regel wie <code>data-gallery</code>-Gruppen in der Lightbox) - kein separates nummeriertes Index-Attribut.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">MoliqueTour.start(steps, options)</code></td>
+                    <td data-label="Was es macht"><code>steps</code>: ein Array aus <code>{ target, title, description }</code> (<code>target</code> - ein Selektor ODER ein lebendes Element). <code>options.onStepChange</code> / <code>onSkip</code> / <code>onComplete</code>. Gibt ein <code>Promise</code> zurück.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. FALLSTRICKE UND BEWUSSTE EINSCHRÄNKUNGEN           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Fallstricke und bewusste Einschränkungen</h2>
+
+            <div class="accordion mb-4">
+              <details class="accordion-item" name="onboarding-fallstricke" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">1</span>
+                  <span>Elemente, die NACH dem Laden zur Seite hinzugefügt werden</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Der deklarative Scan (<code>[data-tour]</code> /
+                    <code>[data-onboarding]</code>) passiert EINMAL, beim
+                    Laden des Moduls - genau wie bei der Lightbox, ohne
+                    <code>MutationObserver</code>. Ein später gerenderten
+                    Panel (Ladeanzeige, Hydration) benötigt
+                    <code>MoliqueTour.start()</code> /
+                    <code>MoliqueOnboarding.start()</code> aus JS statt
+                    reiner Attribute.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="onboarding-fallstricke">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">2</span>
+                  <span>Keine Richtungs-Spitze an der Sprechblase</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Ein bewusster Umfangsschnitt für v1: CSS hat heute
+                    keine zuverlässige Möglichkeit, allein aus CSS heraus
+                    zu erkennen, welche <code>@position-try</code>-Variante
+                    tatsächlich gewonnen hat - die Sprechblase zeichnet
+                    daher keine "Zeiger"-Spitze. Nähe und der eigene
+                    Schatten der Sprechblase halten den Bezug zum
+                    hervorgehobenen Element trotzdem lesbar.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="onboarding-fallstricke">
+                <summary class="accordion-header">
+                  <span class="badge badge-primary">3</span>
+                  <span>Erneutes Anzeigen nach Speicherung in localStorage</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Der deklarative Modus beider Komponenten merkt sich in
+                    <code>localStorage</code> (Standard-Schlüssel: der
+                    Seitenpfad), dass er gesehen wurde, und zeigt sich
+                    danach nicht erneut. Um dem Nutzer einen
+                    "Einführung erneut anzeigen"-Button zu geben, rufen Sie
+                    <code>MoliqueOnboarding.start(slides)</code> /
+                    <code>MoliqueTour.start(steps)</code> direkt aus JS
+                    auf - dieser Aufruf umgeht die
+                    <code>localStorage</code>-Prüfung.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- Navigation unten -->
+          <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+            <a href="docs-widgets.de" class="btn-secondary"
+              ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-left"></use></svg> Zurück: Widgets</a
+            >
+            <a href="docs-eshop.de" class="btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Online-Shop <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-right"></use></svg></a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Skripte -->
+    <script src="js/molique-script.js?v={{ __version }}"></script>
+    <!-- Diese Seite ruft MoliqueOnboarding/MoliqueTour ausschließlich aus
+         JS auf (die "Starten…"-Buttons) - ohne live data-onboarding/
+         data-tour im Markup würde der Autoloader sie nie laden. -->
+    <script defer src="js/modules/molique-onboarding.js?v={{ __version }}"></script>
+    <script defer src="js/modules/molique-tour.js?v={{ __version }}"></script>
+    <script>
+      document.getElementById('docs-onboarding-demo-btn').addEventListener('click', () => {
+        MoliqueOnboarding.start([
+          { icon: 'ph-hand-waving', title: 'Willkommen im Panel', description: 'Ein paar Slides, bevor Sie die ganze Oberfläche sehen - genau die Komponente, die Sie gerade betrachten.' },
+          { icon: 'ph-rocket-launch', title: 'Los geht\'s', description: 'Die Weiter-/Zurück-Buttons, Fortschritts-Punkte und Überspringen funktionieren auch über die Tastatur (Pfeiltasten, Esc).' },
+          { icon: 'ph-confetti', title: 'Das war\'s', description: 'Der letzte Slide tauscht den Button "Weiter" gegen "Los geht\'s".' },
+        ]);
+      });
+      document.getElementById('docs-tour-demo-btn').addEventListener('click', () => {
+        MoliqueTour.start([
+          { target: '#docs-tour-demo-1', title: 'Neue Bestellungen', description: 'Die Anzahl der noch zu bearbeitenden Bestellungen - anklicken für die Liste.' },
+          { target: '#docs-tour-demo-2', title: 'Umsatz heute', description: 'Die Summe der Zahlungen seit Mitternacht, live aktualisiert.' },
+          { target: '#docs-tour-demo-3', title: 'Einstellungen', description: 'Hier konfigurieren Sie Benachrichtigungen und Integrationen.' },
+        ]);
+      });
+    </script>
+  </body>
+</html>

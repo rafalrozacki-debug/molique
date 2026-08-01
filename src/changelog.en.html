@@ -48,6 +48,58 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.21 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.21</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Onboarding: Onboarding Slides and Spotlight Tour
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>.onboarding-dialog</code> - full-screen welcome
+                    slides (icon/image + title + description) on a native
+                    <code>&lt;dialog&gt;</code>. Declaratively via
+                    <code>data-onboarding</code>/<code>data-onboarding-slide</code>
+                    (shows once per browser, <code>localStorage</code>) or
+                    imperatively via <code>MoliqueOnboarding.start(slides)</code>.
+                  </li>
+                  <li>
+                    <code>.tour-dialog</code> - a sequence of steps over real
+                    interface elements (highlight + tooltip). The highlighted
+                    element stays visible but isn't clickable - it uses
+                    <code>showModal()</code>'s native <code>inert</code>
+                    behavior, not a <code>pointer-events</code> trick. The
+                    tooltip is positioned via CSS Anchor Positioning with a
+                    5-way <code>@position-try</code> fallback chain.
+                    Declaratively via <code>data-tour</code> directly on
+                    elements, or imperatively via
+                    <code>MoliqueTour.start(steps)</code>.
+                  </li>
+                  <li>
+                    Both APIs return a <code>Promise</code> - they can be
+                    chained:
+                    <code>MoliqueOnboarding.start(slides).then(() =&gt; MoliqueTour.start(steps))</code>.
+                    Full docs: <a href="docs-onboarding.en">Onboarding</a>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.20 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

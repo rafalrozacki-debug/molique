@@ -48,6 +48,60 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.21 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.21</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Onboarding: Onboarding Slides und Spotlight Tour
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>.onboarding-dialog</code> - Vollbild-Willkommens-
+                    Slides (Icon/Bild + Titel + Beschreibung) auf einem
+                    nativen <code>&lt;dialog&gt;</code>. Deklarativ über
+                    <code>data-onboarding</code>/<code>data-onboarding-slide</code>
+                    (erscheint einmal pro Browser, <code>localStorage</code>)
+                    oder imperativ über
+                    <code>MoliqueOnboarding.start(slides)</code>.
+                  </li>
+                  <li>
+                    <code>.tour-dialog</code> - eine Schrittfolge über echte
+                    Oberflächenelemente (Hervorhebung + Sprechblase). Das
+                    hervorgehobene Element bleibt sichtbar, ist aber nicht
+                    anklickbar - dank der nativen <code>inert</code>-
+                    Eigenschaft von <code>showModal()</code>, kein
+                    <code>pointer-events</code>-Trick. Die Sprechblase wird
+                    über CSS Anchor Positioning mit einer 5-fachen
+                    <code>@position-try</code>-Fallback-Kette positioniert.
+                    Deklarativ über <code>data-tour</code> direkt auf
+                    Elementen oder imperativ über
+                    <code>MoliqueTour.start(steps)</code>.
+                  </li>
+                  <li>
+                    Beide APIs geben ein <code>Promise</code> zurück - sie
+                    lassen sich verketten:
+                    <code>MoliqueOnboarding.start(slides).then(() =&gt; MoliqueTour.start(steps))</code>.
+                    Vollständige Doku: <a href="docs-onboarding.de">Onboarding</a>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.20 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

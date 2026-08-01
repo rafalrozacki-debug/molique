@@ -1,0 +1,327 @@
+// molique - Spotlight Tour: element-highlight coachmark sequence (markup built by JS).
+//
+// Independent module: can be omitted from a bundle with no compile errors.
+//
+// A native <dialog> instead of Popover API - showModal() makes the WHOLE
+// document outside the dialog genuinely `inert` (spec behavior, not a
+// side effect of pointer-events): out of the tab order, out of hit
+// testing, out of the accessibility tree. That's exactly "the highlighted
+// element stays visible but not interactive" for free, with zero
+// hand-rolled focus trap - the opposite of [popover] (used by
+// _toasts.scss), which deliberately keeps the rest of the page working
+// underneath.
+//
+// The "hole": .tour-spotlight is positioned/sized via JS to match the
+// current target's real getBoundingClientRect(), with a huge
+// box-shadow spread (0 0 0 9999px) painting the dimmed area AROUND it -
+// the classic CSS spotlight technique. No SVG <mask>, no radial-gradient:
+// unlike the fixed corner cutout in _hero.scss (HERO CUTOUT SYSTEM), an
+// arbitrary target needs a rounded RECTANGLE sized to its own bounding
+// box, which box-shadow gives natively without any masking risk. Position
+// is snapped instantly between steps (no transition on top/left/width/
+// height) - this project's GPU rule allows animating ONLY transform/
+// opacity, and those four layout properties don't qualify, so they're
+// simply never animated rather than smuggled into a transition.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   SPOTLIGHT TOUR (Element-highlight coachmark, native <dialog>)
+   ========================================= */
+dialog.tour-dialog {
+  /* Reset the <dialog> UA stylesheet - same as _lightbox.scss/
+     _onboarding-slides.scss. */
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-index-modal);
+
+  /* IMPORTANT: display:none must stay unconditional - see the identical,
+     documented gotcha in _lightbox.scss/_onboarding-slides.scss. Author
+     rules always beat "dialog:not([open]) { display:none }" regardless
+     of specificity. */
+  display: none;
+  opacity: 0;
+  transition: opacity var(--transition-speed), overlay var(--transition-speed) allow-discrete,
+    display var(--transition-speed) allow-discrete;
+
+  &:modal {
+    display: block;
+    opacity: 1;
+  }
+
+  @starting-style {
+    &:modal {
+      opacity: 0;
+    }
+  }
+
+  /* No dimming here - .tour-spotlight's own box-shadow does that job (it
+     needs to stay a HOLE, not a flat overlay), so the UA's default
+     backdrop tint would just double up. */
+  &::backdrop {
+    background: transparent;
+  }
+}
+
+/* The "hole": positioned/sized per step from JS via getBoundingClientRect().
+   pointer-events stays at its default (auto) DELIBERATELY - unlike
+   .lightbox-overlay, a click here must NOT dismiss the tour (this is a
+   guided sequence, not a lightbox), so it's left as an inert no-op sink
+   rather than wired to a close handler. */
+.tour-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 0 0 9999px rgba(var(--backdrop-rgb), 0.72);
+}
+
+.tour-tooltip {
+  position: fixed;
+  inset: auto;
+  /* Default placement: below the target, left-aligned. */
+  top: anchor(bottom);
+  left: anchor(left);
+  margin: 12px 0 0 0;
+  z-index: 1;
+  width: min(320px, calc(100vw - 2rem));
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: calc(var(--spacing-unit) * 3);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 2);
+  /* A 5-candidate fallback chain, not the 3 seen in _dropdown.scss's
+     popover - a coachmark target can be anywhere in the viewport
+     (including flush against an edge), so besides flipping above/below
+     the chain also needs "beside" variants, not just corner flips. The
+     browser only applies an entry if it fully eliminates overflow on
+     BOTH axes at once (see _dropdown.scss's comment on the same
+     mechanism), so a shorter list would leave real edge cases with no
+     working fallback. */
+  position-try-fallbacks:
+    --tour-below-right,
+    --tour-above,
+    --tour-above-right,
+    --tour-right,
+    --tour-left;
+
+  /* Fallback for browsers without CSS Anchor Positioning (older
+     Firefox): a centered panel - still in the top layer (inside the open
+     dialog), so nothing clips it. Same graceful-degradation shape as
+     _dropdown.scss/_form-select-search.scss. */
+  @supports not (top: anchor(bottom)) {
+    position: fixed;
+    inset: 0;
+    top: auto;
+    left: auto;
+    margin: auto;
+    width: min(360px, calc(100vw - 2rem));
+    height: fit-content;
+  }
+}
+
+@position-try --tour-below-right {
+  top: anchor(bottom);
+  left: auto;
+  right: anchor(right);
+  margin: 12px 0 0 0;
+}
+@position-try --tour-above {
+  top: auto;
+  bottom: anchor(top);
+  left: anchor(left);
+  margin: 0 0 12px 0;
+}
+@position-try --tour-above-right {
+  top: auto;
+  bottom: anchor(top);
+  left: auto;
+  right: anchor(right);
+  margin: 0 0 12px 0;
+}
+@position-try --tour-right {
+  top: anchor(top);
+  left: anchor(right);
+  right: auto;
+  bottom: auto;
+  margin: 0 0 0 12px;
+}
+@position-try --tour-left {
+  top: anchor(top);
+  right: anchor(left);
+  left: auto;
+  bottom: auto;
+  margin: 0 12px 0 0;
+}
+
+.tour-tooltip-title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+}
+
+.tour-tooltip-desc {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Visually hidden, but still read by screen readers - same "clip"
+   technique as .onboarding-step-count/.tab-input. */
+.tour-step-count {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.tour-tooltip-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--spacing-unit) * 1.5);
+}
+
+.tour-skip {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  min-height: var(--target-size-min);
+  padding: 0 calc(var(--spacing-unit) * 1);
+  transition: color var(--transition-speed);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--text-main);
+  }
+}
+
+/* Progress dots - the same idiom as .carousel-dots/.onboarding-dots,
+   re-declared locally so this file stays independently omittable. */
+.tour-dots {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+}
+
+.tour-dot {
+  width: 6px;
+  height: 6px;
+  min-height: 6px !important; /* Overrides the global button min-height from _base.scss */
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--border-color);
+  cursor: pointer;
+  position: relative;
+  flex: 0 0 auto;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
+  }
+
+  &.is-active {
+    background-color: var(--primary);
+    transform: scale(1.4);
+  }
+}
+
+.tour-nav {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1);
+}
+
+.tour-prev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), opacity var(--transition-speed);
+  position: relative;
+
+  /* Visual size (32px) stays - the invisible hit area is topped up to
+     --target-size-min (44px), the same idiom as .carousel-nav. */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--card-bg-subtle);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.tour-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 calc(var(--spacing-unit) * 2);
+  border-radius: 999px;
+  border: 1px solid var(--primary);
+  background-color: var(--primary);
+  color: var(--btn-text-light);
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+  }
+}

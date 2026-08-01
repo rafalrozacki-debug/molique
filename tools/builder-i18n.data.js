@@ -257,6 +257,10 @@ export const DESCRIPTIONS = {
     en: 'Navbar: base, dark-mode logo, variants (transparent / sticky / pill), and mobile offcanvas.',
     de: 'Navbar: Basis, Logo im Dark Mode, Varianten (transparent / sticky / Pille) und mobiles Offcanvas.',
   },
+  'onboarding-slides': {
+    en: 'Onboarding Slides: full-screen welcome slideshow (markup built by JS).',
+    de: 'Onboarding Slides: Vollbild-Willkommens-Slideshow (Markup wird per JS erzeugt).',
+  },
   pagination: {
     en: 'Pagination.',
     de: 'Pagination.',
@@ -280,6 +284,10 @@ export const DESCRIPTIONS = {
   'scroll-to-top': {
     en: 'Scroll to top: back-to-top button.',
     de: 'Scroll to Top: Nach-oben-Button.',
+  },
+  'spotlight-tour': {
+    en: 'Spotlight Tour: element-highlight coachmark sequence (markup built by JS).',
+    de: 'Spotlight Tour: Coachmark-Sequenz mit Element-Hervorhebung (Markup wird per JS erzeugt).',
   },
   'stat-tile': {
     en: 'Stat Tile: KPI card (icon, label, fixed-size number, optional trend delta). Pair with .card.',

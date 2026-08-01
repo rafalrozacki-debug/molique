@@ -1,0 +1,324 @@
+// molique - Onboarding Slides: full-screen welcome slideshow (markup built by JS).
+//
+// Independent module: can be omitted from a bundle with no compile errors.
+//
+// A native <dialog> instead of a manually controlled <div> - the same
+// reasoning as _lightbox.scss: showModal()/close() give us for free a
+// focus trap, focus restoration to the triggering element, closing on
+// Escape, and placement in the top layer (zero z-index wars). ::backdrop
+// + @starting-style is the same pattern already used there and in
+// _context-menu.scss.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   ONBOARDING SLIDES (Full-screen welcome dialog, native <dialog>)
+   ========================================= */
+dialog.onboarding-dialog {
+  /* Reset the <dialog> UA stylesheet (border, background, centering via
+     margin:auto, max-width/height constraints) - the rest is a normal
+     flex overlay. */
+  border: none;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--z-index-modal);
+  align-items: center;
+  justify-content: center;
+
+  /* IMPORTANT: display:none here must stay unconditional. Author rules
+     always beat user-agent rules regardless of selector specificity - if
+     "display: flex" were here (without :modal), it would ALWAYS win over
+     the browser's default "dialog:not([open]) { display:none }", even
+     while the dialog is closed. That's why flex is scoped exclusively to
+     &:modal (same documented gotcha as _lightbox.scss). */
+  display: none;
+  opacity: 0;
+  transition: opacity var(--transition-speed), overlay var(--transition-speed) allow-discrete,
+    display var(--transition-speed) allow-discrete;
+
+  &:modal {
+    display: flex;
+    opacity: 1;
+  }
+
+  @starting-style {
+    &:modal {
+      opacity: 0;
+    }
+  }
+
+  &::backdrop {
+    background: rgba(var(--backdrop-rgb), 0);
+    transition: background-color var(--transition-speed) allow-discrete;
+  }
+
+  &:modal::backdrop {
+    background: rgba(var(--backdrop-rgb), 0.85);
+  }
+
+  @starting-style {
+    &:modal::backdrop {
+      background: rgba(var(--backdrop-rgb), 0);
+    }
+  }
+}
+
+.onboarding-card {
+  width: 100%;
+  max-width: 440px;
+  margin: calc(var(--spacing-unit) * 2);
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(12px) scale(0.98);
+  transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+dialog.onboarding-dialog:modal .onboarding-card {
+  transform: translateY(0) scale(1);
+}
+
+/* Full-screen on small screens - a centered card with margins around it
+   reads as a small floating popup on a phone; full-screen matches how
+   native apps (and most real product onboarding flows) present a welcome
+   sequence. dvh, not vh, so mobile browser chrome showing/hiding doesn't
+   leave a gap or force a scrollbar. */
+@include mq(sm, max) {
+  dialog.onboarding-dialog {
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  .onboarding-card {
+    max-width: none;
+    width: 100dvw;
+    height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .onboarding-slide {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 4);
+  }
+}
+
+.onboarding-slide {
+  padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.onboarding-slide-media:empty {
+  display: none;
+}
+
+.onboarding-slide-icon {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.onboarding-slide-image {
+  display: block;
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: var(--border-radius);
+}
+
+.onboarding-slide-title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+}
+
+.onboarding-slide-desc {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Visually hidden, but still read by screen readers - the same "clip"
+   technique as .tab-input (_tabs.scss), not display:none, which would
+   also remove it from the accessibility tree. */
+.onboarding-step-count {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.onboarding-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+  border-top: 1px solid var(--border-color);
+}
+
+.onboarding-skip {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  min-height: var(--target-size-min);
+  padding: 0 calc(var(--spacing-unit) * 1);
+  transition: color var(--transition-speed);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--text-main);
+  }
+}
+
+/* Progress dots - the same idiom as .carousel-dots (_carousel.scss): a
+   10px visible circle, .is-active state, 24px gap between dots (WCAG
+   2.5.8), an invisible ::before hit-area bumped up to --target-size-min
+   (44px). Re-declared locally (not the literal .carousel-dot class) so
+   this file stays independently omittable from a bundle even when
+   carousel isn't included. */
+.onboarding-dots {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+.onboarding-dot {
+  width: 8px;
+  height: 8px;
+  min-height: 8px !important; /* Overrides the global button min-height from _base.scss */
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--border-color);
+  cursor: pointer;
+  position: relative;
+  flex: 0 0 auto;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
+  }
+
+  &.is-active {
+    background-color: var(--primary);
+    transform: scale(1.3);
+  }
+}
+
+.onboarding-nav {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+}
+
+.onboarding-prev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), opacity var(--transition-speed);
+  position: relative;
+
+  /* Visual size (36px) stays - the invisible hit area is topped up to
+     --target-size-min (44px), the same idiom as .carousel-nav. */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--target-size-min);
+    height: var(--target-size-min);
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--card-bg-subtle);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.onboarding-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--target-size-min);
+  padding: 0 calc(var(--spacing-unit) * 2.5);
+  border-radius: 999px;
+  border: 1px solid var(--primary);
+  background-color: var(--primary);
+  color: var(--btn-text-light);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.onboarding-dialog,
+  .onboarding-card {
+    transition: none;
+  }
+}

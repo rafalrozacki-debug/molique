@@ -73,21 +73,33 @@
      B2B TARGET SIZE ENFORCEMENT (WCAG 2.2)
      ========================================= */
 
-  /* 1. Default, compact size for desktop (mouse) */
-  button, 
-  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), 
-  select, 
+  /* 1. Default, compact size for desktop (mouse). Small pagination-dot
+     controls (.carousel-dot/.onboarding-dot/.tour-dot) are excluded:
+     they implement their OWN accessible hit area via an invisible
+     ::before bumped to --target-size-min, deliberately keeping the
+     VISUAL dot small (8-10px) - this rule would otherwise inflate them
+     to a tall pill regardless of that technique. */
+  button:not(.carousel-dot):not(.onboarding-dot):not(.tour-dot),
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+  select,
   textarea {
     min-height: 36px;
     padding-top: calc(var(--spacing-unit) * 0.5);
     padding-bottom: calc(var(--spacing-unit) * 0.5);
   }
 
-  /* 2. Enforces 44px ONLY on touch devices (mobile/tablet) */
+  /* 2. Enforces 44px ONLY on touch devices (mobile/tablet).
+     IMPORTANT: this is the rule that actually matters for the dot
+     exclusion above - @layer importance rules mean an EARLIER layer's
+     !important (this one, in `base`) always beats a LATER layer's
+     !important (e.g. .carousel-dot's own min-height override, in
+     `components`) regardless of selector specificity. Excluding the dot
+     classes HERE, at the source, is the only place that can actually
+     win - overriding it again downstream cannot. */
   @media (pointer: coarse) {
-    button, 
-    input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), 
-    select, 
+    button:not(.carousel-dot):not(.onboarding-dot):not(.tour-dot),
+    input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+    select,
     textarea,
     .form-switch-label,
     .form-pill {
