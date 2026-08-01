@@ -13,13 +13,22 @@
   display: inline-block;
   cursor: help;
   border-bottom: 1px dotted var(--text-muted);
+  /* The resting (pre-hover) slide-in offset, split into independent X/Y
+     custom properties rather than one hardcoded transform - this is what
+     lets .tooltip-element-bottom and .tooltip-element-end below override
+     ONE axis each without clobbering the other's offset (two plain
+     `transform` declarations of the same specificity can't merge, only
+     replace each other outright). */
+  --tooltip-tx: -50%;
+  --tooltip-ty-rest: 10px;
 }
 
-.tooltip-element::before, 
+.tooltip-element::before,
 .tooltip-element::after {
   position: absolute;
   opacity: 0;
   visibility: hidden;
+  transform: translate(var(--tooltip-tx), var(--tooltip-ty-rest));
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
   z-index: var(--z-index-tooltip);
   pointer-events: none;
@@ -30,7 +39,6 @@
   content: "";
   bottom: 100%;
   left: 50%;
-  transform: translate(-50%, 10px);
   border: 5px solid transparent;
   border-top-color: var(--dark);
   margin-bottom: -1px;
@@ -41,7 +49,6 @@
   content: attr(data-tooltip);
   bottom: 100%;
   left: 50%;
-  transform: translate(-50%, 10px);
   background-color: var(--dark);
   color: #fff;
   padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
@@ -53,9 +60,57 @@
   box-shadow: var(--shadow-sm);
 }
 
-.tooltip-element:hover::before, 
+.tooltip-element:hover::before,
 .tooltip-element:hover::after {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, 0);
+  /* Only the Y offset zeroes out on hover - X stays at whatever
+     --tooltip-tx is (centered by default, or 0 under .tooltip-element-end),
+     so this single rule works correctly for every modifier combination. */
+  transform: translate(var(--tooltip-tx), 0);
+}
+
+/* Modifier: opens the bubble BELOW the trigger instead of above - use
+   when the trigger sits near the top edge of a clipping ancestor
+   (overflow:hidden, e.g. .card-header inside .card), where the default
+   upward bubble would otherwise get cut off. */
+.tooltip-element-bottom {
+  --tooltip-ty-rest: -10px;
+}
+
+.tooltip-element-bottom::before {
+  bottom: auto;
+  top: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--dark);
+  margin-bottom: 0;
+  margin-top: -1px;
+}
+
+.tooltip-element-bottom::after {
+  bottom: auto;
+  top: 100%;
+  margin-bottom: 0;
+  margin-top: 9px;
+}
+
+/* Modifier: right-aligns the bubble to the trigger's right edge instead
+   of centering it horizontally - use when the trigger sits near the
+   right edge of a clipping ancestor, where a centered bubble would
+   overflow off that side (e.g. an info icon at the far right of a
+   .card-header). Composes cleanly with .tooltip-element-bottom for a
+   trigger sitting in a top-right corner, since each modifier only ever
+   touches its own axis (see the --tooltip-tx/-ty-rest split above). */
+.tooltip-element-end {
+  --tooltip-tx: 0;
+}
+
+.tooltip-element-end::before {
+  left: auto;
+  right: 8px;
+}
+
+.tooltip-element-end::after {
+  left: auto;
+  right: 0;
 }

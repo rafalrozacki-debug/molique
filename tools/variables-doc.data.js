@@ -229,6 +229,9 @@ export const COMPONENT = {
 
   '--position': ['Before/After', 'internal', 'Pozycja suwaka w procentach. Ustawiana przez <code>js/modules/molique-before-after.js</code>.'],
 
+  '--tooltip-tx':     ['Tooltips', 'internal', 'Poziome przesunięcie dymku (X w <code>translate()</code>). Domyślnie <code>-50%</code> (wyśrodkowany na wyzwalaczu), <code>.tooltip-element-end</code> ustawia <code>0</code>.'],
+  '--tooltip-ty-rest': ['Tooltips', 'internal', 'Pionowe przesunięcie spoczynkowe (przed hover). Rozdzielone od <code>--tooltip-tx</code> na osobną zmienną, żeby <code>.tooltip-element-bottom</code> i <code>.tooltip-element-end</code> mogły nadpisywać każdy swoją oś niezależnie, bez wzajemnego kasowania się w pojedynczej deklaracji <code>transform</code>.'],
+
   '--blobs-deep-bg':    ['Animacje', 'api', 'Tło wariantu <code>.bg-blobs-deep</code>. Literalna wartość, bo ten wariant jest ciemny <strong>zawsze</strong> - także w motywie jasnym, żeby biały tekst był na nim czytelny bez sprawdzania motywu.'],
   '--blob-1':           ['Animacje', 'api', 'Kolor pierwszej plamy w <code>.bg-blobs</code> (lewy górny róg). Domyślnie primary z kryciem 50%.'],
   '--blob-2':           ['Animacje', 'api', 'Kolor drugiej plamy (prawy dolny róg). Domyślnie info z kryciem 40%.'],
