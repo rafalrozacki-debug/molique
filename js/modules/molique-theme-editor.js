@@ -29,6 +29,12 @@ const TE_STRINGS = {
   dark: { pl: 'Ciemny', en: 'Dark', de: 'Dunkel' },
   light: { pl: 'Jasny', en: 'Light', de: 'Hell' },
   presetApplied: { pl: 'Zastosowano paletę', en: 'Palette applied', de: 'Palette angewendet' },
+  contrastTitle: { pl: 'Kontrast', en: 'Contrast', de: 'Kontrast' },
+  contrastAAA: { pl: 'AAA', en: 'AAA', de: 'AAA' },
+  contrastAA: { pl: 'AA', en: 'AA', de: 'AA' },
+  contrastFail: { pl: 'Nie przechodzi', en: 'Fails', de: 'Nicht bestanden' },
+  contrastOk: { pl: 'OK', en: 'OK', de: 'OK' },
+  contrastTooLow: { pl: 'Za słabe', en: 'Too weak', de: 'Zu schwach' },
 };
 const teT = (key) => TE_STRINGS[key][TE_LANG] || TE_STRINGS[key].en;
 
@@ -199,6 +205,7 @@ function initThemeEditor() {
 
     applyOverrides();
     updateOutput(control);
+    updateContrastIndicators();
     save();
   }
 
@@ -226,12 +233,64 @@ function initThemeEditor() {
       }
       updateOutput(control);
     });
+    updateContrastIndicators();
   }
 
   function updateOutput(control) {
     if (control.dataset.teType !== 'range') return;
     const out = control.parentElement.querySelector('.te-output');
     if (out) out.textContent = control.value + (control.dataset.teUnit || '');
+  }
+
+  /* WCAG contrast indicators (.te-contrast, attached to real rendered
+     preview elements - buttons, badges, alerts, table, sidebar, code -
+     so the number always sits next to the exact thing it describes).
+     Reads the CURRENT computed value (works for derived variables like
+     --semantic-fg too, and stays correct across theme toggles for free),
+     so it's recomputed from scratch rather than cached.
+
+     Two ways to get the background:
+      - data-te-contrast-bg="--var"      - the variable IS the color.
+      - data-te-contrast-bg-tint="--x-rgb" - alerts use a translucent
+        10% tint (see _alerts.scss: rgba(var(--x-rgb), 0.1)) over the
+        card surface, not a solid variable - alphaOverSurface()
+        reproduces that exact composite instead of measuring the
+        (misleadingly transparent) raw color. */
+  function updateContrastIndicators() {
+    const cs = getComputedStyle(html);
+    root.querySelectorAll('.te-contrast').forEach((el) => {
+      const fg = normalizeHex(cs.getPropertyValue(el.dataset.teContrastFg).trim());
+      const bg = el.dataset.teContrastBgTint
+        ? alphaOverSurface(cs, el.dataset.teContrastBgTint, 0.1)
+        : normalizeHex(cs.getPropertyValue(el.dataset.teContrastBg).trim());
+      el.classList.remove('status-done', 'status-pending', 'status-danger');
+      if (!fg || !bg) {
+        el.textContent = '';
+        el.removeAttribute('title');
+        return;
+      }
+      const ratio = contrastRatio(fg, bg);
+      const ratioText = ratio.toFixed(1) + ':1';
+      let verdictClass;
+      let verdictLabel;
+      if (el.dataset.teContrastType === 'ui') {
+        verdictClass = ratio >= 3 ? 'status-done' : 'status-danger';
+        verdictLabel = ratio >= 3 ? teT('contrastOk') : teT('contrastTooLow');
+      } else if (ratio >= 7) {
+        verdictClass = 'status-done';
+        verdictLabel = teT('contrastAAA');
+      } else if (ratio >= 4.5) {
+        verdictClass = 'status-pending';
+        verdictLabel = teT('contrastAA');
+      } else {
+        verdictClass = 'status-danger';
+        verdictLabel = teT('contrastFail');
+      }
+      const label = el.dataset.teContrastLabel;
+      el.classList.add(verdictClass);
+      el.textContent = (label ? label + ' ' : '') + ratioText + ' ' + verdictLabel;
+      el.title = (label ? label + ' - ' : '') + teT('contrastTitle') + ' ' + ratioText + ' - ' + verdictLabel;
+    });
   }
 
   function updateModeHint() {
@@ -362,6 +421,54 @@ function darken(hex, amount) {
   const g = Math.round(((int >> 8) & 255) * f);
   const b = Math.round((int & 255) * f);
   return '#' + [r, g, b].map((n) => n.toString(16).padStart(2, '0')).join('');
+}
+
+/* Parses a "r, g, b" custom-property string (the format written by
+   hexToRgb() above) into numeric channels. */
+function parseRgbTriplet(str) {
+  const parts = (str || '').split(',').map((s) => parseFloat(s.trim()));
+  if (parts.length !== 3 || parts.some((n) => isNaN(n))) return null;
+  return { r: parts[0], g: parts[1], b: parts[2] };
+}
+
+function rgbToHex(rgb) {
+  const c = (n) => Math.round(Math.min(255, Math.max(0, n))).toString(16).padStart(2, '0');
+  return '#' + c(rgb.r) + c(rgb.g) + c(rgb.b);
+}
+
+/* Composites a translucent color (given as its "-rgb" custom property,
+   e.g. --danger-rgb) at the given alpha over the current --bg-surface -
+   reproducing what rgba(var(--x-rgb), alpha) on a card actually looks
+   like (used for .alert-* backgrounds, see _alerts.scss). */
+function alphaOverSurface(computedStyle, rgbVar, alpha) {
+  const top = parseRgbTriplet(computedStyle.getPropertyValue(rgbVar));
+  const base = parseRgbTriplet(computedStyle.getPropertyValue('--bg-surface-rgb'));
+  if (!top || !base) return null;
+  return rgbToHex({
+    r: top.r * alpha + base.r * (1 - alpha),
+    g: top.g * alpha + base.g * (1 - alpha),
+    b: top.b * alpha + base.b * (1 - alpha),
+  });
+}
+
+/* WCAG 2.x relative luminance + contrast ratio ((L1+0.05)/(L2+0.05)). */
+function relativeLuminance(hex) {
+  const h = normalizeHex(hex);
+  if (!h) return 0;
+  const int = parseInt(h.slice(1), 16);
+  const channels = [(int >> 16) & 255, (int >> 8) & 255, int & 255].map((c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  });
+  return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+}
+
+function contrastRatio(hexA, hexB) {
+  const l1 = relativeLuminance(hexA);
+  const l2 = relativeLuminance(hexB);
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
 }
 
 function copyText(text) {

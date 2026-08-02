@@ -137,6 +137,22 @@
   }
 }
 
+/* WCAG contrast indicator - attached directly to real rendered preview
+   elements (buttons, badges, alerts, table, sidebar, code block) on the
+   right, next to whatever it's actually measuring, not to the abstract
+   color pickers on the left. Reuses .status-dot for the colored marker;
+   this file loads in the `modules` layer, which is declared AFTER
+   `components` (where .status-dot lives) in the core bundle's
+   @layer order, so it wins without needing extra selector weight. */
+.te-contrast {
+  display: flex;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+
+  &:empty { display: none; }
+}
+
 /* Color control: a native input wrapped in a round swatch */
 .te-color {
   inline-size: 40px;
@@ -195,6 +211,14 @@
   align-items: start;
   max-width: 1100px;
   margin: 0 auto;
+}
+
+/* Sits directly on --bg-body (unlike the cards below it, on purpose - it
+   demonstrates that exact pairing), same width/centering as the card
+   grid below it. */
+.te-preview-intro {
+  max-width: 1100px;
+  margin: 0 auto calc(var(--spacing-unit) * 3);
 }
 
 .te-swatches {

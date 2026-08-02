@@ -257,6 +257,12 @@
 
       <!-- ---------- VORSCHAU ---------- -->
       <main class="te-preview">
+        <div class="te-preview-intro">
+          <p class="d-flex align-items-center gap-2 m-0 text-2">
+            Text auf Seitenhintergrund
+            <span class="te-contrast status-dot" data-te-contrast-fg="--dark" data-te-contrast-bg="--bg-body" data-te-contrast-type="text"></span>
+          </p>
+        </div>
         <div class="te-preview-grid">
           <!-- Farben -->
           <div class="card">
@@ -273,43 +279,98 @@
             </div>
           </div>
 
-          <!-- Buttons -->
+          <!-- Buttons: eine Zeile pro Button (gleiches Muster wie bei
+               Alerts) - der Kontrastindikator sitzt immer rechts, keine
+               Zeile "springt" in der Höhe gegenüber ihren Nachbarn. -->
           <div class="card">
             <div class="card-header fw-bold">Buttons</div>
-            <div class="card-body d-flex flex-wrap gap-2">
-              <button class="btn btn-primary">Primary</button>
-              <button class="btn btn-success">Success</button>
-              <button class="btn btn-danger">Danger</button>
+            <div class="card-body d-flex flex-column gap-2">
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <button class="btn btn-primary">Primary</button>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--btn-text-light" data-te-contrast-bg="--primary" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <button class="btn btn-success">Success</button>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--semantic-fg" data-te-contrast-bg="--success" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <button class="btn btn-danger">Danger</button>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--semantic-fg" data-te-contrast-bg="--danger" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <button class="btn btn-light">Light</button>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--text-main" data-te-contrast-bg="--light" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <button class="btn btn-secondary btn-sm">Klein</button>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--btn-text-light" data-te-contrast-bg="--secondary" data-te-contrast-type="text"></span>
+              </div>
               <button class="btn btn-outline-primary">Outline</button>
-              <button class="btn btn-secondary btn-sm">Klein</button>
             </div>
           </div>
 
-          <!-- Badges & Status -->
+          <!-- Badges & Status: dasselbe Zeilenmuster wie bei Buttons - alle
+               5 Farben bekommen jetzt einen Indikator, keine Zeile ist
+               "kürzer" als ihre Nachbarin. -->
           <div class="card">
             <div class="card-header fw-bold">Badges und Status</div>
-            <div class="card-body d-flex flex-wrap align-items-center gap-2">
-              <span class="badge badge-primary">Primary</span>
-              <span class="badge badge-success">Success</span>
-              <span class="badge badge-danger">Danger</span>
-              <span class="badge bg-warning-subtle">Subtle</span>
-              <span class="status-dot status-success status-ping"></span>
-              <span class="status-dot status-danger"></span>
+            <div class="card-body d-flex flex-column gap-2">
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <span class="badge badge-primary">Primary</span>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--btn-text-light" data-te-contrast-bg="--primary" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <span class="badge badge-success">Success</span>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--semantic-fg" data-te-contrast-bg="--success" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <span class="badge badge-danger">Danger</span>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--semantic-fg" data-te-contrast-bg="--danger" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <span class="badge badge-warning">Warning</span>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--semantic-fg" data-te-contrast-bg="--warning" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <span class="badge badge-info">Info</span>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--semantic-fg" data-te-contrast-bg="--info" data-te-contrast-type="text"></span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-warning-subtle">Subtle</span>
+                <span class="status-dot status-success status-ping"></span>
+                <span class="status-dot status-danger"></span>
+              </div>
             </div>
           </div>
 
-          <!-- Alerts -->
+          <!-- Alerts: fg ist immer --text-main (nicht --semantic-fg wie
+               bei Buttons/Badges), und der Hintergrund ist eine 10%-
+               Tönung, gemischt mit --bg-surface - daher
+               data-te-contrast-bg-tint statt eines einfachen -bg (siehe
+               alphaOverSurface() im JS). -->
           <div class="card">
             <div class="card-header fw-bold">Alerts</div>
             <div class="card-body d-flex flex-column gap-2">
-              <div class="alert alert-success m-0">Änderungen gespeichert.</div>
-              <div class="alert alert-danger m-0">Etwas ist schiefgelaufen.</div>
+              <div class="alert alert-success m-0 d-flex align-items-center justify-content-between gap-2">
+                Änderungen gespeichert.
+                <span class="te-contrast status-dot" data-te-contrast-fg="--text-main" data-te-contrast-bg-tint="--success-rgb" data-te-contrast-type="text"></span>
+              </div>
+              <div class="alert alert-danger m-0 d-flex align-items-center justify-content-between gap-2">
+                Etwas ist schiefgelaufen.
+                <span class="te-contrast status-dot" data-te-contrast-fg="--text-main" data-te-contrast-bg-tint="--danger-rgb" data-te-contrast-type="text"></span>
+              </div>
             </div>
           </div>
 
-          <!-- Formular -->
+          <!-- Formular: .input/label teilen sich dasselbe Paar wie "Text
+               auf einer Karte" oben (--dark auf --bg-surface, siehe
+               _form-base.scss/_form-switch.scss) - der Indikator im
+               Header bestätigt das an einem konkreten Formularfeld. -->
           <div class="card">
-            <div class="card-header fw-bold">Formular</div>
+            <div class="card-header fw-bold d-flex align-items-center justify-content-between gap-2">
+              Formular
+              <span class="te-contrast status-dot" data-te-contrast-fg="--dark" data-te-contrast-bg="--bg-surface" data-te-contrast-type="text" data-te-contrast-label="Text"></span>
+            </div>
             <div class="card-body d-flex flex-column gap-3">
               <div class="form-floating">
                 <input type="text" class="input" id="tePreviewInput" placeholder=" " />
@@ -325,7 +386,10 @@
 
           <!-- Fortschritt -->
           <div class="card">
-            <div class="card-header fw-bold">Fortschritt</div>
+            <div class="card-header fw-bold d-flex align-items-center justify-content-between gap-2">
+              Fortschritt
+              <span class="te-contrast status-dot" data-te-contrast-fg="--dark" data-te-contrast-bg="--bg-surface" data-te-contrast-type="text" data-te-contrast-label="Text auf einer Karte"></span>
+            </div>
             <div class="card-body d-flex flex-column gap-3">
               <div class="progress">
                 <div class="progress-bar" style="width: 70%"></div>
@@ -339,9 +403,17 @@
             </div>
           </div>
 
-          <!-- Tabelle -->
+          <!-- Tabelle: der Header erhält zwei Indikatoren - Textlesbarkeit
+               auf der Kartenoberfläche und Sichtbarkeit der Rahmen (Typ
+               "ui", Schwelle 3:1, keine AAA-Stufe). -->
           <div class="card">
-            <div class="card-header fw-bold">Tabelle</div>
+            <div class="card-header fw-bold d-flex align-items-center justify-content-between gap-2">
+              Tabelle
+              <span class="d-flex gap-2">
+                <span class="te-contrast status-dot" data-te-contrast-fg="--dark" data-te-contrast-bg="--bg-surface" data-te-contrast-type="text" data-te-contrast-label="Text"></span>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--border-color" data-te-contrast-bg="--bg-surface" data-te-contrast-type="ui" data-te-contrast-label="Rahmen"></span>
+              </span>
+            </div>
             <div class="card-body">
               <div class="table-wrapper">
                 <table class="table table-sm table-hover m-0">
@@ -353,6 +425,25 @@
                     <tr><td>Briko</td><td><span class="badge bg-warning-subtle">Ausstehend</span></td></tr>
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar: dieselbe fertige Mini-Vorschau wie im
+               Steuerungsbereich links (.te-sidebar-preview) - hier
+               zusätzlich mit einem echten Kontrastindikator. -->
+          <div class="card">
+            <div class="card-header fw-bold">Sidebar</div>
+            <div class="card-body">
+              <div class="te-sidebar-preview">
+                <span class="te-sb-item is-active d-flex align-items-center justify-content-between gap-2">
+                  Dashboard
+                  <span class="te-contrast status-dot" data-te-contrast-fg="--sidebar-text-active" data-te-contrast-bg="--sidebar-bg" data-te-contrast-type="text"></span>
+                </span>
+                <span class="te-sb-item d-flex align-items-center justify-content-between gap-2">
+                  Kunden
+                  <span class="te-contrast status-dot" data-te-contrast-fg="--sidebar-text" data-te-contrast-bg="--sidebar-bg" data-te-contrast-type="text"></span>
+                </span>
               </div>
             </div>
           </div>
@@ -379,6 +470,11 @@
                 <pre><code>.beispiel {
   color: var(--code-text);
 }</code></pre>
+              </div>
+
+              <div class="d-flex align-items-center gap-2">
+                <span class="text-2 text-muted">Text im Code</span>
+                <span class="te-contrast status-dot" data-te-contrast-fg="--code-text" data-te-contrast-bg="--code-bg" data-te-contrast-type="text"></span>
               </div>
 
               <p class="text-2 text-muted m-0">
