@@ -169,6 +169,7 @@ export const GLOBAL = {
 export const COMPONENT = {
   '--btn-border-width':      ['Przyciski', 'api', 'Grubość ramki przycisków. Podnieś dla wariantów <code>.btn-outline-*</code>.'],
   '--btn-3d-shadow':         ['Przyciski', 'internal', 'Kolor „podstawy” przycisku 3D. Ustawiany per wariant koloru.'],
+  '--btn-icon-size':         ['Przyciski', 'api', 'Szerokość i wysokość przycisku <code>.btn-icon</code> (kwadrat/koło). Domyślnie 36px; <code>.btn-icon-sm</code>/<code>.btn-icon-lg</code> ją nadpisują - można też ustawić własną wartość inline.'],
 
   '--input-border-width':     ['Formularze', 'api', 'Grubość ramki pól formularza.'],
   '--input-padding-y':        ['Formularze', 'internal', 'Pionowy padding inputa. Warianty <code>-sm</code>/<code>-lg</code> nadpisują go same.'],

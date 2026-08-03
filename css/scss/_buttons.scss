@@ -508,15 +508,47 @@
       font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      line-height: 1 !important; 
+      line-height: 1 !important;
       text-align: center;
-      
+
       padding: 0 !important;
       white-space: normal;
       word-break: break-word;
       width: 100%;
     }
   }
+
+  /* Icon-only button (square by default, add .rounded-circle for round) -
+     compose with a color class (or bare .btn), e.g. "btn-outline-success
+     btn-icon". Fixed width AND height via --btn-icon-size instead of
+     padding, so there's no padding to juggle to get a perfect square/
+     circle. Excluded from the shared min-height rule in _base.scss (like
+     .carousel-dot/.onboarding-dot/.tour-dot) and manages its own touch
+     target instead - growing BOTH dimensions together on touch, since
+     letting the shared rule bump only min-height would turn it into a
+     tall rectangle instead of a bigger square. */
+  .btn-icon {
+    --btn-icon-size: 36px;
+
+    width: var(--btn-icon-size);
+    height: var(--btn-icon-size);
+    min-height: var(--btn-icon-size);
+    padding: 0;
+    gap: 0;
+    flex-shrink: 0;
+
+    i, svg {
+      font-size: 1.1em;
+      flex-shrink: 0;
+    }
+
+    @media (pointer: coarse) {
+      --btn-icon-size: var(--target-size-min, 44px) !important;
+    }
+  }
+
+  .btn-icon-sm { --btn-icon-size: 28px; }
+  .btn-icon-lg { --btn-icon-size: 48px; }
 
   /* =========================================
      DEFAULT BUTTON HOVER (opt-in)
