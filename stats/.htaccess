@@ -1,0 +1,13 @@
+# Molique Stats — ochrona plików wrażliwych przed bezpośrednim dostępem z sieci.
+# Publiczne pozostają tylko: collect.php, dashboard.php, molique-stats.js
+
+<FilesMatch "(?i)(stats-config.*\.php|bootstrap\.php|\.(sql|md|sample|dist|mmdb))$">
+    Require all denied
+</FilesMatch>
+
+# Na wielu hostingach PHP jako CGI/FastCGI Apache domyślnie NIE przekazuje
+# nagłówka Authorization do PHP (PHP_AUTH_USER w dashboard.php zostaje puste
+# mimo poprawnego logowania). Dyrektywa rdzenia Apache (od 2.4.13) - jeśli
+# hosting ma starszy Apache, dashboard.php ma własny fallback (ręczny odczyt
+# HTTP_AUTHORIZATION), więc panel zadziała tak czy inaczej.
+CGIPassAuth On
