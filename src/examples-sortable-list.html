@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Sortowalna lista - molique Przykłady"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
+  </head>
+  <body>
+<include src="partials/navbar.html"></include>
+    <div class="admin-layout">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/examples-sidebar.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Sortowalna lista</h1>
+            <p class="text-6 text-muted">
+              Zmiana kolejności elementów dwiema równorzędnymi drogami:
+              przeciąganiem uchwytu (Pointer Events - działa myszką,
+              dotykiem i piórem) oraz przyciskami góra/dół, jedyną ścieżką
+              dla klawiatury i czytników ekranu.
+            </p>
+          </div>
+
+          <!-- Kolejność linków w menu nawigacji -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Kolejność linków w menu nawigacji</h2>
+            <p class="text-muted mb-4">
+              Typowy przypadek w adminie: klient sam ustala kolejność
+              pozycji w menu strony. Sama klasa <code>data-sortable</code>
+              na kontenerze wystarczy -
+              <code>js/modules/molique-sortable.js</code> dociąga się sam.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 justify-content-center">
+                <ul class="sortable-list" data-sortable style="max-width: 420px; width: 100%">
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Strona główna</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">O nas</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Usługi</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Kontakt</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;ul class="sortable-list" data-sortable&gt;
+  &lt;li class="sortable-item"&gt;
+    &lt;button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność"&gt;
+      &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-dots-six-vertical"&gt;&lt;/use&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;div class="sortable-content"&gt;Strona główna&lt;/div&gt;
+    &lt;div class="sortable-controls btn-action-group"&gt;
+      &lt;button class="btn-action" data-sortable-up aria-label="Przenieś w górę"&gt;
+        &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-arrow-up"&gt;&lt;/use&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class="btn-action" data-sortable-down aria-label="Przenieś w dół"&gt;
+        &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-arrow-down"&gt;&lt;/use&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;!-- kolejne .sortable-item --&gt;
+&lt;/ul&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Kolejność razem z Data Row Compact -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Z listą plików (<code>.data-row-compact</code>)</h2>
+            <p class="text-muted mb-4">
+              Treść pozycji jest dowolna - tutaj opakowana
+              <a href="examples-data-rows">wariantem kompaktowym Data Row</a>,
+              z ikoną i szczegółami.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 justify-content-center">
+                <ul class="sortable-list" data-sortable style="max-width: 460px; width: 100%">
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">
+                      <div class="data-row-compact p-0">
+                        <div class="row-icon"><span class="icon-square"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-file-text"></use></svg></span></div>
+                        <div class="row-content">
+                          <div class="row-title">Umowa ramowa.pdf</div>
+                          <div class="row-details">2,4 MB</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">
+                      <div class="data-row-compact p-0">
+                        <div class="row-icon"><span class="icon-square"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-file-text"></use></svg></span></div>
+                        <div class="row-content">
+                          <div class="row-title">Cennik 2026.xlsx</div>
+                          <div class="row-details">890 KB</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">
+                      <div class="data-row-compact p-0">
+                        <div class="row-icon"><span class="icon-square"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-file-text"></use></svg></span></div>
+                        <div class="row-content">
+                          <div class="row-title">Prezentacja.pdf</div>
+                          <div class="row-details">5,1 MB</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <div class="p-4 bg-surface border rounded-2 mb-4">
+            <h3 class="fw-bold text-5 mb-2">Zero configu, zero backendu</h3>
+            <p class="text-4 text-muted m-0">
+              Po każdej zmianie (przeciąganiem albo przyciskiem) kontener
+              emituje <code>CustomEvent('sortable:update', &#123; detail:
+              &#123; order, items &#125; &#125;)</code> - zapis nowej
+              kolejności do bazy to zadanie Twojej aplikacji. Pełna
+              referencja klas, atrybutów i zdarzenia w
+              <a href="docs-admin#7-sortowalna-lista">dokumentacji
+              Admina</a>.
+            </p>
+          </div>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-data-rows" class="btn btn-secondary"
+              ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-left"></use></svg> Wstecz: Data Rows</a
+            >
+            <a
+              href="examples-modals"
+              class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Modale <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-right"></use></svg></a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js?v={{ __version }}"></script>
+  </body>
+</html>

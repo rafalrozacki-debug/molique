@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Sortierbare Liste - molique Beispiele"}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout">
+      <!-- SEITENLEISTE -->
+      <include src="partials/examples-sidebar.de.html"></include>
+
+      <!-- HAUPTINHALT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Sortierbare Liste</h1>
+            <p class="text-6 text-muted">
+              Reihenfolge über zwei gleichwertige, parallele Wege ändern:
+              per Drag am Griff (Pointer Events - funktioniert mit Maus,
+              Touch und Stift) und über Auf/Ab-Buttons, dem einzigen Weg
+              für Tastatur- und Screenreader-Nutzer.
+            </p>
+          </div>
+
+          <!-- Reihenfolge im Navigationsmenü -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Reihenfolge im Navigationsmenü</h2>
+            <p class="text-muted mb-4">
+              Ein typisches Admin-Szenario: der Kunde legt die Reihenfolge
+              seines Seitenmenüs selbst fest. Die Klasse
+              <code>data-sortable</code> am Container reicht -
+              <code>js/modules/molique-sortable.js</code> lädt sich selbst.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 justify-content-center">
+                <ul class="sortable-list" data-sortable style="max-width: 420px; width: 100%">
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Startseite</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Nach oben verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Nach unten verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Über uns</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Nach oben verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Nach unten verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Leistungen</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Nach oben verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Nach unten verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Kontakt</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Nach oben verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Nach unten verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;ul class="sortable-list" data-sortable&gt;
+  &lt;li class="sortable-item"&gt;
+    &lt;button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern"&gt;
+      &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-dots-six-vertical"&gt;&lt;/use&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;div class="sortable-content"&gt;Startseite&lt;/div&gt;
+    &lt;div class="sortable-controls btn-action-group"&gt;
+      &lt;button class="btn-action" data-sortable-up aria-label="Nach oben verschieben"&gt;
+        &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-arrow-up"&gt;&lt;/use&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class="btn-action" data-sortable-down aria-label="Nach unten verschieben"&gt;
+        &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-arrow-down"&gt;&lt;/use&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;!-- weitere .sortable-item --&gt;
+&lt;/ul&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Mit Data Row Compact -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Mit einer Dateiliste (<code>.data-row-compact</code>)</h2>
+            <p class="text-muted mb-4">
+              Der Inhalt einer Position ist beliebig - hier eingepackt in
+              die <a href="examples-data-rows.de">kompakte Data-Row-Variante</a>,
+              mit Icon und Details.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 justify-content-center">
+                <ul class="sortable-list" data-sortable style="max-width: 460px; width: 100%">
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">
+                      <div class="data-row-compact p-0">
+                        <div class="row-icon"><span class="icon-square"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-file-text"></use></svg></span></div>
+                        <div class="row-content">
+                          <div class="row-title">Rahmenvertrag.pdf</div>
+                          <div class="row-details">2,4 MB</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Nach oben verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Nach unten verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">
+                      <div class="data-row-compact p-0">
+                        <div class="row-icon"><span class="icon-square"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-file-text"></use></svg></span></div>
+                        <div class="row-content">
+                          <div class="row-title">Preisliste 2026.xlsx</div>
+                          <div class="row-details">890 KB</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Nach oben verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Nach unten verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Ziehen, um die Reihenfolge zu ändern">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">
+                      <div class="data-row-compact p-0">
+                        <div class="row-icon"><span class="icon-square"><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-file-text"></use></svg></span></div>
+                        <div class="row-content">
+                          <div class="row-title">Präsentation.pdf</div>
+                          <div class="row-details">5,1 MB</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Nach oben verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Nach unten verschieben">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <div class="p-4 bg-surface border rounded-2 mb-4">
+            <h3 class="fw-bold text-5 mb-2">Keine Konfiguration, kein Backend</h3>
+            <p class="text-4 text-muted m-0">
+              Nach jeder Änderung (Drag oder Button) sendet der Container
+              <code>CustomEvent('sortable:update', &#123; detail: &#123;
+              order, items &#125; &#125;)</code> - die neue Reihenfolge zu
+              speichern ist Aufgabe Ihrer App. Vollständige Klassen-/
+              Attribut-/Ereignis-Referenz in der
+              <a href="docs-admin.de#7-sortierbare-liste">Admin-Dokumentation</a>.
+            </p>
+          </div>
+
+          <!-- Navigation unten -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-data-rows.de" class="btn btn-secondary"
+              ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-left"></use></svg> Zurück: Data Rows</a
+            >
+            <a
+              href="examples-modals.de"
+              class="btn btn-primary fw-bold hover-spring"
+              >Nächster Schritt: Modale <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-right"></use></svg></a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js?v={{ __version }}"></script>
+  </body>
+</html>
