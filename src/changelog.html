@@ -47,6 +47,53 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.27 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.27</div>
+              <div class="text-muted text-4">Sierpień 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Sortowalna lista: element uciekał kursorowi, strzałki
+                  na krawędziach
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Przeciągany element odjeżdżał od kursora po każdym
+                    "przeskoczeniu" sąsiada - <code>translateY</code>
+                    liczył się jako suma <code>movementY</code>, a ta
+                    suma nie wiedziała, że zamiana miejsc w DOM-ie
+                    (<code>insertBefore</code>) zmienia naturalną pozycję
+                    elementu, więc offset narastał z każdą zamianą.
+                    Teraz <code>translateY</code> liczy się od nowa przy
+                    każdym ruchu wskaźnika, wprost z aktualnej naturalnej
+                    pozycji elementu - punkt złapania zostaje dokładnie
+                    pod kursorem niezależnie od tego, ile razy element
+                    zmienił miejsce w DOM-ie.
+                  </li>
+                  <li>
+                    Pierwsza pozycja listy chowa teraz strzałkę „w górę",
+                    a ostatnia strzałkę „w dół" (zamiast tylko wyszarzać
+                    je jako <code>disabled</code>) -
+                    <code>visibility: hidden</code>, żeby drugi przycisk
+                    w parze nie przeskakiwał w bok.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.26 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

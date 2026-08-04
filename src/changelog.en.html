@@ -48,6 +48,55 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.27 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.27</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Sortable List: item drifted from the cursor, edge
+                  arrows
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    The dragged item drifted away from the cursor every
+                    time it "hopped over" a neighbor -
+                    <code>translateY</code> was a running sum of
+                    <code>movementY</code>, and that sum had no way of
+                    knowing that swapping DOM order
+                    (<code>insertBefore</code>) changes the item's
+                    natural position, so the offset kept compounding
+                    with every swap. <code>translateY</code> is now
+                    recomputed from scratch on every pointer move,
+                    straight from the item's current natural position -
+                    the grabbed point stays exactly under the cursor no
+                    matter how many times the item has changed places in
+                    the DOM.
+                  </li>
+                  <li>
+                    The first list item now hides its "up" arrow, and
+                    the last item hides its "down" arrow (instead of
+                    just graying them out as <code>disabled</code>) -
+                    <code>visibility: hidden</code>, so the other button
+                    in the pair doesn't shift sideways.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.26 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

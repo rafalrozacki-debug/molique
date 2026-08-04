@@ -186,9 +186,14 @@ function initSortable(containerOrSelector) {
     if (!item) return;
 
     handle.setPointerCapture(e.pointerId);
+    const itemRect = item.getBoundingClientRect();
     drag = {
       pointerId: e.pointerId,
       item,
+      // Where within the item (vertically) the pointer grabbed it - kept
+      // constant for the whole drag so that exact point stays glued to
+      // the pointer, regardless of where in the DOM the item ends up.
+      grabOffsetY: e.clientY - itemRect.top,
       translateY: 0,
       originalOrder: items(),
     };
@@ -203,8 +208,6 @@ function initSortable(containerOrSelector) {
     'pointermove',
     (e) => {
       if (!drag || e.pointerId !== drag.pointerId) return;
-      drag.translateY += e.movementY;
-      drag.item.style.transform = `translateY(${drag.translateY}px)`;
 
       const list = items();
       const firstRects = new Map();
@@ -219,6 +222,20 @@ function initSortable(containerOrSelector) {
         else container.insertBefore(drag.item, afterElement);
         firstRects.forEach((rect, el) => flipFrom(el, rect));
       }
+
+      // Recomputed FRESH every move, from the item's CURRENT natural
+      // (untransformed) position - never accumulated. Accumulating
+      // e.movementY drifted further away from the cursor on every swap
+      // above: insertBefore/appendChild change the item's natural
+      // position in the flow, but an accumulator has no way to know
+      // that happened, so the old transform kept adding on top of an
+      // already-shifted layout instead of being re-based on it.
+      const prevTransform = drag.item.style.transform;
+      drag.item.style.transform = 'none';
+      const naturalTop = drag.item.getBoundingClientRect().top;
+      drag.item.style.transform = prevTransform;
+      drag.translateY = e.clientY - drag.grabOffsetY - naturalTop;
+      drag.item.style.transform = `translateY(${drag.translateY}px)`;
     },
     { passive: true }
   );

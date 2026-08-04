@@ -91,6 +91,17 @@
 
 .sortable-controls {
   flex-shrink: 0;
+
+  /* The first item has nowhere to go "up", the last nowhere to go
+     "down" - js/modules/molique-sortable.js already sets `disabled` on
+     the relevant button after every reorder, this just hides it too.
+     visibility (not display:none) keeps its layout box, so the OTHER
+     button in the pair doesn't shift and every row's controls stay
+     aligned to the same width. */
+  [data-sortable-up]:disabled,
+  [data-sortable-down]:disabled {
+    visibility: hidden;
+  }
 }
 
 /* A visually-hidden live region for screen-reader announcements after
