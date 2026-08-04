@@ -94,6 +94,8 @@
     </li>
   <li><strong>Compact Data Rows (List Items):</strong> <code>.data-row-compact</code> &gt; <code>.row-icon</code> + <code>.row-content</code> (z <code>.row-title</code> i <code>.row-details</code>) + <code>.row-actions</code>.
     </li>
+  <li><strong>Sortowalna lista (drag + przyciski):</strong> <code>&lt;ul data-sortable&gt;</code> &gt; <code>.sortable-item</code> (dowolna treść w <code>.sortable-content</code> - tekst, <code>.data-row-compact</code> itd.) z <code>.sortable-handle</code> (uchwyt do przeciągania - Pointer Events, nie natywny HTML5 DnD, bo ten nie działa na dotyku) oraz <code>.sortable-controls</code> z przyciskami <code>data-sortable-up</code>/<code>data-sortable-down</code> (reużywają <code>.btn-action</code>) - druga, równorzędna droga reorderingu dla klawiatury/czytników ekranu. Moduł <code>js/modules/molique-sortable.js</code> dociąga się sam. Po każdej zmianie: <code>CustomEvent('sortable:update', {detail:{order, items}})</code> na kontenerze (molique nie robi żadnych requestów, zapis do backendu to zadanie aplikacji) + ogłoszenie w ukrytym <code>aria-live="polite"</code>.
+    </li>
   <li><strong>Pricing Tables:</strong> <code>.pricing-table</code> (dodaj <code>.is-featured</code> dla wyróżnienia) &gt; <code>.pricing-header</code> + <code>.pricing-features</code>.
     </li>
   <li><strong>Progress Bars:</strong> <code>.progress</code> &gt; <code>.progress-bar</code> (szerokość w <code>style="width: X%"</code>). UWAGA: <code>.progress-bar</code>/<code>.progress-bar-reading</code> animują <code>width</code> (transition) - świadome odstępstwo od reguły GPU-only.

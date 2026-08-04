@@ -538,10 +538,198 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. PUŁAPKI                                            -->
+          <!-- 7. SORTOWALNA LISTA                                   -->
+          <!-- ===================================================== -->
+          <section id="7-sortowalna-lista">
+            <h2 class="text-8 fw-bold mb-3">7. Sortowalna lista</h2>
+            <p class="text-muted mb-4">
+              Zmiana kolejności elementów - dwiema równorzędnymi drogami
+              naraz: przeciąganiem uchwytu (mysz/dotyk/pióro, przez Pointer
+              Events, nie natywny HTML5 Drag&amp;Drop - ten nie działa na
+              dotyku) oraz przyciskami góra/dół, jedyną ścieżką dla
+              klawiatury i czytników ekranu. Zero configu w JS -
+              <code>data-sortable</code> na kontenerze wystarczy,
+              <code>js/modules/molique-sortable.js</code> dociąga się sam.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <ul class="sortable-list" data-sortable style="max-width: 420px; width: 100%">
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Strona główna</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">O nas</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Usługi</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                  <li class="sortable-item">
+                    <button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność">
+                      <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-dots-six-vertical"></use></svg>
+                    </button>
+                    <div class="sortable-content">Kontakt</div>
+                    <div class="sortable-controls btn-action-group">
+                      <button class="btn-action" data-sortable-up aria-label="Przenieś w górę">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-up"></use></svg>
+                      </button>
+                      <button class="btn-action" data-sortable-down aria-label="Przenieś w dół">
+                        <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-down"></use></svg>
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="text-muted mb-4">
+              Treść pozycji jest dowolna - zwykły tekst jak wyżej, albo
+              (zalecane w gęstszych listach admina) opakowany
+              <a href="docs-tables#data-row-compact"><code>.data-row-compact</code></a>
+              z ikoną i szczegółami:
+            </p>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;ul class="sortable-list" data-sortable&gt;
+  &lt;li class="sortable-item"&gt;
+    &lt;button class="sortable-handle" aria-label="Przeciągnij, aby zmienić kolejność"&gt;
+      &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-dots-six-vertical"&gt;&lt;/use&gt;&lt;/svg&gt;
+    &lt;/button&gt;
+    &lt;div class="sortable-content"&gt;
+      &lt;div class="data-row-compact"&gt;
+        &lt;div class="row-content"&gt;
+          &lt;div class="row-title"&gt;Newsletter&lt;/div&gt;
+          &lt;div class="row-details"&gt;Wysyłka co poniedziałek&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="sortable-controls btn-action-group"&gt;
+      &lt;button class="btn-action" data-sortable-up aria-label="Przenieś w górę"&gt;
+        &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-arrow-up"&gt;&lt;/use&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+      &lt;button class="btn-action" data-sortable-down aria-label="Przenieś w dół"&gt;
+        &lt;svg class="icon" aria-hidden="true"&gt;&lt;use href="img/icons-sprite.svg#ph-arrow-down"&gt;&lt;/use&gt;&lt;/svg&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;!-- kolejne .sortable-item --&gt;
+&lt;/ul&gt;
+
+&lt;script&gt;
+  // Zapis nowej kolejności do backendu - Twoja aplikacja, nie molique
+  document.querySelector('[data-sortable]').addEventListener('sortable:update', (e) =&gt; {
+    console.log(e.detail.order); // wartości data-sortable-id w nowej kolejności
+  });
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa / atrybut</th>
+                    <th>Do czego</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">data-sortable</code></td>
+                    <td data-label="Do czego">
+                      Na kontenerze (<code>&lt;ul&gt;</code>, <code>&lt;div&gt;</code>...) -
+                      włącza moduł. Każde bezpośrednie dziecko z klasą
+                      <code>.sortable-item</code> liczy się jako pozycja.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.sortable-item</code></td>
+                    <td data-label="Do czego">
+                      Pojedyncza pozycja. Opcjonalny
+                      <code>data-sortable-id="..."</code> - trafia do
+                      <code>event.detail.order</code> po zmianie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.sortable-handle</code></td>
+                    <td data-label="Do czego">
+                      Uchwyt do przeciągania. Zawsze z <code>aria-label</code> -
+                      obsługuje też strzałki góra/dół z klawiatury, gdy jest
+                      w fokusie.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.sortable-content</code></td>
+                    <td data-label="Do czego">Dowolna treść pozycji - tekst, badge, <code>.data-row-compact</code>.</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="class-name d-block"><code class="fw-bold">.sortable-controls</code></span>
+                      <span class="class-name d-block"><code class="fw-bold">data-sortable-up</code></span>
+                      <span class="class-name d-block"><code class="fw-bold">data-sortable-down</code></span>
+                    </td>
+                    <td data-label="Do czego">
+                      Para przycisków góra/dół (reużywa <code>.btn-action</code>).
+                      Pierwsza/ostatnia pozycja dostaje automatycznie
+                      <code>disabled</code> na odpowiednim przycisku.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2">
+              <h3 class="fw-bold text-5 mb-2">Zdarzenie <code>sortable:update</code></h3>
+              <p class="text-4 text-muted m-0">
+                Po KAŻDEJ zmianie (przeciąganiem, przyciskiem albo
+                strzałkami z klawiatury na uchwycie) kontener emituje
+                <code>CustomEvent('sortable:update', &#123; detail: &#123; order, items &#125; &#125;)</code>.
+                Molique nie ma własnego backendu (tak jak karuzela czy
+                lightbox nie robią żadnych requestów) - zapis nowej
+                kolejności do bazy to zadanie Twojej aplikacji, nasłuchującej
+                tego zdarzenia. Zmianę ogłasza też ukryty region
+                <code>aria-live="polite"</code> dla czytników ekranu.
+              </p>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. PUŁAPKI                                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
+            <h2 class="text-8 fw-bold mb-3">8. Pułapki</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="admin-pulapki" open>
@@ -660,10 +848,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. POWIĄZANE                                          -->
+          <!-- 9. POWIĄZANE                                          -->
           <!-- ===================================================== -->
           <section class="mb-0">
-            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Powiązane strony</h2>
             <div class="grid-md-cols-3 gap-3">
               <a href="examples-admin-layout" class="card hover-shadow">
                 <div class="card-body">

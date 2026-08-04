@@ -73,6 +73,8 @@ const runtime = {
     'select-search-menu',
     'sidebar-md',
     'sidebar-sm',
+    'sortable-announcer',
+    'sortable-item',
     'status-danger',
     'status-done',
     'status-pending',
@@ -108,7 +110,7 @@ const runtime = {
   // molique's state-class convention. A pattern instead of a literal list,
   // since it also protects classes toggled by YOUR OWN code (e.g.
   // .step.is-completed).
-  // Covers 16 .is-* classes in the CSS.
+  // Covers 17 .is-* classes in the CSS.
   greedy: [/^is-/],
   // Animation triggered from an inline style in JS - no CSS rule
   // references it, so the keyframes:true option would remove it.

@@ -47,6 +47,51 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.26 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.26</div>
+              <div class="text-muted text-4">Sierpień 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Sortowalna lista: przeciąganie + przyciski góra/dół
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <code>&lt;ul data-sortable&gt;</code> - reorder pozycji
+                    dwiema równorzędnymi drogami naraz: uchwytem
+                    <code>.sortable-handle</code> (Pointer Events, nie
+                    natywny HTML5 Drag&amp;Drop - ten nie działa na dotyku)
+                    oraz przyciskami <code>data-sortable-up</code>/
+                    <code>-down</code> (reużywają <code>.btn-action</code>) -
+                    jedyną drogą dla klawiatury i czytników ekranu. Sąsiednie
+                    pozycje "robią miejsce" animacją FLIP na
+                    <code>transform</code> (GPU-only). Po każdej zmianie:
+                    <code>CustomEvent('sortable:update')</code> z nową
+                    kolejnością (molique nie ma backendu - zapis to zadanie
+                    aplikacji) i ogłoszenie w ukrytym
+                    <code>aria-live="polite"</code>. Zero configu w JS -
+                    <code>js/modules/molique-sortable.js</code> dociąga się
+                    sam. Pełna referencja w
+                    <a href="docs-admin#7-sortowalna-lista">dokumentacji
+                    Admina</a>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.25 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

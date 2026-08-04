@@ -6068,6 +6068,97 @@
     gap: calc(var(--spacing-unit) * 1);
   }
   /* =========================================
+     SORTABLE LIST (drag via Pointer Events + up/down buttons -
+     js/modules/molique-sortable.js)
+     ========================================= */
+  .sortable-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sortable-item {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 1.5);
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    /* transform here is what animates the FLIP "make way" shift on
+       siblings (js/modules/molique-sortable.js) - the dragged item itself
+       gets transition:none below, since ITS transform must track the
+       pointer 1:1 with no lag. box-shadow is toggled by the class, never
+       transitioned itself, so box-shadow's presence in this list only
+       covers the settle-back after .is-dragging is removed. */
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  }
+  .sortable-item.is-dragging {
+    position: relative;
+    z-index: calc(var(--z-index-dropdown) + 1);
+    opacity: 0.9;
+    box-shadow: var(--shadow-lg);
+    transition: none;
+    cursor: grabbing;
+    user-select: none;
+  }
+  .sortable-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .sortable-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius);
+    color: var(--text-muted);
+    cursor: grab;
+    /* Without this, touch drag fights the browser's own scroll gesture -
+       the page scrolls instead of the item following the finger. */
+    touch-action: none;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+  }
+  .sortable-handle:hover, .sortable-handle:focus-visible {
+    background-color: var(--card-bg-subtle);
+    color: var(--text-main);
+  }
+  .sortable-handle:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
+  }
+  .sortable-handle:active {
+    cursor: grabbing;
+  }
+  .sortable-handle svg {
+    width: 18px;
+    height: 18px;
+  }
+  .sortable-controls {
+    flex-shrink: 0;
+  }
+  /* A visually-hidden live region for screen-reader announcements after
+     drag or button reorder (same technique as .sr-only elsewhere - clipped
+     to 1px instead of display:none, so it's still announced). */
+  .sortable-announcer {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  /* =========================================
      3. ACCORDION (Native <details>)
      ========================================= */
   .accordion {

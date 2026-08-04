@@ -157,6 +157,10 @@ export const DESCRIPTIONS = {
     en: 'Compact Data Row: compact list variant with icon and actions.',
     de: 'Compact Data Row: kompakte Listenvariante mit Icon und Aktionen.',
   },
+  'sortable-list': {
+    en: 'Sortable List: reorderable list, drag (Pointer Events) or up/down buttons.',
+    de: 'Sortable List: sortierbare Liste, per Drag (Pointer Events) oder Auf/Ab-Buttons.',
+  },
   'data-rows': {
     en: 'Data Rows: data rows as cards (CRM grid).',
     de: 'Data Rows: Datenzeilen als Karten (CRM-Grid).',

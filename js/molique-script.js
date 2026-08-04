@@ -304,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: '[data-lightbox]', file: 'modules/molique-lightbox.js' },
     { selectors: '[data-onboarding]', file: 'modules/molique-onboarding.js' },
     { selectors: '[data-tour]', file: 'modules/molique-tour.js' },
+    { selectors: '[data-sortable]', file: 'modules/molique-sortable.js' },
     { selectors: '.select-search', file: 'modules/molique-select.js' },
     { selectors: '.parallax-container', file: 'modules/molique-parallax.js' },
     { selectors: '.nav-filters', file: 'modules/molique-filters.js' },
