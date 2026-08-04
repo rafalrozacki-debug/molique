@@ -48,6 +48,46 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.25 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.25</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Links im Mega-Menü waren auf Mobilgeräten nicht antippbar
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Die unsichtbare, ganzseitige "Außerhalb antippen zum
+                    Schließen"-Abdeckung (<code>.mega-menu[open]
+                    .mega-menu-trigger::before</code>) war nicht auf Desktop
+                    beschränkt. Auf Mobilgeräten, wo
+                    <code>.mega-menu-content</code> zu einem Akkordeon vor
+                    Ort degradiert (<code>position: static</code>, ohne
+                    eigenen z-index), lag diese Abdeckung ÜBER den Links des
+                    Akkordeons und schluckte jeden Tap - er traf stattdessen
+                    das <code>&lt;summary&gt;</code> und klappte das Menü
+                    einfach zu, statt den Link zu öffnen. Die Abdeckung ist
+                    jetzt auf <code>@include mq(md)</code> beschränkt, wo das
+                    Panel tatsächlich über der Seite schwebt.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.24 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

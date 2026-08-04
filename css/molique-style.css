@@ -3880,18 +3880,26 @@
   .mega-menu[open] > .mega-menu-trigger::after {
     transform: rotate(180deg);
   }
-  .mega-menu[open] > .mega-menu-trigger {
-    /* An invisible full-screen "cover" while the menu is open - a click
-       anywhere outside the panel hits the <summary> and natively closes
-       the <details> (the identical trick as .dropdown[open]
-       .dropdown-toggle::before above - zero JS needed to close on a click outside the menu). */
-  }
-  .mega-menu[open] > .mega-menu-trigger::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: var(--z-index-dropdown);
-    cursor: default;
+  /* The invisible full-screen "click outside to close" cover only makes
+     sense where .mega-menu-content actually floats above the page (the
+     anchored panel, @include mq(md) below). On mobile .mega-menu-content
+     is position:static, in-flow right under the trigger with no z-index
+     of its own - this fixed, inset:0 cover was rendering ON TOP of that
+     in-flow content too (a position:fixed layer always beats a static one
+     without an explicit stacking context), swallowing every tap on a
+     .mega-menu-link/.mega-menu-col-title before it could reach the link -
+     the tap landed on the <summary>'s ::before instead and just toggled
+     the accordion shut. Scoping it to desktop removes that trap; the
+     mobile accordion doesn't need it (closes by tapping the trigger again,
+     like .admin-nav-submenu). */
+  @media (min-width: 768px) {
+    .mega-menu[open] > .mega-menu-trigger::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-index-dropdown);
+      cursor: default;
+    }
   }
   .mega-menu-content {
     display: none;
