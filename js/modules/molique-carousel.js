@@ -4,7 +4,11 @@
 // The navigation dots get an aria-label with the slide number - the same
 // JS file loads on the PL/EN/DE site, so the text can't be hardcoded
 // (the same pattern as molique-lang-suggest.js/molique-theme-editor.js).
-const CAROUSEL_LANG = document.documentElement.lang;
+// .split('-')[0]: document.documentElement.lang isn't always a bare
+// 2-letter code - WordPress (and BCP 47 generally) often renders the
+// full tag with a region, e.g. "pl-PL" - an un-split comparison against
+// 'pl' would silently fail and fall back to English on every such site.
+const CAROUSEL_LANG = document.documentElement.lang.split('-')[0];
 const carouselDotLabel = (index) => {
   const n = index + 1;
   if (CAROUSEL_LANG === 'pl') return `Przejdź do slajdu ${n}`;

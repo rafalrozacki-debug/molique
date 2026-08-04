@@ -29,7 +29,11 @@
  * `message` (which does use innerHTML today, a pre-existing gap not
  * repeated here).
  */
-const ONBOARDING_LANG = document.documentElement.lang;
+// .split('-')[0]: document.documentElement.lang isn't always a bare
+// 2-letter code - WordPress (and BCP 47 generally) often renders the
+// full tag with a region, e.g. "pl-PL" - an un-split lookup against
+// ONBOARDING_STRINGS.pl would silently miss and fall back to English.
+const ONBOARDING_LANG = document.documentElement.lang.split('-')[0];
 const ONBOARDING_STRINGS = {
   pl: {
     skip: 'Pomiń',

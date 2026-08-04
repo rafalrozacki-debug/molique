@@ -48,6 +48,53 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.29 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.29</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Englisch-Fallback bei regionalen Sprach-Tags (z. B.
+                  <code>lang="pl-PL"</code>)
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    Sechs Module (<code>molique-carousel.js</code>,
+                    <code>molique-onboarding.js</code>,
+                    <code>molique-sortable.js</code>,
+                    <code>molique-theme-editor.js</code>,
+                    <code>molique-tour.js</code>,
+                    <code>molique-lang-suggest.js</code>) verglichen
+                    <code>document.documentElement.lang</code> wörtlich
+                    mit <code>'pl'</code>/<code>'de'</code>. molique.dev
+                    selbst rendert <code>lang="pl"</code>, daher war der
+                    Fehler auf der Live-Seite unsichtbar - aber WordPress
+                    (und BCP 47 im Allgemeinen) rendert oft den
+                    vollständigen Tag mit Region, z. B. <code>pl-PL</code>,
+                    sodass jede solche Installation still auf Englisch
+                    zurückfiel (z. B. die Screenreader-Ansage nach einer
+                    Umordnung: „Item moved to position 1 of 10" statt des
+                    lokalisierten Texts). Jedes Modul kürzt den Tag jetzt
+                    vor dem Wörterbuch-Lookup am Bindestrich:
+                    <code>document.documentElement.lang.split('-')[0]</code>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.28 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -35,7 +35,11 @@
  * to-close) - this is a guided sequence, not a dismissible gallery, so
  * only the tooltip's own Skip/Prev/Next control navigation.
  */
-const TOUR_LANG = document.documentElement.lang;
+// .split('-')[0]: document.documentElement.lang isn't always a bare
+// 2-letter code - WordPress (and BCP 47 generally) often renders the
+// full tag with a region, e.g. "pl-PL" - an un-split lookup against
+// TOUR_STRINGS.pl would silently miss and fall back to English.
+const TOUR_LANG = document.documentElement.lang.split('-')[0];
 const TOUR_STRINGS = {
   pl: {
     skip: 'Pomiń',

@@ -21,7 +21,11 @@
 // The same JS file loads on the PL/EN/DE site, so toast text can't be
 // hardcoded - we read the language from <html lang> (the same pattern as
 // molique-lang-suggest.js) and pick from a small dictionary.
-const TE_LANG = document.documentElement.lang;
+// .split('-')[0]: document.documentElement.lang isn't always a bare
+// 2-letter code - WordPress (and BCP 47 generally) often renders the
+// full tag with a region, e.g. "pl-PL" - an un-split lookup against
+// TE_STRINGS.pl would silently miss and fall back to English.
+const TE_LANG = document.documentElement.lang.split('-')[0];
 const TE_STRINGS = {
   noChanges: { pl: 'Brak zmian do skopiowania', en: 'No changes to copy', de: 'Keine Änderungen zum Kopieren' },
   copied: { pl: 'Skopiowano CSS motywu', en: 'Theme CSS copied', de: 'Theme-CSS kopiert' },

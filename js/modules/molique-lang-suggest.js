@@ -43,7 +43,13 @@ function initLangSuggest() {
   const detected = detectLangSuggestLocale();
   if (!detected) return;
 
-  const current = document.documentElement.lang;
+  // .split('-')[0]: document.documentElement.lang isn't always a bare
+  // 2-letter code - WordPress (and BCP 47 generally) often renders the
+  // full tag with a region, e.g. "pl-PL" - detected is always a bare
+  // code (from navigator.language.slice(0,2)), so an un-split "current"
+  // would never match it and the bar would offer to switch to the
+  // language the page is already in.
+  const current = document.documentElement.lang.split('-')[0];
   if (detected === current) return;
 
   const menu = document.querySelector(".language-switch-menu");

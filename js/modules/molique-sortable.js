@@ -41,7 +41,12 @@
  *  }) - molique has no backend of its own (like the carousel/lightbox),
  *  so persisting the new order is left entirely to the consuming app.
  */
-const SORTABLE_LANG = document.documentElement.lang;
+// .split('-')[0]: document.documentElement.lang isn't always a bare
+// 2-letter code - WordPress (and BCP 47 generally) often renders the
+// full tag with a region, e.g. "pl-PL" - an un-split lookup against
+// SORTABLE_STRINGS.pl would silently miss and fall back to English (the
+// aria-live announcement after a reorder is where this actually showed up).
+const SORTABLE_LANG = document.documentElement.lang.split('-')[0];
 const SORTABLE_STRINGS = {
   pl: {
     moved: (pos, total) => `Element przeniesiony na pozycję ${pos} z ${total}.`,
