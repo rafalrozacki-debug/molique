@@ -15,8 +15,10 @@ if (!defined('MOLIQUE_STATS')) {
 
 final class StatsCollector
 {
-    private const ALLOWED_TYPES = ['pageview', 'download'];
-    private const MAX_LEN       = 255;
+    private const ALLOWED_TYPES = ['pageview', 'download', 'outbound'];
+    /** Typy, dla których etykieta (nazwa pliku / cel wyjścia) jest obowiązkowa. */
+    private const LABELLED_TYPES = ['download', 'outbound'];
+    private const MAX_LEN        = 255;
 
     private StatsRepository $repository;
     private VisitorFingerprint $fingerprint;
@@ -58,7 +60,7 @@ final class StatsCollector
 
         $path  = $this->sanitizePath((string) ($payload['p'] ?? '/'));
         $label = null;
-        if ($type === 'download') {
+        if (in_array($type, self::LABELLED_TYPES, true)) {
             $label = $this->sanitizeLabel((string) ($payload['n'] ?? ''));
             if ($label === '') {
                 $this->end(422);

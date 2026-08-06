@@ -62,6 +62,18 @@ return [
         'password_hash' => '$2y$10$WSTAW_TU_HASH_Z_PASSWORD_HASH',
     ],
 
-    // Ścieżka (URL) do arkusza molique dla panelu — dostosuj, jeśli inna.
-    'dashboard_css' => '/css/molique-style-admin.css',
+    // Arkusze molique dla panelu (kolejność ma znaczenie). RDZEŃ JEST WYMAGANY:
+    // bundle admina zawiera wyłącznie moduł panelu (layout, sidebar, nawigacja,
+    // dashboard header) i sam z siebie nie ma grida, kart, tabel ani klas
+    // narzędziowych. Pusta tablica [] => te same dwa arkusze co niżej.
+    'dashboard_css' => [
+        '/css/molique-style.css',
+        '/css/molique-style-admin.css',
+    ],
+
+    // Rdzeń JS molique (przełącznik motywu i zwijanie sidebara w panelu)
+    // oraz sprite z ikonami. Puste/nieistniejące => panel działa dalej,
+    // tylko bez przełącznika motywu i bez ikon.
+    'dashboard_script' => '/js/molique-script.js',
+    'dashboard_sprite' => '/img/icons-sprite.svg',
 ];
