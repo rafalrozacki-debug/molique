@@ -126,6 +126,54 @@
         </div>
       </div>
 
+      <!-- NPM -->
+      <section id="npm">
+        <h2 class="text-7 fw-bold mb-3">Or via npm</h2>
+        <p class="text-muted mb-4" style="max-width: 640px">
+          Handy when the project has a <code>package.json</code> anyway. Inside:
+          the CSS bundles (plain and minified), Sass sources, JS with the
+          autoloader, flags, and a ready-made PurgeCSS safelist. No
+          <code>starter.html</code> and no fonts - those ship only in the ZIP.
+        </p>
+
+        <div class="component-code mb-4">
+          <button class="btn-copy">Copy</button>
+          <pre><code>npm install molique</code></pre>
+        </div>
+
+        <p class="text-muted mb-3">
+          From there you include the same two files as from the ZIP - just
+          from a path inside <code>node_modules/</code> (or wherever your
+          bundler copies them):
+        </p>
+        <div class="component-code mb-4">
+          <button class="btn-copy">Copy</button>
+          <pre><code>&lt;link rel="stylesheet" href="node_modules/molique/css/molique-style.min.css" /&gt;
+&lt;script defer src="node_modules/molique/js/molique-script.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <div class="alert alert-warning">
+          <strong>Two things that are easy to miss.</strong>
+          <code>molique-script.js</code> <strong>is not an ES module</strong> -
+          load it with a plain <code>&lt;script defer&gt;</code>, do not
+          <code>import</code> it. It locates its own <code>js/modules/</code>
+          through <code>document.currentScript</code>, so once bundled it stops
+          finding them. Second: <strong>fonts are not in the npm package</strong>
+          (only in the ZIP, with the fonts option ticked) - without them molique
+          degrades to <code>system-ui</code>. Add Poppins yourself, e.g. via
+          <code>@fontsource/poppins</code>.
+        </div>
+
+        <p class="text-muted m-0">
+          Package page:
+          <a href="https://www.npmjs.com/package/molique" target="_blank" rel="noopener"
+            >npmjs.com/package/molique</a>. Published separately:
+          <code>molique-jit</code> - it generates CSS for exactly the classes
+          your HTML uses, instead of picking modules by hand
+          (<a href="docs-jit">docs</a>, <a href="docs-cli">CLI</a>).
+        </p>
+      </section>
+
       <!-- SHRINK THE PACKAGE -->
       <section>
         <h2 class="text-7 fw-bold mb-3">Shrink the package</h2>
