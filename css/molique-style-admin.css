@@ -132,6 +132,13 @@
   /* The shared look of the compact logo version (a badge with an
      icon/initial). Shared between the narrow desktop modes (-sm, -md) and
      mobile, so the rules aren't duplicated in three places. */
+  /* The third logo strategy, next to "hide it" (.admin-logo-hide) and
+     "shrink the same thing" (.admin-logo-compact): swap it for a DIFFERENT
+     file. A wordmark scaled down to a 32px badge is unreadable - what a
+     narrow sidebar actually needs is the logomark, which is a separate
+     asset, not a smaller rendering of the first one. Both files sit in the
+     markup and CSS picks one, so there's no JS and no second request at
+     toggle time (the browser has already fetched both). */
   @layer components {
     .admin-sidebar {
       background-color: var(--sidebar-bg);
@@ -249,6 +256,11 @@
       width: auto;
       height: auto;
       object-fit: contain;
+    }
+    /* Default (wide sidebar): the wordmark shows, the logomark waits. The
+       narrow modes below flip it - see @mixin admin-logo-swap-style. */
+    .admin-logo-swap > .admin-logo-mark {
+      display: none;
     }
     /* =========================================
        ANIMATED TOGGLE ICON (morphing hamburger)
@@ -370,6 +382,42 @@
         border-radius: var(--border-radius);
         margin: 0 !important;
       }
+      /* Option 3: swap the wordmark for the logomark */
+      .sidebar-sm .admin-logo-swap img, .sidebar-sm .admin-logo-swap svg,
+      .sidebar-md .admin-logo-swap img,
+      .sidebar-md .admin-logo-swap svg {
+        max-width: 32px;
+        max-height: 32px;
+        width: auto;
+        height: auto;
+        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
+      }
+      .sidebar-sm .admin-logo-swap,
+      .sidebar-md .admin-logo-swap {
+        display: flex;
+        align-items: center;
+        /* flex-start (not center): with text longer than the badge, we want to
+           cut off the end, not show a random fragment from the middle */
+        justify-content: flex-start;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 1.25rem;
+        font-weight: var(--fw-black);
+        background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+        border-radius: var(--border-radius);
+        margin: 0 !important;
+      }
+      .sidebar-sm .admin-logo-swap > .admin-logo-full,
+      .sidebar-md .admin-logo-swap > .admin-logo-full {
+        display: none;
+      }
+      .sidebar-sm .admin-logo-swap > .admin-logo-mark,
+      .sidebar-md .admin-logo-swap > .admin-logo-mark {
+        display: block;
+      }
     }
     /* Mobile (sidebar collapsed into the bottom bar): the same rules */
     @media (max-width: 768px) {
@@ -401,6 +449,37 @@
         background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
         border-radius: var(--border-radius);
         margin: 0 !important;
+      }
+      /* Option 3: the logomark instead of the wordmark on mobile */
+      .admin-logo-swap img, .admin-logo-swap svg {
+        max-width: 32px;
+        max-height: 32px;
+        width: auto;
+        height: auto;
+        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
+      }
+      .admin-logo-swap {
+        display: flex;
+        align-items: center;
+        /* flex-start (not center): with text longer than the badge, we want to
+           cut off the end, not show a random fragment from the middle */
+        justify-content: flex-start;
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 1.25rem;
+        font-weight: var(--fw-black);
+        background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+        border-radius: var(--border-radius);
+        margin: 0 !important;
+      }
+      .admin-logo-swap > .admin-logo-full {
+        display: none;
+      }
+      .admin-logo-swap > .admin-logo-mark {
+        display: block;
       }
     }
   }

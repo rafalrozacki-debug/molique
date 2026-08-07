@@ -47,6 +47,129 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.30 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.30</div>
+              <div class="text-muted text-4">Sierpień 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Trzy błędy z realnych wdrożeń: kolorowy przycisk w
+                  <code>.input-group</code>, separatory akcji POST, stopka
+                  onboardingu
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Kolorowy przycisk znikał pod kursorem w
+                    <code>.input-group</code>.</strong> Grupa wymuszała na
+                    hoverze <code>background-color: var(--card-bg-subtle)</code>
+                    ze specyficznością wyższą niż wariant koloru, ale nie
+                    ruszała <code>color</code> - biały tekst lądował na jasnym
+                    tle. Neutralne malowanie (szara ramka, przygaszony hover)
+                    dotyczy teraz WYŁĄCZNIE przycisku bez wariantu koloru, czyli
+                    tej lupki/strzałki, pod którą było pisane. Przy okazji
+                    domknięta druga strona tego samego braku: reguły
+                    strukturalne grupy (rogi, nakładanie ramek, kolejność
+                    nakładania) sięgają teraz także klasy koloru użytej bez
+                    <code>.btn</code> - dokładnie tak, jak
+                    <code>.btn-group</code> naprawiło to u siebie wcześniej.
+                  </li>
+                  <li>
+                    <strong>Separatory <code>.with-dividers</code> gubiły się
+                    przy akcjach w <code>&lt;form&gt;</code>.</strong> Kreskę
+                    chowała reguła <code>:last-child</code> na przycisku, a
+                    akcja POST potrzebuje własnego formularza (metoda + nonce) -
+                    więc każdy przycisk bywał jedynakiem swojego
+                    <code>&lt;form&gt;</code> i zasada odpalała per formularz
+                    zamiast per grupa. Kreska wisi teraz na bezpośrednim dziecku
+                    grupy: jedynym elemencie, który zawsze ma znaną pozycję,
+                    niezależnie od tego, czy jest przyciskiem, czy wrapperem.
+                    To nie egzotyka - tabela administracyjna z akcjami POST to
+                    standard.
+                  </li>
+                  <li>
+                    <strong>Stopka onboardingu i touru wypychała „Dalej" poza
+                    kartę.</strong> Nic nie ogranicza liczby slajdów, a rząd
+                    kropek rósł wraz z nimi. Awaria była cicha: przycisk
+                    zostawał w DOM, klikalny i w kolejności tabulacji, a karta
+                    ma <code>overflow: hidden</code>, więc nie pojawiał się
+                    nawet pasek przewijania. Stopka zawija się teraz
+                    (<code>flex-wrap</code>), kropki są jedynym elementem, który
+                    wolno ścisnąć, a nawigacja nie kurczy się nigdy. Powyżej
+                    progu (8 slajdów, 6 kroków tury) kropki znikają całkiem, a
+                    ich rolę przejmuje widoczny licznik „Krok N z M" - ten sam,
+                    który wcześniej czytały wyłącznie czytniki ekranu.
+                  </li>
+                </ul>
+
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  <code>.admin-logo-swap</code> oraz szerokość onboardingu i
+                  dymku jako zmienne
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Trzecia strategia logo w sidebarze:</strong> obok
+                    „ukryj" (<code>.admin-logo-hide</code>) i „zmniejsz to samo"
+                    (<code>.admin-logo-compact</code>) doszło „pokaż inny plik".
+                    <code>.admin-logo-swap</code> na <code>.admin-brand</code>
+                    trzyma dwa obrazki - <code>.admin-logo-full</code>
+                    (wordmark) i <code>.admin-logo-mark</code> (sygnet) - a CSS
+                    wybiera jeden zależnie od trybu szerokości. Wordmark
+                    ściśnięty do 32px jest nieczytelny, a sygnet to osobny plik,
+                    nie mniejsze renderowanie tego samego. Zero JS, żadnego
+                    dodatkowego pobrania przy przełączeniu.
+                  </li>
+                  <li>
+                    <strong><code>.text-left</code> i <code>.text-right</code>
+                    jako aliasy <code>.text-start</code> /
+                    <code>.text-end</code></strong> - razem z wariantami
+                    responsywnymi <code>.text-md-left</code> /
+                    <code>.text-md-right</code>. Markup wklejony z innego
+                    projektu przestaje po cichu tracić wyrównanie. Alias nie
+                    dokłada żadnego zastrzeżenia dla RTL: nazwy logiczne w
+                    molique i tak rozwijają się do fizycznego
+                    <code>left</code>/<code>right</code>, a nie do
+                    <code>text-align: start/end</code>, więc obie pisownie
+                    zachowują się identycznie w każdym trybie pisania. W nowym
+                    markupie zalecana zostaje wersja
+                    <code>start</code>/<code>end</code>.
+                  </li>
+                  <li>
+                    <strong>Nowe zmienne
+                    <code>--onboarding-card-width</code> (440px) i
+                    <code>--tour-tooltip-width</code> (320px).</strong> Do tej
+                    pory zmiana szerokości wymagała nadpisania reguły spoza
+                    <code>@layer</code> i pamiętania o media query od 768px -
+                    inaczej zbijało się celowe rozciągnięcie karty na pełny
+                    ekran na telefonie. Zmienna usuwa i override, i tę pułapkę:
+                    nie dociera do gałęzi mobilnej, a ogranicznik dymka do
+                    szerokości ekranu zostaje niezależnie od ustawionej
+                    wartości. Obie ustawia się na <code>:root</code>, a nie
+                    inline - oba panele buduje JS, więc nie ma markupu, w
+                    który dałoby się wpisać <code>style=""</code>. Framework
+                    ich u siebie nie deklaruje, tylko czyta z domyślną
+                    wartością w fallbacku; lokalna deklaracja wygrałaby z
+                    dziedziczeniem i zmienna byłaby nie do ustawienia.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.29 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

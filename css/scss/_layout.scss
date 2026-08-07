@@ -120,9 +120,16 @@
 /* =========================================
    5. TEXT
    ========================================= */
+/* .text-left/.text-right aliases here too, not only in
+   utilities/_typography.scss - the two files land in different @layer
+   tiers, and a bundle assembled without the utilities layer would
+   otherwise know one spelling but not the other. See the longer note in
+   utilities/_typography.scss for why the alias carries no RTL cost. */
 .text-center { text-align: center; }
-.text-start { text-align: left; }
-.text-end { text-align: right; }
+.text-start,
+.text-left { text-align: left; }
+.text-end,
+.text-right { text-align: right; }
 
 .fw-bold { font-weight: var(--fw-bold); }
 .fw-normal { font-weight: var(--fw-normal); }

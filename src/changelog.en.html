@@ -48,6 +48,128 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.30 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.30</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Three bugs from real deployments: a colored button in
+                  <code>.input-group</code>, dividers around POST actions, the
+                  onboarding footer
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>A colored button vanished under the cursor inside
+                    <code>.input-group</code>.</strong> The group forced
+                    <code>background-color: var(--card-bg-subtle)</code> on
+                    hover at a higher specificity than the color variant, but
+                    never touched <code>color</code> - so white label text
+                    landed on a light background. The neutral paint (gray
+                    border, subtle hover) now reaches ONLY a button with no
+                    color variant: the plain magnifier/arrow it was written
+                    for. The same gap had a second half, now closed too: the
+                    group's structural rules (corners, border overlap, stacking
+                    order) also reach a color class used without
+                    <code>.btn</code> - exactly what
+                    <code>.btn-group</code> had already fixed for itself.
+                  </li>
+                  <li>
+                    <strong><code>.with-dividers</code> lost separators around
+                    actions wrapped in <code>&lt;form&gt;</code>.</strong> The
+                    divider was hidden by a <code>:last-child</code> rule on the
+                    button, but a POST action needs its own form (method +
+                    nonce) - so each button was often the only child of its own
+                    <code>&lt;form&gt;</code>, and the rule fired per form
+                    instead of per group. The divider now hangs off the group's
+                    direct child: the only element that always sits at a known
+                    position, whether it's the button or a wrapper. Hardly an
+                    edge case - an admin table with POST actions is the norm.
+                  </li>
+                  <li>
+                    <strong>The onboarding and tour footer pushed "Next" out of
+                    the card.</strong> Nothing caps the number of slides, and
+                    the dot row grew along with them. The failure was silent:
+                    the button stayed in the DOM, clickable and in the tab
+                    order, and the card is <code>overflow: hidden</code>, so not
+                    even a scrollbar showed up. The footer now wraps
+                    (<code>flex-wrap</code>), the dots are the only part allowed
+                    to shrink, and the navigation never gives way. Past a
+                    threshold (8 slides, 6 tour steps) the dots disappear
+                    entirely and the visible "Step N of M" counter takes over -
+                    the same one that used to be screen-reader-only.
+                  </li>
+                </ul>
+
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  <code>.admin-logo-swap</code>, plus onboarding and tooltip
+                  width as variables
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>A third sidebar logo strategy:</strong> next to
+                    "hide it" (<code>.admin-logo-hide</code>) and "shrink the
+                    same thing" (<code>.admin-logo-compact</code>) comes "show a
+                    different file". <code>.admin-logo-swap</code> on
+                    <code>.admin-brand</code> holds two images -
+                    <code>.admin-logo-full</code> (wordmark) and
+                    <code>.admin-logo-mark</code> (logomark) - and CSS picks one
+                    per width mode. A wordmark squeezed into 32px is
+                    unreadable, and a logomark is a separate asset, not a
+                    smaller rendering of the same one. Zero JS, no extra request
+                    when toggling.
+                  </li>
+                  <li>
+                    <strong><code>.text-left</code> and <code>.text-right</code>
+                    as aliases of <code>.text-start</code> /
+                    <code>.text-end</code></strong> - along with the
+                    responsive <code>.text-md-left</code> /
+                    <code>.text-md-right</code> variants. Markup pasted in from
+                    another project stops silently losing its alignment. The
+                    alias adds no RTL caveat: molique's logical names already
+                    resolve to physical <code>left</code>/<code>right</code>
+                    rather than <code>text-align: start/end</code>, so both
+                    spellings behave identically in every writing mode. The
+                    <code>start</code>/<code>end</code> spelling stays the
+                    recommendation for new markup.
+                  </li>
+                  <li>
+                    <strong>New variables
+                    <code>--onboarding-card-width</code> (440px) and
+                    <code>--tour-tooltip-width</code> (320px).</strong> Changing
+                    the width used to mean overriding a rule from outside
+                    <code>@layer</code> and remembering the 768px media query -
+                    otherwise you'd undo the deliberate full-screen card on
+                    phones. The variable removes both the override and that
+                    trap: it doesn't reach the mobile branch, and the tooltip's
+                    viewport clamp stays in place whatever value you set. Both
+                    are set on <code>:root</code> rather than inline - JS
+                    builds both panels, so there is no markup to put a
+                    <code>style=""</code> on. The framework never declares
+                    them, it only reads them with the default in the fallback;
+                    a local declaration would beat inheritance and leave the
+                    variable unsettable.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.29 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

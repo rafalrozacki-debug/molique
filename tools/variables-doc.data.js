@@ -262,4 +262,6 @@ export const INPUT = {
   '--hover-border-color':  ['Animacje', 'Kolor rysowanej ramki dla efektów <code>.hover-border-*</code>. Domyślnie <code>--primary</code>.'],
   '--border-radius-pill':  ['Nawigacja', 'Zaokrąglenie elementów w kształcie pastylki (language switch, mega menu). Domyślnie <code>999px</code>.'],
   '--clip-img':            ['Typografia', 'Obraz lub gradient przycinany do kształtu liter w <code>.text-clip-bg</code>. Bez niej tekst zostaje bez wypełnienia.'],
+  '--onboarding-card-width': ['Onboarding', 'Szerokość karty powitalnej (<code>max-width</code>), domyślnie 440px. Ustaw ją na <code>:root</code> - kartę buduje JS, więc nie ma markupu, w który dałoby się wstawić <code>style=""</code>. Celowo NIE dociera do gałęzi mobilnej, która rozciąga kartę na pełny ekran, więc poszerzenie nie zdejmuje tamtego trybu.'],
+  '--tour-tooltip-width':    ['Onboarding', 'Szerokość dymku Spotlight Tour, domyślnie 320px. Ustawiana na <code>:root</code> z tego samego powodu co wyżej. Ogranicznik <code>min(…, 100vw - 2rem)</code> zostaje, więc szerszy dymek nadal nie wyjdzie poza wąski ekran.'],
 };

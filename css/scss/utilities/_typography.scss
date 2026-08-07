@@ -37,15 +37,29 @@
 .text-11 { font-size: clamp(2.75rem, 7vw + 1rem, 6.5rem) !important; }
 .text-12 { font-size: clamp(3.5rem, 10vw + 1rem, 9rem) !important; }
 
+/* .text-left/.text-right are ALIASES of .text-start/.text-end, listed in
+   the same rule rather than duplicated below it - one declaration, a few
+   extra bytes for the selector.
+   They cost nothing in RTL correctness, because the logical names here
+   were never logical in the first place: they resolve to the physical
+   `left`/`right`, not to `text-align: start/end`. So both spellings behave
+   identically in every writing mode, and the alias adds no new RTL
+   caveat - it only stops the hand from tripping over Bootstrap muscle
+   memory. Prefer .text-start/.text-end in new markup; these exist so
+   pasted-in code doesn't silently lose its alignment. */
 .text-center { text-align: center !important; }
-.text-start { text-align: left !important; }
-.text-end { text-align: right !important; }
+.text-start,
+.text-left { text-align: left !important; }
+.text-end,
+.text-right { text-align: right !important; }
 .text-justify { text-align: justify !important; }
 
 @include mq(md) {
   .text-md-center { text-align: center !important; }
-  .text-md-start { text-align: left !important; }
-  .text-md-end { text-align: right !important; }
+  .text-md-start,
+  .text-md-left { text-align: left !important; }
+  .text-md-end,
+  .text-md-right { text-align: right !important; }
 }
 
 .text-uppercase { text-transform: uppercase !important; }

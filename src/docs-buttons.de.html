@@ -552,7 +552,14 @@
                     <td data-label="Klasse"><code class="fw-bold">.with-dividers</code></td>
                     <td data-label="Was sie macht">
                       Fügt vertikale Trennstriche zwischen den Aktionen ein.
-                      Nur mit <code>.btn-action-group</code>.
+                      Nur mit <code>.btn-action-group</code>. Der Trennstrich
+                      hängt am <strong>direkten Kind der Gruppe</strong>,
+                      nicht am Button selbst - eine POST-Aktion braucht ein
+                      eigenes <code>&lt;form&gt;</code> (Methode + Nonce),
+                      also ist ein Button oft das einzige Kind seines
+                      Formulars. Das Umschließen mit <code>&lt;form&gt;</code>
+                      ist eingeplant: Der Wrapper bricht die Reihe nicht um
+                      und bringt keine eigene Höhe mit.
                     </td>
                   </tr>
                   <tr>

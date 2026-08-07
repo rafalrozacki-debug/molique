@@ -127,6 +127,10 @@
                     <td data-label="What it does">The native <code>&lt;dialog&gt;</code> built by JS - you never write it by hand.</td>
                   </tr>
                   <tr>
+                    <td data-label="Class"><code class="fw-bold">.onboarding-card</code></td>
+                    <td data-label="What it does">The slide card. Width via <code>--onboarding-card-width</code> (440px by default), set on <code>:root</code> - the card is built by JS, so there is no markup to put a <code>style=""</code> on. The variable deliberately does not reach the mobile branch, where the card goes full-screen anyway.</td>
+                  </tr>
+                  <tr>
                     <td data-label="Class"><code class="fw-bold">data-onboarding</code></td>
                     <td data-label="What it does">Wraps the slides. Optionally <code>data-onboarding-key="name"</code> - a custom <code>localStorage</code> key (defaults to the page path).</td>
                   </tr>
@@ -226,7 +230,7 @@
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">.tour-tooltip</code></td>
-                    <td data-label="What it does">The title/description bubble, positioned via native CSS Anchor Positioning (an <code>anchor-name</code> set from JS on the target + a 5-way <code>@position-try</code> fallback chain, so it never overflows the viewport).</td>
+                    <td data-label="What it does">The title/description bubble, positioned via native CSS Anchor Positioning (an <code>anchor-name</code> set from JS on the target + a 5-way <code>@position-try</code> fallback chain, so it never overflows the viewport). Width via <code>--tour-tooltip-width</code> (320px by default) - the viewport clamp stays in place whatever you set it to.</td>
                   </tr>
                   <tr>
                     <td data-label="Class"><code class="fw-bold">data-tour</code></td>
@@ -303,6 +307,29 @@
                     <code>MoliqueTour.start(steps)</code> directly from
                     JS - that call bypasses the <code>localStorage</code>
                     check.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="onboarding-gotchas">
+                <summary class="accordion-header">
+                  <span class="badge badge-primary">4</span>
+                  <span>Many steps: dots give way to the counter</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Nothing caps the number of slides or steps, and the dot
+                    row grew with it - a long enough sequence pushed the
+                    "Next" button out of the card. The failure was silent:
+                    the button stayed in the DOM, clickable and in the tab
+                    order, and the card is <code>overflow: hidden</code>, so
+                    not even a scrollbar showed up. Since v1.7.30 the footer
+                    wraps (<code>flex-wrap</code>), the dots are the only
+                    part allowed to shrink, and the navigation never gives
+                    way. Past a threshold (8 onboarding slides, 6 tour
+                    steps) the dots disappear entirely and the visible
+                    "Step N of M" counter takes over - the same one that
+                    used to be screen-reader-only.
                   </p>
                 </div>
               </details>

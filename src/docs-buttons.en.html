@@ -544,7 +544,13 @@
                     <td data-label="Class"><code class="fw-bold">.with-dividers</code></td>
                     <td data-label="What it does">
                       Adds vertical dividers between actions. Only with
-                      <code>.btn-action-group</code>.
+                      <code>.btn-action-group</code>. The divider hangs off
+                      the group's <strong>direct child</strong>, not off the
+                      button - a POST action needs its own
+                      <code>&lt;form&gt;</code> (method + nonce), so a button
+                      is often the only child of its own form. Wrapping in a
+                      <code>&lt;form&gt;</code> is accounted for: the wrapper
+                      neither breaks the row nor adds height of its own.
                     </td>
                   </tr>
                   <tr>

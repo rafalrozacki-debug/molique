@@ -264,36 +264,62 @@
     align-items: center;
     gap: calc(var(--spacing-unit) * 0.5);
     
+    /* The separator hangs off the group's DIRECT CHILD, not off
+       .btn-action itself. A POST action needs its own <form> (nonce +
+       method), so in a real admin table each button is the ONLY child of
+       its own form - making every one of them both :first-child and
+       :last-child of that form. A button-based ":last-child::after {
+       display:none }" therefore fired per form instead of per group:
+       every wrapped button lost its divider while every bare one kept it,
+       so dividers appeared to show up at random. The direct child is the
+       only element that always sits at a known position in the group,
+       whether it's the button or a wrapper around it. */
     &.with-dividers {
-      gap: 0; 
-      
-      .btn-action {
+      gap: 0;
+
+      > * {
         position: relative;
-        border-radius: 0; 
-        
+
         &::after {
           content: '';
           position: absolute;
           right: 0;
-          top: 20%; 
+          top: 20%;
           bottom: 20%;
           width: 1px;
           background-color: var(--border-color);
           pointer-events: none;
         }
-        
+
         &:last-child::after {
           display: none;
         }
-        
-        &:first-child {
-          border-top-left-radius: var(--border-radius);
-          border-bottom-left-radius: var(--border-radius);
-        }
-        &:last-child {
-          border-top-right-radius: var(--border-radius);
-          border-bottom-right-radius: var(--border-radius);
-        }
+      }
+
+      /* A wrapper (<form>) must not break the row or add height of its
+         own - it exists only to carry the request, not to lay anything
+         out. */
+      > form {
+        display: flex;
+        align-items: center;
+        margin: 0;
+      }
+
+      .btn-action {
+        border-radius: 0;
+      }
+
+      /* Outer corners: the child is the anchor, the button is what gets
+         painted - so both are addressed, one directly and one nested. */
+      > :first-child,
+      > :first-child .btn-action {
+        border-top-left-radius: var(--border-radius);
+        border-bottom-left-radius: var(--border-radius);
+      }
+      > :last-child,
+      > :last-child .btn-action {
+        border-top-right-radius: var(--border-radius);
+        border-bottom-right-radius: var(--border-radius);
       }
     }
   }

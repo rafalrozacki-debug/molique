@@ -75,7 +75,17 @@ dialog.onboarding-dialog {
 
 .onboarding-card {
   width: 100%;
-  max-width: 440px;
+  /* Width as a variable instead of a rule to override from outside
+     @layer. Read with a fallback and NEVER declared here - unlike
+     --btn-icon-size, whose element the integrator writes by hand, this
+     card is built by JS, so there's no markup to hang a style="" on. A
+     local declaration would win over an inherited one and make the
+     variable unsettable; the fallback keeps 440px as the default while
+     leaving :root as a working input. It deliberately does NOT reach the
+     mobile branch below, which resets max-width to none for the
+     full-screen treatment - so widening the card can't accidentally
+     undo that. */
+  max-width: var(--onboarding-card-width, 440px);
   margin: calc(var(--spacing-unit) * 2);
   background-color: var(--bg-surface);
   border-radius: var(--border-radius-lg);
@@ -183,8 +193,18 @@ dialog.onboarding-dialog:modal .onboarding-card {
   border-width: 0;
 }
 
+/* Nothing caps the number of slides, and the footer is a single
+   non-wrapping row: with enough dots the row overflowed the card and
+   pushed "Next" out of sight - the button stayed in the DOM, focusable
+   and clickable, so the failure was silent (no scrollbar either, the
+   card is overflow:hidden). Three rules make it structurally impossible:
+   wrap, so a long dot row drops to its own line instead of pushing;
+   min-width:0 on the dots, so they're the part allowed to shrink; and
+   flex-shrink:0 on the navigation, so the primary action is never the
+   thing that gives way. */
 .onboarding-footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: calc(var(--spacing-unit) * 2);
@@ -216,8 +236,35 @@ dialog.onboarding-dialog:modal .onboarding-card {
    carousel isn't included. */
 .onboarding-dots {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: calc(var(--spacing-unit) * 2);
+  min-width: 0;
+}
+
+/* Past a certain count the dots stop being a progress indicator and
+   become a wall of identical targets - 8 of them already outgrow the
+   default card. Hiding them costs nothing, because .onboarding-step-count
+   ("Step N of M") carries exactly the same information and is already in
+   the markup; it merely stops being screen-reader-only and takes over as
+   the visible progress readout. Zero JS: :has() reads the dot count the
+   moment the script builds them. */
+.onboarding-card:has(.onboarding-dots > :nth-child(8)) {
+  .onboarding-dots {
+    display: none;
+  }
+
+  .onboarding-step-count {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
 }
 
 .onboarding-dot {
@@ -254,6 +301,8 @@ dialog.onboarding-dialog:modal .onboarding-card {
   display: flex;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1.5);
+  flex-shrink: 0; /* the primary action never shrinks - see .onboarding-footer */
+  margin-left: auto; /* stays flush right even after the dots wrap away */
 }
 
 .onboarding-prev {

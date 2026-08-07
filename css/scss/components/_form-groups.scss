@@ -1,4 +1,36 @@
 // molique - Input groups: combining fields with buttons and prefixes.
+
+/* Two selector lists built from the color map (the same names as
+   $theme-colors in _buttons.scss), because an input group has to treat a
+   button's STRUCTURE and its PAINT differently:
+
+   - $ig-btn (structure: corners, overlap, z-index) must reach EVERY
+     button. A color class implies .btn (see the ".btn IMPLICATION"
+     comment in _buttons.scss), so a bare .btn-primary carries no literal
+     .btn class - matching only ".btn" silently skipped it and left it
+     with its own rounded corners instead of a flush group. Exactly the
+     bug .btn-group already fixed for itself via $btn-base-selectors.
+   - $ig-btn-neutral (paint: gray border, subtle hover, focus border
+     reset) must reach ONLY a button with NO color variant. The neutral
+     hover was written for the plain magnifier/arrow button; on a colored
+     one it repainted the background to --card-bg-subtle without touching
+     `color`, so white label text landed on a light background and the
+     button vanished under the cursor.
+
+   :is()/:not() keep specificity at a single class each, so these lists
+   don't escalate the specificity that the plain ".btn" selectors had. */
+$ig-btn-colors: primary, secondary, success, danger, warning, info, light, dark;
+$ig-btn-colored: "";
+@each $name in $ig-btn-colors {
+  $comma: if($ig-btn-colored == "", "", ", ");
+  $ig-btn-colored: "#{$ig-btn-colored}#{$comma}.btn-#{$name}, .btn-outline-#{$name}";
+}
+$ig-btn: ":is(.btn, #{$ig-btn-colored})";
+$ig-btn-neutral: ".btn:not(:is(#{$ig-btn-colored}))";
+/* Every element type a group can hold, as ONE selector - what used to be
+   a hand-written 3x3 grid of "A + B" pairs for the border overlap. */
+$ig-member: ":is(.input, .input-group-text, .btn, #{$ig-btn-colored})";
+
 @layer components {
   /* =========================================
      1. INPUT GROUPS (Grouped fields and buttons)
@@ -14,38 +46,39 @@
     &:focus-within {
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
 
-      > .input, > .btn, > .input-group-text {
+      /* Neutral elements only: on a colored button the border carries the
+         variant's own color, and repainting it primary reads as a bug. */
+      > .input, > #{$ig-btn-neutral}, > .input-group-text {
         border-color: var(--primary) !important;
       }
     }
 
     /* 1. BASE: all elements in the group */
-    > .input,
-    > .btn,
-    > .input-group-text {
+    > #{$ig-member} {
       position: relative;
       margin-bottom: 0;
       /* BLUNTLY: kill all corners on every element */
       border-radius: 0 !important;
 
-      /* Disable individual focus and validation styling */
+      /* Disable individual focus styling - the group has one shared ring */
       &:focus, &:user-valid, &:user-invalid {
         box-shadow: none !important;
-        border-color: var(--border-color) !important;
         z-index: 3;
       }
     }
 
+    /* The border reset belongs to the validation styling above, but must
+       skip a colored button for the same reason as :focus-within. */
+    > .input,
+    > #{$ig-btn-neutral},
+    > .input-group-text {
+      &:focus, &:user-valid, &:user-invalid {
+        border-color: var(--border-color) !important;
+      }
+    }
+
     /* 2. OVERLAPPING BORDERS: every element (except the first) slides under its predecessor */
-    > .input + .input,
-    > .input + .btn,
-    > .input + .input-group-text,
-    > .btn + .input,
-    > .btn + .btn,
-    > .btn + .input-group-text,
-    > .input-group-text + .input,
-    > .input-group-text + .btn,
-    > .input-group-text + .input-group-text {
+    > #{$ig-member} + #{$ig-member} {
       margin-left: -1px;
     }
 
@@ -67,12 +100,22 @@
       min-width: 0;
     }
 
-    > .btn {
+    /* Stacking order: every button, colored or not, has to sit above its
+       neighbours so the shared 1px border edge belongs to it on hover. */
+    > #{$ig-btn} {
       z-index: 2;
+
+      &:hover {
+        z-index: 3;
+      }
+    }
+
+    /* Paint: neutral button only (see the header comment). A colored
+       button keeps the border-color and hover background of its variant. */
+    > #{$ig-btn-neutral} {
       border: 1px solid var(--border-color);
-      
-      &:hover { 
-        z-index: 3; 
+
+      &:hover {
         background-color: var(--card-bg-subtle);
       }
     }
@@ -89,7 +132,7 @@
     white-space: nowrap;
     background-color: var(--card-bg-subtle);
     border: var(--input-border-width) solid var(--border-color);
-    min-height: var(--target-size-min); 
+    min-height: var(--target-size-min);
     transition: border-color var(--transition-speed);
   }
 

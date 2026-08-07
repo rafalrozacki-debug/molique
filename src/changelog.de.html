@@ -48,6 +48,132 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.30 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.30</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-danger mx-2 text-3">Korrektur</span>
+                  Drei Fehler aus realen Projekten: farbiger Button in
+                  <code>.input-group</code>, Trennstriche bei POST-Aktionen,
+                  Onboarding-Fußzeile
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Ein farbiger Button verschwand unter dem Cursor in
+                    <code>.input-group</code>.</strong> Die Gruppe erzwang beim
+                    Hover <code>background-color: var(--card-bg-subtle)</code>
+                    mit höherer Spezifität als die Farbvariante, rührte aber
+                    <code>color</code> nicht an - weißer Text landete auf hellem
+                    Grund. Die neutrale Gestaltung (graue Umrandung, gedämpfter
+                    Hover) gilt jetzt AUSSCHLIESSLICH für einen Button ohne
+                    Farbvariante: genau die Lupe bzw. den Pfeil, für die sie
+                    geschrieben wurde. Nebenbei wurde die zweite Hälfte
+                    derselben Lücke geschlossen: Die strukturellen Regeln der
+                    Gruppe (Ecken, überlappende Ränder, Stapelreihenfolge)
+                    erreichen nun auch eine ohne <code>.btn</code> verwendete
+                    Farbklasse - genau das, was <code>.btn-group</code> für sich
+                    bereits gelöst hatte.
+                  </li>
+                  <li>
+                    <strong><code>.with-dividers</code> verlor Trennstriche bei
+                    Aktionen in <code>&lt;form&gt;</code>.</strong> Den Strich
+                    blendete eine <code>:last-child</code>-Regel am Button aus,
+                    aber eine POST-Aktion braucht ein eigenes Formular (Methode
+                    + Nonce) - also war jeder Button oft das einzige Kind seines
+                    <code>&lt;form&gt;</code>, und die Regel griff pro Formular
+                    statt pro Gruppe. Der Strich hängt jetzt am direkten Kind
+                    der Gruppe: dem einzigen Element mit stets bekannter
+                    Position, ob Button oder Wrapper. Kein Sonderfall - eine
+                    Admin-Tabelle mit POST-Aktionen ist der Normalfall.
+                  </li>
+                  <li>
+                    <strong>Die Fußzeile von Onboarding und Tour schob
+                    "Weiter" aus der Karte.</strong> Nichts begrenzt die Zahl
+                    der Folien, und die Punktreihe wuchs mit ihnen. Der Fehler
+                    war unsichtbar: Der Button blieb im DOM, klickbar und in der
+                    Tab-Reihenfolge, und die Karte hat
+                    <code>overflow: hidden</code>, also erschien nicht einmal
+                    eine Bildlaufleiste. Die Fußzeile bricht jetzt um
+                    (<code>flex-wrap</code>), die Punkte sind das Einzige, was
+                    schrumpfen darf, und die Navigation weicht nie. Oberhalb
+                    einer Schwelle (8 Folien, 6 Tour-Schritte) verschwinden die
+                    Punkte ganz und der sichtbare Zähler "Schritt N von M"
+                    übernimmt - derselbe, der zuvor nur Screenreadern
+                    vorbehalten war.
+                  </li>
+                </ul>
+
+                <h2
+                  class="text-3 text-primary fw-bold d-flex align-items-center mb-2"
+                >
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  <code>.admin-logo-swap</code> sowie Onboarding- und
+                  Tooltip-Breite als Variablen
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li>
+                    <strong>Eine dritte Logo-Strategie für die Sidebar:</strong>
+                    neben "ausblenden" (<code>.admin-logo-hide</code>) und
+                    "dasselbe verkleinern" (<code>.admin-logo-compact</code>)
+                    kommt "eine andere Datei zeigen".
+                    <code>.admin-logo-swap</code> an <code>.admin-brand</code>
+                    enthält zwei Bilder - <code>.admin-logo-full</code>
+                    (Wortmarke) und <code>.admin-logo-mark</code> (Bildmarke) -
+                    und CSS wählt je nach Breitenmodus eines aus. Eine auf 32px
+                    gequetschte Wortmarke ist unlesbar, und die Bildmarke ist
+                    eine eigene Datei, keine kleinere Darstellung derselben.
+                    Kein JS, keine zusätzliche Anfrage beim Umschalten.
+                  </li>
+                  <li>
+                    <strong><code>.text-left</code> und <code>.text-right</code>
+                    als Aliase von <code>.text-start</code> /
+                    <code>.text-end</code></strong> - samt den responsiven
+                    Varianten <code>.text-md-left</code> /
+                    <code>.text-md-right</code>. Aus einem anderen Projekt
+                    eingefügtes Markup verliert seine Ausrichtung nicht mehr
+                    stillschweigend. Der Alias bringt keinen RTL-Vorbehalt mit:
+                    Die logischen Namen in molique lösen sich ohnehin zu
+                    physischem <code>left</code>/<code>right</code> auf, nicht
+                    zu <code>text-align: start/end</code> - beide Schreibweisen
+                    verhalten sich also in jedem Schreibmodus gleich. Für neues
+                    Markup bleibt <code>start</code>/<code>end</code> die
+                    Empfehlung.
+                  </li>
+                  <li>
+                    <strong>Neue Variablen
+                    <code>--onboarding-card-width</code> (440px) und
+                    <code>--tour-tooltip-width</code> (320px).</strong> Bisher
+                    erforderte eine Breitenänderung das Überschreiben einer
+                    Regel außerhalb von <code>@layer</code> und das Mitdenken
+                    der Media Query ab 768px - sonst zerstörte man die bewusst
+                    bildschirmfüllende Karte auf dem Telefon. Die Variable
+                    beseitigt beides: Sie erreicht den Mobile-Zweig nicht, und
+                    die Begrenzung des Tooltips auf die Bildschirmbreite bleibt
+                    bei jedem Wert bestehen. Beide werden auf <code>:root</code>
+                    gesetzt statt inline - JS erzeugt beide Panels, es gibt
+                    also kein Markup für ein <code>style=""</code>. Das
+                    Framework deklariert sie nicht selbst, es liest sie nur mit
+                    dem Standardwert im Fallback; eine lokale Deklaration würde
+                    die Vererbung schlagen und die Variable unsetzbar machen.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.29 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

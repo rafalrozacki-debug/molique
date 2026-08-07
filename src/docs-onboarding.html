@@ -128,6 +128,10 @@
                     <td data-label="Co robi">Natywny <code>&lt;dialog&gt;</code> budowany przez JS - nie piszesz go ręcznie.</td>
                   </tr>
                   <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.onboarding-card</code></td>
+                    <td data-label="Co robi">Karta planszy. Szerokość zmienną <code>--onboarding-card-width</code> (domyślnie 440px), ustawianą na <code>:root</code> - kartę buduje JS, więc nie ma markupu na <code>style=""</code>. Zmienna nie dotyczy gałęzi mobilnej, gdzie karta i tak zajmuje pełny ekran.</td>
+                  </tr>
+                  <tr>
                     <td data-label="Klasa"><code class="fw-bold">data-onboarding</code></td>
                     <td data-label="Co robi">Owija slajdy. Opcjonalnie <code>data-onboarding-key="nazwa"</code> - własny klucz zapisu w <code>localStorage</code> (domyślnie ścieżka strony).</td>
                   </tr>
@@ -227,7 +231,7 @@
                   </tr>
                   <tr>
                     <td data-label="Klasa"><code class="fw-bold">.tour-tooltip</code></td>
-                    <td data-label="Co robi">Dymek z tytułem/opisem, pozycjonowany przez natywny CSS Anchor Positioning (<code>anchor-name</code> ustawiany z JS na celu + 5-kierunkowy łańcuch <code>@position-try</code>, żeby nigdy nie wypadł poza ekran).</td>
+                    <td data-label="Co robi">Dymek z tytułem/opisem, pozycjonowany przez natywny CSS Anchor Positioning (<code>anchor-name</code> ustawiany z JS na celu + 5-kierunkowy łańcuch <code>@position-try</code>, żeby nigdy nie wypadł poza ekran). Szerokość zmienną <code>--tour-tooltip-width</code> (domyślnie 320px) - ogranicznik do szerokości ekranu zostaje niezależnie od jej wartości.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasa"><code class="fw-bold">data-tour</code></td>
@@ -303,6 +307,30 @@
                     wywołaj <code>MoliqueOnboarding.start(slides)</code> /
                     <code>MoliqueTour.start(steps)</code> bezpośrednio z JS -
                     to obejście pomija sprawdzenie <code>localStorage</code>.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="onboarding-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-primary">4</span>
+                  <span>Dużo kroków: kropki ustępują licznikowi</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Nic nie ogranicza liczby slajdów ani kroków, a rząd
+                    kropek rósł wraz z nią - przy odpowiednio długiej
+                    sekwencji wypychał przycisk „Dalej” poza kartę. Awaria
+                    była cicha: przycisk zostawał w DOM, klikalny i w
+                    kolejności tabulacji, a karta ma
+                    <code>overflow: hidden</code>, więc nie pojawiał się
+                    nawet pasek przewijania. Od v1.7.30 stopka zawija się
+                    (<code>flex-wrap</code>), kropki są jedynym elementem,
+                    który wolno ścisnąć, a nawigacja nie kurczy się nigdy.
+                    Powyżej progu (8 slajdów onboardingu, 6 kroków tury)
+                    kropki znikają całkiem, a ich rolę przejmuje widoczny
+                    licznik „Krok N z M” - ten sam, który wcześniej czytały
+                    wyłącznie czytniki ekranu.
                   </p>
                 </div>
               </details>

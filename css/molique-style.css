@@ -1561,13 +1561,20 @@
   /* =========================================
      5. TEXT
      ========================================= */
+  /* .text-left/.text-right aliases here too, not only in
+     utilities/_typography.scss - the two files land in different @layer
+     tiers, and a bundle assembled without the utilities layer would
+     otherwise know one spelling but not the other. See the longer note in
+     utilities/_typography.scss for why the alias carries no RTL cost. */
   .text-center {
     text-align: center;
   }
-  .text-start {
+  .text-start,
+  .text-left {
     text-align: left;
   }
-  .text-end {
+  .text-end,
+  .text-right {
     text-align: right;
   }
   .fw-bold {
@@ -2115,15 +2122,24 @@
       display: flex;
       align-items: center;
       gap: calc(var(--spacing-unit) * 0.5);
+      /* The separator hangs off the group's DIRECT CHILD, not off
+         .btn-action itself. A POST action needs its own <form> (nonce +
+         method), so in a real admin table each button is the ONLY child of
+         its own form - making every one of them both :first-child and
+         :last-child of that form. A button-based ":last-child::after {
+         display:none }" therefore fired per form instead of per group:
+         every wrapped button lost its divider while every bare one kept it,
+         so dividers appeared to show up at random. The direct child is the
+         only element that always sits at a known position in the group,
+         whether it's the button or a wrapper around it. */
     }
     .btn-action-group.with-dividers {
       gap: 0;
     }
-    .btn-action-group.with-dividers .btn-action {
+    .btn-action-group.with-dividers > * {
       position: relative;
-      border-radius: 0;
     }
-    .btn-action-group.with-dividers .btn-action::after {
+    .btn-action-group.with-dividers > *::after {
       content: "";
       position: absolute;
       right: 0;
@@ -2133,14 +2149,33 @@
       background-color: var(--border-color);
       pointer-events: none;
     }
-    .btn-action-group.with-dividers .btn-action:last-child::after {
+    .btn-action-group.with-dividers > *:last-child::after {
       display: none;
     }
-    .btn-action-group.with-dividers .btn-action:first-child {
+    .btn-action-group.with-dividers {
+      /* A wrapper (<form>) must not break the row or add height of its
+         own - it exists only to carry the request, not to lay anything
+         out. */
+    }
+    .btn-action-group.with-dividers > form {
+      display: flex;
+      align-items: center;
+      margin: 0;
+    }
+    .btn-action-group.with-dividers .btn-action {
+      border-radius: 0;
+    }
+    .btn-action-group.with-dividers {
+      /* Outer corners: the child is the anchor, the button is what gets
+         painted - so both are addressed, one directly and one nested. */
+    }
+    .btn-action-group.with-dividers > :first-child,
+    .btn-action-group.with-dividers > :first-child .btn-action {
       border-top-left-radius: var(--border-radius);
       border-bottom-left-radius: var(--border-radius);
     }
-    .btn-action-group.with-dividers .btn-action:last-child {
+    .btn-action-group.with-dividers > :last-child,
+    .btn-action-group.with-dividers > :last-child .btn-action {
       border-top-right-radius: var(--border-radius);
       border-bottom-right-radius: var(--border-radius);
     }
@@ -2535,6 +2570,27 @@
       }
     }
   }
+  /* Two selector lists built from the color map (the same names as
+     $theme-colors in _buttons.scss), because an input group has to treat a
+     button's STRUCTURE and its PAINT differently:
+
+     - $ig-btn (structure: corners, overlap, z-index) must reach EVERY
+       button. A color class implies .btn (see the ".btn IMPLICATION"
+       comment in _buttons.scss), so a bare .btn-primary carries no literal
+       .btn class - matching only ".btn" silently skipped it and left it
+       with its own rounded corners instead of a flush group. Exactly the
+       bug .btn-group already fixed for itself via $btn-base-selectors.
+     - $ig-btn-neutral (paint: gray border, subtle hover, focus border
+       reset) must reach ONLY a button with NO color variant. The neutral
+       hover was written for the plain magnifier/arrow button; on a colored
+       one it repainted the background to --card-bg-subtle without touching
+       `color`, so white label text landed on a light background and the
+       button vanished under the cursor.
+
+     :is()/:not() keep specificity at a single class each, so these lists
+     don't escalate the specificity that the plain ".btn" selectors had. */
+  /* Every element type a group can hold, as ONE selector - what used to be
+     a hand-written 3x3 grid of "A + B" pairs for the border overlap. */
   @layer components {
     /* =========================================
        1. INPUT GROUPS (Grouped fields and buttons)
@@ -2549,45 +2605,43 @@
     }
     .input-group:focus-within {
       box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+      /* Neutral elements only: on a colored button the border carries the
+         variant's own color, and repainting it primary reads as a bug. */
     }
-    .input-group:focus-within > .input, .input-group:focus-within > .btn, .input-group:focus-within > .input-group-text {
+    .input-group:focus-within > .input, .input-group:focus-within > .btn:not(:is(.btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark)), .input-group:focus-within > .input-group-text {
       border-color: var(--primary) !important;
     }
     .input-group {
       /* 1. BASE: all elements in the group */
     }
-    .input-group > .input,
-    .input-group > .btn,
-    .input-group > .input-group-text {
+    .input-group > :is(.input, .input-group-text, .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark) {
       position: relative;
       margin-bottom: 0;
       /* BLUNTLY: kill all corners on every element */
       border-radius: 0 !important;
-      /* Disable individual focus and validation styling */
+      /* Disable individual focus styling - the group has one shared ring */
+    }
+    .input-group > :is(.input, .input-group-text, .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):focus, .input-group > :is(.input, .input-group-text, .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):user-valid, .input-group > :is(.input, .input-group-text, .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):user-invalid {
+      box-shadow: none !important;
+      z-index: 3;
+    }
+    .input-group {
+      /* The border reset belongs to the validation styling above, but must
+         skip a colored button for the same reason as :focus-within. */
     }
     .input-group > .input:focus, .input-group > .input:user-valid, .input-group > .input:user-invalid,
-    .input-group > .btn:focus,
-    .input-group > .btn:user-valid,
-    .input-group > .btn:user-invalid,
+    .input-group > .btn:not(:is(.btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark)):focus,
+    .input-group > .btn:not(:is(.btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark)):user-valid,
+    .input-group > .btn:not(:is(.btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark)):user-invalid,
     .input-group > .input-group-text:focus,
     .input-group > .input-group-text:user-valid,
     .input-group > .input-group-text:user-invalid {
-      box-shadow: none !important;
       border-color: var(--border-color) !important;
-      z-index: 3;
     }
     .input-group {
       /* 2. OVERLAPPING BORDERS: every element (except the first) slides under its predecessor */
     }
-    .input-group > .input + .input,
-    .input-group > .input + .btn,
-    .input-group > .input + .input-group-text,
-    .input-group > .btn + .input,
-    .input-group > .btn + .btn,
-    .input-group > .btn + .input-group-text,
-    .input-group > .input-group-text + .input,
-    .input-group > .input-group-text + .btn,
-    .input-group > .input-group-text + .input-group-text {
+    .input-group > :is(.input, .input-group-text, .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark) + :is(.input, .input-group-text, .btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark) {
       margin-left: -1px;
     }
     .input-group {
@@ -2609,12 +2663,24 @@
       width: 1%;
       min-width: 0;
     }
-    .input-group > .btn {
+    .input-group {
+      /* Stacking order: every button, colored or not, has to sit above its
+         neighbours so the shared 1px border edge belongs to it on hover. */
+    }
+    .input-group > :is(.btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark) {
       z-index: 2;
+    }
+    .input-group > :is(.btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):hover {
+      z-index: 3;
+    }
+    .input-group {
+      /* Paint: neutral button only (see the header comment). A colored
+         button keeps the border-color and hover background of its variant. */
+    }
+    .input-group > .btn:not(:is(.btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark)) {
       border: 1px solid var(--border-color);
     }
-    .input-group > .btn:hover {
-      z-index: 3;
+    .input-group > .btn:not(:is(.btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark)):hover {
       background-color: var(--card-bg-subtle);
     }
     .input-group-text {
@@ -5334,7 +5400,17 @@
   }
   .onboarding-card {
     width: 100%;
-    max-width: 440px;
+    /* Width as a variable instead of a rule to override from outside
+       @layer. Read with a fallback and NEVER declared here - unlike
+       --btn-icon-size, whose element the integrator writes by hand, this
+       card is built by JS, so there's no markup to hang a style="" on. A
+       local declaration would win over an inherited one and make the
+       variable unsettable; the fallback keeps 440px as the default while
+       leaving :root as a working input. It deliberately does NOT reach the
+       mobile branch below, which resets max-width to none for the
+       full-screen treatment - so widening the card can't accidentally
+       undo that. */
+    max-width: var(--onboarding-card-width, 440px);
     margin: calc(var(--spacing-unit) * 2);
     background-color: var(--bg-surface);
     border-radius: var(--border-radius-lg);
@@ -5429,8 +5505,18 @@
     white-space: nowrap;
     border-width: 0;
   }
+  /* Nothing caps the number of slides, and the footer is a single
+     non-wrapping row: with enough dots the row overflowed the card and
+     pushed "Next" out of sight - the button stayed in the DOM, focusable
+     and clickable, so the failure was silent (no scrollbar either, the
+     card is overflow:hidden). Three rules make it structurally impossible:
+     wrap, so a long dot row drops to its own line instead of pushing;
+     min-width:0 on the dots, so they're the part allowed to shrink; and
+     flex-shrink:0 on the navigation, so the primary action is never the
+     thing that gives way. */
   .onboarding-footer {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: calc(var(--spacing-unit) * 2);
@@ -5458,8 +5544,31 @@
      carousel isn't included. */
   .onboarding-dots {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
     gap: calc(var(--spacing-unit) * 2);
+    min-width: 0;
+  }
+  /* Past a certain count the dots stop being a progress indicator and
+     become a wall of identical targets - 8 of them already outgrow the
+     default card. Hiding them costs nothing, because .onboarding-step-count
+     ("Step N of M") carries exactly the same information and is already in
+     the markup; it merely stops being screen-reader-only and takes over as
+     the visible progress readout. Zero JS: :has() reads the dot count the
+     moment the script builds them. */
+  .onboarding-card:has(.onboarding-dots > :nth-child(8)) .onboarding-dots {
+    display: none;
+  }
+  .onboarding-card:has(.onboarding-dots > :nth-child(8)) .onboarding-step-count {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    font-size: 0.875rem;
+    color: var(--text-muted);
   }
   .onboarding-dot {
     width: 8px;
@@ -5492,6 +5601,8 @@
     display: flex;
     align-items: center;
     gap: calc(var(--spacing-unit) * 1.5);
+    flex-shrink: 0; /* the primary action never shrinks - see .onboarding-footer */
+    margin-left: auto; /* stays flush right even after the dots wrap away */
   }
   .onboarding-prev {
     display: inline-flex;
@@ -7483,7 +7594,12 @@
     left: anchor(left);
     margin: 12px 0 0 0;
     z-index: 1;
-    width: min(320px, 100vw - 2rem);
+    /* Width as a variable, read with a fallback and never declared here -
+       the tooltip is built by JS, so :root is the only place to set it
+       (see the identical reasoning on .onboarding-card). The viewport
+       clamp around it stays, so a wider tooltip still can't overflow a
+       narrow screen. */
+    width: min(var(--tour-tooltip-width, 320px), 100vw - 2rem);
     background-color: var(--bg-surface);
     color: var(--text-main);
     border-radius: var(--border-radius-lg);
@@ -7513,7 +7629,7 @@
       top: auto;
       left: auto;
       margin: auto;
-      width: min(360px, 100vw - 2rem);
+      width: min(var(--tour-tooltip-width, 320px), 100vw - 2rem);
       height: fit-content;
     }
   }
@@ -7574,8 +7690,14 @@
     white-space: nowrap;
     border-width: 0;
   }
+  /* Same silent overflow as .onboarding-footer, and worse here: the tooltip
+     is narrower (320px), so it takes fewer steps for the dot row to push
+     "Next" out of the panel while leaving it in the DOM. Wrap + shrinkable
+     dots + non-shrinkable navigation, identical reasoning - see the comment
+     on .onboarding-footer in _onboarding-slides.scss. */
   .tour-tooltip-footer {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: calc(var(--spacing-unit) * 1.5);
@@ -7598,8 +7720,28 @@
      re-declared locally so this file stays independently omittable. */
   .tour-dots {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
     gap: calc(var(--spacing-unit) * 1.5);
+    min-width: 0;
+  }
+  /* Dots give way to the text counter past 6 steps - the same trade as in
+     _onboarding-slides.scss, at a lower threshold because the tooltip is
+     narrower. .tour-step-count already sits right above the footer, so it
+     only has to stop being screen-reader-only. */
+  .tour-tooltip:has(.tour-dots > :nth-child(6)) .tour-dots {
+    display: none;
+  }
+  .tour-tooltip:has(.tour-dots > :nth-child(6)) .tour-step-count {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
   }
   .tour-dot {
     width: 6px;
@@ -7632,6 +7774,8 @@
     display: flex;
     align-items: center;
     gap: calc(var(--spacing-unit) * 1);
+    flex-shrink: 0; /* the primary action never shrinks - see .tour-tooltip-footer */
+    margin-left: auto; /* stays flush right even after the dots wrap away */
   }
   .tour-prev {
     display: inline-flex;
@@ -9981,13 +10125,25 @@
   .text-12 {
     font-size: clamp(3.5rem, 10vw + 1rem, 9rem) !important;
   }
+  /* .text-left/.text-right are ALIASES of .text-start/.text-end, listed in
+     the same rule rather than duplicated below it - one declaration, a few
+     extra bytes for the selector.
+     They cost nothing in RTL correctness, because the logical names here
+     were never logical in the first place: they resolve to the physical
+     `left`/`right`, not to `text-align: start/end`. So both spellings behave
+     identically in every writing mode, and the alias adds no new RTL
+     caveat - it only stops the hand from tripping over Bootstrap muscle
+     memory. Prefer .text-start/.text-end in new markup; these exist so
+     pasted-in code doesn't silently lose its alignment. */
   .text-center {
     text-align: center !important;
   }
-  .text-start {
+  .text-start,
+  .text-left {
     text-align: left !important;
   }
-  .text-end {
+  .text-end,
+  .text-right {
     text-align: right !important;
   }
   .text-justify {
@@ -9997,10 +10153,12 @@
     .text-md-center {
       text-align: center !important;
     }
-    .text-md-start {
+    .text-md-start,
+    .text-md-left {
       text-align: left !important;
     }
-    .text-md-end {
+    .text-md-end,
+    .text-md-right {
       text-align: right !important;
     }
   }

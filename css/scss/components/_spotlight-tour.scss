@@ -97,7 +97,12 @@ dialog.tour-dialog {
   left: anchor(left);
   margin: 12px 0 0 0;
   z-index: 1;
-  width: min(320px, calc(100vw - 2rem));
+  /* Width as a variable, read with a fallback and never declared here -
+     the tooltip is built by JS, so :root is the only place to set it
+     (see the identical reasoning on .onboarding-card). The viewport
+     clamp around it stays, so a wider tooltip still can't overflow a
+     narrow screen. */
+  width: min(var(--tour-tooltip-width, 320px), calc(100vw - 2rem));
   background-color: var(--bg-surface);
   color: var(--text-main);
   border-radius: var(--border-radius-lg);
@@ -131,7 +136,7 @@ dialog.tour-dialog {
     top: auto;
     left: auto;
     margin: auto;
-    width: min(360px, calc(100vw - 2rem));
+    width: min(var(--tour-tooltip-width, 320px), calc(100vw - 2rem));
     height: fit-content;
   }
 }
@@ -197,8 +202,14 @@ dialog.tour-dialog {
   border-width: 0;
 }
 
+/* Same silent overflow as .onboarding-footer, and worse here: the tooltip
+   is narrower (320px), so it takes fewer steps for the dot row to push
+   "Next" out of the panel while leaving it in the DOM. Wrap + shrinkable
+   dots + non-shrinkable navigation, identical reasoning - see the comment
+   on .onboarding-footer in _onboarding-slides.scss. */
 .tour-tooltip-footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: calc(var(--spacing-unit) * 1.5);
@@ -225,8 +236,32 @@ dialog.tour-dialog {
    re-declared locally so this file stays independently omittable. */
 .tour-dots {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1.5);
+  min-width: 0;
+}
+
+/* Dots give way to the text counter past 6 steps - the same trade as in
+   _onboarding-slides.scss, at a lower threshold because the tooltip is
+   narrower. .tour-step-count already sits right above the footer, so it
+   only has to stop being screen-reader-only. */
+.tour-tooltip:has(.tour-dots > :nth-child(6)) {
+  .tour-dots {
+    display: none;
+  }
+
+  .tour-step-count {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
 }
 
 .tour-dot {
@@ -263,6 +298,8 @@ dialog.tour-dialog {
   display: flex;
   align-items: center;
   gap: calc(var(--spacing-unit) * 1);
+  flex-shrink: 0; /* the primary action never shrinks - see .tour-tooltip-footer */
+  margin-left: auto; /* stays flush right even after the dots wrap away */
 }
 
 .tour-prev {

@@ -31,6 +31,25 @@
   margin: 0 !important;
 }
 
+/* The third logo strategy, next to "hide it" (.admin-logo-hide) and
+   "shrink the same thing" (.admin-logo-compact): swap it for a DIFFERENT
+   file. A wordmark scaled down to a 32px badge is unreadable - what a
+   narrow sidebar actually needs is the logomark, which is a separate
+   asset, not a smaller rendering of the first one. Both files sit in the
+   markup and CSS picks one, so there's no JS and no second request at
+   toggle time (the browser has already fetched both). */
+@mixin admin-logo-swap-style {
+  @include admin-logo-compact-style;
+
+  > .admin-logo-full {
+    display: none;
+  }
+
+  > .admin-logo-mark {
+    display: block;
+  }
+}
+
 @layer components {
   .admin-sidebar {
     background-color: var(--sidebar-bg);
@@ -151,6 +170,12 @@
     }
   }
 
+  /* Default (wide sidebar): the wordmark shows, the logomark waits. The
+     narrow modes below flip it - see @mixin admin-logo-swap-style. */
+  .admin-logo-swap > .admin-logo-mark {
+    display: none;
+  }
+
   /* =========================================
      ANIMATED TOGGLE ICON (morphing hamburger)
      ========================================= */
@@ -247,6 +272,12 @@
     .sidebar-md .admin-logo-compact {
       @include admin-logo-compact-style;
     }
+
+    /* Option 3: swap the wordmark for the logomark */
+    .sidebar-sm .admin-logo-swap,
+    .sidebar-md .admin-logo-swap {
+      @include admin-logo-swap-style;
+    }
   }
 
   /* Mobile (sidebar collapsed into the bottom bar): the same rules */
@@ -259,6 +290,11 @@
     /* Option 2: a compact (shrunk) version on mobile */
     .admin-logo-compact {
       @include admin-logo-compact-style;
+    }
+
+    /* Option 3: the logomark instead of the wordmark on mobile */
+    .admin-logo-swap {
+      @include admin-logo-swap-style;
     }
   }
 }

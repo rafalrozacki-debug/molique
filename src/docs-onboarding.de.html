@@ -129,6 +129,10 @@
                     <td data-label="Was es macht">Der native <code>&lt;dialog&gt;</code>, von JS erzeugt - Sie schreiben ihn nie von Hand.</td>
                   </tr>
                   <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.onboarding-card</code></td>
+                    <td data-label="Was es macht">Die Karte der Folie. Breite über <code>--onboarding-card-width</code> (Standard 440px), gesetzt auf <code>:root</code> - die Karte wird per JS erzeugt, es gibt also kein Markup für ein <code>style=""</code>. Die Variable erreicht den Mobile-Zweig bewusst nicht, dort füllt die Karte ohnehin den ganzen Bildschirm.</td>
+                  </tr>
+                  <tr>
                     <td data-label="Klasse"><code class="fw-bold">data-onboarding</code></td>
                     <td data-label="Was es macht">Umschließt die Slides. Optional <code>data-onboarding-key="name"</code> - eigener <code>localStorage</code>-Schlüssel (Standard: der Seitenpfad).</td>
                   </tr>
@@ -229,7 +233,7 @@
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.tour-tooltip</code></td>
-                    <td data-label="Was es macht">Die Sprechblase mit Titel/Beschreibung, positioniert über natives CSS Anchor Positioning (ein per JS auf dem Ziel gesetzter <code>anchor-name</code> + eine 5-fache <code>@position-try</code>-Fallback-Kette, damit sie nie über den Viewport hinausragt).</td>
+                    <td data-label="Was es macht">Die Sprechblase mit Titel/Beschreibung, positioniert über natives CSS Anchor Positioning (ein per JS auf dem Ziel gesetzter <code>anchor-name</code> + eine 5-fache <code>@position-try</code>-Fallback-Kette, damit sie nie über den Viewport hinausragt). Breite über <code>--tour-tooltip-width</code> (Standard 320px) - die Begrenzung auf die Bildschirmbreite bleibt unabhängig vom gesetzten Wert bestehen.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">data-tour</code></td>
@@ -308,6 +312,30 @@
                     <code>MoliqueTour.start(steps)</code> direkt aus JS
                     auf - dieser Aufruf umgeht die
                     <code>localStorage</code>-Prüfung.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="onboarding-gotchas">
+                <summary class="accordion-header">
+                  <span class="badge badge-primary">4</span>
+                  <span>Viele Schritte: Punkte weichen dem Zähler</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Nichts begrenzt die Zahl der Folien oder Schritte, und
+                    die Punktreihe wuchs mit ihr - eine ausreichend lange
+                    Sequenz schob den "Weiter"-Button aus der Karte heraus.
+                    Der Fehler war unsichtbar: Der Button blieb im DOM,
+                    klickbar und in der Tab-Reihenfolge, und die Karte hat
+                    <code>overflow: hidden</code>, also erschien nicht
+                    einmal eine Bildlaufleiste. Seit v1.7.30 bricht die
+                    Fußzeile um (<code>flex-wrap</code>), die Punkte sind
+                    das Einzige, was schrumpfen darf, und die Navigation
+                    weicht nie. Oberhalb einer Schwelle (8 Onboarding-Folien,
+                    6 Tour-Schritte) verschwinden die Punkte ganz und der
+                    sichtbare Zähler "Schritt N von M" übernimmt - derselbe,
+                    der zuvor nur Screenreadern vorbehalten war.
                   </p>
                 </div>
               </details>
