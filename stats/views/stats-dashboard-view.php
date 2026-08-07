@@ -168,13 +168,48 @@ $sections = [
                             <p class="m-0 text-muted">Brak odsłon w tym zakresie.</p>
                         </div>
                     <?php else: ?>
+                        <?php
+                        $lastBar = count($perDay) - 1;
+                        // Ile słupków przy każdym krańcu dostaje dosunięty dymek. Próg jest
+                        // proporcjonalny, nie sztywne "pierwszy i ostatni": dymek ma ~150px,
+                        // a słupek przy zakresie 90 dni tylko ~6px, więc w strefę przycięcia
+                        // przez .card wchodzi ich kilka. Przy zakresie 7 dni (słupki po ~128px)
+                        // wystarcza skrajny - i dokładnie tyle wychodzi z tego wzoru.
+                        $edgeBand = max(1, (int) ceil(count($perDay) * 0.1));
+                        ?>
                         <div class="r-chart-wrapper" role="img"
                              aria-label="Wykres odsłon z ostatnich <?= $range ?> dni, szczyt <?= $maxDay ?> odsłon dziennie">
                             <div class="chart-sparkline">
-                                <?php foreach ($perDay as $row): ?>
-                                    <div class="sparkline-bar"
-                                         style="--val: <?= $h::share((int) $row['hits'], $maxDay) ?>%"
-                                         title="<?= $h::esc((string) $row['day']) ?>: <?= (int) $row['hits'] ?>"></div>
+                                <?php foreach ($perDay as $index => $row): ?>
+                                    <?php
+                                    $hits = (int) $row['hits'];
+                                    // Dymek OTWIERA SIĘ W DÓŁ (.tooltip-element-bottom), bo .card ma
+                                    // overflow: hidden - domyślny, wychodzący do góry byłby ucinany
+                                    // przy najwyższych słupkach. W dół wszystkie lądują tuż pod linią
+                                    // bazową, niezależnie od wysokości słupka.
+                                    //
+                                    // Poziomo: przy krańcach serii dymek musi rosnąć DO ŚRODKA wykresu.
+                                    // Prawy kraniec załatwia gotowy modyfikator .tooltip-element-end,
+                                    // lewego molique nie ma - ale wystarczy samo --tooltip-tx: 0 (bez
+                                    // ruszania left/right), czyli dymek zaczyna się na środku słupka
+                                    // i rośnie w prawo. To ta sama zmienna, dla której molique rozbiło
+                                    // offset na osobne osie X i Y: modyfikator ma nadpisywać jedną oś,
+                                    // nie cały transform.
+                                    $edge = ['class' => '', 'style' => ''];
+                                    if ($index < $edgeBand) {
+                                        $edge['style'] = '--tooltip-tx: 0;';
+                                    } elseif ($index > $lastBar - $edgeBand) {
+                                        $edge['class'] = ' tooltip-element-end';
+                                    }
+                                    $tooltip = $h::fullDate((string) $row['day']) . ' · ' . $h::number($hits)
+                                             . ' ' . $h::plural($hits, 'odsłona', 'odsłony', 'odsłon');
+                                    ?>
+                                    <?php // .border-0 gasi kropkowaną kreskę, którą .tooltip-element
+                                          // rysuje pod elementem - sensowną pod słowem w zdaniu,
+                                          // bezsensowną pod słupkiem wykresu. ?>
+                                    <div class="sparkline-bar tooltip-element tooltip-element-bottom border-0<?= $edge['class'] ?>"
+                                         style="--val: <?= $h::barHeight($hits, $maxDay) ?>; <?= $edge['style'] ?>"
+                                         data-tooltip="<?= $h::esc($tooltip) ?>"></div>
                                 <?php endforeach; ?>
                             </div>
                         </div>

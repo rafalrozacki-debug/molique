@@ -74,8 +74,48 @@ final class StatsHtml
     /** Data w formacie "05.08" (oś wykresu) — wejście to zawsze Y-m-d z bazy. */
     public static function shortDate(string $isoDay): string
     {
+        return self::formatDay($isoDay, 'd.m');
+    }
+
+    /** Data w formacie "05.08.2026" (dymek nad słupkiem). */
+    public static function fullDate(string $isoDay): string
+    {
+        return self::formatDay($isoDay, 'd.m.Y');
+    }
+
+    private static function formatDay(string $isoDay, string $format): string
+    {
         $time = strtotime($isoDay);
 
-        return $time === false ? $isoDay : date('d.m', $time);
+        return $time === false ? $isoDay : date($format, $time);
+    }
+
+    /**
+     * Wysokość słupka sparkline'a jako wartość dla --val.
+     *
+     * Dzień bez ruchu dostaje 2px zamiast 0% z dwóch powodów: słupek o zerowej
+     * wysokości nie ma czego najechać myszą (a dymek wisi właśnie na słupku),
+     * a przerwa w szeregu czyta się jak brak danych, nie jak zero. 2px to przy
+     * wykresie 200px dokładnie tyle, ile dostałby najniższy niezerowy słupek,
+     * więc skala nie kłamie.
+     */
+    public static function barHeight(int $value, int $max): string
+    {
+        return $value === 0 ? '2px' : self::share($value, $max) . '%';
+    }
+
+    /**
+     * Polska odmiana przez liczbę: 1 odsłona / 2-4 odsłony / 5+ odsłon
+     * (z wyjątkiem nastek: 12, 13, 14 idą do formy "wiele").
+     */
+    public static function plural(int $count, string $one, string $few, string $many): string
+    {
+        if ($count === 1) {
+            return $one;
+        }
+        $lastTwo = $count % 100;
+        $last    = $count % 10;
+
+        return ($last >= 2 && $last <= 4 && ($lastTwo < 12 || $lastTwo > 14)) ? $few : $many;
     }
 }
