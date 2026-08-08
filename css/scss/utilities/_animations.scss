@@ -37,348 +37,346 @@
   }
 }
 
-@layer utilities {
-  /* =========================================
-     1. ENTRANCE ANIMATIONS (Intersection Observer)
-     ========================================= */
-  .animate {
-    opacity: 0;
-    will-change: transform, opacity;
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+/* =========================================
+   1. ENTRANCE ANIMATIONS (Intersection Observer)
+   ========================================= */
+.animate {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-  .animate.is-visible {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1) !important;
-  }
+.animate.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
 
-  .fade-in { transform: translate3d(0, 0, 0); }
-  .fade-in-up { transform: translate3d(0, 40px, 0); }
-  .fade-in-down { transform: translate3d(0, -40px, 0); }
-  .fade-in-left { transform: translate3d(-40px, 0, 0); }
-  .fade-in-right { transform: translate3d(40px, 0, 0); }
-  .zoom-in { transform: scale(0.95); }
+.fade-in { transform: translate3d(0, 0, 0); }
+.fade-in-up { transform: translate3d(0, 40px, 0); }
+.fade-in-down { transform: translate3d(0, -40px, 0); }
+.fade-in-left { transform: translate3d(-40px, 0, 0); }
+.fade-in-right { transform: translate3d(40px, 0, 0); }
+.zoom-in { transform: scale(0.95); }
 
-  .delay-100 { transition-delay: 100ms; }
-  .delay-200 { transition-delay: 200ms; }
-  .delay-300 { transition-delay: 300ms; }
-  .delay-400 { transition-delay: 400ms; }
-  .delay-500 { transition-delay: 500ms; }
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
 
-  .reveal-blur {
-    opacity: 0; filter: blur(10px); transform: translateY(20px);
-    transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: transform, opacity, filter;
-    &.is-visible { opacity: 1; filter: blur(0); transform: translateY(0); }
-    @starting-style { &.is-visible { opacity: 0; filter: blur(10px); transform: translateY(20px); } }
-  }
+.reveal-blur {
+  opacity: 0; filter: blur(10px); transform: translateY(20px);
+  transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity, filter;
+  &.is-visible { opacity: 1; filter: blur(0); transform: translateY(0); }
+  @starting-style { &.is-visible { opacity: 0; filter: blur(10px); transform: translateY(20px); } }
+}
 
-  .reveal-scale {
-    opacity: 0; transform: scale(0.95);
-    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: transform, opacity;
-    &.is-visible { opacity: 1; transform: scale(1); }
-    @starting-style { &.is-visible { opacity: 0; transform: scale(0.95); } }
-  }
+.reveal-scale {
+  opacity: 0; transform: scale(0.95);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity;
+  &.is-visible { opacity: 1; transform: scale(1); }
+  @starting-style { &.is-visible { opacity: 0; transform: scale(0.95); } }
+}
 
-  /* =========================================
-     2. SCROLL REVEAL (CSS Scroll-Driven Animations)
-     ========================================= */
+/* =========================================
+   2. SCROLL REVEAL (CSS Scroll-Driven Animations)
+   ========================================= */
 
-  /* By default (on mobile) the class does nothing - this prevents glitches and saves battery */
-  .scroll-reveal {
-    opacity: 1;
-    transform: none;
-  }
+/* By default (on mobile) the class does nothing - this prevents glitches and saves battery */
+.scroll-reveal {
+  opacity: 1;
+  transform: none;
+}
 
-  /* The animation only activates on desktop (from the MD breakpoint) */
-  @include mq(md) {
-    @supports (animation-timeline: view()) {
-      .scroll-reveal {
-        animation: scrollRevealAnim linear both;
-        animation-timeline: view();
-        animation-range: entry 10% cover 30%;
-      }
+/* The animation only activates on desktop (from the MD breakpoint) */
+@include mq(md) {
+  @supports (animation-timeline: view()) {
+    .scroll-reveal {
+      animation: scrollRevealAnim linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
     }
   }
+}
 
-  @keyframes scrollRevealAnim {
-    from { opacity: 0; transform: translateY(50px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+@keyframes scrollRevealAnim {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  /* =========================================
-     3. HOVER EFFECTS (micro-interactions)
-     ========================================= */
-  .hover-spring, .hover-gpu-shadow {
-    --hover-y: 0px;
-    --hover-scale: 1;
-    transform: translateY(var(--hover-y)) scale(var(--hover-scale));
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    will-change: transform;
-  }
+/* =========================================
+   3. HOVER EFFECTS (micro-interactions)
+   ========================================= */
+.hover-spring, .hover-gpu-shadow {
+  --hover-y: 0px;
+  --hover-scale: 1;
+  transform: translateY(var(--hover-y)) scale(var(--hover-scale));
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+}
 
-  .hover-spring { display: inline-block; &:hover { --hover-scale: 1.05; } }
+.hover-spring { display: inline-block; &:hover { --hover-scale: 1.05; } }
 
-  .hover-gpu-shadow {
-    position: relative;
-    isolation: isolate; 
-    overflow: visible !important; 
-    &::after {
-      content: ''; position: absolute; inset: 0; border-radius: inherit;
-      box-shadow: var(--shadow-lg); opacity: 0; transition: opacity 0.3s ease;
-      pointer-events: none; z-index: -1;
-    }
-    &:hover { --hover-y: -4px; &::after { opacity: 1; } }
+.hover-gpu-shadow {
+  position: relative;
+  isolation: isolate; 
+  overflow: visible !important; 
+  &::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    box-shadow: var(--shadow-lg); opacity: 0; transition: opacity 0.3s ease;
+    pointer-events: none; z-index: -1;
   }
+  &:hover { --hover-y: -4px; &::after { opacity: 1; } }
+}
 
-  .hover-tilt {
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transform-style: preserve-3d; will-change: transform;
-    &:hover { transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) scale(1.02); }
-  }
+.hover-tilt {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d; will-change: transform;
+  &:hover { transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) scale(1.02); }
+}
 
-  .tilt-card {
-    transition: transform 0.1s ease-out;
-    transform-style: preserve-3d; will-change: transform;
-  }
+.tilt-card {
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d; will-change: transform;
+}
 
-  /* =========================================
-     4. TEXT EFFECTS
-     ========================================= */
-  .text-highlight {
-    background-image: linear-gradient(transparent 60%, rgba(var(--primary-rgb), 0.3) 60%);
-    background-size: 0% 100%; background-repeat: no-repeat;
-    transition: background-size 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    &:hover, &.is-active { background-size: 100% 100%; }
-  }
+/* =========================================
+   4. TEXT EFFECTS
+   ========================================= */
+.text-highlight {
+  background-image: linear-gradient(transparent 60%, rgba(var(--primary-rgb), 0.3) 60%);
+  background-size: 0% 100%; background-repeat: no-repeat;
+  transition: background-size 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  &:hover, &.is-active { background-size: 100% 100%; }
+}
 
-  .hover-underline {
-    position: relative; display: inline-block; text-decoration: none;
-    &::after {
-      content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px;
-      background-color: currentColor; transform: scaleX(0); transform-origin: right;
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform;
-    }
-    &:hover::after, &.is-active::after { transform: scaleX(1); transform-origin: left; }
+.hover-underline {
+  position: relative; display: inline-block; text-decoration: none;
+  &::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px;
+    background-color: currentColor; transform: scaleX(0); transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform;
   }
+  &:hover::after, &.is-active::after { transform: scaleX(1); transform-origin: left; }
+}
 
-  .hover-underline-center {
-    @extend .hover-underline;
-    &::after { transform-origin: center; }
-    &:hover::after, &.is-active::after { transform-origin: center; }
-  }
+.hover-underline-center {
+  @extend .hover-underline;
+  &::after { transform-origin: center; }
+  &:hover::after, &.is-active::after { transform-origin: center; }
+}
 
-  .hover-text-wipe {
-    background-image: linear-gradient(var(--primary), var(--primary)), linear-gradient(currentColor, currentColor);
-    background-repeat: no-repeat;
-    background-size: 0% 100%, 100% 100%;
-    background-position: 100% 0%, 0% 0%;
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: background-size 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-    &:hover { background-size: 100% 100%, 100% 100%; background-position: 0% 0%, 0% 0%; }
-  }
+.hover-text-wipe {
+  background-image: linear-gradient(var(--primary), var(--primary)), linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 100%, 100% 100%;
+  background-position: 100% 0%, 0% 0%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-size 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  &:hover { background-size: 100% 100%, 100% 100%; background-position: 0% 0%, 0% 0%; }
+}
 
-  .typewriter {
-    display: inline-block;
-    border-right: 2px solid var(--primary);
-    padding-right: 4px;
-    animation: blinkCursor 0.75s step-end infinite;
-  }
-  @keyframes blinkCursor { from, to { border-color: transparent; } 50% { border-color: var(--primary); } }
+.typewriter {
+  display: inline-block;
+  border-right: 2px solid var(--primary);
+  padding-right: 4px;
+  animation: blinkCursor 0.75s step-end infinite;
+}
+@keyframes blinkCursor { from, to { border-color: transparent; } 50% { border-color: var(--primary); } }
 
-  .text-gradient-animated {
-    --gradient-color-1: var(--primary);
-    --gradient-color-2: var(--info);
-    --gradient-color-3: var(--success);
-    background: linear-gradient(to right, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-3), var(--gradient-color-1));
-    background-size: 300% auto;
-    color: transparent;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: textGradientFlow 4s linear infinite;
-  }
-  @keyframes textGradientFlow { 0% { background-position: 0% center; } 100% { background-position: -300% center; } }
+.text-gradient-animated {
+  --gradient-color-1: var(--primary);
+  --gradient-color-2: var(--info);
+  --gradient-color-3: var(--success);
+  background: linear-gradient(to right, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-3), var(--gradient-color-1));
+  background-size: 300% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradientFlow 4s linear infinite;
+}
+@keyframes textGradientFlow { 0% { background-position: 0% center; } 100% { background-position: -300% center; } }
 
-  /* =========================================
-     5. OTHER (shake, parallax, blobs)
-     ========================================= */
-  .shake { animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
-  @keyframes shakeAnim {
-    10%, 90% { transform: translate3d(-2px, 0, 0); }
-    20%, 80% { transform: translate3d(4px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-    40%, 60% { transform: translate3d(6px, 0, 0); }
-  }
-  .input:user-invalid { animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+/* =========================================
+   5. OTHER (shake, parallax, blobs)
+   ========================================= */
+.shake { animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+@keyframes shakeAnim {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+.input:user-invalid { animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
 
-  .ken-burns {
-    overflow: hidden;
-    img, .bg-image { transition: transform 10s ease-out; will-change: transform; }
-    &:hover img, &:hover .bg-image { transform: scale(1.1); }
-  }
+.ken-burns {
+  overflow: hidden;
+  img, .bg-image { transition: transform 10s ease-out; will-change: transform; }
+  &:hover img, &:hover .bg-image { transform: scale(1.1); }
+}
 
-  .parallax-container { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .parallax-bg { position: absolute; top: -20%; left: 0; width: 100%; height: 140%; object-fit: cover; z-index: 0; pointer-events: none; will-change: transform; }
-  .parallax-content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.parallax-container { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.parallax-bg { position: absolute; top: -20%; left: 0; width: 100%; height: 140%; object-fit: cover; z-index: 0; pointer-events: none; will-change: transform; }
+.parallax-content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-  /* Component API via variables, not classes: color and timing are
-     CONTINUOUS, non-semantic values, so every class would be an arbitrary
-     point on a scale (unlike .stock-bar-success, where the name carries
-     the state). Declared on the container so a single
-     style="--blob-1: #7c3aed" can override them without reaching into
-     the pseudo-elements. */
-  .bg-blobs {
-    --blob-1: rgba(var(--primary-rgb), 0.5);
-    --blob-2: rgba(var(--info-rgb), 0.4);
-    /* Timing of one blob. The second one runs slower (multiplier below),
-       so the cycles drift apart and the pattern doesn't obviously repeat. */
-    --blob-speed: 7s;
+/* Component API via variables, not classes: color and timing are
+   CONTINUOUS, non-semantic values, so every class would be an arbitrary
+   point on a scale (unlike .stock-bar-success, where the name carries
+   the state). Declared on the container so a single
+   style="--blob-1: #7c3aed" can override them without reaching into
+   the pseudo-elements. */
+.bg-blobs {
+  --blob-1: rgba(var(--primary-rgb), 0.5);
+  --blob-2: rgba(var(--info-rgb), 0.4);
+  /* Timing of one blob. The second one runs slower (multiplier below),
+     so the cycles drift apart and the pattern doesn't obviously repeat. */
+  --blob-speed: 7s;
 
-    position: relative; overflow: hidden; background-color: var(--bg-surface); z-index: 1;
-  }
-  .bg-blobs::before, .bg-blobs::after {
-    content: ''; position: absolute; width: 50vw; height: 50vw; max-width: 600px; max-height: 600px;
-    /* An irregular, organic shape instead of a circle. The radii are
-       STATIC - border-radius isn't animatable without reflow, so the
-       motion comes entirely from transform. The shape alone under an
-       80px blur would barely be legible, though, which is why rotation
-       was added to the animation: a rotating irregular blob changes its
-       outline over time, something a perfect circle can't do. */
-    border-radius: 42% 58% 63% 37% / 45% 38% 62% 55%;
-    /* A 50px blur, not 80px. At 80px each point's blur was BIGGER than
-       the outline's irregularity (~60px on a 600px blob), so the organic
-       shape blurred into a circle and the rotation stayed invisible. */
-    filter: blur(50px); z-index: -1;
-    /* Opacity via a variable, so frames can pulse it while variants
-       (e.g. .bg-blobs-deep) still set their own base level. */
-    --blob-opacity: 0.4;
-    opacity: var(--blob-opacity);
-    will-change: transform, opacity; transform: translate3d(0, 0, 0);
-    animation: blobFloat var(--blob-speed) infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .bg-blobs::before { background-color: var(--blob-1); top: -10%; left: -10%; }
-  .bg-blobs::after {
-    background-color: var(--blob-2); bottom: -10%; right: -10%;
-    /* A mirrored outline, so both blobs aren't the same shape. */
-    border-radius: 63% 37% 42% 58% / 62% 55% 45% 38%;
-    /* SEPARATE keyframes, not the same ones with a delay: previously both
-       blobs moved in parallel in the same direction, which read as a
-       shared sway instead of independent drift. */
-    animation-name: blobFloatAlt;
-    /* 1.3x slower than the first blob. A multiplier, not a fixed value -
-       this way changing --blob-speed speeds up both while keeping their
-       cycles offset. */
-    animation-duration: calc(var(--blob-speed) * 1.3);
-    animation-delay: calc(var(--blob-speed) * -0.6);
-  }
-  @keyframes blobFloat {
-    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-           opacity: calc(var(--blob-opacity) * 0.7); }
-    100% { transform: translate3d(12%, 18%, 0) scale(1.18) rotate(45deg);
-           opacity: var(--blob-opacity); }
-  }
-  @keyframes blobFloatAlt {
-    0%   { transform: translate3d(0, 0, 0) scale(1.12) rotate(0deg);
-           opacity: var(--blob-opacity); }
-    100% { transform: translate3d(-15%, -12%, 0) scale(0.92) rotate(-40deg);
-           opacity: calc(var(--blob-opacity) * 0.6); }
-  }
+  position: relative; overflow: hidden; background-color: var(--bg-surface); z-index: 1;
+}
+.bg-blobs::before, .bg-blobs::after {
+  content: ''; position: absolute; width: 50vw; height: 50vw; max-width: 600px; max-height: 600px;
+  /* An irregular, organic shape instead of a circle. The radii are
+     STATIC - border-radius isn't animatable without reflow, so the
+     motion comes entirely from transform. The shape alone under an
+     80px blur would barely be legible, though, which is why rotation
+     was added to the animation: a rotating irregular blob changes its
+     outline over time, something a perfect circle can't do. */
+  border-radius: 42% 58% 63% 37% / 45% 38% 62% 55%;
+  /* A 50px blur, not 80px. At 80px each point's blur was BIGGER than
+     the outline's irregularity (~60px on a 600px blob), so the organic
+     shape blurred into a circle and the rotation stayed invisible. */
+  filter: blur(50px); z-index: -1;
+  /* Opacity via a variable, so frames can pulse it while variants
+     (e.g. .bg-blobs-deep) still set their own base level. */
+  --blob-opacity: 0.4;
+  opacity: var(--blob-opacity);
+  will-change: transform, opacity; transform: translate3d(0, 0, 0);
+  animation: blobFloat var(--blob-speed) infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bg-blobs::before { background-color: var(--blob-1); top: -10%; left: -10%; }
+.bg-blobs::after {
+  background-color: var(--blob-2); bottom: -10%; right: -10%;
+  /* A mirrored outline, so both blobs aren't the same shape. */
+  border-radius: 63% 37% 42% 58% / 62% 55% 45% 38%;
+  /* SEPARATE keyframes, not the same ones with a delay: previously both
+     blobs moved in parallel in the same direction, which read as a
+     shared sway instead of independent drift. */
+  animation-name: blobFloatAlt;
+  /* 1.3x slower than the first blob. A multiplier, not a fixed value -
+     this way changing --blob-speed speeds up both while keeping their
+     cycles offset. */
+  animation-duration: calc(var(--blob-speed) * 1.3);
+  animation-delay: calc(var(--blob-speed) * -0.6);
+}
+@keyframes blobFloat {
+  0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+         opacity: calc(var(--blob-opacity) * 0.7); }
+  100% { transform: translate3d(12%, 18%, 0) scale(1.18) rotate(45deg);
+         opacity: var(--blob-opacity); }
+}
+@keyframes blobFloatAlt {
+  0%   { transform: translate3d(0, 0, 0) scale(1.12) rotate(0deg);
+         opacity: var(--blob-opacity); }
+  100% { transform: translate3d(-15%, -12%, 0) scale(0.92) rotate(-40deg);
+         opacity: calc(var(--blob-opacity) * 0.6); }
+}
 
-  /* A11y: the blobs are a large, continuous background motion - even more
-     so with the added rotation. Under prefers-reduced-motion, only the
-     static organic shape remains. The global rule in this file only
-     silences view transitions, so this animation has to be stopped separately. */
-  @media (prefers-reduced-motion: reduce) {
-    .bg-blobs::before, .bg-blobs::after { animation: none; }
-  }
+/* A11y: the blobs are a large, continuous background motion - even more
+   so with the added rotation. Under prefers-reduced-motion, only the
+   static organic shape remains. The global rule in this file only
+   silences view transitions, so this animation has to be stopped separately. */
+@media (prefers-reduced-motion: reduce) {
+  .bg-blobs::before, .bg-blobs::after { animation: none; }
+}
 
-  /* An ALWAYS-DARK variant - like .navbar-pill, and for the same reason:
-     it needs to be a reliable backdrop for white text regardless of the
-     page's theme. The value is a literal, NOT var(--bg-body) or
-     var(--dark): those variables invert in dark mode, so in the light
-     theme the background would turn light and the white text would
-     vanish. Override via style="--blobs-deep-bg: #123". */
-  .bg-blobs-deep {
-    --blobs-deep-bg: #0A0B14;
-    background-color: var(--blobs-deep-bg);
-    /* Stronger color opacity, since blurred colors fade on a dark
-       background. We override --blob-1/--blob-2, so a custom color given
-       via style="..." on the same element still wins (inline declaration order). */
-    --blob-1: rgba(var(--primary-rgb), 0.75);
-    --blob-2: rgba(var(--info-rgb), 0.65);
-    /* The BASE opacity level - frames pulse relative to it. */
-    &::before, &::after { --blob-opacity: 0.6; }
-  }
+/* An ALWAYS-DARK variant - like .navbar-pill, and for the same reason:
+   it needs to be a reliable backdrop for white text regardless of the
+   page's theme. The value is a literal, NOT var(--bg-body) or
+   var(--dark): those variables invert in dark mode, so in the light
+   theme the background would turn light and the white text would
+   vanish. Override via style="--blobs-deep-bg: #123". */
+.bg-blobs-deep {
+  --blobs-deep-bg: #0A0B14;
+  background-color: var(--blobs-deep-bg);
+  /* Stronger color opacity, since blurred colors fade on a dark
+     background. We override --blob-1/--blob-2, so a custom color given
+     via style="..." on the same element still wins (inline declaration order). */
+  --blob-1: rgba(var(--primary-rgb), 0.75);
+  --blob-2: rgba(var(--info-rgb), 0.65);
+  /* The BASE opacity level - frames pulse relative to it. */
+  &::before, &::after { --blob-opacity: 0.6; }
+}
 
-  /* =========================================
-     6. BORDER ANIMATIONS (border effects)
-     ========================================= */
-  .hover-border-draw {
-    position: relative;
-    border-radius: var(--border-radius);
-    &::before {
-      content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px;
-      background: var(--hover-border-color, var(--primary));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      transform: scale(0.95); opacity: 0; visibility: hidden; 
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, visibility 0.4s;
-      pointer-events: none;
-    }
-    &:hover::before, &.is-active::before, input:checked + &::before {
-      transform: scale(1); opacity: 1; visibility: visible; 
-    }
+/* =========================================
+   6. BORDER ANIMATIONS (border effects)
+   ========================================= */
+.hover-border-draw {
+  position: relative;
+  border-radius: var(--border-radius);
+  &::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px;
+    background: var(--hover-border-color, var(--primary));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    transform: scale(0.95); opacity: 0; visibility: hidden; 
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, visibility 0.4s;
+    pointer-events: none;
   }
-
-  .hover-border-trace {
-    position: relative;
-    border-radius: var(--border-radius);
-    &::before {
-      content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px;
-      background: conic-gradient(from var(--trace-angle), transparent 0%, transparent 70%, var(--hover-border-color, var(--primary)) 100%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
-    }
-    &:hover::before, &.is-active::before, input:checked + &::before {
-      opacity: 1; animation: borderTraceSpin 1.5s linear infinite;
-    }
+  &:hover::before, &.is-active::before, input:checked + &::before {
+    transform: scale(1); opacity: 1; visibility: visible; 
   }
-  @keyframes borderTraceSpin { from { --trace-angle: 0deg; } to { --trace-angle: 360deg; } }
+}
 
-  .hover-border-draw-2 {
-    position: relative;
-    background-image: 
-    linear-gradient(to right, var(--hover-border-color, var(--primary)) 100%, transparent 100%),
-    linear-gradient(to bottom, var(--hover-border-color, var(--primary)) 100%, transparent 100%),
-    linear-gradient(to left, var(--hover-border-color, var(--primary)) 100%, transparent 100%),
-    linear-gradient(to top, var(--hover-border-color, var(--primary)) 100%, transparent 100%);
-    background-repeat: no-repeat;
-    background-size: 0% 2px, 2px 0%, 0% 2px, 2px 0%;
-    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-    transition: background-size 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    &:hover, &.is-active, input:checked + & {
-      background-size: 100% 2px, 2px 100%, 100% 2px, 2px 100%;
-    }
+.hover-border-trace {
+  position: relative;
+  border-radius: var(--border-radius);
+  &::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px;
+    background: conic-gradient(from var(--trace-angle), transparent 0%, transparent 70%, var(--hover-border-color, var(--primary)) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
   }
+  &:hover::before, &.is-active::before, input:checked + &::before {
+    opacity: 1; animation: borderTraceSpin 1.5s linear infinite;
+  }
+}
+@keyframes borderTraceSpin { from { --trace-angle: 0deg; } to { --trace-angle: 360deg; } }
 
-  .hover-border-trace-2 {
-    position: relative;
-    background-image: 
-      linear-gradient(to right, var(--hover-border-color, var(--primary)) var(--t-top), transparent var(--t-top)),
-      linear-gradient(to bottom, var(--hover-border-color, var(--primary)) var(--t-right), transparent var(--t-right)),
-      linear-gradient(to left, var(--hover-border-color, var(--primary)) var(--t-bottom), transparent var(--t-bottom)),
-      linear-gradient(to top, var(--hover-border-color, var(--primary)) var(--t-left), transparent var(--t-left));
-    background-repeat: no-repeat;
-    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+.hover-border-draw-2 {
+  position: relative;
+  background-image: 
+  linear-gradient(to right, var(--hover-border-color, var(--primary)) 100%, transparent 100%),
+  linear-gradient(to bottom, var(--hover-border-color, var(--primary)) 100%, transparent 100%),
+  linear-gradient(to left, var(--hover-border-color, var(--primary)) 100%, transparent 100%),
+  linear-gradient(to top, var(--hover-border-color, var(--primary)) 100%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 2px, 2px 0%, 0% 2px, 2px 0%;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  transition: background-size 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  &:hover, &.is-active, input:checked + & {
     background-size: 100% 2px, 2px 100%, 100% 2px, 2px 100%;
-    transition: --t-top 0.15s linear 0.45s, --t-right 0.15s linear 0.3s, --t-bottom 0.15s linear 0.15s, --t-left 0.15s linear 0s;
-    &:hover, &.is-active, input:checked + & {
-      --t-top: 100%; --t-right: 100%; --t-bottom: 100%; --t-left: 100%;
-      transition: --t-top 0.15s linear 0s, --t-right 0.15s linear 0.15s, --t-bottom 0.15s linear 0.3s, --t-left 0.15s linear 0.45s;
-    }
+  }
+}
+
+.hover-border-trace-2 {
+  position: relative;
+  background-image: 
+    linear-gradient(to right, var(--hover-border-color, var(--primary)) var(--t-top), transparent var(--t-top)),
+    linear-gradient(to bottom, var(--hover-border-color, var(--primary)) var(--t-right), transparent var(--t-right)),
+    linear-gradient(to left, var(--hover-border-color, var(--primary)) var(--t-bottom), transparent var(--t-bottom)),
+    linear-gradient(to top, var(--hover-border-color, var(--primary)) var(--t-left), transparent var(--t-left));
+  background-repeat: no-repeat;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-size: 100% 2px, 2px 100%, 100% 2px, 2px 100%;
+  transition: --t-top 0.15s linear 0.45s, --t-right 0.15s linear 0.3s, --t-bottom 0.15s linear 0.15s, --t-left 0.15s linear 0s;
+  &:hover, &.is-active, input:checked + & {
+    --t-top: 100%; --t-right: 100%; --t-bottom: 100%; --t-left: 100%;
+    transition: --t-top 0.15s linear 0s, --t-right 0.15s linear 0.15s, --t-bottom 0.15s linear 0.3s, --t-left 0.15s linear 0.45s;
   }
 }

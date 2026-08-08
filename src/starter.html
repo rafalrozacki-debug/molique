@@ -3,6 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      ANTI-FOUC - zostaw to tutaj, jak najwyżej w <head>.
+
+      Motyw (jasny/ciemny) i szerokość sidebara admina zapisuje w
+      localStorage molique-script.js, ale odczytuje je dopiero po
+      DOMContentLoaded - czyli PO pierwszym renderowaniu. Powracający
+      użytkownik zobaczyłby więc mignięcie jasnego motywu przed ciemnym,
+      albo pełny sidebar kurczący się do wąskiego.
+
+      Ten skrypt musi być SYNCHRONICZNY: bez defer, bez async, bez
+      type="module". Każde z nich odsuwa wykonanie za pierwszą klatkę
+      i cały sens znika. Nic nie zapisuje - tylko czyta to, co zapisał
+      molique-script.js, i robi to wcześniej.
+
+      Jeśli nie używasz panelu admina, blok z sidebarem możesz usunąć.
+    -->
+    <script>
+      (function () {
+        try {
+          var html = document.documentElement;
+          var savedTheme = localStorage.getItem('molique-theme');
+          var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          html.setAttribute('data-theme', savedTheme || (systemDark ? 'dark' : 'light'));
+
+          var savedSidebar = localStorage.getItem('molique-sidebar-state');
+          if (savedSidebar === 'sidebar-md' || savedSidebar === 'sidebar-sm') {
+            html.classList.add(savedSidebar);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <title>molique - Starter</title>
 
     <!--

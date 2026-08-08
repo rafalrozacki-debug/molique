@@ -1,181 +1,179 @@
 // molique - Data funnels: vertical, horizontal pipeline, and trapezoid.
-@layer components {
-  /* =========================================
-     1. DATA FUNNEL (vertical, based on --val)
-     ========================================= */
-  .chart-funnel {
-    display: flex;
+/* =========================================
+   1. DATA FUNNEL (vertical, based on --val)
+   ========================================= */
+.chart-funnel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.5);
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 2) 0;
+}
+
+.funnel-stage {
+  /* Width controlled from the HTML, defaults to 100% */
+  width: var(--val, 100%);
+  min-width: 140px; /* Prevents the text from being crushed at the very bottom of the funnel */
+  min-height: var(--target-size-min);
+
+  background-color: var(--stage-bg, var(--primary));
+  color: var(--stage-text, var(--btn-text-light));
+  border-radius: var(--border-radius);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* A subtle hover effect for interactivity */
+  &:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+}
+
+/* =========================================
+   2. PROCESS FUNNEL (horizontal CRM pipeline)
+   ========================================= */
+.chart-pipeline {
+  display: flex;
+  width: 100%;
+  gap: 4px; /* Gap between the arrows */
+
+  /* On mobile, switch to a vertical stack */
+  @media (max-width: 768px) {
     flex-direction: column;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 0.5);
-    width: 100%;
-    padding: calc(var(--spacing-unit) * 2) 0;
+  }
+}
+
+.pipeline-stage {
+  flex: 1;
+  min-height: var(--target-size-min);
+  background-color: var(--stage-bg, var(--bg-surface));
+  color: var(--stage-text, var(--text-main));
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
+  
+  font-size: 0.875rem;
+  font-weight: var(--fw-medium);
+  text-align: center;
+  position: relative;
+  
+  /* CSS trick: the chevron (arrow) shape */
+  clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
+
+  /* The first item has no notch on the left */
+  &:first-child {
+    clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
   }
 
-  .funnel-stage {
-    /* Width controlled from the HTML, defaults to 100% */
-    width: var(--val, 100%);
-    min-width: 140px; /* Prevents the text from being crushed at the very bottom of the funnel */
-    min-height: var(--target-size-min);
-
-    background-color: var(--stage-bg, var(--primary));
-    color: var(--stage-text, var(--btn-text-light));
-    border-radius: var(--border-radius);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-
-    font-size: 0.875rem;
-    font-weight: var(--fw-medium);
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-
-    /* A subtle hover effect for interactivity */
-    &:hover {
-      filter: brightness(1.1);
-      transform: scale(1.02);
-    }
+  /* The last item has no point on the right */
+  &:last-child {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
   }
 
-  /* =========================================
-     2. PROCESS FUNNEL (horizontal CRM pipeline)
-     ========================================= */
-  .chart-pipeline {
-    display: flex;
-    width: 100%;
-    gap: 4px; /* Gap between the arrows */
-
-    /* On mobile, switch to a vertical stack */
-    @media (max-width: 768px) {
-      flex-direction: column;
-    }
+  /* Active stage */
+  &.is-active {
+    --stage-bg: var(--primary);
+    --stage-text: var(--btn-text-light);
   }
 
-  .pipeline-stage {
-    flex: 1;
-    min-height: var(--target-size-min);
-    background-color: var(--stage-bg, var(--bg-surface));
-    color: var(--stage-text, var(--text-main));
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
-    
-    font-size: 0.875rem;
-    font-weight: var(--fw-medium);
-    text-align: center;
-    position: relative;
-    
-    /* CSS trick: the chevron (arrow) shape */
-    clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
+  /* Reset the shapes on mobile (plain rounded rectangles) */
+  @media (max-width: 768px) {
+    clip-path: none !important;
+    border-radius: var(--border-radius) !important;
+    justify-content: space-between; /* Text on the left, an optional icon on the right */
+  }
+}
 
-    /* The first item has no notch on the left */
-    &:first-child {
-      clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
-      border-top-left-radius: var(--border-radius);
-      border-bottom-left-radius: var(--border-radius);
-    }
+ /* =========================================
+   3. TRUE FUNNEL (a practical funnel with a stem)
+   ========================================= */
+.chart-funnel-true {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 
-    /* The last item has no point on the right */
-    &:last-child {
-      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
-      border-top-right-radius: var(--border-radius);
-      border-bottom-right-radius: var(--border-radius);
-    }
+  /* Switch the proportions to a square - more compact and practical */
+  aspect-ratio: 1 / 1;
+  gap: 2px;
 
-    /* Active stage */
-    &.is-active {
-      --stage-bg: var(--primary);
-      --stage-text: var(--btn-text-light);
-    }
+  /* CSS trick: a sculpted polygon - a wider stem (50% of the width) */
+  clip-path: polygon(
+    /* Top edge and top-right rounding */
+    4% 0%, 96% 0%, 98.5% 1%, 100% 4%,
 
-    /* Reset the shapes on mobile (plain rounded rectangles) */
-    @media (max-width: 768px) {
-      clip-path: none !important;
-      border-radius: var(--border-radius) !important;
-      justify-content: space-between; /* Text on the left, an optional icon on the right */
-    }
+    /* Right slope going down (ends lower, at 70% height) */
+    76% 68%,
+    /* Right inner bend */
+    75% 72%,
+
+    /* Right vertical stem (wider, at 75% on the X axis) */
+    75% 92%,
+    /* Right bottom corner (cut higher) */
+    73% 96%,
+
+    /* Cut-off bottom (angled) */
+    27% 100%,
+
+    /* Left bottom corner (cut lower) */
+    25% 98%,
+    /* Left vertical stem (wider, at 25% on the X axis) */
+    25% 72%,
+
+    /* Left inner bend */
+    24% 68%,
+    /* Left slope going up */
+    0% 4%,
+
+    /* Top-left rounding */
+    1.5% 1%
+  );
+}
+
+.funnel-true-stage {
+  flex: var(--val, 1); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--stage-bg, var(--primary));
+  color: var(--stage-text, var(--btn-text-light));
+  
+  /* Protects the text inside the narrow stem */
+  padding: calc(var(--spacing-unit) * 1) 5%;
+  overflow: hidden;
+  
+  line-height: 1.2;
+  text-align: center;
+  transition: filter var(--transition-speed);
+  
+  &:hover {
+    filter: brightness(1.1);
   }
 
-   /* =========================================
-     3. TRUE FUNNEL (a practical funnel with a stem)
-     ========================================= */
-  .chart-funnel-true {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-
-    /* Switch the proportions to a square - more compact and practical */
-    aspect-ratio: 1 / 1;
-    gap: 2px;
-
-    /* CSS trick: a sculpted polygon - a wider stem (50% of the width) */
-    clip-path: polygon(
-      /* Top edge and top-right rounding */
-      4% 0%, 96% 0%, 98.5% 1%, 100% 4%,
-
-      /* Right slope going down (ends lower, at 70% height) */
-      76% 68%,
-      /* Right inner bend */
-      75% 72%,
-
-      /* Right vertical stem (wider, at 75% on the X axis) */
-      75% 92%,
-      /* Right bottom corner (cut higher) */
-      73% 96%,
-
-      /* Cut-off bottom (angled) */
-      27% 100%,
-
-      /* Left bottom corner (cut lower) */
-      25% 98%,
-      /* Left vertical stem (wider, at 25% on the X axis) */
-      25% 72%,
-
-      /* Left inner bend */
-      24% 68%,
-      /* Left slope going up */
-      0% 4%,
-
-      /* Top-left rounding */
-      1.5% 1%
-    );
+  .stage-value {
+    font-size: 1.25rem;
+    font-weight: var(--fw-black);
   }
-
-  .funnel-true-stage {
-    flex: var(--val, 1); 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--stage-bg, var(--primary));
-    color: var(--stage-text, var(--btn-text-light));
-    
-    /* Protects the text inside the narrow stem */
-    padding: calc(var(--spacing-unit) * 1) 5%;
-    overflow: hidden;
-    
-    line-height: 1.2;
-    text-align: center;
-    transition: filter var(--transition-speed);
-    
-    &:hover {
-      filter: brightness(1.1);
-    }
-
-    .stage-value {
-      font-size: 1.25rem;
-      font-weight: var(--fw-black);
-    }
-    .stage-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      opacity: 0.9;
-    }
+  .stage-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
   }
 }

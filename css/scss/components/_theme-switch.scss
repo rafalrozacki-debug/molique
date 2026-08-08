@@ -3,111 +3,109 @@
 // Independent module: can be omitted from a bundle with no compile errors.
 // A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
-@layer components {
-  /* =========================================
-     THEME SWITCH (Light / Dark Mode Toggle)
-     ========================================= */
-  .theme-switch {
-    display: inline-flex;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
+/* =========================================
+   THEME SWITCH (Light / Dark Mode Toggle)
+   ========================================= */
+.theme-switch {
+  display: inline-flex;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
 
-  .theme-switch-input {
-    display: none;
-  }
+.theme-switch-input {
+  display: none;
+}
 
-  .theme-switch-track {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 64px;
-    height: 32px;
-    padding: 4px;
-    background-color: var(--card-bg-subtle);
-    border: 1px solid var(--border-color);
-    border-radius: 50px;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
-  }
+.theme-switch-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 64px;
+  height: 32px;
+  padding: 4px;
+  background-color: var(--card-bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+}
 
-  /* The floating pill (background under the active icon) */
+/* The floating pill (background under the active icon) */
+.theme-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--bg-surface);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm), 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 1;
+}
+
+.theme-icon-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+
+/* Sun and Moon icons */
+.theme-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  transition: color 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+
+  &.icon-sun {
+    margin-right: 4px !important;
+  }
+  
+  &.icon-moon {
+    margin-left: 4px !important;
+  }
+}
+
+/* --- STATE: LIGHT MODE (default) --- */
+.theme-switch-input:not(:checked) + .theme-switch-track {
+  .icon-sun {
+    color: var(--warning); /* The sun glows yellow/orange */
+    transform: rotate(0deg) scale(1.1);
+    opacity: 1;
+  }
+  .icon-moon {
+    transform: rotate(-30deg) scale(0.85);
+    opacity: 0.4;
+  }
+}
+
+/* --- STATE: DARK MODE (checked) --- */
+.theme-switch-input:checked + .theme-switch-track {
+  /* Optional: change the whole switch's background in dark mode */
+  background-color: rgba(var(--primary-rgb), 0.1);
+  border-color: rgba(var(--primary-rgb), 0.2);
+
   .theme-switch-thumb {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 24px;
-    height: 24px;
-    background-color: var(--bg-surface);
-    border-radius: 50%;
-    box-shadow: var(--shadow-sm), 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 1;
+    transform: translateX(32px); /* Shift the pill to the right side */
   }
 
-  .theme-icon-wrapper {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
+  .icon-sun {
+    transform: rotate(90deg) scale(0.85);
+    opacity: 0.4;
   }
-
-
-  /* Sun and Moon icons */
-  .theme-icon {
-    width: 14px;
-    height: 14px;
-    color: var(--text-muted);
-    transition: color 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-
-    &.icon-sun {
-      margin-right: 4px !important;
-    }
-    
-    &.icon-moon {
-      margin-left: 4px !important;
-    }
+  .icon-moon {
+    color: var(--primary); /* The moon glows in the brand's primary color */
+    transform: rotate(0deg) scale(1.1);
+    opacity: 1;
   }
+}
 
-  /* --- STATE: LIGHT MODE (default) --- */
-  .theme-switch-input:not(:checked) + .theme-switch-track {
-    .icon-sun {
-      color: var(--warning); /* The sun glows yellow/orange */
-      transform: rotate(0deg) scale(1.1);
-      opacity: 1;
-    }
-    .icon-moon {
-      transform: rotate(-30deg) scale(0.85);
-      opacity: 0.4;
-    }
-  }
-
-  /* --- STATE: DARK MODE (checked) --- */
-  .theme-switch-input:checked + .theme-switch-track {
-    /* Optional: change the whole switch's background in dark mode */
-    background-color: rgba(var(--primary-rgb), 0.1);
-    border-color: rgba(var(--primary-rgb), 0.2);
-
-    .theme-switch-thumb {
-      transform: translateX(32px); /* Shift the pill to the right side */
-    }
-
-    .icon-sun {
-      transform: rotate(90deg) scale(0.85);
-      opacity: 0.4;
-    }
-    .icon-moon {
-      color: var(--primary); /* The moon glows in the brand's primary color */
-      transform: rotate(0deg) scale(1.1);
-      opacity: 1;
-    }
-  }
-
-  /* Focus ring for accessibility (A11y) */
-  .theme-switch-input:focus-visible + .theme-switch-track {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: 2px;
-  }
+/* Focus ring for accessibility (A11y) */
+.theme-switch-input:focus-visible + .theme-switch-track {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 2px;
 }

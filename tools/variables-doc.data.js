@@ -69,6 +69,8 @@ export const GLOBAL = {
   '--info-text':       ['palette', 'Przyciemniony wariant <code>--info</code> do własnego koloru tekstu - patrz <code>--success-text</code>.'],
   '--light':           ['palette', 'Kolor jasny <strong>względny</strong> - w dark mode staje się ciemny. Używaj na tekst leżący na tle <code>--dark</code>.'],
   '--dark':            ['palette', 'Kolor kontrastowy do tła, NIE „ciemny” - w dark mode staje się jasny. Źródło dla <code>--text-main</code>. Patrz pułapka nr 1.'],
+  '--bg-dark-fixed':   ['palette', 'Tło powierzchni ZAWSZE ciemnych: <code>.bg-dark</code>, hero, stopka, <code>.navbar-pill</code>, <code>.bg-gradient-corners</code>. Celowo NIE odwraca się w dark mode - inaczej rozjaśniłoby sekcję, na której w HTML leży biały tekst. To ta zmienna, nie <code>--dark</code>, jest miejscem na rebranding takich sekcji: nadpisywanie klasy <code>.bg-dark</code> nie zadziała, bo ma <code>!important</code> wewnątrz warstwy.'],
+  '--text-on-dark-fixed': ['palette', 'Kolor tekstu na <code>--bg-dark-fixed</code>. Też stały w obu motywach.'],
 
   /* --- surfaces --- */
   '--bg-body':        ['surfaces', 'Podkład całej strony. Ciemniejszy od powierzchni kart, żeby karty się odcinały.'],
@@ -264,4 +266,8 @@ export const INPUT = {
   '--clip-img':            ['Typografia', 'Obraz lub gradient przycinany do kształtu liter w <code>.text-clip-bg</code>. Bez niej tekst zostaje bez wypełnienia.'],
   '--onboarding-card-width': ['Onboarding', 'Szerokość karty powitalnej (<code>max-width</code>), domyślnie 440px. Ustaw ją na <code>:root</code> - kartę buduje JS, więc nie ma markupu, w który dałoby się wstawić <code>style=""</code>. Celowo NIE dociera do gałęzi mobilnej, która rozciąga kartę na pełny ekran, więc poszerzenie nie zdejmuje tamtego trybu.'],
   '--tour-tooltip-width':    ['Onboarding', 'Szerokość dymku Spotlight Tour, domyślnie 320px. Ustawiana na <code>:root</code> z tego samego powodu co wyżej. Ogranicznik <code>min(…, 100vw - 2rem)</code> zostaje, więc szerszy dymek nadal nie wyjdzie poza wąski ekran.'],
+  '--pricing-ribbon':        ['Biznes', 'Napis na wstążce <code>.pricing-table.is-featured</code>, domyślnie <code>&#39;Popularne&#39;</code>. Cudzysłowy są CZĘŚCIĄ wartości, bo trafia do <code>content:</code>. Ustaw na <code>:root</code> albo per karta: <code>style="--pricing-ribbon: &#39;Best value&#39;"</code>.'],
+  '--footer-accent':         ['Nawigacja', 'Kolor akcentu w stopce (linki po najechaniu, obwódka focusa, wyróżnienie w logo). Domyślnie <code>#8B84FF</code>. Stopka jest zawsze ciemna, więc dobierz odcień o kontraście min. 4,5:1 na <code>--bg-dark-fixed</code> - kolor marki z trybu jasnego zwykle go nie osiąga.'],
+  '--footer-accent-hover':   ['Nawigacja', 'Jaśniejszy wariant <code>--footer-accent</code> dla stanu hover przycisku „więcej” w stopce.'],
+  '--form-check-size':       ['Formularze', 'Bok checkboxa i radia (<code>.form-check-input</code>), domyślnie <code>1.5rem</code> = 24px. Kontrolka jest świadomie wyłączona z reguły 44px, ale 24px to minimum wymagane przez audyt Lighthouse - zmniejszaj tylko świadomie.'],
 };

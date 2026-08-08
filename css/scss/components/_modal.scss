@@ -5,89 +5,87 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer components {
 /* =========================================
-   1. NATIVE MODAL (<dialog>)
-   ========================================= */
+ 1. NATIVE MODAL (<dialog>)
+ ========================================= */
 .modal-dialog {
-  border: none;
-  padding: 0;
-  background: transparent;
-  /* The UA gives <dialog> color: CanvasText, which breaks color
-     inheritance from body - an explicit theme color restores the
-     inheritance chain (among others for headings with color: inherit)
-     regardless of color-scheme. */
-  color: var(--text-main);
-  overflow: visible;
-  
-  max-width: 600px;
-  width: 90%;
-  margin: auto; 
+border: none;
+padding: 0;
+background: transparent;
+/* The UA gives <dialog> color: CanvasText, which breaks color
+   inheritance from body - an explicit theme color restores the
+   inheritance chain (among others for headings with color: inherit)
+   regardless of color-scheme. */
+color: var(--text-main);
+overflow: visible;
 
-  /* FIX 1: constrain the modal's height to the screen size (with a small margin) */
-  max-height: calc(100vh - 2rem);
-  max-height: calc(100dvh - 2rem); /* Modern units for mobile */
+max-width: 600px;
+width: 90%;
+margin: auto; 
 
-  /* FIX 2: the modal becomes a flex container */
-  display: flex;
-  flex-direction: column;
+/* FIX 1: constrain the modal's height to the screen size (with a small margin) */
+max-height: calc(100vh - 2rem);
+max-height: calc(100dvh - 2rem); /* Modern units for mobile */
 
-  &:not([open]) {
-    display: none !important;
-    pointer-events: none !important;
-  }
+/* FIX 2: the modal becomes a flex container */
+display: flex;
+flex-direction: column;
 
-  &::backdrop {
-    /* A literal instead of rgba(var(--dark-rgb)): the background dimming
-       must ALWAYS darken, but dark mode inverts --dark-rgb to a light
-       value - the backdrop turned into a light haze, defeating the point
-       of a dark theme. */
-    background-color: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(4px);
-  }
+&:not([open]) {
+  display: none !important;
+  pointer-events: none !important;
+}
 
-  transition: 
-    opacity var(--transition-speed) ease, 
-    transform var(--transition-speed) ease,
-    display var(--transition-speed) ease allow-discrete, 
-    overlay var(--transition-speed) ease allow-discrete;
-  
-  opacity: 0;
-  transform: translateY(-20px);
+&::backdrop {
+  /* A literal instead of rgba(var(--dark-rgb)): the background dimming
+     must ALWAYS darken, but dark mode inverts --dark-rgb to a light
+     value - the backdrop turned into a light haze, defeating the point
+     of a dark theme. */
+  background-color: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(4px);
+}
 
+transition: 
+  opacity var(--transition-speed) ease, 
+  transform var(--transition-speed) ease,
+  display var(--transition-speed) ease allow-discrete, 
+  overlay var(--transition-speed) ease allow-discrete;
+
+opacity: 0;
+transform: translateY(-20px);
+
+&[open] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@starting-style {
   &[open] {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 0;
+    transform: translateY(-20px);
   }
-
-  @starting-style {
-    &[open] {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-  }
+}
 }
 
 /* Card inside the modal */
 .modal-dialog .card {
-  margin: 0;
-  box-shadow: var(--shadow-lg);
+margin: 0;
+box-shadow: var(--shadow-lg);
 
-  /* FIX 3: the card can't be taller than the modal itself */
-  max-height: 100%;
-  display: flex;
-  flex-direction: column;
+/* FIX 3: the card can't be taller than the modal itself */
+max-height: 100%;
+display: flex;
+flex-direction: column;
 }
 
 /* FIX 4: only the card body scrolls */
 .modal-dialog .card-body {
-  overflow-y: auto;
-  overscroll-behavior: contain; /* Prevents scrolling the page background under the modal */
+overflow-y: auto;
+overscroll-behavior: contain; /* Prevents scrolling the page background under the modal */
 
-  /* An elegant, thin scrollbar */
-  scrollbar-width: thin;
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-}
+/* An elegant, thin scrollbar */
+scrollbar-width: thin;
+&::-webkit-scrollbar { width: 6px; }
+&::-webkit-scrollbar-track { background: transparent; }
+&::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
 }

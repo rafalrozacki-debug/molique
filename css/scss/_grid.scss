@@ -6,193 +6,191 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-@layer layout {
-  /* =========================================
-     1. BASE GRID CONTAINER
-     ========================================= */
-  .grid {
+/* =========================================
+   1. BASE GRID CONTAINER
+   ========================================= */
+.grid {
+  display: grid;
+  gap: var(--grid-gap);
+}
+
+/* GRID BLOWOUT FIX:
+   Every grid child can shrink below the width of its content */
+.grid > *,
+[class*="grid-cols-"] > *,
+[class*="grid-auto"] > * {
+  min-width: 0;
+}
+
+/* =========================================
+   2. SMART AUTO-GRID (the RWD holy grail)
+   ========================================= */
+/*
+   Usage: <div class="grid-auto">...</div>
+   Children arrange themselves into columns with a 280px minimum width.
+   If there isn't enough room, they automatically wrap to a new line.
+*/
+.grid-auto {
+  display: grid;
+  gap: var(--grid-gap);
+  /* The RAM pattern: Repeat, Auto-fit, Minmax */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 280px)), 1fr));
+}
+
+/* Auto-grid variants (overriding the local variable) */
+.grid-auto-sm { --grid-min: 200px; }
+.grid-auto-lg { --grid-min: 350px; }
+
+/* =========================================
+   3. FIXED COLUMNS (only when truly needed)
+   ========================================= */
+$grid-columns: 12;
+
+@for $i from 1 through $grid-columns {
+  .grid-cols-#{$i} {
     display: grid;
-    gap: var(--grid-gap);
+    grid-template-columns: repeat(#{$i}, 1fr);
   }
+}
 
-  /* GRID BLOWOUT FIX:
-     Every grid child can shrink below the width of its content */
-  .grid > *,
-  [class*="grid-cols-"] > *,
-  [class*="grid-auto"] > * {
-    min-width: 0;
-  }
+/* A responsive grid defaults to SINGLE-COLUMN below its own breakpoint.
+   Without this rule, .grid-md-cols-12 only existed inside a media
+   query, so on a phone the element wasn't a grid at all. Its children
+   then stacked as blocks - visually full-width, which is CORRECT - but
+   gap stopped working (it requires grid/flex) and the spacing
+   disappeared only on mobile. A hard bug to catch, because desktop
+   looked fine.
 
-  /* =========================================
-     2. SMART AUTO-GRID (the RWD holy grail)
-     ========================================= */
-  /*
-     Usage: <div class="grid-auto">...</div>
-     Children arrange themselves into columns with a 280px minimum width.
-     If there isn't enough room, they automatically wrap to a new line.
-  */
-  .grid-auto {
-    display: grid;
-    gap: var(--grid-gap);
-    /* The RAM pattern: Repeat, Auto-fit, Minmax */
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 280px)), 1fr));
-  }
+   Thanks to this, `class="grid-md-cols-12"` is enough on its own;
+   adding `grid-cols-1` is no longer needed. The media-query rules still
+   come later in the source at the same specificity, so they normally
+   win once the breakpoint is reached.
 
-  /* Auto-grid variants (overriding the local variable) */
-  .grid-auto-sm { --grid-min: 200px; }
-  .grid-auto-lg { --grid-min: 350px; }
+   Applies to both breakpoints - including .grid-lg-cols-*, which has
+   its own counterpart here for children (.col-lg-span-*, .offset-lg-*). */
+[class*="grid-md-cols-"],
+[class*="grid-lg-cols-"] {
+  display: grid;
+  grid-template-columns: 1fr;
+}
 
-  /* =========================================
-     3. FIXED COLUMNS (only when truly needed)
-     ========================================= */
-  $grid-columns: 12;
-
+@include mq(md) {
   @for $i from 1 through $grid-columns {
-    .grid-cols-#{$i} {
+    .grid-md-cols-#{$i} {
       display: grid;
       grid-template-columns: repeat(#{$i}, 1fr);
     }
   }
+}
 
-  /* A responsive grid defaults to SINGLE-COLUMN below its own breakpoint.
-     Without this rule, .grid-md-cols-12 only existed inside a media
-     query, so on a phone the element wasn't a grid at all. Its children
-     then stacked as blocks - visually full-width, which is CORRECT - but
-     gap stopped working (it requires grid/flex) and the spacing
-     disappeared only on mobile. A hard bug to catch, because desktop
-     looked fine.
-
-     Thanks to this, `class="grid-md-cols-12"` is enough on its own;
-     adding `grid-cols-1` is no longer needed. The media-query rules still
-     come later in the source at the same specificity, so they normally
-     win once the breakpoint is reached.
-
-     Applies to both breakpoints - including .grid-lg-cols-*, which has
-     its own counterpart here for children (.col-lg-span-*, .offset-lg-*). */
-  [class*="grid-md-cols-"],
-  [class*="grid-lg-cols-"] {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  @include mq(md) {
-    @for $i from 1 through $grid-columns {
-      .grid-md-cols-#{$i} {
-        display: grid;
-        grid-template-columns: repeat(#{$i}, 1fr);
-      }
-    }
-  }
-
-  /* The lg variant. Must come AFTER the md block, so that with both
-     classes at once (e.g. "grid-md-cols-2 grid-lg-cols-4") lg wins from
-     its breakpoint onward - both have the same specificity, so source
-     order decides. */
-  @include mq(lg) {
-    @for $i from 1 through $grid-columns {
-      .grid-lg-cols-#{$i} {
-        display: grid;
-        grid-template-columns: repeat(#{$i}, 1fr);
-      }
-    }
-  }
-
-  /* =========================================
-     4. CHILD OVERRIDES (span and offsets)
-     ========================================= */
-
-  /* --- 1. SPAN --- */
-  /* FIX: We use grid-column-end instead of grid-column! */
+/* The lg variant. Must come AFTER the md block, so that with both
+   classes at once (e.g. "grid-md-cols-2 grid-lg-cols-4") lg wins from
+   its breakpoint onward - both have the same specificity, so source
+   order decides. */
+@include mq(lg) {
   @for $i from 1 through $grid-columns {
-    .col-span-#{$i} {
+    .grid-lg-cols-#{$i} {
+      display: grid;
+      grid-template-columns: repeat(#{$i}, 1fr);
+    }
+  }
+}
+
+/* =========================================
+   4. CHILD OVERRIDES (span and offsets)
+   ========================================= */
+
+/* --- 1. SPAN --- */
+/* FIX: We use grid-column-end instead of grid-column! */
+@for $i from 1 through $grid-columns {
+  .col-span-#{$i} {
+    grid-column-end: span #{$i};
+    min-width: 0;
+  }
+}
+
+@include mq(md) {
+  @for $i from 1 through $grid-columns {
+    .col-md-span-#{$i} {
       grid-column-end: span #{$i};
       min-width: 0;
     }
   }
+}
 
-  @include mq(md) {
-    @for $i from 1 through $grid-columns {
-      .col-md-span-#{$i} {
-        grid-column-end: span #{$i};
-        min-width: 0;
-      }
+@include mq(lg) {
+  @for $i from 1 through $grid-columns {
+    .col-lg-span-#{$i} {
+      grid-column-end: span #{$i};
+      min-width: 0;
     }
   }
+}
 
-  @include mq(lg) {
-    @for $i from 1 through $grid-columns {
-      .col-lg-span-#{$i} {
-        grid-column-end: span #{$i};
-        min-width: 0;
-      }
-    }
+/* --- 2. OFFSETS (moving elements within the grid) --- */
+@for $i from 1 through 12 {
+  .col-start-#{$i}, 
+  .offset-#{$i - 1} { 
+    grid-column-start: #{$i}; 
   }
+}
 
-  /* --- 2. OFFSETS (moving elements within the grid) --- */
+@include mq(md) {
   @for $i from 1 through 12 {
-    .col-start-#{$i}, 
-    .offset-#{$i - 1} { 
+    .col-md-start-#{$i}, 
+    .offset-md-#{$i - 1} { 
       grid-column-start: #{$i}; 
     }
   }
-  
-  @include mq(md) {
-    @for $i from 1 through 12 {
-      .col-md-start-#{$i}, 
-      .offset-md-#{$i - 1} { 
-        grid-column-start: #{$i}; 
-      }
+}
+
+@include mq(lg) {
+  @for $i from 1 through 12 {
+    .col-lg-start-#{$i}, 
+    .offset-lg-#{$i - 1} { 
+      grid-column-start: #{$i}; 
     }
   }
+}
 
-  @include mq(lg) {
-    @for $i from 1 through 12 {
-      .col-lg-start-#{$i}, 
-      .offset-lg-#{$i - 1} { 
-        grid-column-start: #{$i}; 
-      }
-    }
+/* Offset reset */
+.col-start-auto, .offset-0 { grid-column-start: auto; }
+@include mq(md) { .col-md-start-auto, .offset-md-0 { grid-column-start: auto; } }
+@include mq(lg) { .col-lg-start-auto, .offset-lg-0 { grid-column-start: auto; } }
+
+/* =========================================
+   5. BENTO GRID (asymmetric grid)
+   ========================================= */
+.bento-grid {
+  display: grid;
+  /* Default tile width (a fluid approach) */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+
+  /* FIX 1: minmax() guarantees 250px, but lets a tile grow if there's too much text */
+  grid-auto-rows: minmax(250px, auto);
+  gap: var(--grid-gap);
+
+  /* FIX 2: forces the browser to pack smaller tiles into empty gaps (dense packing) */
+  grid-auto-flow: dense;
+
+  /* Bento Grid children */
+  > * {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    /* Ensures the content fills the tile */
+    display: flex;
+    flex-direction: column;
   }
-  
-  /* Offset reset */
-  .col-start-auto, .offset-0 { grid-column-start: auto; }
-  @include mq(md) { .col-md-start-auto, .offset-md-0 { grid-column-start: auto; } }
-  @include mq(lg) { .col-lg-start-auto, .offset-lg-0 { grid-column-start: auto; } }
+}
 
-  /* =========================================
-     5. BENTO GRID (asymmetric grid)
-     ========================================= */
-  .bento-grid {
-    display: grid;
-    /* Default tile width (a fluid approach) */
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+/* Span modifiers (work from tablet upward) */
+@include mq(md) {
+  .bento-col-2 { grid-column: span 2; }
+  .bento-col-3 { grid-column: span 3; }
+  .bento-row-2 { grid-row: span 2; }
+  .bento-row-3 { grid-row: span 3; }
 
-    /* FIX 1: minmax() guarantees 250px, but lets a tile grow if there's too much text */
-    grid-auto-rows: minmax(250px, auto);
-    gap: var(--grid-gap);
-
-    /* FIX 2: forces the browser to pack smaller tiles into empty gaps (dense packing) */
-    grid-auto-flow: dense;
-
-    /* Bento Grid children */
-    > * {
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      /* Ensures the content fills the tile */
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  /* Span modifiers (work from tablet upward) */
-  @include mq(md) {
-    .bento-col-2 { grid-column: span 2; }
-    .bento-col-3 { grid-column: span 3; }
-    .bento-row-2 { grid-row: span 2; }
-    .bento-row-3 { grid-row: span 3; }
-
-    /* FIX: Forces a fixed column count for precise Bento layouts */
-    .bento-grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .bento-grid-4 { grid-template-columns: repeat(4, 1fr); }
-  }
+  /* FIX: Forces a fixed column count for precise Bento layouts */
+  .bento-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .bento-grid-4 { grid-template-columns: repeat(4, 1fr); }
 }

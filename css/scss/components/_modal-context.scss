@@ -5,131 +5,129 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer components {
 /* =========================================
-   2. CONTEXT MODAL (Narrow context menu)
-   ========================================= */
+ 2. CONTEXT MODAL (Narrow context menu)
+ ========================================= */
 .modal-context {
-  max-width: 400px; 
-  margin-right: calc(var(--spacing-unit) * 2);
-  margin-left: auto;
-  transform: translateX(20px);
-  
-  &[open] { transform: translateX(0); }
-  @starting-style { &[open] { transform: translateX(20px); } }
+max-width: 400px; 
+margin-right: calc(var(--spacing-unit) * 2);
+margin-left: auto;
+transform: translateX(20px);
+
+&[open] { transform: translateX(0); }
+@starting-style { &[open] { transform: translateX(20px); } }
 }
 
 .modal-context .card {
-  border-radius: var(--border-radius);
+border-radius: var(--border-radius);
 }
 
 .modal-context .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
-  background-color: var(--bg-surface);
-  border-bottom: 1px solid var(--border-color);
-  border-top-left-radius: calc(var(--border-radius) - 1px);
-  border-top-right-radius: calc(var(--border-radius) - 1px);
-  
-  h3 { margin: 0; font-size: 1.125rem; }
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3);
+background-color: var(--bg-surface);
+border-bottom: 1px solid var(--border-color);
+border-top-left-radius: calc(var(--border-radius) - 1px);
+border-top-right-radius: calc(var(--border-radius) - 1px);
+
+h3 { margin: 0; font-size: 1.125rem; }
 }
 
 .modal-close-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 1.5rem;
-  line-height: 1;
-  padding: 0;
-  cursor: pointer;
-  transition: color var(--transition-speed);
-  width: var(--target-size-min);
-  height: var(--target-size-min);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: -12px;
+background: transparent;
+border: none;
+color: var(--text-muted);
+font-size: 1.5rem;
+line-height: 1;
+padding: 0;
+cursor: pointer;
+transition: color var(--transition-speed);
+width: var(--target-size-min);
+height: var(--target-size-min);
+display: flex;
+align-items: center;
+justify-content: center;
+margin-right: -12px;
 
-  &:hover { color: var(--danger); }
+&:hover { color: var(--danger); }
 }
 
 /* The close button in the modal header gets focus automatically on
-   showModal() (the browser focuses the window's first focusable element),
-   so a full focus ring lights up right after opening and looks like a
-   rendering glitch. We swap it for a subtler indicator - still visible
-   for keyboard navigation (A11y), but not shouting. */
+ showModal() (the browser focuses the window's first focusable element),
+ so a full focus ring lights up right after opening and looks like a
+ rendering glitch. We swap it for a subtler indicator - still visible
+ for keyboard navigation (A11y), but not shouting. */
 .modal-dialog .card-header .btn-action:focus-visible,
 .modal-dialog .card-header .modal-close-btn:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 2px var(--focus-ring-color);
-  background-color: var(--card-bg-subtle);
+outline: none;
+box-shadow: inset 0 0 0 2px var(--focus-ring-color);
+background-color: var(--card-bg-subtle);
 }
 
 .modal-context .card-body {
-  padding: calc(var(--spacing-unit) * 3);
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 2);
+padding: calc(var(--spacing-unit) * 3);
+display: flex;
+flex-direction: column;
+gap: calc(var(--spacing-unit) * 2);
 }
 
 .modal-divider {
-  border: none;
-  border-top: 1px solid var(--border-color);
-  margin: calc(var(--spacing-unit) * 1) 0;
-  width: 100%;
+border: none;
+border-top: 1px solid var(--border-color);
+margin: calc(var(--spacing-unit) * 1) 0;
+width: 100%;
 }
 
 .modal-action-list {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-unit) * 0.5);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+display: flex;
+flex-direction: column;
+gap: calc(var(--spacing-unit) * 0.5);
+margin: 0;
+padding: 0;
+list-style: none;
 }
 
 .modal-action-btn {
-  display: flex;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 1.5);
-  width: 100%;
-  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
-  background: transparent;
-  border: none;
-  border-radius: calc(var(--border-radius) / 2);
-  color: var(--text-main);
-  font-weight: var(--fw-medium);
-  text-align: left;
-  cursor: pointer;
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-  min-height: var(--target-size-min) !important;
+display: flex;
+align-items: center;
+gap: calc(var(--spacing-unit) * 1.5);
+width: 100%;
+padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+background: transparent;
+border: none;
+border-radius: calc(var(--border-radius) / 2);
+color: var(--text-main);
+font-weight: var(--fw-medium);
+text-align: left;
+cursor: pointer;
+transition: background-color var(--transition-speed), color var(--transition-speed);
+min-height: var(--target-size-min) !important;
 
-  &:hover { background-color: var(--card-bg-subtle); color: var(--primary); }
-  &.text-danger:hover { background-color: rgba(var(--danger-rgb), 0.1); color: var(--danger); }
+&:hover { background-color: var(--card-bg-subtle); color: var(--primary); }
+&.text-danger:hover { background-color: rgba(var(--danger-rgb), 0.1); color: var(--danger); }
 }
 
 @include mq(sm, max) {
-  .modal-context {
-    max-width: 100%;
-    margin: auto 0 0 0;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    transform: translateY(100%);
-    
-    /* FIX 5: on mobile, the bottom sheet shouldn't take up 100% of the
-       screen, so the user can see that it's a modal */
-    max-height: 90vh;
-    max-height: 90dvh;
-    
-    &[open] { transform: translateY(0); }
-    @starting-style { &[open] { transform: translateY(100%); } }
-  }
+.modal-context {
+  max-width: 100%;
+  margin: auto 0 0 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  transform: translateY(100%);
   
-  .modal-context .card {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+  /* FIX 5: on mobile, the bottom sheet shouldn't take up 100% of the
+     screen, so the user can see that it's a modal */
+  max-height: 90vh;
+  max-height: 90dvh;
+  
+  &[open] { transform: translateY(0); }
+  @starting-style { &[open] { transform: translateY(100%); } }
+}
+
+.modal-context .card {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 }

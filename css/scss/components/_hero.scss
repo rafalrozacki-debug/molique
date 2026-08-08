@@ -7,141 +7,139 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer components {
-  /* =========================================
-     1. PAGE HEADER (hero with a background image)
-     ========================================= */
-  .page-header {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+/* =========================================
+   1. PAGE HEADER (hero with a background image)
+   ========================================= */
+.page-header {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Add to any container with an .overlay inside - clips off the
+   overlay's overhanging corners and gives it a positioning context
+   (position:relative). */
+.has-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+/* =========================================
+   2. OVERLAY (dimming layer)
+   ========================================= */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  /* DEFAULT SCRIM. Previously a bare .overlay had neither a color nor
+     an opacity, so both usages without a full set of classes came out
+     wrong:
+       .overlay                -> invisible (no background),
+       .overlay + .overlay-dark -> FULLY OPAQUE (opacity 1),
+                                   i.e. the image vanished under a flat color.
+     Now a bare .overlay gives a useful dimming effect, and the color
+     classes (.overlay-dark/-primary/-light, .bg-overlay) and opacity
+     classes (.overlay-10..90) override these values - they come later
+     in the source at the same specificity. */
+  background-color: var(--bg-dark-fixed);
+  opacity: 0.5;
+}
+
+/* --- Overlay colors --- */
+/* overlay-dark uses a literal (like overlay-light): the overlay must
+   ALWAYS dim the image under the hero's light text, and dark mode
+   inverts var(--dark) to near-white - the "dimming" would become a
+   brightening and the white text would land on a light background. */
+.bg-overlay { background-color: #000; }
+.overlay-dark { background-color: var(--bg-dark-fixed); }
+.overlay-primary { background-color: var(--primary); }
+.overlay-light { background-color: #fff; }
+
+/* --- Overlay opacity (steps of 10) --- */
+.overlay-10 { opacity: 0.1; }
+.overlay-20 { opacity: 0.2; }
+.overlay-30 { opacity: 0.3; }
+.overlay-40 { opacity: 0.4; }
+.overlay-50 { opacity: 0.5; }
+.overlay-60 { opacity: 0.6; }
+.overlay-70 { opacity: 0.7; }
+.overlay-80 { opacity: 0.8; }
+.overlay-90 { opacity: 0.9; }
+
+/* =========================================
+   3. HERO CUTOUT SYSTEM (concave corners)
+   ========================================= */
+.hero-with-cutout {
+  position: relative;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
+}
 
-  /* Add to any container with an .overlay inside - clips off the
-     overlay's overhanging corners and gives it a positioning context
-     (position:relative). */
-  .has-overlay {
-    position: relative;
-    overflow: hidden;
-  }
+.cutout-wrapper {
+  position: relative;
+  background-color: var(--cutout-bg, var(--bg-surface));
+}
 
-  /* =========================================
-     2. OVERLAY (dimming layer)
-     ========================================= */
-  .overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-
-    /* DEFAULT SCRIM. Previously a bare .overlay had neither a color nor
-       an opacity, so both usages without a full set of classes came out
-       wrong:
-         .overlay                -> invisible (no background),
-         .overlay + .overlay-dark -> FULLY OPAQUE (opacity 1),
-                                     i.e. the image vanished under a flat color.
-       Now a bare .overlay gives a useful dimming effect, and the color
-       classes (.overlay-dark/-primary/-light, .bg-overlay) and opacity
-       classes (.overlay-10..90) override these values - they come later
-       in the source at the same specificity. */
-    background-color: #14162B;
-    opacity: 0.5;
-  }
-
-  /* --- Overlay colors --- */
-  /* overlay-dark uses a literal (like overlay-light): the overlay must
-     ALWAYS dim the image under the hero's light text, and dark mode
-     inverts var(--dark) to near-white - the "dimming" would become a
-     brightening and the white text would land on a light background. */
-  .bg-overlay { background-color: #000; }
-  .overlay-dark { background-color: #14162B; }
-  .overlay-primary { background-color: var(--primary); }
-  .overlay-light { background-color: #fff; }
-
-  /* --- Overlay opacity (steps of 10) --- */
-  .overlay-10 { opacity: 0.1; }
-  .overlay-20 { opacity: 0.2; }
-  .overlay-30 { opacity: 0.3; }
-  .overlay-40 { opacity: 0.4; }
-  .overlay-50 { opacity: 0.5; }
-  .overlay-60 { opacity: 0.6; }
-  .overlay-70 { opacity: 0.7; }
-  .overlay-80 { opacity: 0.8; }
-  .overlay-90 { opacity: 0.9; }
-
-  /* =========================================
-     3. HERO CUTOUT SYSTEM (concave corners)
-     ========================================= */
+@include mq(md) {
   .hero-with-cutout {
-    position: relative;
+    overflow: hidden;
 
     img {
-      display: block;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
     }
   }
 
   .cutout-wrapper {
-    position: relative;
-    background-color: var(--cutout-bg, var(--bg-surface));
+    z-index: 1;
+    /* The radius of the "cutout" at the corner touching the image */
+    --cutout-radius: 32px;
   }
 
-  @include mq(md) {
-    .hero-with-cutout {
-      overflow: hidden;
+  /* Each variant anchors the wrapper to a given corner and cuts out the
+     OPPOSITE corner of the wrapper itself (the one touching the image)
+     with a gentle arc - hence "at 0 0" for br (a cutout at the
+     wrapper's top-left corner), etc. */
+  .cutout-wrapper.cutout-md-br {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
+  }
 
-      img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: 0;
-      }
-    }
+  .cutout-wrapper.cutout-md-bl {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
+  }
 
-    .cutout-wrapper {
-      z-index: 1;
-      /* The radius of the "cutout" at the corner touching the image */
-      --cutout-radius: 32px;
-    }
+  .cutout-wrapper.cutout-md-tr {
+    position: absolute;
+    right: 0;
+    top: 0;
+    mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
+  }
 
-    /* Each variant anchors the wrapper to a given corner and cuts out the
-       OPPOSITE corner of the wrapper itself (the one touching the image)
-       with a gentle arc - hence "at 0 0" for br (a cutout at the
-       wrapper's top-left corner), etc. */
-    .cutout-wrapper.cutout-md-br {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
-      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 0, transparent 99%, #fff 100%);
-    }
-
-    .cutout-wrapper.cutout-md-bl {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
-      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 0, transparent 99%, #fff 100%);
-    }
-
-    .cutout-wrapper.cutout-md-tr {
-      position: absolute;
-      right: 0;
-      top: 0;
-      mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
-      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 0 100%, transparent 99%, #fff 100%);
-    }
-
-    .cutout-wrapper.cutout-md-tl {
-      position: absolute;
-      left: 0;
-      top: 0;
-      mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
-      -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
-    }
+  .cutout-wrapper.cutout-md-tl {
+    position: absolute;
+    left: 0;
+    top: 0;
+    mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
+    -webkit-mask-image: radial-gradient(circle var(--cutout-radius) at 100% 100%, transparent 99%, #fff 100%);
   }
 }

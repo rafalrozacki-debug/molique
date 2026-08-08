@@ -10,53 +10,51 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer components {
+.lang-suggest-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-index-toast);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 2.5);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+
+  &.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.lang-suggest-text {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-main);
+}
+
+.lang-suggest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-unit) * 1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-suggest-bar { transition: none; }
+}
+
+@include mq(sm, max) {
   .lang-suggest-bar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: var(--z-index-toast);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: calc(var(--spacing-unit) * 2);
-    padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 2.5);
-    background: var(--bg-surface);
-    border-top: 1px solid var(--border-color);
-    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
-
-    transform: translateY(100%);
-    opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-
-    &.is-visible {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  .lang-suggest-text {
-    margin: 0;
-    font-size: var(--text-sm);
-    color: var(--text-main);
-  }
-
-  .lang-suggest-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacing-unit) * 1.25);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .lang-suggest-bar { transition: none; }
-  }
-
-  @include mq(sm, max) {
-    .lang-suggest-bar {
-      justify-content: flex-start;
-      text-align: left;
-    }
+    justify-content: flex-start;
+    text-align: left;
   }
 }

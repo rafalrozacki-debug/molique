@@ -16,42 +16,40 @@
    * molique - Documentation Styles
    * Contains only the styles for presentational blocks (Showcase).
    */
-  @layer modules {
-    /* Width constraint and padding FIX on mobile */
-    .docs-content-wrapper {
-      /* FIX: .admin-main is flex-column. With width:auto + margin:auto, the
-         flexbox spec DISABLES stretch on the cross axis (auto margins "eat"
-         the free space), so the element is sized from its content's
-         max-content - and a non-wrapping <pre> has a very wide max-content,
-         which was blowing out the whole content column and clipping text via
-         overflow:hidden further up the tree. An explicit width:100% forces
-         it to fill the available width regardless of the ancestor's
-         flex/grid context, while margin:auto still centers it once
-         max-width is reached. */
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
-      /* FIX: Gwarantowany padding boczny na mobile! */
-      padding-left: calc(var(--spacing-unit) * 2);
-      padding-right: calc(var(--spacing-unit) * 2);
-    }
-    @media (min-width: 768px) {
-      .docs-content-wrapper {
-        padding-left: 0;
-        padding-right: 0;
-      }
-    }
-    .docs-nav-title {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: var(--fw-bold);
-      color: rgba(255, 255, 255, 0.4);
-      margin: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1) 0;
-    }
-    /* Bloki prezentacyjne (Showcase) przeniesione do rdzenia:
-       components/_code-preview.scss (działają też poza bundle'em docs). */
+  /* Width constraint and padding FIX on mobile */
+  .docs-content-wrapper {
+    /* FIX: .admin-main is flex-column. With width:auto + margin:auto, the
+       flexbox spec DISABLES stretch on the cross axis (auto margins "eat"
+       the free space), so the element is sized from its content's
+       max-content - and a non-wrapping <pre> has a very wide max-content,
+       which was blowing out the whole content column and clipping text via
+       overflow:hidden further up the tree. An explicit width:100% forces
+       it to fill the available width regardless of the ancestor's
+       flex/grid context, while margin:auto still centers it once
+       max-width is reached. */
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    /* FIX: Gwarantowany padding boczny na mobile! */
+    padding-left: calc(var(--spacing-unit) * 2);
+    padding-right: calc(var(--spacing-unit) * 2);
   }
+  @media (min-width: 768px) {
+    .docs-content-wrapper {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  .docs-nav-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: var(--fw-bold);
+    color: rgba(255, 255, 255, 0.4);
+    margin: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1) 0;
+  }
+  /* Bloki prezentacyjne (Showcase) przeniesione do rdzenia:
+     components/_code-preview.scss (działają też poza bundle'em docs). */
   /**
    * molique - Zmienne SCSS
    */

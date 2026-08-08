@@ -5,229 +5,227 @@
 
 @use '../variables' as *;
 
-@layer utilities {
-  /* =========================================
-     1. TEXT COLORS
-     ========================================= */
-  .text-main { color: var(--text-main) !important; }
-  .text-muted { color: var(--text-muted) !important; }
-  .text-white { color: #ffffff !important; }
+/* =========================================
+   1. TEXT COLORS
+   ========================================= */
+.text-main { color: var(--text-main) !important; }
+.text-muted { color: var(--text-muted) !important; }
+.text-white { color: #ffffff !important; }
 
-  /* A plain link in prose (a paragraph, table cell, list item) WITHOUT
-     its own class: the --primary color alone doesn't give enough
-     DIFFERENCE from the surrounding text (--text-main, --text-muted, or
-     --secondary) to be "distinguishable by more than color alone" (WCAG
-     1.4.1) - an underline is needed as a second, non-color cue.
-     `:not([class])` deliberately excludes links that DO HAVE their own
-     class (.btn, .card, .admin-nav-link, .dropdown-item, etc.) - those
-     are styled as separate UI elements (padding, hover background), not
-     fragments of a sentence, so an underline there would only get in the
-     way. Links with .text-decoration-none (!important) would still win
-     regardless of this exception. */
-  p a:not([class]),
-  td a:not([class]),
-  li a:not([class]),
-  .alert a:not([class]) {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
-  }
+/* A plain link in prose (a paragraph, table cell, list item) WITHOUT
+   its own class: the --primary color alone doesn't give enough
+   DIFFERENCE from the surrounding text (--text-main, --text-muted, or
+   --secondary) to be "distinguishable by more than color alone" (WCAG
+   1.4.1) - an underline is needed as a second, non-color cue.
+   `:not([class])` deliberately excludes links that DO HAVE their own
+   class (.btn, .card, .admin-nav-link, .dropdown-item, etc.) - those
+   are styled as separate UI elements (padding, hover background), not
+   fragments of a sentence, so an underline there would only get in the
+   way. Links with .text-decoration-none (!important) would still win
+   regardless of this exception. */
+p a:not([class]),
+td a:not([class]),
+li a:not([class]),
+.alert a:not([class]) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
 
-  .text-primary { color: var(--primary) !important; }
-  .text-secondary { color: var(--secondary) !important; }
-  .text-success { color: var(--success-text) !important; }
-  .text-danger { color: var(--danger-text) !important; }
-  .text-warning { color: var(--warning-text) !important; }
-  .text-info { color: var(--info-text) !important; }
-  .text-dark { color: var(--dark) !important; }
-  .text-light { color: var(--light) !important; }
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--secondary) !important; }
+.text-success { color: var(--success-text) !important; }
+.text-danger { color: var(--danger-text) !important; }
+.text-warning { color: var(--warning-text) !important; }
+.text-info { color: var(--info-text) !important; }
+.text-dark { color: var(--dark) !important; }
+.text-light { color: var(--light) !important; }
 
-  /* =========================================
-     2. BACKGROUND COLORS
-     ========================================= */
-  .bg-body { background-color: var(--bg-body) !important; }
-  .bg-surface { background-color: var(--bg-surface) !important; }
-  .bg-transparent { background-color: transparent !important; }
+/* =========================================
+   2. BACKGROUND COLORS
+   ========================================= */
+.bg-body { background-color: var(--bg-body) !important; }
+.bg-surface { background-color: var(--bg-surface) !important; }
+.bg-transparent { background-color: transparent !important; }
 
-  .bg-primary { background-color: var(--primary) !important; color: var(--btn-text-light) !important; }
-  .bg-secondary { background-color: var(--secondary) !important; color: var(--btn-text-light) !important; }
-  .bg-success { background-color: var(--success) !important; color: var(--semantic-fg) !important; }
-  .bg-danger { background-color: var(--danger) !important; color: var(--semantic-fg) !important; }
-  .bg-warning { background-color: var(--warning) !important; color: var(--semantic-fg) !important; }
-  .bg-info { background-color: var(--info) !important; color: var(--semantic-fg) !important; }
-  /* bg-dark uses literals: "always dark" sections (footers, hero) are
-     paired in the HTML with .text-white - with a flipped var(--dark) in
-     dark mode the background would turn light under white text. */
-  .bg-dark { background-color: #14162B !important; color: #F9F9F9 !important; }
-  .bg-light { background-color: var(--light) !important; color: var(--text-main) !important; }
+.bg-primary { background-color: var(--primary) !important; color: var(--btn-text-light) !important; }
+.bg-secondary { background-color: var(--secondary) !important; color: var(--btn-text-light) !important; }
+.bg-success { background-color: var(--success) !important; color: var(--semantic-fg) !important; }
+.bg-danger { background-color: var(--danger) !important; color: var(--semantic-fg) !important; }
+.bg-warning { background-color: var(--warning) !important; color: var(--semantic-fg) !important; }
+.bg-info { background-color: var(--info) !important; color: var(--semantic-fg) !important; }
+/* bg-dark uses literals: "always dark" sections (footers, hero) are
+   paired in the HTML with .text-white - with a flipped var(--dark) in
+   dark mode the background would turn light under white text. */
+.bg-dark { background-color: var(--bg-dark-fixed) !important; color: var(--text-on-dark-fixed) !important; }
+.bg-light { background-color: var(--light) !important; color: var(--text-main) !important; }
 
-  /* --- SUBTLE BACKGROUNDS (10% opacity) --- */
-  /* Using the RGB variables from _root.scss to get transparency */
-  .bg-primary-subtle { background-color: rgba(var(--primary-rgb), 0.1) !important; color: var(--primary) !important; }
-  .bg-secondary-subtle { background-color: rgba(var(--secondary-rgb), 0.1) !important; color: var(--secondary) !important; }
-  .bg-success-subtle { background-color: rgba(var(--success-rgb), 0.1) !important; color: var(--success-text) !important; }
-  .bg-danger-subtle { background-color: rgba(var(--danger-rgb), 0.1) !important; color: var(--danger-text) !important; }
-  .bg-warning-subtle { background-color: rgba(var(--warning-rgb), 0.1) !important; color: var(--warning-text) !important; }
-  .bg-info-subtle { background-color: rgba(var(--info-rgb), 0.1) !important; color: var(--info-text) !important; }
-  .bg-dark-subtle { background-color: rgba(var(--dark-rgb), 0.1) !important; color: var(--dark) !important; }
-  .bg-light-subtle { background-color: rgba(var(--light-rgb), 0.5) !important; color: var(--text-main) !important; }
-  .bg-surface-subtle { background-color: rgba(var(--dark-rgb), 0.03) !important; color: var(--text-main) !important; }
-  .bg-body-subtle { background-color: rgba(var(--dark-rgb), 0.05) !important; color: var(--text-main) !important; }
-  .bg-white-subtle { background-color: rgba(255, 255, 255, 0.1) !important; color: var(--text-main) !important; }
+/* --- SUBTLE BACKGROUNDS (10% opacity) --- */
+/* Using the RGB variables from _root.scss to get transparency */
+.bg-primary-subtle { background-color: rgba(var(--primary-rgb), 0.1) !important; color: var(--primary) !important; }
+.bg-secondary-subtle { background-color: rgba(var(--secondary-rgb), 0.1) !important; color: var(--secondary) !important; }
+.bg-success-subtle { background-color: rgba(var(--success-rgb), 0.1) !important; color: var(--success-text) !important; }
+.bg-danger-subtle { background-color: rgba(var(--danger-rgb), 0.1) !important; color: var(--danger-text) !important; }
+.bg-warning-subtle { background-color: rgba(var(--warning-rgb), 0.1) !important; color: var(--warning-text) !important; }
+.bg-info-subtle { background-color: rgba(var(--info-rgb), 0.1) !important; color: var(--info-text) !important; }
+.bg-dark-subtle { background-color: rgba(var(--dark-rgb), 0.1) !important; color: var(--dark) !important; }
+.bg-light-subtle { background-color: rgba(var(--light-rgb), 0.5) !important; color: var(--text-main) !important; }
+.bg-surface-subtle { background-color: rgba(var(--dark-rgb), 0.03) !important; color: var(--text-main) !important; }
+.bg-body-subtle { background-color: rgba(var(--dark-rgb), 0.05) !important; color: var(--text-main) !important; }
+.bg-white-subtle { background-color: rgba(255, 255, 255, 0.1) !important; color: var(--text-main) !important; }
 
-  /* =========================================
-     3. HOVER UTILITIES (generated from a loop)
-     ========================================= */
-  $theme-colors: (
-    "primary": var(--primary),
-    "secondary": var(--secondary),
-    "success": var(--success),
-    "danger": var(--danger),
-    "warning": var(--warning),
-    "info": var(--info),
-    "light": var(--light),
-    "dark": var(--dark),
-    "surface": var(--bg-surface),
-    "body": var(--bg-body)
-  );
+/* =========================================
+   3. HOVER UTILITIES (generated from a loop)
+   ========================================= */
+$theme-colors: (
+  "primary": var(--primary),
+  "secondary": var(--secondary),
+  "success": var(--success),
+  "danger": var(--danger),
+  "warning": var(--warning),
+  "info": var(--info),
+  "light": var(--light),
+  "dark": var(--dark),
+  "surface": var(--bg-surface),
+  "body": var(--bg-body)
+);
 
-  @each $name, $color in $theme-colors {
+@each $name, $color in $theme-colors {
 
-    /* Background on hover */
-    .bg-hover-#{$name} {
-      transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+  /* Background on hover */
+  .bg-hover-#{$name} {
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 
-      &:hover {
-        background-color: #{$color} !important;
+    &:hover {
+      background-color: #{$color} !important;
 
-        /* Automatic text contrast - success/danger/warning/info use
-           --semantic-fg (mode-aware, see _root.scss), since in this
-           palette they're dark/saturated in light mode but light/neon in
-           dark mode. */
-        @if $name == "primary" or $name == "dark" or $name == "secondary" {
-          color: var(--btn-text-light) !important;
-        } @else if $name == "success" or $name == "danger" or $name == "warning" or $name == "info" {
-          color: var(--semantic-fg) !important;
-        } @else if $name == "light" or $name == "surface" or $name == "body" {
-          color: var(--text-main) !important;
-        }
+      /* Automatic text contrast - success/danger/warning/info use
+         --semantic-fg (mode-aware, see _root.scss), since in this
+         palette they're dark/saturated in light mode but light/neon in
+         dark mode. */
+      @if $name == "primary" or $name == "dark" or $name == "secondary" {
+        color: var(--btn-text-light) !important;
+      } @else if $name == "success" or $name == "danger" or $name == "warning" or $name == "info" {
+        color: var(--semantic-fg) !important;
+      } @else if $name == "light" or $name == "surface" or $name == "body" {
+        color: var(--text-main) !important;
       }
     }
-
-    /* Text on hover */
-    .text-hover-#{$name} {
-      transition: color var(--transition-speed) ease;
-      &:hover { color: #{$color} !important; }
-    }
-
-    /* Border on hover */
-    .border-hover-#{$name} {
-      transition: border-color var(--transition-speed) ease;
-      &:hover { border-color: #{$color} !important; }
-    }
   }
 
-  /* =========================================
-     4. GLASSMORPHISM
-     ========================================= */
-  .bg-glass {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, rgba(var(--bg-surface-rgb), 0.15) 0%, rgba(var(--bg-surface-rgb), 0.01) 100%);
-    backdrop-filter: blur(25px) saturate(180%) brightness(120%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%) brightness(120%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: var(--shadow-lg), inset 0 1px 2px rgba(255, 255, 255, 0.5);
-    border-radius: var(--border-radius);
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      opacity: 0.06;
-      mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-      z-index: 0;
-    }
-
-    > * { position: relative; z-index: 1; }
+  /* Text on hover */
+  .text-hover-#{$name} {
+    transition: color var(--transition-speed) ease;
+    &:hover { color: #{$color} !important; }
   }
 
-  [data-theme="dark"] .bg-glass {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.02) 100%);
-    backdrop-filter: blur(25px) saturate(150%);
-    -webkit-backdrop-filter: blur(25px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: var(--shadow-lg), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  /* Border on hover */
+  .border-hover-#{$name} {
+    transition: border-color var(--transition-speed) ease;
+    &:hover { border-color: #{$color} !important; }
+  }
+}
+
+/* =========================================
+   4. GLASSMORPHISM
+   ========================================= */
+.bg-glass {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(var(--bg-surface-rgb), 0.15) 0%, rgba(var(--bg-surface-rgb), 0.01) 100%);
+  backdrop-filter: blur(25px) saturate(180%) brightness(120%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%) brightness(120%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: var(--shadow-lg), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  border-radius: var(--border-radius);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    z-index: 0;
   }
 
-  /* =========================================
-     5. ADVANCED BACKGROUNDS
-     ========================================= */
+  > * { position: relative; z-index: 1; }
+}
 
-  /* Corner gradients (a glow effect) */
-  .bg-gradient-corners {
-    position: relative;
-    /* A literal: the glow needs an always-dark background (a flipped
-       var(--dark) in dark mode would brighten the section under light content) */
-    background-color: #14162B;
-    z-index: 1;
-    /* Guard against content spilling out */
-    overflow: hidden;
+[data-theme="dark"] .bg-glass {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.02) 100%);
+  backdrop-filter: blur(25px) saturate(150%);
+  -webkit-backdrop-filter: blur(25px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-lg), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
 
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
+/* =========================================
+   5. ADVANCED BACKGROUNDS
+   ========================================= */
 
-      /* FIX: the pseudo-element must inherit its parent's rounding! */
-      border-radius: inherit;
+/* Corner gradients (a glow effect) */
+.bg-gradient-corners {
+  position: relative;
+  /* A literal: the glow needs an always-dark background (a flipped
+     var(--dark) in dark mode would brighten the section under light content) */
+  background-color: var(--bg-dark-fixed);
+  z-index: 1;
+  /* Guard against content spilling out */
+  overflow: hidden;
 
-      background:
-        radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.22) 0%, transparent 45%),
-        radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.18) 0%, transparent 45%);
-      pointer-events: none;
-    }
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    /* FIX: the pseudo-element must inherit its parent's rounding! */
+    border-radius: inherit;
+
+    background:
+      radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.22) 0%, transparent 45%),
+      radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.18) 0%, transparent 45%);
+    pointer-events: none;
   }
+}
 
-  /* The same glow as above, but on a light background - unlike
-     .bg-gradient-corners, THIS background inverts normally with the
-     theme (var(--bg-body)), since there's no assumption of white text on
-     top here. */
-  .bg-gradient-corners-light {
-    position: relative;
-    background-color: var(--bg-body);
-    z-index: 1;
-    overflow: hidden;
+/* The same glow as above, but on a light background - unlike
+   .bg-gradient-corners, THIS background inverts normally with the
+   theme (var(--bg-body)), since there's no assumption of white text on
+   top here. */
+.bg-gradient-corners-light {
+  position: relative;
+  background-color: var(--bg-body);
+  z-index: 1;
+  overflow: hidden;
 
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      border-radius: inherit;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
 
-      background:
-        radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.09) 0%, transparent 45%),
-        radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.07) 0%, transparent 45%);
-      pointer-events: none;
-    }
+    background:
+      radial-gradient(circle at 0% 0%, rgba(var(--primary-rgb), 0.09) 0%, transparent 45%),
+      radial-gradient(circle at 100% 100%, rgba(var(--info-rgb), 0.07) 0%, transparent 45%);
+    pointer-events: none;
   }
+}
 
-  /* Text clipped from a background (requires the --clip-img variable in the HTML) */
-  .text-clip-bg {
-    background-image: var(--clip-img);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    display: inline-block;
-  }
+/* Text clipped from a background (requires the --clip-img variable in the HTML) */
+.text-clip-bg {
+  background-image: var(--clip-img);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
 }

@@ -31,149 +31,147 @@ $ig-btn-neutral: ".btn:not(:is(#{$ig-btn-colored}))";
    a hand-written 3x3 grid of "A + B" pairs for the border overlap. */
 $ig-member: ":is(.input, .input-group-text, .btn, #{$ig-btn-colored})";
 
-@layer components {
-  /* =========================================
-     1. INPUT GROUPS (Grouped fields and buttons)
-     ========================================= */
-  .input-group {
-    display: flex;
-    align-items: stretch;
-    width: 100%;
-    border-radius: var(--border-radius);
-    transition: box-shadow var(--transition-speed);
+/* =========================================
+   1. INPUT GROUPS (Grouped fields and buttons)
+   ========================================= */
+.input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border-radius: var(--border-radius);
+  transition: box-shadow var(--transition-speed);
 
-    /* Focus on the whole group */
-    &:focus-within {
-      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+  /* Focus on the whole group */
+  &:focus-within {
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
 
-      /* Neutral elements only: on a colored button the border carries the
-         variant's own color, and repainting it primary reads as a bug. */
-      > .input, > #{$ig-btn-neutral}, > .input-group-text {
-        border-color: var(--primary) !important;
-      }
-    }
-
-    /* 1. BASE: all elements in the group */
-    > #{$ig-member} {
-      position: relative;
-      margin-bottom: 0;
-      /* BLUNTLY: kill all corners on every element */
-      border-radius: 0 !important;
-
-      /* Disable individual focus styling - the group has one shared ring */
-      &:focus, &:user-valid, &:user-invalid {
-        box-shadow: none !important;
-        z-index: 3;
-      }
-    }
-
-    /* The border reset belongs to the validation styling above, but must
-       skip a colored button for the same reason as :focus-within. */
-    > .input,
-    > #{$ig-btn-neutral},
-    > .input-group-text {
-      &:focus, &:user-valid, &:user-invalid {
-        border-color: var(--border-color) !important;
-      }
-    }
-
-    /* 2. OVERLAPPING BORDERS: every element (except the first) slides under its predecessor */
-    > #{$ig-member} + #{$ig-member} {
-      margin-left: -1px;
-    }
-
-    /* 3. RECOVERING CORNERS: only the outermost elements */
-    > :first-child {
-      border-top-left-radius: var(--border-radius) !important;
-      border-bottom-left-radius: var(--border-radius) !important;
-    }
-
-    > :last-child {
-      border-top-right-radius: var(--border-radius) !important;
-      border-bottom-right-radius: var(--border-radius) !important;
-    }
-
-    /* 4. ELEMENT-SPECIFIC RULES */
-    > .input {
-      flex: 1 1 auto;
-      width: 1%;
-      min-width: 0;
-    }
-
-    /* Stacking order: every button, colored or not, has to sit above its
-       neighbours so the shared 1px border edge belongs to it on hover. */
-    > #{$ig-btn} {
-      z-index: 2;
-
-      &:hover {
-        z-index: 3;
-      }
-    }
-
-    /* Paint: neutral button only (see the header comment). A colored
-       button keeps the border-color and hover background of its variant. */
-    > #{$ig-btn-neutral} {
-      border: 1px solid var(--border-color);
-
-      &:hover {
-        background-color: var(--card-bg-subtle);
-      }
+    /* Neutral elements only: on a colored button the border carries the
+       variant's own color, and repainting it primary reads as a bug. */
+    > .input, > #{$ig-btn-neutral}, > .input-group-text {
+      border-color: var(--primary) !important;
     }
   }
 
-  .input-group-text {
-    --input-border-width: 1px;
-    display: flex;
-    align-items: center;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    font-weight: var(--fw-medium);
-    color: var(--text-muted);
-    text-align: center;
-    white-space: nowrap;
-    background-color: var(--card-bg-subtle);
-    border: var(--input-border-width) solid var(--border-color);
-    min-height: var(--target-size-min);
-    transition: border-color var(--transition-speed);
-  }
-
-  /* =========================================
-     2. FLOATING LABELS
-     ========================================= */
-  .form-floating {
+  /* 1. BASE: all elements in the group */
+  > #{$ig-member} {
     position: relative;
-    margin-bottom: calc(var(--spacing-unit) * 2);
-
-    label {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      padding: 1rem 0.75rem;
-      pointer-events: none;
-      transform-origin: 0 0;
-      transition: opacity var(--transition-speed), transform var(--transition-speed);
-      color: var(--text-muted);
-    }
-
-    .input:focus ~ label,
-    .input:not(:placeholder-shown) ~ label {
-      opacity: 0.8;
-      transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
-    }
-
-    .input {
-      padding-top: 1.625rem;
-      padding-bottom: 0.625rem;
-    }
-  }
-
-  /* .card-body has its own flex gap (spacing between children) - the
-     .form-floating margin-bottom above would duplicate that spacing (gap +
-     margin = a double gap). The margin above stays unchanged for other
-     contexts (e.g. several .form-floating directly in a <form> without
-     .d-flex) - there it's the only thing providing spacing between
-     fields. */
-  .card-body > .form-floating {
     margin-bottom: 0;
+    /* BLUNTLY: kill all corners on every element */
+    border-radius: 0 !important;
+
+    /* Disable individual focus styling - the group has one shared ring */
+    &:focus, &:user-valid, &:user-invalid {
+      box-shadow: none !important;
+      z-index: 3;
+    }
   }
+
+  /* The border reset belongs to the validation styling above, but must
+     skip a colored button for the same reason as :focus-within. */
+  > .input,
+  > #{$ig-btn-neutral},
+  > .input-group-text {
+    &:focus, &:user-valid, &:user-invalid {
+      border-color: var(--border-color) !important;
+    }
+  }
+
+  /* 2. OVERLAPPING BORDERS: every element (except the first) slides under its predecessor */
+  > #{$ig-member} + #{$ig-member} {
+    margin-left: -1px;
+  }
+
+  /* 3. RECOVERING CORNERS: only the outermost elements */
+  > :first-child {
+    border-top-left-radius: var(--border-radius) !important;
+    border-bottom-left-radius: var(--border-radius) !important;
+  }
+
+  > :last-child {
+    border-top-right-radius: var(--border-radius) !important;
+    border-bottom-right-radius: var(--border-radius) !important;
+  }
+
+  /* 4. ELEMENT-SPECIFIC RULES */
+  > .input {
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+  }
+
+  /* Stacking order: every button, colored or not, has to sit above its
+     neighbours so the shared 1px border edge belongs to it on hover. */
+  > #{$ig-btn} {
+    z-index: 2;
+
+    &:hover {
+      z-index: 3;
+    }
+  }
+
+  /* Paint: neutral button only (see the header comment). A colored
+     button keeps the border-color and hover background of its variant. */
+  > #{$ig-btn-neutral} {
+    border: 1px solid var(--border-color);
+
+    &:hover {
+      background-color: var(--card-bg-subtle);
+    }
+  }
+}
+
+.input-group-text {
+  --input-border-width: 1px;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--card-bg-subtle);
+  border: var(--input-border-width) solid var(--border-color);
+  min-height: var(--target-size-min);
+  transition: border-color var(--transition-speed);
+}
+
+/* =========================================
+   2. FLOATING LABELS
+   ========================================= */
+.form-floating {
+  position: relative;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+
+  label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 1rem 0.75rem;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transition: opacity var(--transition-speed), transform var(--transition-speed);
+    color: var(--text-muted);
+  }
+
+  .input:focus ~ label,
+  .input:not(:placeholder-shown) ~ label {
+    opacity: 0.8;
+    transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
+  }
+
+  .input {
+    padding-top: 1.625rem;
+    padding-bottom: 0.625rem;
+  }
+}
+
+/* .card-body has its own flex gap (spacing between children) - the
+   .form-floating margin-bottom above would duplicate that spacing (gap +
+   margin = a double gap). The margin above stays unchanged for other
+   contexts (e.g. several .form-floating directly in a <form> without
+   .d-flex) - there it's the only thing providing spacing between
+   fields. */
+.card-body > .form-floating {
+  margin-bottom: 0;
 }

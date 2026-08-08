@@ -366,8 +366,69 @@
                       z. B. ein Menü, das erst ab Tablet-Breite gezeigt wird.
                     </td>
                   </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.justify-content-md-*</code></td>
+                    <td data-label="Was sie macht">
+                      Ausrichtung entlang der Hauptachse, erst ab MD. Dieselben
+                      Endungen wie in der Basisversion: <code>start</code>,
+                      <code>end</code>, <code>center</code>,
+                      <code>between</code>. Ebenso
+                      <code>.align-items-md-*</code> und
+                      <code>.align-self-md-*</code> (mit
+                      <code>stretch</code>), dazu
+                      <code>.flex-md-wrap</code> /
+                      <code>.flex-md-nowrap</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.order-*</code></td>
+                    <td data-label="Was sie macht">
+                      Visuelle Reihenfolge, ohne das DOM anzufassen:
+                      <code>.order-first</code> (-1),
+                      <code>.order-last</code> (99),
+                      <code>.order-0</code> bis <code>.order-5</code>, dazu
+                      <code>-md-</code> und <code>-lg-</code>. Funktioniert
+                      auch im Grid.
+                    </td>
+                  </tr>
                 </tbody>
               </table>
+            </div>
+
+            <h3 class="text-6 fw-semibold mb-2">Alternierende Sektionen ohne kaputte Lesereihenfolge</h3>
+            <p class="text-muted mb-3">
+              Der Rhythmus einer Angebotsseite - Bild mal links, mal rechts.
+              Entscheidend: Das Markup bleibt in <strong>Lesereihenfolge</strong>
+              (erst Text, dann Bild), getauscht wird ausschließlich visuell, ab
+              MD. Auf dem Telefon und im Screenreader bleibt die Reihenfolge
+              gleich und sinnvoll. Fenster schmaler ziehen, um den Unterschied
+              zu sehen.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview d-block">
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 mb-3">
+                  <div class="w-100">
+                    <h4 class="text-5 fw-semibold m-0">Ungerade Sektion</h4>
+                    <p class="text-muted m-0">Der Text steht im Markup zuerst.</p>
+                  </div>
+                  <div class="w-100 p-4 bg-surface border rounded-2 text-center text-muted">Bild</div>
+                </div>
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+                  <div class="w-100">
+                    <h4 class="text-5 fw-semibold m-0">Gerade Sektion</h4>
+                    <p class="text-muted m-0">Gleiches Markup, das Bild wandert nur visuell.</p>
+                  </div>
+                  <div class="w-100 p-4 bg-surface border rounded-2 text-center text-muted order-md-first">Bild</div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="d-flex flex-column flex-md-row align-items-md-center gap-3"&gt;
+  &lt;div&gt;Text - im Markup IMMER zuerst&lt;/div&gt;
+  &lt;div class="order-md-first"&gt;Bild - springt nur visuell&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
             </div>
           </section>
 

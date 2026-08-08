@@ -48,6 +48,47 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.31 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.31</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Doppelt verschachtelte Layer, fest im CSS verdrahtete Werte und Fallen aus einem echten Website-Projekt
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Verschachtelte <code>@layer</code> aus 36 Dateien entfernt.</strong> Partials umschlossen sich selbst mit einem eigenen <code>@layer</code>, der Entry Point umschloss sie erneut - kompiliert ergab das <code>@layer utilities { @layer utilities { … } }</code>. Die Kaskade brach in BEIDE Richtungen, je nach <code>!important</code>: normale Deklarationen im Sub-Layer verloren gegen nicht umschlossene Regeln derselben Ebene, <code>!important</code>-Deklarationen dagegen gewannen. Gemeldet aus einem Projekt, in dem das Überschreiben von <code>.bg-dark</code> still verlor - Marineblau <code>#14162B</code> gegen <code>#16233C</code>, mit bloßem Auge nicht zu erkennen. Layer vergibt jetzt ausschließlich der Entry Point. Per Skript verifiziert: alle 8 Bundles nach dem Abflachen identisch, kein Selektor mit geändertem Gewinner.</li>
+                  <li><strong>Immer dunkle Flächen haben endlich ein Token.</strong> <code>#14162B</code> stand als Literal an acht Stellen. Jetzt <code>--bg-dark-fixed</code> und <code>--text-on-dark-fixed</code>, einmal deklariert und im Dark Mode bewusst NICHT invertiert. Rebranding heißt jetzt Variable ändern statt gegen die Kaskade zu kämpfen - wichtig, weil Utilities <code>!important</code> innerhalb eines Layers tragen und ein <code>!important</code> außerhalb jedes Layers in der Autoren-Kaskade das schwächste ist. Footer-Akzent separat: <code>--footer-accent</code> / <code>--footer-accent-hover</code>.</li>
+                  <li><strong>Die Beschriftung der Pricing-Schleife steckt nicht mehr im CSS.</strong> <code>.pricing-table.is-featured::before</code> hatte <code>content: 'Popularne'</code> fest verdrahtet. Jetzt <code>var(--pricing-ribbon, 'Popularne')</code>.</li>
+                  <li><strong><code>.before-after-slider</code> sprengt das Layout nicht mehr.</strong> Die Skalierung lag nur in <code>.before-after-img</code>; sie zu vergessen war keine Kosmetik, sondern eine Layout-Bombe: Das Bild behielt seine 1600px, und ein nacktes <code>1fr</code> im Grid nimmt sein Minimum aus dem min-content des Nachfahren - der TRACK wuchs, trotz <code>overflow: hidden</code>. Die Regel sitzt jetzt am <code>img</code> selbst, die Klasse bleibt als Alias.</li>
+                  <li><strong>Checkbox von 20px auf 24px.</strong> Das Element ist bewusst von der 44px-Regel ausgenommen, aber 20px bestand den Lighthouse-Audit nicht, der mindestens 24px verlangt. Größe über <code>--form-check-size</code>. Das ist eine VISUELLE Änderung - dichte Formulare nach dem Update prüfen.</li>
+                </ul>
+
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Die Klassen, die auf einer Marketing-Seite fehlten
+                </h2>
+                <ul class="text-secondary m-0">
+                  <li><strong><code>.fw-semibold</code> (600).</strong> Das Token <code>--fw-semibold</code> gab es von Anfang an, die Klasse nicht - die Skala sprang von <code>medium</code> (500) direkt auf <code>bold</code> (700).</li>
+                  <li><strong><code>.order-*</code>:</strong> <code>.order-first</code>, <code>.order-last</code>, <code>.order-0</code>–<code>.order-5</code> plus <code>-md-</code> und <code>-lg-</code>. Alternierende Sektionen erzwangen bisher ein Umsortieren im DOM, was die Lesereihenfolge auf schmalen Bildschirmen und für Screenreader zerstörte.</li>
+                  <li><strong>Responsive Flexbox-Ausrichtung:</strong> <code>.justify-content-md-*</code>, <code>.align-items-md-*</code>, <code>.align-self-md-*</code>, <code>.flex-md-wrap</code> / <code>.flex-md-nowrap</code>. Die Achsenrichtung ließ sich schon umschalten, die Ausrichtung entlang der Achse nicht.</li>
+                  <li><strong>Abstands-Aliase <code>s</code>/<code>e</code>:</strong> <code>.ps-*</code>, <code>.pe-*</code>, <code>.ms-*</code>, <code>.me-*</code> - aufgelöst zu physischem left/right, wie <code>.text-start</code>. Die Seitenvarianten (<code>.pt-</code>, <code>.pb-</code>, <code>.pl-</code>, <code>.pr-</code>) existierten längst, fehlten aber in <code>llms.txt</code> und in der Klassenübersicht.</li>
+                  <li><strong>Das Anti-FOUC-Snippet liegt jetzt in <code>starter.html</code>.</strong> Die Doku verlangte ein synchrones Skript im <code>&lt;head&gt;</code>, das Paket lieferte es nie mit.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.30 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -1,140 +1,138 @@
 // molique - Base input, select, textarea, floating labels, and validation.
-@layer components {
-  /* =========================================
-     1. BASE INPUT & SELECT
-     ========================================= */
-  .input {
-    --input-border-width: 1px;
-    --input-padding-y: calc(var(--spacing-unit) * 1.25);
-    display: block;
-    width: 100%;
-    padding: var(--input-padding-y) calc(var(--spacing-unit) * 2);
-    font-family: var(--font-family-base);
-    font-weight: var(--fw-medium);
-    line-height: 1.5;
-    color: var(--text-main);
-    background-color: var(--bg-surface);
-    background-clip: padding-box;
-    border: var(--input-border-width) solid var(--border-color);
-    border-radius: var(--border-radius);
-    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+/* =========================================
+   1. BASE INPUT & SELECT
+   ========================================= */
+.input {
+  --input-border-width: 1px;
+  --input-padding-y: calc(var(--spacing-unit) * 1.25);
+  display: block;
+  width: 100%;
+  padding: var(--input-padding-y) calc(var(--spacing-unit) * 2);
+  font-family: var(--font-family-base);
+  font-weight: var(--fw-medium);
+  line-height: 1.5;
+  color: var(--text-main);
+  background-color: var(--bg-surface);
+  background-clip: padding-box;
+  border: var(--input-border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
 
-     /* --- SIZE VARIANTS ---
-        Work on any element carrying the .input class: input, select, and textarea.
-        A bare .input (no modifier) is the middle ("md") variant. */
+   /* --- SIZE VARIANTS ---
+      Work on any element carrying the .input class: input, select, and textarea.
+      A bare .input (no modifier) is the middle ("md") variant. */
 
-    /* Compact (ideal for tables, popovers, and small widgets) */
-    &.input-sm {
-      --input-padding-y: calc(var(--spacing-unit) * 0.75);
-      padding: var(--input-padding-y) calc(var(--spacing-unit) * 1.5);
-      font-size: 0.8125rem; /* Smaller font */
-      border-radius: calc(var(--border-radius) * 0.8);
-      /* Override the global 44px mobile target size when using input-sm */
-      min-height: 32px !important;
-    }
-
-    /* Large (ideal for hero search bars and primary forms) */
-    &.input-lg {
-      --input-padding-y: calc(var(--spacing-unit) * 1.5);
-      padding: var(--input-padding-y) calc(var(--spacing-unit) * 2.5);
-      font-size: 1.125rem; /* Larger font */
-      border-radius: calc(var(--border-radius) * 1.2);
-      min-height: 56px !important;
-    }
-
-
-    &:focus {
-      border-color: var(--primary);
-      outline: 0;
-      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-    }
-
-    &::placeholder {
-      color: var(--text-muted);
-      opacity: 0.6;
-    }
-
-    &:disabled, &[readonly] {
-      background-color: var(--bg-body);
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
+  /* Compact (ideal for tables, popovers, and small widgets) */
+  &.input-sm {
+    --input-padding-y: calc(var(--spacing-unit) * 0.75);
+    padding: var(--input-padding-y) calc(var(--spacing-unit) * 1.5);
+    font-size: 0.8125rem; /* Smaller font */
+    border-radius: calc(var(--border-radius) * 0.8);
+    /* Override the global 44px mobile target size when using input-sm */
+    min-height: 32px !important;
   }
 
-  /* Custom arrow for the Select */
-  select.input {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right calc(var(--spacing-unit) * 1.5) center;
-    background-size: 16px 12px;
-    padding-right: calc(var(--spacing-unit) * 4);
-    cursor: pointer;
-
-    /* .input-sm/.input-lg override padding as a shorthand (all sides) -
-       here we restore the right-hand space for the arrow so they don't cover it. */
-    &.input-sm { padding-right: calc(var(--spacing-unit) * 3); }
-    &.input-lg { padding-right: calc(var(--spacing-unit) * 5); }
+  /* Large (ideal for hero search bars and primary forms) */
+  &.input-lg {
+    --input-padding-y: calc(var(--spacing-unit) * 1.5);
+    padding: var(--input-padding-y) calc(var(--spacing-unit) * 2.5);
+    font-size: 1.125rem; /* Larger font */
+    border-radius: calc(var(--border-radius) * 1.2);
+    min-height: 56px !important;
   }
 
-  /* =========================================
-     2. NATIVE VALIDATION (No JS)
-     ========================================= */
-  .input:user-valid {
-    border-color: var(--success);
-    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--success-rgb), 0.15); }
+
+  &:focus {
+    border-color: var(--primary);
+    outline: 0;
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
   }
 
-  .input:user-invalid {
-    border-color: var(--danger);
-    &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--danger-rgb), 0.15); }
+  &::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
   }
 
-  .feedback-invalid {
-    display: none;
-    width: 100%;
-    margin-top: calc(var(--spacing-unit) * 0.5);
-    font-size: 0.875em;
-    color: var(--danger);
+  &:disabled, &[readonly] {
+    background-color: var(--bg-body);
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+/* Custom arrow for the Select */
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(var(--spacing-unit) * 1.5) center;
+  background-size: 16px 12px;
+  padding-right: calc(var(--spacing-unit) * 4);
+  cursor: pointer;
+
+  /* .input-sm/.input-lg override padding as a shorthand (all sides) -
+     here we restore the right-hand space for the arrow so they don't cover it. */
+  &.input-sm { padding-right: calc(var(--spacing-unit) * 3); }
+  &.input-lg { padding-right: calc(var(--spacing-unit) * 5); }
+}
+
+/* =========================================
+   2. NATIVE VALIDATION (No JS)
+   ========================================= */
+.input:user-valid {
+  border-color: var(--success);
+  &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--success-rgb), 0.15); }
+}
+
+.input:user-invalid {
+  border-color: var(--danger);
+  &:focus { box-shadow: 0 0 0 var(--focus-ring-width) rgba(var(--danger-rgb), 0.15); }
+}
+
+.feedback-invalid {
+  display: none;
+  width: 100%;
+  margin-top: calc(var(--spacing-unit) * 0.5);
+  font-size: 0.875em;
+  color: var(--danger);
+}
+
+.input:user-invalid ~ .feedback-invalid {
+  display: block;
+  animation: fadeIn var(--transition-speed) ease;
+}
+
+/* =========================================
+   3. TEXTAREA: "SINGLE LINE" MODE (Auto-Expand, Zero JS)
+   ========================================= */
+.textarea-expandable {
+  /* How many rows the field expands to - overridable per instance:
+     style="--textarea-rows-expanded: 10;" */
+  --textarea-rows-expanded: 6;
+
+  resize: none;
+  overflow-y: hidden;
+  /* A height change is a reflow, so per the GPU Golden Rule (animate
+     only transform/opacity) the switch is instant. */
+  transition: none;
+  height: calc(1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+
+  /* Expanded: field active OR containing content - :not(:placeholder-shown)
+     keeps the text from collapsing back to a single line on blur alone.
+     REQUIRES a placeholder attribute (even placeholder=" ") on the <textarea>. */
+  &:focus,
+  &:not(:placeholder-shown) {
+    height: calc(var(--textarea-rows-expanded) * 1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
+    overflow-y: auto;
   }
 
-  .input:user-invalid ~ .feedback-invalid {
-    display: block;
-    animation: fadeIn var(--transition-speed) ease;
-  }
+  /* Fallback: browsers without support for the `lh` unit (e.g. older Safari) */
+  @supports not (height: 1lh) {
+    height: calc(1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
 
-  /* =========================================
-     3. TEXTAREA: "SINGLE LINE" MODE (Auto-Expand, Zero JS)
-     ========================================= */
-  .textarea-expandable {
-    /* How many rows the field expands to - overridable per instance:
-       style="--textarea-rows-expanded: 10;" */
-    --textarea-rows-expanded: 6;
-
-    resize: none;
-    overflow-y: hidden;
-    /* A height change is a reflow, so per the GPU Golden Rule (animate
-       only transform/opacity) the switch is instant. */
-    transition: none;
-    height: calc(1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
-
-    /* Expanded: field active OR containing content - :not(:placeholder-shown)
-       keeps the text from collapsing back to a single line on blur alone.
-       REQUIRES a placeholder attribute (even placeholder=" ") on the <textarea>. */
     &:focus,
     &:not(:placeholder-shown) {
-      height: calc(var(--textarea-rows-expanded) * 1lh + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2) + (var(--input-border-width) * 2));
-      overflow-y: auto;
-    }
-
-    /* Fallback: browsers without support for the `lh` unit (e.g. older Safari) */
-    @supports not (height: 1lh) {
-      height: calc(1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
-
-      &:focus,
-      &:not(:placeholder-shown) {
-        height: calc(var(--textarea-rows-expanded) * 1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
-      }
+      height: calc(var(--textarea-rows-expanded) * 1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
     }
   }
 }

@@ -7,97 +7,103 @@
 @use '../mixins' as *;
 @use 'sass:meta';
 
-@layer utilities {
-  /* =========================================
-     1. SPACING (margins and paddings)
-     ========================================= */
+/* =========================================
+   1. SPACING (margins and paddings)
+   ========================================= */
 
-  /* Added the 'auto' value to the map */
-  $space-amounts: (
-    0: 0, 
-    1: var(--spacing-unit), 
-    2: calc(var(--spacing-unit) * 2), 
-    3: calc(var(--spacing-unit) * 3), 
-    4: calc(var(--spacing-unit) * 4), 
-    5: calc(var(--spacing-unit) * 6),
-    auto: auto
-  );
+/* Added the 'auto' value to the map */
+$space-amounts: (
+  0: 0, 
+  1: var(--spacing-unit), 
+  2: calc(var(--spacing-unit) * 2), 
+  3: calc(var(--spacing-unit) * 3), 
+  4: calc(var(--spacing-unit) * 4), 
+  5: calc(var(--spacing-unit) * 6),
+  auto: auto
+);
+
+/* Classic naming (Top, Bottom, Left, Right, X, Y) plus s/e aliases.
+   s/e expand to the PHYSICAL left/right, exactly like .text-start and
+   .border-start already do in this framework - the names exist so markup
+   pasted in from a start/end codebase keeps its spacing instead of
+   silently losing it, not to add RTL behaviour molique does not have
+   elsewhere. .ms-auto / .me-auto come along for free (auto is in the
+   amounts map) and are the usual way to push a flex item to one side. */
+$sides: (
+  t: top,
+  b: bottom,
+  l: left,
+  r: right,
+  s: left,
+  e: right,
+  x: (left, right),
+  y: (top, bottom)
+);
+
+@each $space-key, $space-val in $space-amounts {
   
-  /* Classic naming (Top, Bottom, Left, Right, X, Y) */
-  $sides: (
-    t: top, 
-    b: bottom, 
-    l: left, 
-    r: right, 
-    x: (left, right), 
-    y: (top, bottom)
-  );
-
-  @each $space-key, $space-val in $space-amounts {
-    
-    /* Paddings (skip 'auto', since padding: auto doesn't exist in CSS) */
-    @if $space-key != auto {
-      .p-#{$space-key} { padding: #{$space-val} !important; }
-      
-      @each $side-key, $side-val in $sides {
-        @if meta.type-of($side-val) == "list" {
-          .p#{$side-key}-#{$space-key} { 
-            padding-#{nth($side-val, 1)}: #{$space-val} !important; 
-            padding-#{nth($side-val, 2)}: #{$space-val} !important; 
-          }
-        } @else {
-          .p#{$side-key}-#{$space-key} { padding-#{$side-val}: #{$space-val} !important; }
-        }
-      }
-    }
-
-    /* Margins (support 'auto') */
-    .m-#{$space-key} { margin: #{$space-val} !important; }
+  /* Paddings (skip 'auto', since padding: auto doesn't exist in CSS) */
+  @if $space-key != auto {
+    .p-#{$space-key} { padding: #{$space-val} !important; }
     
     @each $side-key, $side-val in $sides {
       @if meta.type-of($side-val) == "list" {
-        .m#{$side-key}-#{$space-key} { 
-          margin-#{nth($side-val, 1)}: #{$space-val} !important; 
-          margin-#{nth($side-val, 2)}: #{$space-val} !important; 
+        .p#{$side-key}-#{$space-key} { 
+          padding-#{nth($side-val, 1)}: #{$space-val} !important; 
+          padding-#{nth($side-val, 2)}: #{$space-val} !important; 
         }
       } @else {
-        .m#{$side-key}-#{$space-key} { margin-#{$side-val}: #{$space-val} !important; }
+        .p#{$side-key}-#{$space-key} { padding-#{$side-val}: #{$space-val} !important; }
       }
     }
   }
 
-  /* =========================================
-     2. DESKTOP VARIANTS (MD)
-     ========================================= */
-  @include mq(md) {
-    @each $space-key, $space-val in $space-amounts {
-      
-      @if $space-key != auto {
-        .p-md-#{$space-key} { padding: #{$space-val} !important; }
-        
-        @each $side-key, $side-val in $sides {
-          @if meta.type-of($side-val) == "list" {
-            .p#{$side-key}-md-#{$space-key} { 
-              padding-#{nth($side-val, 1)}: #{$space-val} !important; 
-              padding-#{nth($side-val, 2)}: #{$space-val} !important; 
-            }
-          } @else {
-            .p#{$side-key}-md-#{$space-key} { padding-#{$side-val}: #{$space-val} !important; }
-          }
-        }
+  /* Margins (support 'auto') */
+  .m-#{$space-key} { margin: #{$space-val} !important; }
+  
+  @each $side-key, $side-val in $sides {
+    @if meta.type-of($side-val) == "list" {
+      .m#{$side-key}-#{$space-key} { 
+        margin-#{nth($side-val, 1)}: #{$space-val} !important; 
+        margin-#{nth($side-val, 2)}: #{$space-val} !important; 
       }
+    } @else {
+      .m#{$side-key}-#{$space-key} { margin-#{$side-val}: #{$space-val} !important; }
+    }
+  }
+}
 
-      .m-md-#{$space-key} { margin: #{$space-val} !important; }
+/* =========================================
+   2. DESKTOP VARIANTS (MD)
+   ========================================= */
+@include mq(md) {
+  @each $space-key, $space-val in $space-amounts {
+    
+    @if $space-key != auto {
+      .p-md-#{$space-key} { padding: #{$space-val} !important; }
       
       @each $side-key, $side-val in $sides {
         @if meta.type-of($side-val) == "list" {
-          .m#{$side-key}-md-#{$space-key} { 
-            margin-#{nth($side-val, 1)}: #{$space-val} !important; 
-            margin-#{nth($side-val, 2)}: #{$space-val} !important; 
+          .p#{$side-key}-md-#{$space-key} { 
+            padding-#{nth($side-val, 1)}: #{$space-val} !important; 
+            padding-#{nth($side-val, 2)}: #{$space-val} !important; 
           }
         } @else {
-          .m#{$side-key}-md-#{$space-key} { margin-#{$side-val}: #{$space-val} !important; }
+          .p#{$side-key}-md-#{$space-key} { padding-#{$side-val}: #{$space-val} !important; }
         }
+      }
+    }
+
+    .m-md-#{$space-key} { margin: #{$space-val} !important; }
+    
+    @each $side-key, $side-val in $sides {
+      @if meta.type-of($side-val) == "list" {
+        .m#{$side-key}-md-#{$space-key} { 
+          margin-#{nth($side-val, 1)}: #{$space-val} !important; 
+          margin-#{nth($side-val, 2)}: #{$space-val} !important; 
+        }
+      } @else {
+        .m#{$side-key}-md-#{$space-key} { margin-#{$side-val}: #{$space-val} !important; }
       }
     }
   }

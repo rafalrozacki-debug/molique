@@ -6,45 +6,44 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer utilities {
-  /* =========================================
-     DISPLAY UTILITIES (visibility management)
-     ========================================= */
+/* =========================================
+   DISPLAY UTILITIES (visibility management)
+   ========================================= */
 
-  /* Default (mobile-first) */
-  .d-none { display: none !important; }
-  .d-inline { display: inline !important; }
-  .d-inline-block { display: inline-block !important; }
-  .d-block { display: block !important; }
-  .d-flex { display: flex !important; }
-  .d-inline-flex { display: inline-flex !important; }
-  .d-grid { display: grid !important; }
+/* Default (mobile-first) */
+.d-none { display: none !important; }
+.d-inline { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+.d-block { display: block !important; }
+.d-flex { display: flex !important; }
+.d-inline-flex { display: inline-flex !important; }
+.d-grid { display: grid !important; }
 
-  /* Desktop variants (MD) */
-  @include mq(md) {
-    .d-md-none { display: none !important; }
-    .d-md-inline { display: inline !important; }
-    .d-md-inline-block { display: inline-block !important; }
-    .d-md-block { display: block !important; }
-    .d-md-flex { display: flex !important; }
-    .d-md-inline-flex { display: inline-flex !important; }
-    .d-md-grid { display: grid !important; }
-  }
+/* Desktop variants (MD) */
+@include mq(md) {
+  .d-md-none { display: none !important; }
+  .d-md-inline { display: inline !important; }
+  .d-md-inline-block { display: inline-block !important; }
+  .d-md-block { display: block !important; }
+  .d-md-flex { display: flex !important; }
+  .d-md-inline-flex { display: inline-flex !important; }
+  .d-md-grid { display: grid !important; }
+}
 
-  /* Large-screen variants (LG) */
-  @include mq(lg) {
-    .d-lg-none { display: none !important; }
-    .d-lg-inline { display: inline !important; }
-    .d-lg-inline-block { display: inline-block !important; }
-    .d-lg-block { display: block !important; }
-    .d-lg-flex { display: flex !important; }
-    .d-lg-inline-flex { display: inline-flex !important; }
-    .d-lg-grid { display: grid !important; }
-  }
+/* Large-screen variants (LG) */
+@include mq(lg) {
+  .d-lg-none { display: none !important; }
+  .d-lg-inline { display: inline !important; }
+  .d-lg-inline-block { display: inline-block !important; }
+  .d-lg-block { display: block !important; }
+  .d-lg-flex { display: flex !important; }
+  .d-lg-inline-flex { display: inline-flex !important; }
+  .d-lg-grid { display: grid !important; }
+}
 
 /* =========================================
-   5. HELPERS (filters, embeds, hover states)
-   ========================================= */
+ 5. HELPERS (filters, embeds, hover states)
+ ========================================= */
 .filter-grayscale { filter: grayscale(100%); transition: filter var(--transition-speed); }
 .filter-blur { filter: blur(4px); transition: filter var(--transition-speed); }
 .filter-none { filter: none; }
@@ -59,10 +58,10 @@
 .hover-opacity-100:hover { opacity: 1; }
 
 /* REMOVED: .hover-text-primary and .hover-bg-light.
-   They broke the naming convention (WHAT-hover-COLOR, e.g.
-   text-hover-primary) and duplicated classes from the palette in
-   utilities/_colors.scss - those also have a transition. Usages migrated
-   to .text-hover-primary. */
+ They broke the naming convention (WHAT-hover-COLOR, e.g.
+ text-hover-primary) and duplicated classes from the palette in
+ utilities/_colors.scss - those also have a transition. Usages migrated
+ to .text-hover-primary. */
 
 .embed-responsive { position: relative; display: block; width: 100%; padding: 0; overflow: hidden; }
 .embed-responsive::before { display: block; content: ""; }
@@ -71,8 +70,8 @@
 .embed-responsive-4by3::before { padding-top: 75%; }
 
 /* =========================================
-   6. FILTERS AND TRANSPARENCY (logos)
-   ========================================= */
+ 6. FILTERS AND TRANSPARENCY (logos)
+ ========================================= */
 .opacity-0 { opacity: 0 !important; }
 .opacity-25 { opacity: 0.25 !important; }
 .opacity-50 { opacity: 0.5 !important; }
@@ -85,163 +84,162 @@
 .hover-filter-none:hover { filter: none !important; }
 
 /* =========================================
-   6b. SHADOWS
-   ========================================= */
+ 6b. SHADOWS
+ ========================================= */
 .shadow-sm { box-shadow: var(--shadow-sm) !important; }
 .shadow { box-shadow: var(--shadow-md) !important; }
 .shadow-lg { box-shadow: var(--shadow-lg) !important; }
 .shadow-none { box-shadow: none !important; }
 
 /* =========================================
-   6c. CURSOR
-   ========================================= */
+ 6c. CURSOR
+ ========================================= */
 .cursor-pointer { cursor: pointer !important; }
 .cursor-default { cursor: default !important; }
 .cursor-not-allowed { cursor: not-allowed !important; }
 
 /* =========================================
-   7. STACKING SECTIONS (sticky sections)
-   ========================================= */
+ 7. STACKING SECTIONS (sticky sections)
+ ========================================= */
 .stacking-container {
-  position: relative;
+position: relative;
 }
 
 .section-stacked {
-  position: sticky;
-  top: 0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+position: sticky;
+top: 0;
+min-height: 100vh;
+display: flex;
+align-items: center;
+box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* VARIANT: Magnetic snapping (Scroll Snap) */
 .stacking-container-snap {
-  /* The container needs a defined height and its own scrolling */
-  height: 100vh;
-  height: 100dvh;
-  overflow-y: auto;
+/* The container needs a defined height and its own scrolling */
+height: 100vh;
+height: 100dvh;
+overflow-y: auto;
 
-  /* Forces snapping to a section's edge */
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
+/* Forces snapping to a section's edge */
+scroll-snap-type: y mandatory;
+scroll-behavior: smooth;
 
-  /* Hide the scrollbar for a "clean presentation" effect */
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+/* Hide the scrollbar for a "clean presentation" effect */
+scrollbar-width: none;
+&::-webkit-scrollbar { display: none; }
 
-  .section-stacked {
-    /* Every section becomes a snap point */
-    scroll-snap-align: start;
-    scroll-snap-stop: always; /* Forces a stop at every section, prevents "flying past" */
-  }
+.section-stacked {
+  /* Every section becomes a snap point */
+  scroll-snap-align: start;
+  scroll-snap-stop: always; /* Forces a stop at every section, prevents "flying past" */
+}
 }
 
 /* =========================================
-   8. KNOCKOUT TEXT (text that cuts out a background)
-   ========================================= */
+ 8. KNOCKOUT TEXT (text that cuts out a background)
+ ========================================= */
 /* Container with a background image */
 .bg-knockout-wrapper {
-  position: relative;
-  background-size: cover;
-  background-position: center;
-  /* Optional: add background-attachment: fixed for a parallax effect inside the text! */
+position: relative;
+background-size: cover;
+background-position: center;
+/* Optional: add background-attachment: fixed for a parallax effect inside the text! */
 }
 
 /* Light variant: white background, transparent text */
 .text-knockout-light {
-  background-color: #fff;
-  color: #000; /* Must be black for mix-blend-mode to work */
-  mix-blend-mode: screen; /* Black becomes transparent, white stays white */
+background-color: #fff;
+color: #000; /* Must be black for mix-blend-mode to work */
+mix-blend-mode: screen; /* Black becomes transparent, white stays white */
 }
 
 /* Dark variant: black background, transparent text */
 .text-knockout-dark {
-  background-color: #000;
-  color: #fff; /* Must be white for mix-blend-mode to work */
-  mix-blend-mode: multiply; /* White becomes transparent, black stays black */
+background-color: #000;
+color: #fff; /* Must be white for mix-blend-mode to work */
+mix-blend-mode: multiply; /* White becomes transparent, black stays black */
 }
 
-  /* =========================================
-     BACKGROUND MEDIA (efficient backgrounds: video and images)
-     ========================================= */
-  .bg-video-container,
-  .bg-image-container {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
+/* =========================================
+   BACKGROUND MEDIA (efficient backgrounds: video and images)
+   ========================================= */
+.bg-video-container,
+.bg-image-container {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 
-    /* Default overlay (dimming) */
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.4);
-      z-index: -1;
-      pointer-events: none;
-    }
-  }
-
-  /* Shared styles for video, images, and a background <picture> tag */
-  .bg-video,
-  .bg-image,
-  picture.bg-image {
+  /* Default overlay (dimming) */
+  &::after {
+    content: '';
     position: absolute;
     inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+    pointer-events: none;
+  }
+}
+
+/* Shared styles for video, images, and a background <picture> tag */
+.bg-video,
+.bg-image,
+picture.bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+
+  /* If this is a <picture> tag, we need to style the <img> inside it */
+  img {
     width: 100%;
     height: 100%;
-    z-index: -2;
-    pointer-events: none;
-
-    /* If this is a <picture> tag, we need to style the <img> inside it */
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  /* Video-specific (GPU acceleration) */
-  video.bg-video {
     object-fit: cover;
-    transform: translateZ(0);
-    will-change: transform;
   }
+}
 
-  /* A11y: hide video for prefers-reduced-motion */
-  @media (prefers-reduced-motion: reduce) {
-    .bg-video-container video.bg-video {
-      display: none; 
-    }
+/* Video-specific (GPU acceleration) */
+video.bg-video {
+  object-fit: cover;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* A11y: hide video for prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-video-container video.bg-video {
+    display: none; 
   }
+}
 
-  .z-index-1 { z-index: 1 !important; }
-  .z-index-2 { z-index: 2 !important; }
-  .z-index-3 { z-index: 3 !important; }
+.z-index-1 { z-index: 1 !important; }
+.z-index-2 { z-index: 2 !important; }
+.z-index-3 { z-index: 3 !important; }
 
-  /* =========================================
-     9. FULL-BLEED / BREAKOUT (mobile)
-     ========================================= */
-  /* Pulls an element out of .container's padding on mobile, all the way
-     to the screen edge - typically carousels, image galleries, hero
-     images inside article content. Works ONLY below md (768px):
-     .container has padding-inline there (see _base.scss), and at md+ it's
-     already deliberately narrower than the viewport, so a breakout there
-     would only break the layout.
+/* =========================================
+   9. FULL-BLEED / BREAKOUT (mobile)
+   ========================================= */
+/* Pulls an element out of .container's padding on mobile, all the way
+   to the screen edge - typically carousels, image galleries, hero
+   images inside article content. Works ONLY below md (768px):
+   .container has padding-inline there (see _base.scss), and at md+ it's
+   already deliberately narrower than the viewport, so a breakout there
+   would only break the layout.
 
-     The "viewport centering" technique (width: 100vw + margin-left: 50% +
-     translateX(-50%)) works regardless of the parent's actual padding
-     value - no need to know or compute it, works even if someone
-     overrides .container's padding with a utility class. html already has
-     a global overflow-x: clip (see _base.scss) - this keeps 100vw from
-     blowing out the layout with horizontal scroll, even when the page has
-     a visible scrollbar (without this shield, 100vw is measured
-     INCLUDING the scrollbar's width). */
-  @include mq(sm, max) {
-    .breakout-mobile {
-      width: 100vw;
-      margin-left: 50%;
-      transform: translateX(-50%);
-    }
+   The "viewport centering" technique (width: 100vw + margin-left: 50% +
+   translateX(-50%)) works regardless of the parent's actual padding
+   value - no need to know or compute it, works even if someone
+   overrides .container's padding with a utility class. html already has
+   a global overflow-x: clip (see _base.scss) - this keeps 100vw from
+   blowing out the layout with horizontal scroll, even when the page has
+   a visible scrollbar (without this shield, 100vw is measured
+   INCLUDING the scrollbar's width). */
+@include mq(sm, max) {
+  .breakout-mobile {
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
   }
 }

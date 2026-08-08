@@ -3,133 +3,131 @@
 // Independent module: can be omitted from a bundle with no compile errors.
 // A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
-@layer components {
-  /* =========================================
-     4. SEARCHABLE SELECT (Combobox)
-     ========================================= */
-  .select-search {
-    position: relative;
-    width: 100%;
+/* =========================================
+   4. SEARCHABLE SELECT (Combobox)
+   ========================================= */
+.select-search {
+  position: relative;
+  width: 100%;
 
-    /* We read the "open" state from the popover via :has() - a popover
-       (unlike <details>) doesn't leave an [open] attribute on the parent
-       element. */
-    &:has(.select-search-menu:popover-open) .select-search-trigger {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-      &::after { transform: rotate(180deg); }
-    }
+  /* We read the "open" state from the popover via :has() - a popover
+     (unlike <details>) doesn't leave an [open] attribute on the parent
+     element. */
+  &:has(.select-search-menu:popover-open) .select-search-trigger {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+    &::after { transform: rotate(180deg); }
   }
+}
 
-  .select-search-trigger {
+.select-search-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  /* The trigger is a <button> - unlike <summary> it doesn't inherit the
+     font automatically. */
+  font: inherit;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--bg-surface);
+
+  &::after {
+    content: "▼";
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    transition: transform var(--transition-speed);
+  }
+}
+
+.select-search-menu {
+  /* The [popover] attribute in the HTML moves the menu to the browser's
+     top layer - this means it's NOT clipped by ancestor overflow (e.g. a
+     scrollable .card-body in a modal) and renders above an open
+     <dialog>. Closing on Esc and a click outside the menu is handled
+     natively by light dismiss.
+
+     Anchor: IMPLICIT, unnamed. The popovertarget+id pairing (Chrome
+     133+) creates the element-to-element relationship between the
+     button and the menu on its own - "auto" just enables using it via
+     anchor().
+
+     POSITION: FIXED, not absolute. Verified in Playwright (Chromium
+     149): this popover, nested inside an open <dialog>, with
+     position:absolute computed anchor() correctly (top: 409px), but
+     rendered RELATIVE TO THE DOCUMENT, not the viewport - at scrollY:
+     3772 that gave a real position of y: -3358px (off-screen, despite a
+     correctly computed top). On top of that, a native .focus() on the
+     search field (in JS), seeing an "invisible" element, triggered a
+     smooth scroll of the page toward that wrong position - that was the
+     actual symptom of the bug report (the page jumps to a different
+     select on the page). position: fixed has containing block =
+     viewport regardless of promotion to the top layer, so both defects
+     disappear together. The other half of the fix:
+     focus({ preventScroll: true }) in molique-select.js. */
+  position: fixed;
+  position-anchor: auto;
+  /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
+  inset: auto;
+  top: anchor(bottom);
+  left: anchor(left);
+  width: anchor-size(width);
+  margin: 4px 0 0 0;
+  max-height: 300px;
+  padding: calc(var(--spacing-unit) * 1);
+  color: var(--text-main);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  /* z-index only matters in the fallback - in the top layer, opening
+     order decides stacking, not z-index. */
+  z-index: var(--z-index-dropdown);
+
+  &:popover-open {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    text-align: left;
-    /* The trigger is a <button> - unlike <summary> it doesn't inherit the
-       font automatically. */
-    font: inherit;
-    cursor: pointer;
-    user-select: none;
-    background-color: var(--bg-surface);
-
-    &::after {
-      content: "▼";
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      transition: transform var(--transition-speed);
-    }
+    flex-direction: column;
+    animation: fadeInDown 0.2s ease;
   }
 
-  .select-search-menu {
-    /* The [popover] attribute in the HTML moves the menu to the browser's
-       top layer - this means it's NOT clipped by ancestor overflow (e.g. a
-       scrollable .card-body in a modal) and renders above an open
-       <dialog>. Closing on Esc and a click outside the menu is handled
-       natively by light dismiss.
-
-       Anchor: IMPLICIT, unnamed. The popovertarget+id pairing (Chrome
-       133+) creates the element-to-element relationship between the
-       button and the menu on its own - "auto" just enables using it via
-       anchor().
-
-       POSITION: FIXED, not absolute. Verified in Playwright (Chromium
-       149): this popover, nested inside an open <dialog>, with
-       position:absolute computed anchor() correctly (top: 409px), but
-       rendered RELATIVE TO THE DOCUMENT, not the viewport - at scrollY:
-       3772 that gave a real position of y: -3358px (off-screen, despite a
-       correctly computed top). On top of that, a native .focus() on the
-       search field (in JS), seeing an "invisible" element, triggered a
-       smooth scroll of the page toward that wrong position - that was the
-       actual symptom of the bug report (the page jumps to a different
-       select on the page). position: fixed has containing block =
-       viewport regardless of promotion to the top layer, so both defects
-       disappear together. The other half of the fix:
-       focus({ preventScroll: true }) in molique-select.js. */
+  /* Fallback for browsers without CSS Anchor Positioning (older Firefox):
+     the menu opens as a centered panel - still in the top layer, so
+     nothing clips it. */
+  @supports not (top: anchor(bottom)) {
     position: fixed;
-    position-anchor: auto;
-    /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
-    inset: auto;
-    top: anchor(bottom);
-    left: anchor(left);
-    width: anchor-size(width);
-    margin: 4px 0 0 0;
-    max-height: 300px;
-    padding: calc(var(--spacing-unit) * 1);
-    color: var(--text-main);
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-    /* z-index only matters in the fallback - in the top layer, opening
-       order decides stacking, not z-index. */
-    z-index: var(--z-index-dropdown);
-
-    &:popover-open {
-      display: flex;
-      flex-direction: column;
-      animation: fadeInDown 0.2s ease;
-    }
-
-    /* Fallback for browsers without CSS Anchor Positioning (older Firefox):
-       the menu opens as a centered panel - still in the top layer, so
-       nothing clips it. */
-    @supports not (top: anchor(bottom)) {
-      position: fixed;
-      inset: 0;
-      margin: auto;
-      width: min(400px, calc(100vw - 2rem));
-      height: fit-content;
-    }
+    inset: 0;
+    margin: auto;
+    width: min(400px, calc(100vw - 2rem));
+    height: fit-content;
   }
+}
 
-  .select-search-input {
-    margin-bottom: calc(var(--spacing-unit) * 1);
-    min-height: 36px !important; 
-    padding: 0.5rem 0.75rem;
-  }
+.select-search-input {
+  margin-bottom: calc(var(--spacing-unit) * 1);
+  min-height: 36px !important; 
+  padding: 0.5rem 0.75rem;
+}
 
-  .select-search-list {
-    overflow-y: auto;
-    flex: 1;
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-  }
+.select-search-list {
+  overflow-y: auto;
+  flex: 1;
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+}
 
-  .select-search-option {
-    cursor: pointer;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    border-radius: calc(var(--border-radius) / 2);
-    transition: background-color var(--transition-speed);
-    
-    &:hover { background-color: var(--card-bg-subtle); }
-    &.is-hidden { display: none !important; }
-    &.is-selected {
-      background-color: rgba(var(--primary-rgb), 0.1);
-      color: var(--primary);
-      font-weight: var(--fw-bold);
-    }
+.select-search-option {
+  cursor: pointer;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  border-radius: calc(var(--border-radius) / 2);
+  transition: background-color var(--transition-speed);
+  
+  &:hover { background-color: var(--card-bg-subtle); }
+  &.is-hidden { display: none !important; }
+  &.is-selected {
+    background-color: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary);
+    font-weight: var(--fw-bold);
   }
 }

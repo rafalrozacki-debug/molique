@@ -27,6 +27,14 @@
     background-color: var(--light);
     --position: 50%;
   }
+  /* Sizing lives on the ELEMENT, not only on the class: forgetting
+     .before-after-img used to be a silent layout bomb rather than a cosmetic
+     slip. The image kept its intrinsic width (1600px is typical), and although
+     the slider itself clips with overflow:hidden, a bare `1fr` grid track is
+     minmax(auto, 1fr) - its minimum comes from the descendant's min-content,
+     so the TRACK blew out instead. .before-after-img stays as an explicit
+     alias for existing markup and for non-img children. */
+  .before-after-slider img,
   .before-after-img {
     display: block;
     width: 100%;

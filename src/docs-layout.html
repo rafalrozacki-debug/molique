@@ -361,8 +361,69 @@
                       menu pokazywane dopiero od tabletu.
                     </td>
                   </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.justify-content-md-*</code></td>
+                    <td data-label="Co robi">
+                      Wyrównanie wzdłuż osi głównej, tylko od MD w górę. Te
+                      same końcówki co w wersji bazowej:
+                      <code>start</code>, <code>end</code>,
+                      <code>center</code>, <code>between</code>. Analogicznie
+                      <code>.align-items-md-*</code> i
+                      <code>.align-self-md-*</code> (z
+                      <code>stretch</code>) oraz
+                      <code>.flex-md-wrap</code> /
+                      <code>.flex-md-nowrap</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.order-*</code></td>
+                    <td data-label="Co robi">
+                      Kolejność wizualna bez ruszania DOM-u:
+                      <code>.order-first</code> (-1),
+                      <code>.order-last</code> (99),
+                      <code>.order-0</code> do <code>.order-5</code>, plus
+                      <code>-md-</code> i <code>-lg-</code>. Działa też
+                      w Gridzie.
+                    </td>
+                  </tr>
                 </tbody>
               </table>
+            </div>
+
+            <h3 class="text-6 fw-semibold mb-2">Naprzemienne sekcje bez psucia kolejności czytania</h3>
+            <p class="text-muted mb-3">
+              Rytm strony ofertowej - zdjęcie raz z lewej, raz z prawej.
+              Kluczowe: markup jest w kolejności <strong>czytania</strong>
+              (najpierw opis, potem obrazek), a zamiana miejscami dzieje się
+              wyłącznie wizualnie, od MD w górę. Na telefonie i w czytniku
+              ekranu kolejność zostaje ta sama, sensowna. Zwęź okno, żeby
+              zobaczyć różnicę.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview d-block">
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 mb-3">
+                  <div class="w-100">
+                    <h4 class="text-5 fw-semibold m-0">Sekcja nieparzysta</h4>
+                    <p class="text-muted m-0">Opis stoi w markupie jako pierwszy.</p>
+                  </div>
+                  <div class="w-100 p-4 bg-surface border rounded-2 text-center text-muted">obrazek</div>
+                </div>
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+                  <div class="w-100">
+                    <h4 class="text-5 fw-semibold m-0">Sekcja parzysta</h4>
+                    <p class="text-muted m-0">Ten sam markup, obrazek przesunięty tylko wizualnie.</p>
+                  </div>
+                  <div class="w-100 p-4 bg-surface border rounded-2 text-center text-muted order-md-first">obrazek</div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="d-flex flex-column flex-md-row align-items-md-center gap-3"&gt;
+  &lt;div&gt;Opis - w markupie ZAWSZE pierwszy&lt;/div&gt;
+  &lt;div class="order-md-first"&gt;Obrazek - przeskakuje tylko wizualnie&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
             </div>
           </section>
 

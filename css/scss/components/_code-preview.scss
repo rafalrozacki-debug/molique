@@ -8,80 +8,78 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer components {
-  .component-showcase {
-    margin: calc(var(--spacing-unit) * 4) 0;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    background-color: var(--bg-body);
-    /* A safeguard against content blowing out the width */
-    max-width: 100%;
+.component-showcase {
+  margin: calc(var(--spacing-unit) * 4) 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--bg-body);
+  /* A safeguard against content blowing out the width */
+  max-width: 100%;
+}
+
+.component-preview {
+  padding: calc(var(--spacing-unit) * 3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing-unit) * 3);
+  background-image: radial-gradient(var(--border-color) 1px, transparent 0);
+  background-size: 20px 20px;
+
+  @include mq(md) {
+    padding: calc(var(--spacing-unit) * 6);
   }
+}
 
-  .component-preview {
-    padding: calc(var(--spacing-unit) * 3);
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--spacing-unit) * 3);
-    background-image: radial-gradient(var(--border-color) 1px, transparent 0);
-    background-size: 20px 20px;
+.component-code {
+  position: relative;
+  background-color: var(--code-bg);
+  /* A border, since .component-code is sometimes used STANDALONE
+     (without the .component-showcase wrapper that carried the border) -
+     without it the code block has no edge at all. */
+  border: 1px solid var(--code-border);
+  border-radius: var(--border-radius);
+  margin: 0;
+  padding: 0;
+  /* A safeguard against long code blowing out the width */
+  max-width: 100%;
 
-    @include mq(md) {
-      padding: calc(var(--spacing-unit) * 6);
-    }
-  }
-
-  .component-code {
-    position: relative;
-    background-color: var(--code-bg);
-    /* A border, since .component-code is sometimes used STANDALONE
-       (without the .component-showcase wrapper that carried the border) -
-       without it the code block has no edge at all. */
-    border: 1px solid var(--code-border);
-    border-radius: var(--border-radius);
+  pre {
     margin: 0;
-    padding: 0;
-    /* A safeguard against long code blowing out the width */
+    padding: calc(var(--spacing-unit) * 4);
+    /* Force horizontal scrolling for long code lines */
+    overflow-x: auto;
     max-width: 100%;
-
-    pre {
-      margin: 0;
-      padding: calc(var(--spacing-unit) * 4);
-      /* Force horizontal scrolling for long code lines */
-      overflow-x: auto;
-      max-width: 100%;
-      color: var(--code-text);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.875rem;
-      line-height: 1.6;
-    }
+    color: var(--code-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
   }
+}
 
-  /* Inside a showcase, .component-showcase already carries the border, and
-     the code block sits flush against the preview - only the dividing
-     line remains. */
-  .component-showcase > .component-code {
-    border: 0;
-    border-top: 1px solid var(--code-border);
-    border-radius: 0;
-  }
+/* Inside a showcase, .component-showcase already carries the border, and
+   the code block sits flush against the preview - only the dividing
+   line remains. */
+.component-showcase > .component-code {
+  border: 0;
+  border-top: 1px solid var(--code-border);
+  border-radius: 0;
+}
 
-  .btn-copy {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 4px 12px;
-    border-radius: calc(var(--border-radius) / 2);
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
+.btn-copy {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: calc(var(--border-radius) / 2);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
 
-    &:hover { background-color: rgba(255, 255, 255, 0.2); }
-    &.is-copied { background-color: var(--success); border-color: var(--success); }
-  }
+  &:hover { background-color: rgba(255, 255, 255, 0.2); }
+  &.is-copied { background-color: var(--success); border-color: var(--success); }
 }

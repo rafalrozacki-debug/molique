@@ -50,251 +50,249 @@
   }
 }
 
-@layer components {
-  .admin-sidebar {
-    background-color: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    display: flex;
-    flex-direction: column;
-    position: sticky;
-    top: var(--layout-padding);
-    height: calc(100dvh - (var(--layout-padding) * 2));
-    border-radius: var(--sidebar-radius);
-    z-index: var(--z-index-sticky);
-    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
-    gap: calc(var(--spacing-unit) * 3);
+.admin-sidebar {
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: var(--layout-padding);
+  height: calc(100dvh - (var(--layout-padding) * 2));
+  border-radius: var(--sidebar-radius);
+  z-index: var(--z-index-sticky);
+  padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
+  gap: calc(var(--spacing-unit) * 3);
 
-    /* Back to safely hiding, since the sidebar itself will grow */
-    overflow-y: auto;
-    overflow-x: hidden;
+  /* Back to safely hiding, since the sidebar itself will grow */
+  overflow-y: auto;
+  overflow-x: hidden;
 
-    /* FIX: the sidebar has a fixed width and smoothly grows.
-       A deliberate exception to the GPU-only rule (transform/opacity):
-       animating width triggers reflow, but this is a one-off,
-       click-initiated change (the width toggle), not a continuous/looping
-       animation - the cost is one-time, not per-frame. The same tradeoff
-       as .progress-bar/.progress-bar-reading in _progress.scss. */
-    width: var(--current-sidebar-width);
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  /* FIX: the sidebar has a fixed width and smoothly grows.
+     A deliberate exception to the GPU-only rule (transform/opacity):
+     animating width triggers reflow, but this is a one-off,
+     click-initiated change (the width toggle), not a continuous/looping
+     animation - the cost is one-time, not per-frame. The same tradeoff
+     as .progress-bar/.progress-bar-reading in _progress.scss. */
+  width: var(--current-sidebar-width);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
 
-    /* An elegant scrollbar */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(var(--sidebar-highlight-rgb), 0.1) transparent;
-    &::-webkit-scrollbar { width: 4px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb {
-      background: rgba(var(--sidebar-highlight-rgb), 0.1);
-      border-radius: var(--border-radius);
-    }
-
-
-    /* Mobile Bottom Nav */
-    @media (max-width: 768px) {
-      position: fixed;
-      top: auto;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%; /* Force 100% on mobile */
-      height: auto;
-      min-height: 70px;
-      flex-direction: row;
-      align-items: center;
-      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-      border-radius: 0;
-      border-top: 1px solid rgba(var(--sidebar-highlight-rgb), 0.1);
-      padding-bottom: env(safe-area-inset-bottom);
-      overflow: visible;
-    }
-  }
-
-  /* =========================================
-     COORDINATION WITH THE GLOBAL NAVBAR
-     =========================================
-     When a navbar sits above the admin layout (body > .navbar), the
-     sidebar must start BELOW it and fill the rest of the window. Desktop
-     only - on mobile the sidebar is the bottom Bottom Nav (position: fixed; bottom). */
-  @include mq(md) {
-    body:has(> .navbar) .admin-sidebar {
-      top: calc(var(--navbar-h) + var(--layout-padding));
-      height: calc(100dvh - var(--navbar-h) - (var(--layout-padding) * 2));
-    }
-  }
-
-  /* On pages with the admin layout, the navbar stays pinned (doesn't hide
-     on scroll down), otherwise the sidebar would expose an empty bar at the top. */
-  body:has(.admin-layout) .navbar-sticky.is-hidden {
-    transform: none;
-  }
-
-  /* Fading content at the bottom of the scrollable sidebar (opt-in: the
-     .fade-bottom class from the layout layer). The gradient must use the
-     sidebar's background color (always dark), not the page surface's. */
-  .admin-sidebar.fade-bottom {
-    --fade-color: var(--sidebar-bg);
-
-    /* On mobile the sidebar turns into a horizontal bottom bar - a
-       vertical gradient would obscure the navigation pills. */
-    @media (max-width: 768px) {
-      &::after { display: none; }
-    }
-  }
-
-  /* Sidebar logo.
-     Works regardless of content type (image, SVG, text) - always fits
-     within the parent's width and never blows out the sidebar. */
-  .admin-brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    height: var(--target-size-min);
-    flex-shrink: 0; /* FIX: overflow:hidden gives flex items an automatic
-                        min-height:0 - without this the logo gets crushed
-                        to zero when .admin-nav is taller than the sidebar */
-    margin-bottom: calc(var(--spacing-unit) * 4);
-    overflow: hidden;
-    white-space: nowrap;
-    text-decoration: none;
-    color: var(--sidebar-text-active);
-    font-family: var(--font-family-heading);
-    font-weight: var(--fw-black);
-    font-size: var(--h4-size);
-
-    img, svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-    }
-  }
-
-  /* Default (wide sidebar): the wordmark shows, the logomark waits. The
-     narrow modes below flip it - see @mixin admin-logo-swap-style. */
-  .admin-logo-swap > .admin-logo-mark {
-    display: none;
-  }
-
-  /* =========================================
-     ANIMATED TOGGLE ICON (morphing hamburger)
-     ========================================= */
-
-  /* 1. The toggle button */
-  #molique-sidebar-toggle {
-    display: flex;
-    align-items: center;
-    /* By default (LG) the icon is on the left, like the rest of the links */
-    justify-content: flex-start;
-    width: 100%; /* Always fills the sidebar's full width */
-    height: var(--target-size-min, 44px);
-    padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding like the links */
-    margin: 0;
+  /* An elegant scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--sidebar-highlight-rgb), 0.1) transparent;
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(var(--sidebar-highlight-rgb), 0.1);
     border-radius: var(--border-radius);
   }
 
-  /* In narrow mode (MD and SM), center the icon */
-  .admin-layout.sidebar-md #molique-sidebar-toggle,
-  .admin-layout.sidebar-sm #molique-sidebar-toggle {
-    justify-content: center;
-    padding: 0 !important;
-  }
 
-  /* 2. The icon's base */
-  .sidebar-toggle-icon {
-    width: 20px;
-    height: 14px;
-    position: relative;
-    display: inline-block;
-    transition: transform var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
-
-    span {
-      position: absolute;
-      left: 0;
-      height: 2px;
-      background-color: currentColor;
-      border-radius: 2px;
-      transition: all var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
-      width: 100%;
-    }
-    
-    /* Default state (LG) - classic hamburger */
-    span:nth-child(1) { top: 0; }
-    span:nth-child(2) { top: 6px; }
-    span:nth-child(3) { top: 12px; }
-  }
-
-  /* State 2 (MD) - asymmetric */
-  .admin-layout.sidebar-md .sidebar-toggle-icon {
-    span:nth-child(1) { width: 100%; }
-    span:nth-child(2) { width: 75%; }
-    span:nth-child(3) { width: 50%; }
-  }
-
-  /* State 3 (SM) - arrow pointing right */
-  .admin-layout.sidebar-sm .sidebar-toggle-icon {
-    /* OPTICAL CORRECTION: shift the whole icon 2px left to balance the weight of the arrowhead */
-    transform: translateX(-2px);
-    
-    span:nth-child(1) {
-      width: 50%;
-      top: 2px;
-      left: 10px;
-      transform: rotate(45deg);
-    }
-    span:nth-child(2) {
-      width: 100%;
-      top: 6px;
-      left: 0;
-      transform: rotate(0);
-    }
-    span:nth-child(3) {
-      width: 50%;
-      top: 10px;
-      left: 10px;
-      transform: rotate(-45deg);
-    }
-  }
-
-  /* =========================================
-     LOGO MANAGEMENT - RESPONSIVE VERSION
-     ========================================= */
-
-  /* Narrow desktop modes (-sm, -md): the logo collapses automatically,
-     just like link labels in .admin-nav-link (see _admin-nav.scss) */
-  @include mq(md) {
-    .sidebar-sm .admin-logo-hide,
-    .sidebar-md .admin-logo-hide {
-      display: none !important;
-    }
-
-    .sidebar-sm .admin-logo-compact,
-    .sidebar-md .admin-logo-compact {
-      @include admin-logo-compact-style;
-    }
-
-    /* Option 3: swap the wordmark for the logomark */
-    .sidebar-sm .admin-logo-swap,
-    .sidebar-md .admin-logo-swap {
-      @include admin-logo-swap-style;
-    }
-  }
-
-  /* Mobile (sidebar collapsed into the bottom bar): the same rules */
+  /* Mobile Bottom Nav */
   @media (max-width: 768px) {
-    /* Option 1: fully hide the logo on mobile */
-    .admin-logo-hide {
-      display: none !important;
-    }
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%; /* Force 100% on mobile */
+    height: auto;
+    min-height: 70px;
+    flex-direction: row;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+    border-radius: 0;
+    border-top: 1px solid rgba(var(--sidebar-highlight-rgb), 0.1);
+    padding-bottom: env(safe-area-inset-bottom);
+    overflow: visible;
+  }
+}
 
-    /* Option 2: a compact (shrunk) version on mobile */
-    .admin-logo-compact {
-      @include admin-logo-compact-style;
-    }
+/* =========================================
+   COORDINATION WITH THE GLOBAL NAVBAR
+   =========================================
+   When a navbar sits above the admin layout (body > .navbar), the
+   sidebar must start BELOW it and fill the rest of the window. Desktop
+   only - on mobile the sidebar is the bottom Bottom Nav (position: fixed; bottom). */
+@include mq(md) {
+  body:has(> .navbar) .admin-sidebar {
+    top: calc(var(--navbar-h) + var(--layout-padding));
+    height: calc(100dvh - var(--navbar-h) - (var(--layout-padding) * 2));
+  }
+}
 
-    /* Option 3: the logomark instead of the wordmark on mobile */
-    .admin-logo-swap {
-      @include admin-logo-swap-style;
-    }
+/* On pages with the admin layout, the navbar stays pinned (doesn't hide
+   on scroll down), otherwise the sidebar would expose an empty bar at the top. */
+body:has(.admin-layout) .navbar-sticky.is-hidden {
+  transform: none;
+}
+
+/* Fading content at the bottom of the scrollable sidebar (opt-in: the
+   .fade-bottom class from the layout layer). The gradient must use the
+   sidebar's background color (always dark), not the page surface's. */
+.admin-sidebar.fade-bottom {
+  --fade-color: var(--sidebar-bg);
+
+  /* On mobile the sidebar turns into a horizontal bottom bar - a
+     vertical gradient would obscure the navigation pills. */
+  @media (max-width: 768px) {
+    &::after { display: none; }
+  }
+}
+
+/* Sidebar logo.
+   Works regardless of content type (image, SVG, text) - always fits
+   within the parent's width and never blows out the sidebar. */
+.admin-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  height: var(--target-size-min);
+  flex-shrink: 0; /* FIX: overflow:hidden gives flex items an automatic
+                      min-height:0 - without this the logo gets crushed
+                      to zero when .admin-nav is taller than the sidebar */
+  margin-bottom: calc(var(--spacing-unit) * 4);
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--sidebar-text-active);
+  font-family: var(--font-family-heading);
+  font-weight: var(--fw-black);
+  font-size: var(--h4-size);
+
+  img, svg {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+/* Default (wide sidebar): the wordmark shows, the logomark waits. The
+   narrow modes below flip it - see @mixin admin-logo-swap-style. */
+.admin-logo-swap > .admin-logo-mark {
+  display: none;
+}
+
+/* =========================================
+   ANIMATED TOGGLE ICON (morphing hamburger)
+   ========================================= */
+
+/* 1. The toggle button */
+#molique-sidebar-toggle {
+  display: flex;
+  align-items: center;
+  /* By default (LG) the icon is on the left, like the rest of the links */
+  justify-content: flex-start;
+  width: 100%; /* Always fills the sidebar's full width */
+  height: var(--target-size-min, 44px);
+  padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding like the links */
+  margin: 0;
+  border-radius: var(--border-radius);
+}
+
+/* In narrow mode (MD and SM), center the icon */
+.admin-layout.sidebar-md #molique-sidebar-toggle,
+.admin-layout.sidebar-sm #molique-sidebar-toggle {
+  justify-content: center;
+  padding: 0 !important;
+}
+
+/* 2. The icon's base */
+.sidebar-toggle-icon {
+  width: 20px;
+  height: 14px;
+  position: relative;
+  display: inline-block;
+  transition: transform var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
+
+  span {
+    position: absolute;
+    left: 0;
+    height: 2px;
+    background-color: currentColor;
+    border-radius: 2px;
+    transition: all var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+  }
+  
+  /* Default state (LG) - classic hamburger */
+  span:nth-child(1) { top: 0; }
+  span:nth-child(2) { top: 6px; }
+  span:nth-child(3) { top: 12px; }
+}
+
+/* State 2 (MD) - asymmetric */
+.admin-layout.sidebar-md .sidebar-toggle-icon {
+  span:nth-child(1) { width: 100%; }
+  span:nth-child(2) { width: 75%; }
+  span:nth-child(3) { width: 50%; }
+}
+
+/* State 3 (SM) - arrow pointing right */
+.admin-layout.sidebar-sm .sidebar-toggle-icon {
+  /* OPTICAL CORRECTION: shift the whole icon 2px left to balance the weight of the arrowhead */
+  transform: translateX(-2px);
+  
+  span:nth-child(1) {
+    width: 50%;
+    top: 2px;
+    left: 10px;
+    transform: rotate(45deg);
+  }
+  span:nth-child(2) {
+    width: 100%;
+    top: 6px;
+    left: 0;
+    transform: rotate(0);
+  }
+  span:nth-child(3) {
+    width: 50%;
+    top: 10px;
+    left: 10px;
+    transform: rotate(-45deg);
+  }
+}
+
+/* =========================================
+   LOGO MANAGEMENT - RESPONSIVE VERSION
+   ========================================= */
+
+/* Narrow desktop modes (-sm, -md): the logo collapses automatically,
+   just like link labels in .admin-nav-link (see _admin-nav.scss) */
+@include mq(md) {
+  .sidebar-sm .admin-logo-hide,
+  .sidebar-md .admin-logo-hide {
+    display: none !important;
+  }
+
+  .sidebar-sm .admin-logo-compact,
+  .sidebar-md .admin-logo-compact {
+    @include admin-logo-compact-style;
+  }
+
+  /* Option 3: swap the wordmark for the logomark */
+  .sidebar-sm .admin-logo-swap,
+  .sidebar-md .admin-logo-swap {
+    @include admin-logo-swap-style;
+  }
+}
+
+/* Mobile (sidebar collapsed into the bottom bar): the same rules */
+@media (max-width: 768px) {
+  /* Option 1: fully hide the logo on mobile */
+  .admin-logo-hide {
+    display: none !important;
+  }
+
+  /* Option 2: a compact (shrunk) version on mobile */
+  .admin-logo-compact {
+    @include admin-logo-compact-style;
+  }
+
+  /* Option 3: the logomark instead of the wordmark on mobile */
+  .admin-logo-swap {
+    @include admin-logo-swap-style;
   }
 }

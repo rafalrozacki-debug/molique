@@ -122,22 +122,32 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   `--warning-text`, `--danger-text`, `--info-text`) dla tekstu/ikon na
   jasnym tle, nigdy gołe `--success`/`--warning` itd. - te drugie są
   dobrane pod tła, nie pod kontrast tekstu.
-- **Nowy plik w `components/` nie powinien owijać się we własny
-  `@layer components { ... }`:** `molique-style.scss` już owija cały
-  import `_components.scss` w `@layer components { ... }` - dodatkowe
-  owinięcie W ŚRODKU pliku komponentu tworzy zagnieżdżoną podwarstwę
-  (`components.components`), która ma NIŻSZY priorytet niż nieowinięte
-  reguły w tym samym zakresie, NIEZALEŻNIE od kolejności w pliku i
-  specyficzności. Realny bug: `.stat-tile` (samo owinięte) ustawiało
-  `flex-direction: row`, ale `.card` (nieowinięte, z `_cards.scss`)
-  ustawiające `column` wygrywało - ikona lądowała nad tekstem zamiast
-  obok niego (naprawione w v1.7.14). Około 26 z 60 plików w
-  `components/` wciąż ma to zbędne owinięcie (zaszłość, nie
-  konwencja) - nie kopiuj tego wzorca do nowych plików. Jeśli
-  komponent ma być łączony z `.card` na tym samym elemencie (jak
-  `.stat-tile`), ten bug jest szczególnie prawdopodobny, bo `.card`
-  jest zawsze nieowinięte - sprawdź to jako pierwsze podejrzenie przy
-  "właściwość z mojego pliku nie działa, mimo że jest w CSS".
+- **ŻADEN plik częściowy nie owija się we własny `@layer` - stan od
+  v1.7.31, egzekwuj to przy każdym nowym pliku.** Warstwę nadaje
+  WYŁĄCZNIE entry point (`molique-style*.scss`), owijając cały import.
+  Dodatkowe owinięcie W ŚRODKU pliku tworzy podwarstwę
+  (`components.components`) i psuje kaskadę w obie strony, zależnie od
+  `!important`:
+  - deklaracje zwykłe: podwarstwa PRZEGRYWA z nieowiniętymi regułami tej
+    samej warstwy, niezależnie od kolejności i specyficzności (realny bug:
+    `.stat-tile` ustawiało `flex-direction: row`, ale wygrywało `column`
+    z nieowiniętego `.card` - ikona lądowała nad tekstem; v1.7.14);
+  - deklaracje `!important`: kolejność warstw jest ODWRÓCONA, więc
+    podwarstwa WYGRYWA - a przy okazji `!important` spoza jakiejkolwiek
+    warstwy jest najsłabszy w całej kaskadzie autora. To drugie zgłosił
+    użytkownik, któremu nadpisanie `.bg-dark` z własnego arkusza cicho
+    przegrywało: różnica granatu #14162B vs #16233C, nie do wychwycenia
+    okiem, znaleziona dopiero pomiarem pikseli.
+  W v1.7.31 zdjęto owinięcie z 36 plików (skrypt + weryfikacja: wszystkie
+  8 bundli identycznych po spłaszczeniu warstw, zero selektorów, dla
+  których zmienił się zwycięzca). Nie przywracaj tego wzorca.
+- **Konsekwencja dla projektów klienckich:** utilities molique mają
+  `!important` wewnątrz warstwy, więc nadpisanie klasy narzędziowej ze
+  zwykłego, bezwarstwowego arkusza NIE ZADZIAŁA - i to niezależnie od
+  spłaszczenia. Właściwa droga to zmiana zmiennej (`--bg-dark-fixed`,
+  `--footer-accent`, `--pricing-ribbon`, `--form-check-size`), a nie
+  walka z kaskadą. Nowe utilities z zaszytą wartością zawsze wystawiaj
+  jako token.
 - **Goły `1fr` w CSS Grid to `minmax(auto, 1fr)`, nie `minmax(0, 1fr)`:**
   minimum toru liczy się z min-content potomków (dowolnie głęboko
   zagnieżdżonych), NIE z zera - `min-width: 0` + `overflow-x: hidden` na

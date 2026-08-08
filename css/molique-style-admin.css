@@ -4,126 +4,124 @@
  */
 @layer modules;
 @layer modules {
-  @layer layout {
-    .admin-layout {
-      /* Variables controlling the layout's current state */
-      --current-sidebar-width: var(--sidebar-width-lg);
+  .admin-layout {
+    /* Variables controlling the layout's current state */
+    --current-sidebar-width: var(--sidebar-width-lg);
+    --layout-gap: 0px;
+    --layout-padding: 0px;
+    --sidebar-radius: 0px;
+    --main-radius: 0px;
+    /* FIX: default background for the main content in standard mode */
+    --main-bg: var(--bg-surface);
+    display: grid;
+    grid-template-columns: var(--current-sidebar-width) 1fr;
+    gap: var(--layout-gap);
+    padding: var(--layout-padding);
+    min-height: 100dvh;
+    background-color: var(--bg-body);
+    transition: grid-template-columns var(--transition-speed) ease;
+    /* When there's a global navbar above the layout, don't count its
+       height in min-height (otherwise the page has a needless empty-scroll
+       strip at the bottom). */
+  }
+  body:has(> .navbar) .admin-layout {
+    min-height: calc(100dvh - var(--navbar-h));
+  }
+  .admin-layout {
+    /* SIZE VARIANTS */
+  }
+  .admin-layout.sidebar-md {
+    --current-sidebar-width: var(--sidebar-width-md);
+  }
+  .admin-layout.sidebar-sm {
+    --current-sidebar-width: var(--sidebar-width-sm);
+  }
+  :root.sidebar-md .admin-layout {
+    --current-sidebar-width: var(--sidebar-width-md);
+  }
+  :root.sidebar-sm .admin-layout {
+    --current-sidebar-width: var(--sidebar-width-sm);
+  }
+  .admin-layout {
+    /* FLOATING VARIANT (offset from the edge) */
+  }
+  .admin-layout.admin-layout-floating {
+    --layout-gap: calc(var(--spacing-unit) * 3);
+    --layout-padding: calc(var(--spacing-unit) * 3);
+    --sidebar-radius: var(--border-radius-lg);
+    --main-radius: var(--border-radius-lg);
+    --main-bg: var(--bg-surface);
+    /* Reset floating on mobile */
+  }
+  @media (max-width: 768px) {
+    .admin-layout.admin-layout-floating {
       --layout-gap: 0px;
       --layout-padding: 0px;
       --sidebar-radius: 0px;
       --main-radius: 0px;
-      /* FIX: default background for the main content in standard mode */
-      --main-bg: var(--bg-surface);
-      display: grid;
-      grid-template-columns: var(--current-sidebar-width) 1fr;
-      gap: var(--layout-gap);
-      padding: var(--layout-padding);
-      min-height: 100dvh;
-      background-color: var(--bg-body);
-      transition: grid-template-columns var(--transition-speed) ease;
-      /* When there's a global navbar above the layout, don't count its
-         height in min-height (otherwise the page has a needless empty-scroll
-         strip at the bottom). */
     }
-    body:has(> .navbar) .admin-layout {
-      min-height: calc(100dvh - var(--navbar-h));
-    }
+  }
+  .admin-layout {
+    /* Mobile: switch to Bottom Nav */
+  }
+  @media (max-width: 768px) {
     .admin-layout {
-      /* SIZE VARIANTS */
+      /* A bare 1fr is, in short, minmax(auto, 1fr) - a track's minimum is
+         computed from its descendants' min-content (e.g. a table or a tab
+         pill with a longer label), NOT from zero, even when .admin-main
+         already has min-width: 0 + overflow-x: hidden (those two
+         properties don't protect against the grid TRACK ITSELF
+         overflowing - that's a different mechanism). Effect: the track
+         grows past the screen width, and because of overflow-x: clip on
+         html/body (deliberate, to avoid breaking position:sticky) there's
+         no visible scrollbar - the content just silently gets clipped past
+         the edge. minmax(0, 1fr) unambiguously zeroes out the track's
+         minimum. */
+      grid-template-columns: minmax(0, 1fr);
+      --current-sidebar-width: 100%;
     }
-    .admin-layout.sidebar-md {
-      --current-sidebar-width: var(--sidebar-width-md);
-    }
-    .admin-layout.sidebar-sm {
-      --current-sidebar-width: var(--sidebar-width-sm);
-    }
-    :root.sidebar-md .admin-layout {
-      --current-sidebar-width: var(--sidebar-width-md);
-    }
-    :root.sidebar-sm .admin-layout {
-      --current-sidebar-width: var(--sidebar-width-sm);
-    }
-    .admin-layout {
-      /* FLOATING VARIANT (offset from the edge) */
-    }
-    .admin-layout.admin-layout-floating {
-      --layout-gap: calc(var(--spacing-unit) * 3);
-      --layout-padding: calc(var(--spacing-unit) * 3);
-      --sidebar-radius: var(--border-radius-lg);
-      --main-radius: var(--border-radius-lg);
-      --main-bg: var(--bg-surface);
-      /* Reset floating on mobile */
-    }
-    @media (max-width: 768px) {
-      .admin-layout.admin-layout-floating {
-        --layout-gap: 0px;
-        --layout-padding: 0px;
-        --sidebar-radius: 0px;
-        --main-radius: 0px;
-      }
-    }
-    .admin-layout {
-      /* Mobile: switch to Bottom Nav */
-    }
-    @media (max-width: 768px) {
-      .admin-layout {
-        /* A bare 1fr is, in short, minmax(auto, 1fr) - a track's minimum is
-           computed from its descendants' min-content (e.g. a table or a tab
-           pill with a longer label), NOT from zero, even when .admin-main
-           already has min-width: 0 + overflow-x: hidden (those two
-           properties don't protect against the grid TRACK ITSELF
-           overflowing - that's a different mechanism). Effect: the track
-           grows past the screen width, and because of overflow-x: clip on
-           html/body (deliberate, to avoid breaking position:sticky) there's
-           no visible scrollbar - the content just silently gets clipped past
-           the edge. minmax(0, 1fr) unambiguously zeroes out the track's
-           minimum. */
-        grid-template-columns: minmax(0, 1fr);
-        --current-sidebar-width: 100%;
-      }
-    }
-    .admin-main {
-      background-color: var(--main-bg);
-      border-radius: var(--main-radius);
-      /* FIX: guaranteed padding regardless of mode */
-      padding: calc(var(--spacing-unit) * 4);
-      padding-bottom: calc(var(--spacing-unit) * 12);
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      /* Shadow only in floating mode */
-    }
-    .admin-layout-floating .admin-main {
-      box-shadow: var(--shadow-sm);
-    }
-    /* Fading content at the bottom of the main column (opt-in: the
-       .fade-bottom class from the layout layer). .admin-main doesn't scroll
-       itself - the page scrolls - and overflow-x:hidden makes it a
-       scrollport for sticky, which means the base variant would never
-       actually "stick". That's why the gradient here is positioned fixed
-       relative to the window, aligned to the content column via layout
-       variables (also works in floating mode). */
-    .admin-main.fade-bottom {
-      --fade-color: var(--main-bg);
-    }
+  }
+  .admin-main {
+    background-color: var(--main-bg);
+    border-radius: var(--main-radius);
+    /* FIX: guaranteed padding regardless of mode */
+    padding: calc(var(--spacing-unit) * 4);
+    padding-bottom: calc(var(--spacing-unit) * 12);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    /* Shadow only in floating mode */
+  }
+  .admin-layout-floating .admin-main {
+    box-shadow: var(--shadow-sm);
+  }
+  /* Fading content at the bottom of the main column (opt-in: the
+     .fade-bottom class from the layout layer). .admin-main doesn't scroll
+     itself - the page scrolls - and overflow-x:hidden makes it a
+     scrollport for sticky, which means the base variant would never
+     actually "stick". That's why the gradient here is positioned fixed
+     relative to the window, aligned to the content column via layout
+     variables (also works in floating mode). */
+  .admin-main.fade-bottom {
+    --fade-color: var(--main-bg);
+  }
+  .admin-main.fade-bottom::after {
+    position: fixed;
+    bottom: var(--layout-padding);
+    left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
+    right: var(--layout-padding);
+    height: var(--fade-height);
+    margin-top: 0;
+    border-radius: 0 0 var(--main-radius) var(--main-radius);
+  }
+  @media (max-width: 768px) {
     .admin-main.fade-bottom::after {
-      position: fixed;
-      bottom: var(--layout-padding);
-      left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
-      right: var(--layout-padding);
-      height: var(--fade-height);
-      margin-top: 0;
-      border-radius: 0 0 var(--main-radius) var(--main-radius);
-    }
-    @media (max-width: 768px) {
-      .admin-main.fade-bottom::after {
-        left: 0;
-        right: 0;
-        /* Above the mobile bottom navigation bar (sidebar) */
-        bottom: calc(70px + env(safe-area-inset-bottom));
-        border-radius: 0;
-      }
+      left: 0;
+      right: 0;
+      /* Above the mobile bottom navigation bar (sidebar) */
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      border-radius: 0;
     }
   }
   /**
@@ -139,348 +137,346 @@
      asset, not a smaller rendering of the first one. Both files sit in the
      markup and CSS picks one, so there's no JS and no second request at
      toggle time (the browser has already fetched both). */
-  @layer components {
+  .admin-sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: var(--layout-padding);
+    height: calc(100dvh - var(--layout-padding) * 2);
+    border-radius: var(--sidebar-radius);
+    z-index: var(--z-index-sticky);
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
+    gap: calc(var(--spacing-unit) * 3);
+    /* Back to safely hiding, since the sidebar itself will grow */
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* FIX: the sidebar has a fixed width and smoothly grows.
+       A deliberate exception to the GPU-only rule (transform/opacity):
+       animating width triggers reflow, but this is a one-off,
+       click-initiated change (the width toggle), not a continuous/looping
+       animation - the cost is one-time, not per-frame. The same tradeoff
+       as .progress-bar/.progress-bar-reading in _progress.scss. */
+    width: var(--current-sidebar-width);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    /* An elegant scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--sidebar-highlight-rgb), 0.1) transparent;
+  }
+  .admin-sidebar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .admin-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .admin-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(var(--sidebar-highlight-rgb), 0.1);
+    border-radius: var(--border-radius);
+  }
+  .admin-sidebar {
+    /* Mobile Bottom Nav */
+  }
+  @media (max-width: 768px) {
     .admin-sidebar {
-      background-color: var(--sidebar-bg);
-      color: var(--sidebar-text);
-      display: flex;
-      flex-direction: column;
-      position: sticky;
-      top: var(--layout-padding);
-      height: calc(100dvh - var(--layout-padding) * 2);
-      border-radius: var(--sidebar-radius);
-      z-index: var(--z-index-sticky);
-      padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 1);
-      gap: calc(var(--spacing-unit) * 3);
-      /* Back to safely hiding, since the sidebar itself will grow */
-      overflow-y: auto;
-      overflow-x: hidden;
-      /* FIX: the sidebar has a fixed width and smoothly grows.
-         A deliberate exception to the GPU-only rule (transform/opacity):
-         animating width triggers reflow, but this is a one-off,
-         click-initiated change (the width toggle), not a continuous/looping
-         animation - the cost is one-time, not per-frame. The same tradeoff
-         as .progress-bar/.progress-bar-reading in _progress.scss. */
-      width: var(--current-sidebar-width);
-      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
-      /* An elegant scrollbar */
-      scrollbar-width: thin;
-      scrollbar-color: rgba(var(--sidebar-highlight-rgb), 0.1) transparent;
-    }
-    .admin-sidebar::-webkit-scrollbar {
-      width: 4px;
-    }
-    .admin-sidebar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .admin-sidebar::-webkit-scrollbar-thumb {
-      background: rgba(var(--sidebar-highlight-rgb), 0.1);
-      border-radius: var(--border-radius);
-    }
-    .admin-sidebar {
-      /* Mobile Bottom Nav */
-    }
-    @media (max-width: 768px) {
-      .admin-sidebar {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%; /* Force 100% on mobile */
-        height: auto;
-        min-height: 70px;
-        flex-direction: row;
-        align-items: center;
-        padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-        border-radius: 0;
-        border-top: 1px solid rgba(var(--sidebar-highlight-rgb), 0.1);
-        padding-bottom: env(safe-area-inset-bottom);
-        overflow: visible;
-      }
-    }
-    /* =========================================
-       COORDINATION WITH THE GLOBAL NAVBAR
-       =========================================
-       When a navbar sits above the admin layout (body > .navbar), the
-       sidebar must start BELOW it and fill the rest of the window. Desktop
-       only - on mobile the sidebar is the bottom Bottom Nav (position: fixed; bottom). */
-    @media (min-width: 768px) {
-      body:has(> .navbar) .admin-sidebar {
-        top: calc(var(--navbar-h) + var(--layout-padding));
-        height: calc(100dvh - var(--navbar-h) - var(--layout-padding) * 2);
-      }
-    }
-    /* On pages with the admin layout, the navbar stays pinned (doesn't hide
-       on scroll down), otherwise the sidebar would expose an empty bar at the top. */
-    body:has(.admin-layout) .navbar-sticky.is-hidden {
-      transform: none;
-    }
-    /* Fading content at the bottom of the scrollable sidebar (opt-in: the
-       .fade-bottom class from the layout layer). The gradient must use the
-       sidebar's background color (always dark), not the page surface's. */
-    .admin-sidebar.fade-bottom {
-      --fade-color: var(--sidebar-bg);
-      /* On mobile the sidebar turns into a horizontal bottom bar - a
-         vertical gradient would obscure the navigation pills. */
-    }
-    @media (max-width: 768px) {
-      .admin-sidebar.fade-bottom::after {
-        display: none;
-      }
-    }
-    /* Sidebar logo.
-       Works regardless of content type (image, SVG, text) - always fits
-       within the parent's width and never blows out the sidebar. */
-    .admin-brand {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      max-width: 100%;
-      height: var(--target-size-min);
-      flex-shrink: 0; /* FIX: overflow:hidden gives flex items an automatic
-    min-height:0 - without this the logo gets crushed
-    to zero when .admin-nav is taller than the sidebar */
-      margin-bottom: calc(var(--spacing-unit) * 4);
-      overflow: hidden;
-      white-space: nowrap;
-      text-decoration: none;
-      color: var(--sidebar-text-active);
-      font-family: var(--font-family-heading);
-      font-weight: var(--fw-black);
-      font-size: var(--h4-size);
-    }
-    .admin-brand img, .admin-brand svg {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%; /* Force 100% on mobile */
       height: auto;
-      object-fit: contain;
+      min-height: 70px;
+      flex-direction: row;
+      align-items: center;
+      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+      border-radius: 0;
+      border-top: 1px solid rgba(var(--sidebar-highlight-rgb), 0.1);
+      padding-bottom: env(safe-area-inset-bottom);
+      overflow: visible;
     }
-    /* Default (wide sidebar): the wordmark shows, the logomark waits. The
-       narrow modes below flip it - see @mixin admin-logo-swap-style. */
-    .admin-logo-swap > .admin-logo-mark {
+  }
+  /* =========================================
+     COORDINATION WITH THE GLOBAL NAVBAR
+     =========================================
+     When a navbar sits above the admin layout (body > .navbar), the
+     sidebar must start BELOW it and fill the rest of the window. Desktop
+     only - on mobile the sidebar is the bottom Bottom Nav (position: fixed; bottom). */
+  @media (min-width: 768px) {
+    body:has(> .navbar) .admin-sidebar {
+      top: calc(var(--navbar-h) + var(--layout-padding));
+      height: calc(100dvh - var(--navbar-h) - var(--layout-padding) * 2);
+    }
+  }
+  /* On pages with the admin layout, the navbar stays pinned (doesn't hide
+     on scroll down), otherwise the sidebar would expose an empty bar at the top. */
+  body:has(.admin-layout) .navbar-sticky.is-hidden {
+    transform: none;
+  }
+  /* Fading content at the bottom of the scrollable sidebar (opt-in: the
+     .fade-bottom class from the layout layer). The gradient must use the
+     sidebar's background color (always dark), not the page surface's. */
+  .admin-sidebar.fade-bottom {
+    --fade-color: var(--sidebar-bg);
+    /* On mobile the sidebar turns into a horizontal bottom bar - a
+       vertical gradient would obscure the navigation pills. */
+  }
+  @media (max-width: 768px) {
+    .admin-sidebar.fade-bottom::after {
       display: none;
     }
-    /* =========================================
-       ANIMATED TOGGLE ICON (morphing hamburger)
-       ========================================= */
-    /* 1. The toggle button */
-    #molique-sidebar-toggle {
+  }
+  /* Sidebar logo.
+     Works regardless of content type (image, SVG, text) - always fits
+     within the parent's width and never blows out the sidebar. */
+  .admin-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    height: var(--target-size-min);
+    flex-shrink: 0; /* FIX: overflow:hidden gives flex items an automatic
+    min-height:0 - without this the logo gets crushed
+    to zero when .admin-nav is taller than the sidebar */
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--sidebar-text-active);
+    font-family: var(--font-family-heading);
+    font-weight: var(--fw-black);
+    font-size: var(--h4-size);
+  }
+  .admin-brand img, .admin-brand svg {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  /* Default (wide sidebar): the wordmark shows, the logomark waits. The
+     narrow modes below flip it - see @mixin admin-logo-swap-style. */
+  .admin-logo-swap > .admin-logo-mark {
+    display: none;
+  }
+  /* =========================================
+     ANIMATED TOGGLE ICON (morphing hamburger)
+     ========================================= */
+  /* 1. The toggle button */
+  #molique-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    /* By default (LG) the icon is on the left, like the rest of the links */
+    justify-content: flex-start;
+    width: 100%; /* Always fills the sidebar's full width */
+    height: var(--target-size-min, 44px);
+    padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding like the links */
+    margin: 0;
+    border-radius: var(--border-radius);
+  }
+  /* In narrow mode (MD and SM), center the icon */
+  .admin-layout.sidebar-md #molique-sidebar-toggle,
+  .admin-layout.sidebar-sm #molique-sidebar-toggle {
+    justify-content: center;
+    padding: 0 !important;
+  }
+  /* 2. The icon's base */
+  .sidebar-toggle-icon {
+    width: 20px;
+    height: 14px;
+    position: relative;
+    display: inline-block;
+    transition: transform var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sidebar-toggle-icon span {
+    position: absolute;
+    left: 0;
+    height: 2px;
+    background-color: currentColor;
+    border-radius: 2px;
+    transition: all var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+  }
+  .sidebar-toggle-icon {
+    /* Default state (LG) - classic hamburger */
+  }
+  .sidebar-toggle-icon span:nth-child(1) {
+    top: 0;
+  }
+  .sidebar-toggle-icon span:nth-child(2) {
+    top: 6px;
+  }
+  .sidebar-toggle-icon span:nth-child(3) {
+    top: 12px;
+  }
+  /* State 2 (MD) - asymmetric */
+  .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(1) {
+    width: 100%;
+  }
+  .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(2) {
+    width: 75%;
+  }
+  .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(3) {
+    width: 50%;
+  }
+  /* State 3 (SM) - arrow pointing right */
+  .admin-layout.sidebar-sm .sidebar-toggle-icon {
+    /* OPTICAL CORRECTION: shift the whole icon 2px left to balance the weight of the arrowhead */
+    transform: translateX(-2px);
+  }
+  .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(1) {
+    width: 50%;
+    top: 2px;
+    left: 10px;
+    transform: rotate(45deg);
+  }
+  .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(2) {
+    width: 100%;
+    top: 6px;
+    left: 0;
+    transform: rotate(0);
+  }
+  .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(3) {
+    width: 50%;
+    top: 10px;
+    left: 10px;
+    transform: rotate(-45deg);
+  }
+  /* =========================================
+     LOGO MANAGEMENT - RESPONSIVE VERSION
+     ========================================= */
+  /* Narrow desktop modes (-sm, -md): the logo collapses automatically,
+     just like link labels in .admin-nav-link (see _admin-nav.scss) */
+  @media (min-width: 768px) {
+    .sidebar-sm .admin-logo-hide,
+    .sidebar-md .admin-logo-hide {
+      display: none !important;
+    }
+    .sidebar-sm .admin-logo-compact img, .sidebar-sm .admin-logo-compact svg,
+    .sidebar-md .admin-logo-compact img,
+    .sidebar-md .admin-logo-compact svg {
+      max-width: 32px;
+      max-height: 32px;
+      width: auto;
+      height: auto;
+      margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
+    }
+    .sidebar-sm .admin-logo-compact,
+    .sidebar-md .admin-logo-compact {
       display: flex;
       align-items: center;
-      /* By default (LG) the icon is on the left, like the rest of the links */
+      /* flex-start (not center): with text longer than the badge, we want to
+         cut off the end, not show a random fragment from the middle */
       justify-content: flex-start;
-      width: 100%; /* Always fills the sidebar's full width */
-      height: var(--target-size-min, 44px);
-      padding: 0 calc(var(--spacing-unit) * 2) !important; /* Padding like the links */
-      margin: 0;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 1.25rem;
+      font-weight: var(--fw-black);
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
       border-radius: var(--border-radius);
+      margin: 0 !important;
     }
-    /* In narrow mode (MD and SM), center the icon */
-    .admin-layout.sidebar-md #molique-sidebar-toggle,
-    .admin-layout.sidebar-sm #molique-sidebar-toggle {
-      justify-content: center;
-      padding: 0 !important;
+    /* Option 3: swap the wordmark for the logomark */
+    .sidebar-sm .admin-logo-swap img, .sidebar-sm .admin-logo-swap svg,
+    .sidebar-md .admin-logo-swap img,
+    .sidebar-md .admin-logo-swap svg {
+      max-width: 32px;
+      max-height: 32px;
+      width: auto;
+      height: auto;
+      margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
     }
-    /* 2. The icon's base */
-    .sidebar-toggle-icon {
-      width: 20px;
-      height: 14px;
-      position: relative;
-      display: inline-block;
-      transition: transform var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
+    .sidebar-sm .admin-logo-swap,
+    .sidebar-md .admin-logo-swap {
+      display: flex;
+      align-items: center;
+      /* flex-start (not center): with text longer than the badge, we want to
+         cut off the end, not show a random fragment from the middle */
+      justify-content: flex-start;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 1.25rem;
+      font-weight: var(--fw-black);
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+      border-radius: var(--border-radius);
+      margin: 0 !important;
     }
-    .sidebar-toggle-icon span {
-      position: absolute;
-      left: 0;
-      height: 2px;
-      background-color: currentColor;
-      border-radius: 2px;
-      transition: all var(--transition-speed-slower) cubic-bezier(0.4, 0, 0.2, 1);
-      width: 100%;
+    .sidebar-sm .admin-logo-swap > .admin-logo-full,
+    .sidebar-md .admin-logo-swap > .admin-logo-full {
+      display: none;
     }
-    .sidebar-toggle-icon {
-      /* Default state (LG) - classic hamburger */
+    .sidebar-sm .admin-logo-swap > .admin-logo-mark,
+    .sidebar-md .admin-logo-swap > .admin-logo-mark {
+      display: block;
     }
-    .sidebar-toggle-icon span:nth-child(1) {
-      top: 0;
+  }
+  /* Mobile (sidebar collapsed into the bottom bar): the same rules */
+  @media (max-width: 768px) {
+    /* Option 1: fully hide the logo on mobile */
+    .admin-logo-hide {
+      display: none !important;
     }
-    .sidebar-toggle-icon span:nth-child(2) {
-      top: 6px;
+    /* Option 2: a compact (shrunk) version on mobile */
+    .admin-logo-compact img, .admin-logo-compact svg {
+      max-width: 32px;
+      max-height: 32px;
+      width: auto;
+      height: auto;
+      margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
     }
-    .sidebar-toggle-icon span:nth-child(3) {
-      top: 12px;
+    .admin-logo-compact {
+      display: flex;
+      align-items: center;
+      /* flex-start (not center): with text longer than the badge, we want to
+         cut off the end, not show a random fragment from the middle */
+      justify-content: flex-start;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 1.25rem;
+      font-weight: var(--fw-black);
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+      border-radius: var(--border-radius);
+      margin: 0 !important;
     }
-    /* State 2 (MD) - asymmetric */
-    .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(1) {
-      width: 100%;
+    /* Option 3: the logomark instead of the wordmark on mobile */
+    .admin-logo-swap img, .admin-logo-swap svg {
+      max-width: 32px;
+      max-height: 32px;
+      width: auto;
+      height: auto;
+      margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
     }
-    .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(2) {
-      width: 75%;
+    .admin-logo-swap {
+      display: flex;
+      align-items: center;
+      /* flex-start (not center): with text longer than the badge, we want to
+         cut off the end, not show a random fragment from the middle */
+      justify-content: flex-start;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 1.25rem;
+      font-weight: var(--fw-black);
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+      border-radius: var(--border-radius);
+      margin: 0 !important;
     }
-    .admin-layout.sidebar-md .sidebar-toggle-icon span:nth-child(3) {
-      width: 50%;
+    .admin-logo-swap > .admin-logo-full {
+      display: none;
     }
-    /* State 3 (SM) - arrow pointing right */
-    .admin-layout.sidebar-sm .sidebar-toggle-icon {
-      /* OPTICAL CORRECTION: shift the whole icon 2px left to balance the weight of the arrowhead */
-      transform: translateX(-2px);
-    }
-    .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(1) {
-      width: 50%;
-      top: 2px;
-      left: 10px;
-      transform: rotate(45deg);
-    }
-    .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(2) {
-      width: 100%;
-      top: 6px;
-      left: 0;
-      transform: rotate(0);
-    }
-    .admin-layout.sidebar-sm .sidebar-toggle-icon span:nth-child(3) {
-      width: 50%;
-      top: 10px;
-      left: 10px;
-      transform: rotate(-45deg);
-    }
-    /* =========================================
-       LOGO MANAGEMENT - RESPONSIVE VERSION
-       ========================================= */
-    /* Narrow desktop modes (-sm, -md): the logo collapses automatically,
-       just like link labels in .admin-nav-link (see _admin-nav.scss) */
-    @media (min-width: 768px) {
-      .sidebar-sm .admin-logo-hide,
-      .sidebar-md .admin-logo-hide {
-        display: none !important;
-      }
-      .sidebar-sm .admin-logo-compact img, .sidebar-sm .admin-logo-compact svg,
-      .sidebar-md .admin-logo-compact img,
-      .sidebar-md .admin-logo-compact svg {
-        max-width: 32px;
-        max-height: 32px;
-        width: auto;
-        height: auto;
-        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
-      }
-      .sidebar-sm .admin-logo-compact,
-      .sidebar-md .admin-logo-compact {
-        display: flex;
-        align-items: center;
-        /* flex-start (not center): with text longer than the badge, we want to
-           cut off the end, not show a random fragment from the middle */
-        justify-content: flex-start;
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 1.25rem;
-        font-weight: var(--fw-black);
-        background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-        border-radius: var(--border-radius);
-        margin: 0 !important;
-      }
-      /* Option 3: swap the wordmark for the logomark */
-      .sidebar-sm .admin-logo-swap img, .sidebar-sm .admin-logo-swap svg,
-      .sidebar-md .admin-logo-swap img,
-      .sidebar-md .admin-logo-swap svg {
-        max-width: 32px;
-        max-height: 32px;
-        width: auto;
-        height: auto;
-        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
-      }
-      .sidebar-sm .admin-logo-swap,
-      .sidebar-md .admin-logo-swap {
-        display: flex;
-        align-items: center;
-        /* flex-start (not center): with text longer than the badge, we want to
-           cut off the end, not show a random fragment from the middle */
-        justify-content: flex-start;
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 1.25rem;
-        font-weight: var(--fw-black);
-        background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-        border-radius: var(--border-radius);
-        margin: 0 !important;
-      }
-      .sidebar-sm .admin-logo-swap > .admin-logo-full,
-      .sidebar-md .admin-logo-swap > .admin-logo-full {
-        display: none;
-      }
-      .sidebar-sm .admin-logo-swap > .admin-logo-mark,
-      .sidebar-md .admin-logo-swap > .admin-logo-mark {
-        display: block;
-      }
-    }
-    /* Mobile (sidebar collapsed into the bottom bar): the same rules */
-    @media (max-width: 768px) {
-      /* Option 1: fully hide the logo on mobile */
-      .admin-logo-hide {
-        display: none !important;
-      }
-      /* Option 2: a compact (shrunk) version on mobile */
-      .admin-logo-compact img, .admin-logo-compact svg {
-        max-width: 32px;
-        max-height: 32px;
-        width: auto;
-        height: auto;
-        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
-      }
-      .admin-logo-compact {
-        display: flex;
-        align-items: center;
-        /* flex-start (not center): with text longer than the badge, we want to
-           cut off the end, not show a random fragment from the middle */
-        justify-content: flex-start;
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 1.25rem;
-        font-weight: var(--fw-black);
-        background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-        border-radius: var(--border-radius);
-        margin: 0 !important;
-      }
-      /* Option 3: the logomark instead of the wordmark on mobile */
-      .admin-logo-swap img, .admin-logo-swap svg {
-        max-width: 32px;
-        max-height: 32px;
-        width: auto;
-        height: auto;
-        margin: auto; /* the image/SVG is always centered in the badge, regardless of justify-content */
-      }
-      .admin-logo-swap {
-        display: flex;
-        align-items: center;
-        /* flex-start (not center): with text longer than the badge, we want to
-           cut off the end, not show a random fragment from the middle */
-        justify-content: flex-start;
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 1.25rem;
-        font-weight: var(--fw-black);
-        background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-        border-radius: var(--border-radius);
-        margin: 0 !important;
-      }
-      .admin-logo-swap > .admin-logo-full {
-        display: none;
-      }
-      .admin-logo-swap > .admin-logo-mark {
-        display: block;
-      }
+    .admin-logo-swap > .admin-logo-mark {
+      display: block;
     }
   }
   /**
@@ -493,916 +489,912 @@
      the narrow desktop variants (-sm/-md) and the mobile drill-down in the
      Bottom Nav - the mixin is ONLY responsible for appearance (back arrow +
      "Back" label, colors, hover/focus). Positioning is set by the calling context. */
-  @layer components {
+  .admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  @media (max-width: 768px) {
     .admin-nav {
-      display: flex;
-      flex-direction: column;
-      gap: calc(var(--spacing-unit) * 1);
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    @media (max-width: 768px) {
-      .admin-nav {
-        flex-direction: row;
-        /* Even spacing for the main icons on the bar */
-        justify-content: space-around;
-        width: 100%;
-        gap: 0;
-      }
-    }
-    .admin-nav-link {
-      display: flex;
-      align-items: center;
-      color: var(--sidebar-text);
-      text-decoration: none;
-      font-weight: var(--fw-medium);
-      transition: all var(--transition-speed) ease;
-      border-radius: var(--border-radius);
-      min-height: var(--target-size-min);
-      /* Default layout (Standard - .sidebar-lg) */
       flex-direction: row;
-      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
-      gap: calc(var(--spacing-unit) * 1.5);
-      justify-content: flex-start;
-    }
-    .admin-nav-link i, .admin-nav-link svg {
-      font-size: 1.25rem;
-      flex-shrink: 0;
-    }
-    .admin-nav-link .nav-text {
-      white-space: nowrap;
-      opacity: 1;
-      transition: opacity var(--transition-speed);
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .admin-nav-link:hover {
-      color: var(--sidebar-text-active);
-      background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
-    }
-    .admin-nav-link.is-active {
-      color: var(--btn-text-light);
-      background-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
-    }
-    .admin-nav-link {
-      /* =========================================
-         DESKTOP VARIANTS (ignored on mobile!)
-         ========================================= */
-    }
-    @media (min-width: 768px) {
-      .admin-nav-link {
-        /* --- VARIANT: NARROW (icon on top, text below) --- */
-      }
-      .sidebar-md .admin-nav-link {
-        /* FIX: force a vertical layout! */
-        flex-direction: column;
-        justify-content: center;
-        padding: calc(var(--spacing-unit) * 1) 4px;
-        gap: calc(var(--spacing-unit) * 0.5);
-        text-align: center;
-        width: 100%;
-      }
-      .sidebar-md .admin-nav-link .nav-text {
-        /* FIX: small, centered text */
-        font-size: 0.6rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        white-space: normal;
-        word-break: break-word;
-        line-height: 1.1;
-        width: 100%;
-      }
-      .admin-nav-link {
-        /* --- VARIANT: COMPACT (icons only) --- */
-      }
-      .sidebar-sm .admin-nav-link {
-        justify-content: center;
-        align-items: center;
-        padding: calc(var(--spacing-unit) * 1.5) 0;
-        width: 100%;
-      }
-      .sidebar-sm .admin-nav-link i, .sidebar-sm .admin-nav-link svg, .sidebar-sm .admin-nav-link .sidebar-toggle-icon {
-        margin: 0 !important;
-      }
-      .sidebar-sm .admin-nav-link .nav-text {
-        display: none;
-      }
-    }
-    .admin-nav-link {
-      /* =========================================
-         MOBILE BOTTOM NAV
-         ========================================= */
-    }
-    @media (max-width: 768px) {
-      .admin-nav-link {
-        flex-direction: column;
-        justify-content: center;
-        padding: calc(var(--spacing-unit) * 1);
-        gap: 4px;
-        /* FIX: flex: 1 makes all 5 icons split the space evenly */
-        flex: 1;
-        min-width: 0; /* Allows shrinking if the screen is very narrow */
-      }
-      .admin-nav-link .nav-text {
-        display: block;
-        font-size: 0.65rem;
-        white-space: normal;
-        text-align: center;
-        line-height: 1.1;
-      }
-      .admin-nav-link.is-active {
-        background-color: transparent;
-        /* NOT var(--primary) - the sidebar is always dark, and --primary
-           in light mode (#5145E5) only gives 2.3:1 on this background. See
-           --sidebar-active-accent in _root.scss. */
-        color: var(--sidebar-active-accent);
-        box-shadow: none;
-      }
-    }
-    /* =========================================
-       DIVIDER AND BOTTOM NAVIGATION
-       ========================================= */
-    .admin-nav-divider {
-      display: block;
+      /* Even spacing for the main icons on the bar */
+      justify-content: space-around;
       width: 100%;
-      height: 1px;
-      background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-      margin: 0;
-      border: none;
-      flex-shrink: 0;
-      border-top: calc(var(--spacing-unit) * 1) solid transparent;
-      border-bottom: calc(var(--spacing-unit) * 1) solid transparent;
-      background-clip: content-box;
+      gap: 0;
     }
-    @media (max-width: 768px) {
-      .admin-nav-divider {
-        display: none;
-      }
-    }
-    .admin-nav-bottom {
-      margin-top: auto !important;
-    }
-    @media (max-width: 768px) {
-      .admin-nav-bottom {
-        display: none !important; /* Hide the bottom section on mobile */
-      }
-    }
-    /* FIX: a class that hides duplicate links on desktop! */
-    @media (min-width: 768px) {
-      .mobile-only-nav-item {
-        display: none !important;
-      }
-    }
+  }
+  .admin-nav-link {
+    display: flex;
+    align-items: center;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-weight: var(--fw-medium);
+    transition: all var(--transition-speed) ease;
+    border-radius: var(--border-radius);
+    min-height: var(--target-size-min);
+    /* Default layout (Standard - .sidebar-lg) */
+    flex-direction: row;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
+    gap: calc(var(--spacing-unit) * 1.5);
+    justify-content: flex-start;
+  }
+  .admin-nav-link i, .admin-nav-link svg {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+  .admin-nav-link .nav-text {
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity var(--transition-speed);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .admin-nav-link:hover {
+    color: var(--sidebar-text-active);
+    background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+  }
+  .admin-nav-link.is-active {
+    color: var(--btn-text-light);
+    background-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+  }
+  .admin-nav-link {
     /* =========================================
-       MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
+       DESKTOP VARIANTS (ignored on mobile!)
        ========================================= */
-    /* The checkbox + label + .admin-nav-dropdown-menu must (for the sibling
-       selector .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu below)
-       share a common parent - hence grouped together in one <li>, instead
-       of sitting directly inside <ul class="admin-nav"> (input/label/div as
-       DIRECT children of a <ul> broke the rule that a <ul> may only contain
-       <li> - flagged by the Lighthouse "list" audit). display:contents on
-       that <li> makes it invisible in the layout (its children lay out as
-       if they were still direct flex items of .admin-nav) - the identical
-       visual result as before the change, just correct in the DOM. */
-    .admin-nav-more-item {
-      display: contents;
+  }
+  @media (min-width: 768px) {
+    .admin-nav-link {
+      /* --- VARIANT: NARROW (icon on top, text below) --- */
     }
-    .mobile-more-toggle {
+    .sidebar-md .admin-nav-link {
+      /* FIX: force a vertical layout! */
+      flex-direction: column;
+      justify-content: center;
+      padding: calc(var(--spacing-unit) * 1) 4px;
+      gap: calc(var(--spacing-unit) * 0.5);
+      text-align: center;
+      width: 100%;
+    }
+    .sidebar-md .admin-nav-link .nav-text {
+      /* FIX: small, centered text */
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.1;
+      width: 100%;
+    }
+    .admin-nav-link {
+      /* --- VARIANT: COMPACT (icons only) --- */
+    }
+    .sidebar-sm .admin-nav-link {
+      justify-content: center;
+      align-items: center;
+      padding: calc(var(--spacing-unit) * 1.5) 0;
+      width: 100%;
+    }
+    .sidebar-sm .admin-nav-link i, .sidebar-sm .admin-nav-link svg, .sidebar-sm .admin-nav-link .sidebar-toggle-icon {
+      margin: 0 !important;
+    }
+    .sidebar-sm .admin-nav-link .nav-text {
       display: none;
     }
-    .mobile-more-label {
-      cursor: pointer;
-    }
-    @media (min-width: 768px) {
-      .mobile-more-label {
-        display: none !important;
-      }
-    }
-    .admin-nav-dropdown-menu {
-      /* Now a <ul> (was a <div>) - the <li> elements inside require a real
-         ul/ol/menu parent (the HTML5 parser auto-closes the nearest open
-         <li> when it hits another <li>, SKIPPING an intervening <div> - a
-         <ul>/<ol> creates a scope that blocks this). A <ul>'s default
-         margin/padding needs to be zeroed by hand (list-style:none is
-         inherited from .admin-nav, but this isn't). */
-      margin: 0;
-      padding: 0;
-      display: flex;
+  }
+  .admin-nav-link {
+    /* =========================================
+       MOBILE BOTTOM NAV
+       ========================================= */
+  }
+  @media (max-width: 768px) {
+    .admin-nav-link {
       flex-direction: column;
-      gap: calc(var(--spacing-unit) * 1);
-      /* DESKTOP: flat links */
+      justify-content: center;
+      padding: calc(var(--spacing-unit) * 1);
+      gap: 4px;
+      /* FIX: flex: 1 makes all 5 icons split the space evenly */
+      flex: 1;
+      min-width: 0; /* Allows shrinking if the screen is very narrow */
     }
-    @media (min-width: 768px) {
-      .admin-nav-dropdown-menu {
-        display: contents;
+    .admin-nav-link .nav-text {
+      display: block;
+      font-size: 0.65rem;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.1;
+    }
+    .admin-nav-link.is-active {
+      background-color: transparent;
+      /* NOT var(--primary) - the sidebar is always dark, and --primary
+         in light mode (#5145E5) only gives 2.3:1 on this background. See
+         --sidebar-active-accent in _root.scss. */
+      color: var(--sidebar-active-accent);
+      box-shadow: none;
+    }
+  }
+  /* =========================================
+     DIVIDER AND BOTTOM NAVIGATION
+     ========================================= */
+  .admin-nav-divider {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+    margin: 0;
+    border: none;
+    flex-shrink: 0;
+    border-top: calc(var(--spacing-unit) * 1) solid transparent;
+    border-bottom: calc(var(--spacing-unit) * 1) solid transparent;
+    background-clip: content-box;
+  }
+  @media (max-width: 768px) {
+    .admin-nav-divider {
+      display: none;
+    }
+  }
+  .admin-nav-bottom {
+    margin-top: auto !important;
+  }
+  @media (max-width: 768px) {
+    .admin-nav-bottom {
+      display: none !important; /* Hide the bottom section on mobile */
+    }
+  }
+  /* FIX: a class that hides duplicate links on desktop! */
+  @media (min-width: 768px) {
+    .mobile-only-nav-item {
+      display: none !important;
+    }
+  }
+  /* =========================================
+     MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
+     ========================================= */
+  /* The checkbox + label + .admin-nav-dropdown-menu must (for the sibling
+     selector .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu below)
+     share a common parent - hence grouped together in one <li>, instead
+     of sitting directly inside <ul class="admin-nav"> (input/label/div as
+     DIRECT children of a <ul> broke the rule that a <ul> may only contain
+     <li> - flagged by the Lighthouse "list" audit). display:contents on
+     that <li> makes it invisible in the layout (its children lay out as
+     if they were still direct flex items of .admin-nav) - the identical
+     visual result as before the change, just correct in the DOM. */
+  .admin-nav-more-item {
+    display: contents;
+  }
+  .mobile-more-toggle {
+    display: none;
+  }
+  .mobile-more-label {
+    cursor: pointer;
+  }
+  @media (min-width: 768px) {
+    .mobile-more-label {
+      display: none !important;
+    }
+  }
+  .admin-nav-dropdown-menu {
+    /* Now a <ul> (was a <div>) - the <li> elements inside require a real
+       ul/ol/menu parent (the HTML5 parser auto-closes the nearest open
+       <li> when it hits another <li>, SKIPPING an intervening <div> - a
+       <ul>/<ol> creates a scope that blocks this). A <ul>'s default
+       margin/padding needs to be zeroed by hand (list-style:none is
+       inherited from .admin-nav, but this isn't). */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1);
+    /* DESKTOP: flat links */
+  }
+  @media (min-width: 768px) {
+    .admin-nav-dropdown-menu {
+      display: contents;
+    }
+  }
+  .admin-nav-dropdown-menu {
+    /* MOBILE: floating drawer */
+  }
+  @media (max-width: 991px) {
+    .admin-nav-dropdown-menu {
+      position: fixed;
+      /* FIX: the bottom bar is min-height 70px PLUS padding-bottom
+         env(safe-area-inset-bottom) - without accounting for the inset
+         the drawer's bottom edge slides under the bar and the last items
+         get clipped (the identical formula as in the bottom-sheet submenu). */
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      left: 0;
+      right: 0;
+      width: 100%;
+      background-color: var(--sidebar-bg);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top-left-radius: var(--border-radius-lg, 24px);
+      border-top-right-radius: var(--border-radius-lg, 24px);
+      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+      padding-bottom: calc(var(--spacing-unit) * 4);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      /* FIX: long lists (e.g. docs navigation) must scroll vertically,
+         otherwise the drawer sticks out above the top of the screen - and
+         on pages that also have a navbar (partials/navbar.html) ABOVE
+         this sidebar, the "top of the screen" is in practice the bottom
+         of the navbar, not y=0: without subtracting --navbar-h the drawer
+         would slide UNDER the fixed navbar and its top items (the first
+         groups in a long menu) would be hidden behind it. */
+      max-height: calc(100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - var(--spacing-unit) * 4);
+      overflow-y: auto;
+      /* FIX: instead of display: none, hide the drawer below the screen! */
+      visibility: hidden;
+      transform: translateY(100%);
+      transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1), visibility var(--transition-speed-slow);
+    }
+    .admin-nav-dropdown-menu .admin-nav-link {
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: calc(var(--spacing-unit) * 2);
+      min-height: 48px;
+    }
+    .admin-nav-dropdown-menu .admin-nav-link i, .admin-nav-dropdown-menu .admin-nav-link svg {
+      font-size: 1.5rem;
+      margin-right: calc(var(--spacing-unit) * 2) !important;
+    }
+    .admin-nav-dropdown-menu .admin-nav-link .nav-text {
+      display: block;
+      font-size: 1rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+  }
+  .admin-nav-dropdown-menu {
+    /* THIS WAS MISSING */
+  }
+  /* THE TRICK: sliding the drawer in on click */
+  @media (max-width: 991px) {
+    .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+  .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
+    /* THIS WAS MISSING */
+  }
+  /* =========================================
+     SUBMENU (expandable link tree)
+     ========================================= */
+  .admin-nav-submenu {
+    position: relative;
+  }
+  .admin-nav-submenu summary {
+    list-style: none;
+    cursor: pointer;
+  }
+  .admin-nav-submenu summary::-webkit-details-marker {
+    display: none;
+  }
+  .admin-nav-submenu summary::after {
+    content: "";
+    display: inline-block;
+    margin-left: auto;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform var(--transition-speed);
+    opacity: 0.5;
+  }
+  .admin-nav-submenu[open] > summary::after {
+    transform: rotate(-135deg);
+  }
+  /* --- DEFAULT VARIANT (wide sidebar - tree) --- */
+  .admin-nav-submenu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 4px 0 8px 0;
+    padding-left: calc(var(--spacing-unit) * 5);
+    position: relative;
+  }
+  .admin-nav-submenu-list::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 8px;
+    left: calc(var(--spacing-unit) * 3);
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .admin-nav-submenu-link {
+    display: flex;
+    align-items: center;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: var(--fw-medium);
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed);
+    position: relative;
+    border: 1px solid transparent;
+  }
+  .admin-nav-submenu-link::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--spacing-unit) * -2);
+    top: 50%;
+    width: 12px;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .admin-nav-submenu-link:hover {
+    color: var(--sidebar-text-active);
+    background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+  }
+  .admin-nav-submenu-link.is-active {
+    color: var(--sidebar-text-active);
+    font-weight: var(--fw-bold);
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    box-shadow: none !important;
+  }
+  /* --- NARROW VARIANTS (Drill-down Menu) --- */
+  @media (min-width: 768px) {
+    .sidebar-md .admin-nav-submenu,
+    .sidebar-sm .admin-nav-submenu {
+      /* Escape the positioning context so we can cover the entire sidebar! */
+      position: static;
+    }
+    .sidebar-md .admin-nav-submenu summary::after,
+    .sidebar-sm .admin-nav-submenu summary::after {
+      display: none;
+    }
+    .sidebar-md .admin-nav-submenu .admin-nav-submenu-list,
+    .sidebar-sm .admin-nav-submenu .admin-nav-submenu-list {
+      display: none !important;
+    }
+    .sidebar-md .admin-nav-submenu,
+    .sidebar-sm .admin-nav-submenu {
+      /* =========================================
+         OPEN STATE (drill-down active)
+         ========================================= */
+    }
+    .sidebar-md .admin-nav-submenu[open],
+    .sidebar-sm .admin-nav-submenu[open] {
+      /* 1. A background covering the rest of the sidebar BELOW the logo (logo stays visible) */
+    }
+    .sidebar-md .admin-nav-submenu[open]::before,
+    .sidebar-sm .admin-nav-submenu[open]::before {
+      content: "";
+      position: absolute;
+      top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--sidebar-bg);
+      z-index: 100;
+    }
+    .sidebar-md .admin-nav-submenu[open],
+    .sidebar-sm .admin-nav-submenu[open] {
+      /* 2. The "Back" button (transforms the <summary> tag) - below the logo, not in its place */
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-nav-submenu[open] > summary {
+      position: absolute;
+      top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
+      left: 0;
+      width: 100%;
+      height: 70px;
+      z-index: 102;
+      background-color: var(--sidebar-bg);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      gap: 8px;
+      transition: background-color var(--transition-speed);
+      /* A summary can be marked .is-active (color --btn-text-light, which
+         turns dark in dark mode). The "Back" background is always the dark
+         --sidebar-bg, so the color MUST fall back to the sidebar palette -
+         otherwise the arrow and label vanish in the dark theme. */
+      color: var(--sidebar-text);
+      /* Without this, "Back" doesn't react to hover/focus. We darken (not
+         lighten) - a light highlight looks out of place on a dark background. */
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary:hover,
+    .sidebar-sm .admin-nav-submenu[open] > summary:hover {
+      color: var(--sidebar-text-active);
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary:focus-visible,
+    .sidebar-sm .admin-nav-submenu[open] > summary:focus-visible {
+      background-color: rgba(0, 0, 0, 0.15);
+      /* overrides the light focus ring from _base.scss (based on --primary) */
+      outline: none;
+      box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-nav-submenu[open] > summary {
+      /* Hide the item's original icon */
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary > i, .sidebar-md .admin-nav-submenu[open] > summary > svg,
+    .sidebar-sm .admin-nav-submenu[open] > summary > i,
+    .sidebar-sm .admin-nav-submenu[open] > summary > svg {
+      display: none !important;
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-nav-submenu[open] > summary {
+      /* Draw the left-pointing arrow icon (Back) */
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary::before,
+    .sidebar-sm .admin-nav-submenu[open] > summary::before {
+      content: "";
+      display: block;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      background-color: currentColor;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-nav-submenu[open] > summary {
+      /* Swap the item's text for "Back"
+         NOTE (pre-existing i18n gap, not touched by this comment-translation
+         pass): the "Cofnij" label injected below via content: is hardcoded
+         Polish even though this component is used on the EN/DE site pages
+         too - would need a real localization pass, e.g. reading it from a
+         CSS custom property set per page language instead of a literal. */
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary .nav-text,
+    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+      display: block !important;
+      /* without this, .nav-text inherits width:100% from the -md variant and stretches */
+      width: auto;
+      font-size: 0 !important; /* Hides the original text */
+    }
+    .sidebar-md .admin-nav-submenu[open] > summary .nav-text::after,
+    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text::after {
+      content: "Cofnij";
+      font-size: 0.875rem;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    .sidebar-md .admin-nav-submenu[open],
+    .sidebar-sm .admin-nav-submenu[open] {
+      /* 3. The submenu link list - starts below the Back button (which is below the logo) */
+    }
+    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list,
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+      display: flex !important;
+      position: absolute;
+      top: calc(calc(var(--target-size-min) + var(--spacing-unit) * 4) + 70px);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 101;
+      background-color: var(--sidebar-bg);
+      padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 1);
+      margin: 0;
+      overflow-y: auto;
+      /* Reset the tree lines */
+    }
+    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list::before,
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
+      display: none;
+    }
+    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
+      justify-content: center;
+      text-align: center;
+      /* FIX: long words with no natural break points (spaces,
+         hyphens) spilled outside the narrow -sm sidebar - widening
+         -sm isn't an option, so instead we break the word, but ONLY
+         when it genuinely doesn't fit on the line (overflow-wrap,
+         not word-break: break-word - the latter breaks words even
+         when they would have fit whole) */
+      overflow-wrap: break-word;
+    }
+    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before,
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
+      display: none;
+    }
+    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link { /* Hide the horizontal tick marks */ }
+    /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
+    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+      display: none !important;
+    }
+    /* --- -SM VARIANT: full-width links with a separator instead of borders ---
+       The -sm sidebar is too narrow (72px) for a rounded border + padding
+       around every link to make sense - the text touched/spilled outside
+       the border. Instead: full-width links, separated by a thin line. */
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+      width: 100%;
+      border-radius: 0;
+      border-width: 0 0 1px 0;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link:last-child {
+      border-bottom: none;
+    }
+    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link.is-active {
+      background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+    }
+  }
+  /* =========================================
+     MOBILE: SUBMENU AS A DRILL-DOWN (like -sm/-md)
+     =========================================
+     A tree makes no sense in the horizontal Bottom Nav. Clicking the
+     trigger swaps the view to a full-screen panel: <summary> becomes a
+     "Back" bar at the top of the screen, and the link list fills the
+     rest - identical to the drill-down in the -sm/-md variants, just as a
+     mobile overlay. The native <details> handles opening itself; the
+     admin-nav.js module only handles active state from the URL and
+     mutually excluding open submenus. */
+  @media (max-width: 768px) {
+    .admin-nav-submenu {
+      position: static;
+      /* details stretches its <summary> (trigger) to fill the bar's tile */
+      display: flex;
+      /* Height of the usable (tappable) part of the "Back" bar.
+         env(safe-area-inset-top) - the status bar/notch - is added on top
+         of it, so the label doesn't land under the notification bar, and
+         the large target sits comfortably away from the top edge (fewer
+         accidental notification-shade gestures). */
+      --drilldown-bar-h: 64px;
+    }
+    .admin-nav-submenu > summary {
+      width: 100%;
+      /* the tree-expand arrow is redundant in a horizontal bar */
+    }
+    .admin-nav-submenu > summary::after {
+      display: none;
+    }
+    .admin-nav-submenu[open] {
+      /* 1. The list -> a full-screen panel (from the very top of the
+         screen). Its dark background forms a CONTINUOUS surface under
+         the "Back" bar too - links are pushed down with padding so they
+         don't hide under the bar. This way "Back" and the list read as
+         one whole, regardless of how the browser paints the <summary>'s
+         own background. */
+    }
+    .admin-nav-submenu[open] > .admin-nav-submenu-list {
+      display: flex !important; /* overrides the default tree state */
+      flex-direction: column;
+      gap: calc(var(--spacing-unit) * 0.5);
+      margin: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1050;
+      background-color: var(--sidebar-bg);
+      /* Padding for the "bounce": the overshoot lifts the panel
+         slightly upward, exposing a gap at the bottom - this solid
+         shadow (blur 0) paints in the dark background below the
+         panel, so the page doesn't flash through during the overshoot. */
+      box-shadow: 0 160px 0 var(--sidebar-bg);
+      /* padding-top makes room for the "Back" bar (height + status bar) + breathing room */
+      padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
+      overflow-y: auto;
+      /* Slides in from the bottom with a slight bounce (back-ease: control point > 1) */
+      animation: adminDrilldownPanelIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+      /* Links centered vertically (more comfortable for a thumb on
+         mobile); "safe" falls back to the top and allows scrolling
+         when there are many items. */
+      justify-content: center;
+      justify-content: safe center;
+      /* Reset the vertical tree line */
+    }
+    .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
+      display: none;
+    }
+    .admin-nav-submenu[open] > .admin-nav-submenu-list {
+      /* Full-width links, no horizontal tree tick marks */
+    }
+    .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+      justify-content: flex-start;
+      text-align: left;
+      padding: calc(var(--spacing-unit) * 2);
+      min-height: 48px;
+      font-size: 1rem;
+    }
+    .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
+      display: none;
+    }
+    .admin-nav-submenu[open] {
+      /* 2. <summary> -> the "Back" bar at the top, ON the panel (sits on
+         its dark background). z-index above the panel. */
+    }
+    .admin-nav-submenu[open] > summary {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
+      z-index: 1051; /* above the panel and above the bottom bar (1040) */
+      background-color: var(--sidebar-bg);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      gap: 8px;
+      transition: background-color var(--transition-speed);
+      /* A summary can be marked .is-active (color --btn-text-light, which
+         turns dark in dark mode). The "Back" background is always the dark
+         --sidebar-bg, so the color MUST fall back to the sidebar palette -
+         otherwise the arrow and label vanish in the dark theme. */
+      color: var(--sidebar-text);
+      /* Without this, "Back" doesn't react to hover/focus. We darken (not
+         lighten) - a light highlight looks out of place on a dark background. */
+    }
+    .admin-nav-submenu[open] > summary:hover {
+      color: var(--sidebar-text-active);
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+    .admin-nav-submenu[open] > summary:focus-visible {
+      background-color: rgba(0, 0, 0, 0.15);
+      /* overrides the light focus ring from _base.scss (based on --primary) */
+      outline: none;
+      box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
+    }
+    .admin-nav-submenu[open] > summary {
+      /* Hide the item's original icon */
+    }
+    .admin-nav-submenu[open] > summary > i, .admin-nav-submenu[open] > summary > svg {
+      display: none !important;
+    }
+    .admin-nav-submenu[open] > summary {
+      /* Draw the left-pointing arrow icon (Back) */
+    }
+    .admin-nav-submenu[open] > summary::before {
+      content: "";
+      display: block;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      background-color: currentColor;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
+    }
+    .admin-nav-submenu[open] > summary {
+      /* Swap the item's text for "Back"
+         NOTE (pre-existing i18n gap, not touched by this comment-translation
+         pass): the "Cofnij" label injected below via content: is hardcoded
+         Polish even though this component is used on the EN/DE site pages
+         too - would need a real localization pass, e.g. reading it from a
+         CSS custom property set per page language instead of a literal. */
+    }
+    .admin-nav-submenu[open] > summary .nav-text {
+      display: block !important;
+      /* without this, .nav-text inherits width:100% from the -md variant and stretches */
+      width: auto;
+      font-size: 0 !important; /* Hides the original text */
+    }
+    .admin-nav-submenu[open] > summary .nav-text::after {
+      content: "Cofnij";
+      font-size: 0.875rem;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    .admin-nav-submenu[open] > summary {
+      /* the label clears the status bar/notch (env), and a large,
+         lower-positioned target is more thumb-friendly */
+      padding-top: env(safe-area-inset-top);
+      /* on touch (no hover) a brighter label = a clear back button */
+      color: var(--sidebar-text-active);
+      /* The label appears with a slight delay - only once the panel
+         has already covered the top of the screen (otherwise it
+         would flash above the page). */
+      animation: adminDrilldownBar 0.24s ease 0.12s both;
+    }
+    .admin-nav-submenu {
+      /* =========================================
+         SLIDE-OUT (animated close - the .is-closing class from admin-nav.js)
+         =========================================
+         The native <details> hides its content instantly, so the JS
+         module delays the actual close: it adds .is-closing, waits for
+         the animation to finish, and only then removes [open]. */
+    }
+    .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
+      animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
+    }
+    .admin-nav-submenu.is-closing > summary {
+      animation: adminDrilldownBarOut 0.18s ease both;
+    }
+    /* Drill-down entrance/exit (GPU: opacity + transform only) */
+    @keyframes adminDrilldownBar {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
       }
     }
-    .admin-nav-dropdown-menu {
-      /* MOBILE: floating drawer */
+    @keyframes adminDrilldownBarOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
     }
-    @media (max-width: 991px) {
-      .admin-nav-dropdown-menu {
-        position: fixed;
-        /* FIX: the bottom bar is min-height 70px PLUS padding-bottom
-           env(safe-area-inset-bottom) - without accounting for the inset
-           the drawer's bottom edge slides under the bar and the last items
-           get clipped (the identical formula as in the bottom-sheet submenu). */
-        bottom: calc(70px + env(safe-area-inset-bottom));
-        left: 0;
-        right: 0;
-        width: 100%;
-        background-color: var(--sidebar-bg);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        border-top-left-radius: var(--border-radius-lg, 24px);
-        border-top-right-radius: var(--border-radius-lg, 24px);
-        padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
-        padding-bottom: calc(var(--spacing-unit) * 4);
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-        z-index: 100;
-        /* FIX: long lists (e.g. docs navigation) must scroll vertically,
-           otherwise the drawer sticks out above the top of the screen - and
-           on pages that also have a navbar (partials/navbar.html) ABOVE
-           this sidebar, the "top of the screen" is in practice the bottom
-           of the navbar, not y=0: without subtracting --navbar-h the drawer
-           would slide UNDER the fixed navbar and its top items (the first
-           groups in a long menu) would be hidden behind it. */
-        max-height: calc(100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - var(--spacing-unit) * 4);
-        overflow-y: auto;
-        /* FIX: instead of display: none, hide the drawer below the screen! */
-        visibility: hidden;
+    @keyframes adminDrilldownPanelIn {
+      from {
         transform: translateY(100%);
-        transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1), visibility var(--transition-speed-slow);
       }
-      .admin-nav-dropdown-menu .admin-nav-link {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: calc(var(--spacing-unit) * 2);
-        min-height: 48px;
-      }
-      .admin-nav-dropdown-menu .admin-nav-link i, .admin-nav-dropdown-menu .admin-nav-link svg {
-        font-size: 1.5rem;
-        margin-right: calc(var(--spacing-unit) * 2) !important;
-      }
-      .admin-nav-dropdown-menu .admin-nav-link .nav-text {
-        display: block;
-        font-size: 1rem;
-        text-align: left;
-        white-space: nowrap;
-      }
-    }
-    .admin-nav-dropdown-menu {
-      /* THIS WAS MISSING */
-    }
-    /* THE TRICK: sliding the drawer in on click */
-    @media (max-width: 991px) {
-      .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
-        visibility: visible;
+      to {
         transform: translateY(0);
       }
     }
-    .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
-      /* THIS WAS MISSING */
-    }
-    /* =========================================
-       SUBMENU (expandable link tree)
-       ========================================= */
-    .admin-nav-submenu {
-      position: relative;
-    }
-    .admin-nav-submenu summary {
-      list-style: none;
-      cursor: pointer;
-    }
-    .admin-nav-submenu summary::-webkit-details-marker {
-      display: none;
-    }
-    .admin-nav-submenu summary::after {
-      content: "";
-      display: inline-block;
-      margin-left: auto;
-      width: 6px;
-      height: 6px;
-      border-right: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      transform: rotate(45deg);
-      transition: transform var(--transition-speed);
-      opacity: 0.5;
-    }
-    .admin-nav-submenu[open] > summary::after {
-      transform: rotate(-135deg);
-    }
-    /* --- DEFAULT VARIANT (wide sidebar - tree) --- */
-    .admin-nav-submenu-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin: 4px 0 8px 0;
-      padding-left: calc(var(--spacing-unit) * 5);
-      position: relative;
-    }
-    .admin-nav-submenu-list::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      bottom: 8px;
-      left: calc(var(--spacing-unit) * 3);
-      width: 1px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    .admin-nav-submenu-link {
-      display: flex;
-      align-items: center;
-      color: var(--sidebar-text);
-      text-decoration: none;
-      font-size: 0.8125rem;
-      font-weight: var(--fw-medium);
-      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-      border-radius: var(--border-radius);
-      transition: all var(--transition-speed);
-      position: relative;
-      border: 1px solid transparent;
-    }
-    .admin-nav-submenu-link::before {
-      content: "";
-      position: absolute;
-      left: calc(var(--spacing-unit) * -2);
-      top: 50%;
-      width: 12px;
-      height: 1px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-    .admin-nav-submenu-link:hover {
-      color: var(--sidebar-text-active);
-      background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
-    }
-    .admin-nav-submenu-link.is-active {
-      color: var(--sidebar-text-active);
-      font-weight: var(--fw-bold);
-      border-color: rgba(255, 255, 255, 0.2);
-      background-color: transparent;
-      box-shadow: none !important;
-    }
-    /* --- NARROW VARIANTS (Drill-down Menu) --- */
-    @media (min-width: 768px) {
-      .sidebar-md .admin-nav-submenu,
-      .sidebar-sm .admin-nav-submenu {
-        /* Escape the positioning context so we can cover the entire sidebar! */
-        position: static;
+    @keyframes adminDrilldownPanelOut {
+      from {
+        transform: translateY(0);
       }
-      .sidebar-md .admin-nav-submenu summary::after,
-      .sidebar-sm .admin-nav-submenu summary::after {
-        display: none;
-      }
-      .sidebar-md .admin-nav-submenu .admin-nav-submenu-list,
-      .sidebar-sm .admin-nav-submenu .admin-nav-submenu-list {
-        display: none !important;
-      }
-      .sidebar-md .admin-nav-submenu,
-      .sidebar-sm .admin-nav-submenu {
-        /* =========================================
-           OPEN STATE (drill-down active)
-           ========================================= */
-      }
-      .sidebar-md .admin-nav-submenu[open],
-      .sidebar-sm .admin-nav-submenu[open] {
-        /* 1. A background covering the rest of the sidebar BELOW the logo (logo stays visible) */
-      }
-      .sidebar-md .admin-nav-submenu[open]::before,
-      .sidebar-sm .admin-nav-submenu[open]::before {
-        content: "";
-        position: absolute;
-        top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: var(--sidebar-bg);
-        z-index: 100;
-      }
-      .sidebar-md .admin-nav-submenu[open],
-      .sidebar-sm .admin-nav-submenu[open] {
-        /* 2. The "Back" button (transforms the <summary> tag) - below the logo, not in its place */
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary,
-      .sidebar-sm .admin-nav-submenu[open] > summary {
-        position: absolute;
-        top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
-        left: 0;
-        width: 100%;
-        height: 70px;
-        z-index: 102;
-        background-color: var(--sidebar-bg);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        gap: 8px;
-        transition: background-color var(--transition-speed);
-        /* A summary can be marked .is-active (color --btn-text-light, which
-           turns dark in dark mode). The "Back" background is always the dark
-           --sidebar-bg, so the color MUST fall back to the sidebar palette -
-           otherwise the arrow and label vanish in the dark theme. */
-        color: var(--sidebar-text);
-        /* Without this, "Back" doesn't react to hover/focus. We darken (not
-           lighten) - a light highlight looks out of place on a dark background. */
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary:hover,
-      .sidebar-sm .admin-nav-submenu[open] > summary:hover {
-        color: var(--sidebar-text-active);
-        background-color: rgba(0, 0, 0, 0.15);
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary:focus-visible,
-      .sidebar-sm .admin-nav-submenu[open] > summary:focus-visible {
-        background-color: rgba(0, 0, 0, 0.15);
-        /* overrides the light focus ring from _base.scss (based on --primary) */
-        outline: none;
-        box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary,
-      .sidebar-sm .admin-nav-submenu[open] > summary {
-        /* Hide the item's original icon */
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary > i, .sidebar-md .admin-nav-submenu[open] > summary > svg,
-      .sidebar-sm .admin-nav-submenu[open] > summary > i,
-      .sidebar-sm .admin-nav-submenu[open] > summary > svg {
-        display: none !important;
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary,
-      .sidebar-sm .admin-nav-submenu[open] > summary {
-        /* Draw the left-pointing arrow icon (Back) */
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary::before,
-      .sidebar-sm .admin-nav-submenu[open] > summary::before {
-        content: "";
-        display: block;
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-        background-color: currentColor;
-        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary,
-      .sidebar-sm .admin-nav-submenu[open] > summary {
-        /* Swap the item's text for "Back"
-           NOTE (pre-existing i18n gap, not touched by this comment-translation
-           pass): the "Cofnij" label injected below via content: is hardcoded
-           Polish even though this component is used on the EN/DE site pages
-           too - would need a real localization pass, e.g. reading it from a
-           CSS custom property set per page language instead of a literal. */
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary .nav-text,
-      .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
-        display: block !important;
-        /* without this, .nav-text inherits width:100% from the -md variant and stretches */
-        width: auto;
-        font-size: 0 !important; /* Hides the original text */
-      }
-      .sidebar-md .admin-nav-submenu[open] > summary .nav-text::after,
-      .sidebar-sm .admin-nav-submenu[open] > summary .nav-text::after {
-        content: "Cofnij";
-        font-size: 0.875rem;
-        text-transform: none;
-        letter-spacing: normal;
-      }
-      .sidebar-md .admin-nav-submenu[open],
-      .sidebar-sm .admin-nav-submenu[open] {
-        /* 3. The submenu link list - starts below the Back button (which is below the logo) */
-      }
-      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list,
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
-        display: flex !important;
-        position: absolute;
-        top: calc(calc(var(--target-size-min) + var(--spacing-unit) * 4) + 70px);
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 101;
-        background-color: var(--sidebar-bg);
-        padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 1);
-        margin: 0;
-        overflow-y: auto;
-        /* Reset the tree lines */
-      }
-      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list::before,
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
-        display: none;
-      }
-      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
-        padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
-        justify-content: center;
-        text-align: center;
-        /* FIX: long words with no natural break points (spaces,
-           hyphens) spilled outside the narrow -sm sidebar - widening
-           -sm isn't an option, so instead we break the word, but ONLY
-           when it genuinely doesn't fit on the line (overflow-wrap,
-           not word-break: break-word - the latter breaks words even
-           when they would have fit whole) */
-        overflow-wrap: break-word;
-      }
-      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before,
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
-        display: none;
-      }
-      .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link { /* Hide the horizontal tick marks */ }
-      /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
-      .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
-        display: none !important;
-      }
-      /* --- -SM VARIANT: full-width links with a separator instead of borders ---
-         The -sm sidebar is too narrow (72px) for a rounded border + padding
-         around every link to make sense - the text touched/spilled outside
-         the border. Instead: full-width links, separated by a thin line. */
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
-        padding-left: 0;
-        padding-right: 0;
-      }
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
-        width: 100%;
-        border-radius: 0;
-        border-width: 0 0 1px 0;
-        border-style: solid;
-        border-color: rgba(255, 255, 255, 0.08);
-      }
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link:last-child {
-        border-bottom: none;
-      }
-      .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link.is-active {
-        background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+      to {
+        transform: translateY(100%);
       }
     }
-    /* =========================================
-       MOBILE: SUBMENU AS A DRILL-DOWN (like -sm/-md)
-       =========================================
-       A tree makes no sense in the horizontal Bottom Nav. Clicking the
-       trigger swaps the view to a full-screen panel: <summary> becomes a
-       "Back" bar at the top of the screen, and the link list fills the
-       rest - identical to the drill-down in the -sm/-md variants, just as a
-       mobile overlay. The native <details> handles opening itself; the
-       admin-nav.js module only handles active state from the URL and
-       mutually excluding open submenus. */
-    @media (max-width: 768px) {
-      .admin-nav-submenu {
-        position: static;
-        /* details stretches its <summary> (trigger) to fill the bar's tile */
-        display: flex;
-        /* Height of the usable (tappable) part of the "Back" bar.
-           env(safe-area-inset-top) - the status bar/notch - is added on top
-           of it, so the label doesn't land under the notification bar, and
-           the large target sits comfortably away from the top edge (fewer
-           accidental notification-shade gestures). */
-        --drilldown-bar-h: 64px;
-      }
-      .admin-nav-submenu > summary {
-        width: 100%;
-        /* the tree-expand arrow is redundant in a horizontal bar */
-      }
-      .admin-nav-submenu > summary::after {
-        display: none;
-      }
-      .admin-nav-submenu[open] {
-        /* 1. The list -> a full-screen panel (from the very top of the
-           screen). Its dark background forms a CONTINUOUS surface under
-           the "Back" bar too - links are pushed down with padding so they
-           don't hide under the bar. This way "Back" and the list read as
-           one whole, regardless of how the browser paints the <summary>'s
-           own background. */
-      }
-      .admin-nav-submenu[open] > .admin-nav-submenu-list {
-        display: flex !important; /* overrides the default tree state */
-        flex-direction: column;
-        gap: calc(var(--spacing-unit) * 0.5);
-        margin: 0;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 1050;
-        background-color: var(--sidebar-bg);
-        /* Padding for the "bounce": the overshoot lifts the panel
-           slightly upward, exposing a gap at the bottom - this solid
-           shadow (blur 0) paints in the dark background below the
-           panel, so the page doesn't flash through during the overshoot. */
-        box-shadow: 0 160px 0 var(--sidebar-bg);
-        /* padding-top makes room for the "Back" bar (height + status bar) + breathing room */
-        padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
-        overflow-y: auto;
-        /* Slides in from the bottom with a slight bounce (back-ease: control point > 1) */
-        animation: adminDrilldownPanelIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) both;
-        /* Links centered vertically (more comfortable for a thumb on
-           mobile); "safe" falls back to the top and allows scrolling
-           when there are many items. */
-        justify-content: center;
-        justify-content: safe center;
-        /* Reset the vertical tree line */
-      }
-      .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
-        display: none;
-      }
-      .admin-nav-submenu[open] > .admin-nav-submenu-list {
-        /* Full-width links, no horizontal tree tick marks */
-      }
-      .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
-        justify-content: flex-start;
-        text-align: left;
-        padding: calc(var(--spacing-unit) * 2);
-        min-height: 48px;
-        font-size: 1rem;
-      }
-      .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
-        display: none;
-      }
-      .admin-nav-submenu[open] {
-        /* 2. <summary> -> the "Back" bar at the top, ON the panel (sits on
-           its dark background). z-index above the panel. */
-      }
-      .admin-nav-submenu[open] > summary {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
-        z-index: 1051; /* above the panel and above the bottom bar (1040) */
-        background-color: var(--sidebar-bg);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        gap: 8px;
-        transition: background-color var(--transition-speed);
-        /* A summary can be marked .is-active (color --btn-text-light, which
-           turns dark in dark mode). The "Back" background is always the dark
-           --sidebar-bg, so the color MUST fall back to the sidebar palette -
-           otherwise the arrow and label vanish in the dark theme. */
-        color: var(--sidebar-text);
-        /* Without this, "Back" doesn't react to hover/focus. We darken (not
-           lighten) - a light highlight looks out of place on a dark background. */
-      }
-      .admin-nav-submenu[open] > summary:hover {
-        color: var(--sidebar-text-active);
-        background-color: rgba(0, 0, 0, 0.15);
-      }
-      .admin-nav-submenu[open] > summary:focus-visible {
-        background-color: rgba(0, 0, 0, 0.15);
-        /* overrides the light focus ring from _base.scss (based on --primary) */
-        outline: none;
-        box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
-      }
-      .admin-nav-submenu[open] > summary {
-        /* Hide the item's original icon */
-      }
-      .admin-nav-submenu[open] > summary > i, .admin-nav-submenu[open] > summary > svg {
-        display: none !important;
-      }
-      .admin-nav-submenu[open] > summary {
-        /* Draw the left-pointing arrow icon (Back) */
-      }
-      .admin-nav-submenu[open] > summary::before {
-        content: "";
-        display: block;
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-        background-color: currentColor;
-        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
-      }
-      .admin-nav-submenu[open] > summary {
-        /* Swap the item's text for "Back"
-           NOTE (pre-existing i18n gap, not touched by this comment-translation
-           pass): the "Cofnij" label injected below via content: is hardcoded
-           Polish even though this component is used on the EN/DE site pages
-           too - would need a real localization pass, e.g. reading it from a
-           CSS custom property set per page language instead of a literal. */
-      }
-      .admin-nav-submenu[open] > summary .nav-text {
-        display: block !important;
-        /* without this, .nav-text inherits width:100% from the -md variant and stretches */
-        width: auto;
-        font-size: 0 !important; /* Hides the original text */
-      }
-      .admin-nav-submenu[open] > summary .nav-text::after {
-        content: "Cofnij";
-        font-size: 0.875rem;
-        text-transform: none;
-        letter-spacing: normal;
-      }
-      .admin-nav-submenu[open] > summary {
-        /* the label clears the status bar/notch (env), and a large,
-           lower-positioned target is more thumb-friendly */
-        padding-top: env(safe-area-inset-top);
-        /* on touch (no hover) a brighter label = a clear back button */
-        color: var(--sidebar-text-active);
-        /* The label appears with a slight delay - only once the panel
-           has already covered the top of the screen (otherwise it
-           would flash above the page). */
-        animation: adminDrilldownBar 0.24s ease 0.12s both;
-      }
-      .admin-nav-submenu {
-        /* =========================================
-           SLIDE-OUT (animated close - the .is-closing class from admin-nav.js)
-           =========================================
-           The native <details> hides its content instantly, so the JS
-           module delays the actual close: it adds .is-closing, waits for
-           the animation to finish, and only then removes [open]. */
-      }
-      .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
-        animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
-      }
-      .admin-nav-submenu.is-closing > summary {
-        animation: adminDrilldownBarOut 0.18s ease both;
-      }
-      /* Drill-down entrance/exit (GPU: opacity + transform only) */
-      @keyframes adminDrilldownBar {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      @keyframes adminDrilldownBarOut {
-        from {
-          opacity: 1;
-        }
-        to {
-          opacity: 0;
-        }
-      }
-      @keyframes adminDrilldownPanelIn {
-        from {
-          transform: translateY(100%);
-        }
-        to {
-          transform: translateY(0);
-        }
-      }
-      @keyframes adminDrilldownPanelOut {
-        from {
-          transform: translateY(0);
-        }
-        to {
-          transform: translateY(100%);
-        }
-      }
+  }
+  /* A11y: no animation for users with prefers-reduced-motion
+     (the admin-nav.js module also closes instantly, with no waiting). */
+  @media (prefers-reduced-motion: reduce) {
+    .admin-nav-submenu[open] > summary,
+    .admin-nav-submenu[open] > .admin-nav-submenu-list,
+    .admin-nav-submenu.is-closing > summary,
+    .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
+      animation: none;
     }
-    /* A11y: no animation for users with prefers-reduced-motion
-       (the admin-nav.js module also closes instantly, with no waiting). */
-    @media (prefers-reduced-motion: reduce) {
-      .admin-nav-submenu[open] > summary,
-      .admin-nav-submenu[open] > .admin-nav-submenu-list,
-      .admin-nav-submenu.is-closing > summary,
-      .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
-        animation: none;
-      }
-    }
-  } /* CLOSES @layer components */
-  @layer components {
-    /* =========================================
-       1. DATA FUNNEL (vertical, based on --val)
-       ========================================= */
-    .chart-funnel {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: calc(var(--spacing-unit) * 0.5);
-      width: 100%;
-      padding: calc(var(--spacing-unit) * 2) 0;
-    }
-    .funnel-stage {
-      /* Width controlled from the HTML, defaults to 100% */
-      width: var(--val, 100%);
-      min-width: 140px; /* Prevents the text from being crushed at the very bottom of the funnel */
-      min-height: var(--target-size-min);
-      background-color: var(--stage-bg, var(--primary));
-      color: var(--stage-text, var(--btn-text-light));
-      border-radius: var(--border-radius);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-      font-size: 0.875rem;
-      font-weight: var(--fw-medium);
-      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      /* A subtle hover effect for interactivity */
-    }
-    .funnel-stage:hover {
-      filter: brightness(1.1);
-      transform: scale(1.02);
-    }
-    /* =========================================
-       2. PROCESS FUNNEL (horizontal CRM pipeline)
-       ========================================= */
+  }
+  /* =========================================
+     1. DATA FUNNEL (vertical, based on --val)
+     ========================================= */
+  .chart-funnel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.5);
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 2) 0;
+  }
+  .funnel-stage {
+    /* Width controlled from the HTML, defaults to 100% */
+    width: var(--val, 100%);
+    min-width: 140px; /* Prevents the text from being crushed at the very bottom of the funnel */
+    min-height: var(--target-size-min);
+    background-color: var(--stage-bg, var(--primary));
+    color: var(--stage-text, var(--btn-text-light));
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+    font-size: 0.875rem;
+    font-weight: var(--fw-medium);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    /* A subtle hover effect for interactivity */
+  }
+  .funnel-stage:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+  /* =========================================
+     2. PROCESS FUNNEL (horizontal CRM pipeline)
+     ========================================= */
+  .chart-pipeline {
+    display: flex;
+    width: 100%;
+    gap: 4px; /* Gap between the arrows */
+    /* On mobile, switch to a vertical stack */
+  }
+  @media (max-width: 768px) {
     .chart-pipeline {
-      display: flex;
-      width: 100%;
-      gap: 4px; /* Gap between the arrows */
-      /* On mobile, switch to a vertical stack */
-    }
-    @media (max-width: 768px) {
-      .chart-pipeline {
-        flex-direction: column;
-      }
-    }
-    .pipeline-stage {
-      flex: 1;
-      min-height: var(--target-size-min);
-      background-color: var(--stage-bg, var(--bg-surface));
-      color: var(--stage-text, var(--text-main));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
-      font-size: 0.875rem;
-      font-weight: var(--fw-medium);
-      text-align: center;
-      position: relative;
-      /* CSS trick: the chevron (arrow) shape */
-      clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
-      /* The first item has no notch on the left */
-    }
-    .pipeline-stage:first-child {
-      clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
-      border-top-left-radius: var(--border-radius);
-      border-bottom-left-radius: var(--border-radius);
-    }
-    .pipeline-stage {
-      /* The last item has no point on the right */
-    }
-    .pipeline-stage:last-child {
-      clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
-      border-top-right-radius: var(--border-radius);
-      border-bottom-right-radius: var(--border-radius);
-    }
-    .pipeline-stage {
-      /* Active stage */
-    }
-    .pipeline-stage.is-active {
-      --stage-bg: var(--primary);
-      --stage-text: var(--btn-text-light);
-    }
-    .pipeline-stage {
-      /* Reset the shapes on mobile (plain rounded rectangles) */
-    }
-    @media (max-width: 768px) {
-      .pipeline-stage {
-        clip-path: none !important;
-        border-radius: var(--border-radius) !important;
-        justify-content: space-between; /* Text on the left, an optional icon on the right */
-      }
-    }
-    /* =========================================
-      3. TRUE FUNNEL (a practical funnel with a stem)
-      ========================================= */
-    .chart-funnel-true {
-      display: flex;
       flex-direction: column;
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto;
-      /* Switch the proportions to a square - more compact and practical */
-      aspect-ratio: 1/1;
-      gap: 2px;
-      /* CSS trick: a sculpted polygon - a wider stem (50% of the width) */
-      clip-path: polygon(4% 0%, 96% 0%, 98.5% 1%, 100% 4%, 76% 68%, 75% 72%, 75% 92%, 73% 96%, 27% 100%, 25% 98%, 25% 72%, 24% 68%, 0% 4%, 1.5% 1%);
     }
-    .funnel-true-stage {
-      flex: var(--val, 1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: var(--stage-bg, var(--primary));
-      color: var(--stage-text, var(--btn-text-light));
-      /* Protects the text inside the narrow stem */
-      padding: calc(var(--spacing-unit) * 1) 5%;
-      overflow: hidden;
-      line-height: 1.2;
-      text-align: center;
-      transition: filter var(--transition-speed);
+  }
+  .pipeline-stage {
+    flex: 1;
+    min-height: var(--target-size-min);
+    background-color: var(--stage-bg, var(--bg-surface));
+    color: var(--stage-text, var(--text-main));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
+    font-size: 0.875rem;
+    font-weight: var(--fw-medium);
+    text-align: center;
+    position: relative;
+    /* CSS trick: the chevron (arrow) shape */
+    clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%, 16px 50%);
+    /* The first item has no notch on the left */
+  }
+  .pipeline-stage:first-child {
+    clip-path: polygon(0% 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 0% 100%);
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+  }
+  .pipeline-stage {
+    /* The last item has no point on the right */
+  }
+  .pipeline-stage:last-child {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 16px 50%);
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+  }
+  .pipeline-stage {
+    /* Active stage */
+  }
+  .pipeline-stage.is-active {
+    --stage-bg: var(--primary);
+    --stage-text: var(--btn-text-light);
+  }
+  .pipeline-stage {
+    /* Reset the shapes on mobile (plain rounded rectangles) */
+  }
+  @media (max-width: 768px) {
+    .pipeline-stage {
+      clip-path: none !important;
+      border-radius: var(--border-radius) !important;
+      justify-content: space-between; /* Text on the left, an optional icon on the right */
     }
-    .funnel-true-stage:hover {
-      filter: brightness(1.1);
-    }
-    .funnel-true-stage .stage-value {
-      font-size: 1.25rem;
-      font-weight: var(--fw-black);
-    }
-    .funnel-true-stage .stage-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      opacity: 0.9;
-    }
+  }
+  /* =========================================
+    3. TRUE FUNNEL (a practical funnel with a stem)
+    ========================================= */
+  .chart-funnel-true {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    /* Switch the proportions to a square - more compact and practical */
+    aspect-ratio: 1/1;
+    gap: 2px;
+    /* CSS trick: a sculpted polygon - a wider stem (50% of the width) */
+    clip-path: polygon(4% 0%, 96% 0%, 98.5% 1%, 100% 4%, 76% 68%, 75% 72%, 75% 92%, 73% 96%, 27% 100%, 25% 98%, 25% 72%, 24% 68%, 0% 4%, 1.5% 1%);
+  }
+  .funnel-true-stage {
+    flex: var(--val, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--stage-bg, var(--primary));
+    color: var(--stage-text, var(--btn-text-light));
+    /* Protects the text inside the narrow stem */
+    padding: calc(var(--spacing-unit) * 1) 5%;
+    overflow: hidden;
+    line-height: 1.2;
+    text-align: center;
+    transition: filter var(--transition-speed);
+  }
+  .funnel-true-stage:hover {
+    filter: brightness(1.1);
+  }
+  .funnel-true-stage .stage-value {
+    font-size: 1.25rem;
+    font-weight: var(--fw-black);
+  }
+  .funnel-true-stage .stage-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
   }
   /**
    * molique - Zmienne SCSS
@@ -1411,87 +1403,85 @@
    * molique - Admin dashboard
    * Contains dashboard elements such as overlays, cards, and other components.
    */
-  @layer components {
-    /* =========================================
-       DASHBOARD HEADER (Faux Cutout / Overlay)
-       ========================================= */
+  /* =========================================
+   DASHBOARD HEADER (Faux Cutout / Overlay)
+   ========================================= */
+  .dashboard-header {
+    --cutout-radius: 32px;
+    --cutout-bg: var(--bg-body);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: calc(var(--spacing-unit) * -4);
+    margin-right: calc(var(--spacing-unit) * -4);
+    margin-left: calc(var(--spacing-unit) * -4);
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    padding-left: calc(var(--spacing-unit) * 4);
+    padding-top: calc(var(--spacing-unit) * 4);
+    /* FIX: reset the negative margins on mobile.
+       We don't need the cutout here, and this prevents text from being clipped! */
+  }
+  @media (max-width: 991px) {
     .dashboard-header {
-      --cutout-radius: 32px;
-      --cutout-bg: var(--bg-body);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-top: calc(var(--spacing-unit) * -4);
-      margin-right: calc(var(--spacing-unit) * -4);
-      margin-left: calc(var(--spacing-unit) * -4);
-      margin-bottom: calc(var(--spacing-unit) * 4);
-      padding-left: calc(var(--spacing-unit) * 4);
-      padding-top: calc(var(--spacing-unit) * 4);
-      /* FIX: reset the negative margins on mobile.
-         We don't need the cutout here, and this prevents text from being clipped! */
+      flex-direction: column;
+      margin-top: 0;
+      margin-left: 0;
+      margin-right: 0;
+      padding-top: 0;
+      padding-left: 0;
     }
-    @media (max-width: 991px) {
-      .dashboard-header {
-        flex-direction: column;
-        margin-top: 0;
-        margin-left: 0;
-        margin-right: 0;
-        padding-top: 0;
-        padding-left: 0;
-      }
+  }
+  .dashboard-header {
+    /* THIS WAS MISSING */
+  }
+  .dashboard-header-actions {
+    background-color: var(--cutout-bg);
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
+    border-bottom-left-radius: var(--cutout-radius);
+    border-top-right-radius: var(--main-radius, 0);
+    margin-top: calc(var(--spacing-unit) * -4);
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 2);
+    position: relative;
+  }
+  @media (min-width: 768px) {
+    .dashboard-header-actions::before {
+      content: "";
+      position: absolute;
+      left: calc(var(--cutout-radius) * -1);
+      top: 0;
+      width: var(--cutout-radius);
+      height: var(--cutout-radius);
+      background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
+      pointer-events: none;
     }
-    .dashboard-header {
-      /* THIS WAS MISSING */
+    .dashboard-header-actions::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: calc(var(--cutout-radius) * -1);
+      width: var(--cutout-radius);
+      height: var(--cutout-radius);
+      background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
+      pointer-events: none;
     }
+  }
+  .dashboard-header-actions {
+    /* FIX: on mobile we remove the background and align the buttons to the text's left edge */
+  }
+  @media (max-width: 991px) {
     .dashboard-header-actions {
-      background-color: var(--cutout-bg);
-      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
-      border-bottom-left-radius: var(--cutout-radius);
-      border-top-right-radius: var(--main-radius, 0);
-      margin-top: calc(var(--spacing-unit) * -4);
-      display: flex;
-      align-items: center;
-      gap: calc(var(--spacing-unit) * 2);
-      position: relative;
+      background-color: transparent;
+      padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Top spacing only */
+      border-radius: 0;
+      width: 100%;
     }
-    @media (min-width: 768px) {
-      .dashboard-header-actions::before {
-        content: "";
-        position: absolute;
-        left: calc(var(--cutout-radius) * -1);
-        top: 0;
-        width: var(--cutout-radius);
-        height: var(--cutout-radius);
-        background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
-        pointer-events: none;
-      }
-      .dashboard-header-actions::after {
-        content: "";
-        position: absolute;
-        right: 0;
-        bottom: calc(var(--cutout-radius) * -1);
-        width: var(--cutout-radius);
-        height: var(--cutout-radius);
-        background: radial-gradient(circle at bottom left, transparent calc(var(--cutout-radius) - 0.5px), var(--cutout-bg) var(--cutout-radius));
-        pointer-events: none;
-      }
+    .dashboard-header-actions::before, .dashboard-header-actions::after {
+      display: none;
     }
-    .dashboard-header-actions {
-      /* FIX: on mobile we remove the background and align the buttons to the text's left edge */
-    }
-    @media (max-width: 991px) {
-      .dashboard-header-actions {
-        background-color: transparent;
-        padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Top spacing only */
-        border-radius: 0;
-        width: 100%;
-      }
-      .dashboard-header-actions::before, .dashboard-header-actions::after {
-        display: none;
-      }
-    }
-    .dashboard-header-actions {
-      /* THIS WAS MISSING */
-    }
+  }
+  .dashboard-header-actions {
+    /* THIS WAS MISSING */
   }
 }

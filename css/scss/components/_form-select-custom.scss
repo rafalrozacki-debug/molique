@@ -3,211 +3,209 @@
 // Independent module: can be omitted from a bundle with no compile errors.
 // A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
-@layer components {
-  /* =========================================
-     5. PREMIUM MULTI SELECT (modeled after a UI reference)
-     ========================================= */
-  .custom-select {
-    position: relative;
-    width: 100%;
+/* =========================================
+   5. PREMIUM MULTI SELECT (modeled after a UI reference)
+   ========================================= */
+.custom-select {
+  position: relative;
+  width: 100%;
 
-    /* We read the "open" state from the popover via :has() - a popover
-       (unlike <details>) doesn't leave an [open] attribute on the parent element. */
-    &:has(.custom-select-dropdown:popover-open) .custom-select-trigger {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
-      .icon-chevron { transform: rotate(180deg); }
-    }
+  /* We read the "open" state from the popover via :has() - a popover
+     (unlike <details>) doesn't leave an [open] attribute on the parent element. */
+  &:has(.custom-select-dropdown:popover-open) .custom-select-trigger {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+    .icon-chevron { transform: rotate(180deg); }
   }
+}
 
-  .custom-select-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: var(--target-size-min);
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    text-align: left;
-    /* The trigger is a <button> - unlike <summary> it doesn't inherit the font automatically. */
-    font: inherit;
-    color: var(--text-main);
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--target-size-min);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  text-align: left;
+  /* The trigger is a <button> - unlike <summary> it doesn't inherit the font automatically. */
+  font: inherit;
+  color: var(--text-main);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
 
-    .icon-chevron {
-      transition: transform var(--transition-speed);
-      color: var(--text-muted);
-    }
-  }
-
-  .custom-select-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px; 
-    flex: 1;
-    
-    .badge {
-      padding: 4px 10px; 
-      font-size: 0.75rem;
-      border-radius: 50px; 
-      font-weight: var(--fw-medium);
-    }
-  }
-
-  .custom-select-dropdown {
-    /* The [popover] attribute in the HTML moves the dropdown to the
-       browser's top layer - this means it's NOT clipped by ancestor
-       overflow (e.g. a scrollable .card-body in a modal) and renders
-       above an open <dialog>. Closing on Esc and a click outside the
-       menu is handled natively by light dismiss.
-
-       Anchor: IMPLICIT, unnamed - like in .select-search-menu (see the
-       comment there, along with the full write-up of the diagnosed bug).
-       The popovertarget+id pairing (Chrome 133+) creates the
-       element-to-element relationship on its own; "auto" just enables
-       using it via anchor().
-
-       position: FIXED, not absolute - for the same reason as in
-       .select-search-menu: inside a <dialog>, position:absolute computed
-       anchor() correctly, but rendered relative to the document instead
-       of the viewport, which at a large scrollY put the popover far off-screen. */
-    position: fixed;
-    position-anchor: auto;
-    /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
-    inset: auto;
-    /* Pin the popover's top to the button's bottom (anchor) */
-    top: anchor(bottom);
-    /* Align the popover's left edge with the button's left edge */
-    left: anchor(left);
-    /* Same width as the button */
-    width: anchor-size(width);
-    /* z-index only matters in the fallback - in the top layer, opening
-       order decides stacking, not z-index (sticky table headers with
-       z-index:10 stop being a problem). */
-    z-index: var(--z-index-dropdown);
-
-    margin: 4px 0 0 0;
-    padding: 0;
-    min-width: 180px;
-    color: var(--text-main);
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg, 12px);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-
-    &:popover-open {
-      display: flex;
-      flex-direction: column;
-      animation: fadeInDown 0.2s ease;
-    }
-
-    /* Fallback for browsers without CSS Anchor Positioning support
-       (older Firefox): the dropdown opens as a centered panel - still in
-       the top layer, so nothing clips it. */
-    @supports not (top: anchor(bottom)) {
-      position: fixed;
-      inset: 0;
-      margin: auto;
-      width: min(400px, calc(100vw - 2rem));
-      height: fit-content;
-    }
-  }
-
-  .custom-select-search {
-    padding: calc(var(--spacing-unit) * 1);
-    border-bottom: 1px solid var(--border-color);
-    position: relative;
-    
-    .search-icon {
-      position: absolute;
-      left: calc(var(--spacing-unit) * 2.5);
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      pointer-events: none; 
-      z-index: 2;
-    }
-
-    .input {
-      padding-left: calc(var(--spacing-unit) * 4.5);
-      
-      &:user-valid, &:user-invalid {
-        border-color: var(--border-color) !important;
-      }
-      &:focus {
-        border-color: var(--primary) !important;
-        box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color) !important;
-      }
-    }
-  }
-
-  .custom-select-category {
-    font-size: 0.7rem;
-    font-weight: var(--fw-bold);
+  .icon-chevron {
+    transition: transform var(--transition-speed);
     color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    margin-top: calc(var(--spacing-unit) * 1);
-    
-    &:first-child { margin-top: 0; }
   }
+}
 
-  .custom-select-list {
-    max-height: 300px;
-    overflow-y: auto;
-    padding: calc(var(--spacing-unit) * 2);
+.custom-select-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px; 
+  flex: 1;
+  
+  .badge {
+    padding: 4px 10px; 
+    font-size: 0.75rem;
+    border-radius: 50px; 
+    font-weight: var(--fw-medium);
+  }
+}
+
+.custom-select-dropdown {
+  /* The [popover] attribute in the HTML moves the dropdown to the
+     browser's top layer - this means it's NOT clipped by ancestor
+     overflow (e.g. a scrollable .card-body in a modal) and renders
+     above an open <dialog>. Closing on Esc and a click outside the
+     menu is handled natively by light dismiss.
+
+     Anchor: IMPLICIT, unnamed - like in .select-search-menu (see the
+     comment there, along with the full write-up of the diagnosed bug).
+     The popovertarget+id pairing (Chrome 133+) creates the
+     element-to-element relationship on its own; "auto" just enables
+     using it via anchor().
+
+     position: FIXED, not absolute - for the same reason as in
+     .select-search-menu: inside a <dialog>, position:absolute computed
+     anchor() correctly, but rendered relative to the document instead
+     of the viewport, which at a large scrollY put the popover far off-screen. */
+  position: fixed;
+  position-anchor: auto;
+  /* Reset the popover's default UA styles (inset: 0 + margin: auto centers it) */
+  inset: auto;
+  /* Pin the popover's top to the button's bottom (anchor) */
+  top: anchor(bottom);
+  /* Align the popover's left edge with the button's left edge */
+  left: anchor(left);
+  /* Same width as the button */
+  width: anchor-size(width);
+  /* z-index only matters in the fallback - in the top layer, opening
+     order decides stacking, not z-index (sticky table headers with
+     z-index:10 stop being a problem). */
+  z-index: var(--z-index-dropdown);
+
+  margin: 4px 0 0 0;
+  padding: 0;
+  min-width: 180px;
+  color: var(--text-main);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg, 12px);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+
+  &:popover-open {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--spacing-unit) * 1);
-    
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+    animation: fadeInDown 0.2s ease;
   }
 
-  .custom-select-option {
-    display: flex;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 2);
-    padding: calc(var(--spacing-unit) * 1.5);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+  /* Fallback for browsers without CSS Anchor Positioning support
+     (older Firefox): the dropdown opens as a centered panel - still in
+     the top layer, so nothing clips it. */
+  @supports not (top: anchor(bottom)) {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(400px, calc(100vw - 2rem));
+    height: fit-content;
+  }
+}
+
+.custom-select-search {
+  padding: calc(var(--spacing-unit) * 1);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  
+  .search-icon {
+    position: absolute;
+    left: calc(var(--spacing-unit) * 2.5);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none; 
+    z-index: 2;
+  }
+
+  .input {
+    padding-left: calc(var(--spacing-unit) * 4.5);
+    
+    &:user-valid, &:user-invalid {
+      border-color: var(--border-color) !important;
+    }
+    &:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color) !important;
+    }
+  }
+}
+
+.custom-select-category {
+  font-size: 0.7rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  margin-top: calc(var(--spacing-unit) * 1);
+  
+  &:first-child { margin-top: 0; }
+}
+
+.custom-select-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: calc(var(--spacing-unit) * 2);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+  
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+}
+
+.custom-select-option {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 1.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+
+  &:hover {
+    background-color: var(--card-bg-subtle);
+  }
+
+  &:has(input:checked) {
+    border-color: var(--primary);
+    background-color: rgba(var(--primary-rgb), 0.05);
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0 0 0 auto; 
+    background-color: var(--bg-body);
+    border: 2px solid var(--border-color);
+    border-radius: calc(var(--border-radius) / 2);
     cursor: pointer;
-    transition: all var(--transition-speed);
-
-    &:hover {
-      background-color: var(--card-bg-subtle);
-    }
-
-    &:has(input:checked) {
+    transition: background var(--transition-speed), border-color var(--transition-speed);
+    
+    &:checked {
+      background-color: var(--primary);
       border-color: var(--primary);
-      background-color: rgba(var(--primary-rgb), 0.05);
-    }
-
-    input[type="checkbox"] {
-      appearance: none;
-      width: 1.25rem;
-      height: 1.25rem;
-      margin: 0 0 0 auto; 
-      background-color: var(--bg-body);
-      border: 2px solid var(--border-color);
-      border-radius: calc(var(--border-radius) / 2);
-      cursor: pointer;
-      transition: background var(--transition-speed), border-color var(--transition-speed);
-      
-      &:checked {
-        background-color: var(--primary);
-        border-color: var(--primary);
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
-        background-size: 70%;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+      background-size: 70%;
+      background-position: center;
+      background-repeat: no-repeat;
     }
   }
 }

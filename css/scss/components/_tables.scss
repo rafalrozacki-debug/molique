@@ -5,196 +5,194 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer components {
-  /* =========================================
-     1. B2B TABLES (optimized for data)
-     ========================================= */
-  .table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-body);
-  }
+/* =========================================
+   1. B2B TABLES (optimized for data)
+   ========================================= */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-body);
+}
 
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    color: var(--text-main);
-    font-size: 0.875rem;
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-main);
+  font-size: 0.875rem;
 
-    /* Variables controlling size (default MD) */
-    --table-padding-y: calc(var(--spacing-unit) * 1.5);
-    --table-padding-x: calc(var(--spacing-unit) * 2);
-    --table-font-size: 0.875rem;
-    --table-header-font-size: 0.75rem;
-  }
+  /* Variables controlling size (default MD) */
+  --table-padding-y: calc(var(--spacing-unit) * 1.5);
+  --table-padding-x: calc(var(--spacing-unit) * 2);
+  --table-font-size: 0.875rem;
+  --table-header-font-size: 0.75rem;
+}
 
-  /* --- SIZE VARIANTS --- */
+/* --- SIZE VARIANTS --- */
 
-  /* Compact (dense data, e.g. financial reports) */
-  .table-sm {
-    --table-padding-y: calc(var(--spacing-unit) * 0.75);
-    --table-padding-x: calc(var(--spacing-unit) * 1.5);
-    --table-font-size: 0.8125rem;
-    --table-header-font-size: 0.7rem;
-  }
+/* Compact (dense data, e.g. financial reports) */
+.table-sm {
+  --table-padding-y: calc(var(--spacing-unit) * 0.75);
+  --table-padding-x: calc(var(--spacing-unit) * 1.5);
+  --table-font-size: 0.8125rem;
+  --table-header-font-size: 0.7rem;
+}
 
-  /* Loose (lots of space, e.g. a user list with avatars) */
-  .table-lg {
-    --table-padding-y: calc(var(--spacing-unit) * 1.5);
-    --table-padding-x: calc(var(--spacing-unit) * 2);
-    --table-font-size: 1rem;
-    --table-header-font-size: 0.875rem;
-  }
+/* Loose (lots of space, e.g. a user list with avatars) */
+.table-lg {
+  --table-padding-y: calc(var(--spacing-unit) * 1.5);
+  --table-padding-x: calc(var(--spacing-unit) * 2);
+  --table-font-size: 1rem;
+  --table-header-font-size: 0.875rem;
+}
 
-  /* --- BASE CELL STYLES --- */
-  .table th, 
-  .table td {
-    padding: var(--table-padding-y) var(--table-padding-x);
-    border-bottom: 1px solid var(--border-color);
-    text-align: left;
-    vertical-align: middle;
-    font-size: var(--table-font-size);
-  }
+/* --- BASE CELL STYLES --- */
+.table th, 
+.table td {
+  padding: var(--table-padding-y) var(--table-padding-x);
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  vertical-align: middle;
+  font-size: var(--table-font-size);
+}
 
-  .table th {
-    font-weight: var(--fw-bold);
-    background-color: var(--bg-surface);
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: var(--table-header-font-size);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    /* Prevents a double border with a sticky header */
-    box-shadow: 0 1px 0 var(--border-color);
-    border-bottom: none;
-  }
+.table th {
+  font-weight: var(--fw-bold);
+  background-color: var(--bg-surface);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: var(--table-header-font-size);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  /* Prevents a double border with a sticky header */
+  box-shadow: 0 1px 0 var(--border-color);
+  border-bottom: none;
+}
 
-  /* --- HEADER (THEAD) VARIANTS --- */
+/* --- HEADER (THEAD) VARIANTS --- */
 
-  /* Default / Light (subtle cutoff) */
-  .thead-light th {
+/* Default / Light (subtle cutoff) */
+.thead-light th {
+  background-color: var(--card-bg-subtle);
+  /* NOT --text-muted - on this near-white background it only gives
+     4.34:1 (small, bold header letters need the full 4.5:1).
+     --secondary-hover is dark enough (6.5+:1 in both themes) without
+     introducing a new variable. */
+  color: var(--secondary-hover);
+  border-bottom: 2px solid var(--border-color); /* A stronger line under the header */
+}
+
+/* Dark (strong contrast) */
+.thead-dark th {
+  background-color: var(--dark);
+  color: var(--btn-text-light);
+  border-bottom: none;
+  /* Changes the shadow color for the sticky header */
+  box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* Primary (brand color) */
+.thead-primary th {
+  background-color: var(--primary);
+  color: var(--btn-text-light);
+  border-bottom: none;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+
+/* --- HEADER SIZE VARIANTS --- */
+
+/* Compact header (smaller padding and font) */
+.thead-sm th {
+  padding-top: calc(var(--spacing-unit) * 1);
+  padding-bottom: calc(var(--spacing-unit) * 1);
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+}
+
+/* Large header (more breathing room) */
+.thead-lg th {
+  padding-top: calc(var(--spacing-unit) * 2.5);
+  padding-bottom: calc(var(--spacing-unit) * 2.5);
+  font-size: 0.875rem;
+  letter-spacing: 0;
+}
+
+/* --- VISUAL VARIANTS --- */
+
+/* Zebra stripes (improve readability of wide tables) */
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(var(--dark-rgb), 0.02);
+}
+
+/* Row highlight on hover */
+.table-hover tbody tr {
+  transition: background-color var(--transition-speed);
+  &:hover {
     background-color: var(--card-bg-subtle);
-    /* NOT --text-muted - on this near-white background it only gives
-       4.34:1 (small, bold header letters need the full 4.5:1).
-       --secondary-hover is dark enough (6.5+:1 in both themes) without
-       introducing a new variable. */
-    color: var(--secondary-hover);
-    border-bottom: 2px solid var(--border-color); /* A stronger line under the header */
+  }
+}
+
+/* Tables with no side borders (clean, modern look) */
+.table-borderless {
+  th, td { border-bottom: none; }
+  tbody tr { border-bottom: 1px solid var(--border-color); }
+  tbody tr:last-child { border-bottom: none; }
+}
+
+/* --- MIXIN: turns a table into cards (mobile-first data) --- */
+@mixin make-table-cards {
+  thead { display: none; }
+  tbody, tr, td { display: block; width: 100%; }
+
+  tr {
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-surface);
+    /* Reset the zebra-stripe background for cards */
+    background-color: var(--bg-surface) !important;
   }
 
-  /* Dark (strong contrast) */
-  .thead-dark th {
-    background-color: var(--dark);
-    color: var(--btn-text-light);
-    border-bottom: none;
-    /* Changes the shadow color for the sticky header */
-    box-shadow: 0 1px 0 rgba(255,255,255,0.1);
+  /* Label ABOVE the value (not beside it, via flex) - cells with rich
+     content (several <code> at once, a longer description) broke in
+     the flex variant: every child element (every <code>, every text
+     fragment) becomes ITS OWN flex item, and when space runs out,
+     instead of wrapping as one paragraph, each one individually shrinks
+     to nearly zero width - the text breaks into single letters. A plain
+     block-flow (no flex/grid on the cell) is immune to this regardless
+     of how many inline elements the value contains. */
+  td {
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
   }
 
-  /* Primary (brand color) */
-  .thead-primary th {
-    background-color: var(--primary);
-    color: var(--btn-text-light);
-    border-bottom: none;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+  td:last-child { border-bottom: none; }
+
+  td::before {
+    content: attr(data-label);
+    display: block;
+    font-weight: var(--fw-bold);
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
   }
+}
 
-  /* --- HEADER SIZE VARIANTS --- */
-
-  /* Compact header (smaller padding and font) */
-  .thead-sm th {
-    padding-top: calc(var(--spacing-unit) * 1);
-    padding-bottom: calc(var(--spacing-unit) * 1);
-    font-size: 0.65rem;
-    letter-spacing: 1px;
-  }
-
-  /* Large header (more breathing room) */
-  .thead-lg th {
-    padding-top: calc(var(--spacing-unit) * 2.5);
-    padding-bottom: calc(var(--spacing-unit) * 2.5);
-    font-size: 0.875rem;
-    letter-spacing: 0;
-  }
-
-  /* --- VISUAL VARIANTS --- */
-
-  /* Zebra stripes (improve readability of wide tables) */
-  .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(var(--dark-rgb), 0.02);
-  }
-
-  /* Row highlight on hover */
-  .table-hover tbody tr {
-    transition: background-color var(--transition-speed);
-    &:hover {
-      background-color: var(--card-bg-subtle);
-    }
-  }
-
-  /* Tables with no side borders (clean, modern look) */
-  .table-borderless {
-    th, td { border-bottom: none; }
-    tbody tr { border-bottom: 1px solid var(--border-color); }
-    tbody tr:last-child { border-bottom: none; }
-  }
-
-  /* --- MIXIN: turns a table into cards (mobile-first data) --- */
-  @mixin make-table-cards {
-    thead { display: none; }
-    tbody, tr, td { display: block; width: 100%; }
-
-    tr {
-      margin-bottom: calc(var(--spacing-unit) * 2);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius);
-      background-color: var(--bg-surface);
-      /* Reset the zebra-stripe background for cards */
-      background-color: var(--bg-surface) !important;
-    }
-
-    /* Label ABOVE the value (not beside it, via flex) - cells with rich
-       content (several <code> at once, a longer description) broke in
-       the flex variant: every child element (every <code>, every text
-       fragment) becomes ITS OWN flex item, and when space runs out,
-       instead of wrapping as one paragraph, each one individually shrinks
-       to nearly zero width - the text breaks into single letters. A plain
-       block-flow (no flex/grid on the cell) is immune to this regardless
-       of how many inline elements the value contains. */
-    td {
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-      padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
-    }
-
-    td:last-child { border-bottom: none; }
-
-    td::before {
-      content: attr(data-label);
-      display: block;
-      font-weight: var(--fw-bold);
-      color: var(--text-muted);
-      font-size: var(--text-xs);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      margin-bottom: calc(var(--spacing-unit) * 0.5);
-    }
-  }
-
-  /* Mobile version (automatic) */
-  @include mq(sm, max) {
-    .table-cards {
-      @include make-table-cards;
-    }
-  }
-
-  /* Forced version (always active, even on desktop) */
-  .table-cards-always {
+/* Mobile version (automatic) */
+@include mq(sm, max) {
+  .table-cards {
     @include make-table-cards;
   }
+}
+
+/* Forced version (always active, even on desktop) */
+.table-cards-always {
+  @include make-table-cards;
 }

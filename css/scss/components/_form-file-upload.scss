@@ -3,94 +3,92 @@
 // Independent module: can be omitted from a bundle with no compile errors.
 // A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
-@layer components {
-  /* =========================================
-     3. CUSTOM FILE UPLOAD
-     ========================================= */
-  .file-upload {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: calc(var(--spacing-unit) * 4);
-    border: 2px dashed var(--border-color);
-    border-radius: var(--border-radius);
-    background-color: var(--bg-surface);
-    transition: all var(--transition-speed);
-    text-align: center;
+/* =========================================
+   3. CUSTOM FILE UPLOAD
+   ========================================= */
+.file-upload {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--spacing-unit) * 4);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-surface);
+  transition: all var(--transition-speed);
+  text-align: center;
+  cursor: pointer;
+
+  &:hover, &:focus-within {
+    border-color: var(--primary);
+    background-color: rgba(var(--primary-rgb), 0.03);
+  }
+
+  input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
     cursor: pointer;
-
-    &:hover, &:focus-within {
-      border-color: var(--primary);
-      background-color: rgba(var(--primary-rgb), 0.03);
-    }
-
-    input[type="file"] {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-      z-index: 2;
-    }
-
-    .file-upload-icon {
-      font-size: 2rem;
-      color: var(--text-muted);
-      margin-bottom: calc(var(--spacing-unit) * 1);
-      transition: color var(--transition-speed), transform var(--transition-speed);
-    }
-
-    &:hover .file-upload-icon {
-      color: var(--primary);
-      transform: translateY(-5px);
-    }
+    z-index: 2;
   }
 
-  .file-upload-animated {
-    border: none; 
+  .file-upload-icon {
+    font-size: 2rem;
+    color: var(--text-muted);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+    transition: color var(--transition-speed), transform var(--transition-speed);
+  }
+
+  &:hover .file-upload-icon {
+    color: var(--primary);
+    transform: translateY(-5px);
+  }
+}
+
+.file-upload-animated {
+  border: none; 
+  background-image: 
+    linear-gradient(to right, var(--border-color) 50%, transparent 50%),
+    linear-gradient(to bottom, var(--border-color) 50%, transparent 50%),
+    linear-gradient(to left, var(--border-color) 50%, transparent 50%),
+    linear-gradient(to top, var(--border-color) 50%, transparent 50%);
+  background-size: 16px 2px, 2px 16px, 16px 2px, 2px 16px;
+  background-position: 0 0, 100% 0, 0 100%, 0 0;
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  
+  &:hover, &:focus-within {
+    background-color: rgba(var(--primary-rgb), 0.03);
     background-image: 
-      linear-gradient(to right, var(--border-color) 50%, transparent 50%),
-      linear-gradient(to bottom, var(--border-color) 50%, transparent 50%),
-      linear-gradient(to left, var(--border-color) 50%, transparent 50%),
-      linear-gradient(to top, var(--border-color) 50%, transparent 50%);
-    background-size: 16px 2px, 2px 16px, 16px 2px, 2px 16px;
-    background-position: 0 0, 100% 0, 0 100%, 0 0;
-    background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
-    
-    &:hover, &:focus-within {
-      background-color: rgba(var(--primary-rgb), 0.03);
-      background-image: 
-        linear-gradient(to right, var(--primary) 50%, transparent 50%),
-        linear-gradient(to bottom, var(--primary) 50%, transparent 50%),
-        linear-gradient(to left, var(--primary) 50%, transparent 50%),
-        linear-gradient(to top, var(--primary) 50%, transparent 50%);
-      animation: marchingAnts 0.6s linear infinite;
-    }
-
-    /* NOTE: input[type="file"] is deliberately OUTSIDE this list - it must
-       keep position: absolute from the base .file-upload (an invisible
-       overlay across the whole card, z-index: 2 already comes from the
-       base). Overriding it to relative pulled it into the flow and pushed
-       the card's content down. */
-    .file-upload-icon, h4, p, .file-upload-name {
-      position: relative;
-      z-index: 2;
-      /* Without this, these elements (same z-index as the input, but
-         AFTER it in the DOM - so they win the stacking order) were
-         capturing clicks and drops exactly where the user visually aims:
-         the icon/text at the center of the card. A click "worked" only by
-         accident when it landed in the padding around them - a drop
-         aimed dead center always hit the text block, never the input
-         underneath. */
-      pointer-events: none;
-    }
+      linear-gradient(to right, var(--primary) 50%, transparent 50%),
+      linear-gradient(to bottom, var(--primary) 50%, transparent 50%),
+      linear-gradient(to left, var(--primary) 50%, transparent 50%),
+      linear-gradient(to top, var(--primary) 50%, transparent 50%);
+    animation: marchingAnts 0.6s linear infinite;
   }
 
-  @keyframes marchingAnts {
-    0% { background-position: 0 0, 100% 0, 0 100%, 0 0; }
-    100% { background-position: 16px 0, 100% 16px, -16px 100%, 0 -16px; }
+  /* NOTE: input[type="file"] is deliberately OUTSIDE this list - it must
+     keep position: absolute from the base .file-upload (an invisible
+     overlay across the whole card, z-index: 2 already comes from the
+     base). Overriding it to relative pulled it into the flow and pushed
+     the card's content down. */
+  .file-upload-icon, h4, p, .file-upload-name {
+    position: relative;
+    z-index: 2;
+    /* Without this, these elements (same z-index as the input, but
+       AFTER it in the DOM - so they win the stacking order) were
+       capturing clicks and drops exactly where the user visually aims:
+       the icon/text at the center of the card. A click "worked" only by
+       accident when it landed in the padding around them - a drop
+       aimed dead center always hit the text block, never the input
+       underneath. */
+    pointer-events: none;
   }
+}
+
+@keyframes marchingAnts {
+  0% { background-position: 0 0, 100% 0, 0 100%, 0 0; }
+  100% { background-position: 16px 0, 100% 16px, -16px 100%, 0 -16px; }
 }

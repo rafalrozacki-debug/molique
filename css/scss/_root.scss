@@ -38,6 +38,20 @@
   --light: #F9F9F9;
   --dark: #14162B;
 
+  /* "Always dark" surfaces - hero, footer, .bg-dark, the pill navbar, corner
+     glows. These are NOT --dark: --dark flips with the theme (that is its
+     job), and a flipped value would brighten a section whose white text was
+     painted over it in the HTML.
+     Deliberately declared ONCE, here, and never redefined under
+     [data-theme="dark"] - that constancy is the whole point.
+     Before 1.7.31 the same two values sat as raw literals in eight places
+     across the SCSS, so rebranding meant overriding .bg-dark itself - the
+     exact spot where the cascade-layer trap bites (a project's unlayered
+     !important cannot beat a layered !important). One variable, one edit,
+     no fight with the cascade. */
+  --bg-dark-fixed: #14162B;
+  --text-on-dark-fixed: #F9F9F9;
+
   --secondary: #71717A;
   --secondary-hover: #63636B;
   --success: #0E793C;

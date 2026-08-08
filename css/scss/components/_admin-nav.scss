@@ -75,620 +75,617 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 }
 
-@layer components {
-  .admin-nav {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--spacing-unit) * 1);
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
-    @media (max-width: 768px) {
-      flex-direction: row;
-      /* Even spacing for the main icons on the bar */
-      justify-content: space-around;
-      width: 100%;
-      gap: 0;
-    }
+  @media (max-width: 768px) {
+    flex-direction: row;
+    /* Even spacing for the main icons on the bar */
+    justify-content: space-around;
+    width: 100%;
+    gap: 0;
+  }
+}
+
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+  transition: all var(--transition-speed) ease;
+  border-radius: var(--border-radius);
+  min-height: var(--target-size-min);
+  
+  /* Default layout (Standard - .sidebar-lg) */
+  flex-direction: row;
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
+  gap: calc(var(--spacing-unit) * 1.5);
+  justify-content: flex-start;
+
+  i, svg {
+    font-size: 1.25rem;
+    flex-shrink: 0;
   }
 
-  .admin-nav-link {
-    display: flex;
-    align-items: center;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    font-weight: var(--fw-medium);
-    transition: all var(--transition-speed) ease;
-    border-radius: var(--border-radius);
-    min-height: var(--target-size-min);
-    
-    /* Default layout (Standard - .sidebar-lg) */
-    flex-direction: row;
-    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.5);
-    gap: calc(var(--spacing-unit) * 1.5);
-    justify-content: flex-start;
+  .nav-text {
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity var(--transition-speed);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-    i, svg {
-      font-size: 1.25rem;
-      flex-shrink: 0;
+  &:hover {
+    color: var(--sidebar-text-active);
+    background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+  }
+
+  &.is-active {
+    color: var(--btn-text-light);
+    background-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+  }
+
+  /* =========================================
+     DESKTOP VARIANTS (ignored on mobile!)
+     ========================================= */
+  @include mq(md) {
+
+    /* --- VARIANT: NARROW (icon on top, text below) --- */
+    .sidebar-md & {
+      /* FIX: force a vertical layout! */
+      flex-direction: column;
+      justify-content: center;
+      padding: calc(var(--spacing-unit) * 1) 4px;
+      gap: calc(var(--spacing-unit) * 0.5);
+      text-align: center;
+      width: 100%;
+
+      .nav-text {
+        /* FIX: small, centered text */
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.1;
+        width: 100%;
+      }
     }
+
+    /* --- VARIANT: COMPACT (icons only) --- */
+    .sidebar-sm & {
+      justify-content: center;
+      align-items: center;
+      padding: calc(var(--spacing-unit) * 1.5) 0;
+      width: 100%;
+      
+      i, svg, .sidebar-toggle-icon { margin: 0 !important; }
+      .nav-text { display: none; }
+    }
+
+  }
+
+  /* =========================================
+     MOBILE BOTTOM NAV
+     ========================================= */
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 1);
+    gap: 4px;
+
+    /* FIX: flex: 1 makes all 5 icons split the space evenly */
+    flex: 1;
+    min-width: 0; /* Allows shrinking if the screen is very narrow */
 
     .nav-text {
-      white-space: nowrap;
-      opacity: 1;
-      transition: opacity var(--transition-speed);
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    &:hover {
-      color: var(--sidebar-text-active);
-      background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+      display: block;
+      font-size: 0.65rem;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.1;
     }
 
     &.is-active {
-      color: var(--btn-text-light);
-      background-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
-    }
-
-    /* =========================================
-       DESKTOP VARIANTS (ignored on mobile!)
-       ========================================= */
-    @include mq(md) {
-
-      /* --- VARIANT: NARROW (icon on top, text below) --- */
-      .sidebar-md & {
-        /* FIX: force a vertical layout! */
-        flex-direction: column;
-        justify-content: center;
-        padding: calc(var(--spacing-unit) * 1) 4px;
-        gap: calc(var(--spacing-unit) * 0.5);
-        text-align: center;
-        width: 100%;
-
-        .nav-text {
-          /* FIX: small, centered text */
-          font-size: 0.6rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          white-space: normal;
-          word-break: break-word;
-          line-height: 1.1;
-          width: 100%;
-        }
-      }
-
-      /* --- VARIANT: COMPACT (icons only) --- */
-      .sidebar-sm & {
-        justify-content: center;
-        align-items: center;
-        padding: calc(var(--spacing-unit) * 1.5) 0;
-        width: 100%;
-        
-        i, svg, .sidebar-toggle-icon { margin: 0 !important; }
-        .nav-text { display: none; }
-      }
-
-    }
-
-    /* =========================================
-       MOBILE BOTTOM NAV
-       ========================================= */
-    @media (max-width: 768px) {
-      flex-direction: column;
-      justify-content: center;
-      padding: calc(var(--spacing-unit) * 1);
-      gap: 4px;
-
-      /* FIX: flex: 1 makes all 5 icons split the space evenly */
-      flex: 1;
-      min-width: 0; /* Allows shrinking if the screen is very narrow */
-
-      .nav-text {
-        display: block;
-        font-size: 0.65rem;
-        white-space: normal;
-        text-align: center;
-        line-height: 1.1;
-      }
-
-      &.is-active {
-        background-color: transparent;
-        /* NOT var(--primary) - the sidebar is always dark, and --primary
-           in light mode (#5145E5) only gives 2.3:1 on this background. See
-           --sidebar-active-accent in _root.scss. */
-        color: var(--sidebar-active-accent);
-        box-shadow: none;
-      }
+      background-color: transparent;
+      /* NOT var(--primary) - the sidebar is always dark, and --primary
+         in light mode (#5145E5) only gives 2.3:1 on this background. See
+         --sidebar-active-accent in _root.scss. */
+      color: var(--sidebar-active-accent);
+      box-shadow: none;
     }
   }
+}
 
-  /* =========================================
-     DIVIDER AND BOTTOM NAVIGATION
-     ========================================= */
-  .admin-nav-divider {
-    display: block;
-    width: 100%; 
-    height: 1px;
-    background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
-    margin: 0;
-    border: none;
-    flex-shrink: 0;
-    border-top: calc(var(--spacing-unit) * 1) solid transparent;
-    border-bottom: calc(var(--spacing-unit) * 1) solid transparent;
-    background-clip: content-box;
+/* =========================================
+   DIVIDER AND BOTTOM NAVIGATION
+   ========================================= */
+.admin-nav-divider {
+  display: block;
+  width: 100%; 
+  height: 1px;
+  background-color: rgba(var(--sidebar-highlight-rgb), 0.1);
+  margin: 0;
+  border: none;
+  flex-shrink: 0;
+  border-top: calc(var(--spacing-unit) * 1) solid transparent;
+  border-bottom: calc(var(--spacing-unit) * 1) solid transparent;
+  background-clip: content-box;
 
-    @media (max-width: 768px) {
-      display: none;
-    }
+  @media (max-width: 768px) {
+    display: none;
   }
+}
 
-  .admin-nav-bottom {
-    margin-top: auto !important;
+.admin-nav-bottom {
+  margin-top: auto !important;
 
-    @media (max-width: 768px) {
-      display: none !important; /* Hide the bottom section on mobile */
-    }
+  @media (max-width: 768px) {
+    display: none !important; /* Hide the bottom section on mobile */
   }
+}
 
-  /* FIX: a class that hides duplicate links on desktop! */
-  .mobile-only-nav-item {
-    @include mq(md) {
-      display: none !important;
-    }
+/* FIX: a class that hides duplicate links on desktop! */
+.mobile-only-nav-item {
+  @include mq(md) {
+    display: none !important;
   }
+}
 
-  /* =========================================
-     MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
-     ========================================= */
+/* =========================================
+   MOBILE DROP-UP MENU (Checkbox Hack - Slide Up)
+   ========================================= */
 
-  /* The checkbox + label + .admin-nav-dropdown-menu must (for the sibling
-     selector .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu below)
-     share a common parent - hence grouped together in one <li>, instead
-     of sitting directly inside <ul class="admin-nav"> (input/label/div as
-     DIRECT children of a <ul> broke the rule that a <ul> may only contain
-     <li> - flagged by the Lighthouse "list" audit). display:contents on
-     that <li> makes it invisible in the layout (its children lay out as
-     if they were still direct flex items of .admin-nav) - the identical
-     visual result as before the change, just correct in the DOM. */
-  .admin-nav-more-item {
+/* The checkbox + label + .admin-nav-dropdown-menu must (for the sibling
+   selector .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu below)
+   share a common parent - hence grouped together in one <li>, instead
+   of sitting directly inside <ul class="admin-nav"> (input/label/div as
+   DIRECT children of a <ul> broke the rule that a <ul> may only contain
+   <li> - flagged by the Lighthouse "list" audit). display:contents on
+   that <li> makes it invisible in the layout (its children lay out as
+   if they were still direct flex items of .admin-nav) - the identical
+   visual result as before the change, just correct in the DOM. */
+.admin-nav-more-item {
+  display: contents;
+}
+
+.mobile-more-toggle {
+  display: none;
+}
+
+.mobile-more-label {
+  cursor: pointer;
+  @include mq(md) {
+    display: none !important;
+  }
+}
+
+.admin-nav-dropdown-menu {
+  /* Now a <ul> (was a <div>) - the <li> elements inside require a real
+     ul/ol/menu parent (the HTML5 parser auto-closes the nearest open
+     <li> when it hits another <li>, SKIPPING an intervening <div> - a
+     <ul>/<ol> creates a scope that blocks this). A <ul>'s default
+     margin/padding needs to be zeroed by hand (list-style:none is
+     inherited from .admin-nav, but this isn't). */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1);
+
+  /* DESKTOP: flat links */
+  @include mq(md) {
     display: contents;
   }
 
-  .mobile-more-toggle {
-    display: none;
-  }
+  /* MOBILE: floating drawer */
+  @include mq(md, max) {
+    position: fixed;
+    /* FIX: the bottom bar is min-height 70px PLUS padding-bottom
+       env(safe-area-inset-bottom) - without accounting for the inset
+       the drawer's bottom edge slides under the bar and the last items
+       get clipped (the identical formula as in the bottom-sheet submenu). */
+    bottom: calc(70px + env(safe-area-inset-bottom));
+    left: 0;
+    right: 0;
+    width: 100%;
 
-  .mobile-more-label {
-    cursor: pointer;
-    @include mq(md) {
-      display: none !important;
-    }
-  }
+    background-color: var(--sidebar-bg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-left-radius: var(--border-radius-lg, 24px);
+    border-top-right-radius: var(--border-radius-lg, 24px);
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+    padding-bottom: calc(var(--spacing-unit) * 4);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    /* FIX: long lists (e.g. docs navigation) must scroll vertically,
+       otherwise the drawer sticks out above the top of the screen - and
+       on pages that also have a navbar (partials/navbar.html) ABOVE
+       this sidebar, the "top of the screen" is in practice the bottom
+       of the navbar, not y=0: without subtracting --navbar-h the drawer
+       would slide UNDER the fixed navbar and its top items (the first
+       groups in a long menu) would be hidden behind it. */
+    max-height: calc(
+      100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - (var(--spacing-unit) * 4)
+    );
+    overflow-y: auto;
 
-  .admin-nav-dropdown-menu {
-    /* Now a <ul> (was a <div>) - the <li> elements inside require a real
-       ul/ol/menu parent (the HTML5 parser auto-closes the nearest open
-       <li> when it hits another <li>, SKIPPING an intervening <div> - a
-       <ul>/<ol> creates a scope that blocks this). A <ul>'s default
-       margin/padding needs to be zeroed by hand (list-style:none is
-       inherited from .admin-nav, but this isn't). */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--spacing-unit) * 1);
-
-    /* DESKTOP: flat links */
-    @include mq(md) {
-      display: contents;
-    }
-
-    /* MOBILE: floating drawer */
-    @include mq(md, max) {
-      position: fixed;
-      /* FIX: the bottom bar is min-height 70px PLUS padding-bottom
-         env(safe-area-inset-bottom) - without accounting for the inset
-         the drawer's bottom edge slides under the bar and the last items
-         get clipped (the identical formula as in the bottom-sheet submenu). */
-      bottom: calc(70px + env(safe-area-inset-bottom));
-      left: 0;
-      right: 0;
-      width: 100%;
-
-      background-color: var(--sidebar-bg);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      border-top-left-radius: var(--border-radius-lg, 24px);
-      border-top-right-radius: var(--border-radius-lg, 24px);
-      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
-      padding-bottom: calc(var(--spacing-unit) * 4);
-      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-      z-index: 100;
-      /* FIX: long lists (e.g. docs navigation) must scroll vertically,
-         otherwise the drawer sticks out above the top of the screen - and
-         on pages that also have a navbar (partials/navbar.html) ABOVE
-         this sidebar, the "top of the screen" is in practice the bottom
-         of the navbar, not y=0: without subtracting --navbar-h the drawer
-         would slide UNDER the fixed navbar and its top items (the first
-         groups in a long menu) would be hidden behind it. */
-      max-height: calc(
-        100dvh - 70px - var(--navbar-h) - env(safe-area-inset-bottom) - (var(--spacing-unit) * 4)
-      );
-      overflow-y: auto;
-
-      /* FIX: instead of display: none, hide the drawer below the screen! */
-      visibility: hidden;
-      transform: translateY(100%);
-      transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1), visibility var(--transition-speed-slow);
+    /* FIX: instead of display: none, hide the drawer below the screen! */
+    visibility: hidden;
+    transform: translateY(100%);
+    transition: transform var(--transition-speed-slow) cubic-bezier(0.2, 0.8, 0.2, 1), visibility var(--transition-speed-slow);
+    
+    .admin-nav-link {
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: calc(var(--spacing-unit) * 2);
+      min-height: 48px;
       
-      .admin-nav-link {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: calc(var(--spacing-unit) * 2);
-        min-height: 48px;
-        
-        i, svg {
-          font-size: 1.5rem;
-          margin-right: calc(var(--spacing-unit) * 2) !important;
-        }
-        
-        .nav-text {
-          display: block;
-          font-size: 1rem;
-          text-align: left;
-          white-space: nowrap;
-        }
+      i, svg {
+        font-size: 1.5rem;
+        margin-right: calc(var(--spacing-unit) * 2) !important;
+      }
+      
+      .nav-text {
+        display: block;
+        font-size: 1rem;
+        text-align: left;
+        white-space: nowrap;
       }
     }
   }
+}
 
-  /* THE TRICK: sliding the drawer in on click */
-  .mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
-    @include mq(md, max) {
-      visibility: visible;
-      transform: translateY(0);
-    }
+/* THE TRICK: sliding the drawer in on click */
+.mobile-more-toggle:checked ~ .admin-nav-dropdown-menu {
+  @include mq(md, max) {
+    visibility: visible;
+    transform: translateY(0);
   }
+}
+
+/* =========================================
+   SUBMENU (expandable link tree)
+   ========================================= */
+.admin-nav-submenu {
+  position: relative;
   
-  /* =========================================
-     SUBMENU (expandable link tree)
-     ========================================= */
-  .admin-nav-submenu {
-    position: relative;
+  summary {
+    list-style: none;
+    cursor: pointer;
+    &::-webkit-details-marker { display: none; }
     
-    summary {
-      list-style: none;
-      cursor: pointer;
-      &::-webkit-details-marker { display: none; }
-      
-      &::after {
-        content: "";
-        display: inline-block;
-        margin-left: auto;
-        width: 6px;
-        height: 6px;
-        border-right: 2px solid currentColor;
-        border-bottom: 2px solid currentColor;
-        transform: rotate(45deg);
-        transition: transform var(--transition-speed);
-        opacity: 0.5;
+    &::after {
+      content: "";
+      display: inline-block;
+      margin-left: auto;
+      width: 6px;
+      height: 6px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform var(--transition-speed);
+      opacity: 0.5;
+    }
+  }
+
+  &[open] > summary::after {
+    transform: rotate(-135deg);
+  }
+}
+
+/* --- DEFAULT VARIANT (wide sidebar - tree) --- */
+.admin-nav-submenu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 8px 0;
+  padding-left: calc(var(--spacing-unit) * 5); 
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 8px; 
+    left: calc(var(--spacing-unit) * 3); 
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.admin-nav-submenu-link {
+  display: flex;
+  align-items: center;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed);
+  position: relative;
+  border: 1px solid transparent;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--spacing-unit) * -2);
+    top: 50%;
+    width: 12px;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &:hover {
+    color: var(--sidebar-text-active);
+    background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+  }
+
+  &.is-active {
+    color: var(--sidebar-text-active);
+    font-weight: var(--fw-bold);
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    box-shadow: none !important;
+  }
+}
+
+/* --- NARROW VARIANTS (Drill-down Menu) --- */
+@include mq(md) {
+  .sidebar-md .admin-nav-submenu,
+  .sidebar-sm .admin-nav-submenu {
+
+    /* Escape the positioning context so we can cover the entire sidebar! */
+    position: static;
+
+    summary::after { display: none; }
+    .admin-nav-submenu-list { display: none !important; }
+
+    /* =========================================
+       OPEN STATE (drill-down active)
+       ========================================= */
+    &[open] {
+
+      /* 1. A background covering the rest of the sidebar BELOW the logo (logo stays visible) */
+      &::before {
+        content: '';
+        position: absolute;
+        top: $admin-brand-block-height;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--sidebar-bg);
+        z-index: 100;
       }
-    }
 
-    &[open] > summary::after {
-      transform: rotate(-135deg);
-    }
-  }
-
-  /* --- DEFAULT VARIANT (wide sidebar - tree) --- */
-  .admin-nav-submenu-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin: 4px 0 8px 0;
-    padding-left: calc(var(--spacing-unit) * 5); 
-    position: relative;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 8px; 
-      left: calc(var(--spacing-unit) * 3); 
-      width: 1px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
-
-  .admin-nav-submenu-link {
-    display: flex;
-    align-items: center;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    font-size: 0.8125rem;
-    font-weight: var(--fw-medium);
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    border-radius: var(--border-radius);
-    transition: all var(--transition-speed);
-    position: relative;
-    border: 1px solid transparent;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: calc(var(--spacing-unit) * -2);
-      top: 50%;
-      width: 12px;
-      height: 1px;
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    &:hover {
-      color: var(--sidebar-text-active);
-      background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
-    }
-
-    &.is-active {
-      color: var(--sidebar-text-active);
-      font-weight: var(--fw-bold);
-      border-color: rgba(255, 255, 255, 0.2);
-      background-color: transparent;
-      box-shadow: none !important;
-    }
-  }
-
-  /* --- NARROW VARIANTS (Drill-down Menu) --- */
-  @include mq(md) {
-    .sidebar-md .admin-nav-submenu,
-    .sidebar-sm .admin-nav-submenu {
-
-      /* Escape the positioning context so we can cover the entire sidebar! */
-      position: static;
-
-      summary::after { display: none; }
-      .admin-nav-submenu-list { display: none !important; }
-
-      /* =========================================
-         OPEN STATE (drill-down active)
-         ========================================= */
-      &[open] {
-
-        /* 1. A background covering the rest of the sidebar BELOW the logo (logo stays visible) */
-        &::before {
-          content: '';
-          position: absolute;
-          top: $admin-brand-block-height;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: var(--sidebar-bg);
-          z-index: 100;
-        }
-
-        /* 2. The "Back" button (transforms the <summary> tag) - below the logo, not in its place */
-        > summary {
-          position: absolute;
-          top: $admin-brand-block-height;
-          left: 0;
-          width: 100%;
-          height: 70px;
-          z-index: 102;
-          @include admin-drilldown-back;
-        }
-
-        /* 3. The submenu link list - starts below the Back button (which is below the logo) */
-        > .admin-nav-submenu-list {
-          display: flex !important;
-          position: absolute;
-          top: calc(#{$admin-brand-block-height} + 70px);
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 101;
-          background-color: var(--sidebar-bg);
-          padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 1);
-          margin: 0;
-          overflow-y: auto;
-
-          /* Reset the tree lines */
-          &::before { display: none; }
-
-          .admin-nav-submenu-link {
-            padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
-            justify-content: center;
-            text-align: center;
-            /* FIX: long words with no natural break points (spaces,
-               hyphens) spilled outside the narrow -sm sidebar - widening
-               -sm isn't an option, so instead we break the word, but ONLY
-               when it genuinely doesn't fit on the line (overflow-wrap,
-               not word-break: break-word - the latter breaks words even
-               when they would have fit whole) */
-            overflow-wrap: break-word;
-            &::before { display: none; } /* Hide the horizontal tick marks */
-          }
-        }
-      }
-    }
-
-    /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
-    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
-      display: none !important;
-    }
-
-    /* --- -SM VARIANT: full-width links with a separator instead of borders ---
-       The -sm sidebar is too narrow (72px) for a rounded border + padding
-       around every link to make sense - the text touched/spilled outside
-       the border. Instead: full-width links, separated by a thin line. */
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
-      padding-left: 0;
-      padding-right: 0;
-
-      .admin-nav-submenu-link {
-        width: 100%;
-        border-radius: 0;
-        border-width: 0 0 1px 0;
-        border-style: solid;
-        border-color: rgba(255, 255, 255, 0.08);
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        &.is-active {
-          background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
-        }
-      }
-    }
-  }
-
-  /* =========================================
-     MOBILE: SUBMENU AS A DRILL-DOWN (like -sm/-md)
-     =========================================
-     A tree makes no sense in the horizontal Bottom Nav. Clicking the
-     trigger swaps the view to a full-screen panel: <summary> becomes a
-     "Back" bar at the top of the screen, and the link list fills the
-     rest - identical to the drill-down in the -sm/-md variants, just as a
-     mobile overlay. The native <details> handles opening itself; the
-     admin-nav.js module only handles active state from the URL and
-     mutually excluding open submenus. */
-  @media (max-width: 768px) {
-    .admin-nav-submenu {
-      position: static;
-      /* details stretches its <summary> (trigger) to fill the bar's tile */
-      display: flex;
-
-      /* Height of the usable (tappable) part of the "Back" bar.
-         env(safe-area-inset-top) - the status bar/notch - is added on top
-         of it, so the label doesn't land under the notification bar, and
-         the large target sits comfortably away from the top edge (fewer
-         accidental notification-shade gestures). */
-      --drilldown-bar-h: 64px;
-
+      /* 2. The "Back" button (transforms the <summary> tag) - below the logo, not in its place */
       > summary {
+        position: absolute;
+        top: $admin-brand-block-height;
+        left: 0;
         width: 100%;
-        /* the tree-expand arrow is redundant in a horizontal bar */
-        &::after { display: none; }
+        height: 70px;
+        z-index: 102;
+        @include admin-drilldown-back;
       }
 
-      &[open] {
-        /* 1. The list -> a full-screen panel (from the very top of the
-           screen). Its dark background forms a CONTINUOUS surface under
-           the "Back" bar too - links are pushed down with padding so they
-           don't hide under the bar. This way "Back" and the list read as
-           one whole, regardless of how the browser paints the <summary>'s
-           own background. */
-        > .admin-nav-submenu-list {
-          display: flex !important; /* overrides the default tree state */
-          flex-direction: column;
-          gap: calc(var(--spacing-unit) * 0.5);
-          margin: 0;
+      /* 3. The submenu link list - starts below the Back button (which is below the logo) */
+      > .admin-nav-submenu-list {
+        display: flex !important;
+        position: absolute;
+        top: calc(#{$admin-brand-block-height} + 70px);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 101;
+        background-color: var(--sidebar-bg);
+        padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 1);
+        margin: 0;
+        overflow-y: auto;
 
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: 1050;
-          background-color: var(--sidebar-bg);
-          /* Padding for the "bounce": the overshoot lifts the panel
-             slightly upward, exposing a gap at the bottom - this solid
-             shadow (blur 0) paints in the dark background below the
-             panel, so the page doesn't flash through during the overshoot. */
-          box-shadow: 0 160px 0 var(--sidebar-bg);
-          /* padding-top makes room for the "Back" bar (height + status bar) + breathing room */
-          padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2)
-            calc(var(--spacing-unit) * 2)
-            calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
-          overflow-y: auto;
-          /* Slides in from the bottom with a slight bounce (back-ease: control point > 1) */
-          animation: adminDrilldownPanelIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+        /* Reset the tree lines */
+        &::before { display: none; }
 
-          /* Links centered vertically (more comfortable for a thumb on
-             mobile); "safe" falls back to the top and allows scrolling
-             when there are many items. */
+        .admin-nav-submenu-link {
+          padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
           justify-content: center;
-          justify-content: safe center;
+          text-align: center;
+          /* FIX: long words with no natural break points (spaces,
+             hyphens) spilled outside the narrow -sm sidebar - widening
+             -sm isn't an option, so instead we break the word, but ONLY
+             when it genuinely doesn't fit on the line (overflow-wrap,
+             not word-break: break-word - the latter breaks words even
+             when they would have fit whole) */
+          overflow-wrap: break-word;
+          &::before { display: none; } /* Hide the horizontal tick marks */
+        }
+      }
+    }
+  }
 
-          /* Reset the vertical tree line */
+  /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
+  .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+    display: none !important;
+  }
+
+  /* --- -SM VARIANT: full-width links with a separator instead of borders ---
+     The -sm sidebar is too narrow (72px) for a rounded border + padding
+     around every link to make sense - the text touched/spilled outside
+     the border. Instead: full-width links, separated by a thin line. */
+  .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+    padding-left: 0;
+    padding-right: 0;
+
+    .admin-nav-submenu-link {
+      width: 100%;
+      border-radius: 0;
+      border-width: 0 0 1px 0;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.08);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.is-active {
+        background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
+      }
+    }
+  }
+}
+
+/* =========================================
+   MOBILE: SUBMENU AS A DRILL-DOWN (like -sm/-md)
+   =========================================
+   A tree makes no sense in the horizontal Bottom Nav. Clicking the
+   trigger swaps the view to a full-screen panel: <summary> becomes a
+   "Back" bar at the top of the screen, and the link list fills the
+   rest - identical to the drill-down in the -sm/-md variants, just as a
+   mobile overlay. The native <details> handles opening itself; the
+   admin-nav.js module only handles active state from the URL and
+   mutually excluding open submenus. */
+@media (max-width: 768px) {
+  .admin-nav-submenu {
+    position: static;
+    /* details stretches its <summary> (trigger) to fill the bar's tile */
+    display: flex;
+
+    /* Height of the usable (tappable) part of the "Back" bar.
+       env(safe-area-inset-top) - the status bar/notch - is added on top
+       of it, so the label doesn't land under the notification bar, and
+       the large target sits comfortably away from the top edge (fewer
+       accidental notification-shade gestures). */
+    --drilldown-bar-h: 64px;
+
+    > summary {
+      width: 100%;
+      /* the tree-expand arrow is redundant in a horizontal bar */
+      &::after { display: none; }
+    }
+
+    &[open] {
+      /* 1. The list -> a full-screen panel (from the very top of the
+         screen). Its dark background forms a CONTINUOUS surface under
+         the "Back" bar too - links are pushed down with padding so they
+         don't hide under the bar. This way "Back" and the list read as
+         one whole, regardless of how the browser paints the <summary>'s
+         own background. */
+      > .admin-nav-submenu-list {
+        display: flex !important; /* overrides the default tree state */
+        flex-direction: column;
+        gap: calc(var(--spacing-unit) * 0.5);
+        margin: 0;
+
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1050;
+        background-color: var(--sidebar-bg);
+        /* Padding for the "bounce": the overshoot lifts the panel
+           slightly upward, exposing a gap at the bottom - this solid
+           shadow (blur 0) paints in the dark background below the
+           panel, so the page doesn't flash through during the overshoot. */
+        box-shadow: 0 160px 0 var(--sidebar-bg);
+        /* padding-top makes room for the "Back" bar (height + status bar) + breathing room */
+        padding: calc(var(--drilldown-bar-h) + env(safe-area-inset-top) + var(--spacing-unit) * 2)
+          calc(var(--spacing-unit) * 2)
+          calc(var(--spacing-unit) * 2 + env(safe-area-inset-bottom));
+        overflow-y: auto;
+        /* Slides in from the bottom with a slight bounce (back-ease: control point > 1) */
+        animation: adminDrilldownPanelIn 0.42s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+
+        /* Links centered vertically (more comfortable for a thumb on
+           mobile); "safe" falls back to the top and allows scrolling
+           when there are many items. */
+        justify-content: center;
+        justify-content: safe center;
+
+        /* Reset the vertical tree line */
+        &::before { display: none; }
+
+        /* Full-width links, no horizontal tree tick marks */
+        .admin-nav-submenu-link {
+          justify-content: flex-start;
+          text-align: left;
+          padding: calc(var(--spacing-unit) * 2);
+          min-height: 48px;
+          font-size: 1rem;
           &::before { display: none; }
-
-          /* Full-width links, no horizontal tree tick marks */
-          .admin-nav-submenu-link {
-            justify-content: flex-start;
-            text-align: left;
-            padding: calc(var(--spacing-unit) * 2);
-            min-height: 48px;
-            font-size: 1rem;
-            &::before { display: none; }
-          }
-        }
-
-        /* 2. <summary> -> the "Back" bar at the top, ON the panel (sits on
-           its dark background). z-index above the panel. */
-        > summary {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
-          z-index: 1051; /* above the panel and above the bottom bar (1040) */
-          @include admin-drilldown-back;
-          /* the label clears the status bar/notch (env), and a large,
-             lower-positioned target is more thumb-friendly */
-          padding-top: env(safe-area-inset-top);
-          /* on touch (no hover) a brighter label = a clear back button */
-          color: var(--sidebar-text-active);
-          /* The label appears with a slight delay - only once the panel
-             has already covered the top of the screen (otherwise it
-             would flash above the page). */
-          animation: adminDrilldownBar 0.24s ease 0.12s both;
         }
       }
 
-      /* =========================================
-         SLIDE-OUT (animated close - the .is-closing class from admin-nav.js)
-         =========================================
-         The native <details> hides its content instantly, so the JS
-         module delays the actual close: it adds .is-closing, waits for
-         the animation to finish, and only then removes [open]. */
-      &.is-closing > .admin-nav-submenu-list {
-        animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
-      }
-      &.is-closing > summary {
-        animation: adminDrilldownBarOut 0.18s ease both;
+      /* 2. <summary> -> the "Back" bar at the top, ON the panel (sits on
+         its dark background). z-index above the panel. */
+      > summary {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(var(--drilldown-bar-h) + env(safe-area-inset-top));
+        z-index: 1051; /* above the panel and above the bottom bar (1040) */
+        @include admin-drilldown-back;
+        /* the label clears the status bar/notch (env), and a large,
+           lower-positioned target is more thumb-friendly */
+        padding-top: env(safe-area-inset-top);
+        /* on touch (no hover) a brighter label = a clear back button */
+        color: var(--sidebar-text-active);
+        /* The label appears with a slight delay - only once the panel
+           has already covered the top of the screen (otherwise it
+           would flash above the page). */
+        animation: adminDrilldownBar 0.24s ease 0.12s both;
       }
     }
 
-    /* Drill-down entrance/exit (GPU: opacity + transform only) */
-    @keyframes adminDrilldownBar {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    /* =========================================
+       SLIDE-OUT (animated close - the .is-closing class from admin-nav.js)
+       =========================================
+       The native <details> hides its content instantly, so the JS
+       module delays the actual close: it adds .is-closing, waits for
+       the animation to finish, and only then removes [open]. */
+    &.is-closing > .admin-nav-submenu-list {
+      animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
     }
-    @keyframes adminDrilldownBarOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    @keyframes adminDrilldownPanelIn {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    @keyframes adminDrilldownPanelOut {
-      from { transform: translateY(0); }
-      to { transform: translateY(100%); }
+    &.is-closing > summary {
+      animation: adminDrilldownBarOut 0.18s ease both;
     }
   }
 
-  /* A11y: no animation for users with prefers-reduced-motion
-     (the admin-nav.js module also closes instantly, with no waiting). */
-  @media (prefers-reduced-motion: reduce) {
-    .admin-nav-submenu[open] > summary,
-    .admin-nav-submenu[open] > .admin-nav-submenu-list,
-    .admin-nav-submenu.is-closing > summary,
-    .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
-      animation: none;
-    }
+  /* Drill-down entrance/exit (GPU: opacity + transform only) */
+  @keyframes adminDrilldownBar {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
+  @keyframes adminDrilldownBarOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  @keyframes adminDrilldownPanelIn {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes adminDrilldownPanelOut {
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
+  }
+}
 
-} /* CLOSES @layer components */
+/* A11y: no animation for users with prefers-reduced-motion
+   (the admin-nav.js module also closes instantly, with no waiting). */
+@media (prefers-reduced-motion: reduce) {
+  .admin-nav-submenu[open] > summary,
+  .admin-nav-submenu[open] > .admin-nav-submenu-list,
+  .admin-nav-submenu.is-closing > summary,
+  .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
+    animation: none;
+  }
+}

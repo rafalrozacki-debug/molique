@@ -1,123 +1,121 @@
-@layer layout {
-  .admin-layout {
-    /* Variables controlling the layout's current state */
-    --current-sidebar-width: var(--sidebar-width-lg);
-    --layout-gap: 0px;
-    --layout-padding: 0px;
-    --sidebar-radius: 0px;
-    --main-radius: 0px;
-    /* FIX: default background for the main content in standard mode */
+.admin-layout {
+  /* Variables controlling the layout's current state */
+  --current-sidebar-width: var(--sidebar-width-lg);
+  --layout-gap: 0px;
+  --layout-padding: 0px;
+  --sidebar-radius: 0px;
+  --main-radius: 0px;
+  /* FIX: default background for the main content in standard mode */
+  --main-bg: var(--bg-surface);
+
+  display: grid;
+  grid-template-columns: var(--current-sidebar-width) 1fr;
+  gap: var(--layout-gap);
+  padding: var(--layout-padding);
+  min-height: 100dvh;
+  background-color: var(--bg-body);
+  transition: grid-template-columns var(--transition-speed) ease;
+
+  /* When there's a global navbar above the layout, don't count its
+     height in min-height (otherwise the page has a needless empty-scroll
+     strip at the bottom). */
+  body:has(> .navbar) & {
+    min-height: calc(100dvh - var(--navbar-h));
+  }
+
+  /* SIZE VARIANTS */
+  &.sidebar-md { --current-sidebar-width: var(--sidebar-width-md); }
+  &.sidebar-sm { --current-sidebar-width: var(--sidebar-width-sm); }
+
+  // Prevents FOUC: the same rules as above, but hooked to a class on
+  // <html> - set by a synchronous inline script in <head> (see
+  // partials/head.html) before the browser gets a chance to paint
+  // anything. .admin-layout still gets its OWN class later, in
+  // molique-script.js (for handling the toggle click) - this rule just
+  // ensures the correct width is already in place on the first frame,
+  // instead of "jumping" from the full width (lg) after DOMContentLoaded.
+  :root.sidebar-md & { --current-sidebar-width: var(--sidebar-width-md); }
+  :root.sidebar-sm & { --current-sidebar-width: var(--sidebar-width-sm); }
+
+  /* FLOATING VARIANT (offset from the edge) */
+  &.admin-layout-floating {
+    --layout-gap: calc(var(--spacing-unit) * 3);
+    --layout-padding: calc(var(--spacing-unit) * 3);
+    --sidebar-radius: var(--border-radius-lg);
+    --main-radius: var(--border-radius-lg);
     --main-bg: var(--bg-surface);
 
-    display: grid;
-    grid-template-columns: var(--current-sidebar-width) 1fr;
-    gap: var(--layout-gap);
-    padding: var(--layout-padding);
-    min-height: 100dvh;
-    background-color: var(--bg-body);
-    transition: grid-template-columns var(--transition-speed) ease;
-
-    /* When there's a global navbar above the layout, don't count its
-       height in min-height (otherwise the page has a needless empty-scroll
-       strip at the bottom). */
-    body:has(> .navbar) & {
-      min-height: calc(100dvh - var(--navbar-h));
-    }
-
-    /* SIZE VARIANTS */
-    &.sidebar-md { --current-sidebar-width: var(--sidebar-width-md); }
-    &.sidebar-sm { --current-sidebar-width: var(--sidebar-width-sm); }
-
-    // Prevents FOUC: the same rules as above, but hooked to a class on
-    // <html> - set by a synchronous inline script in <head> (see
-    // partials/head.html) before the browser gets a chance to paint
-    // anything. .admin-layout still gets its OWN class later, in
-    // molique-script.js (for handling the toggle click) - this rule just
-    // ensures the correct width is already in place on the first frame,
-    // instead of "jumping" from the full width (lg) after DOMContentLoaded.
-    :root.sidebar-md & { --current-sidebar-width: var(--sidebar-width-md); }
-    :root.sidebar-sm & { --current-sidebar-width: var(--sidebar-width-sm); }
-
-    /* FLOATING VARIANT (offset from the edge) */
-    &.admin-layout-floating {
-      --layout-gap: calc(var(--spacing-unit) * 3);
-      --layout-padding: calc(var(--spacing-unit) * 3);
-      --sidebar-radius: var(--border-radius-lg);
-      --main-radius: var(--border-radius-lg);
-      --main-bg: var(--bg-surface);
-
-      /* Reset floating on mobile */
-      @media (max-width: 768px) {
-        --layout-gap: 0px;
-        --layout-padding: 0px;
-        --sidebar-radius: 0px;
-        --main-radius: 0px;
-      }
-    }
-
-    /* Mobile: switch to Bottom Nav */
+    /* Reset floating on mobile */
     @media (max-width: 768px) {
-      /* A bare 1fr is, in short, minmax(auto, 1fr) - a track's minimum is
-         computed from its descendants' min-content (e.g. a table or a tab
-         pill with a longer label), NOT from zero, even when .admin-main
-         already has min-width: 0 + overflow-x: hidden (those two
-         properties don't protect against the grid TRACK ITSELF
-         overflowing - that's a different mechanism). Effect: the track
-         grows past the screen width, and because of overflow-x: clip on
-         html/body (deliberate, to avoid breaking position:sticky) there's
-         no visible scrollbar - the content just silently gets clipped past
-         the edge. minmax(0, 1fr) unambiguously zeroes out the track's
-         minimum. */
-      grid-template-columns: minmax(0, 1fr);
-      --current-sidebar-width: 100%;
+      --layout-gap: 0px;
+      --layout-padding: 0px;
+      --sidebar-radius: 0px;
+      --main-radius: 0px;
     }
   }
 
-  .admin-main {
-    background-color: var(--main-bg);
-    border-radius: var(--main-radius);
-    /* FIX: guaranteed padding regardless of mode */
-    padding: calc(var(--spacing-unit) * 4);
-    padding-bottom: calc(var(--spacing-unit) * 12);
-    overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    
-    /* Shadow only in floating mode */
-    .admin-layout-floating & {
-      box-shadow: var(--shadow-sm);
-    }
+  /* Mobile: switch to Bottom Nav */
+  @media (max-width: 768px) {
+    /* A bare 1fr is, in short, minmax(auto, 1fr) - a track's minimum is
+       computed from its descendants' min-content (e.g. a table or a tab
+       pill with a longer label), NOT from zero, even when .admin-main
+       already has min-width: 0 + overflow-x: hidden (those two
+       properties don't protect against the grid TRACK ITSELF
+       overflowing - that's a different mechanism). Effect: the track
+       grows past the screen width, and because of overflow-x: clip on
+       html/body (deliberate, to avoid breaking position:sticky) there's
+       no visible scrollbar - the content just silently gets clipped past
+       the edge. minmax(0, 1fr) unambiguously zeroes out the track's
+       minimum. */
+    grid-template-columns: minmax(0, 1fr);
+    --current-sidebar-width: 100%;
+  }
+}
+
+.admin-main {
+  background-color: var(--main-bg);
+  border-radius: var(--main-radius);
+  /* FIX: guaranteed padding regardless of mode */
+  padding: calc(var(--spacing-unit) * 4);
+  padding-bottom: calc(var(--spacing-unit) * 12);
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  
+  /* Shadow only in floating mode */
+  .admin-layout-floating & {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Fading content at the bottom of the main column (opt-in: the
+   .fade-bottom class from the layout layer). .admin-main doesn't scroll
+   itself - the page scrolls - and overflow-x:hidden makes it a
+   scrollport for sticky, which means the base variant would never
+   actually "stick". That's why the gradient here is positioned fixed
+   relative to the window, aligned to the content column via layout
+   variables (also works in floating mode). */
+.admin-main.fade-bottom {
+  --fade-color: var(--main-bg);
+
+  &::after {
+    position: fixed;
+    bottom: var(--layout-padding);
+    left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
+    right: var(--layout-padding);
+    height: var(--fade-height);
+    margin-top: 0;
+    border-radius: 0 0 var(--main-radius) var(--main-radius);
   }
 
-  /* Fading content at the bottom of the main column (opt-in: the
-     .fade-bottom class from the layout layer). .admin-main doesn't scroll
-     itself - the page scrolls - and overflow-x:hidden makes it a
-     scrollport for sticky, which means the base variant would never
-     actually "stick". That's why the gradient here is positioned fixed
-     relative to the window, aligned to the content column via layout
-     variables (also works in floating mode). */
-  .admin-main.fade-bottom {
-    --fade-color: var(--main-bg);
-
+  @media (max-width: 768px) {
     &::after {
-      position: fixed;
-      bottom: var(--layout-padding);
-      left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
-      right: var(--layout-padding);
-      height: var(--fade-height);
-      margin-top: 0;
-      border-radius: 0 0 var(--main-radius) var(--main-radius);
-    }
-
-    @media (max-width: 768px) {
-      &::after {
-        left: 0;
-        right: 0;
-        /* Above the mobile bottom navigation bar (sidebar) */
-        bottom: calc(70px + env(safe-area-inset-bottom));
-        border-radius: 0;
-      }
+      left: 0;
+      right: 0;
+      /* Above the mobile bottom navigation bar (sidebar) */
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      border-radius: 0;
     }
   }
 }

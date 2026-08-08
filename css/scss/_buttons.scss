@@ -5,82 +5,113 @@
 
 @use 'variables' as *;
 
-@layer components {
-  /* =========================================
-     1. BASE BUTTON (.btn)
-     ========================================= */
-  /* Colors must be declared BEFORE the base block, since it builds a
-     selector list from them (see below). */
-  $theme-colors: (
-    "primary": var(--primary),
-    "secondary": var(--secondary),
-    "success": var(--success),
-    "danger": var(--danger),
-    "warning": var(--warning),
-    "info": var(--info),
-    "light": var(--light),
-    "dark": var(--dark)
-  );
+/* =========================================
+   1. BASE BUTTON (.btn)
+   ========================================= */
+/* Colors must be declared BEFORE the base block, since it builds a
+   selector list from them (see below). */
+$theme-colors: (
+  "primary": var(--primary),
+  "secondary": var(--secondary),
+  "success": var(--success),
+  "danger": var(--danger),
+  "warning": var(--warning),
+  "info": var(--info),
+  "light": var(--light),
+  "dark": var(--dark)
+);
 
-  /* .btn IMPLICATION - .btn-primary alone is enough, no need to also add
-     .btn. The list is built from the color map, so a new color gets the
-     base automatically; a hand-written list would drift out of sync the
-     moment a new variant was added.
+/* .btn IMPLICATION - .btn-primary alone is enough, no need to also add
+   .btn. The list is built from the color map, so a new color gets the
+   base automatically; a hand-written list would drift out of sync the
+   moment a new variant was added.
 
-     DELIBERATELY EXCLUDES:
-     - appearance modifiers (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
-       .btn-glow, .btn-stacked, .btn-outline-soft) and sizes (.btn-sm etc.) -
-       these are add-ons to a button, not buttons themselves,
-     - .btn-action, which DELIBERATELY breaks the 44px rule for dense tables,
-     - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* -
-       they carry the btn- prefix but aren't buttons. */
-  $btn-base-selectors: ".btn";
-  @each $name, $color in $theme-colors {
-    $btn-base-selectors: "#{$btn-base-selectors}, .btn-#{$name}, .btn-outline-#{$name}";
+   DELIBERATELY EXCLUDES:
+   - appearance modifiers (.btn-3d, .btn-glass, .btn-shine, .btn-gradient,
+     .btn-glow, .btn-stacked, .btn-outline-soft) and sizes (.btn-sm etc.) -
+     these are add-ons to a button, not buttons themselves,
+   - .btn-action, which DELIBERATELY breaks the 44px rule for dense tables,
+   - .btn-group, .btn-action-group, .btn-copy, .btn-text, .btn-hover-* -
+     they carry the btn- prefix but aren't buttons. */
+$btn-base-selectors: ".btn";
+@each $name, $color in $theme-colors {
+  $btn-base-selectors: "#{$btn-base-selectors}, .btn-#{$name}, .btn-outline-#{$name}";
+}
+
+#{$btn-base-selectors} {
+  --btn-border-width: 1px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 1);
+  font-family: inherit;
+  font-weight: var(--fw-medium);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  border-radius: var(--border-radius);
+  border: var(--btn-border-width) solid transparent; 
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
+
+  /* Focus ring for accessibility */
+  &:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
   }
+}
 
-  #{$btn-base-selectors} {
-    --btn-border-width: 1px;
+/* =========================================
+   2. COLOR VARIANTS (SCSS loop)
+   ========================================= */
+@each $name, $color in $theme-colors {
+  /* success/danger/warning/info have THEIR OWN mode-aware text token
+     (--semantic-fg in _root.scss) instead of --btn-text-light - in the
+     "Slate Violet" palette they're dark/saturated in light mode (need
+     light text) but light/neon in dark mode (need dark text), i.e. the
+     opposite of the usual --btn-text-light. */
+  $text-safe: $name == "success" or $name == "danger" or $name == "warning" or $name == "info";
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: calc(var(--spacing-unit) * 1);
-    font-family: inherit;
-    font-weight: var(--fw-medium);
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    cursor: pointer;
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-    border-radius: var(--border-radius);
-    border: var(--btn-border-width) solid transparent; 
-    transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
+  /* --- SOLID VARIANTS --- */
+  .btn-#{$name} {
+    background-color: #{$color};
+    border-color: #{$color};
 
-    /* Focus ring for accessibility */
-    &:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+    /* Automatic text contrast */
+    @if $name == "light" {
+      color: var(--text-main);
+    } @else if $text-safe {
+      color: var(--semantic-fg);
+    } @else {
+      color: var(--btn-text-light, #fff);
+    }
+
+    &:hover, &:focus-visible {
+      /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
+      background-color: var(--#{$name}-hover, color-mix(in srgb, #{$color} 85%, black));
+      border-color: var(--#{$name}-hover, color-mix(in srgb, #{$color} 85%, black));
     }
   }
 
-  /* =========================================
-     2. COLOR VARIANTS (SCSS loop)
-     ========================================= */
-  @each $name, $color in $theme-colors {
-    /* success/danger/warning/info have THEIR OWN mode-aware text token
-       (--semantic-fg in _root.scss) instead of --btn-text-light - in the
-       "Slate Violet" palette they're dark/saturated in light mode (need
-       light text) but light/neon in dark mode (need dark text), i.e. the
-       opposite of the usual --btn-text-light. */
-    $text-safe: $name == "success" or $name == "danger" or $name == "warning" or $name == "info";
+  /* --- OUTLINE VARIANTS --- */
+  .btn-outline-#{$name} {
+    background-color: transparent;
+    border-color: #{$color};
 
-    /* --- SOLID VARIANTS --- */
-    .btn-#{$name} {
+    /* Text on a transparent background (i.e. on the page background) -
+       the same contrast rules as .text-* (see --*-text in _root.scss). */
+    @if $text-safe {
+      color: var(--#{$name}-text);
+    } @else {
+      color: #{$color};
+    }
+
+    /* Default, solid hover */
+    &:hover, &:focus-visible {
       background-color: #{$color};
-      border-color: #{$color};
 
-      /* Automatic text contrast */
       @if $name == "light" {
         color: var(--text-main);
       } @else if $text-safe {
@@ -88,525 +119,492 @@
       } @else {
         color: var(--btn-text-light, #fff);
       }
-
-      &:hover, &:focus-visible {
-        /* Use the -hover variable from _root.scss if it exists, otherwise darken/lighten */
-        background-color: var(--#{$name}-hover, color-mix(in srgb, #{$color} 85%, black));
-        border-color: var(--#{$name}-hover, color-mix(in srgb, #{$color} 85%, black));
-      }
     }
 
-    /* --- OUTLINE VARIANTS --- */
-    .btn-outline-#{$name} {
-      background-color: transparent;
-      border-color: #{$color};
+    /* Soft variant (semi-transparent hover and a softened border) */
+    &.btn-outline-soft {
+      /* By default the border is very subtle (30% opacity) */
+      border-color: rgba(var(--#{$name}-rgb), 0.3);
 
-      /* Text on a transparent background (i.e. on the page background) -
-         the same contrast rules as .text-* (see --*-text in _root.scss). */
-      @if $text-safe {
-        color: var(--#{$name}-text);
-      } @else {
+      &:hover, &:focus-visible {
+        /* Background at 10% opacity */
+        background-color: rgba(var(--#{$name}-rgb), 0.1);
+        /* The border becomes slightly more defined (50% opacity), but still soft */
+        border-color: rgba(var(--#{$name}-rgb), 0.5);
         color: #{$color};
       }
-
-      /* Default, solid hover */
-      &:hover, &:focus-visible {
-        background-color: #{$color};
-
-        @if $name == "light" {
-          color: var(--text-main);
-        } @else if $text-safe {
-          color: var(--semantic-fg);
-        } @else {
-          color: var(--btn-text-light, #fff);
-        }
-      }
-
-      /* Soft variant (semi-transparent hover and a softened border) */
-      &.btn-outline-soft {
-        /* By default the border is very subtle (30% opacity) */
-        border-color: rgba(var(--#{$name}-rgb), 0.3);
-
-        &:hover, &:focus-visible {
-          /* Background at 10% opacity */
-          background-color: rgba(var(--#{$name}-rgb), 0.1);
-          /* The border becomes slightly more defined (50% opacity), but still soft */
-          border-color: rgba(var(--#{$name}-rgb), 0.5);
-          color: #{$color};
-        }
-      }
     }
   }
+}
 
-  /* =========================================
-     3. BUTTON SIZES
-     ========================================= */
-  .btn-xs {
-    padding: calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.75);
-    font-size: 0.75rem;
-    border-radius: calc(var(--border-radius) * 0.6);
-  }
+/* =========================================
+   3. BUTTON SIZES
+   ========================================= */
+.btn-xs {
+  padding: calc(var(--spacing-unit) * 0.25) calc(var(--spacing-unit) * 0.75);
+  font-size: 0.75rem;
+  border-radius: calc(var(--border-radius) * 0.6);
+}
 
-  .btn-sm {
-    padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1.5);
-    font-size: 0.875rem;
-    border-radius: calc(var(--border-radius) * 0.8);
-  }
+.btn-sm {
+  padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1.5);
+  font-size: 0.875rem;
+  border-radius: calc(var(--border-radius) * 0.8);
+}
 
-  .btn-md {
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
-    font-size: 1rem;
-    border-radius: var(--border-radius);
-  }
+.btn-md {
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+  font-size: 1rem;
+  border-radius: var(--border-radius);
+}
 
-  .btn-lg {
-    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
-    font-size: 1.125rem;
-    border-radius: calc(var(--border-radius) * 1.2);
-    font-weight: var(--fw-bold);
-  }
+.btn-lg {
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
+  font-size: 1.125rem;
+  border-radius: calc(var(--border-radius) * 1.2);
+  font-weight: var(--fw-bold);
+}
 
-  .btn-xl {
-    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
-    font-size: 1.25rem;
-    border-radius: calc(var(--border-radius) * 1.5);
-    font-weight: var(--fw-bold);
-  }
+.btn-xl {
+  padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
+  font-size: 1.25rem;
+  border-radius: calc(var(--border-radius) * 1.5);
+  font-weight: var(--fw-bold);
+}
 
-  /* =========================================
-     4. BUTTON GROUPS
-     ========================================= */
-  /* Children target $btn-base-selectors (the same list as the base
-     above), not the literal .btn class - since a color implies .btn (see
-     the .btn IMPLICATION comment), a bare .btn-primary inside a group
-     used to get none of this radius/border-overlap handling. */
-  .btn-group {
-    display: inline-flex;
-    align-items: stretch;
+/* =========================================
+   4. BUTTON GROUPS
+   ========================================= */
+/* Children target $btn-base-selectors (the same list as the base
+   above), not the literal .btn class - since a color implies .btn (see
+   the .btn IMPLICATION comment), a bare .btn-primary inside a group
+   used to get none of this radius/border-overlap handling. */
+.btn-group {
+  display: inline-flex;
+  align-items: stretch;
 
-    #{$btn-base-selectors} {
-      position: relative;
-      flex: 1 1 auto;
+  #{$btn-base-selectors} {
+    position: relative;
+    flex: 1 1 auto;
 
-      &:not(:first-child) {
-        margin-left: calc(var(--btn-border-width) * -1);
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-
-      &:not(:last-child) {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-
-      &:hover,
-      &:focus,
-      &:active,
-      &.is-active {
-        z-index: 1;
-      }
-    }
-  }
-
-  /* =========================================
-     5. GHOST BUTTONS (actions in tables and bars)
-     ========================================= */
-  .btn-action {
-    appearance: none;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-family: inherit;
-    font-weight: var(--fw-medium);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: calc(var(--spacing-unit) * 1);
-    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
-    min-height: 32px !important; 
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all var(--transition-speed) ease;
-    
-    i, svg {
-      font-size: 1.1em;
-      flex-shrink: 0;
+    &:not(:first-child) {
+      margin-left: calc(var(--btn-border-width) * -1);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
 
+    &:not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.is-active {
+      z-index: 1;
+    }
+  }
+}
+
+/* =========================================
+   5. GHOST BUTTONS (actions in tables and bars)
+   ========================================= */
+.btn-action {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-weight: var(--fw-medium);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--spacing-unit) * 1);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  min-height: 32px !important; 
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  
+  i, svg {
+    font-size: 1.1em;
+    flex-shrink: 0;
+  }
+
+  &:hover, &:focus-visible {
+    color: var(--text-main);
+    background-color: var(--card-bg-subtle, rgba(0,0,0,0.05));
+  }
+
+  &.text-danger {
+    color: var(--danger);
     &:hover, &:focus-visible {
-      color: var(--text-main);
-      background-color: var(--card-bg-subtle, rgba(0,0,0,0.05));
-    }
-
-    &.text-danger {
-      color: var(--danger);
-      &:hover, &:focus-visible {
-        background-color: rgba(var(--danger-rgb), 0.1);
-      }
-    }
-    
-    &.text-primary {
-      color: var(--primary);
-      &:hover, &:focus-visible {
-        background-color: rgba(var(--primary-rgb), 0.1);
-      }
-    }
-
-    &:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: 2px;
+      background-color: rgba(var(--danger-rgb), 0.1);
     }
   }
   
-  /* Grouping action buttons */
-  .btn-action-group {
-    display: flex;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 0.5);
-    
-    /* The separator hangs off the group's DIRECT CHILD, not off
-       .btn-action itself. A POST action needs its own <form> (nonce +
-       method), so in a real admin table each button is the ONLY child of
-       its own form - making every one of them both :first-child and
-       :last-child of that form. A button-based ":last-child::after {
-       display:none }" therefore fired per form instead of per group:
-       every wrapped button lost its divider while every bare one kept it,
-       so dividers appeared to show up at random. The direct child is the
-       only element that always sits at a known position in the group,
-       whether it's the button or a wrapper around it. */
-    &.with-dividers {
-      gap: 0;
-
-      > * {
-        position: relative;
-
-        &::after {
-          content: '';
-          position: absolute;
-          right: 0;
-          top: 20%;
-          bottom: 20%;
-          width: 1px;
-          background-color: var(--border-color);
-          pointer-events: none;
-        }
-
-        &:last-child::after {
-          display: none;
-        }
-      }
-
-      /* A wrapper (<form>) must not break the row or add height of its
-         own - it exists only to carry the request, not to lay anything
-         out. */
-      > form {
-        display: flex;
-        align-items: center;
-        margin: 0;
-      }
-
-      .btn-action {
-        border-radius: 0;
-      }
-
-      /* Outer corners: the child is the anchor, the button is what gets
-         painted - so both are addressed, one directly and one nested. */
-      > :first-child,
-      > :first-child .btn-action {
-        border-top-left-radius: var(--border-radius);
-        border-bottom-left-radius: var(--border-radius);
-      }
-      > :last-child,
-      > :last-child .btn-action {
-        border-top-right-radius: var(--border-radius);
-        border-bottom-right-radius: var(--border-radius);
-      }
+  &.text-primary {
+    color: var(--primary);
+    &:hover, &:focus-visible {
+      background-color: rgba(var(--primary-rgb), 0.1);
     }
   }
 
-  /* =========================================
-     6. MODERN EFFECTS (modifiers)
-     ========================================= */
-
-  /* 1. GLOW (neon glow)
-     The hover shadow does NOT transition directly (reflow) - it lives on
-     ::after, which only animates opacity. The same pattern as
-     .hover-gpu-shadow in utilities/_animations.scss. The base (resting)
-     shadow stays on the button itself, since it's static - it never
-     changes, so it costs nothing. */
-  .btn-glow {
-    position: relative;
-    isolation: isolate;
-    box-shadow: 0 0 15px 0 rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      box-shadow: 0 8px 25px -5px var(--primary);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    &:hover {
-      transform: translateY(-2px);
-
-      &::after {
-        opacity: 1;
-      }
-    }
+  &:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: 2px;
   }
+}
 
-  /* 2. GLASS (ideal for dark backgrounds and video) */
-  .btn-glass {
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    color: #fff !important;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease, border-color 0.3s ease;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.2) !important;
-      border-color: rgba(255, 255, 255, 0.4) !important;
-    }
-  }
-
-  /* 3. 3D PUSH (a physical button)
-     Instead of animating a flat box-shadow's Y-offset (reflow), the
-     "base" lives on a static ::before (solid background, offset 6px
-     below the button). The button itself animates only
-     transform: translateY() - as it's pressed, it "gets closer" to the
-     static base, producing the identical disappearing-shadow effect
-     without ever animating box-shadow. */
-  .btn-3d {
-    /* Requires the shadow color to be defined (e.g. a darker primary) */
-    --btn-3d-shadow: var(--primary-hover);
-
-    position: relative;
-    isolation: isolate;
-    transform: translateY(0);
-    transition: transform 0.1s ease;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 6px;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      background: var(--btn-3d-shadow);
-      z-index: -1;
-    }
-
-    &:hover {
-      transform: translateY(2px);
-    }
-
-    &:active {
-      transform: translateY(6px);
-    }
-  }
-
-  /* 4. SHINE (a sweeping highlight) */
-  .btn-shine {
-    position: relative;
-    overflow: hidden;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-      transform: skewX(-25deg);
-      transition: none;
-    }
-
-    &:hover::after {
-      animation: btnShineAnim 0.7s ease forwards;
-    }
-  }
-
-  @keyframes btnShineAnim {
-    100% { left: 200%; }
-  }
-
-  /* 5. GRADIENT ANIMATED (a flowing gradient)
-     Instead of animating background-position (reflow/paint on every
-     frame), the gradient lives on a ::before twice as wide as the
-     button, shifted via transform: translateX() - the identical flowing-
-     gradient effect, zero animated properties besides transform/opacity.
-     The hover shadow works the same way as in .btn-glow: a separate
-     ::after, only opacity animated. The button's content (z-index: auto)
-     stays above both layers (negative z-index), since isolation: isolate
-     creates its own stacking context for them. */
-  .btn-gradient {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    color: #fff !important;
-    border: none !important;
-    transition: transform 0.3s ease;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -2;
-      width: 200%;
-      height: 100%;
-      background: linear-gradient(
-        135deg,
-        var(--primary),
-        var(--info),
-        var(--success),
-        var(--primary)
-      );
-      background-size: 50% 100%;
-      background-repeat: repeat-x;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      border-radius: inherit;
-      box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    &:hover {
-      transform: translateY(-2px);
-
-      &::before {
-        animation: btnGradientFlow 3s linear infinite;
-      }
-
-      &::after {
-        opacity: 1;
-      }
-    }
-  }
-
-  @keyframes btnGradientFlow {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  /* =========================================
-     6. LAYOUT MODIFIERS
-     ========================================= */
-
-  /* Vertical button (icon above text) - a pattern from mobile apps */
-  .btn-stacked {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px !important;
-    
-    padding: calc(var(--spacing-unit) * 1);
-    min-height: 56px !important;
-    line-height: 1 !important; 
-
-    i, svg {
-      font-size: 1.2rem;
-      width: 1em !important;
-      height: 1em !important;
-      flex-shrink: 0;
-      margin: 0 !important;
-      display: block; 
-    }
-
-    span, .btn-text {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      line-height: 1 !important;
-      text-align: center;
-
-      padding: 0 !important;
-      white-space: normal;
-      word-break: break-word;
-      width: 100%;
-    }
-  }
-
-  /* Icon-only button (square by default, add .rounded-circle for round) -
-     compose with a color class (or bare .btn), e.g. "btn-outline-success
-     btn-icon". Fixed width AND height via --btn-icon-size instead of
-     padding, so there's no padding to juggle to get a perfect square/
-     circle. Excluded from the shared min-height rule in _base.scss (like
-     .carousel-dot/.onboarding-dot/.tour-dot) and manages its own touch
-     target instead - growing BOTH dimensions together on touch, since
-     letting the shared rule bump only min-height would turn it into a
-     tall rectangle instead of a bigger square. */
-  .btn-icon {
-    --btn-icon-size: 36px;
-
-    width: var(--btn-icon-size);
-    height: var(--btn-icon-size);
-    min-height: var(--btn-icon-size);
-    padding: 0;
+/* Grouping action buttons */
+.btn-action-group {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.5);
+  
+  /* The separator hangs off the group's DIRECT CHILD, not off
+     .btn-action itself. A POST action needs its own <form> (nonce +
+     method), so in a real admin table each button is the ONLY child of
+     its own form - making every one of them both :first-child and
+     :last-child of that form. A button-based ":last-child::after {
+     display:none }" therefore fired per form instead of per group:
+     every wrapped button lost its divider while every bare one kept it,
+     so dividers appeared to show up at random. The direct child is the
+     only element that always sits at a known position in the group,
+     whether it's the button or a wrapper around it. */
+  &.with-dividers {
     gap: 0;
-    flex-shrink: 0;
 
-    i, svg {
-      font-size: 1.1em;
-      flex-shrink: 0;
+    > * {
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 20%;
+        bottom: 20%;
+        width: 1px;
+        background-color: var(--border-color);
+        pointer-events: none;
+      }
+
+      &:last-child::after {
+        display: none;
+      }
     }
 
-    @media (pointer: coarse) {
-      --btn-icon-size: var(--target-size-min, 44px) !important;
+    /* A wrapper (<form>) must not break the row or add height of its
+       own - it exists only to carry the request, not to lay anything
+       out. */
+    > form {
+      display: flex;
+      align-items: center;
+      margin: 0;
+    }
+
+    .btn-action {
+      border-radius: 0;
+    }
+
+    /* Outer corners: the child is the anchor, the button is what gets
+       painted - so both are addressed, one directly and one nested. */
+    > :first-child,
+    > :first-child .btn-action {
+      border-top-left-radius: var(--border-radius);
+      border-bottom-left-radius: var(--border-radius);
+    }
+    > :last-child,
+    > :last-child .btn-action {
+      border-top-right-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
     }
   }
+}
 
-  .btn-icon-sm { --btn-icon-size: 28px; }
-  .btn-icon-lg { --btn-icon-size: 48px; }
+/* =========================================
+   6. MODERN EFFECTS (modifiers)
+   ========================================= */
 
-  /* =========================================
-     DEFAULT BUTTON HOVER (opt-in)
-     =========================================
-     Add ONE of these classes to <body> (or any container) to give EVERY
-     .btn inside it a shared hover effect - the author picks it once
-     instead of tagging each button individually. Buttons with their own
-     hover-* class are skipped (they take precedence). GPU: transform + box-shadow. */
-  .btn-hover-spring .btn:not([class*="hover-"]),
-  .btn-hover-lift .btn:not([class*="hover-"]),
-  .btn-hover-glow .btn:not([class*="hover-"]) {
-    transition: background-color var(--transition-speed),
-      border-color var(--transition-speed), color var(--transition-speed),
-      transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1),
-      box-shadow var(--transition-speed);
-    will-change: transform;
+/* 1. GLOW (neon glow)
+   The hover shadow does NOT transition directly (reflow) - it lives on
+   ::after, which only animates opacity. The same pattern as
+   .hover-gpu-shadow in utilities/_animations.scss. The base (resting)
+   shadow stays on the button itself, since it's static - it never
+   changes, so it costs nothing. */
+.btn-glow {
+  position: relative;
+  isolation: isolate;
+  box-shadow: 0 0 15px 0 rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 8px 25px -5px var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
   }
-  .btn-hover-spring .btn:not([class*="hover-"]):hover {
-    transform: scale(1.05);
-  }
-  .btn-hover-lift .btn:not([class*="hover-"]):hover {
+
+  &:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+
+    &::after {
+      opacity: 1;
+    }
   }
-  .btn-hover-glow .btn:not([class*="hover-"]):hover {
-    box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.25);
+}
+
+/* 2. GLASS (ideal for dark backgrounds and video) */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, border-color 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+  }
+}
+
+/* 3. 3D PUSH (a physical button)
+   Instead of animating a flat box-shadow's Y-offset (reflow), the
+   "base" lives on a static ::before (solid background, offset 6px
+   below the button). The button itself animates only
+   transform: translateY() - as it's pressed, it "gets closer" to the
+   static base, producing the identical disappearing-shadow effect
+   without ever animating box-shadow. */
+.btn-3d {
+  /* Requires the shadow color to be defined (e.g. a darker primary) */
+  --btn-3d-shadow: var(--primary-hover);
+
+  position: relative;
+  isolation: isolate;
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--btn-3d-shadow);
+    z-index: -1;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .btn-hover-spring .btn:not([class*="hover-"]):hover,
-    .btn-hover-lift .btn:not([class*="hover-"]):hover {
-      transform: none;
+  &:hover {
+    transform: translateY(2px);
+  }
+
+  &:active {
+    transform: translateY(6px);
+  }
+}
+
+/* 4. SHINE (a sweeping highlight) */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: none;
+  }
+
+  &:hover::after {
+    animation: btnShineAnim 0.7s ease forwards;
+  }
+}
+
+@keyframes btnShineAnim {
+  100% { left: 200%; }
+}
+
+/* 5. GRADIENT ANIMATED (a flowing gradient)
+   Instead of animating background-position (reflow/paint on every
+   frame), the gradient lives on a ::before twice as wide as the
+   button, shifted via transform: translateX() - the identical flowing-
+   gradient effect, zero animated properties besides transform/opacity.
+   The hover shadow works the same way as in .btn-glow: a separate
+   ::after, only opacity animated. The button's content (z-index: auto)
+   stays above both layers (negative z-index), since isolation: isolate
+   creates its own stacking context for them. */
+.btn-gradient {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #fff !important;
+  border: none !important;
+  transition: transform 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -2;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--primary),
+      var(--info),
+      var(--success),
+      var(--primary)
+    );
+    background-size: 50% 100%;
+    background-repeat: repeat-x;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+
+    &::before {
+      animation: btnGradientFlow 3s linear infinite;
     }
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes btnGradientFlow {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* =========================================
+   6. LAYOUT MODIFIERS
+   ========================================= */
+
+/* Vertical button (icon above text) - a pattern from mobile apps */
+.btn-stacked {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px !important;
+  
+  padding: calc(var(--spacing-unit) * 1);
+  min-height: 56px !important;
+  line-height: 1 !important; 
+
+  i, svg {
+    font-size: 1.2rem;
+    width: 1em !important;
+    height: 1em !important;
+    flex-shrink: 0;
+    margin: 0 !important;
+    display: block; 
+  }
+
+  span, .btn-text {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1 !important;
+    text-align: center;
+
+    padding: 0 !important;
+    white-space: normal;
+    word-break: break-word;
+    width: 100%;
+  }
+}
+
+/* Icon-only button (square by default, add .rounded-circle for round) -
+   compose with a color class (or bare .btn), e.g. "btn-outline-success
+   btn-icon". Fixed width AND height via --btn-icon-size instead of
+   padding, so there's no padding to juggle to get a perfect square/
+   circle. Excluded from the shared min-height rule in _base.scss (like
+   .carousel-dot/.onboarding-dot/.tour-dot) and manages its own touch
+   target instead - growing BOTH dimensions together on touch, since
+   letting the shared rule bump only min-height would turn it into a
+   tall rectangle instead of a bigger square. */
+.btn-icon {
+  --btn-icon-size: 36px;
+
+  width: var(--btn-icon-size);
+  height: var(--btn-icon-size);
+  min-height: var(--btn-icon-size);
+  padding: 0;
+  gap: 0;
+  flex-shrink: 0;
+
+  i, svg {
+    font-size: 1.1em;
+    flex-shrink: 0;
+  }
+
+  @media (pointer: coarse) {
+    --btn-icon-size: var(--target-size-min, 44px) !important;
+  }
+}
+
+.btn-icon-sm { --btn-icon-size: 28px; }
+.btn-icon-lg { --btn-icon-size: 48px; }
+
+/* =========================================
+   DEFAULT BUTTON HOVER (opt-in)
+   =========================================
+   Add ONE of these classes to <body> (or any container) to give EVERY
+   .btn inside it a shared hover effect - the author picks it once
+   instead of tagging each button individually. Buttons with their own
+   hover-* class are skipped (they take precedence). GPU: transform + box-shadow. */
+.btn-hover-spring .btn:not([class*="hover-"]),
+.btn-hover-lift .btn:not([class*="hover-"]),
+.btn-hover-glow .btn:not([class*="hover-"]) {
+  transition: background-color var(--transition-speed),
+    border-color var(--transition-speed), color var(--transition-speed),
+    transform var(--transition-speed) cubic-bezier(0.25, 1, 0.5, 1),
+    box-shadow var(--transition-speed);
+  will-change: transform;
+}
+.btn-hover-spring .btn:not([class*="hover-"]):hover {
+  transform: scale(1.05);
+}
+.btn-hover-lift .btn:not([class*="hover-"]):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.btn-hover-glow .btn:not([class*="hover-"]):hover {
+  box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-hover-spring .btn:not([class*="hover-"]):hover,
+  .btn-hover-lift .btn:not([class*="hover-"]):hover {
+    transform: none;
   }
 }

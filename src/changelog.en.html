@@ -48,6 +48,47 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.31 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.31</div>
+              <div class="text-muted text-4">August 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Double-nested layers, values baked into CSS, and traps found while shipping a real service site
+                </h2>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Nested <code>@layer</code> removed from 36 files.</strong> Partials wrapped themselves in their own <code>@layer</code> and the entry point wrapped them again, compiling to <code>@layer utilities { @layer utilities { … } }</code>. The cascade broke BOTH ways depending on <code>!important</code>: normal declarations in the sub-layer lost to unwrapped rules of the same layer, while <code>!important</code> ones won. Reported from a deployment where overriding <code>.bg-dark</code> silently lost - navy <code>#14162B</code> versus <code>#16233C</code>, invisible to the eye. Layers are now assigned by the entry point only. Verified by script: all 8 bundles identical once layers are flattened, zero selectors changed their winner.</li>
+                  <li><strong>Always-dark surfaces finally have a token.</strong> <code>#14162B</code> sat as a literal in eight places (<code>.bg-dark</code>, hero, footer, <code>.navbar-pill</code>, <code>.bg-gradient-corners</code>). It is now <code>--bg-dark-fixed</code> and <code>--text-on-dark-fixed</code>, declared once and deliberately NOT flipped in dark mode. Rebranding means changing a variable instead of fighting the cascade - which matters, because utilities carry <code>!important</code> inside a layer, and an <code>!important</code> outside any layer is the weakest thing in the author cascade and always loses. Footer accent separately: <code>--footer-accent</code> / <code>--footer-accent-hover</code>.</li>
+                  <li><strong>The pricing ribbon label is no longer baked into CSS.</strong> <code>.pricing-table.is-featured::before</code> had <code>content: 'Popularne'</code> - a Polish word no other project could change without overriding the whole component. Now <code>var(--pricing-ribbon, 'Popularne')</code>.</li>
+                  <li><strong><code>.before-after-slider</code> no longer blows up the layout.</strong> Sizing lived only in <code>.before-after-img</code>, so forgetting it was not a cosmetic slip but a layout bomb: the image kept its intrinsic 1600px, and a bare <code>1fr</code> grid track takes its minimum from the descendant's min-content, so the TRACK expanded despite <code>overflow: hidden</code>. The rule now sits on the <code>img</code> itself; the class still works as an alias.</li>
+                  <li><strong>Checkbox grew from 20px to 24px.</strong> The control is deliberately exempt from the 44px rule, but 20px failed the Lighthouse audit, which requires at least 24px. Resize via <code>--form-check-size</code>. This is a VISUAL change - check dense forms after updating.</li>
+                </ul>
+
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  The classes that were missing on a marketing page
+                </h2>
+                <ul class="text-secondary m-0">
+                  <li><strong><code>.fw-semibold</code> (600).</strong> The <code>--fw-semibold</code> token existed from the start, the class did not - the scale jumped from <code>medium</code> (500) straight to <code>bold</code> (700), exactly where the most common heading weight sits.</li>
+                  <li><strong><code>.order-*</code>:</strong> <code>.order-first</code>, <code>.order-last</code>, <code>.order-0</code>–<code>.order-5</code> plus <code>-md-</code> and <code>-lg-</code> variants. Alternating sections used to force DOM reordering, which wrecked reading order on narrow screens and for screen readers.</li>
+                  <li><strong>Responsive Flexbox alignment:</strong> <code>.justify-content-md-*</code>, <code>.align-items-md-*</code>, <code>.align-self-md-*</code>, <code>.flex-md-wrap</code> / <code>.flex-md-nowrap</code>. You could already flip the axis direction (<code>.flex-md-row</code>) but not the alignment along it.</li>
+                  <li><strong>Spacing aliases <code>s</code>/<code>e</code>:</strong> <code>.ps-*</code>, <code>.pe-*</code>, <code>.ms-*</code>, <code>.me-*</code> - expanding to physical left/right, like <code>.text-start</code>. The side variants (<code>.pt-</code>, <code>.pb-</code>, <code>.pl-</code>, <code>.pr-</code>) had existed for a long time but were absent from <code>llms.txt</code> and the class reference, which made it look like only <code>.px-</code> and <code>.py-</code> existed. They are documented now.</li>
+                  <li><strong>The anti-FOUC snippet ships in <code>starter.html</code>.</strong> The docs required a synchronous script in <code>&lt;head&gt;</code> that the package never provided.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.30 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

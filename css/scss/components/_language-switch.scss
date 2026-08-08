@@ -15,112 +15,110 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
-@layer components {
-  .language-switch-trigger {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 0.75);
-    height: 38px;
-    padding: 0 calc(var(--spacing-unit) * 1.5);
-    background-color: var(--card-bg-subtle);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-pill, 999px);
-    color: var(--text-main);
-    /* The trigger is a <button> - it doesn't inherit the font family automatically */
-    font-family: inherit;
-    font-weight: var(--fw-medium);
-    font-size: 0.8125rem;
-    line-height: 1;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+.language-switch-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.75);
+  height: 38px;
+  padding: 0 calc(var(--spacing-unit) * 1.5);
+  background-color: var(--card-bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-pill, 999px);
+  color: var(--text-main);
+  /* The trigger is a <button> - it doesn't inherit the font family automatically */
+  font-family: inherit;
+  font-weight: var(--fw-medium);
+  font-size: 0.8125rem;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 
-    &::-webkit-details-marker { display: none; }
+  &::-webkit-details-marker { display: none; }
 
-    /* The indicator arrow - the same trick as .dropdown-toggle / .mega-menu-trigger */
-    &::after {
-      content: '';
-      display: inline-block;
-      margin-left: calc(var(--spacing-unit) * 0.25);
-      border-top: 4px solid;
-      border-right: 4px solid transparent;
-      border-left: 4px solid transparent;
-      color: var(--text-muted);
-      transition: transform var(--transition-speed);
-    }
-
-    &:hover, &:focus-visible {
-      background-color: rgba(var(--primary-rgb), 0.08);
-      border-color: rgba(var(--primary-rgb), 0.3);
-    }
+  /* The indicator arrow - the same trick as .dropdown-toggle / .mega-menu-trigger */
+  &::after {
+    content: '';
+    display: inline-block;
+    margin-left: calc(var(--spacing-unit) * 0.25);
+    border-top: 4px solid;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    color: var(--text-muted);
+    transition: transform var(--transition-speed);
   }
 
-  /* Arrow rotation: the popover variant (the menu must be a direct
-     sibling after the button) and the legacy <details>. */
-  .language-switch-trigger:has(+ .language-switch-menu:popover-open)::after,
-  .language-switch[open] > .language-switch-trigger::after {
-    transform: rotate(180deg);
+  &:hover, &:focus-visible {
+    background-color: rgba(var(--primary-rgb), 0.08);
+    border-color: rgba(var(--primary-rgb), 0.3);
+  }
+}
+
+/* Arrow rotation: the popover variant (the menu must be a direct
+   sibling after the button) and the legacy <details>. */
+.language-switch-trigger:has(+ .language-switch-menu:popover-open)::after,
+.language-switch[open] > .language-switch-trigger::after {
+  transform: rotate(180deg);
+}
+
+/* Flag: an SVG file from img/flags/ in a fixed 4:3 box.
+   The inner border (::after) separates a flag's light areas (e.g. the
+   white in the Polish flag) from the background - without it the flag
+   "dissolves" into a light pill. */
+.language-switch-flag {
+  position: relative;
+  display: inline-flex;
+  width: 20px;
+  height: 15px;
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img,
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Without this, the flag could be dragged/selected with the mouse cursor. */
+    pointer-events: none;
+    user-select: none;
   }
 
-  /* Flag: an SVG file from img/flags/ in a fixed 4:3 box.
-     The inner border (::after) separates a flag's light areas (e.g. the
-     white in the Polish flag) from the background - without it the flag
-     "dissolves" into a light pill. */
-  .language-switch-flag {
-    position: relative;
-    display: inline-flex;
-    width: 20px;
-    height: 15px;
-    border-radius: 2px;
-    overflow: hidden;
-    flex-shrink: 0;
-
-    img,
-    svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      /* Without this, the flag could be dragged/selected with the mouse cursor. */
-      pointer-events: none;
-      user-select: none;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
-      pointer-events: none;
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    pointer-events: none;
   }
+}
 
-  .language-switch-menu {
-    min-width: 190px;
-  }
+.language-switch-menu {
+  min-width: 190px;
+}
 
-  .language-switch-item {
-    display: flex;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 1.25);
-  }
+.language-switch-item {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 1.25);
+}
 
-  .language-switch-name {
-    flex: 1;
-  }
+.language-switch-name {
+  flex: 1;
+}
 
-  /* Checkmark for the active language: an SVG icon in currentColor
-     (font-weight stays for legacy markup using the text character "✓"). */
-  .language-switch-check {
-    display: inline-flex;
-    align-items: center;
-    color: var(--primary);
-    font-weight: var(--fw-bold);
+/* Checkmark for the active language: an SVG icon in currentColor
+   (font-weight stays for legacy markup using the text character "✓"). */
+.language-switch-check {
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary);
+  font-weight: var(--fw-bold);
 
-    svg {
-      width: 14px;
-      height: 14px;
-    }
+  svg {
+    width: 14px;
+    height: 14px;
   }
 }

@@ -40,9 +40,13 @@
     z-index: 2;
     background-color: var(--bg-body);
 
-    /* Ribbon */
+    /* Ribbon. The label comes from a variable, because it is CONTENT, not
+       styling - a Polish literal baked into the CSS forced every non-Polish
+       project to override the whole component just to change one word.
+       Set it per project (:root) or per card (style="--pricing-ribbon: 'Best value'").
+       Quotes are part of the value: content: takes a string. */
     &::before {
-      content: 'Popularne';
+      content: var(--pricing-ribbon, 'Popularne');
       position: absolute;
       top: 15px;
       right: -35px;
