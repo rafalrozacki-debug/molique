@@ -82,3 +82,26 @@
     gap: calc(var(--spacing-unit) * 1);
   }
 }
+
+/* Opt-in: let the text wrap instead of being cut off.
+   The base row truncates with an ellipsis, which is right for a dense
+   dashboard where every row must be the same height - and wrong for the
+   generic "list of items with a description" the component's name and
+   looks suggest. Reaching for it there costs you content, with no signal
+   that anything was lost.
+
+   A class, not a variable: truncate/wrap is a switch, not a value.
+
+   NOTE ON THE DEFAULT, deliberately not changed here. Wrapping is the
+   safer default - at worst it makes a row taller, whereas truncating
+   hides text. Flipping it, though, would break every existing dashboard
+   built on a fixed row height, so the swap (with .data-row-compact-truncate
+   taking over as the variant) belongs in a major release, not a patch. */
+.data-row-compact-wrap {
+  .row-title,
+  .row-details {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}

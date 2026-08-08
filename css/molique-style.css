@@ -4945,6 +4945,43 @@
     overflow: hidden; /* Prevents images from spilling past the rounded corners */
     transition: box-shadow var(--transition-speed), transform var(--transition-speed);
   }
+  /* Opt-in: let content stick OUT of the card.
+     The base card clips (overflow: hidden) so images respect the rounded
+     corners - correct by default, but it also swallows anything meant to
+     break the edge: the "Most popular" ribbon on a pricing card, a badge
+     pinned above the top edge, a plain dropdown menu without popover.
+
+     A class, not a variable: overflow has two states here, not a range of
+     values. Same reasoning as .bg-blobs steering color and speed by
+     variables while its "always dark" variant is a class.
+
+     The nested rule pays back what the class takes away. Dropping the clip
+     also drops the corner rounding on a leading/trailing image, so the
+     picture would poke square corners out of a rounded card - the variant
+     would fix the ribbon and break the photo. border-radius: inherit rather
+     than a fixed calc() on purpose: it follows whatever the card actually
+     computes, including .rounded-0 / .rounded-pill utilities. The cost is
+     that it ignores the card's 1px border (the .card-header above subtracts
+     it), a difference nobody will see - unlike a square corner on a pill. */
+  .card-overflow-visible {
+    overflow: visible;
+    /* <picture> is listed ALONGSIDE its img, not instead of it: the wrapper
+       renders nothing itself, and an img inheriting from a bare <picture>
+       would inherit 0. Rounding the wrapper first gives the img something
+       real to inherit. */
+  }
+  .card-overflow-visible > img:first-child,
+  .card-overflow-visible > picture:first-child,
+  .card-overflow-visible > picture:first-child img {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+  .card-overflow-visible > img:last-child,
+  .card-overflow-visible > picture:last-child,
+  .card-overflow-visible > picture:last-child img {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
   .card-header {
     padding: calc(var(--spacing-unit) * 2);
     background-color: var(--card-bg-subtle);
@@ -6284,6 +6321,26 @@
     display: flex;
     align-items: center;
     gap: calc(var(--spacing-unit) * 1);
+  }
+  /* Opt-in: let the text wrap instead of being cut off.
+     The base row truncates with an ellipsis, which is right for a dense
+     dashboard where every row must be the same height - and wrong for the
+     generic "list of items with a description" the component's name and
+     looks suggest. Reaching for it there costs you content, with no signal
+     that anything was lost.
+
+     A class, not a variable: truncate/wrap is a switch, not a value.
+
+     NOTE ON THE DEFAULT, deliberately not changed here. Wrapping is the
+     safer default - at worst it makes a row taller, whereas truncating
+     hides text. Flipping it, though, would break every existing dashboard
+     built on a fixed row height, so the swap (with .data-row-compact-truncate
+     taking over as the variant) belongs in a major release, not a patch. */
+  .data-row-compact-wrap .row-title,
+  .data-row-compact-wrap .row-details {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
   }
   /* =========================================
      SORTABLE LIST (drag via Pointer Events + up/down buttons -

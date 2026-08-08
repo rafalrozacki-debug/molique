@@ -19,6 +19,46 @@
   transition: box-shadow var(--transition-speed), transform var(--transition-speed);
 }
 
+/* Opt-in: let content stick OUT of the card.
+   The base card clips (overflow: hidden) so images respect the rounded
+   corners - correct by default, but it also swallows anything meant to
+   break the edge: the "Most popular" ribbon on a pricing card, a badge
+   pinned above the top edge, a plain dropdown menu without popover.
+
+   A class, not a variable: overflow has two states here, not a range of
+   values. Same reasoning as .bg-blobs steering color and speed by
+   variables while its "always dark" variant is a class.
+
+   The nested rule pays back what the class takes away. Dropping the clip
+   also drops the corner rounding on a leading/trailing image, so the
+   picture would poke square corners out of a rounded card - the variant
+   would fix the ribbon and break the photo. border-radius: inherit rather
+   than a fixed calc() on purpose: it follows whatever the card actually
+   computes, including .rounded-0 / .rounded-pill utilities. The cost is
+   that it ignores the card's 1px border (the .card-header above subtracts
+   it), a difference nobody will see - unlike a square corner on a pill. */
+.card-overflow-visible {
+  overflow: visible;
+
+  /* <picture> is listed ALONGSIDE its img, not instead of it: the wrapper
+     renders nothing itself, and an img inheriting from a bare <picture>
+     would inherit 0. Rounding the wrapper first gives the img something
+     real to inherit. */
+  > img:first-child,
+  > picture:first-child,
+  > picture:first-child img {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  > img:last-child,
+  > picture:last-child,
+  > picture:last-child img {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+}
+
 .card-header {
   padding: calc(var(--spacing-unit) * 2);
   background-color: var(--card-bg-subtle);
