@@ -123,7 +123,7 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   jasnym tle, nigdy gołe `--success`/`--warning` itd. - te drugie są
   dobrane pod tła, nie pod kontrast tekstu.
 - **ŻADEN plik częściowy nie owija się we własny `@layer` - stan od
-  v1.7.31, egzekwuj to przy każdym nowym pliku.** Warstwę nadaje
+  v1.7.32, egzekwuj to przy każdym nowym pliku.** Warstwę nadaje
   WYŁĄCZNIE entry point (`molique-style*.scss`), owijając cały import.
   Dodatkowe owinięcie W ŚRODKU pliku tworzy podwarstwę
   (`components.components`) i psuje kaskadę w obie strony, zależnie od
@@ -138,7 +138,7 @@ naraz (ten sam katalog roboczy). Konsekwencje:
     użytkownik, któremu nadpisanie `.bg-dark` z własnego arkusza cicho
     przegrywało: różnica granatu #14162B vs #16233C, nie do wychwycenia
     okiem, znaleziona dopiero pomiarem pikseli.
-  W v1.7.31 zdjęto owinięcie z 36 plików (skrypt + weryfikacja: wszystkie
+  W v1.7.32 zdjęto owinięcie z 36 plików (skrypt + weryfikacja: wszystkie
   8 bundli identycznych po spłaszczeniu warstw, zero selektorów, dla
   których zmienił się zwycięzca). Nie przywracaj tego wzorca.
 - **Konsekwencja dla projektów klienckich:** utilities molique mają

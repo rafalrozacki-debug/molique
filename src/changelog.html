@@ -47,11 +47,11 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
-          <!-- v1.7.31 -->
+          <!-- v1.7.32 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-5">v1.7.31</div>
+              <div class="fw-black text-5">v1.7.32</div>
               <div class="text-muted text-4">Sierpień 2026</div>
             </div>
             <div class="timeline-separator">
@@ -64,6 +64,15 @@
                   <span class="badge badge-danger mx-2 text-3">Poprawka</span>
                   Podwójne zagnieżdżenie warstw, wartości zaszyte w CSS i pułapki z realnego wdrożenia strony usługowej
                 </h2>
+                <p class="text-2 text-muted mb-3">
+                  <strong>Uwaga o numeracji:</strong> wersja 1.7.31 została
+                  opublikowana na npm z zawartością 1.7.30 - katalog paczki
+                  jest generowany przez <code>tools/build-npm-molique.mjs</code>,
+                  a przy tamtym wydaniu podbito w nim tylko numer, bez
+                  regeneracji plików. Numeru nie da się na npm nadpisać, więc
+                  to wydanie nosi numer 1.7.32, a 1.7.31 jest oznaczone jako
+                  wycofane. Na stronie 1.7.31 nigdy nie było wdrożone.
+                </p>
                 <ul class="text-secondary mb-4">
                   <li><strong>Podwarstwy <code>@layer</code> zdjęte z 36 plików.</strong> Pliki częściowe owijały się we własny <code>@layer</code>, a entry point owijał je jeszcze raz - w skompilowanym CSS wychodziło <code>@layer utilities { @layer utilities { … } }</code>. Kaskada psuła się w OBIE strony, zależnie od <code>!important</code>: deklaracje zwykłe z podwarstwy przegrywały z nieowiniętymi regułami tej samej warstwy, a deklaracje <code>!important</code> - odwrotnie - wygrywały. Zgłoszone z wdrożenia, gdzie nadpisanie <code>.bg-dark</code> cicho przegrywało: różnica granatu <code>#14162B</code> kontra <code>#16233C</code>, nie do wychwycenia okiem. Warstwę nadaje teraz WYŁĄCZNIE entry point. Zweryfikowane skryptowo: wszystkie 8 bundli identycznych po spłaszczeniu warstw, zero selektorów ze zmienionym zwycięzcą.</li>
                   <li><strong>Powierzchnie zawsze ciemne mają wreszcie token.</strong> Kolor <code>#14162B</code> siedział jako literał w ośmiu miejscach (<code>.bg-dark</code>, hero, stopka, <code>.navbar-pill</code>, <code>.bg-gradient-corners</code>). Teraz to <code>--bg-dark-fixed</code> i <code>--text-on-dark-fixed</code>, deklarowane raz i celowo NIE odwracane w trybie ciemnym. Rebranding to zmiana zmiennej, a nie walka z kaskadą - co ma znaczenie, bo utilities mają <code>!important</code> wewnątrz warstwy, a <code>!important</code> spoza warstwy jest w kaskadzie autora najsłabszy i przegrywa zawsze. Akcent stopki osobno: <code>--footer-accent</code> / <code>--footer-accent-hover</code> (domyślny odcień zostaje, bo kolor marki z trybu jasnego zwykle nie ma 4,5:1 na ciemnym tle).</li>

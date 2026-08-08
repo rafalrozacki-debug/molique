@@ -48,11 +48,11 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
-          <!-- v1.7.31 -->
+          <!-- v1.7.32 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
             <div class="timeline-label">
-              <div class="fw-black text-5">v1.7.31</div>
+              <div class="fw-black text-5">v1.7.32</div>
               <div class="text-muted text-4">August 2026</div>
             </div>
             <div class="timeline-separator">
@@ -65,6 +65,17 @@
                   <span class="badge badge-danger mx-2 text-3">Fix</span>
                   Doppelt verschachtelte Layer, fest im CSS verdrahtete Werte und Fallen aus einem echten Website-Projekt
                 </h2>
+                <p class="text-2 text-muted mb-3">
+                  <strong>Hinweis zur Nummerierung:</strong> Version 1.7.31
+                  wurde auf npm mit dem Inhalt von 1.7.30 veröffentlicht - das
+                  Paketverzeichnis wird von
+                  <code>tools/build-npm-molique.mjs</code> erzeugt, und bei
+                  jenem Release wurde darin nur die Nummer erhöht, ohne die
+                  Dateien neu zu generieren. npm erlaubt kein erneutes
+                  Veröffentlichen derselben Version, daher trägt dieses Release
+                  die Nummer 1.7.32 und 1.7.31 ist als veraltet markiert. Auf
+                  der Website war 1.7.31 nie ausgeliefert.
+                </p>
                 <ul class="text-secondary mb-4">
                   <li><strong>Verschachtelte <code>@layer</code> aus 36 Dateien entfernt.</strong> Partials umschlossen sich selbst mit einem eigenen <code>@layer</code>, der Entry Point umschloss sie erneut - kompiliert ergab das <code>@layer utilities { @layer utilities { … } }</code>. Die Kaskade brach in BEIDE Richtungen, je nach <code>!important</code>: normale Deklarationen im Sub-Layer verloren gegen nicht umschlossene Regeln derselben Ebene, <code>!important</code>-Deklarationen dagegen gewannen. Gemeldet aus einem Projekt, in dem das Überschreiben von <code>.bg-dark</code> still verlor - Marineblau <code>#14162B</code> gegen <code>#16233C</code>, mit bloßem Auge nicht zu erkennen. Layer vergibt jetzt ausschließlich der Entry Point. Per Skript verifiziert: alle 8 Bundles nach dem Abflachen identisch, kein Selektor mit geändertem Gewinner.</li>
                   <li><strong>Immer dunkle Flächen haben endlich ein Token.</strong> <code>#14162B</code> stand als Literal an acht Stellen. Jetzt <code>--bg-dark-fixed</code> und <code>--text-on-dark-fixed</code>, einmal deklariert und im Dark Mode bewusst NICHT invertiert. Rebranding heißt jetzt Variable ändern statt gegen die Kaskade zu kämpfen - wichtig, weil Utilities <code>!important</code> innerhalb eines Layers tragen und ein <code>!important</code> außerhalb jedes Layers in der Autoren-Kaskade das schwächste ist. Footer-Akzent separat: <code>--footer-accent</code> / <code>--footer-accent-hover</code>.</li>
