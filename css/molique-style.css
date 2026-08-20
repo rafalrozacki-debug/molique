@@ -6640,153 +6640,35 @@
     display: none;
     animation: fadeIn var(--transition-speed) ease;
   }
-  /* Linking an input to a panel by position (up to 10 tabs) */
-  .tab-input:nth-of-type(1):checked ~ .tabs-content .tab-pane:nth-of-type(1) {
+  /* A PANEL BEYOND THE THRESHOLD STAYS VISIBLE instead of vanishing.
+     Vanishing is undiagnosable: the HTML is complete, the console is clean,
+     the section renders fine - nobody just tells it to show. The first
+     suspicion always goes to the backend, and half an hour disappears there.
+     A panel that is permanently visible is obvious at a glance and leads
+     straight to the cause.
+     Specificity works out: (0,2,0) beats the plain .tab-pane at (0,1,0), and
+     loses to the showing rule below at (0,6,0) - three classes plus
+     :nth-of-type, :checked and :nth-of-type - so nothing within the threshold
+     changes. */
+  .tab-pane:nth-of-type(n + 17) {
     display: block;
   }
-  .tab-input:nth-of-type(1):checked ~ .tabs-header .tab-label:nth-of-type(1) {
+  /* Linking an input to a panel by position.
+     Selectors are collected into lists and emitted as THREE rules rather than
+     3 x $tabs-max - all three carry identical declarations, so looping the
+     rules themselves would duplicate every declaration and comment each time
+     the threshold is raised. */
+  .tab-input:nth-of-type(1):checked ~ .tabs-content .tab-pane:nth-of-type(1), .tab-input:nth-of-type(2):checked ~ .tabs-content .tab-pane:nth-of-type(2), .tab-input:nth-of-type(3):checked ~ .tabs-content .tab-pane:nth-of-type(3), .tab-input:nth-of-type(4):checked ~ .tabs-content .tab-pane:nth-of-type(4), .tab-input:nth-of-type(5):checked ~ .tabs-content .tab-pane:nth-of-type(5), .tab-input:nth-of-type(6):checked ~ .tabs-content .tab-pane:nth-of-type(6), .tab-input:nth-of-type(7):checked ~ .tabs-content .tab-pane:nth-of-type(7), .tab-input:nth-of-type(8):checked ~ .tabs-content .tab-pane:nth-of-type(8), .tab-input:nth-of-type(9):checked ~ .tabs-content .tab-pane:nth-of-type(9), .tab-input:nth-of-type(10):checked ~ .tabs-content .tab-pane:nth-of-type(10), .tab-input:nth-of-type(11):checked ~ .tabs-content .tab-pane:nth-of-type(11), .tab-input:nth-of-type(12):checked ~ .tabs-content .tab-pane:nth-of-type(12), .tab-input:nth-of-type(13):checked ~ .tabs-content .tab-pane:nth-of-type(13), .tab-input:nth-of-type(14):checked ~ .tabs-content .tab-pane:nth-of-type(14), .tab-input:nth-of-type(15):checked ~ .tabs-content .tab-pane:nth-of-type(15), .tab-input:nth-of-type(16):checked ~ .tabs-content .tab-pane:nth-of-type(16) {
+    display: block;
+  }
+  .tab-input:nth-of-type(1):checked ~ .tabs-header .tab-label:nth-of-type(1), .tab-input:nth-of-type(2):checked ~ .tabs-header .tab-label:nth-of-type(2), .tab-input:nth-of-type(3):checked ~ .tabs-header .tab-label:nth-of-type(3), .tab-input:nth-of-type(4):checked ~ .tabs-header .tab-label:nth-of-type(4), .tab-input:nth-of-type(5):checked ~ .tabs-header .tab-label:nth-of-type(5), .tab-input:nth-of-type(6):checked ~ .tabs-header .tab-label:nth-of-type(6), .tab-input:nth-of-type(7):checked ~ .tabs-header .tab-label:nth-of-type(7), .tab-input:nth-of-type(8):checked ~ .tabs-header .tab-label:nth-of-type(8), .tab-input:nth-of-type(9):checked ~ .tabs-header .tab-label:nth-of-type(9), .tab-input:nth-of-type(10):checked ~ .tabs-header .tab-label:nth-of-type(10), .tab-input:nth-of-type(11):checked ~ .tabs-header .tab-label:nth-of-type(11), .tab-input:nth-of-type(12):checked ~ .tabs-header .tab-label:nth-of-type(12), .tab-input:nth-of-type(13):checked ~ .tabs-header .tab-label:nth-of-type(13), .tab-input:nth-of-type(14):checked ~ .tabs-header .tab-label:nth-of-type(14), .tab-input:nth-of-type(15):checked ~ .tabs-header .tab-label:nth-of-type(15), .tab-input:nth-of-type(16):checked ~ .tabs-header .tab-label:nth-of-type(16) {
     color: var(--primary);
     border-bottom-color: var(--primary);
     font-weight: var(--fw-bold);
   }
   /* The focus ring must land on the visible label - the radio itself is
      clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(1):focus-visible ~ .tabs-header .tab-label:nth-of-type(1) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(2):checked ~ .tabs-content .tab-pane:nth-of-type(2) {
-    display: block;
-  }
-  .tab-input:nth-of-type(2):checked ~ .tabs-header .tab-label:nth-of-type(2) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(2):focus-visible ~ .tabs-header .tab-label:nth-of-type(2) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(3):checked ~ .tabs-content .tab-pane:nth-of-type(3) {
-    display: block;
-  }
-  .tab-input:nth-of-type(3):checked ~ .tabs-header .tab-label:nth-of-type(3) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(3):focus-visible ~ .tabs-header .tab-label:nth-of-type(3) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(4):checked ~ .tabs-content .tab-pane:nth-of-type(4) {
-    display: block;
-  }
-  .tab-input:nth-of-type(4):checked ~ .tabs-header .tab-label:nth-of-type(4) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(4):focus-visible ~ .tabs-header .tab-label:nth-of-type(4) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(5):checked ~ .tabs-content .tab-pane:nth-of-type(5) {
-    display: block;
-  }
-  .tab-input:nth-of-type(5):checked ~ .tabs-header .tab-label:nth-of-type(5) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(5):focus-visible ~ .tabs-header .tab-label:nth-of-type(5) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(6):checked ~ .tabs-content .tab-pane:nth-of-type(6) {
-    display: block;
-  }
-  .tab-input:nth-of-type(6):checked ~ .tabs-header .tab-label:nth-of-type(6) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(6):focus-visible ~ .tabs-header .tab-label:nth-of-type(6) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(7):checked ~ .tabs-content .tab-pane:nth-of-type(7) {
-    display: block;
-  }
-  .tab-input:nth-of-type(7):checked ~ .tabs-header .tab-label:nth-of-type(7) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(7):focus-visible ~ .tabs-header .tab-label:nth-of-type(7) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(8):checked ~ .tabs-content .tab-pane:nth-of-type(8) {
-    display: block;
-  }
-  .tab-input:nth-of-type(8):checked ~ .tabs-header .tab-label:nth-of-type(8) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(8):focus-visible ~ .tabs-header .tab-label:nth-of-type(8) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(9):checked ~ .tabs-content .tab-pane:nth-of-type(9) {
-    display: block;
-  }
-  .tab-input:nth-of-type(9):checked ~ .tabs-header .tab-label:nth-of-type(9) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(9):focus-visible ~ .tabs-header .tab-label:nth-of-type(9) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
-  .tab-input:nth-of-type(10):checked ~ .tabs-content .tab-pane:nth-of-type(10) {
-    display: block;
-  }
-  .tab-input:nth-of-type(10):checked ~ .tabs-header .tab-label:nth-of-type(10) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(10):focus-visible ~ .tabs-header .tab-label:nth-of-type(10) {
+  .tab-input:nth-of-type(1):focus-visible ~ .tabs-header .tab-label:nth-of-type(1), .tab-input:nth-of-type(2):focus-visible ~ .tabs-header .tab-label:nth-of-type(2), .tab-input:nth-of-type(3):focus-visible ~ .tabs-header .tab-label:nth-of-type(3), .tab-input:nth-of-type(4):focus-visible ~ .tabs-header .tab-label:nth-of-type(4), .tab-input:nth-of-type(5):focus-visible ~ .tabs-header .tab-label:nth-of-type(5), .tab-input:nth-of-type(6):focus-visible ~ .tabs-header .tab-label:nth-of-type(6), .tab-input:nth-of-type(7):focus-visible ~ .tabs-header .tab-label:nth-of-type(7), .tab-input:nth-of-type(8):focus-visible ~ .tabs-header .tab-label:nth-of-type(8), .tab-input:nth-of-type(9):focus-visible ~ .tabs-header .tab-label:nth-of-type(9), .tab-input:nth-of-type(10):focus-visible ~ .tabs-header .tab-label:nth-of-type(10), .tab-input:nth-of-type(11):focus-visible ~ .tabs-header .tab-label:nth-of-type(11), .tab-input:nth-of-type(12):focus-visible ~ .tabs-header .tab-label:nth-of-type(12), .tab-input:nth-of-type(13):focus-visible ~ .tabs-header .tab-label:nth-of-type(13), .tab-input:nth-of-type(14):focus-visible ~ .tabs-header .tab-label:nth-of-type(14), .tab-input:nth-of-type(15):focus-visible ~ .tabs-header .tab-label:nth-of-type(15), .tab-input:nth-of-type(16):focus-visible ~ .tabs-header .tab-label:nth-of-type(16) {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: -2px;
     border-radius: calc(var(--border-radius) * 0.5);
@@ -6855,54 +6737,65 @@
     pointer-events: none;
   }
   .tabs-pill {
-    /* Matching an input (by position) to the indicator and the active label's color */
+    /* Matching an input (by position) to the indicator.
+       This one CANNOT be grouped the way the rules above are: every step
+       carries its own transform value, so the loop is the declaration, not
+       just the selector. */
   }
   .tabs-pill:has(.tab-input:nth-of-type(1):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 0));
   }
-  .tabs-pill .tab-input:nth-of-type(1):checked ~ .tabs-header .tab-label:nth-of-type(1) {
-    color: var(--text-main);
-  }
   .tabs-pill:has(.tab-input:nth-of-type(2):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 1));
-  }
-  .tabs-pill .tab-input:nth-of-type(2):checked ~ .tabs-header .tab-label:nth-of-type(2) {
-    color: var(--text-main);
   }
   .tabs-pill:has(.tab-input:nth-of-type(3):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 2));
   }
-  .tabs-pill .tab-input:nth-of-type(3):checked ~ .tabs-header .tab-label:nth-of-type(3) {
-    color: var(--text-main);
-  }
   .tabs-pill:has(.tab-input:nth-of-type(4):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 3));
-  }
-  .tabs-pill .tab-input:nth-of-type(4):checked ~ .tabs-header .tab-label:nth-of-type(4) {
-    color: var(--text-main);
   }
   .tabs-pill:has(.tab-input:nth-of-type(5):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 4));
   }
-  .tabs-pill .tab-input:nth-of-type(5):checked ~ .tabs-header .tab-label:nth-of-type(5) {
-    color: var(--text-main);
-  }
   .tabs-pill:has(.tab-input:nth-of-type(6):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 5));
-  }
-  .tabs-pill .tab-input:nth-of-type(6):checked ~ .tabs-header .tab-label:nth-of-type(6) {
-    color: var(--text-main);
   }
   .tabs-pill:has(.tab-input:nth-of-type(7):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 6));
   }
-  .tabs-pill .tab-input:nth-of-type(7):checked ~ .tabs-header .tab-label:nth-of-type(7) {
-    color: var(--text-main);
-  }
   .tabs-pill:has(.tab-input:nth-of-type(8):checked) .tabs-pill-indicator {
     transform: translateX(calc(100% * 7));
   }
-  .tabs-pill .tab-input:nth-of-type(8):checked ~ .tabs-header .tab-label:nth-of-type(8) {
+  .tabs-pill:has(.tab-input:nth-of-type(9):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 8));
+  }
+  .tabs-pill:has(.tab-input:nth-of-type(10):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 9));
+  }
+  .tabs-pill:has(.tab-input:nth-of-type(11):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 10));
+  }
+  .tabs-pill:has(.tab-input:nth-of-type(12):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 11));
+  }
+  .tabs-pill:has(.tab-input:nth-of-type(13):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 12));
+  }
+  .tabs-pill:has(.tab-input:nth-of-type(14):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 13));
+  }
+  .tabs-pill:has(.tab-input:nth-of-type(15):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 14));
+  }
+  .tabs-pill:has(.tab-input:nth-of-type(16):checked) .tabs-pill-indicator {
+    transform: translateX(calc(100% * 15));
+  }
+  /* Active label color in the pill variant - identical for every position, so
+     it is grouped. Written out with the .tabs-pill prefix instead of nested
+     under `&`: a comma-separated selector list cannot be interpolated after
+     `&`, because the parent has to be prepended to EACH entry, not once to
+     the whole string. */
+  .tabs-pill .tab-input:nth-of-type(1):checked ~ .tabs-header .tab-label:nth-of-type(1), .tabs-pill .tab-input:nth-of-type(2):checked ~ .tabs-header .tab-label:nth-of-type(2), .tabs-pill .tab-input:nth-of-type(3):checked ~ .tabs-header .tab-label:nth-of-type(3), .tabs-pill .tab-input:nth-of-type(4):checked ~ .tabs-header .tab-label:nth-of-type(4), .tabs-pill .tab-input:nth-of-type(5):checked ~ .tabs-header .tab-label:nth-of-type(5), .tabs-pill .tab-input:nth-of-type(6):checked ~ .tabs-header .tab-label:nth-of-type(6), .tabs-pill .tab-input:nth-of-type(7):checked ~ .tabs-header .tab-label:nth-of-type(7), .tabs-pill .tab-input:nth-of-type(8):checked ~ .tabs-header .tab-label:nth-of-type(8), .tabs-pill .tab-input:nth-of-type(9):checked ~ .tabs-header .tab-label:nth-of-type(9), .tabs-pill .tab-input:nth-of-type(10):checked ~ .tabs-header .tab-label:nth-of-type(10), .tabs-pill .tab-input:nth-of-type(11):checked ~ .tabs-header .tab-label:nth-of-type(11), .tabs-pill .tab-input:nth-of-type(12):checked ~ .tabs-header .tab-label:nth-of-type(12), .tabs-pill .tab-input:nth-of-type(13):checked ~ .tabs-header .tab-label:nth-of-type(13), .tabs-pill .tab-input:nth-of-type(14):checked ~ .tabs-header .tab-label:nth-of-type(14), .tabs-pill .tab-input:nth-of-type(15):checked ~ .tabs-header .tab-label:nth-of-type(15), .tabs-pill .tab-input:nth-of-type(16):checked ~ .tabs-header .tab-label:nth-of-type(16) {
     color: var(--text-main);
   }
   /* =========================================

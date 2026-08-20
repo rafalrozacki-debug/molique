@@ -5,6 +5,15 @@
 @use '../variables' as *;
 @use '../mixins' as *;
 
+// How many tabs the positional mechanism covers. ONE threshold for both
+// variants on purpose: they used to differ (10 for .tabs, 8 for .tabs-pill),
+// which produced the worst possible symptom - on the 9th tab the panel still
+// appeared but the pill indicator stayed parked under the first label, so the
+// component looked half-broken rather than broken.
+// `!default`, so a project can raise it via `@use ... with (...)` instead of
+// forking the file - same pattern as $grid-columns in _grid.scss.
+$tabs-max: 16 !default;
+
 /* =========================================
    4. TABS (CSS :has() + radio hack)
    ========================================= */
@@ -62,25 +71,56 @@
   animation: fadeIn var(--transition-speed) ease;
 }
 
-/* Linking an input to a panel by position (up to 10 tabs) */
-@for $i from 1 through 10 {
-  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-content .tab-pane:nth-of-type(#{$i}) {
-    display: block;
-  }
-  
-  .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    font-weight: var(--fw-bold);
-  }
+/* A PANEL BEYOND THE THRESHOLD STAYS VISIBLE instead of vanishing.
+   Vanishing is undiagnosable: the HTML is complete, the console is clean,
+   the section renders fine - nobody just tells it to show. The first
+   suspicion always goes to the backend, and half an hour disappears there.
+   A panel that is permanently visible is obvious at a glance and leads
+   straight to the cause.
+   Specificity works out: (0,2,0) beats the plain .tab-pane at (0,1,0), and
+   loses to the showing rule below at (0,6,0) - three classes plus
+   :nth-of-type, :checked and :nth-of-type - so nothing within the threshold
+   changes. */
+.tab-pane:nth-of-type(n + #{$tabs-max + 1}) {
+  display: block;
+}
 
-  /* The focus ring must land on the visible label - the radio itself is
-     clipped to zero size, so its own outline would be invisible. */
-  .tab-input:nth-of-type(#{$i}):focus-visible ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: -2px;
-    border-radius: calc(var(--border-radius) * 0.5);
-  }
+/* Linking an input to a panel by position.
+   Selectors are collected into lists and emitted as THREE rules rather than
+   3 x $tabs-max - all three carry identical declarations, so looping the
+   rules themselves would duplicate every declaration and comment each time
+   the threshold is raised. */
+$tab-show: '';
+$tab-active: '';
+$tab-focus: '';
+
+@for $i from 1 through $tabs-max {
+  $sep: if($i == 1, '', ', ');
+
+  $tab-show: $tab-show + $sep +
+    '.tab-input:nth-of-type(#{$i}):checked ~ .tabs-content .tab-pane:nth-of-type(#{$i})';
+  $tab-active: $tab-active + $sep +
+    '.tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i})';
+  $tab-focus: $tab-focus + $sep +
+    '.tab-input:nth-of-type(#{$i}):focus-visible ~ .tabs-header .tab-label:nth-of-type(#{$i})';
+}
+
+#{$tab-show} {
+  display: block;
+}
+
+#{$tab-active} {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: var(--fw-bold);
+}
+
+/* The focus ring must land on the visible label - the radio itself is
+   clipped to zero size, so its own outline would be invisible. */
+#{$tab-focus} {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -2px;
+  border-radius: calc(var(--border-radius) * 0.5);
 }
 
 /* =========================================
@@ -150,14 +190,29 @@
     pointer-events: none;
   }
 
-  /* Matching an input (by position) to the indicator and the active label's color */
-  @for $i from 1 through 8 {
+  /* Matching an input (by position) to the indicator.
+     This one CANNOT be grouped the way the rules above are: every step
+     carries its own transform value, so the loop is the declaration, not
+     just the selector. */
+  @for $i from 1 through $tabs-max {
     &:has(.tab-input:nth-of-type(#{$i}):checked) .tabs-pill-indicator {
       transform: translateX(calc(100% * #{$i - 1}));
     }
-
-    .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i}) {
-      color: var(--text-main);
-    }
   }
+}
+
+/* Active label color in the pill variant - identical for every position, so
+   it is grouped. Written out with the .tabs-pill prefix instead of nested
+   under `&`: a comma-separated selector list cannot be interpolated after
+   `&`, because the parent has to be prepended to EACH entry, not once to
+   the whole string. */
+$pill-active: '';
+
+@for $i from 1 through $tabs-max {
+  $pill-active: $pill-active + if($i == 1, '', ', ') +
+    '.tabs-pill .tab-input:nth-of-type(#{$i}):checked ~ .tabs-header .tab-label:nth-of-type(#{$i})';
+}
+
+#{$pill-active} {
+  color: var(--text-main);
 }
