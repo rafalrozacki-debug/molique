@@ -8,6 +8,8 @@
     </li>
   <li><strong>Zero wojen na specyficzność:</strong> CSS opiera się na warstwach <code>@layer</code>. Zakaz używania <code>!important</code> (z wyjątkiem klas narzędziowych w <code>@layer utilities</code>).
     </li>
+  <li><strong><code>hidden</code> DZIAŁA i nie da się go nadpisać:</strong> molique wymusza <code>[hidden] { display: none !important }</code> w warstwie <code>base</code> (wyjątek: <code>hidden="until-found"</code>). Bez tego atrybut przegrywał z każdym komponentem ustawiającym <code>display</code> (<code>.card-body</code>, <code>.card-footer</code>, <code>.navbar</code> - wszystkie mają <code>display: flex</code>), bo arkusz przeglądarki jest najsłabszym źródłem kaskady. Do przełączania widoczności używaj <code>hidden</code> albo <code>.d-none</code> - nie własnego CSS-a, bo z zewnątrz tej reguły nie pokonasz.
+    </li>
   <li><strong>Dostępność B2B (A11y):</strong> Elementy interaktywne (button, input) muszą mieć <code>min-height: 44px</code> (zmienna <code>--target-size-min</code>). Wyjątkiem są przyciski <code>.btn-action</code> w gęstych tabelach.
     </li>
   <li><strong>Wydajność GPU:</strong> Animacje mogą modyfikować wyłącznie <code>transform</code>, <code>scale</code>, <code>translate</code> i <code>opacity</code>. Zakaz animowania <code>box-shadow</code>, <code>width</code>, <code>height</code> (unikamy Reflow).

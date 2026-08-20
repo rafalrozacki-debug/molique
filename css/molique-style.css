@@ -493,6 +493,31 @@
   *, *::before, *::after {
     box-sizing: border-box;
   }
+  /* The `hidden` attribute has to actually hide.
+     The UA stylesheet gives [hidden] display:none, but that is the WEAKEST
+     source in the cascade - every author rule setting display beats it.
+     In practice: <div class="card-body" hidden> stayed visible, because
+     .card-body sets display:flex. Same for .card-footer, .data-row-compact,
+     .navbar and every other component with its own display.
+
+     Why here, and why !important:
+     - a NORMAL declaration would not be enough - .card-body (components)
+       comes after `base` and would win;
+     - the !important goes in `base`, the earliest author layer, ON PURPOSE:
+       for !important declarations the layer order is REVERSED, so an
+       earlier layer beats a later one. This is what also lets it win against
+       .d-flex / .d-block / .d-grid, which carry !important inside
+       `utilities`. Note that a project cannot fix this from its own
+       unlayered stylesheet: an unlayered !important is the weakest
+       !important there is, so it beats .card-body but silently loses to
+       .d-flex. That asymmetry is exactly why the rule belongs here.
+
+     hidden="until-found" is excluded so find-in-page can still reveal it -
+     that variant needs to stay laid out (content-visibility), and killing it
+     with display:none would break the feature. */
+  [hidden]:not([hidden=until-found]) {
+    display: none !important;
+  }
   body {
     margin: 0;
     font-family: var(--font-family-base);

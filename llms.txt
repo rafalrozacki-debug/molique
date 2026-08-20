@@ -4,6 +4,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 ## 1. ZŁOTE ZASADY (CORE RULES)
 - **Natywny HTML5/CSS nad JS:** Zawsze preferuj natywne rozwiązania (`<dialog>`, `<details>`, `:user-invalid`, `scroll-snap`, `popover`). JS to ostateczność.
 - **Zero wojen na specyficzność:** CSS opiera się na warstwach `@layer`. Zakaz używania `!important` (z wyjątkiem klas narzędziowych w `@layer utilities`).
+- **`hidden` DZIAŁA i nie da się go nadpisać:** molique wymusza `[hidden] { display: none !important }` w warstwie `base` (wyjątek: `hidden="until-found"`). Bez tego atrybut przegrywał z każdym komponentem ustawiającym `display` (`.card-body`, `.card-footer`, `.navbar` - wszystkie mają `display: flex`), bo arkusz przeglądarki jest najsłabszym źródłem kaskady. Do przełączania widoczności używaj `hidden` albo `.d-none` - nie własnego CSS-a, bo z zewnątrz tej reguły nie pokonasz.
 - **Dostępność B2B (A11y):** Elementy interaktywne (button, input) muszą mieć `min-height: 44px` (zmienna `--target-size-min`). Wyjątkiem są przyciski `.btn-action` w gęstych tabelach.
 - **Wydajność GPU:** Animacje mogą modyfikować wyłącznie `transform`, `scale`, `translate` i `opacity`. Zakaz animowania `box-shadow`, `width`, `height` (unikamy Reflow).
 
