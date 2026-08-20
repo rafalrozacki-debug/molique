@@ -5202,6 +5202,38 @@
       transform: translateY(-20px);
     }
   }
+  /* A <form> wrapping the modal's content must not break the height chain.
+     The modal works as a chain: .modal-dialog is a flex column capped at the
+     viewport, .card inherits that cap with max-height:100%, and .card-body is
+     the ONLY scroller. A plain block <form> inserted anywhere in that chain
+     severs it - .card's max-height:100% then resolves against the form's auto
+     height (indefinite, so the cap does nothing), .card-body never gets a
+     definite height to overflow, and the whole modal grows past the screen
+     with the header and footer scrolling away with it.
+
+     display:contents makes the form generate no box at all, so its children
+     go back to being flex children of the element the form sits in - the
+     chain is whole again. Both wrapping positions are covered, since real
+     projects use both: the form around the whole card (to submit header,
+     body and footer together) and the form inside the card around body plus
+     footer.
+
+     Scoped to those two positions ON PURPOSE, not a blanket
+     ".modal-dialog form". An ordinary form nested inside .card-body is not
+     broken and must stay a block: unwrapping it would drop its children
+     straight into .card-body's flex column and apply that column's `gap`
+     between them, silently respacing every existing modal form.
+
+     Submission, validation and form-owner association are DOM-based, so
+     display:contents does not touch them. Two things it does cost: the form
+     itself can no longer be painted (no padding, background or border on the
+     wrapper - put those on .card), and a form carrying an accessible name as
+     a landmark loses that box. Neither applies to a wrapper form; if you need
+     either, keep the form inside .card-body instead. */
+  .modal-dialog > form,
+  .modal-dialog > .card > form {
+    display: contents;
+  }
   /* Card inside the modal */
   .modal-dialog .card {
     margin: 0;
