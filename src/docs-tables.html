@@ -264,28 +264,58 @@
             <p class="text-muted mb-3">
               Atrybut <code>data-search-target</code> na dowolnym polu
               tekstowym filtruje wiersze wskazanej tabeli w locie, bez
-              przeładowania i bez pisania JS.
+              przeładowania i bez pisania JS. Wiersz może dodatkowo nieść
+              <code>data-tags</code> - słowa, których ktoś szuka, gdy zna swój
+              problem, a nie nazwę klasy.
             </p>
             <div class="component-code">
               <button class="btn-copy">Kopiuj</button>
               <pre><code>&lt;input type="text" class="input" placeholder="Szukaj…"
-       data-search-target="#klienciBody"&gt;
+       data-search-target="#klienciBody"
+       data-search-status="#licznik"
+       data-search-hotkey="/"&gt;
+&lt;span id="licznik"&gt;&lt;/span&gt;
 
 &lt;table class="table"&gt;
   &lt;tbody id="klienciBody"&gt;
-    &lt;tr&gt;&lt;td&gt;Molique&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;Briko&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td colspan="2" class="cheat-sheet-category"&gt;Aktywni&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr data-tags="faktur platnos"&gt;&lt;td&gt;Molique&lt;/td&gt;&lt;td&gt;…&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;</code></pre>
             </div>
-            <p class="text-muted text-4 mt-3 mb-0">
-              <code>data-search-target</code> wskazuje <code>id</code>
-              elementu z wierszami (zwykle <code>&lt;tbody&gt;</code>) -
-              moduł porównuje wpisany tekst z całą treścią każdego
-              <code>&lt;tr&gt;</code>. Wiersz z klasą
-              <code>.cheat-sheet-category</code> traktuje jako nagłówek
-              sekcji i chowa go automatycznie, gdy żaden wiersz pod nim nie
-              pasuje do wyszukiwania - reszta tabel może tę klasę zignorować.
+            <div class="table-wrapper mt-3">
+              <table class="table table-sm">
+                <thead class="thead-light">
+                  <tr><th>Atrybut</th><th>Działanie</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>data-search-target</code></td><td>Selektor elementu z wierszami (zwykle <code>&lt;tbody&gt;</code>). Wymagany - bez niego moduł się nie uruchomi.</td></tr>
+                  <tr><td><code>data-tags</code></td><td>Na <code>&lt;tr&gt;</code>. Dodatkowe słowa do przeszukania, niewidoczne w tabeli.</td></tr>
+                  <tr><td><code>data-search-status</code></td><td>Selektor elementu, w którym pojawi się licznik trafień („12 z 181").</td></tr>
+                  <tr><td><code>data-search-empty</code></td><td>Własny tekst pustego stanu. Domyślny idzie za <code>lang</code> dokumentu (PL/EN/DE).</td></tr>
+                  <tr><td><code>data-search-hotkey</code></td><td>Klawisz ustawiający kursor w polu (np. <code>/</code>). Opcjonalny i celowo <strong>nie</strong> domyślny.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-muted text-4 mt-3 mb-2">
+              <strong>Dopasowanie nie jest zwykłym podciągiem.</strong> Polski
+              i niemiecki odmieniają się przez końcówkę, więc tag
+              <code>wyśrodkowanie</code> nie jest podciągiem tego, co ktoś
+              naprawdę wpisze - <code>wyśrodkować</code>. Dlatego tagi zapisuje
+              się jako <strong>rdzenie</strong> (<code>wysrodk</code>), a moduł
+              uznaje trafienie, gdy rdzeń jest prefiksem wpisanego słowa albo
+              odwrotnie. Diakrytyki zdejmuje po obu stronach, więc
+              <code>wysrodkowac</code> z klawiatury bez polskich znaków znajdzie
+              to samo. Widoczny tekst wiersza nadal działa jak zwykły podciąg.
+            </p>
+            <p class="text-muted text-4 mb-0">
+              Nagłówek sekcji to <code>&lt;tr&gt;</code> zawierający komórkę
+              <code>.cheat-sheet-category</code> - moduł chowa go, gdy nic pod
+              nim nie zostało. <kbd>Esc</kbd> czyści pole, parametr
+              <code>?q=</code> w adresie wypełnia je przy wejściu (dzięki temu
+              wynik da się podlinkować), a <code>MoliqueTableSearch.refresh()</code>
+              przeindeksowuje tabelę po dosypaniu wierszy z JS. Widoczność
+              przełącza atrybut <code>hidden</code>, nie styl inline.
             </p>
           </section>
 

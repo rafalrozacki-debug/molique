@@ -225,6 +225,14 @@
               przeglądarki Internet Explorer.
             </p>
 
+            <div class="alert alert-warning mb-4">
+              <strong>Minimum: Chrome/Edge 125+, Firefox 147+, Safari 26+</strong>
+              (z <code>molique-script.js</code>). Bez JS, na samym CSS:
+              Chrome/Edge <strong>133+</strong>. Różnicę robi jedna rzecz -
+              niejawna kotwica popovera, opisana niżej. Cała reszta
+              degraduje się łagodnie i działa dużo niżej.
+            </div>
+
             <div class="p-4 bg-surface border rounded-2 mb-4">
               <h3 class="fw-bold text-5 mb-3">Wykorzystywane technologie:</h3>
               <ul
@@ -246,6 +254,32 @@
                 <li>
                   <strong>Natywne Modale (<code>&lt;dialog&gt;</code>):</strong>
                   Pełne wsparcie we wszystkich nowoczesnych przeglądarkach.
+                </li>
+                <li>
+                  <strong>CSS Anchor Positioning + niejawna kotwica popovera:</strong>
+                  <span class="badge badge-warning">to wyznacza próg</span>
+                  Chrome/Edge <strong>133+</strong>, Firefox 147+, Safari 26+.
+                  Cztery komponenty kotwiczą się do przycisku, który je otwiera:
+                  <code>.dropdown-menu[popover]</code>,
+                  <code>.popover-context</code>,
+                  <code>.select-search-menu</code>,
+                  <code>.custom-select-dropdown</code>. Samo anchor positioning
+                  jest starsze (Chrome 125) i to
+                  <strong>dwie różne rzeczy</strong>: w przedziale
+                  <strong>Chrome/Edge 125-132</strong> <code>anchor()</code>
+                  parsuje się poprawnie, więc fallback
+                  <code>@supports not (top: anchor(bottom))</code> się nie
+                  włącza, ale niejawnej kotwicy nie ma. Żadne zapytanie
+                  o cechę w CSS tego nie wykryje, dlatego przedział domyka
+                  moduł <code>molique-popover-anchor.js</code> (doładowywany
+                  automatycznie): nadaje triggerowi jawną
+                  <code>anchor-name</code> i wskazuje na nią
+                  <code>position-anchor</code> menu. Bez JS próg zostaje na
+                  133+. Poniżej progu anchor positioning fallback działa
+                  normalnie (wyśrodkowany panel). Nie dotyczy
+                  <code>.mega-menu</code> (jawna <code>anchor-name</code>)
+                  ani <code>.tour-tooltip</code> (kotwicę nadaje JS) - te
+                  działają od Chrome 125.
                 </li>
               </ul>
             </div>

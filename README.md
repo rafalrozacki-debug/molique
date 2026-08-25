@@ -47,6 +47,59 @@ This repo contains two distinct things:
 
 3. Done. See `starter.html` as a starting point.
 
+## Browser requirements
+
+molique is built on modern, native CSS. Most of it degrades gracefully on
+older engines; **one thing does not**, so it is stated here rather than
+left to be discovered.
+
+| Engine | With `molique-script.js` | CSS only |
+|---|---|---|
+| Chrome / Edge | **125** | **133** |
+| Firefox | **147** | 147 |
+| Safari | **26** | 26 |
+
+**The one hard requirement.** Four components position themselves against
+the button that opens them, using the *implicit* anchor a browser creates
+between a `[popovertarget]` button and its popover:
+`.dropdown-menu[popover]`, `.popover-context`, `.select-search-menu`,
+`.custom-select-dropdown`.
+
+That implicit anchor is Chrome/Edge **133+**. CSS Anchor Positioning
+itself is older (Chrome 125), and the two are separate: **Chrome/Edge
+125-132 parse `anchor()` correctly but create no implicit anchor**. Every
+one of these components carries an `@supports not (top: anchor(bottom))`
+fallback that turns the menu into a centred panel, but that test only
+detects anchor positioning as a whole - it cannot see the missing implicit
+anchor, and **no CSS feature query can**.
+
+That band is closed by `js/modules/molique-popover-anchor.js`, loaded
+automatically by `molique-script.js` when one of those menus is on the
+page. It gives the trigger an explicit `anchor-name` and points the
+menu's `position-anchor` at it - the same thing `.mega-menu` does in
+pure CSS, which it can only afford because it has a wrapper to scope one
+shared name to. The link is made on click and delegated from `document`,
+so menus rendered later need no re-initialisation, and a menu shared by
+several triggers anchors to the one actually used. Where the implicit
+anchor already works this changes nothing - an explicit anchor resolves to
+the same element. An `anchor-name` or `position-anchor` you set
+yourself is respected, never overwritten.
+
+**If you take the CSS without the JS, the floor stays at Chrome/Edge 133.**
+
+Firefox and Safari shipped anchor positioning long after the implicit-anchor
+behaviour was settled, so no equivalent band is known there; below their
+minimums the centred-panel fallback takes over and works.
+
+Not affected: `.mega-menu` uses an explicit `anchor-name`, and
+`.tour-tooltip` gets one assigned by JS. Both work wherever anchor
+positioning does (Chrome 125+).
+
+For a CSS-only integration that must reach Chrome 125-132, do by hand
+what the shim does: give the trigger an explicit `anchor-name` and the
+menu a matching `position-anchor`. Or use the `<details class="dropdown">`
+variant, which uses no anchor positioning at all.
+
 ## What's in the package
 
 | Path | Description |

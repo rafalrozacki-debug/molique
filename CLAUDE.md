@@ -23,7 +23,7 @@ sugestia - przed uznaniem zmiany za skończoną, przejdź ją całą.
 | 1 | SCSS komponentu + rejestracja w `_components.scss` (lub właściwym aggregatorze) | zawsze |
 | 2 | `tools/builder-i18n.data.js` - wpis EN/DE dla nowego pliku komponentu | zawsze (nowy plik `.scss` w `components/`) - **build się nie zbuduje bez tego**, to jedyny punkt-bramka na liście |
 | 3 | `src/docs-*.html` (PL/EN/DE) - żywy przykład + tabela klas na właściwej stronie referencyjnej | zawsze (nowa klasa publiczna) |
-| 4 | `src/docs-classes.html` (PL/EN/DE) - wiersz w cheat-sheecie | zawsze (nowa klasa publiczna) |
+| 4 | `tools/cheatsheet.data.js` - wpis w spisie klas (PL/EN/DE naraz) | zawsze (nowa klasa publiczna) - **drugi punkt-bramka na liście**: `tools/gen-cheatsheet.js` przerywa build, gdy w skompilowanym CSS jest klasa bez wpisu ALBO gdy wpis wskazuje klasę, której już nie ma. `src/docs-classes.*.html` NIE edytujesz - to `<include>` partiala generowanego do `.gitignore`. Klasa będąca wyłącznie hakiem dla JS (bez reguły CSS, jak `.btn-magnetic`) dostaje `cssless: true` |
 | 5 | `llms.txt` (jeden plik, PL) | zawsze (nowa klasa publiczna) - `docs-llms.html` regeneruje się z niego automatycznie, nic więcej nie trzeba ręcznie edytować |
 | 6 | `~/.claude/molique.md` (globalny słownik użytkownika, poza tym repo) | zawsze (nowa klasa publiczna) - inaczej Claude pracujący nad projektem klienckim nie wie, że klasa istnieje |
 | 7 | `src/examples-*.html` | TYLKO gdy komponent wchodzi w skład większej, realistycznej kompozycji (dashboard, strona ofertowa). Pojedyncze atomy (jak `.stat-tile`) NIE dostają własnej strony examples. |
@@ -148,6 +148,31 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   `--footer-accent`, `--pricing-ribbon`, `--form-check-size`), a nie
   walka z kaskadą. Nowe utilities z zaszytą wartością zawsze wystawiaj
   jako token.
+- **Keyframe NAZYWAJ PO KOMPONENCIE i definiuj W JEGO PLIKU.** Chunki
+  (`dist/chunks/molique-*.css`) buduje `tools/gen-chunks.js` PER KOMPONENT,
+  więc `@keyframes` o nazwie generycznej nie należy do żadnego chunka - a
+  w praktyce nie trafiał nigdzie. Zdarzyło się to DWA razy: `fadeInDown`
+  (`.dropdown-menu`, `.custom-select-dropdown`, `.select-search-menu`)
+  i `fadeIn` (`.radial-value`, `.feedback-invalid`, `.tab-pane`) - sześć
+  martwych referencji, zero efektu, zero ostrzeżenia (Sass kompiluje,
+  przeglądarka ignoruje nieznaną nazwę, konsola czysta). Wzorzec jest
+  w repo od dawna: `toastEnter`, `adminDrilldownPanelIn`, `pingDot`.
+  Pilnuje tego `npm run test:css` - wywala się, gdy animacja odwołuje się
+  do `@keyframes` spoza TEGO SAMEGO pliku.
+- **Popover kotwiczony niejawnie MUSI mieć `position-anchor: auto`.**
+  Wartość początkowa to `normal`, a `normal` zachowuje się jak `none`,
+  dopóki nie użyjesz `position-area` - poleganie na domyślce zostawia
+  `anchor()` bez kotwicy (wartość nieprawidłowa na etapie wartości
+  obliczonej → `top: auto` → element w pozycji statycznej). Brakowało tego
+  w `.dropdown-menu[popover]` i `.popover-context`. Osobno: sama niejawna
+  kotwica to Chrome/Edge 133+, a `anchor()` jest starsze (Chrome 125), więc
+  `@supports not (top: anchor(bottom))` NIE łapie przedziału 125-132 i
+  żadne zapytanie o cechę tego nie wykryje - dlatego przedział domyka
+  `js/modules/molique-popover-anchor.js` (jawna `anchor-name` na triggerze
+  + `position-anchor` na menu, na kliknięciu, delegowane z `document`),
+  a wymóg jest postawiony wprost w README, `docs.html` i `llms.txt`:
+  z JS Chrome/Edge 125+, na samym CSS 133+. Testy:
+  `npm run test:popover-anchor`.
 - **Goły `1fr` w CSS Grid to `minmax(auto, 1fr)`, nie `minmax(0, 1fr)`:**
   minimum toru liczy się z min-content potomków (dowolnie głęboko
   zagnieżdżonych), NIE z zera - `min-width: 0` + `overflow-x: hidden` na

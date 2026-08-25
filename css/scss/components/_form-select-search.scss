@@ -88,7 +88,12 @@
   &:popover-open {
     display: flex;
     flex-direction: column;
-    animation: fadeInDown 0.2s ease;
+    animation: selectSearchMenuIn 0.2s ease;
+
+    /* A11y: no entrance animation under prefers-reduced-motion. */
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
 
   /* Fallback for browsers without CSS Anchor Positioning (older Firefox):
@@ -129,5 +134,21 @@
     background-color: rgba(var(--primary-rgb), 0.1);
     color: var(--primary);
     font-weight: var(--fw-bold);
+  }
+}
+
+
+/* Component-scoped keyframe - see the note in _dropdown.scss: chunks are
+   built per component, so a generically named shared keyframe belongs to
+   no chunk. This one replaces `fadeInDown`, which was referenced here but
+   defined nowhere, in any bundle. */
+@keyframes selectSearchMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

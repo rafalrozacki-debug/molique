@@ -4,7 +4,7 @@
   "description": "Ultralekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez zależności (zero jQuery).",
   "main": "index.js",
   "scripts": {
-    "predev": "node tools/gen-chunks.js && node tools/gen-jit-utilities.js && node tools/gen-jit-package-data.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js && node tools/gen-icon-sprite.js && node tools/gen-sitemap.js",
+    "predev": "node tools/gen-chunks.js && node tools/gen-jit-utilities.js && node tools/gen-jit-package-data.js && node tools/gen-variables-doc.js && node tools/gen-cheatsheet.js && node tools/gen-llms-page.js && node tools/sync-version.js && node tools/gen-icon-sprite.js && node tools/gen-sitemap.js",
     "dev": "vite",
     "build": "vite build",
     "postbuild": "node tools/minify-css.js",
@@ -13,15 +13,19 @@
     "gen:jit-utilities": "node tools/gen-jit-utilities.js",
     "gen:jit-package-data": "node tools/gen-jit-package-data.js",
     "gen:variables": "node tools/gen-variables-doc.js",
+    "gen:cheatsheet": "node tools/gen-cheatsheet.js",
     "gen:llms-page": "node tools/gen-llms-page.js",
     "gen:sitemap": "node tools/gen-sitemap.js",
     "gen:minify-css": "node tools/minify-css.js",
     "gen:icons": "node tools/gen-icon-sprite.js",
     "gen:npm-molique": "node tools/build-npm-molique.mjs",
     "sync:version": "node tools/sync-version.js",
+    "test:css": "node tools/tests/css-integrity.test.js",
+    "test:popover-anchor": "node tools/tests/popover-anchor.test.js",
+    "test:cheatsheet": "node tools/gen-cheatsheet.js && node tools/tests/cheatsheet-search.test.js",
     "test:jit-parity": "node --test tools/jit/tests/parity.test.mjs",
     "test:jit-scaffolding": "node tools/run-scaffolding-tests.mjs",
-    "prebuild": "node tools/gen-chunks.js && node tools/gen-jit-utilities.js && node tools/gen-jit-package-data.js && node tools/gen-variables-doc.js && node tools/gen-llms-page.js && node tools/sync-version.js && node tools/gen-icon-sprite.js && node tools/gen-sitemap.js"
+    "prebuild": "node tools/gen-chunks.js && node tools/gen-jit-utilities.js && node tools/gen-jit-package-data.js && node tools/gen-variables-doc.js && node tools/gen-cheatsheet.js && node tools/gen-llms-page.js && node tools/sync-version.js && node tools/gen-icon-sprite.js && node tools/gen-sitemap.js"
   },
   "repository": {
     "type": "git",

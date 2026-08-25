@@ -49,6 +49,64 @@ Dieses Repo enthält zwei unterschiedliche Dinge:
 
 3. Fertig. Siehe `starter.html` als Ausgangspunkt.
 
+## Browser-Anforderungen
+
+molique baut auf modernem, nativem CSS auf. Das meiste degradiert auf
+älteren Engines sanft; **eine Sache nicht**, deshalb steht sie hier
+ausdrücklich, statt entdeckt werden zu müssen.
+
+| Engine | Mit `molique-script.js` | Nur CSS |
+|---|---|---|
+| Chrome / Edge | **125** | **133** |
+| Firefox | **147** | 147 |
+| Safari | **26** | 26 |
+
+**Die eine harte Anforderung.** Vier Komponenten positionieren sich
+relativ zu dem Button, der sie öffnet, über den *impliziten* Anker, den
+der Browser zwischen einem `[popovertarget]`-Button und seinem Popover
+herstellt: `.dropdown-menu[popover]`, `.popover-context`,
+`.select-search-menu`, `.custom-select-dropdown`.
+
+Dieser implizite Anker ist Chrome/Edge **133+**. CSS Anchor Positioning
+selbst ist älter (Chrome 125), und beides ist getrennt: **Chrome/Edge
+125-132 parsen `anchor()` korrekt, erzeugen aber keinen impliziten
+Anker**. Jede dieser Komponenten trägt einen Fallback
+`@supports not (top: anchor(bottom))`, der das Menü in ein zentriertes
+Panel verwandelt - dieser Test erkennt jedoch nur Anchor Positioning als
+Ganzes, er sieht den fehlenden impliziten Anker nicht, und **keine
+CSS-Feature-Query kann das**.
+
+Dieses Band schließt `js/modules/molique-popover-anchor.js`, das
+`molique-script.js` automatisch nachlädt, sobald eines dieser Menüs auf
+der Seite ist. Es gibt dem Auslöser einen expliziten `anchor-name` und
+richtet `position-anchor` des Menüs darauf aus - genau das, was
+`.mega-menu` in reinem CSS tut, was es sich nur leisten kann, weil es
+einen Wrapper hat, in dem sich ein gemeinsamer Name begrenzen lässt. Die
+Verknüpfung entsteht beim Klick und ist von `document` delegiert, sodass
+später gerenderte Menüs keine Neuinitialisierung brauchen und ein von
+mehreren Auslösern geteiltes Menü sich an dem tatsächlich benutzten
+verankert. Wo der implizite Anker bereits funktioniert, ändert das nichts -
+ein expliziter Anker verweist auf dasselbe Element. Ein selbst gesetzter
+`anchor-name` oder `position-anchor` wird respektiert und nie
+überschrieben.
+
+**Wer das CSS ohne das JS nimmt, bleibt bei Chrome/Edge 133.**
+
+Firefox und Safari haben Anchor Positioning lange nach der Festlegung des
+impliziten Ankers ausgeliefert, ein entsprechendes Band ist dort also
+nicht bekannt; unterhalb ihrer Minima übernimmt der Fallback mit dem
+zentrierten Panel und funktioniert.
+
+Nicht betroffen: `.mega-menu` nutzt einen expliziten `anchor-name`,
+und `.tour-tooltip` bekommt einen per JS. Beide funktionieren überall
+dort, wo Anchor Positioning funktioniert (Chrome 125+).
+
+Für eine reine CSS-Einbindung, die Chrome 125-132 erreichen muss, macht
+man von Hand, was der Shim tut: dem Auslöser einen expliziten
+`anchor-name` geben und dem Menü ein passendes `position-anchor`. Oder
+die Variante `<details class="dropdown">` nutzen, die ohne Anchor
+Positioning auskommt.
+
 ## Was im Paket enthalten ist
 
 | Pfad | Beschreibung |

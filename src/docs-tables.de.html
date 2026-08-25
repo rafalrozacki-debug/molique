@@ -265,30 +265,62 @@
             <h3 class="text-6 fw-bold mb-2 mt-4">Live-Suche</h3>
             <p class="text-muted mb-3">
               Das Attribut <code>data-search-target</code> an einem beliebigen
-              Textfeld filtert die Zeilen der angegebenen Tabelle live, ohne
-              Neuladen und ohne JS zu schreiben.
+              Textfeld filtert die Zeilen der angegebenen Tabelle im laufenden
+              Betrieb - ohne Neuladen und ohne eigenes JavaScript. Eine Zeile
+              kann zusätzlich <code>data-tags</code> tragen: die Wörter, nach
+              denen jemand sucht, der sein Problem kennt, aber nicht den
+              Klassennamen.
             </p>
             <div class="component-code">
               <button class="btn-copy">Kopieren</button>
               <pre><code>&lt;input type="text" class="input" placeholder="Suchen…"
-       data-search-target="#kundenBody"&gt;
+       data-search-target="#kundenBody"
+       data-search-status="#zaehler"
+       data-search-hotkey="/"&gt;
+&lt;span id="zaehler"&gt;&lt;/span&gt;
 
 &lt;table class="table"&gt;
   &lt;tbody id="kundenBody"&gt;
-    &lt;tr&gt;&lt;td&gt;Molique&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;Briko&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td colspan="2" class="cheat-sheet-category"&gt;Aktiv&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr data-tags="rechnung zahlung"&gt;&lt;td&gt;Molique&lt;/td&gt;&lt;td&gt;…&lt;/td&gt;&lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;</code></pre>
             </div>
-            <p class="text-muted text-4 mt-3 mb-0">
-              <code>data-search-target</code> zeigt auf die <code>id</code>
-              des Elements mit den Zeilen (meist <code>&lt;tbody&gt;</code>) -
-              das Modul vergleicht den eingegebenen Text mit dem gesamten
-              Inhalt jedes <code>&lt;tr&gt;</code>. Eine Zeile mit der Klasse
-              <code>.cheat-sheet-category</code> behandelt es als
-              Abschnittsüberschrift und blendet sie automatisch aus, sobald
-              keine Zeile darunter zur Suche passt - andere Tabellen können
-              diese Klasse gefahrlos ignorieren.
+            <div class="table-wrapper mt-3">
+              <table class="table table-sm">
+                <thead class="thead-light">
+                  <tr><th>Attribut</th><th>Wirkung</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>data-search-target</code></td><td>Selektor des Elements mit den Zeilen (meist ein <code>&lt;tbody&gt;</code>). Pflicht - ohne das Attribut startet nichts.</td></tr>
+                  <tr><td><code>data-tags</code></td><td>Am <code>&lt;tr&gt;</code>. Zusätzliche durchsuchbare Wörter, in der Tabelle unsichtbar.</td></tr>
+                  <tr><td><code>data-search-status</code></td><td>Selektor des Elements, das die Trefferzahl bekommt („12 von 181").</td></tr>
+                  <tr><td><code>data-search-empty</code></td><td>Eigener Text für den leeren Zustand. Die Vorgabe folgt dem <code>lang</code> des Dokuments (PL/EN/DE).</td></tr>
+                  <tr><td><code>data-search-hotkey</code></td><td>Taste, die das Feld fokussiert (z. B. <code>/</code>). Optional und bewusst <strong>nicht</strong> voreingestellt.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-muted text-4 mt-3 mb-2">
+              <strong>Der Abgleich ist kein einfacher Teilstring-Test.</strong>
+              Polnisch und Deutsch flektieren am Wortende, deshalb ist das Tag
+              <code>wyśrodkowanie</code> kein Teilstring dessen, was jemand
+              tatsächlich tippt: <code>wyśrodkować</code>. Tags werden daher als
+              <strong>Wortstämme</strong> gespeichert (<code>wysrodk</code>),
+              und ein Treffer gilt, wenn der Stamm ein Präfix des Suchworts ist
+              oder umgekehrt. Diakritika werden auf beiden Seiten entfernt, so
+              findet <code>wysrodkowac</code> ohne polnische Tastatur dieselben
+              Zeilen. Der sichtbare Zeilentext wird weiterhin als gewöhnlicher
+              Teilstring geprüft.
+            </p>
+            <p class="text-muted text-4 mb-0">
+              Eine Abschnittsüberschrift ist ein <code>&lt;tr&gt;</code> mit
+              einer Zelle <code>.cheat-sheet-category</code> - sie verschwindet,
+              sobald darunter nichts mehr übrig ist. <kbd>Esc</kbd> leert das
+              Feld, ein <code>?q=</code> in der Adresse füllt es beim Laden (so
+              lässt sich ein Ergebnis verlinken), und
+              <code>MoliqueTableSearch.refresh()</code> indiziert die Tabelle
+              neu, wenn Zeilen per JS dazukommen. Die Sichtbarkeit schaltet das
+              Attribut <code>hidden</code>, kein Inline-Style.
             </p>
           </section>
 

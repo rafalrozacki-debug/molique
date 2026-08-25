@@ -51,7 +51,30 @@
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
-  animation: fadeInDown 0.2s ease;
+  animation: dropdownMenuIn 0.2s ease;
+
+  /* A11y: no entrance animation under prefers-reduced-motion. */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* Named after the component, not "fadeInDown", because chunks are built
+   PER COMPONENT (dist/chunks/molique-dropdown.css). A shared, generically
+   named keyframe belongs to no chunk - which is exactly how the previous
+   `animation: fadeInDown` ended up referencing a @keyframes that existed
+   in no bundle at all: the animation silently did nothing, in the core
+   bundle and in every chunk. Every other keyframe here is already
+   component-scoped (toastEnter, adminDrilldownPanelIn, pingDot). */
+@keyframes dropdownMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dropdown-item {
@@ -106,10 +129,28 @@
    close it natively (light dismiss).
 
    Positioning: a popover opened via [popovertarget] gets its button as an
-   IMPLICIT anchor (position-anchor: auto - the default value), so anchor()
-   works without a .dropdown wrapper, without anchor-name, and without
-   anchor-scope. That's why this variant can be attached to any button with
-   just one pair of attributes. */
+   IMPLICIT anchor, so anchor() works without a .dropdown wrapper, without
+   anchor-name and without anchor-scope. That's why this variant can be
+   attached to any button with just one pair of attributes.
+
+   `position-anchor: auto` is DECLARED, not left to the default. The
+   initial value of position-anchor is `normal`, and `normal` behaves as
+   `none` unless position-area is in use - which it is not here, the
+   placement comes from anchor() in top/left. Relying on the default meant
+   anchor() had no anchor at all: invalid at computed-value time, so `top`
+   fell back to auto and the menu landed at its static position instead of
+   under the button. `auto` opts into the implicit anchor explicitly.
+
+   BROWSER REQUIREMENT: the implicit anchor from a popover invoker is
+   Chrome/Edge 133+. Anchor positioning itself is older (Chrome 125), so
+   the @supports test below does NOT catch the 125-132 band: those
+   versions parse anchor() fine, skip the fallback, and have no implicit
+   anchor to resolve against. There is no feature query for this, so the
+   band is closed in JS instead: js/modules/molique-popover-anchor.js gives
+   the trigger an explicit anchor-name and points this menu's
+   position-anchor at it. With molique-script.js the floor is Chrome 125;
+   on the CSS alone it stays at 133. See the browser-requirements section
+   in README. */
 /* Fallback-position variants for when the default placement (below the
    button, to the left) would push the menu outside the viewport - e.g. a
    button near the bottom or right edge of the screen (the last table row,
@@ -145,6 +186,7 @@
      the viewport - at a large scrollY it landed far off-screen. fixed has
      containing block = viewport regardless of promotion to the top layer. */
   position: fixed;
+  position-anchor: auto;
   inset: auto;
   top: anchor(bottom);
   left: anchor(left);

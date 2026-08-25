@@ -20,8 +20,17 @@
   box-shadow: var(--shadow-md);
   min-width: 160px;
 
-  /* Positioned via CSS Anchor Positioning (Baseline 2026) */
+  /* Positioned via CSS Anchor Positioning against the [popovertarget]
+     button, which the browser sets as this popover's IMPLICIT anchor.
+     `position-anchor: auto` is declared rather than left to the default:
+     the initial value is `normal`, which behaves as `none` when
+     position-area is not in use - so anchor() below would have had no
+     anchor to resolve against. Same reasoning as .dropdown-menu[popover];
+     the implicit anchor itself needs Chrome/Edge 133+, and
+     js/modules/molique-popover-anchor.js closes the 125-132 band by
+     assigning an explicit anchor (see README). */
   position: absolute;
+  position-anchor: auto;
   top: anchor(bottom);
   left: anchor(start);
   margin-top: 4px;

@@ -68,7 +68,12 @@ $tabs-max: 16 !default;
 
 .tab-pane {
   display: none;
-  animation: fadeIn var(--transition-speed) ease;
+  animation: tabPaneIn var(--transition-speed) ease;
+
+  /* A11y: no fade under prefers-reduced-motion. */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 /* A PANEL BEYOND THE THRESHOLD STAYS VISIBLE instead of vanishing.
@@ -215,4 +220,17 @@ $pill-active: '';
 
 #{$pill-active} {
   color: var(--text-main);
+}
+
+
+/* Component-scoped keyframe - see the note in _dropdown.scss. This replaces
+   `fadeIn`, which was referenced here but defined in no bundle and no chunk,
+   so the animation silently did nothing. */
+@keyframes tabPaneIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

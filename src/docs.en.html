@@ -223,6 +223,14 @@
               Internet Explorer.
             </p>
 
+            <div class="alert alert-warning mb-4">
+              <strong>Minimum: Chrome/Edge 125+, Firefox 147+, Safari 26+</strong>
+              (with <code>molique-script.js</code>). CSS only, no JS:
+              Chrome/Edge <strong>133+</strong>. The difference comes from one
+              thing - the implicit popover anchor, described below.
+              Everything else degrades gracefully and works far lower.
+            </div>
+
             <div class="p-4 bg-surface border rounded-2 mb-4">
               <h3 class="fw-bold text-5 mb-3">Technologies in use:</h3>
               <ul
@@ -245,6 +253,32 @@
                 <li>
                   <strong>Native modals (<code>&lt;dialog&gt;</code>):</strong>
                   Full support in all modern browsers.
+                </li>
+                <li>
+                  <strong>CSS Anchor Positioning + the implicit popover anchor:</strong>
+                  <span class="badge badge-warning">this sets the floor</span>
+                  Chrome/Edge <strong>133+</strong>, Firefox 147+, Safari 26+.
+                  Four components anchor themselves to the button that opens
+                  them: <code>.dropdown-menu[popover]</code>,
+                  <code>.popover-context</code>,
+                  <code>.select-search-menu</code>,
+                  <code>.custom-select-dropdown</code>. Anchor positioning
+                  itself is older (Chrome 125) and the two are
+                  <strong>separate things</strong>: in the
+                  <strong>Chrome/Edge 125-132</strong> band
+                  <code>anchor()</code> parses correctly, so the
+                  <code>@supports not (top: anchor(bottom))</code> fallback
+                  does not fire, yet there is no implicit anchor. No CSS
+                  feature query can detect this, which is why the band is
+                  closed by <code>molique-popover-anchor.js</code> (loaded
+                  automatically): it gives the trigger an explicit
+                  <code>anchor-name</code> and points the menu's
+                  <code>position-anchor</code> at it. Without the JS the floor
+                  stays at 133+. Below the anchor-positioning threshold the
+                  fallback works normally (a centred panel). Not affected:
+                  <code>.mega-menu</code> (explicit <code>anchor-name</code>)
+                  and <code>.tour-tooltip</code> (anchor assigned by JS) -
+                  those work from Chrome 125.
                 </li>
               </ul>
             </div>

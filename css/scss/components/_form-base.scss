@@ -99,7 +99,13 @@ select.input {
 
 .input:user-invalid ~ .feedback-invalid {
   display: block;
-  animation: fadeIn var(--transition-speed) ease;
+  animation: formFeedbackIn var(--transition-speed) ease;
+
+  /* A11y: no fade under prefers-reduced-motion - a validation message
+     must not be delayed by an effect. */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 /* =========================================
@@ -134,5 +140,18 @@ select.input {
     &:not(:placeholder-shown) {
       height: calc(var(--textarea-rows-expanded) * 1.5em + (var(--input-padding-y, calc(var(--spacing-unit) * 1.25)) * 2));
     }
+  }
+}
+
+
+/* Component-scoped keyframe - see the note in _dropdown.scss. This replaces
+   `fadeIn`, which was referenced here but defined in no bundle and no chunk,
+   so the animation silently did nothing. */
+@keyframes formFeedbackIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

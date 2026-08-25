@@ -136,7 +136,12 @@
   font-weight: var(--fw-black);
   color: var(--text-main);
   /* Text fade-in animation */
-  animation: fadeIn 1s ease backwards 0.3s;
+  animation: chartValueIn 1s ease backwards 0.3s;
+
+  /* A11y: the value shows immediately under prefers-reduced-motion. */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 /* =========================================
@@ -396,5 +401,18 @@
   input:focus-visible + .nav-label {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: 2px;
+  }
+}
+
+
+/* Component-scoped keyframe - see the note in _dropdown.scss. This replaces
+   `fadeIn`, which was referenced here but defined in no bundle and no chunk,
+   so the animation silently did nothing. */
+@keyframes chartValueIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

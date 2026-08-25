@@ -228,6 +228,14 @@
               unterstützen den Internet Explorer nicht.
             </p>
 
+            <div class="alert alert-warning mb-4">
+              <strong>Minimum: Chrome/Edge 125+, Firefox 147+, Safari 26+</strong>
+              (mit <code>molique-script.js</code>). Nur CSS, ohne JS:
+              Chrome/Edge <strong>133+</strong>. Den Unterschied macht eine
+              einzige Sache - der implizite Popover-Anker, siehe unten. Alles
+              andere degradiert sanft und funktioniert deutlich darunter.
+            </div>
+
             <div class="p-4 bg-surface border rounded-2 mb-4">
               <h3 class="fw-bold text-5 mb-3">Verwendete Technologien:</h3>
               <ul
@@ -251,6 +259,32 @@
                 <li>
                   <strong>Native Modale (<code>&lt;dialog&gt;</code>):</strong>
                   Vollständige Unterstützung in allen modernen Browsern.
+                </li>
+                <li>
+                  <strong>CSS Anchor Positioning + impliziter Popover-Anker:</strong>
+                  <span class="badge badge-warning">setzt die Untergrenze</span>
+                  Chrome/Edge <strong>133+</strong>, Firefox 147+, Safari 26+.
+                  Vier Komponenten verankern sich an dem Button, der sie
+                  öffnet: <code>.dropdown-menu[popover]</code>,
+                  <code>.popover-context</code>,
+                  <code>.select-search-menu</code>,
+                  <code>.custom-select-dropdown</code>. Anchor Positioning
+                  selbst ist älter (Chrome 125), und beides sind
+                  <strong>zwei verschiedene Dinge</strong>: im Band
+                  <strong>Chrome/Edge 125-132</strong> parst
+                  <code>anchor()</code> korrekt, der Fallback
+                  <code>@supports not (top: anchor(bottom))</code> greift also
+                  nicht, einen impliziten Anker gibt es aber nicht. Keine
+                  CSS-Feature-Query erkennt das, deshalb schließt
+                  <code>molique-popover-anchor.js</code> das Band (wird
+                  automatisch nachgeladen): es gibt dem Auslöser einen
+                  expliziten <code>anchor-name</code> und richtet
+                  <code>position-anchor</code> des Menüs darauf aus. Ohne das
+                  JS bleibt die Untergrenze bei 133+. Unterhalb der
+                  Anchor-Positioning-Schwelle funktioniert der Fallback normal
+                  (zentriertes Panel). Nicht betroffen: <code>.mega-menu</code> (expliziter
+                  <code>anchor-name</code>) und <code>.tour-tooltip</code>
+                  (Anker per JS) - die funktionieren ab Chrome 125.
                 </li>
               </ul>
             </div>

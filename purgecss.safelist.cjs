@@ -3,7 +3,7 @@
  *
  * AUTO-GENERATED FILE - do not edit by hand.
  * Source: tools/gen-safelist.js   |   Regenerate with: node tools/gen-safelist.js
- * Generated: 2026-08-04
+ * Generated: 2026-08-25
  *
  * WHY THIS EXISTS: some molique classes never appear in the HTML - they're
  * added by JS at runtime (states, carousel/lightbox/toast markup).
@@ -69,6 +69,7 @@ const runtime = {
     'onboarding-slide-title',
     'onboarding-step-count',
     'opacity-50',
+    'p-4',
     'select-search',
     'select-search-menu',
     'sidebar-md',
@@ -80,6 +81,8 @@ const runtime = {
     'status-pending',
     'te-label',
     'text-4',
+    'text-center',
+    'text-muted',
     'toast',
     'toast-bottom-center',
     'toast-bottom-left',
