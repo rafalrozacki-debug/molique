@@ -13,6 +13,14 @@
     --main-radius: 0px;
     /* FIX: default background for the main content in standard mode */
     --main-bg: var(--bg-surface);
+    /* Width of the optional second column (.admin-rail). Only takes effect
+       when such a column actually exists - see the :has() rule below. */
+    --admin-rail-width: 240px;
+    /* Distance from the left edge of the viewport to the main column.
+       Declared ONCE, because .admin-main.fade-bottom positions its gradient
+       with position:fixed and has to line it up with the column - and a
+       duplicated calc() is exactly how those two drift apart. */
+    --main-offset: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
     display: grid;
     grid-template-columns: var(--current-sidebar-width) 1fr;
     gap: var(--layout-gap);
@@ -81,6 +89,29 @@
       --current-sidebar-width: 100%;
     }
   }
+  .admin-layout {
+    /* SECOND COLUMN (opt-in) - see .admin-rail below.
+       Added with :has() rather than unconditionally, because an empty
+       third track would still generate a SECOND gap in floating mode and
+       shift the layout for every page that does not use a rail. This way
+       nothing changes unless the element is actually there. */
+  }
+  .admin-layout:has(> .admin-rail) {
+    grid-template-columns: var(--current-sidebar-width) var(--admin-rail-width) minmax(0, 1fr);
+    /* Two gaps now sit to the left of the main column, not one. */
+    --main-offset: calc(
+      var(--current-sidebar-width) + var(--admin-rail-width) +
+        (2 * var(--layout-gap)) + var(--layout-padding)
+    );
+    /* Mobile keeps the single column from the rule above - this selector
+       is more specific, so it has to repeat it or it would win. */
+  }
+  @media (max-width: 768px) {
+    .admin-layout:has(> .admin-rail) {
+      grid-template-columns: minmax(0, 1fr);
+      --main-offset: 0px;
+    }
+  }
   .admin-main {
     background-color: var(--main-bg);
     border-radius: var(--main-radius);
@@ -96,6 +127,64 @@
   .admin-layout-floating .admin-main {
     box-shadow: var(--shadow-sm);
   }
+  /* SECOND COLUMN, between the sidebar and the content: sub-navigation,
+     filters, a list of records to pick from.
+     DELIBERATELY WITHOUT A BACKGROUND - it sits on the layout's --bg-body,
+     so it reads as part of the page ground rather than as a third card. In
+     floating mode that is the whole point: sidebar and content are cards,
+     the rail is the gap between them that happens to hold content.
+     The column only exists because of the :has() rule in .admin-layout - a
+     bare .admin-rail outside that layout is just a block. */
+  .admin-rail {
+    /* Sticks like the sidebar, and for the same reason: .admin-main does
+       not scroll itself (the page does), so a long rail would otherwise
+       scroll away and leave its column empty. */
+    position: sticky;
+    top: var(--layout-padding);
+    height: calc(100dvh - var(--layout-padding) * 2);
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* min-width: 0 so a long label inside cannot push the fixed track. */
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 2);
+    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+  }
+  .admin-rail::-webkit-scrollbar {
+    width: 4px;
+  }
+  .admin-rail::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .admin-rail::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--border-radius);
+  }
+  .admin-rail {
+    /* Mobile: the grid collapses to one column and the sidebar becomes the
+       fixed Bottom Nav, so the rail simply stacks ABOVE the content. It is
+       not hidden: silently dropping content the markup contains is the kind
+       of failure nobody can diagnose. Use .admin-rail-hide-mobile when the
+       rail really is redundant on a phone. */
+  }
+  @media (max-width: 768px) {
+    .admin-rail {
+      position: static;
+      height: auto;
+      overflow: visible;
+      padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2) 0;
+    }
+  }
+  /* Opt-in: drop the rail on small screens (for a rail that only duplicates
+     navigation available elsewhere). */
+  @media (max-width: 768px) {
+    .admin-rail-hide-mobile {
+      display: none;
+    }
+  }
   /* Fading content at the bottom of the main column (opt-in: the
      .fade-bottom class from the layout layer). .admin-main doesn't scroll
      itself - the page scrolls - and overflow-x:hidden makes it a
@@ -109,7 +198,7 @@
   .admin-main.fade-bottom::after {
     position: fixed;
     bottom: var(--layout-padding);
-    left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
+    left: var(--main-offset);
     right: var(--layout-padding);
     height: var(--fade-height);
     margin-top: 0;
@@ -841,32 +930,44 @@
     box-shadow: none !important;
   }
   /* --- NARROW VARIANTS (Drill-down Menu) --- */
+  /* SCOPED TO .admin-sidebar ON PURPOSE - do not widen this selector.
+     The drill-down forces `position: static` on the submenu so its ::before
+     can cover the whole sidebar; that only works because .admin-sidebar is
+     the nearest positioned ancestor (it is sticky). A .admin-nav-submenu
+     living ANYWHERE ELSE on the page - a documentation demo, a nav rendered
+     into the main column - has no positioned ancestor, so the same ::before
+     resolved against the initial containing block and painted a dark,
+     click-eating panel over the ENTIRE page at z-index 100.
+     It fired without anyone touching the toggle on that page: the anti-FOUC
+     script in <head> puts .sidebar-md/.sidebar-sm on <html> straight from
+     localStorage, so the class arrives from a completely different page the
+     visitor collapsed the sidebar on. */
   @media (min-width: 768px) {
-    .sidebar-md .admin-nav-submenu,
-    .sidebar-sm .admin-nav-submenu {
+    .sidebar-md .admin-sidebar .admin-nav-submenu,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu {
       /* Escape the positioning context so we can cover the entire sidebar! */
       position: static;
     }
-    .sidebar-md .admin-nav-submenu summary::after,
-    .sidebar-sm .admin-nav-submenu summary::after {
+    .sidebar-md .admin-sidebar .admin-nav-submenu summary::after,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu summary::after {
       display: none;
     }
-    .sidebar-md .admin-nav-submenu .admin-nav-submenu-list,
-    .sidebar-sm .admin-nav-submenu .admin-nav-submenu-list {
+    .sidebar-md .admin-sidebar .admin-nav-submenu .admin-nav-submenu-list,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu .admin-nav-submenu-list {
       display: none !important;
     }
-    .sidebar-md .admin-nav-submenu,
-    .sidebar-sm .admin-nav-submenu {
+    .sidebar-md .admin-sidebar .admin-nav-submenu,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu {
       /* =========================================
          OPEN STATE (drill-down active)
          ========================================= */
     }
-    .sidebar-md .admin-nav-submenu[open],
-    .sidebar-sm .admin-nav-submenu[open] {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open],
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] {
       /* 1. A background covering the rest of the sidebar BELOW the logo (logo stays visible) */
     }
-    .sidebar-md .admin-nav-submenu[open]::before,
-    .sidebar-sm .admin-nav-submenu[open]::before {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open]::before,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open]::before {
       content: "";
       position: absolute;
       top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
@@ -876,12 +977,12 @@
       background-color: var(--sidebar-bg);
       z-index: 100;
     }
-    .sidebar-md .admin-nav-submenu[open],
-    .sidebar-sm .admin-nav-submenu[open] {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open],
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] {
       /* 2. The "Back" button (transforms the <summary> tag) - below the logo, not in its place */
     }
-    .sidebar-md .admin-nav-submenu[open] > summary,
-    .sidebar-sm .admin-nav-submenu[open] > summary {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary {
       position: absolute;
       top: calc(var(--target-size-min) + var(--spacing-unit) * 4);
       left: 0;
@@ -905,33 +1006,33 @@
       /* Without this, "Back" doesn't react to hover/focus. We darken (not
          lighten) - a light highlight looks out of place on a dark background. */
     }
-    .sidebar-md .admin-nav-submenu[open] > summary:hover,
-    .sidebar-sm .admin-nav-submenu[open] > summary:hover {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary:hover,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary:hover {
       color: var(--sidebar-text-active);
       background-color: rgba(0, 0, 0, 0.15);
     }
-    .sidebar-md .admin-nav-submenu[open] > summary:focus-visible,
-    .sidebar-sm .admin-nav-submenu[open] > summary:focus-visible {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary:focus-visible,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary:focus-visible {
       background-color: rgba(0, 0, 0, 0.15);
       /* overrides the light focus ring from _base.scss (based on --primary) */
       outline: none;
       box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
     }
-    .sidebar-md .admin-nav-submenu[open] > summary,
-    .sidebar-sm .admin-nav-submenu[open] > summary {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary {
       /* Hide the item's original icon */
     }
-    .sidebar-md .admin-nav-submenu[open] > summary > i, .sidebar-md .admin-nav-submenu[open] > summary > svg,
-    .sidebar-sm .admin-nav-submenu[open] > summary > i,
-    .sidebar-sm .admin-nav-submenu[open] > summary > svg {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary > i, .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary > svg,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary > i,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary > svg {
       display: none !important;
     }
-    .sidebar-md .admin-nav-submenu[open] > summary,
-    .sidebar-sm .admin-nav-submenu[open] > summary {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary {
       /* Draw the left-pointing arrow icon (Back) */
     }
-    .sidebar-md .admin-nav-submenu[open] > summary::before,
-    .sidebar-sm .admin-nav-submenu[open] > summary::before {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary::before,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary::before {
       content: "";
       display: block;
       width: 16px;
@@ -941,8 +1042,8 @@
       -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
     }
-    .sidebar-md .admin-nav-submenu[open] > summary,
-    .sidebar-sm .admin-nav-submenu[open] > summary {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary {
       /* Swap the item's text for "Back"
          NOTE (pre-existing i18n gap, not touched by this comment-translation
          pass): the "Cofnij" label injected below via content: is hardcoded
@@ -950,26 +1051,26 @@
          too - would need a real localization pass, e.g. reading it from a
          CSS custom property set per page language instead of a literal. */
     }
-    .sidebar-md .admin-nav-submenu[open] > summary .nav-text,
-    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary .nav-text,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary .nav-text {
       display: block !important;
       /* without this, .nav-text inherits width:100% from the -md variant and stretches */
       width: auto;
       font-size: 0 !important; /* Hides the original text */
     }
-    .sidebar-md .admin-nav-submenu[open] > summary .nav-text::after,
-    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text::after {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > summary .nav-text::after,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary .nav-text::after {
       content: "Cofnij";
       font-size: 0.875rem;
       text-transform: none;
       letter-spacing: normal;
     }
-    .sidebar-md .admin-nav-submenu[open],
-    .sidebar-sm .admin-nav-submenu[open] {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open],
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] {
       /* 3. The submenu link list - starts below the Back button (which is below the logo) */
     }
-    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list,
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list {
       display: flex !important;
       position: absolute;
       top: calc(calc(var(--target-size-min) + var(--spacing-unit) * 4) + 70px);
@@ -983,12 +1084,12 @@
       overflow-y: auto;
       /* Reset the tree lines */
     }
-    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list::before,
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list::before,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
       display: none;
     }
-    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
       padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1);
       justify-content: center;
       text-align: center;
@@ -1000,35 +1101,35 @@
          when they would have fit whole) */
       overflow-wrap: break-word;
     }
-    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before,
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
       display: none;
     }
-    .sidebar-md .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link { /* Hide the horizontal tick marks */ }
+    .sidebar-md .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link,
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link { /* Hide the horizontal tick marks */ }
     /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
-    .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary .nav-text {
       display: none !important;
     }
     /* --- -SM VARIANT: full-width links with a separator instead of borders ---
        The -sm sidebar is too narrow (72px) for a rounded border + padding
        around every link to make sense - the text touched/spilled outside
        the border. Instead: full-width links, separated by a thin line. */
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list {
       padding-left: 0;
       padding-right: 0;
     }
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
       width: 100%;
       border-radius: 0;
       border-width: 0 0 1px 0;
       border-style: solid;
       border-color: rgba(255, 255, 255, 0.08);
     }
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link:last-child {
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link:last-child {
       border-bottom: none;
     }
-    .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link.is-active {
+    .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link.is-active {
       background-color: rgba(var(--sidebar-highlight-rgb), 0.05);
     }
   }
@@ -1043,7 +1144,12 @@
      admin-nav.js module only handles active state from the URL and
      mutually excluding open submenus. */
   @media (max-width: 768px) {
-    .admin-nav-submenu {
+    /* SCOPED TO .admin-sidebar ON PURPOSE - see the note above the -sm/-md
+       drill-down. This branch was even wider: it needed no .sidebar-* class
+       at all, so ANY .admin-nav-submenu[open] anywhere on the page turned its
+       list into position:fixed; inset:0; z-index:1050 - a full-screen dark
+       panel over the whole document, for every visitor on a phone. */
+    .admin-sidebar .admin-nav-submenu {
       position: static;
       /* details stretches its <summary> (trigger) to fill the bar's tile */
       display: flex;
@@ -1054,14 +1160,14 @@
          accidental notification-shade gestures). */
       --drilldown-bar-h: 64px;
     }
-    .admin-nav-submenu > summary {
+    .admin-sidebar .admin-nav-submenu > summary {
       width: 100%;
       /* the tree-expand arrow is redundant in a horizontal bar */
     }
-    .admin-nav-submenu > summary::after {
+    .admin-sidebar .admin-nav-submenu > summary::after {
       display: none;
     }
-    .admin-nav-submenu[open] {
+    .admin-sidebar .admin-nav-submenu[open] {
       /* 1. The list -> a full-screen panel (from the very top of the
          screen). Its dark background forms a CONTINUOUS surface under
          the "Back" bar too - links are pushed down with padding so they
@@ -1069,7 +1175,7 @@
          one whole, regardless of how the browser paints the <summary>'s
          own background. */
     }
-    .admin-nav-submenu[open] > .admin-nav-submenu-list {
+    .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list {
       display: flex !important; /* overrides the default tree state */
       flex-direction: column;
       gap: calc(var(--spacing-unit) * 0.5);
@@ -1098,27 +1204,27 @@
       justify-content: safe center;
       /* Reset the vertical tree line */
     }
-    .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
+    .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list::before {
       display: none;
     }
-    .admin-nav-submenu[open] > .admin-nav-submenu-list {
+    .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list {
       /* Full-width links, no horizontal tree tick marks */
     }
-    .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
+    .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link {
       justify-content: flex-start;
       text-align: left;
       padding: calc(var(--spacing-unit) * 2);
       min-height: 48px;
       font-size: 1rem;
     }
-    .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
+    .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list .admin-nav-submenu-link::before {
       display: none;
     }
-    .admin-nav-submenu[open] {
+    .admin-sidebar .admin-nav-submenu[open] {
       /* 2. <summary> -> the "Back" bar at the top, ON the panel (sits on
          its dark background). z-index above the panel. */
     }
-    .admin-nav-submenu[open] > summary {
+    .admin-sidebar .admin-nav-submenu[open] > summary {
       position: fixed;
       top: 0;
       left: 0;
@@ -1142,26 +1248,26 @@
       /* Without this, "Back" doesn't react to hover/focus. We darken (not
          lighten) - a light highlight looks out of place on a dark background. */
     }
-    .admin-nav-submenu[open] > summary:hover {
+    .admin-sidebar .admin-nav-submenu[open] > summary:hover {
       color: var(--sidebar-text-active);
       background-color: rgba(0, 0, 0, 0.15);
     }
-    .admin-nav-submenu[open] > summary:focus-visible {
+    .admin-sidebar .admin-nav-submenu[open] > summary:focus-visible {
       background-color: rgba(0, 0, 0, 0.15);
       /* overrides the light focus ring from _base.scss (based on --primary) */
       outline: none;
       box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.4);
     }
-    .admin-nav-submenu[open] > summary {
+    .admin-sidebar .admin-nav-submenu[open] > summary {
       /* Hide the item's original icon */
     }
-    .admin-nav-submenu[open] > summary > i, .admin-nav-submenu[open] > summary > svg {
+    .admin-sidebar .admin-nav-submenu[open] > summary > i, .admin-sidebar .admin-nav-submenu[open] > summary > svg {
       display: none !important;
     }
-    .admin-nav-submenu[open] > summary {
+    .admin-sidebar .admin-nav-submenu[open] > summary {
       /* Draw the left-pointing arrow icon (Back) */
     }
-    .admin-nav-submenu[open] > summary::before {
+    .admin-sidebar .admin-nav-submenu[open] > summary::before {
       content: "";
       display: block;
       width: 16px;
@@ -1171,7 +1277,7 @@
       -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E") no-repeat center/contain;
     }
-    .admin-nav-submenu[open] > summary {
+    .admin-sidebar .admin-nav-submenu[open] > summary {
       /* Swap the item's text for "Back"
          NOTE (pre-existing i18n gap, not touched by this comment-translation
          pass): the "Cofnij" label injected below via content: is hardcoded
@@ -1179,19 +1285,19 @@
          too - would need a real localization pass, e.g. reading it from a
          CSS custom property set per page language instead of a literal. */
     }
-    .admin-nav-submenu[open] > summary .nav-text {
+    .admin-sidebar .admin-nav-submenu[open] > summary .nav-text {
       display: block !important;
       /* without this, .nav-text inherits width:100% from the -md variant and stretches */
       width: auto;
       font-size: 0 !important; /* Hides the original text */
     }
-    .admin-nav-submenu[open] > summary .nav-text::after {
+    .admin-sidebar .admin-nav-submenu[open] > summary .nav-text::after {
       content: "Cofnij";
       font-size: 0.875rem;
       text-transform: none;
       letter-spacing: normal;
     }
-    .admin-nav-submenu[open] > summary {
+    .admin-sidebar .admin-nav-submenu[open] > summary {
       /* the label clears the status bar/notch (env), and a large,
          lower-positioned target is more thumb-friendly */
       padding-top: env(safe-area-inset-top);
@@ -1202,7 +1308,7 @@
          would flash above the page). */
       animation: adminDrilldownBar 0.24s ease 0.12s both;
     }
-    .admin-nav-submenu {
+    .admin-sidebar .admin-nav-submenu {
       /* =========================================
          SLIDE-OUT (animated close - the .is-closing class from admin-nav.js)
          =========================================
@@ -1210,10 +1316,10 @@
          module delays the actual close: it adds .is-closing, waits for
          the animation to finish, and only then removes [open]. */
     }
-    .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
+    .admin-sidebar .admin-nav-submenu.is-closing > .admin-nav-submenu-list {
       animation: adminDrilldownPanelOut 0.22s cubic-bezier(0.4, 0, 1, 1) both;
     }
-    .admin-nav-submenu.is-closing > summary {
+    .admin-sidebar .admin-nav-submenu.is-closing > summary {
       animation: adminDrilldownBarOut 0.18s ease both;
     }
     /* Drill-down entrance/exit (GPU: opacity + transform only) */

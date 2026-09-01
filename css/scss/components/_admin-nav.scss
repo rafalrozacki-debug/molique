@@ -439,9 +439,21 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
 }
 
 /* --- NARROW VARIANTS (Drill-down Menu) --- */
+/* SCOPED TO .admin-sidebar ON PURPOSE - do not widen this selector.
+   The drill-down forces `position: static` on the submenu so its ::before
+   can cover the whole sidebar; that only works because .admin-sidebar is
+   the nearest positioned ancestor (it is sticky). A .admin-nav-submenu
+   living ANYWHERE ELSE on the page - a documentation demo, a nav rendered
+   into the main column - has no positioned ancestor, so the same ::before
+   resolved against the initial containing block and painted a dark,
+   click-eating panel over the ENTIRE page at z-index 100.
+   It fired without anyone touching the toggle on that page: the anti-FOUC
+   script in <head> puts .sidebar-md/.sidebar-sm on <html> straight from
+   localStorage, so the class arrives from a completely different page the
+   visitor collapsed the sidebar on. */
 @include mq(md) {
-  .sidebar-md .admin-nav-submenu,
-  .sidebar-sm .admin-nav-submenu {
+  .sidebar-md .admin-sidebar .admin-nav-submenu,
+  .sidebar-sm .admin-sidebar .admin-nav-submenu {
 
     /* Escape the positioning context so we can cover the entire sidebar! */
     position: static;
@@ -512,7 +524,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
   }
 
   /* In SM mode (the narrowest), hide the "Back" text, leave just the arrow */
-  .sidebar-sm .admin-nav-submenu[open] > summary .nav-text {
+  .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > summary .nav-text {
     display: none !important;
   }
 
@@ -520,7 +532,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
      The -sm sidebar is too narrow (72px) for a rounded border + padding
      around every link to make sense - the text touched/spilled outside
      the border. Instead: full-width links, separated by a thin line. */
-  .sidebar-sm .admin-nav-submenu[open] > .admin-nav-submenu-list {
+  .sidebar-sm .admin-sidebar .admin-nav-submenu[open] > .admin-nav-submenu-list {
     padding-left: 0;
     padding-right: 0;
 
@@ -553,7 +565,12 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
    admin-nav.js module only handles active state from the URL and
    mutually excluding open submenus. */
 @media (max-width: 768px) {
-  .admin-nav-submenu {
+  /* SCOPED TO .admin-sidebar ON PURPOSE - see the note above the -sm/-md
+     drill-down. This branch was even wider: it needed no .sidebar-* class
+     at all, so ANY .admin-nav-submenu[open] anywhere on the page turned its
+     list into position:fixed; inset:0; z-index:1050 - a full-screen dark
+     panel over the whole document, for every visitor on a phone. */
+  .admin-sidebar .admin-nav-submenu {
     position: static;
     /* details stretches its <summary> (trigger) to fill the bar's tile */
     display: flex;

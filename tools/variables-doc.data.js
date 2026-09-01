@@ -190,6 +190,8 @@ export const COMPONENT = {
   '--layout-padding':        ['Panel admina', 'api', 'Odsunięcie całego layoutu od krawędzi okna w wariancie floating.'],
   '--main-bg':               ['Panel admina', 'api', 'Tło kolumny z treścią.'],
   '--main-radius':           ['Panel admina', 'api', 'Zaokrąglenie kolumny z treścią w wariancie floating.'],
+  '--admin-rail-width':      ['Panel admina', 'api', 'Szerokość drugiej kolumny <code>.admin-rail</code>. Działa tylko wtedy, gdy taka kolumna faktycznie jest w layoucie (reguła <code>:has()</code>).'],
+  '--main-offset':           ['Panel admina', 'internal', 'Odległość kolumny z treścią od lewej krawędzi okna. Liczona raz, bo <code>.fade-bottom</code> pozycjonuje gradient przez <code>position: fixed</code> i musi trafić w tę samą kolumnę.'],
   '--drilldown-bar-h':       ['Panel admina', 'internal', 'Wysokość paska „Cofnij” w pełnoekranowym submenu na mobile.'],
   '--fade-color':            ['Panel admina', 'api', 'Kolor gradientu zanikania <code>.fade-bottom</code>. Ustaw na kolor tła kontenera.'],
   '--fade-height':           ['Panel admina', 'api', 'Wysokość gradientu zanikania.'],

@@ -145,7 +145,7 @@
 </ul>
 <h3 class="text-6 fw-bold mb-2 mt-4">Moduły: Admin, E-commerce, Blog</h3>
 <ul class="text-secondary mb-4">
-  <li><strong>Admin Layout:</strong> <code>.admin-layout</code> &gt; <code>.admin-sidebar</code> + <code>.admin-main</code>. Wariant <code>.admin-layout-floating</code> odsuwa treść od krawędzi.
+  <li><strong>Admin Layout:</strong> <code>.admin-layout</code> &gt; <code>.admin-sidebar</code> + <code>.admin-main</code>. Opcjonalna DRUGA kolumna między nimi: <code>.admin-rail</code> - podnawigacja, filtry, lista rekordów. CELOWO BEZ TŁA (leży na <code>--bg-body</code>, więc w trybie floating czyta się jako podłoże między dwiema kartami, nie jako trzecia karta). Tor w siatce dokłada reguła <code>:has()</code>, dopiero gdy element istnieje - pusty tor generowałby w trybie floating drugi <code>gap</code> i przesunął layout każdej stronie bez raila. Przykleja się jak sidebar. Szerokość: <code>--admin-rail-width</code> (240px). Na mobile siatka schodzi do jednej kolumny, więc rail układa się NAD treścią; <code>.admin-rail-hide-mobile</code> chowa go, gdy tylko dubluje nawigację dostępną gdzie indziej. Wariant <code>.admin-layout-floating</code> odsuwa treść od krawędzi.
     </li>
   <li><strong>Fade Bottom:</strong> <code>.fade-bottom</code> - zanikanie treści przy dolnej krawędzi (gradient zamiast ostrego ucięcia). Dowolny przewijany kontener: <code>--fade-color</code> = kolor tła kontenera (domyślnie <code>--bg-surface</code>), wysokość <code>--fade-height</code> (80px). Na <code>.admin-sidebar</code> i <code>.admin-main</code> kolor dobiera się automatycznie, na mobile gradient sidebara sam się wyłącza.
     </li>

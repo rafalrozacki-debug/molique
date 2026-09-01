@@ -50,6 +50,9 @@
     &lt;/ul&gt;
   &lt;/aside&gt;
 
+  &lt;!-- Optionale zweite Spalte, ohne Hintergrund (siehe .admin-rail unten) --&gt;
+  &lt;div class="admin-rail"&gt;&lt;!-- Filter, Unternavigation, Liste --&gt;&lt;/div&gt;
+
   &lt;main class="admin-main"&gt;
     &lt;!-- Panel-Inhalt --&gt;
   &lt;/main&gt;
@@ -82,6 +85,14 @@
                       auf Mobilgeräten. Hintergrund immer dunkel, unabhängig
                       vom hellen/dunklen Theme - siehe Fallstrick Nr. 1.
                     </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.admin-rail</code></td>
+                    <td data-label="Was sie macht">Eine optionale ZWEITE Spalte zwischen Sidebar und Inhalt: Unternavigation, Filter, eine Liste von Datensätzen. <strong>Bewusst ohne Hintergrund</strong> - sie liegt auf <code>--bg-body</code> und liest sich im Floating-Modus als Grund zwischen zwei Karten, nicht als dritte Karte. Die Grid-Spur fügt eine <code>:has()</code>-Regel erst hinzu, wenn das Element existiert: eine leere Spur würde im Floating-Modus einen zweiten <code>gap</code> erzeugen und das Layout jeder Seite ohne Rail verschieben. Sie klebt wie die Sidebar. Breite: <code>--admin-rail-width</code> (240px). Auf dem Handy fällt das Grid ohnehin auf eine Spalte zurück, die Rail stapelt sich also ÜBER dem Inhalt - sie verschwindet nicht, denn stilles Verlieren von Inhalt ist nicht diagnostizierbar.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.admin-rail-hide-mobile</code></td>
+                    <td data-label="Was sie macht">Opt-in: blendet die Rail unter 768px aus. Für Rails, die nur anderswo verfügbare Navigation duplizieren - nicht für solche mit eigenem Inhalt.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-main</code></td>
@@ -140,6 +151,50 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Die zweite Spalte (<code>.admin-rail</code>)</h3>
+            <p class="text-muted mb-3">
+              Eine optionale Spalte zwischen Sidebar und Inhalt - für Unternavigation, Filter oder eine Liste von Datensätzen. Sie hat keinen eigenen Hintergrund, liest sich im Floating-Modus also als Grund zwischen zwei Karten und nicht als dritte Karte. Die Vorschau ist auf die Höhe des Kastens gestaucht; produktiv sind beide Randspalten bildschirmhoch und kleben beim Scrollen.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div
+                  class="admin-layout admin-layout-floating w-100"
+                  style="min-height: 0; --current-sidebar-width: 96px; --admin-rail-width: 140px"
+                >
+                  <aside class="admin-sidebar" style="position: static; height: auto">
+                    <span class="admin-brand text-center text-2">Logo</span>
+                  </aside>
+                  <div class="admin-rail" style="position: static; height: auto">
+                    <span class="text-2 fw-semibold">Filter</span>
+                    <span class="text-2 fw-semibold">Alle</span>
+                    <span class="text-2 text-muted">Aktiv</span>
+                    <span class="text-2 text-muted">Abgeschlossen</span>
+                  </div>
+                  <!-- Podgląd używa div zamiast znacznika main: strona ma już
+                       swój własny, a zagnieżdżony byłby nieprawidłowym HTML-em.
+                       W snippecie obok znacznik zostaje - tam jest poprawny. -->
+                  <div class="admin-main" style="padding: calc(var(--spacing-unit) * 3)">
+                    <span class="text-2 fw-semibold">Inhalt</span>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="admin-layout admin-layout-floating"&gt;
+  &lt;aside class="admin-sidebar"&gt;…&lt;/aside&gt;
+
+  &lt;!-- Ohne Hintergrund: liegt auf --bg-body --&gt;
+  &lt;div class="admin-rail"&gt;
+    &lt;span class="fw-semibold"&gt;Filter&lt;/span&gt;
+    …
+  &lt;/div&gt;
+
+  &lt;main class="admin-main"&gt;…&lt;/main&gt;
+&lt;/div&gt;</code></pre>
+              </div>
             </div>
 
             <div class="component-code mb-4">

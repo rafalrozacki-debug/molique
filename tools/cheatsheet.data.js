@@ -3464,6 +3464,17 @@ export const CATEGORIES = [
         tags: ['admin', 'dashboard'],
       },
       {
+        id: 'admin-rail',
+        classes: [['.admin-rail', '.admin-rail-hide-mobile']],
+        desc: {
+          pl: 'Druga kolumna między sidebarem a treścią: podnawigacja, filtry, lista rekordów do wyboru. <strong>Celowo bez tła</strong> - siedzi na <code>--bg-body</code>, więc czyta się jako podłoże strony, a nie trzecia karta. Tor w siatce dokłada się sam, przez <code>:has()</code>, dopiero gdy element istnieje - inaczej pusty tor generowałby w trybie floating drugi <code>gap</code> i ruszał layout wszystkim. Przykleja się jak sidebar (treść przewija strona, nie kolumna). Szerokość: <code>--admin-rail-width</code> (240px). Na mobile układa się NAD treścią; <code>.admin-rail-hide-mobile</code> chowa ją, gdy tylko dubluje nawigację dostępną gdzie indziej.',
+          en: 'A second column between the sidebar and the content: sub-navigation, filters, a list of records to pick from. <strong>Deliberately without a background</strong> - it sits on <code>--bg-body</code>, so it reads as page ground rather than a third card. The grid track is added by a <code>:has()</code> rule only once the element exists - an empty track would otherwise generate a second <code>gap</code> in floating mode and shift the layout for everyone. It sticks like the sidebar (the page scrolls, not the column). Width: <code>--admin-rail-width</code> (240px). On mobile it stacks ABOVE the content; <code>.admin-rail-hide-mobile</code> drops it when it merely duplicates navigation available elsewhere.',
+          de: 'Eine zweite Spalte zwischen Sidebar und Inhalt: Unternavigation, Filter, eine Liste zur Auswahl. <strong>Bewusst ohne Hintergrund</strong> - sie liegt auf <code>--bg-body</code> und liest sich als Seitengrund, nicht als dritte Karte. Die Grid-Spur kommt über eine <code>:has()</code>-Regel erst dazu, wenn das Element existiert - eine leere Spur würde im Floating-Modus sonst einen zweiten <code>gap</code> erzeugen und das Layout für alle verschieben. Sie klebt wie die Sidebar (es scrollt die Seite, nicht die Spalte). Breite: <code>--admin-rail-width</code> (240px). Auf dem Handy stapelt sie sich ÜBER dem Inhalt; <code>.admin-rail-hide-mobile</code> blendet sie aus, wenn sie nur anderswo vorhandene Navigation dupliziert.',
+        },
+        demo: '-',
+        tags: ['admin', 'nav', 'dashboard', 'responsive'],
+      },
+      {
         id: 'sidebar-md',
         classes: [['.sidebar-md', '.sidebar-sm']],
         desc: {

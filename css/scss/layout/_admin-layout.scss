@@ -7,6 +7,15 @@
   --main-radius: 0px;
   /* FIX: default background for the main content in standard mode */
   --main-bg: var(--bg-surface);
+  /* Width of the optional second column (.admin-rail). Only takes effect
+     when such a column actually exists - see the :has() rule below. */
+  --admin-rail-width: 240px;
+
+  /* Distance from the left edge of the viewport to the main column.
+     Declared ONCE, because .admin-main.fade-bottom positions its gradient
+     with position:fixed and has to line it up with the column - and a
+     duplicated calc() is exactly how those two drift apart. */
+  --main-offset: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
 
   display: grid;
   grid-template-columns: var(--current-sidebar-width) 1fr;
@@ -70,6 +79,31 @@
     grid-template-columns: minmax(0, 1fr);
     --current-sidebar-width: 100%;
   }
+
+  /* SECOND COLUMN (opt-in) - see .admin-rail below.
+     Added with :has() rather than unconditionally, because an empty
+     third track would still generate a SECOND gap in floating mode and
+     shift the layout for every page that does not use a rail. This way
+     nothing changes unless the element is actually there. */
+  &:has(> .admin-rail) {
+    grid-template-columns:
+      var(--current-sidebar-width)
+      var(--admin-rail-width)
+      minmax(0, 1fr);
+
+    /* Two gaps now sit to the left of the main column, not one. */
+    --main-offset: calc(
+      var(--current-sidebar-width) + var(--admin-rail-width) +
+        (2 * var(--layout-gap)) + var(--layout-padding)
+    );
+
+    /* Mobile keeps the single column from the rule above - this selector
+       is more specific, so it has to repeat it or it would win. */
+    @media (max-width: 768px) {
+      grid-template-columns: minmax(0, 1fr);
+      --main-offset: 0px;
+    }
+  }
 }
 
 .admin-main {
@@ -89,6 +123,59 @@
   }
 }
 
+/* SECOND COLUMN, between the sidebar and the content: sub-navigation,
+   filters, a list of records to pick from.
+   DELIBERATELY WITHOUT A BACKGROUND - it sits on the layout's --bg-body,
+   so it reads as part of the page ground rather than as a third card. In
+   floating mode that is the whole point: sidebar and content are cards,
+   the rail is the gap between them that happens to hold content.
+   The column only exists because of the :has() rule in .admin-layout - a
+   bare .admin-rail outside that layout is just a block. */
+.admin-rail {
+  /* Sticks like the sidebar, and for the same reason: .admin-main does
+     not scroll itself (the page does), so a long rail would otherwise
+     scroll away and leave its column empty. */
+  position: sticky;
+  top: var(--layout-padding);
+  height: calc(100dvh - (var(--layout-padding) * 2));
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* min-width: 0 so a long label inside cannot push the fixed track. */
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2);
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: var(--border-radius);
+  }
+
+  /* Mobile: the grid collapses to one column and the sidebar becomes the
+     fixed Bottom Nav, so the rail simply stacks ABOVE the content. It is
+     not hidden: silently dropping content the markup contains is the kind
+     of failure nobody can diagnose. Use .admin-rail-hide-mobile when the
+     rail really is redundant on a phone. */
+  @media (max-width: 768px) {
+    position: static;
+    height: auto;
+    overflow: visible;
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2) 0;
+  }
+}
+
+/* Opt-in: drop the rail on small screens (for a rail that only duplicates
+   navigation available elsewhere). */
+@media (max-width: 768px) {
+  .admin-rail-hide-mobile { display: none; }
+}
+
 /* Fading content at the bottom of the main column (opt-in: the
    .fade-bottom class from the layout layer). .admin-main doesn't scroll
    itself - the page scrolls - and overflow-x:hidden makes it a
@@ -102,7 +189,7 @@
   &::after {
     position: fixed;
     bottom: var(--layout-padding);
-    left: calc(var(--current-sidebar-width) + var(--layout-gap) + var(--layout-padding));
+    left: var(--main-offset);
     right: var(--layout-padding);
     height: var(--fade-height);
     margin-top: 0;

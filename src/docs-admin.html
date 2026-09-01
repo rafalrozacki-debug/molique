@@ -50,6 +50,9 @@
     &lt;/ul&gt;
   &lt;/aside&gt;
 
+  &lt;!-- Opcjonalna druga kolumna, bez tła (patrz .admin-rail niżej) --&gt;
+  &lt;div class="admin-rail"&gt;&lt;!-- filtry, podnawigacja, lista --&gt;&lt;/div&gt;
+
   &lt;main class="admin-main"&gt;
     &lt;!-- Treść panelu --&gt;
   &lt;/main&gt;
@@ -82,6 +85,14 @@
                       Tło zawsze ciemne, niezależnie od motywu jasny/ciemny -
                       patrz pułapka nr 1.
                     </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-rail</code></td>
+                    <td data-label="Co robi">Opcjonalna DRUGA kolumna, między sidebarem a treścią: podnawigacja, filtry, lista rekordów. <strong>Celowo bez tła</strong> - leży na <code>--bg-body</code>, więc w trybie floating czyta się jako podłoże między dwiema kartami, a nie jako trzecia karta. Tor w siatce dokłada reguła <code>:has()</code>, dopiero gdy element istnieje: pusty tor generowałby w trybie floating drugi <code>gap</code> i przesunął layout każdej stronie bez raila. Przykleja się jak sidebar. Szerokość: <code>--admin-rail-width</code> (240px). Na mobile siatka i tak schodzi do jednej kolumny, więc rail układa się NAD treścią - nie znika, bo ciche gubienie treści jest nie do zdiagnozowania.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.admin-rail-hide-mobile</code></td>
+                    <td data-label="Co robi">Opt-in: chowa rail poniżej 768px. Do railów, które tylko dublują nawigację dostępną gdzie indziej - nie do takich, które niosą własną treść.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasa"><code class="fw-bold">.admin-main</code></td>
@@ -136,6 +147,50 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Druga kolumna (<code>.admin-rail</code>)</h3>
+            <p class="text-muted mb-3">
+              Opcjonalna kolumna między sidebarem a treścią - na podnawigację, filtry albo listę rekordów. Nie ma własnego tła, więc w trybie floating czyta się jako podłoże między dwiema kartami, a nie jako trzecia karta. Podgląd jest ściśnięty do wysokości pudełka; produkcyjnie obie boczne kolumny mają wysokość ekranu i przyklejają się przy przewijaniu.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100">
+                <div
+                  class="admin-layout admin-layout-floating w-100"
+                  style="min-height: 0; --current-sidebar-width: 96px; --admin-rail-width: 140px"
+                >
+                  <aside class="admin-sidebar" style="position: static; height: auto">
+                    <span class="admin-brand text-center text-2">Logo</span>
+                  </aside>
+                  <div class="admin-rail" style="position: static; height: auto">
+                    <span class="text-2 fw-semibold">Filtry</span>
+                    <span class="text-2 fw-semibold">Wszystkie</span>
+                    <span class="text-2 text-muted">Aktywne</span>
+                    <span class="text-2 text-muted">Zakończone</span>
+                  </div>
+                  <!-- Podgląd używa div zamiast znacznika main: strona ma już
+                       swój własny, a zagnieżdżony byłby nieprawidłowym HTML-em.
+                       W snippecie obok znacznik zostaje - tam jest poprawny. -->
+                  <div class="admin-main" style="padding: calc(var(--spacing-unit) * 3)">
+                    <span class="text-2 fw-semibold">Treść</span>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="admin-layout admin-layout-floating"&gt;
+  &lt;aside class="admin-sidebar"&gt;…&lt;/aside&gt;
+
+  &lt;!-- Bez tła: leży na --bg-body --&gt;
+  &lt;div class="admin-rail"&gt;
+    &lt;span class="fw-semibold"&gt;Filtry&lt;/span&gt;
+    …
+  &lt;/div&gt;
+
+  &lt;main class="admin-main"&gt;…&lt;/main&gt;
+&lt;/div&gt;</code></pre>
+              </div>
             </div>
 
             <div class="component-code mb-4">
