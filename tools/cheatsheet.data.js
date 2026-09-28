@@ -4300,6 +4300,17 @@ export const CATEGORIES = [
         tags: ['overlay', 'animation', 'color'],
       },
       {
+        id: 'bg-cinema',
+        classes: [['.bg-cinema']],
+        desc: {
+          pl: 'Zawsze ciemne tło w kolorystyce plakatu filmowego: chłodny niebieski w lewym górnym rogu, bursztyn w prawym dolnym, subtelne ziarno. Łuny powoli oddychają. Kolory, tło, tempo i ziarno przez <code>--cinema-1</code>, <code>--cinema-2</code>, <code>--cinema-bg</code>, <code>--cinema-speed</code>, <code>--cinema-grain</code>.',
+          en: 'An always-dark background in the colours of a film poster: cool blue in the top-left corner, amber in the bottom-right, a subtle grain. The glows breathe slowly. Colours, base, pace and grain via <code>--cinema-1</code>, <code>--cinema-2</code>, <code>--cinema-bg</code>, <code>--cinema-speed</code>, <code>--cinema-grain</code>.',
+          de: 'Ein immer dunkler Hintergrund in den Farben eines Filmplakats: kühles Blau oben links, Bernstein unten rechts, ein dezentes Korn. Die Lichthöfe atmen langsam. Farben, Grund, Tempo und Korn über <code>--cinema-1</code>, <code>--cinema-2</code>, <code>--cinema-bg</code>, <code>--cinema-speed</code>, <code>--cinema-grain</code>.',
+        },
+        demo: '<div class="bg-cinema rounded-2" style="width: 44px; height: 24px; margin: 0 auto" ></div>',
+        tags: ['overlay', 'animation', 'color'],
+      },
+      {
         id: 'bg-glass',
         classes: [['.bg-glass']],
         desc: {

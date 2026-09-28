@@ -321,6 +321,61 @@
                 </tbody>
               </table>
             </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-5">Filmowe światło w narożnikach</h3>
+            <p class="text-muted mb-3"><code>.bg-cinema</code> to ciemne tło w kolorystyce plakatu filmowego: chłodne światło w lewym górnym rogu, bursztyn w prawym dolnym i głęboka czerń pośrodku. Obie łuny bardzo powoli oddychają, każda we własnym tempie. Tło jest zawsze ciemne (niezależnie od motywu), więc biały tekst jest na nim bezpieczny.</p>
+            <div class="bg-cinema rounded-4 mb-3" style="padding: 56px 40px">
+              <p class="text-2 fw-semibold mb-2" style="letter-spacing: .2em; opacity: .7">.BG-CINEMA</p>
+              <h4 class="text-8 fw-semibold mb-2">Filmowe światło</h4>
+              <p class="text-4 mb-0" style="opacity: .8">Chłodny niebieski w cieniach, bursztyn w światłach.</p>
+            </div>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;section class="bg-cinema"&gt;…&lt;/section&gt;
+
+&lt;!-- klasyczny filmowy teal zamiast niebieskiego - same zmienne --&gt;
+&lt;section class="bg-cinema"
+  style="--cinema-1: rgb(14 110 122 / 0.75); --cinema-2: rgb(224 122 46 / 0.6); --cinema-bg: #070C0F"&gt;…&lt;/section&gt;</code></pre>
+            </div>
+            <p class="text-muted mb-3">Łuny są elipsami liczonymi z szerokości i wysokości, więc zostają w narożnikach na szerokim hero, karcie i wysokiej kolumnie. Działa z zaokrągleniami (<code>.rounded-*</code> przycina łuny razem z rogami). Subtelne ziarno filmowe to kafelek SVG zaszyty w CSS, bez dodatkowego pliku; poza charakterem maskuje pasmowanie długich, ciemnych gradientów. Ruch to wyłącznie <code>transform</code> i <code>opacity</code> i gaśnie przy <code>prefers-reduced-motion</code>.</p>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Zmienna</th>
+                    <th>Domyślnie</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--cinema-1</code></td>
+                    <td data-label="Domyślnie"><code>rgb(34 92 150 / 0.7)</code></td>
+                    <td data-label="Co robi">Kolor światła w lewym górnym rogu. Pełny kolor - działa też hex.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--cinema-2</code></td>
+                    <td data-label="Domyślnie"><code>rgb(230 136 58 / 0.55)</code></td>
+                    <td data-label="Co robi">Kolor światła w prawym dolnym rogu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--cinema-bg</code></td>
+                    <td data-label="Domyślnie"><code>#0A0E16</code></td>
+                    <td data-label="Co robi">Tło pod łunami. Literał, nie zmienna motywu, żeby nie odwracało się w trybie ciemnym.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--cinema-speed</code></td>
+                    <td data-label="Domyślnie"><code>16s</code></td>
+                    <td data-label="Co robi">Cykl pierwszej łuny; druga liczy swój jako ×1.25, więc się rozjeżdżają.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Zmienna"><code class="fw-bold">--cinema-grain</code></td>
+                    <td data-label="Domyślnie"><code>url(…)</code></td>
+                    <td data-label="Co robi">Ziarno. <code>none</code> je wyłącza.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <!-- ===================================================== -->

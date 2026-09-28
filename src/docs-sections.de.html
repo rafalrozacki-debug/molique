@@ -332,6 +332,61 @@
                 </tbody>
               </table>
             </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-5">Filmisches Licht in den Ecken</h3>
+            <p class="text-muted mb-3"><code>.bg-cinema</code> ist ein dunkler Hintergrund in den Farben eines Filmplakats: kühles Licht in der oberen linken Ecke, Bernstein unten rechts und ein tiefes Fast-Schwarz dazwischen. Beide Lichthöfe atmen sehr langsam, jeder in seinem eigenen Tempo. Der Hintergrund ist immer dunkel (unabhängig vom Theme), weißer Text ist darauf also sicher.</p>
+            <div class="bg-cinema rounded-4 mb-3" style="padding: 56px 40px">
+              <p class="text-2 fw-semibold mb-2" style="letter-spacing: .2em; opacity: .7">.BG-CINEMA</p>
+              <h4 class="text-8 fw-semibold mb-2">Filmisches Licht</h4>
+              <p class="text-4 mb-0" style="opacity: .8">Kühles Blau in den Schatten, Bernstein in den Lichtern.</p>
+            </div>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;section class="bg-cinema"&gt;…&lt;/section&gt;
+
+&lt;!-- das klassische Film-Teal statt Blau - nur Variablen --&gt;
+&lt;section class="bg-cinema"
+  style="--cinema-1: rgb(14 110 122 / 0.75); --cinema-2: rgb(224 122 46 / 0.6); --cinema-bg: #070C0F"&gt;…&lt;/section&gt;</code></pre>
+            </div>
+            <p class="text-muted mb-3">Die Lichthöfe sind Ellipsen, die aus Breite und Höhe berechnet werden, und bleiben so auf einem breiten Hero, einer Karte und einer hohen Spalte in den Ecken. Funktioniert mit Rundungen (<code>.rounded-*</code> beschneidet die Lichthöfe mit den Ecken). Das dezente Filmkorn ist eine im CSS eingebettete SVG-Kachel, ohne zusätzliche Datei; neben dem Look verdeckt es das Banding langer, dunkler Verläufe. Die Bewegung nutzt nur <code>transform</code> und <code>opacity</code> und stoppt bei <code>prefers-reduced-motion</code>.</p>
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Variable</th>
+                    <th>Standard</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--cinema-1</code></td>
+                    <td data-label="Standard"><code>rgb(34 92 150 / 0.7)</code></td>
+                    <td data-label="Was sie macht">Farbe des Lichts oben links. Eine vollständige Farbe - Hex funktioniert auch.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--cinema-2</code></td>
+                    <td data-label="Standard"><code>rgb(230 136 58 / 0.55)</code></td>
+                    <td data-label="Was sie macht">Farbe des Lichts unten rechts.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--cinema-bg</code></td>
+                    <td data-label="Standard"><code>#0A0E16</code></td>
+                    <td data-label="Was sie macht">Der Hintergrund unter den Lichthöfen. Ein Literal, keine Theme-Variable, damit er sich im dunklen Modus nicht umkehrt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--cinema-speed</code></td>
+                    <td data-label="Standard"><code>16s</code></td>
+                    <td data-label="Was sie macht">Ein Zyklus des ersten Lichthofs; der zweite rechnet ×1.25, so laufen sie auseinander.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Variable"><code class="fw-bold">--cinema-grain</code></td>
+                    <td data-label="Standard"><code>url(…)</code></td>
+                    <td data-label="Was sie macht">Das Korn. <code>none</code> schaltet es ab.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <!-- ===================================================== -->

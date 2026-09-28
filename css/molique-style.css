@@ -12141,6 +12141,96 @@
   .bg-blobs-deep::before, .bg-blobs-deep::after {
     --blob-opacity: 0.6;
   }
+  /* Cinematic corner light: the teal-and-orange grade of film posters - cool
+     light in the top-left corner, warm amber in the bottom-right, a deep
+     near-black in between. Related to .bg-gradient-corners (same corners) and
+     .bg-blobs (same slow motion), but neither fits: the former has a fixed
+     palette and no motion, the latter spreads soft blobs across the whole
+     area instead of pinning light to the corners.
+     ALWAYS DARK, like .bg-blobs-deep and for the same reason - the colour is a
+     literal, not a theme variable that would invert.
+     API via variables: --cinema-1 / --cinema-2 are whole colours (hex works,
+     the fade-out stops are derived with color-mix), --cinema-bg the base,
+     --cinema-speed one cycle of the first glow, --cinema-grain the film grain
+     (`none` turns it off). */
+  .bg-cinema {
+    --cinema-bg: #0A0E16;
+    --cinema-1: rgb(34 92 150 / 0.7);
+    --cinema-2: rgb(230 136 58 / 0.55);
+    --cinema-speed: 16s;
+    /* Grain: an inline SVG noise tile, no request. Besides the film look it
+       dithers the gradients - long, dark radial gradients band visibly on
+       8-bit screens, and a faint noise hides the steps. */
+    --cinema-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    position: relative;
+    /* isolation, not z-index on the container: a stacking context of its own
+       keeps the glows (z-index -1) above this background and below the
+       content, and confines their screen blending to this box. */
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--cinema-bg);
+    background-image: var(--cinema-grain);
+    color: var(--text-on-dark-fixed);
+  }
+  /* Ellipses sized from BOTH dimensions and centred on the corner itself, so
+     the light stays in the corner on a wide hero, a card and a tall column
+     alike. A circle sized from the width alone reached the middle of a wide
+     section and read as two halves with a dark seam, not as two corners. */
+  .bg-cinema::before,
+  .bg-cinema::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 110%;
+    height: 160%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+    animation: cinemaGlowA var(--cinema-speed) ease-in-out infinite alternate;
+  }
+  .bg-cinema::before {
+    left: -55%;
+    top: -80%;
+    background: radial-gradient(closest-side, var(--cinema-1), color-mix(in srgb, var(--cinema-1) 50%, transparent) 40%, color-mix(in srgb, var(--cinema-1) 15%, transparent) 70%, transparent);
+  }
+  .bg-cinema::after {
+    right: -55%;
+    bottom: -80%;
+    background: radial-gradient(closest-side, var(--cinema-2), color-mix(in srgb, var(--cinema-2) 50%, transparent) 40%, color-mix(in srgb, var(--cinema-2) 15%, transparent) 70%, transparent);
+    /* Its own keyframes and a slower, offset cycle - as with .bg-blobs, two
+       glows breathing in step read as one pulse, not as two light sources. */
+    animation-name: cinemaGlowB;
+    animation-duration: calc(var(--cinema-speed) * 1.25);
+    animation-delay: calc(var(--cinema-speed) * -0.5);
+  }
+  /* Small moves on purpose: this is light breathing, not blobs floating.
+     transform-origin is the default centre, which here lies on the corner, so
+     scaling swells the light out of the corner instead of sliding it. */
+  @keyframes cinemaGlowA {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.85;
+    }
+    to {
+      transform: translate3d(4%, 5%, 0) scale(1.12);
+      opacity: 1;
+    }
+  }
+  @keyframes cinemaGlowB {
+    from {
+      transform: translate3d(0, 0, 0) scale(1.08);
+      opacity: 1;
+    }
+    to {
+      transform: translate3d(-5%, -4%, 0) scale(0.96);
+      opacity: 0.8;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg-cinema::before, .bg-cinema::after {
+      animation: none;
+    }
+  }
   /* =========================================
      6. BORDER ANIMATIONS (border effects)
      ========================================= */

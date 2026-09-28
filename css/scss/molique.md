@@ -529,6 +529,20 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   co rozmywać. Kształt plam jest statyczny (`border-radius` nie jest
   animowalny bez reflow), ruch daje wyłącznie `transform` z obrotem.
   Animacja wyłącza się przy `prefers-reduced-motion`.
+- **Filmowe światło w narożnikach (od 1.7.36):** `.bg-cinema` - ZAWSZE
+  ciemne tło w kolorystyce plakatu filmowego: chłodny niebieski w lewym
+  górnym rogu, bursztyn w prawym dolnym, głęboka czerń pośrodku, subtelne
+  ziarno. Obie łuny powoli „oddychają” (tylko transform/opacity, gasną przy
+  `prefers-reduced-motion`). Sterowanie ZMIENNYMI, nie klasami:
+  `--cinema-1`/`--cinema-2` (pełne kolory, hex działa),
+  `--cinema-bg` (literał, domyślnie `#0A0E16`), `--cinema-speed` (16s,
+  druga łuna ×1.25), `--cinema-grain` (`none` wyłącza ziarno). Klasyczny
+  filmowy teal: `--cinema-1: rgb(14 110 122 / 0.75); --cinema-2: rgb(224
+  122 46 / 0.6); --cinema-bg: #070C0F`. Łuny są elipsami z szerokości I
+  wysokości, więc zostają w rogach także na karcie i wysokiej kolumnie;
+  `.rounded-*` przycina je z rogami. Tekst domyślnie `--text-on-dark-fixed`.
+  Kuzyni: `.bg-gradient-corners` (statyczna łuna, stała paleta) i
+  `.bg-blobs` (plamy po całej powierzchni).
 - **Grid Expand (płynny akordeon):** `.grid-expand` > `.grid-expand-inner`
   (owija treść, bez niego nie ma czego ściskać przez `overflow:hidden`).
   Animuje `grid-template-rows: 0fr → 1fr` - jedyny sposób na płynne
