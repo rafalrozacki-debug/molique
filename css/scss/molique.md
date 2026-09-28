@@ -44,7 +44,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.align-self-start/-end/-center/-stretch`.
 - **Spacing:** `.m-1` do `.m-5`, `.p-1` do `.p-5` (oraz warianty `-md-`,
   np. `.p-md-4`). Wciąganie w górę (ujemny margines):
-  `.overlap-up-50/-100/-150` (np. karta na hero).
+  `.overlap-up-50/-100/-150` (np. karta na hero). **Działają dopiero od
+  `md` (768px)** - na telefonie nic nie robią. Przesunięcie także na
+  mobile: `.overlap-container`.
 - **Pozycjonowanie:** `.position-relative/-absolute/-fixed/-sticky`;
   przypięcie do krawędzi `.top-0/.bottom-0/.left-0/.right-0/.inset-0`;
   centrowanie `.top-50` + `.left-50` + `.translate-middle(-x/-y)`.
@@ -287,7 +289,25 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Tooltipy:** `.tooltip-element[data-tooltip="Treść"]`. Modyfikatory:
   `.tooltip-element-bottom`, `.tooltip-element-end`,
   `.tooltip-element-wide` (dymek na całe zdanie, zawija tekst, szerokość
-  do `--tooltip-max-width`, domyślnie 280px).
+  do `--tooltip-max-width`, domyślnie 280px). Dymek jest pseudo-elementem,
+  więc przycina go `overflow` przodka - w tabeli, karcie i modalu użyj
+  `.tooltip-popover`.
+- **Tooltip w top layer (od 1.7.34):** `.tooltip-popover` - gdy dymek
+  siedzi w czymś, co przycina (`.table-wrapper`, `.card`, `.accordion`,
+  ciało modala), bo `.tooltip-element` jest pseudo-elementem i nie da się
+  go wynieść. Markup: `<button aria-describedby="tip-1">` +
+  `<div id="tip-1" class="tooltip-popover" popover="hint" role="tooltip">`.
+  Powiązaniem jest WYŁĄCZNIE `aria-describedby` wyzwalacza - bez niego
+  dymek się nie otworzy. Obsługę (najechanie 150 ms, fokus z klawiatury,
+  dotyk, `Esc`, jeden naraz) robi `js/modules/molique-tooltip-popover.js`,
+  auto-ładowany po `.tooltip-popover`; działa na delegacji, ALE autoloader
+  skanuje stronę tylko przy starcie - gdy `.tooltip-popover` pojawi się
+  dopiero z AJAX-a, dołącz moduł sam (`wp_enqueue_script`).
+  `popover="hint"` nie zamyka otwartego dropdownu; gdzie `hint` jest
+  nieznany, działa jak `manual` (zamyka moduł). Bez strzałki, zawija sam
+  do `--tooltip-max-width` (bez wariantu `-wide`),
+  `.tooltip-popover-bottom` = domyślnie pod wyzwalaczem. Z kodu:
+  `MoliqueTooltipPopover.show(trigger)` / `.hide()`.
 
 ## Moduły: Admin, E-commerce, Blog
 

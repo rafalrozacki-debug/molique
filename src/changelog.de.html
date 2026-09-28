@@ -48,6 +48,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.34 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.34</div>
+              <div class="text-muted text-4">September 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Ein Tooltip, den weder Tabelle noch Karte abschneiden
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  <code>.tooltip-element</code> zeichnet die Sprechblase als Pseudo-Element im Auslöser, daher wurde sie in Tabellen, Karten, Akkordeons und Modals abgeschnitten. Ein Pseudo-Element lässt sich dort weder per CSS noch per Skript herausholen, deshalb gibt es jetzt einen zweiten Tooltip auf Basis der Popover API.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Neue Klasse <code>.tooltip-popover</code> (+ <code>.tooltip-popover-bottom</code>).</strong> Ein eigenes Element mit <code>popover="hint"</code> und <code>role="tooltip"</code>, das beim Öffnen im Top Layer landet. Der Auslöser verweist über <code>aria-describedby</code> darauf - die einzige Verbindung, die Beschreibung für Screenreader kann also nicht verloren gehen. Die Sprechblase steht über dem Auslöser, klappt bei Platzmangel darunter oder rückt zur Seite und hält 8 px Abstand zum Fensterrand. Sie bricht selbst bis <code>--tooltip-max-width</code> um. Es gibt keinen Pfeil, weil er nach dem Umklappen in die falsche Richtung zeigen würde.</li>
+                  <li><strong>Neues Modul <code>js/modules/molique-tooltip-popover.js</code>.</strong> Wird mit <code>.tooltip-popover</code> automatisch geladen, weil ein Popover nicht von selbst auf Überfahren reagiert. Öffnet beim Überfahren (150 ms), sofort bei Tastaturfokus und Berührung; schließt, wenn der Zeiger geht (auf die Sprechblase kann man zum Weiterlesen fahren), bei <kbd>Esc</kbd>, wenn der Fokus wandert und bei einem Tippen anderswo. Es ist immer nur eine offen. Das Modul arbeitet mit Delegation, per AJAX nachgeladene Zeilen brauchen keine Initialisierung. <code>popover="hint"</code> (Chrome/Edge 133+) schließt kein offenes Menü; ein älterer Browser behandelt es als <code>manual</code>, und das Schließen übernimmt ohnehin das Modul. Ohne Anchor Positioning berechnet das Modul die Position selbst. Per Code: <code>MoliqueTooltipPopover.show(trigger)</code> / <code>.hide()</code>. Tests: <code>npm run test:tooltip-popover</code>.</li>
+                  <li><strong><code>.tooltip-element</code> im dunklen Modus: weißer Text auf fast weißer Sprechblase.</strong> Der Hintergrund ist <code>--dark</code>, das sich im dunklen Modus zu <code>#ECEDF8</code> umkehrt, während der Text fest <code>#fff</code> war. Der Text nutzt jetzt <code>--light</code>, das sich mit dem Hintergrund umkehrt: Kontrast 15:1 im dunklen und 17:1 im hellen Modus.</li>
+                  <li><strong>Doku: <code>.overlap-up-50/-100/-150</code> wirken erst ab <code>md</code>.</strong> Die Klassen sind nur ab 768 px definiert, auf dem Smartphone tun sie also nichts, und die Beschreibung sagte das nicht. Das Verhalten bleibt unverändert. Für eine Verschiebung auch mobil <code>.overlap-container</code> verwenden.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.33 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -1,4 +1,5 @@
-// molique - Tooltips (pure CSS, data-tooltip).
+// molique - Tooltips: .tooltip-element (pure CSS, data-tooltip) and
+// .tooltip-popover (top layer, js/modules/molique-tooltip-popover.js).
 //
 // Independent module: can be omitted from a bundle with no compile errors.
 
@@ -50,7 +51,9 @@
   bottom: 100%;
   left: 50%;
   background-color: var(--dark);
-  color: #fff;
+  /* --light, not #fff: --dark inverts in dark mode (#ECEDF8), so a fixed
+     white left white text on a near-white bubble. --light inverts with it. */
+  color: var(--light);
   padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
   border-radius: var(--border-radius);
   font-size: 0.75rem;
@@ -130,4 +133,168 @@
   max-width: min(var(--tooltip-max-width, 280px), calc(100vw - 2rem));
   text-align: left;
   line-height: 1.4;
+}
+
+/* =========================================
+   6. TOOLTIP POPOVER (top layer)
+   ========================================= */
+/* WHY A SECOND TOOLTIP. .tooltip-element draws its bubble with ::before and
+   ::after, absolutely positioned inside the trigger - so every clipping
+   ancestor cuts it off: .table-wrapper (overflow-x: auto forces the block
+   axis to clip too), .card, .accordion, the body of a modal. A pseudo-element
+   cannot be moved out of its ancestor, by CSS or by JS. This one is a real
+   element with the popover attribute: shown, it lives in the top layer,
+   where no overflow of any ancestor reaches it.
+
+   MARKUP. The trigger's aria-describedby IS the link - no extra attribute:
+     <button aria-describedby="tip-1">...</button>
+     <div id="tip-1" class="tooltip-popover" popover="hint" role="tooltip">...</div>
+   The a11y wiring cannot be forgotten, because without it nothing opens.
+
+   popover="hint" (Chrome/Edge 133+): a hint never closes an open
+   popover="auto" (a dropdown, a select) when it appears - a tooltip over an
+   open menu must not dismiss the menu. Where "hint" is unknown, the
+   attribute's invalid-value default is "manual", which is exactly the
+   fallback we want: nothing closes by itself, js/modules/molique-tooltip-
+   popover.js opens and closes it (hover with a delay, focus, Escape, a tap
+   outside) in both cases. A popover does not open on hover by itself.
+
+   NO ARROW, on purpose. The bubble flips below/sideways through
+   @position-try when there is no room, and a fallback can only change the
+   element's own insets, margins and alignment - not its pseudo-elements. An
+   arrow would keep pointing up at a trigger that now sits above it.
+
+   ANIMATION: opacity only. A slide would have to know which way the bubble
+   ended up after the flips, which CSS cannot tell it. */
+@position-try --tooltip-popover-above {
+  top: auto;
+  bottom: anchor(top);
+  left: auto;
+  right: auto;
+  justify-self: anchor-center;
+  margin: 0 8px 8px 8px;
+}
+@position-try --tooltip-popover-below {
+  top: anchor(bottom);
+  bottom: auto;
+  left: auto;
+  right: auto;
+  justify-self: anchor-center;
+  margin: 8px 8px 0 8px;
+}
+/* The "-start"/"-end" pairs: the trigger sits near a side edge of the
+   window, where a centred bubble would stick out. The browser only takes a
+   fallback that removes the overflow on BOTH axes (see _dropdown.scss), so
+   every vertical/horizontal combination is listed. */
+@position-try --tooltip-popover-above-start {
+  top: auto;
+  bottom: anchor(top);
+  left: anchor(left);
+  right: auto;
+  justify-self: normal;
+  margin: 0 0 8px 0;
+}
+@position-try --tooltip-popover-above-end {
+  top: auto;
+  bottom: anchor(top);
+  left: auto;
+  right: anchor(right);
+  justify-self: normal;
+  margin: 0 0 8px 0;
+}
+@position-try --tooltip-popover-below-start {
+  top: anchor(bottom);
+  bottom: auto;
+  left: anchor(left);
+  right: auto;
+  justify-self: normal;
+  margin: 8px 0 0 0;
+}
+@position-try --tooltip-popover-below-end {
+  top: anchor(bottom);
+  bottom: auto;
+  left: auto;
+  right: anchor(right);
+  justify-self: normal;
+  margin: 8px 0 0 0;
+}
+
+.tooltip-popover {
+  /* fixed, not absolute - the same reason as .dropdown-menu[popover]: inside
+     an open <dialog> an absolute popover resolved against the document and
+     landed off-screen at a large scrollY. */
+  position: fixed;
+  position-anchor: auto;
+  inset: auto;
+  bottom: anchor(top);
+  justify-self: anchor-center;
+  /* The side margins are symmetric, so they do not move the centring - but
+     when anchor-center has to slide the bubble back inside the window, they
+     keep it 8px off the edge instead of flush against it. */
+  margin: 0 8px 8px 8px;
+  position-try-fallbacks:
+    --tooltip-popover-below,
+    --tooltip-popover-above-start,
+    --tooltip-popover-above-end,
+    --tooltip-popover-below-start,
+    --tooltip-popover-below-end;
+
+  /* Sized by its text, not by the trigger - so, unlike .tooltip-element,
+     wrapping needs no -wide variant: a short label stays on one line, a
+     sentence wraps at --tooltip-max-width. */
+  width: max-content;
+  max-width: min(var(--tooltip-max-width, 280px), calc(100vw - 2rem));
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  border: 0;
+  border-radius: var(--border-radius);
+  overflow: visible;
+  background-color: var(--dark);
+  color: var(--light);
+  font-size: 0.75rem;
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+
+  opacity: 0;
+  transition: opacity 0.15s ease, display 0.15s allow-discrete, overlay 0.15s allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+  }
+
+  @starting-style {
+    &:popover-open {
+      opacity: 0;
+    }
+  }
+
+  /* A11y: no fade under prefers-reduced-motion. */
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  /* Without CSS Anchor Positioning the module places the bubble itself
+     (inline top/left against the viewport, with the same flip below and the
+     same clamp to the window edges) - these reset what anchor() would have
+     set, so the inline values are the only ones left. */
+  @supports not (top: anchor(bottom)) {
+    inset: auto;
+    margin: 0;
+    justify-self: auto;
+  }
+}
+
+/* Modifier: below the trigger by default (a trigger near the top of the
+   window, a header row), flipping above only when there is no room. */
+.tooltip-popover-bottom {
+  bottom: auto;
+  top: anchor(bottom);
+  margin: 8px 8px 0 8px;
+  position-try-fallbacks:
+    --tooltip-popover-above,
+    --tooltip-popover-below-start,
+    --tooltip-popover-below-end,
+    --tooltip-popover-above-start,
+    --tooltip-popover-above-end;
 }

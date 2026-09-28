@@ -586,12 +586,12 @@ export const CATEGORIES = [
         id: 'overlap-up-50',
         classes: [['.overlap-up-50', '.overlap-up-100', '.overlap-up-150']],
         desc: {
-          pl: 'Wciąga element do góry o 50/100/150px (ujemny margines) - np. karta nachodząca na sekcję hero powyżej.',
-          en: 'Pulls an element up by 50/100/150px (negative margin) - e.g. a card overlapping the hero section above it.',
-          de: 'Zieht ein Element um 50/100/150px nach oben (negativer Margin) - z. B. eine Karte, die den Hero-Abschnitt darüber überlappt.',
+          pl: 'Wciąga element do góry o 50/100/150px (ujemny margines) - np. karta nachodząca na sekcję hero powyżej. <strong>Działa dopiero od <code>md</code> (768px)</strong> - na telefonie nic nie robi. Przesunięcie także na mobile daje <code>.overlap-container</code>.',
+          en: 'Pulls an element up by 50/100/150px (negative margin) - e.g. a card overlapping the hero section above it. <strong>Only from <code>md</code> (768px) up</strong> - on a phone it does nothing. For an offset on mobile too, use <code>.overlap-container</code>.',
+          de: 'Zieht ein Element um 50/100/150px nach oben (negativer Margin) - z. B. eine Karte, die den Hero-Abschnitt darüber überlappt. <strong>Erst ab <code>md</code> (768px)</strong> - auf dem Smartphone wirkungslos. Für eine Verschiebung auch mobil <code>.overlap-container</code> verwenden.',
         },
         demo: '-',
-        tags: ['spacing'],
+        tags: ['spacing', 'responsive'],
       },
       {
         id: 'overlap-container',
@@ -3774,6 +3774,17 @@ export const CATEGORIES = [
         },
         demo: '-',
         tags: ['feedback'],
+      },
+      {
+        id: 'tooltip-popover',
+        classes: [['.tooltip-popover'], ['.tooltip-popover-bottom']],
+        desc: {
+          pl: 'Tooltip w top layer, którego nie przytnie <code>overflow</code> tabeli, karty, akordeonu ani modala. Osobny element z <code>popover="hint"</code>, <code>role="tooltip"</code> i <code>id</code>, wskazany przez <code>aria-describedby</code> wyzwalacza. Otwiera go auto-ładowany <code>molique-tooltip-popover.js</code> (najechanie, fokus, dotyk). <code>-bottom</code>: domyślnie pod wyzwalaczem.',
+          en: 'A top-layer tooltip that no <code>overflow</code> of a table, card, accordion or modal can clip. A separate element with <code>popover="hint"</code>, <code>role="tooltip"</code> and an <code>id</code>, named by the trigger\'s <code>aria-describedby</code>. Opened by the auto-loaded <code>molique-tooltip-popover.js</code> (hover, focus, touch). <code>-bottom</code>: below the trigger by default.',
+          de: 'Ein Tooltip im Top Layer, den kein <code>overflow</code> einer Tabelle, Karte, eines Akkordeons oder Modals abschneidet. Ein eigenes Element mit <code>popover="hint"</code>, <code>role="tooltip"</code> und <code>id</code>, auf das <code>aria-describedby</code> des Auslösers verweist. Geöffnet vom automatisch geladenen <code>molique-tooltip-popover.js</code> (Überfahren, Fokus, Berührung). <code>-bottom</code>: standardmäßig unter dem Auslöser.',
+        },
+        demo: '-',
+        tags: ['feedback', 'clip', 'a11y'],
       },
       {
         id: 'modal-action-btn',

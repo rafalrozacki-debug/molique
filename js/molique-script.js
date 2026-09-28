@@ -320,6 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: 'input[data-search-target]', file: 'modules/molique-table-search.js', init: 'initTableSearch' },
     { selectors: '.popover-context', file: 'modules/molique-context-menu.js', init: 'initContextMenu' },
     { selectors: '.dropdown-menu[popover], .popover-context, .select-search-menu, .custom-select-dropdown', file: 'modules/molique-popover-anchor.js', init: 'initPopoverAnchor' },
+    { selectors: '.tooltip-popover', file: 'modules/molique-tooltip-popover.js', init: 'initTooltipPopover' },
     { selectors: '.admin-nav-submenu', file: 'modules/molique-admin-nav.js', init: 'initAdminNav' },
     { selectors: '.admin-nav', file: 'modules/molique-admin-nav-active.js', init: 'initAdminNavActive' },
     { selectors: '.theme-editor', file: 'modules/molique-theme-editor.js', init: 'initThemeEditor' },

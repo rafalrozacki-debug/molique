@@ -62,6 +62,11 @@
                     <td data-label="JavaScript"><span class="badge badge-success">zero</span></td>
                   </tr>
                   <tr>
+                    <td data-label="Komponent"><code>.tooltip-popover</code></td>
+                    <td data-label="Mechanizm">Popover API (<code>popover="hint"</code>) + Anchor Positioning</td>
+                    <td data-label="JavaScript"><span class="badge badge-warning">moduł auto-ładowany</span></td>
+                  </tr>
+                  <tr>
                     <td data-label="Komponent"><code>.grid-expand</code></td>
                     <td data-label="Mechanizm">Animowany <code>grid-template-rows</code></td>
                     <td data-label="JavaScript"><span class="badge badge-success">zero</span></td>
@@ -643,6 +648,74 @@
       data-tooltip="To pole jest zablokowane, bo zamówienie przekazano już do realizacji w magazynie."&gt;Dlaczego nie mogę tego zmienić?&lt;/span&gt;</code></pre>
             </div>
 
+            <h3 class="text-6 fw-bold mb-2 mt-4">Tooltip, którego nic nie przytnie</h3>
+            <p class="text-muted mb-3">
+              <code>.tooltip-element</code> rysuje dymek pseudo-elementem wewnątrz
+              wyzwalacza, więc przycina go każdy przodek z <code>overflow</code>:
+              <code>.table-wrapper</code>, <code>.card</code>, akordeon, ciało
+              modala. W takich miejscach użyj <code>.tooltip-popover</code>: to
+              osobny element z atrybutem <code>popover="hint"</code>, który po
+              otwarciu trafia do top layer. Wyzwalacz wskazuje go przez
+              <code>aria-describedby</code> - to jedyne powiązanie, więc bez tego
+              atrybutu dymek się nie otworzy, a czytnik ekranu zawsze dostaje opis.
+            </p>
+            <div class="table-wrapper mb-3">
+              <table class="table table-sm">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Zamówienie</th>
+                    <th>Status</th>
+                    <th>Akcje</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#1042</td>
+                    <td><span class="badge badge-warning">W magazynie</span></td>
+                    <td><button type="button" class="btn-action" aria-describedby="demo-tip-locked">Edytuj</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="demo-tip-locked" class="tooltip-popover" popover="hint" role="tooltip">Edycja jest zablokowana, bo zamówienie przekazano już do realizacji w magazynie.</div>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;button type="button" class="btn-action" aria-describedby="tip-locked"&gt;Edytuj&lt;/button&gt;
+
+&lt;div id="tip-locked" class="tooltip-popover" popover="hint" role="tooltip"&gt;
+  Edycja jest zablokowana, bo zamówienie przekazano już do realizacji.
+&lt;/div&gt;</code></pre>
+            </div>
+            <p class="text-muted mb-3">
+              Dymek otwiera się po najechaniu (z opóźnieniem 150 ms, żeby
+              przelatujący kursor niczego nie zapalał), od razu przy fokusie
+              z klawiatury i przy dotknięciu. Zamyka się po zjechaniu kursorem
+              (na sam dymek można najechać, żeby go doczytać), po
+              <kbd>Esc</kbd>, po odejściu fokusu i po dotknięciu w innym miejscu.
+              Naraz otwarty jest jeden. Popover sam nie reaguje na najechanie,
+              dlatego obsługę robi <code>js/modules/molique-tooltip-popover.js</code>,
+              doładowywany automatycznie, gdy na stronie jest
+              <code>.tooltip-popover</code>. Moduł działa na delegacji, więc
+              wiersze dosypane później (AJAX) nie wymagają ponownej inicjalizacji.
+              Autoloader sprawdza jednak stronę tylko raz, przy starcie: jeśli
+              wtedy nie ma na niej żadnego <code>.tooltip-popover</code>, dołącz
+              moduł sam.
+            </p>
+            <p class="text-muted mb-3">
+              Dymek staje nad wyzwalaczem, a gdy brakuje miejsca, odbija się pod
+              niego albo przesuwa w bok. Szerokość sięga do
+              <code>--tooltip-max-width</code>, więc krótka etykieta zostaje
+              w jednej linii, a zdanie się zawija bez osobnego wariantu. Nie ma
+              strzałki, bo po odbiciu wskazywałaby w złą stronę.
+              <code>popover="hint"</code> (Chrome/Edge 133+) sprawia, że dymek nie
+              zamyka otwartego menu. Przeglądarka, która tej wartości nie zna,
+              traktuje ją jak <code>manual</code> - dymek działa tak samo, bo
+              zamykaniem i tak zajmuje się moduł. Bez Anchor Positioning moduł
+              sam liczy pozycję względem okna i zamyka dymek przy przewijaniu.
+              Otwieranie z kodu: <code>MoliqueTooltipPopover.show(trigger)</code>
+              i <code>MoliqueTooltipPopover.hide()</code>.
+            </p>
+
             <h3 class="text-6 fw-bold mb-2 mt-4">Menu kontekstowe</h3>
             <p class="text-muted mb-3">
               Małe menu, które przykleja się do przycisku wywołującego. Stoi na
@@ -675,6 +748,21 @@
                       Wariant na całe zdanie: zawija tekst, wyrównuje do lewej,
                       szerokość do <code>--tooltip-max-width</code> (domyślnie 280px),
                       nigdy szerzej niż ekran.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tooltip-popover</code></td>
+                    <td data-label="Co robi">
+                      Dymek w top layer, którego nie przytnie żaden
+                      <code>overflow</code>. Element z <code>popover="hint"</code>,
+                      <code>role="tooltip"</code> i <code>id</code>, wskazany przez
+                      <code>aria-describedby</code> wyzwalacza.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tooltip-popover-bottom</code></td>
+                    <td data-label="Co robi">
+                      Domyślnie pod wyzwalaczem, nad nim tylko przy braku miejsca.
                     </td>
                   </tr>
                   <tr>
