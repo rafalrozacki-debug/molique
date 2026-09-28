@@ -288,8 +288,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   Checkmark). Może być użyta z `<label class="status-checkbox">`.
 - **Tooltipy:** `.tooltip-element[data-tooltip="Treść"]`. Modyfikatory:
   `.tooltip-element-bottom`, `.tooltip-element-end`,
-  `.tooltip-element-wide` (dymek na całe zdanie, zawija tekst, szerokość
-  do `--tooltip-max-width`, domyślnie 280px). Dymek jest pseudo-elementem,
+  `.tooltip-element-wide` (dymek na całe zdanie, wyrównanie do lewej). Od
+  1.7.34 każdy dymek zawija tekst przy `--tooltip-max-width` (domyślnie
+  280px), krótka etykieta zostaje w jednej linii. Dymek jest pseudo-elementem,
   więc przycina go `overflow` przodka - w tabeli, karcie i modalu użyj
   `.tooltip-popover`.
 - **Tooltip w top layer (od 1.7.34):** `.tooltip-popover` - gdy dymek
