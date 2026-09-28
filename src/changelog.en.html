@@ -48,6 +48,38 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.35 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.35</div>
+              <div class="text-muted text-4">September 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Corner shape, entrance animations and a hiding navbar without JS
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Native <code>corner-shape</code> changes the shape of the rounding instead of cutting the element out after painting, as <code>clip-path</code> and masks do. That is why the border and the shadow follow the shape. On top of that, two things that needed <code>molique-script.js</code> so far are now done by CSS alone in newer Chromium - the script stays as the fallback for other browsers.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>New classes <code>.corner-shape-squircle</code>, <code>-bevel</code>, <code>-notch</code> and <code>-scoop</code>.</strong> They work on an element that already has a <code>border-radius</code>: the radius sets how deep the corner goes, the class sets its shape. For subtle corners <code>.rounded-2</code> or <code>.rounded-3</code> is enough; with <code>.rounded-5</code> on a small element <code>-notch</code> turns it into a cross. A browser without support (outside Chromium) drops the declaration and the ordinary rounding stays, with no fallback code.</li>
+                  <li><strong>Entrance animations on <code>animation-trigger</code> (Chrome/Edge 145+).</strong> <code>.animate</code>, <code>.reveal-blur</code> and <code>.reveal-scale</code> start their entrance by themselves once 10% of the element scrolls into view - the same threshold as the observer so far. <code>molique-script.js</code> tests the identical <code>@supports</code> condition and then creates no IntersectionObserver at all, so the two paths never run together. A side effect to watch: on this path <strong>the <code>.is-visible</code> class is not added</strong>, so your own styles built on <code>.animate.is-visible</code> now only work in Firefox and Safari. The gain: content with <code>.animate</code> no longer stays invisible when JavaScript does not run. <code>.delay-*</code> now also delays the animation.</li>
+                  <li><strong>Hiding <code>.navbar-sticky</code> through <code>scroll-state</code> (Chrome/Edge 144+).</strong> The bar hides on scroll down and comes back on scroll up with no <code>scroll</code> listener - through an <code>@container molique-page scroll-state(scrolled: bottom)</code> query on <code>:root</code>. It also works without JS. The JS still sets <code>.is-hidden</code>, because it computes <code>.is-scrolled</code> and the reading bar anyway, and support for the query cannot be detected with <code>@supports</code> - the two mechanisms add up. The only visible difference: CSS hides the bar from the first pixel down, the JS waits 100px. An open mobile menu keeps the bar in place in both cases.</li>
+                  <li><strong>The <code>.corner-cut-*</code> description in the class list was wrong.</strong> It said <code>mask-image</code>, while the cut uses <code>clip-path</code> (only <code>.corner-concave-*</code> uses a mask). The description now also says that both families cut off the border and shadow of the element, so they only fit when the cut must exist in every browser.</li>
+                  <li><strong>Roadmap: rebuilding on native <code>@function</code> and <code>if()</code> is on hold.</strong> As of September 2026 this only works in Chrome/Edge, and an unsupported declaration is dropped entirely, so the core would stop working in Firefox and Safari.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.34 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

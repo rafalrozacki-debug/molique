@@ -147,8 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================
   // 4. ANIMACJE WEJŚCIA (Intersection Observer)
   // =========================================
+  // Gdzie działają CSS Animation Triggers (Chrome/Edge 145+), wejście
+  // odpala sam CSS (utilities/_animations.scss) - obserwator by je
+  // zdublował. Warunek MUSI być identyczny z tamtym @supports.
+  const cssRevealTriggers = !!(window.CSS && CSS.supports &&
+    CSS.supports('timeline-trigger', '--molique-reveal view()') &&
+    CSS.supports('animation-trigger', '--molique-reveal play-once'));
   const animatedElements = document.querySelectorAll('.animate, .reveal-blur, .reveal-scale');
-  if (animatedElements.length > 0) {
+  if (animatedElements.length > 0 && !cssRevealTriggers) {
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {

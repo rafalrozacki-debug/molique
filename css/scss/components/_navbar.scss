@@ -194,6 +194,31 @@
   }
 }
 
+/* The same auto-hide without JS: a scroll-state container query on the
+   page's own scroller (Chrome/Edge 144+). `scrolled` is the direction of the
+   LAST scroll, so the bar goes on the way down and comes back on the way
+   up - with no scroll listener, so it also works on a CSS-only integration.
+   It ADDS to the .is-hidden class rather than replacing it: molique-script.js
+   still runs its scroll handler for .is-scrolled and the reading bar, and
+   no feature query can tell whether `scrolled` is supported (@supports does
+   not see container queries), so the JS keeps setting .is-hidden as the
+   fallback. Both hide the same bar, so wherever both work the result is
+   simply "hidden when either says so". One visible difference: the JS waits
+   for 100px of scroll, this does not.
+   The mobile menu keeps the bar in place, as in the JS
+   (!mobileNavToggle.checked). The container is named, so it cannot capture
+   an unnamed scroll-state query of a project; it sets no containment, so it
+   changes nothing else about the root. */
+:root {
+  container: molique-page / scroll-state;
+}
+
+@container molique-page scroll-state(scrolled: bottom) {
+  .navbar-sticky:not(:has(.navbar-offcanvas-toggle:checked)) {
+    transform: translateY(-100%);
+  }
+}
+
 /* --- Navbar "Pill" (floating over the hero -> sticky after scroll) ---
    An overlay variant: the navbar is a pill pulled away from the edge,
    sitting ON the content, so the section's background/image underneath

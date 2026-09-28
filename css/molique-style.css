@@ -3936,6 +3936,29 @@
   .navbar-sticky.is-hidden {
     transform: translateY(-100%);
   }
+  /* The same auto-hide without JS: a scroll-state container query on the
+     page's own scroller (Chrome/Edge 144+). `scrolled` is the direction of the
+     LAST scroll, so the bar goes on the way down and comes back on the way
+     up - with no scroll listener, so it also works on a CSS-only integration.
+     It ADDS to the .is-hidden class rather than replacing it: molique-script.js
+     still runs its scroll handler for .is-scrolled and the reading bar, and
+     no feature query can tell whether `scrolled` is supported (@supports does
+     not see container queries), so the JS keeps setting .is-hidden as the
+     fallback. Both hide the same bar, so wherever both work the result is
+     simply "hidden when either says so". One visible difference: the JS waits
+     for 100px of scroll, this does not.
+     The mobile menu keeps the bar in place, as in the JS
+     (!mobileNavToggle.checked). The container is named, so it cannot capture
+     an unnamed scroll-state query of a project; it sets no containment, so it
+     changes nothing else about the root. */
+  :root {
+    container: molique-page/scroll-state;
+  }
+  @container molique-page scroll-state(scrolled: bottom) {
+    .navbar-sticky:not(:has(.navbar-offcanvas-toggle:checked)) {
+      transform: translateY(-100%);
+    }
+  }
   /* --- Navbar "Pill" (floating over the hero -> sticky after scroll) ---
      An overlay variant: the navbar is a pill pulled away from the edge,
      sitting ON the content, so the section's background/image underneath
@@ -11520,7 +11543,33 @@
     border-bottom-right-radius: 0 !important;
   }
   /* =========================================
-     3. CORNERS: SHARP CUT (clip-path) AND CONCAVE NOTCH (mask-image)
+     3. CORNER SHAPE (native corner-shape, progressive)
+     ========================================= */
+  /* Changes the SHAPE of the existing rounding, not its size - so these only
+     show on an element that already has a border-radius (.rounded-3 and up,
+     or a component's own radius): the radius says how far the corner reaches,
+     corner-shape says what curve fills it.
+     Unlike .corner-cut-* / .corner-concave-* below, the border, background and
+     box-shadow all follow the shape - clip-path and mask cut the element out
+     AFTER painting, so they also cut off its border and its shadow.
+     Where corner-shape is unsupported the declaration is simply dropped and
+     the element keeps its ordinary rounded corners - no fallback code needed.
+     That also means .corner-shape-bevel is NOT a guaranteed bevel: where the
+     cut must exist in every browser, .corner-cut-* is still the tool. */
+  .corner-shape-squircle {
+    corner-shape: squircle !important;
+  }
+  .corner-shape-bevel {
+    corner-shape: bevel !important;
+  }
+  .corner-shape-notch {
+    corner-shape: notch !important;
+  }
+  .corner-shape-scoop {
+    corner-shape: scoop !important;
+  }
+  /* =========================================
+     4. CORNERS: SHARP CUT (clip-path) AND CONCAVE NOTCH (mask-image)
      ========================================= */
   .corner-cut-tl {
     clip-path: polygon(24px 0, 100% 0, 100% 100%, 0 100%, 0 24px);
@@ -11603,7 +11652,7 @@
     }
   }
   /* =========================================
-     1. ENTRANCE ANIMATIONS (Intersection Observer)
+     1. ENTRANCE ANIMATIONS (Animation Triggers, Intersection Observer fallback)
      ========================================= */
   .animate {
     opacity: 0;
@@ -11680,6 +11729,76 @@
     .reveal-scale.is-visible {
       opacity: 0;
       transform: scale(0.95);
+    }
+  }
+  /* Declarative path: CSS Animation Triggers (Chrome/Edge 145+). The element
+     starts its own entrance when 10% of it has scrolled into view (the same
+     threshold as the IntersectionObserver in molique-script.js), once. No
+     script involved - so this also works on a CSS-only integration, where
+     without it .animate content stayed at opacity 0 for good.
+     molique-script.js tests EXACTLY this @supports condition and skips its
+     observer where it holds, so the two paths never run together. In this
+     path .is-visible is therefore NOT added.
+     trigger-scope keeps every element's --molique-reveal to itself: trigger
+     names are otherwise document-wide, like anchor names, and a nested
+     .animate could resolve its parent's trigger. */
+  @supports (timeline-trigger: --molique-reveal view()) and (animation-trigger: --molique-reveal play-once) {
+    .animate,
+    .reveal-blur,
+    .reveal-scale {
+      timeline-trigger: --molique-reveal view() entry 10% exit 100%;
+      trigger-scope: --molique-reveal;
+      animation-trigger: --molique-reveal play-once;
+    }
+    .animate {
+      animation: animateRevealIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .reveal-blur {
+      animation: revealBlurIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+    .reveal-scale {
+      animation: revealScaleIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+    /* .delay-* are transition-delays in the class path; here they have to
+       delay the animation. Limited to the three entrance classes, so an
+       unrelated animation that happens to share a .delay-* class is not
+       delayed only in the browsers that take this path. */
+    :is(.animate, .reveal-blur, .reveal-scale).delay-100 {
+      animation-delay: 100ms;
+    }
+    :is(.animate, .reveal-blur, .reveal-scale).delay-200 {
+      animation-delay: 200ms;
+    }
+    :is(.animate, .reveal-blur, .reveal-scale).delay-300 {
+      animation-delay: 300ms;
+    }
+    :is(.animate, .reveal-blur, .reveal-scale).delay-400 {
+      animation-delay: 400ms;
+    }
+    :is(.animate, .reveal-blur, .reveal-scale).delay-500 {
+      animation-delay: 500ms;
+    }
+  }
+  /* Only the end state: the start is whatever the element already has -
+     opacity 0 plus the offset of .fade-in-up / .zoom-in / etc. - so one
+     keyframe serves every direction class. */
+  @keyframes animateRevealIn {
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+  @keyframes revealBlurIn {
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+  }
+  @keyframes revealScaleIn {
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
   /* =========================================

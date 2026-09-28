@@ -47,6 +47,38 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.35 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.35</div>
+              <div class="text-muted text-4">Wrzesień 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Kształt narożnika, animacje wejścia i chowany navbar bez JS
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Natywne <code>corner-shape</code> zmienia kształt zaokrąglenia, a nie wycina elementu po namalowaniu, jak robią to <code>clip-path</code> i maska. Dzięki temu ramka i cień idą za kształtem. Do tego dwie rzeczy, które dotąd wymagały <code>molique-script.js</code>, w nowszym Chromium robi już sam CSS - skrypt zostaje jako zapas dla pozostałych przeglądarek.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Nowe klasy <code>.corner-shape-squircle</code>, <code>-bevel</code>, <code>-notch</code> i <code>-scoop</code>.</strong> Działają na elemencie, który ma już <code>border-radius</code>: promień wyznacza głębokość narożnika, a klasa jego kształt. Do subtelnych narożników wystarczy <code>.rounded-2</code> albo <code>.rounded-3</code>; przy <code>.rounded-5</code> na małym elemencie <code>-notch</code> robi krzyż. Przeglądarka bez obsługi (poza Chromium) pomija deklarację i zostaje zwykłe zaokrąglenie, bez żadnego kodu zapasowego.</li>
+                  <li><strong>Animacje wejścia na <code>animation-trigger</code> (Chrome/Edge 145+).</strong> <code>.animate</code>, <code>.reveal-blur</code> i <code>.reveal-scale</code> odpalają wejście same, gdy 10% elementu wjedzie w widok - ten sam próg co dotychczasowy obserwator. <code>molique-script.js</code> sprawdza identyczny warunek <code>@supports</code> i wtedy w ogóle nie tworzy IntersectionObservera, więc obie ścieżki nigdy nie działają naraz. Skutek uboczny, na który trzeba uważać: w tej ścieżce <strong>klasa <code>.is-visible</code> nie jest nadawana</strong>, więc własne style oparte na <code>.animate.is-visible</code> działają już tylko w Firefoksie i Safari. Korzyść: treść z <code>.animate</code> nie zostaje niewidoczna, gdy JavaScript się nie wykona. <code>.delay-*</code> opóźnia teraz także animację.</li>
+                  <li><strong>Chowanie <code>.navbar-sticky</code> przez <code>scroll-state</code> (Chrome/Edge 144+).</strong> Pasek chowa się przy przewijaniu w dół i wraca przy przewijaniu w górę bez nasłuchu <code>scroll</code> - przez zapytanie <code>@container molique-page scroll-state(scrolled: bottom)</code> na <code>:root</code>. Działa także bez JS. JS dalej nadaje <code>.is-hidden</code>, bo i tak liczy <code>.is-scrolled</code> i pasek czytania, a obsługi zapytania nie da się wykryć przez <code>@supports</code> - oba mechanizmy się sumują. Jedyna widoczna różnica: CSS chowa pasek od pierwszego piksela w dół, JS czeka 100px. Otwarte menu mobilne trzyma pasek w obu przypadkach.</li>
+                  <li><strong>Opis <code>.corner-cut-*</code> w spisie klas był błędny.</strong> Podawał <code>mask-image</code>, a ścięcie działa przez <code>clip-path</code> (maskę ma tylko <code>.corner-concave-*</code>). Opis mówi teraz też, że obie rodziny obcinają ramkę i cień elementu, więc są właściwe tylko wtedy, gdy ścięcie musi być w każdej przeglądarce.</li>
+                  <li><strong>Roadmapa: przebudowa na natywne <code>@function</code> i <code>if()</code> wstrzymana.</strong> We wrześniu 2026 działa to tylko w Chrome/Edge, a nieobsługiwana deklaracja wypada w całości, więc rdzeń przestałby działać w Firefoksie i Safari.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.34 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

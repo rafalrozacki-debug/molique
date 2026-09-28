@@ -84,7 +84,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   markupu - navbar bywa współdzielony między podstronami, robi to skrypt z
   adresu.
 - **Warianty:** `.navbar-transparent`, `.navbar-sticky` (dodaje
-  `.is-scrolled`).
+  `.is-scrolled`). Chowanie `.navbar-sticky` przy przewijaniu w dół robi JS
+  (`.is-hidden`, po 100px), a od 1.7.35 w Chrome/Edge 144+ dodatkowo sam CSS
+  (`@container molique-page scroll-state(scrolled: bottom)` na `:root`) —
+  od pierwszego piksela i bez JS. Otwarte menu mobilne trzyma pasek.
+  Kontener `molique-page` jest nazwany i bez containment, więc nie łapie
+  Twoich nienazwanych zapytań.
 - **Nakładkowe (`.navbar-transparent`, `.navbar-pill`):** `position: absolute`,
   więc navbar leży NA treści - tło/zdjęcie hero zaczyna się od samej góry
   strony. Po scrollu JS nadaje `.is-scrolled` → `position: fixed` + tło motywu.
@@ -466,6 +471,12 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 ## Animacje, Efekty & Utilities (GPU)
 
 - **Wejścia:** `.animate.fade-in-up`, `.reveal-blur`, `.reveal-scale`.
+  Od 1.7.35 w Chrome/Edge 145+ wejście odpala SAM CSS
+  (`animation-trigger`, 10% elementu w widoku, raz) - `molique-script.js`
+  nie tworzy wtedy IntersectionObservera i **`.is-visible` NIE jest
+  nadawane**, więc nie opieraj na tej klasie własnych stylów. Tam działa to
+  też bez JS. W Firefoksie i Safari bez zmian: obserwator + `.is-visible`,
+  a bez JS treść z `.animate` zostaje niewidoczna.
 - **Scroll Reveal:** `.scroll-reveal` (wykorzystuje
   `animation-timeline: view()`).
 - **Hover:** `.hover-spring`, `.hover-gpu-shadow`, `.hover-tilt`
@@ -494,6 +505,17 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Zaokrąglenia (Radius):** `.rounded-0` do `.rounded-5`,
   `.rounded-circle`, `.rounded-pill`, `.rounded-top-0`,
   `.rounded-bottom-0`.
+- **Kształt narożnika (od 1.7.35):** `.corner-shape-squircle`,
+  `-bevel` (ścięcie), `-notch` (wcięcie schodkowe), `-scoop` (wcięcie
+  łukiem) - natywne `corner-shape`. Zmienia KSZTAŁT istniejącego
+  zaokrąglenia, więc bez `border-radius` nic nie robi; promień wyznacza
+  głębokość (`.rounded-5` na kwadracie 120px daje z `-notch` krzyż,
+  `.rounded-3` na niskim przycisku z `-bevel` sześciokąt - do subtelnych
+  narożników `.rounded-2`/`-3`). Ramka i cień idą za kształtem. Poza
+  Chromium deklaracja odpada i zostaje zwykłe zaokrąglenie. Starsze
+  `.corner-cut-*` (`clip-path`) i `.corner-concave-*` (`mask-image`)
+  działają wszędzie, ale obcinają też ramkę i CIEŃ - użyj ich tylko, gdy
+  ścięcie musi być w każdej przeglądarce.
 - **Animowane plamy w tle:** `.bg-blobs` - dwie rozmyte, organiczne plamy
   (primary + info) unoszące się w tle kontenera. Tło podąża za motywem.
   Wariant `.bg-blobs-deep` jest **ZAWSZE CIEMNY**, także w motywie jasnym

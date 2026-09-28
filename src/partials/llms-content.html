@@ -47,7 +47,7 @@
     </li>
   <li><strong>Aktywna pozycja (bieżąca strona):</strong> klasa <code>.is-active</code> na <code>.navbar-item</code> (oraz <code>.dropdown-item</code> / <code>.mega-menu-link</code>) - primary + grubsza waga. Nadaje ją wg URL moduł <code>js/modules/molique-navbar-active.js</code> (auto-ładowany przy <code>.navbar-menu</code>): podświetla link bieżącej strony ORAZ trigger rozwijanego menu, w którym leży. NIE wpisuj aktywności do markupu - navbar bywa współdzielony, robi to skrypt z adresu.
     </li>
-  <li><strong>Warianty:</strong> <code>.navbar-transparent</code>, <code>.navbar-sticky</code> (dodaje <code>.is-scrolled</code>).
+  <li><strong>Warianty:</strong> <code>.navbar-transparent</code>, <code>.navbar-sticky</code> (dodaje <code>.is-scrolled</code>). Chowanie <code>.navbar-sticky</code> przy przewijaniu w dół: JS (<code>.is-hidden</code>, po 100px) oraz od 1.7.35 w Chrome/Edge 144+ dodatkowo sam CSS - <code>:root { container: molique-page / scroll-state }</code> + <code>@container molique-page scroll-state(scrolled: bottom)</code>, od pierwszego piksela i bez JS. Oba mechanizmy się sumują (zapytania <code>scroll-state</code> nie da się wykryć przez <code>@supports</code>). Otwarte menu mobilne trzyma pasek.
     </li>
   <li><strong>Nakładkowe (<code>.navbar-transparent</code>, <code>.navbar-pill</code>):</strong> <code>position: absolute</code> - navbar leży NA treści, więc zdjęcie hero zaczyna się od samej góry strony. Po scrollu JS nadaje <code>.is-scrolled</code> → <code>position: fixed</code> + tło motywu. <strong>NIE łącz z <code>.navbar-sticky</code></strong> (sticky wraca do przepływu i wygrywa w kaskadzie - nakładka przestaje działać). Treść hero odsuń o <code>var(--navbar-h)</code>.
     </li>
@@ -199,7 +199,7 @@
 </ul>
 <h3 class="text-6 fw-bold mb-2 mt-4">Animacje, Efekty &amp; Utilities (GPU)</h3>
 <ul class="text-secondary mb-4">
-  <li><strong>Wejścia:</strong> <code>.animate.fade-in-up</code>, <code>.reveal-blur</code>, <code>.reveal-scale</code>.
+  <li><strong>Wejścia:</strong> <code>.animate.fade-in-up</code>, <code>.reveal-blur</code>, <code>.reveal-scale</code>. Od 1.7.35 w Chrome/Edge 145+ wejście odpala sam CSS (<code>animation-trigger</code> + <code>timeline-trigger: --molique-reveal view()</code>, przy 10% elementu w widoku, raz) - <code>molique-script.js</code> sprawdza ten sam warunek <code>@supports</code> i NIE tworzy wtedy IntersectionObservera, więc <code>.is-visible</code> NIE jest nadawane (nie opieraj na nim stylów). Tam animacje działają także bez JS. W pozostałych przeglądarkach bez zmian: obserwator dodaje <code>.is-visible</code>, a bez JS treść z <code>.animate</code> zostaje niewidoczna.
     </li>
   <li><strong>Scroll Reveal:</strong> <code>.scroll-reveal</code> (wykorzystuje <code>animation-timeline: view()</code>).
     </li>
@@ -238,6 +238,8 @@
   <li><strong>Obramowania (Borders):</strong> <code>.border</code>, <code>.border-0</code>, <code>.border-top</code>, <code>.border-bottom</code>, <code>.border-start</code>, <code>.border-end</code>.
     </li>
   <li><strong>Zaokrąglenia (Radius):</strong> <code>.rounded-0</code> do <code>.rounded-5</code>, <code>.rounded-circle</code>, <code>.rounded-pill</code>, <code>.rounded-top-0</code>, <code>.rounded-bottom-0</code>.
+    </li>
+  <li><strong>Kształt narożnika (od 1.7.35):</strong> <code>.corner-shape-squircle</code>, <code>-bevel</code> (ścięcie), <code>-notch</code> (wcięcie schodkowe), <code>-scoop</code> (wcięcie łukiem) - natywne <code>corner-shape</code>. Zmienia KSZTAŁT istniejącego zaokrąglenia, więc bez <code>border-radius</code> nic nie robi; promień wyznacza głębokość (do subtelnych narożników <code>.rounded-2</code>/<code>-3</code>, przy <code>.rounded-5</code> na małym elemencie <code>-notch</code> robi krzyż). Ramka i cień idą za kształtem. Poza Chromium deklaracja odpada i zostaje zwykłe zaokrąglenie. Starsze <code>.corner-cut-tl/-tr/-bl/-br</code> (<code>clip-path</code>) i <code>.corner-concave-*</code> (<code>mask-image</code>) działają wszędzie, ale obcinają też ramkę i cień - tylko gdy ścięcie musi być w każdej przeglądarce.
     </li>
   <li><strong>Animowane plamy w tle:</strong> <code>.bg-blobs</code> - dwie rozmyte, organiczne plamy (primary + info) unoszące się w tle kontenera. Tło podąża za motywem. Wariant <code>.bg-blobs-deep</code> jest ZAWSZE CIEMNY, także w motywie jasnym (jak <code>.navbar-pill</code>) - biały tekst działa na nim bez sprawdzania motywu. Kolor przez <code>--blobs-deep-bg</code> (domyślnie <code>#0F172A</code>); NIE używaj tam <code>var(--bg-body)</code> ani <code>var(--dark)</code>, bo odwracają się w dark mode. Sterowanie ZMIENNYMI, nie klasami (kolor i czas to wartości ciągłe): <code>--blob-1</code> / <code>--blob-2</code> (kolory plam), <code>--blob-speed</code> (cykl pierwszej; druga liczy swój jako <code>×1.3</code>, więc jedna wartość przyspiesza obie i zachowuje rozjazd cykli). Typowo pod <code>.bg-glass</code> (szkło musi mieć co rozmywać). Kształt statyczny (<code>border-radius</code> nie jest animowalny bez reflow), ruch daje wyłącznie <code>transform</code> z obrotem. Wyłącza się przy <code>prefers-reduced-motion</code>.
     </li>

@@ -48,6 +48,38 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.35 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.35</div>
+              <div class="text-muted text-4">September 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Eckenform, Eintrittsanimationen und eine sich versteckende Navbar ohne JS
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Natives <code>corner-shape</code> ändert die Form der Rundung, statt das Element nach dem Zeichnen auszuschneiden, wie es <code>clip-path</code> und Masken tun. Deshalb folgen Rahmen und Schatten der Form. Dazu kommen zwei Dinge, die bisher <code>molique-script.js</code> brauchten und im neueren Chromium jetzt CSS allein erledigt - das Skript bleibt als Fallback für andere Browser.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Neue Klassen <code>.corner-shape-squircle</code>, <code>-bevel</code>, <code>-notch</code> und <code>-scoop</code>.</strong> Sie wirken auf einem Element, das bereits einen <code>border-radius</code> hat: Der Radius bestimmt die Tiefe der Ecke, die Klasse ihre Form. Für dezente Ecken reicht <code>.rounded-2</code> oder <code>.rounded-3</code>; mit <code>.rounded-5</code> auf einem kleinen Element macht <code>-notch</code> ein Kreuz daraus. Ein Browser ohne Unterstützung (außerhalb von Chromium) verwirft die Deklaration, und die normale Rundung bleibt, ganz ohne Fallback-Code.</li>
+                  <li><strong>Eintrittsanimationen mit <code>animation-trigger</code> (Chrome/Edge 145+).</strong> <code>.animate</code>, <code>.reveal-blur</code> und <code>.reveal-scale</code> starten ihren Auftritt selbst, sobald 10% des Elements sichtbar sind - dieselbe Schwelle wie beim bisherigen Observer. <code>molique-script.js</code> prüft dieselbe <code>@supports</code>-Bedingung und legt dann gar keinen IntersectionObserver an, beide Wege laufen also nie gleichzeitig. Eine Nebenwirkung, auf die man achten muss: Auf diesem Weg <strong>wird die Klasse <code>.is-visible</code> nicht gesetzt</strong>, eigene Stile auf Basis von <code>.animate.is-visible</code> wirken also nur noch in Firefox und Safari. Der Gewinn: Inhalte mit <code>.animate</code> bleiben nicht mehr unsichtbar, wenn JavaScript nicht ausgeführt wird. <code>.delay-*</code> verzögert jetzt auch die Animation.</li>
+                  <li><strong>Verstecken von <code>.navbar-sticky</code> per <code>scroll-state</code> (Chrome/Edge 144+).</strong> Die Leiste verschwindet beim Scrollen nach unten und kommt beim Scrollen nach oben zurück, ohne <code>scroll</code>-Listener - über eine Abfrage <code>@container molique-page scroll-state(scrolled: bottom)</code> auf <code>:root</code>. Das funktioniert auch ohne JS. Das JS setzt weiterhin <code>.is-hidden</code>, weil es <code>.is-scrolled</code> und die Lesefortschrittsleiste ohnehin berechnet, und sich die Unterstützung der Abfrage nicht per <code>@supports</code> erkennen lässt - beide Mechanismen addieren sich. Der einzige sichtbare Unterschied: CSS versteckt die Leiste ab dem ersten Pixel nach unten, das JS wartet 100px. Ein offenes Mobilmenü hält die Leiste in beiden Fällen an Ort und Stelle.</li>
+                  <li><strong>Die Beschreibung von <code>.corner-cut-*</code> in der Klassenliste war falsch.</strong> Sie nannte <code>mask-image</code>, der Schnitt arbeitet aber mit <code>clip-path</code> (eine Maske nutzt nur <code>.corner-concave-*</code>). Die Beschreibung sagt jetzt auch, dass beide Familien Rahmen und Schatten des Elements abschneiden und daher nur passen, wenn der Schnitt in jedem Browser existieren muss.</li>
+                  <li><strong>Roadmap: Umbau auf natives <code>@function</code> und <code>if()</code> zurückgestellt.</strong> Im September 2026 funktioniert das nur in Chrome/Edge, und eine nicht unterstützte Deklaration fällt komplett weg, der Kern würde also in Firefox und Safari nicht mehr funktionieren.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.34 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

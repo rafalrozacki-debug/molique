@@ -109,7 +109,11 @@
               skryptu klasę <code>.is-visible</code> i płynnie się pojawia.
               Wykrywaniem zajmuje się obserwator przecięcia - nie zdarzenie
               <code>scroll</code>, więc nic nie liczy się przy każdym piksecie
-              przewijania.
+              przewijania. W Chrome/Edge 145+ robi to już sam CSS przez
+              <code>animation-trigger</code>: element odpala własne wejście,
+              skrypt w ogóle nie tworzy obserwatora, a klasa
+              <code>.is-visible</code> się nie pojawia. Dzięki temu animacje
+              działają tam także bez <code>molique-script.js</code>.
             </p>
 
             <div class="component-code mb-4">
@@ -184,6 +188,8 @@
                     <td data-label="Rola">Stan</td>
                     <td data-label="Co robi">
                       Nadaje skrypt po wejściu w widok. Ty jej nie wpisujesz.
+                      W Chrome/Edge 145+ wejście robi CSS i tej klasy nie ma -
+                      nie opieraj na niej własnych stylów.
                     </td>
                   </tr>
                 </tbody>
@@ -471,7 +477,9 @@
                     w innym pliku, wolne łącze, blokada w przeglądarce -
                     <strong>treść zostaje niewidoczna na stałe</strong>. Nad
                     zgięciem strony używaj animacji oszczędnie, a najważniejszy
-                    komunikat zostaw statyczny.
+                    komunikat zostaw statyczny. W Chrome/Edge 145+ ten problem
+                    znika (wejście odpala CSS), ale w Firefoksie i Safari nadal
+                    obowiązuje.
                   </p>
                 </div>
               </details>

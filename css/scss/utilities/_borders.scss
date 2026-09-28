@@ -45,7 +45,26 @@
 .rounded-bottom-0 { border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; }
 
 /* =========================================
-   3. CORNERS: SHARP CUT (clip-path) AND CONCAVE NOTCH (mask-image)
+   3. CORNER SHAPE (native corner-shape, progressive)
+   ========================================= */
+/* Changes the SHAPE of the existing rounding, not its size - so these only
+   show on an element that already has a border-radius (.rounded-3 and up,
+   or a component's own radius): the radius says how far the corner reaches,
+   corner-shape says what curve fills it.
+   Unlike .corner-cut-* / .corner-concave-* below, the border, background and
+   box-shadow all follow the shape - clip-path and mask cut the element out
+   AFTER painting, so they also cut off its border and its shadow.
+   Where corner-shape is unsupported the declaration is simply dropped and
+   the element keeps its ordinary rounded corners - no fallback code needed.
+   That also means .corner-shape-bevel is NOT a guaranteed bevel: where the
+   cut must exist in every browser, .corner-cut-* is still the tool. */
+.corner-shape-squircle { corner-shape: squircle !important; }
+.corner-shape-bevel { corner-shape: bevel !important; }
+.corner-shape-notch { corner-shape: notch !important; }
+.corner-shape-scoop { corner-shape: scoop !important; }
+
+/* =========================================
+   4. CORNERS: SHARP CUT (clip-path) AND CONCAVE NOTCH (mask-image)
    ========================================= */
 $corner-size: 24px;
 

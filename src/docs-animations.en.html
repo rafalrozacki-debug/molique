@@ -112,7 +112,11 @@
               script gives it the <code>.is-visible</code> class and it
               smoothly appears. Detection is handled by an intersection
               observer - not a <code>scroll</code> event, so nothing gets
-              computed on every pixel of scrolling.
+              computed on every pixel of scrolling. In Chrome/Edge 145+ CSS
+              does it alone through <code>animation-trigger</code>: the element
+              starts its own entrance, the script creates no observer at all,
+              and the <code>.is-visible</code> class does not appear. So there
+              the animations also work without <code>molique-script.js</code>.
             </p>
 
             <div class="component-code mb-4">
@@ -187,7 +191,9 @@
                     <td data-label="Role">State</td>
                     <td data-label="What it does">
                       Set by the script once the element scrolls into view.
-                      You don't write it yourself.
+                      You don't write it yourself. In Chrome/Edge 145+ CSS does
+                      the entrance and this class is absent - do not build your
+                      own styles on it.
                     </td>
                   </tr>
                 </tbody>
@@ -481,7 +487,9 @@
                     connection, a browser block - <strong>the content stays
                     invisible permanently</strong>. Above the fold, use
                     animation sparingly, and leave your most important
-                    message static.
+                    message static. In Chrome/Edge 145+ this problem is gone
+                    (CSS starts the entrance), but it still applies in Firefox
+                    and Safari.
                   </p>
                 </div>
               </details>

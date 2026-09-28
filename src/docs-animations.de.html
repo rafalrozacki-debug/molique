@@ -116,7 +116,12 @@
               <code>.is-visible</code> und erscheint sanft. Die Erkennung
               übernimmt ein Intersection Observer - kein
               <code>scroll</code>-Event, sodass bei jedem Pixel des
-              Scrollens nichts berechnet wird.
+              Scrollens nichts berechnet wird. In Chrome/Edge 145+ erledigt das
+              CSS allein über <code>animation-trigger</code>: Das Element startet
+              seinen Auftritt selbst, das Skript legt gar keinen Observer an, und
+              die Klasse <code>.is-visible</code> erscheint nicht. Dort
+              funktionieren die Animationen also auch ohne
+              <code>molique-script.js</code>.
             </p>
 
             <div class="component-code mb-4">
@@ -191,7 +196,9 @@
                     <td data-label="Rolle">Zustand</td>
                     <td data-label="Was sie tut">
                       Wird vom Skript gesetzt, sobald das Element sichtbar
-                      wird. Sie schreiben sie nicht selbst.
+                      wird. Sie schreiben sie nicht selbst. In Chrome/Edge 145+
+                      übernimmt CSS den Auftritt, und diese Klasse fehlt - bauen
+                      Sie keine eigenen Stile darauf.
                     </td>
                   </tr>
                 </tbody>
@@ -490,7 +497,9 @@
                     langsame Verbindung, eine Browser-Blockade -
                     <strong>bleibt der Inhalt dauerhaft unsichtbar</strong>.
                     Setzen Sie oberhalb des Folds Animation sparsam ein und
-                    lassen Sie die wichtigste Botschaft statisch.
+                    lassen Sie die wichtigste Botschaft statisch. In
+                    Chrome/Edge 145+ entfällt das Problem (CSS startet den
+                    Auftritt), in Firefox und Safari gilt es weiterhin.
                   </p>
                 </div>
               </details>

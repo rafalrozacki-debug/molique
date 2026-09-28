@@ -38,7 +38,7 @@
 }
 
 /* =========================================
-   1. ENTRANCE ANIMATIONS (Intersection Observer)
+   1. ENTRANCE ANIMATIONS (Animation Triggers, Intersection Observer fallback)
    ========================================= */
 .animate {
   opacity: 0;
@@ -78,6 +78,56 @@
   will-change: transform, opacity;
   &.is-visible { opacity: 1; transform: scale(1); }
   @starting-style { &.is-visible { opacity: 0; transform: scale(0.95); } }
+}
+
+/* Declarative path: CSS Animation Triggers (Chrome/Edge 145+). The element
+   starts its own entrance when 10% of it has scrolled into view (the same
+   threshold as the IntersectionObserver in molique-script.js), once. No
+   script involved - so this also works on a CSS-only integration, where
+   without it .animate content stayed at opacity 0 for good.
+   molique-script.js tests EXACTLY this @supports condition and skips its
+   observer where it holds, so the two paths never run together. In this
+   path .is-visible is therefore NOT added.
+   trigger-scope keeps every element's --molique-reveal to itself: trigger
+   names are otherwise document-wide, like anchor names, and a nested
+   .animate could resolve its parent's trigger. */
+@supports (timeline-trigger: --molique-reveal view()) and (animation-trigger: --molique-reveal play-once) {
+  .animate,
+  .reveal-blur,
+  .reveal-scale {
+    timeline-trigger: --molique-reveal view() entry 10% exit 100%;
+    trigger-scope: --molique-reveal;
+    animation-trigger: --molique-reveal play-once;
+  }
+
+  .animate { animation: animateRevealIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .reveal-blur { animation: revealBlurIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .reveal-scale { animation: revealScaleIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+  /* .delay-* are transition-delays in the class path; here they have to
+     delay the animation. Limited to the three entrance classes, so an
+     unrelated animation that happens to share a .delay-* class is not
+     delayed only in the browsers that take this path. */
+  :is(.animate, .reveal-blur, .reveal-scale) {
+    &.delay-100 { animation-delay: 100ms; }
+    &.delay-200 { animation-delay: 200ms; }
+    &.delay-300 { animation-delay: 300ms; }
+    &.delay-400 { animation-delay: 400ms; }
+    &.delay-500 { animation-delay: 500ms; }
+  }
+}
+
+/* Only the end state: the start is whatever the element already has -
+   opacity 0 plus the offset of .fade-in-up / .zoom-in / etc. - so one
+   keyframe serves every direction class. */
+@keyframes animateRevealIn {
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes revealBlurIn {
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+@keyframes revealScaleIn {
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* =========================================
