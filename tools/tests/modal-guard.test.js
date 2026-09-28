@@ -41,6 +41,8 @@ class Dialog {
     // What the device "paints" at the first look (rAF) and the second (timeout).
     this.paint = [VISIBLE, VISIBLE];
     this.looks = 0;
+    // Computed transition-* / animation-* of the dialog, as the browser reports them.
+    this.motion = {};
     this.classList = {
       add: (c) => this._class.add(c),
       remove: (c) => this._class.delete(c),
@@ -136,10 +138,13 @@ function makeWorld() {
       };
     },
     requestAnimationFrame: (fn) => frames.push(fn),
-    setTimeout: (fn, ms) => timers.push({ fn, ms }),
+    setTimeout: (fn, ms) => {
+      timers.push({ fn, ms });
+      world.lastDelay = ms;
+    },
     getComputedStyle: (d) => {
       const p = d.current();
-      return { opacity: p.opacity, visibility: p.visibility };
+      return { opacity: p.opacity, visibility: p.visibility, ...d.motion };
     },
   };
   vm.createContext(sandbox);
@@ -264,6 +269,49 @@ for (const [label, paint] of [['transparent', TRANSPARENT], ['zero-height', COLL
     'observes the `open` attribute on the whole document, with old values',
     o && o.subtree && o.attributes && o.attributeOldValue && o.attributeFilter.join() === 'open'
   );
+}
+
+/* ---------- 10. the second look waits for the dialog's own opening ---------- */
+const openWith = (motion, paint) => {
+  const w = makeWorld();
+  w.init();
+  const d = w.dialog('modal-dialog', paint);
+  d.motion = motion;
+  d.showModal();
+  w.frame();
+  return { w, d };
+};
+{
+  const { w } = openWith({}, [TRANSPARENT, TRANSPARENT]);
+  check('no declared motion -> the 450ms floor', w.lastDelay === 450, `got ${w.lastDelay}`);
+}
+{
+  // A project slowed the opening down to 1.2s: at 450ms it is still fading in.
+  const slow = { transitionDuration: '0.2s, 1.2s', transitionDelay: '0s' };
+  // COLLAPSED, not TRANSPARENT: the mini DOM advances to the next look on
+  // getBoundingClientRect, so opacity would already be read from VISIBLE.
+  const { w, d } = openWith(slow, [COLLAPSED, VISIBLE]);
+  check('a slow transition moves the second look past its end', w.lastDelay === 1250, `got ${w.lastDelay}`);
+  w.wait(2000);
+  check('a slow but healthy opening gets no fallback', !fallback(d));
+}
+{
+  const slow = { transitionDuration: '1.2s', transitionDelay: '0s' };
+  const { w, d } = openWith(slow, [TRANSPARENT, TRANSPARENT]);
+  w.wait(1000);
+  check('slow opening: no verdict before its transition ends', !fallback(d));
+  w.wait(2000);
+  check('slow opening that never paints still gets the fallback', fallback(d));
+}
+{
+  const anim = { animationDuration: '300ms', animationDelay: '200ms', animationIterationCount: '2' };
+  const { w } = openWith(anim, [TRANSPARENT, TRANSPARENT]);
+  check('animation counts duration x iterations + delay', w.lastDelay === 850, `got ${w.lastDelay}`);
+}
+{
+  const endless = { animationDuration: '10s', animationIterationCount: 'infinite' };
+  const { w } = openWith(endless, [TRANSPARENT, TRANSPARENT]);
+  check('a long or infinite animation is capped at 3000ms', w.lastDelay === 3000, `got ${w.lastDelay}`);
 }
 
 console.log(failed ? `\n${failed} check(s) failed` : '\nall checks passed');
