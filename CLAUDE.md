@@ -173,6 +173,23 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   a wymóg jest postawiony wprost w README, `docs.html` i `llms.txt`:
   z JS Chrome/Edge 125+, na samym CSS 133+. Testy:
   `npm run test:popover-anchor`.
+- **Wejście `.modal-dialog` NIE animuje `opacity` (stan od v1.7.33).**
+  `opacity: 0` w `@starting-style` + przejście `display`/`overlay`
+  `allow-discrete` dawało na iOS Safari przyciemnienie bez okna (trzy
+  zgłoszenia z produkcji Briko): `::backdrop` nie ma animacji, więc gdy
+  przejście nie ruszyło, tło było, a okno zostawało przezroczyste, przy
+  całkowicie nieaktywnej stronie pod spodem. Wejście animuje tylko
+  `transform`, wyjście może wygaszać. Karta trzyma limit przez łańcuch
+  flex (`min-height: 0`), nie `max-height: 100%` od rodzica bez `height`.
+  Siatką bezpieczeństwa jest `js/modules/molique-modal-guard.js`
+  (`.is-fallback`, testy: `npm run test:modal-guard`) - symulator Blinka
+  usterki nie odtwarza, a guard na maszynie deweloperskiej sam się nie
+  odpala, więc przy zmianach testuj z wymuszeniem klasy (kontrola ujemna).
+- **Środkowanie w przewijanym kontenerze gubi GÓRĘ treści.**
+  `justify-content: center` przy przepełnieniu wypycha treść poza oba
+  końce, a części nad górną krawędzią nie da się przewinąć. Wzorzec:
+  dwa rosnące odstępniki `::before`/`::after` (`flex: 1 0 0`, ujemny
+  margines równy `gap`) - patrz `.onboarding-slide` w gałęzi mobilnej.
 - **Goły `1fr` w CSS Grid to `minmax(auto, 1fr)`, nie `minmax(0, 1fr)`:**
   minimum toru liczy się z min-content potomków (dowolnie głęboko
   zagnieżdżonych), NIE z zera - `min-width: 0` + `overflow-x: hidden` na

@@ -136,6 +136,20 @@
      The column only exists because of the :has() rule in .admin-layout - a
      bare .admin-rail outside that layout is just a block. */
   .admin-rail {
+    /* .admin-nav is written for the sidebar, which is ALWAYS dark, and
+       reads its colors from --sidebar-*. The rail has no background of its
+       own (see above) and sits on the light --bg-body, so the same nav
+       there came out as light text on a light ground, with hover and the
+       mobile active accent tuned for a dark one. Re-pointing the variables
+       for the rail's subtree fixes every nav rule at once without
+       duplicating any of them. Inactive items take --text-main, not
+       --text-muted: muted on --bg-body is 4.48:1 in light mode, just under
+       WCAG AA. .is-active needs nothing - --primary with --btn-text-light
+       is its own background. */
+    --sidebar-text: var(--text-main);
+    --sidebar-text-active: var(--text-main);
+    --sidebar-highlight-rgb: var(--dark-rgb);
+    --sidebar-active-accent: var(--primary);
     /* Sticks like the sidebar, and for the same reason: .admin-main does
        not scroll itself (the page does), so a long rail would otherwise
        scroll away and leave its column empty. */
@@ -637,9 +651,16 @@
   }
   @media (min-width: 768px) {
     .admin-nav-link {
+      /* Both variants are SCOPED TO .admin-sidebar - do not widen them.
+         .sidebar-md/.sidebar-sm sit on .admin-layout (and on <html>, from
+         the anti-FOUC script), so a bare ".sidebar-md &" caught every
+         .admin-nav-link in the layout, including the nav in .admin-rail -
+         a separate, fixed-width column that got micro text or lost its
+         labels whenever the sidebar was collapsed. Same class of bug as the
+         drill-down selectors further down. */
       /* --- VARIANT: NARROW (icon on top, text below) --- */
     }
-    .sidebar-md .admin-nav-link {
+    .sidebar-md .admin-sidebar .admin-nav-link {
       /* FIX: force a vertical layout! */
       flex-direction: column;
       justify-content: center;
@@ -648,7 +669,7 @@
       text-align: center;
       width: 100%;
     }
-    .sidebar-md .admin-nav-link .nav-text {
+    .sidebar-md .admin-sidebar .admin-nav-link .nav-text {
       /* FIX: small, centered text */
       font-size: 0.6rem;
       text-transform: uppercase;
@@ -661,16 +682,16 @@
     .admin-nav-link {
       /* --- VARIANT: COMPACT (icons only) --- */
     }
-    .sidebar-sm .admin-nav-link {
+    .sidebar-sm .admin-sidebar .admin-nav-link {
       justify-content: center;
       align-items: center;
       padding: calc(var(--spacing-unit) * 1.5) 0;
       width: 100%;
     }
-    .sidebar-sm .admin-nav-link i, .sidebar-sm .admin-nav-link svg, .sidebar-sm .admin-nav-link .sidebar-toggle-icon {
+    .sidebar-sm .admin-sidebar .admin-nav-link i, .sidebar-sm .admin-sidebar .admin-nav-link svg, .sidebar-sm .admin-sidebar .admin-nav-link .sidebar-toggle-icon {
       margin: 0 !important;
     }
-    .sidebar-sm .admin-nav-link .nav-text {
+    .sidebar-sm .admin-sidebar .admin-nav-link .nav-text {
       display: none;
     }
   }
@@ -1582,6 +1603,11 @@
       padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Top spacing only */
       border-radius: 0;
       width: 100%;
+      /* The negative margin above IS the desktop cutout (the actions block
+         reaches up into the header's padding). In the column layout there is
+         no cutout, and the parent's mobile branch already zeroes its own
+         margins - left here, this one pulled the actions up over the title. */
+      margin-top: 0;
     }
     .dashboard-header-actions::before, .dashboard-header-actions::after {
       display: none;
@@ -1590,4 +1616,26 @@
   .dashboard-header-actions {
     /* THIS WAS MISSING */
   }
+  /* Mobile, icon-only actions: stay on the title's row. Stacking is right
+     for a row of labelled buttons, but a lone icon (a notification bell)
+     dropped to its own line, flush left, next to an empty strip, reads as
+     something that fell out of place. Only when EVERY direct child of the
+     actions is a .btn-icon - one wider button and the header stacks as
+     before, because a row of labelled buttons next to the title is exactly
+     what used to overlap it. An icon wrapped in another element (a
+     .dropdown around the bell) does not count as .btn-icon and keeps the
+     stacked layout.
+     :not(:has()) at the top level, not :has() inside :has(), which the
+     selector spec forbids - a nested :has() invalidates the whole rule. */
+  @media (max-width: 991px) {
+    .dashboard-header:has(> .dashboard-header-actions):not(:has(> .dashboard-header-actions > :not(.btn-icon))) {
+      flex-direction: row;
+      gap: calc(var(--spacing-unit) * 2);
+    }
+    .dashboard-header:has(> .dashboard-header-actions):not(:has(> .dashboard-header-actions > :not(.btn-icon))) > .dashboard-header-actions {
+      width: auto;
+      flex-shrink: 0;
+      padding-top: 0;
+    }
+  } /* THIS WAS MISSING */
 }

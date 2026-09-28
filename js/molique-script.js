@@ -302,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const dynamicModules = [
     { selectors: '.carousel', file: 'modules/molique-carousel.js' },
     { selectors: '[data-lightbox]', file: 'modules/molique-lightbox.js' },
+    { selectors: '.modal-dialog', file: 'modules/molique-modal-guard.js', init: 'initModalGuard' },
     { selectors: '[data-onboarding]', file: 'modules/molique-onboarding.js' },
     { selectors: '[data-tour]', file: 'modules/molique-tour.js' },
     { selectors: '[data-sortable]', file: 'modules/molique-sortable.js' },

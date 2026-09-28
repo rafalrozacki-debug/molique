@@ -79,6 +79,35 @@ position: relative;
   padding: calc(var(--spacing-unit) * 3) 0 0 0; /* Top spacing only */
   border-radius: 0;
   width: 100%;
+  /* The negative margin above IS the desktop cutout (the actions block
+     reaches up into the header's padding). In the column layout there is
+     no cutout, and the parent's mobile branch already zeroes its own
+     margins - left here, this one pulled the actions up over the title. */
+  margin-top: 0;
   &::before, &::after { display: none; }
 }
+}
+
+/* Mobile, icon-only actions: stay on the title's row. Stacking is right
+   for a row of labelled buttons, but a lone icon (a notification bell)
+   dropped to its own line, flush left, next to an empty strip, reads as
+   something that fell out of place. Only when EVERY direct child of the
+   actions is a .btn-icon - one wider button and the header stacks as
+   before, because a row of labelled buttons next to the title is exactly
+   what used to overlap it. An icon wrapped in another element (a
+   .dropdown around the bell) does not count as .btn-icon and keeps the
+   stacked layout.
+   :not(:has()) at the top level, not :has() inside :has(), which the
+   selector spec forbids - a nested :has() invalidates the whole rule. */
+@include mq(md, max) {
+  .dashboard-header:has(> .dashboard-header-actions):not(:has(> .dashboard-header-actions > :not(.btn-icon))) {
+    flex-direction: row;
+    gap: calc(var(--spacing-unit) * 2);
+
+    > .dashboard-header-actions {
+      width: auto;
+      flex-shrink: 0;
+      padding-top: 0;
+    }
+  }
 }

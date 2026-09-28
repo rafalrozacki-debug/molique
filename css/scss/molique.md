@@ -178,6 +178,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Modale (Natywne):** `<dialog class="modal-dialog">` (lub
   `.modal-context` dla bocznego/dolnego panelu). Zamykanie:
   `<form method="dialog">`.
+  Siatka bezpieczeństwa: `molique-modal-guard.js` (autoloader, gdy jest
+  `.modal-dialog`) dokłada `.is-fallback`, gdy otwarte okno się nie
+  narysowało - rysuje się wtedy jako zwykły blok. Klasę nadaje JS, nie
+  wpisuj jej ręcznie.
 - **Zakładki:** `.tabs` > ukryte `input.tab-input[type=radio]` (wspólne `name`)
   + `.tabs-header` > `label.tab-label` + `.tabs-content` > `.tab-pane`.
   Kolejność paneli MUSI odpowiadać kolejności inputów - CSS łączy je po
@@ -280,7 +284,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `role="img"` + `aria-label`.
 - **Interaktywna Ikona:** `.status-icon-toggle` (animacja Plus ->
   Checkmark). Może być użyta z `<label class="status-checkbox">`.
-- **Tooltipy:** `.tooltip-element[data-tooltip="Treść"]`.
+- **Tooltipy:** `.tooltip-element[data-tooltip="Treść"]`. Modyfikatory:
+  `.tooltip-element-bottom`, `.tooltip-element-end`,
+  `.tooltip-element-wide` (dymek na całe zdanie, zawija tekst, szerokość
+  do `--tooltip-max-width`, domyślnie 280px).
 
 ## Moduły: Admin, E-commerce, Blog
 
@@ -338,6 +345,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   tylko odczytuje to, co tamten zapisuje, i to wcześniej.
 - **Admin Header (Faux Cutout):** `.dashboard-header` > lewa strona +
   `.dashboard-header-actions`. Tworzy iluzję wycięcia w nagłówku.
+  Na mobile akcje schodzą pod tytuł; same `.btn-icon` jako bezpośrednie
+  dzieci akcji zostają w wierszu tytułu.
 - **Admin Nav:** `.admin-nav` > `.admin-nav-link`. Submenu:
   `<details class="admin-nav-submenu">` > `<summary class="admin-nav-link">`
   + `.admin-nav-submenu-list` (z `.admin-nav-submenu-link`). Ten sam markup

@@ -51,6 +51,15 @@ dialog.onboarding-dialog {
     opacity: 1;
   }
 
+  &:not([open]) {
+    /* The unconditional display: none above is a normal declaration inside
+       a layer, so ANY unlayered rule setting display on dialogs (a project's
+       own, a third-party plugin's) beats it and shows the closed welcome
+       screen. Same protection .modal-dialog has had all along. The exit
+       animation survives it: a running transition outranks !important. */
+    display: none !important;
+  }
+
   @starting-style {
     &:modal {
       opacity: 0;
@@ -101,6 +110,19 @@ dialog.onboarding-dialog:modal .onboarding-card {
   transform: translateY(0) scale(1);
 }
 
+.onboarding-slide {
+  /* Declared BEFORE the mobile branch below, not after it: at equal
+     specificity the later rule wins, and this one used to sit after the
+     media query - so the mobile padding there never applied and a phone
+     got the desktop 48/24 split instead of an even 32 on every side. */
+  padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
 /* Full-screen on small screens - a centered card with margins around it
    reads as a small floating popup on a phone; full-screen matches how
    native apps (and most real product onboarding flows) present a welcome
@@ -120,20 +142,35 @@ dialog.onboarding-dialog:modal .onboarding-card {
     border-radius: 0;
   }
 
+  /* The card is exactly one screen tall and overflow: hidden, so a slide
+     longer than the screen used to be cut off mid-sentence, with no
+     scrollbar and no sign that more text existed. The slide becomes the
+     scroller: min-height: 0 is the condition, not decoration - a flex
+     item's automatic minimum is its content height, so without it the
+     slide never shrinks below its text and overflow-y has nothing to do.
+
+     Centering goes through two growing spacers instead of
+     justify-content: center. Center alignment in a scroll container
+     overflows BOTH ends, and the part above the top edge cannot be
+     scrolled to - the opening lines would be lost instead of the closing
+     ones. Spacers center while there is room and collapse to zero when
+     there is not, so a long slide starts at its first line. The negative
+     margin cancels the gap each spacer would otherwise add. */
   .onboarding-slide {
     flex: 1 1 auto;
-    justify-content: center;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: calc(var(--spacing-unit) * 4);
-  }
-}
 
-.onboarding-slide {
-  padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(var(--spacing-unit) * 2);
+    &::before,
+    &::after {
+      content: '';
+      flex: 1 0 0;
+    }
+    &::before { margin-bottom: calc(var(--spacing-unit) * -2); }
+    &::after { margin-top: calc(var(--spacing-unit) * -2); }
+  }
 }
 
 .onboarding-slide-media:empty {

@@ -51,6 +51,13 @@ transition: opacity var(--transition-speed), overlay var(--transition-speed) all
   opacity: 1;
 }
 
+&:not([open]) {
+  /* A layered normal display: none loses to any unlayered display rule on
+     dialogs - the same protection as .modal-dialog, .onboarding-dialog and
+     .tour-dialog. A running exit transition still outranks !important. */
+  display: none !important;
+}
+
 @starting-style {
   &:modal {
     opacity: 0;

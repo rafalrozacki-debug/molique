@@ -114,3 +114,20 @@
   left: auto;
   right: 0;
 }
+
+/* Modifier: a bubble for a full sentence instead of a short label - why a
+   field is locked, where a number comes from. The base bubble is
+   nowrap on purpose (short labels should never break), so a sentence ran
+   off the screen. This one wraps, left-aligned, up to
+   --tooltip-max-width (default 280px) and never wider than the viewport.
+   width: max-content is required, not just white-space: normal: the
+   bubble is absolutely positioned inside an inline trigger, so without an
+   explicit width it shrinks to the trigger's width and wraps after every
+   word. Composes with -bottom and -end like the other modifiers. */
+.tooltip-element-wide::after {
+  white-space: normal;
+  width: max-content;
+  max-width: min(var(--tooltip-max-width, 280px), calc(100vw - 2rem));
+  text-align: left;
+  line-height: 1.4;
+}

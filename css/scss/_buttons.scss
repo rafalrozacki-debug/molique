@@ -538,8 +538,15 @@ $btn-base-selectors: ".btn";
 
     padding: 0 !important;
     white-space: normal;
-    word-break: break-word;
-    width: 100%;
+    /* Wraps BETWEEN words, breaks inside a word only when that single
+       word cannot fit on a line at all. word-break: break-word broke
+       anywhere, so in a narrow table column a one-word label came out
+       as a column of letter pairs ("PO / DG / LĄ / D"); width: 100%
+       forced that break earlier than the content needed. */
+    overflow-wrap: break-word;
+    word-break: normal;
+    width: auto;
+    max-width: 100%;
   }
 }
 

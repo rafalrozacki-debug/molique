@@ -137,8 +137,16 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
      ========================================= */
   @include mq(md) {
 
+    /* Both variants are SCOPED TO .admin-sidebar - do not widen them.
+       .sidebar-md/.sidebar-sm sit on .admin-layout (and on <html>, from
+       the anti-FOUC script), so a bare ".sidebar-md &" caught every
+       .admin-nav-link in the layout, including the nav in .admin-rail -
+       a separate, fixed-width column that got micro text or lost its
+       labels whenever the sidebar was collapsed. Same class of bug as the
+       drill-down selectors further down. */
+
     /* --- VARIANT: NARROW (icon on top, text below) --- */
-    .sidebar-md & {
+    .sidebar-md .admin-sidebar & {
       /* FIX: force a vertical layout! */
       flex-direction: column;
       justify-content: center;
@@ -160,7 +168,7 @@ $admin-brand-block-height: calc(var(--target-size-min) + var(--spacing-unit) * 4
     }
 
     /* --- VARIANT: COMPACT (icons only) --- */
-    .sidebar-sm & {
+    .sidebar-sm .admin-sidebar & {
       justify-content: center;
       align-items: center;
       padding: calc(var(--spacing-unit) * 1.5) 0;

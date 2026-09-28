@@ -47,6 +47,46 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.33 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.33</div>
+              <div class="text-muted text-4">Wrzesień 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Modal, którego nie widać, i dziewięć usterek z produkcyjnego panelu B2B
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Wszystko poniżej przyszło z wdrożeń panelu B2B na molique, gdzie
+                  każda z tych rzeczy miała już łatkę po stronie klienta. Łatka
+                  u jednego integratora nie jest poprawką frameworka, więc
+                  przyczyny zostały usunięte tutaj.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Modal na iPhonie: przyciemnienie bez okna.</strong> Zgłoszone trzy razy przez użytkowników. Ekran ciemniał, okna nie było, a strona pod spodem jest przy <code>showModal()</code> nieaktywna, więc nie dało się nic kliknąć ani zamknąć. Dwie przyczyny, każda wystarcza sama. Pierwsza: wejście startowało z <code>opacity: 0</code> w <code>@starting-style</code> i liczyło na przejście <code>display</code>/<code>overlay</code> z <code>allow-discrete</code>, a <code>::backdrop</code> nie ma własnej animacji. Gdy przejście nie ruszało, tło było, okno zostawało przezroczyste. Wejście animuje teraz tylko <code>transform</code>, więc nie ma klatki, w której istnieje tło, a okna nie widać. Wyjście nadal wygasa. Druga: <code>.card</code> w modalu trzymała się limitu przez <code>max-height: 100%</code> od rodzica, który ma <code>max-height</code>, ale nie ma <code>height</code>. Procent od wysokości nieokreślonej to obszar, w którym silniki się nie zgadzają. Karta kurczy się teraz przez łańcuch flex (<code>min-height: 0</code>), bez procentów.</li>
+                  <li><strong>Siatka bezpieczeństwa modali: <code>.is-fallback</code>.</strong> Poprawka wyżej usuwa znane przyczyny, nie następną. Nowy moduł <code>js/modules/molique-modal-guard.js</code> (doładowywany automatycznie, gdy na stronie jest <code>.modal-dialog</code>) po każdym otwarciu pyta urządzenie, czy okno się narysowało: rozmiar co najmniej 40px, krycie powyżej zera. Pierwszy pomiar w <code>requestAnimationFrame</code>, bo przed malowaniem nie ma czego mierzyć. Jeśli wypadnie źle, werdykt czeka 450 ms na drugi pomiar, bo animacja wejścia może chwilowo dać przezroczyste okno. Dopiero wtedy okno dostaje <code>.is-fallback</code> i rysuje się jako zwykły blok, bez flexa, procentów i animacji. Deklaracje trybu zapasowego mają <code>!important</code>, bo muszą wygrać także z bezwarstwowym arkuszem projektu, który mógł okno zepsuć. Moduł obserwuje atrybut <code>open</code>, a nie podmienia <code>showModal()</code>: deklaratywne <code>command="show-modal"</code> otwiera okno bez wywołania metody JS, więc podmiana by go przeoczyła. Dotyczy wyłącznie <code>.modal-dialog</code>. Nakładki onboardingu i przewodnika są przezroczyste z założenia, a lightbox maluje własne tło. Testy: <code>npm run test:modal-guard</code>.</li>
+                  <li><strong>Karta powitania ucinała dłuższy opis na telefonie.</strong> Na małym ekranie karta ma wysokość ekranu i <code>overflow: hidden</code>, a slajd nie miał własnego przewijania. Nadmiar znikał w połowie zdania, bez paska i bez sygnału, że jest coś dalej. Slajd przewija się teraz sam (<code>min-height: 0</code> + <code>overflow-y: auto</code>). Wyśrodkowanie przeszło z <code>justify-content: center</code> na dwa rosnące odstępniki, bo środkowanie w przewijanym kontenerze wypycha treść poza OBA końce, a górnej części nie da się przewinąć. Długi slajd zaczyna się teraz od pierwszego wiersza. Przy okazji wyszło, że mobilny <code>padding</code> slajdu nigdy nie działał: reguła bazowa stała w pliku po media query i ją nadpisywała. Na telefonie jest teraz równe 32px zamiast 48/24. Dymek przewodnika (<code>.tour-tooltip</code>) dostał ten sam ogranicznik w pionie.</li>
+                  <li><strong>Akcje nagłówka wchodziły na tytuł na telefonie.</strong> <code>.dashboard-header-actions</code> ma ujemny <code>margin-top</code>, na którym stoi efekt wycięcia. Gałąź mobilna zerowała tło, padding i zaokrąglenia, ale nie margines, więc blok akcji wjeżdżał na tytuł.</li>
+                  <li><strong>Warianty wąskiego sidebara przestawiały też <code>.admin-rail</code>.</strong> Reguły <code>.sidebar-md</code>/<code>.sidebar-sm</code> łapały każdy <code>.admin-nav-link</code> w układzie, także w drugiej kolumnie o stałej szerokości. Rail dostawał mikroskopijny tekst albo tracił etykiety. Zawężone do <code>.admin-sidebar</code>, tak jak w 1.7.32 selektory drill-downu.</li>
+                  <li><strong>Nawigacja w <code>.admin-rail</code> malowała się kolorami ciemnego sidebara.</strong> Rail jest celowo bez tła, leży na jasnym <code>--bg-body</code>, a <code>.admin-nav-link</code> brał jasny <code>--sidebar-text</code>. Rail przestawia teraz cztery zmienne <code>--sidebar-*</code> dla swojego wnętrza, więc wszystkie reguły nawigacji działają bez duplikowania. Pozycje nieaktywne dostają <code>--text-main</code>, nie <code>--text-muted</code>: przygaszony tekst na <code>--bg-body</code> to w trybie jasnym 4,48:1, tuż pod progiem WCAG AA.</li>
+                  <li><strong><code>.btn-stacked</code> łamał jednowyrazowe podpisy na słupek liter.</strong> <code>word-break: break-word</code> łamał w środku wyrazu, więc w wąskiej kolumnie „PODGLĄD” wychodziło jako „PO / DG / LĄ / D”. Teraz <code>overflow-wrap: break-word</code>: zawijanie między wyrazami, łamanie wyrazu tylko wtedy, gdy nie mieści się w ogóle.</li>
+                  <li><strong>Samotna ikona w akcjach nagłówka zostaje w wierszu tytułu.</strong> Na telefonie akcje schodzą pod tytuł na pełną szerokość, co dla rzędu przycisków jest słuszne. Pojedynczy dzwonek lądował jednak w osobnym wierszu, przy lewej krawędzi, obok pustego pasa. Gdy każde bezpośrednie dziecko <code>.dashboard-header-actions</code> to <code>.btn-icon</code>, akcje zostają obok tytułu. Wystarczy jeden szerszy przycisk i nagłówek układa się w kolumnę jak dotąd.</li>
+                  <li><strong>Nowa klasa <code>.tooltip-element-wide</code>.</strong> Dymek na całe zdanie: zawija tekst, wyrównuje do lewej, szerokość do <code>--tooltip-max-width</code> (domyślnie 280px), nigdy szerzej niż ekran. Domyślny dymek zostaje przy <code>nowrap</code>, bo krótka etykieta nie powinna się łamać.</li>
+                  <li><strong>Zamknięte okna onboardingu, przewodnika i lightboksa chronią się jak modal.</strong> Ich <code>display: none</code> było zwykłą deklaracją w warstwie, więc każda bezwarstwowa reguła ustawiająca <code>display</code> na <code>dialog</code> (własna albo z cudzej wtyczki) pokazywała zamknięte okno. Teraz <code>:not([open])</code> z <code>!important</code>, tak jak <code>.modal-dialog</code>. Animacja zamykania zostaje, bo trwające przejście ma w kaskadzie pierwszeństwo przed <code>!important</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.32 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

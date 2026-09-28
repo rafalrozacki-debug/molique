@@ -48,6 +48,46 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.33 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.33</div>
+              <div class="text-muted text-4">September 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Ein Modal, das niemand sieht, und neun Fehler aus einem produktiven B2B-Panel
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Alles Folgende stammt aus Einsätzen eines B2B-Panels auf molique,
+                  wo jeder dieser Punkte bereits einen Patch auf Kundenseite hatte.
+                  Ein Patch bei einem Integrator ist keine Korrektur des
+                  Frameworks, deshalb wurden die Ursachen hier beseitigt.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Modal auf dem iPhone: abgedunkelt, aber kein Fenster.</strong> Dreimal von Nutzern gemeldet. Der Bildschirm wurde dunkel, kein Fenster erschien, und da <code>showModal()</code> die Seite darunter inaktiv macht, ließ sich nichts klicken oder schließen. Zwei Ursachen, jede reicht allein. Erstens: Der Einstieg begann mit <code>opacity: 0</code> in <code>@starting-style</code> und verließ sich auf den <code>display</code>/<code>overlay</code>-Übergang mit <code>allow-discrete</code>, während <code>::backdrop</code> keine eigene Animation hat. Lief der Übergang nicht an, war der Hintergrund da und das Fenster blieb transparent. Der Einstieg animiert jetzt nur <code>transform</code>, es gibt also keinen Frame mit Hintergrund ohne Fenster. Das Schließen blendet weiter aus. Zweitens: Die <code>.card</code> im Modal hielt ihr Limit über <code>max-height: 100%</code> eines Elternelements mit <code>max-height</code>, aber ohne <code>height</code>. Ein Prozentwert einer unbestimmten Höhe ist genau der Bereich, in dem sich Engines uneinig sind. Die Karte schrumpft jetzt über die Flex-Kette (<code>min-height: 0</code>), ohne Prozentwerte.</li>
+                  <li><strong>Ein Sicherheitsnetz für Modale: <code>.is-fallback</code>.</strong> Die Korrektur oben beseitigt die bekannten Ursachen, nicht die nächste. Ein neues Modul, <code>js/modules/molique-modal-guard.js</code> (automatisch geladen, sobald die Seite ein <code>.modal-dialog</code> enthält), fragt nach jedem Öffnen das Gerät, ob das Fenster gezeichnet wurde: mindestens 40px groß, Deckkraft über null. Der erste Blick läuft in <code>requestAnimationFrame</code>, weil es vor dem ersten Zeichnen nichts zu messen gibt. Fällt er negativ aus, wartet das Urteil 450 ms auf einen zweiten Blick, weil eine Einstiegsanimation das Fenster kurz transparent lassen kann. Erst dann bekommt das Fenster <code>.is-fallback</code> und wird als einfacher Block gezeichnet, ohne Flex, Prozentwerte und Animation. Die Deklarationen des Ausweichmodus tragen <code>!important</code>, weil sie auch gegen ein schichtloses Stylesheet des Projekts gewinnen müssen, das das Fenster womöglich kaputt gemacht hat. Das Modul beobachtet das Attribut <code>open</code>, statt <code>showModal()</code> zu ersetzen: Das deklarative <code>command="show-modal"</code> öffnet einen Dialog, ohne die JS-Methode aufzurufen, ein Ersatz würde es also übersehen. Geschützt wird nur <code>.modal-dialog</code>. Die Overlays von Onboarding und Tour sind absichtlich transparent, und die Lightbox zeichnet ihren eigenen Hintergrund. Tests: <code>npm run test:modal-guard</code>.</li>
+                  <li><strong>Die Willkommenskarte schnitt längere Beschreibungen auf dem Handy ab.</strong> Auf kleinen Bildschirmen ist die Karte genau einen Bildschirm hoch und hat <code>overflow: hidden</code>, der Slide hatte kein eigenes Scrollen. Der Überhang verschwand mitten im Satz, ohne Scrollleiste und ohne Hinweis, dass noch Text folgt. Der Slide scrollt jetzt selbst (<code>min-height: 0</code> + <code>overflow-y: auto</code>). Die Zentrierung wechselte von <code>justify-content: center</code> zu zwei wachsenden Abstandshaltern, denn Zentrieren in einem Scroll-Container schiebt den Inhalt über BEIDE Enden hinaus, und der obere Teil ist nicht erreichbar. Ein langer Slide beginnt jetzt mit seiner ersten Zeile. Dabei kam heraus, dass das mobile <code>padding</code> des Slides nie gegriffen hat: Die Basisregel stand in der Datei nach der Media Query und überschrieb sie. Auf dem Handy gibt es jetzt gleichmäßige 32px statt 48/24. Die Tour-Sprechblase (<code>.tour-tooltip</code>) bekam dieselbe vertikale Begrenzung.</li>
+                  <li><strong>Header-Aktionen überlagerten auf dem Handy den Titel.</strong> <code>.dashboard-header-actions</code> hat ein negatives <code>margin-top</code>, auf dem der Ausschnitt-Effekt beruht. Der mobile Zweig setzte Hintergrund, Padding und Rundung zurück, aber nicht den Margin, also rutschte der Aktionsblock über den Titel.</li>
+                  <li><strong>Die schmalen Sidebar-Varianten veränderten auch <code>.admin-rail</code>.</strong> Die Regeln für <code>.sidebar-md</code>/<code>.sidebar-sm</code> erfassten jeden <code>.admin-nav-link</code> im Layout, auch in der zweiten Spalte mit fester Breite. Die Rail bekam winzigen Text oder verlor ihre Beschriftungen. Jetzt auf <code>.admin-sidebar</code> begrenzt, wie die Drill-down-Selektoren in 1.7.32.</li>
+                  <li><strong>Die Navigation in <code>.admin-rail</code> übernahm die Farben der dunklen Sidebar.</strong> Die Rail hat absichtlich keinen Hintergrund und liegt auf dem hellen <code>--bg-body</code>, während <code>.admin-nav-link</code> das helle <code>--sidebar-text</code> nahm. Die Rail setzt jetzt vier <code>--sidebar-*</code>-Variablen für ihren Teilbaum um, sodass alle Navigationsregeln ohne Duplikate funktionieren. Inaktive Einträge bekommen <code>--text-main</code>, nicht <code>--text-muted</code>: gedämpfter Text auf <code>--bg-body</code> liegt im hellen Modus bei 4,48:1, knapp unter WCAG AA.</li>
+                  <li><strong><code>.btn-stacked</code> zerlegte einwortige Beschriftungen in eine Buchstabensäule.</strong> <code>word-break: break-word</code> brach mitten im Wort, in einer schmalen Spalte wurde aus „PODGLĄD“ also „PO / DG / LĄ / D“. Jetzt <code>overflow-wrap: break-word</code>: Umbruch zwischen Wörtern, ein Wort wird nur gebrochen, wenn es gar nicht passt.</li>
+                  <li><strong>Ein einzelnes Icon in den Header-Aktionen bleibt in der Titelzeile.</strong> Auf dem Handy rutschen die Aktionen in voller Breite unter den Titel, was für eine Reihe von Buttons richtig ist. Eine einzelne Glocke landete aber in einer eigenen Zeile, linksbündig, neben einem leeren Streifen. Ist jedes direkte Kind von <code>.dashboard-header-actions</code> ein <code>.btn-icon</code>, bleiben die Aktionen neben dem Titel. Ein breiterer Button genügt, und der Header stapelt sich wie bisher.</li>
+                  <li><strong>Neue Klasse <code>.tooltip-element-wide</code>.</strong> Eine Sprechblase für einen ganzen Satz: bricht um, linksbündig, bis <code>--tooltip-max-width</code> (standardmäßig 280px), nie breiter als der Bildschirm. Die Standard-Sprechblase bleibt bei <code>nowrap</code>, weil ein kurzes Label nie umbrechen soll.</li>
+                  <li><strong>Geschlossene Dialoge von Onboarding, Tour und Lightbox sind geschützt wie das Modal.</strong> Ihr <code>display: none</code> war eine normale Deklaration in einer Schicht, also zeigte jede schichtlose Regel, die <code>display</code> auf <code>dialog</code> setzt (eine eigene oder die eines fremden Plugins), den geschlossenen Dialog an. Jetzt <code>:not([open])</code> mit <code>!important</code>, wie bei <code>.modal-dialog</code>. Die Schließanimation bleibt, weil ein laufender Übergang in der Kaskade Vorrang vor <code>!important</code> hat.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.32 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

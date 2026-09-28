@@ -132,6 +132,21 @@
    The column only exists because of the :has() rule in .admin-layout - a
    bare .admin-rail outside that layout is just a block. */
 .admin-rail {
+  /* .admin-nav is written for the sidebar, which is ALWAYS dark, and
+     reads its colors from --sidebar-*. The rail has no background of its
+     own (see above) and sits on the light --bg-body, so the same nav
+     there came out as light text on a light ground, with hover and the
+     mobile active accent tuned for a dark one. Re-pointing the variables
+     for the rail's subtree fixes every nav rule at once without
+     duplicating any of them. Inactive items take --text-main, not
+     --text-muted: muted on --bg-body is 4.48:1 in light mode, just under
+     WCAG AA. .is-active needs nothing - --primary with --btn-text-light
+     is its own background. */
+  --sidebar-text: var(--text-main);
+  --sidebar-text-active: var(--text-main);
+  --sidebar-highlight-rgb: var(--dark-rgb);
+  --sidebar-active-accent: var(--primary);
+
   /* Sticks like the sidebar, and for the same reason: .admin-main does
      not scroll itself (the page does), so a long rail would otherwise
      scroll away and leave its column empty. */

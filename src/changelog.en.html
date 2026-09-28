@@ -48,6 +48,46 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.33 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.33</div>
+              <div class="text-muted text-4">September 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  A modal nobody can see, and nine defects from a production B2B panel
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Everything below came from B2B panel deployments on molique,
+                  where each of these already had a patch on the client side. A
+                  patch at one integrator is not a framework fix, so the causes
+                  were removed here.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Modal on iPhone: dimmed screen, no window.</strong> Reported three times by users. The screen dimmed, no window appeared, and since <code>showModal()</code> makes the page underneath inert, there was nothing to click or close. Two causes, each sufficient on its own. First: the entry started from <code>opacity: 0</code> in <code>@starting-style</code> and relied on the <code>display</code>/<code>overlay</code> <code>allow-discrete</code> transition, while <code>::backdrop</code> has no animation of its own. When the transition did not run, the backdrop was there and the window stayed transparent. The entry now animates <code>transform</code> only, so there is no frame in which the backdrop exists and the window does not. The exit still fades. Second: the <code>.card</code> in a modal was capped with <code>max-height: 100%</code> of a parent that has a <code>max-height</code> but no <code>height</code>. A percentage of an indefinite height is where engines disagree. The card now shrinks through the flex chain (<code>min-height: 0</code>), no percentages.</li>
+                  <li><strong>A safety net for modals: <code>.is-fallback</code>.</strong> The fix above removes the known causes, not the next one. A new module, <code>js/modules/molique-modal-guard.js</code> (loaded automatically when the page has a <code>.modal-dialog</code>), asks the device after every opening whether the window painted: at least 40px in size, opacity above zero. The first look runs in <code>requestAnimationFrame</code>, because before the first paint there is nothing to measure. If it fails, the verdict waits 450 ms for a second look, because an opening animation can leave the window transparent for a moment. Only then does the window get <code>.is-fallback</code> and is redrawn as a plain block, with no flex, percentages or animation. The fallback declarations carry <code>!important</code>, because they must also beat a project's unlayered stylesheet, which may be what broke the window. The module observes the <code>open</code> attribute instead of patching <code>showModal()</code>: the declarative <code>command="show-modal"</code> opens a dialog without calling the JS method, so a patch would miss it. Only <code>.modal-dialog</code> is guarded. The onboarding and tour overlays are transparent by design, and the lightbox paints its own background. Tests: <code>npm run test:modal-guard</code>.</li>
+                  <li><strong>The welcome card cut off longer descriptions on phones.</strong> On a small screen the card is one screen tall with <code>overflow: hidden</code>, and the slide had no scrolling of its own. The overflow vanished mid-sentence, with no scrollbar and no hint that more text existed. The slide now scrolls itself (<code>min-height: 0</code> + <code>overflow-y: auto</code>). Centering moved from <code>justify-content: center</code> to two growing spacers, because center alignment in a scroll container pushes content past BOTH ends and the top part cannot be scrolled to. A long slide now starts at its first line. This also surfaced that the slide's mobile <code>padding</code> never applied: the base rule sat after the media query in the file and overrode it. Phones now get an even 32px instead of 48/24. The tour tooltip (<code>.tour-tooltip</code>) got the same vertical clamp.</li>
+                  <li><strong>Header actions overlapped the title on phones.</strong> <code>.dashboard-header-actions</code> has a negative <code>margin-top</code> that the cutout effect relies on. The mobile branch reset the background, padding and radius, but not the margin, so the actions block rode up over the title.</li>
+                  <li><strong>The narrow sidebar variants also rearranged <code>.admin-rail</code>.</strong> The <code>.sidebar-md</code>/<code>.sidebar-sm</code> rules caught every <code>.admin-nav-link</code> in the layout, including the fixed-width second column. The rail got micro text or lost its labels. Now scoped to <code>.admin-sidebar</code>, like the drill-down selectors in 1.7.32.</li>
+                  <li><strong>Navigation in <code>.admin-rail</code> was painted in the dark sidebar's colors.</strong> The rail deliberately has no background and sits on the light <code>--bg-body</code>, while <code>.admin-nav-link</code> took the light <code>--sidebar-text</code>. The rail now re-points four <code>--sidebar-*</code> variables for its subtree, so every nav rule works without duplication. Inactive items take <code>--text-main</code>, not <code>--text-muted</code>: muted text on <code>--bg-body</code> is 4.48:1 in light mode, just under WCAG AA.</li>
+                  <li><strong><code>.btn-stacked</code> broke one-word labels into a column of letters.</strong> <code>word-break: break-word</code> broke inside words, so in a narrow column “PODGLĄD” came out as “PO / DG / LĄ / D”. Now <code>overflow-wrap: break-word</code>: wrapping between words, breaking a word only when it cannot fit at all.</li>
+                  <li><strong>A lone icon in the header actions stays on the title row.</strong> On phones the actions drop below the title at full width, which is right for a row of buttons. A single bell, though, landed on its own line, flush left, next to an empty strip. When every direct child of <code>.dashboard-header-actions</code> is a <code>.btn-icon</code>, the actions stay next to the title. One wider button and the header stacks as before.</li>
+                  <li><strong>New class <code>.tooltip-element-wide</code>.</strong> A bubble for a full sentence: wraps, left-aligned, up to <code>--tooltip-max-width</code> (280px by default), never wider than the screen. The default bubble stays <code>nowrap</code>, because a short label should never break.</li>
+                  <li><strong>Closed onboarding, tour and lightbox dialogs are protected like the modal.</strong> Their <code>display: none</code> was a normal declaration inside a layer, so any unlayered rule setting <code>display</code> on <code>dialog</code> (a project's own or a third-party plugin's) showed the closed dialog. Now <code>:not([open])</code> with <code>!important</code>, as on <code>.modal-dialog</code>. The closing animation survives, because a running transition outranks <code>!important</code> in the cascade.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.32 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -3666,6 +3666,17 @@ export const CATEGORIES = [
         tags: ['modal', 'zerojs'],
       },
       {
+        id: 'modal-fallback',
+        classes: [['.is-fallback']],
+        desc: {
+          pl: 'Siatka bezpieczeństwa modala. Po każdym otwarciu <code>.modal-dialog</code> moduł <code>molique-modal-guard.js</code> sprawdza, czy okno faktycznie się narysowało (rozmiar min. 40px, niezerowe krycie); jeśli nie, dokłada <code>.is-fallback</code> i okno rysuje się jako zwykły blok - bez flexa, procentów i animacji. Nadaje ją JS, nie wpisujesz jej sam. Zdejmowana przy następnym otwarciu.',
+          en: 'The modal safety net. After every opening of a <code>.modal-dialog</code>, <code>molique-modal-guard.js</code> checks whether the window actually painted (at least 40px, non-zero opacity); if not, it adds <code>.is-fallback</code> and the window is redrawn as a plain block - no flex, no percentages, no animation. Set by JS, you do not write it yourself. Removed at the next opening.',
+          de: 'Das Sicherheitsnetz des Modals. Nach jedem Öffnen eines <code>.modal-dialog</code> prüft <code>molique-modal-guard.js</code>, ob das Fenster tatsächlich gezeichnet wurde (mind. 40px, Deckkraft über null); wenn nicht, setzt es <code>.is-fallback</code> und das Fenster wird als einfacher Block gezeichnet - ohne Flex, Prozentwerte und Animation. Wird per JS gesetzt, nicht von dir. Beim nächsten Öffnen entfernt.',
+        },
+        demo: '-',
+        tags: ['modal', 'state'],
+      },
+      {
         id: 'modal-context',
         classes: [['.modal-context']],
         desc: {
@@ -3749,6 +3760,17 @@ export const CATEGORIES = [
           pl: 'Wariant otwierający dymek w dół zamiast w górę - użyj, gdy wyzwalacz siedzi blisko górnej krawędzi kontenera z <code>overflow: hidden</code> (np. <code>.card-header</code> wewnątrz <code>.card</code>), gdzie domyślny dymek zostałby przycięty.',
           en: 'Opens the bubble downward instead of upward - use when the trigger sits near the top edge of an <code>overflow: hidden</code> container (e.g. a <code>.card-header</code> inside a <code>.card</code>), where the default upward bubble would get clipped.',
           de: 'Öffnet die Sprechblase nach unten statt nach oben - zu verwenden, wenn der Auslöser nahe der oberen Kante eines Containers mit <code>overflow: hidden</code> sitzt (z. B. ein <code>.card-header</code> innerhalb einer <code>.card</code>), wo die standardmäßige Blase nach oben abgeschnitten würde.',
+        },
+        demo: '-',
+        tags: ['feedback'],
+      },
+      {
+        id: 'tooltip-element-wide',
+        classes: [['.tooltip-element-wide']],
+        desc: {
+          pl: 'Dymek na całe zdanie zamiast krótkiej etykiety (dlaczego pole jest zablokowane, skąd wzięła się liczba). Zawija tekst, wyrównuje do lewej, szerokość do <code>--tooltip-max-width</code> (domyślnie 280px), nigdy szerzej niż ekran. Łączy się z <code>-bottom</code> i <code>-end</code>.',
+          en: 'A bubble for a full sentence instead of a short label (why a field is locked, where a number comes from). Wraps, left-aligned, up to <code>--tooltip-max-width</code> (280px by default), never wider than the screen. Composes with <code>-bottom</code> and <code>-end</code>.',
+          de: 'Eine Sprechblase für einen ganzen Satz statt eines kurzen Labels (warum ein Feld gesperrt ist, woher eine Zahl stammt). Bricht um, linksbündig, bis <code>--tooltip-max-width</code> (standardmäßig 280px), nie breiter als der Bildschirm. Kombinierbar mit <code>-bottom</code> und <code>-end</code>.',
         },
         demo: '-',
         tags: ['feedback'],

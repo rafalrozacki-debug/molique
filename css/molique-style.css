@@ -2530,8 +2530,15 @@
     text-align: center;
     padding: 0 !important;
     white-space: normal;
-    word-break: break-word;
-    width: 100%;
+    /* Wraps BETWEEN words, breaks inside a word only when that single
+       word cannot fit on a line at all. word-break: break-word broke
+       anywhere, so in a narrow table column a one-word label came out
+       as a column of letter pairs ("PO / DG / LĄ / D"); width: 100%
+       forced that break earlier than the content needed. */
+    overflow-wrap: break-word;
+    word-break: normal;
+    width: auto;
+    max-width: 100%;
   }
   /* Icon-only button (square by default, add .rounded-circle for round) -
      compose with a color class (or bare .btn), e.g. "btn-outline-success
@@ -5298,18 +5305,27 @@
   }
   @starting-style {
     .modal-dialog[open] {
-      opacity: 0;
+      /* The ENTRY animates transform only - opacity is deliberately absent
+         here. With opacity in @starting-style the dialog spends its first
+         frames fully transparent and relies on the display/overlay
+         allow-discrete transition to bring it back; when that transition does
+         not run (reported three times on iOS Safari), the ::backdrop - which
+         has no transition of its own - is painted and the window never is:
+         a dimmed screen with nothing to click or close. Without opacity here
+         the before-change value is the [open] one (1), so there is no frame in
+         which the backdrop exists and the window does not. The EXIT still
+         fades: closing goes from [open] to the base opacity: 0 above. */
       transform: translateY(-20px);
     }
   }
   /* A <form> wrapping the modal's content must not break the height chain.
      The modal works as a chain: .modal-dialog is a flex column capped at the
-     viewport, .card inherits that cap with max-height:100%, and .card-body is
-     the ONLY scroller. A plain block <form> inserted anywhere in that chain
-     severs it - .card's max-height:100% then resolves against the form's auto
-     height (indefinite, so the cap does nothing), .card-body never gets a
-     definite height to overflow, and the whole modal grows past the screen
-     with the header and footer scrolling away with it.
+     viewport, .card is a shrinkable flex item of it (min-height: 0), and
+     .card-body is the ONLY scroller. A plain block <form> inserted anywhere
+     in that chain severs it - .card is no longer a flex item of the capped
+     column, so nothing shrinks it, .card-body never gets a bounded height to
+     overflow, and the whole modal grows past the screen with the header and
+     footer scrolling away with it.
 
      display:contents makes the form generate no box at all, so its children
      go back to being flex children of the element the form sits in - the
@@ -5338,8 +5354,14 @@
   .modal-dialog .card {
     margin: 0;
     box-shadow: var(--shadow-lg);
-    /* FIX 3: the card can't be taller than the modal itself */
-    max-height: 100%;
+    /* FIX 3: the card can't be taller than the modal itself. Through the
+       flex chain, NOT max-height: 100% - .modal-dialog has a max-height but
+       no height, and a percentage of an indefinite height is exactly where
+       engines disagree (WebKit resolved it differently from Blink). As a
+       flex item the card shrinks to the dialog's capped size with no
+       percentage at all; min-height: 0 lifts the automatic minimum (its
+       content height) that would otherwise stop it from shrinking. */
+    min-height: 0;
     display: flex;
     flex-direction: column;
   }
@@ -5359,6 +5381,61 @@
   .modal-dialog .card-body::-webkit-scrollbar-thumb {
     background: var(--border-color);
     border-radius: 10px;
+  }
+  /* =========================================
+   2. SAFETY NET (.is-fallback, set by molique-modal-guard.js)
+   ========================================= */
+  /* A modal that fails to paint is worse than any other broken component:
+     the page behind it is inert, so there is nothing to click and nothing
+     to close - the only way out is a reload. molique-modal-guard.js asks
+     the device, after every opening, whether the window actually has a
+     size and is visible; when it does not, it adds .is-fallback, and these
+     rules redraw the same modal with the most boring layout there is: a
+     plain block, no flex, no percentages, no transition, no opacity.
+     It works whatever the cause, including causes nobody has found yet.
+
+     [open] is part of the selector ON PURPOSE: the class is only removed
+     at the NEXT opening, so a closed modal still carries it. .modal-dialog
+     is protected by display: none !important while closed anyway, but the
+     rules below must never be the ones that decide a closed modal's
+     display.
+
+     No background on the dialog itself: a .modal-dialog is transparent by
+     design and its .card is what paints. A modal without a card stays
+     transparent in the fallback too - painting it white would cover the
+     page with an empty sheet.
+
+     !important throughout, deliberately. This is the last-resort mode and
+     has to win against whatever broke the modal - and that can be a
+     project's own unlayered stylesheet, which beats every normal
+     declaration inside molique's layers. A layered !important is the only
+     thing that outranks it. */
+  .modal-dialog.is-fallback[open] {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    margin: auto !important;
+    width: 90% !important;
+    max-width: 600px !important;
+    height: fit-content !important;
+    max-height: calc(100vh - 2rem) !important;
+    max-height: calc(100dvh - 2rem) !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .modal-dialog.is-fallback[open] .card {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0;
+    overflow: visible !important;
+  }
+  .modal-dialog.is-fallback[open] .card-body {
+    overflow: visible !important;
   }
   /* =========================================
    1.1. CONFIRM MODAL (Small confirmation modal)
@@ -5557,6 +5634,12 @@
     display: flex;
     opacity: 1;
   }
+  dialog.lightbox-overlay:not([open]) {
+    /* A layered normal display: none loses to any unlayered display rule on
+       dialogs - the same protection as .modal-dialog, .onboarding-dialog and
+       .tour-dialog. A running exit transition still outranks !important. */
+    display: none !important;
+  }
   @starting-style {
     dialog.lightbox-overlay:modal {
       opacity: 0;
@@ -5686,6 +5769,14 @@
     display: flex;
     opacity: 1;
   }
+  dialog.onboarding-dialog:not([open]) {
+    /* The unconditional display: none above is a normal declaration inside
+       a layer, so ANY unlayered rule setting display on dialogs (a project's
+       own, a third-party plugin's) beats it and shows the closed welcome
+       screen. Same protection .modal-dialog has had all along. The exit
+       animation survives it: a running transition outranks !important. */
+    display: none !important;
+  }
   @starting-style {
     dialog.onboarding-dialog:modal {
       opacity: 0;
@@ -5729,6 +5820,18 @@
   dialog.onboarding-dialog:modal .onboarding-card {
     transform: translateY(0) scale(1);
   }
+  .onboarding-slide {
+    /* Declared BEFORE the mobile branch below, not after it: at equal
+       specificity the later rule wins, and this one used to sit after the
+       media query - so the mobile padding there never applied and a phone
+       got the desktop 48/24 split instead of an even 32 on every side. */
+    padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 2);
+  }
   /* Full-screen on small screens - a centered card with margins around it
      reads as a small floating popup on a phone; full-screen matches how
      native apps (and most real product onboarding flows) present a welcome
@@ -5746,19 +5849,37 @@
       margin: 0;
       border-radius: 0;
     }
+    /* The card is exactly one screen tall and overflow: hidden, so a slide
+       longer than the screen used to be cut off mid-sentence, with no
+       scrollbar and no sign that more text existed. The slide becomes the
+       scroller: min-height: 0 is the condition, not decoration - a flex
+       item's automatic minimum is its content height, so without it the
+       slide never shrinks below its text and overflow-y has nothing to do.
+
+       Centering goes through two growing spacers instead of
+       justify-content: center. Center alignment in a scroll container
+       overflows BOTH ends, and the part above the top edge cannot be
+       scrolled to - the opening lines would be lost instead of the closing
+       ones. Spacers center while there is room and collapse to zero when
+       there is not, so a long slide starts at its first line. The negative
+       margin cancels the gap each spacer would otherwise add. */
     .onboarding-slide {
       flex: 1 1 auto;
-      justify-content: center;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
       padding: calc(var(--spacing-unit) * 4);
     }
-  }
-  .onboarding-slide {
-    padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: calc(var(--spacing-unit) * 2);
+    .onboarding-slide::before, .onboarding-slide::after {
+      content: "";
+      flex: 1 0 0;
+    }
+    .onboarding-slide::before {
+      margin-bottom: calc(var(--spacing-unit) * -2);
+    }
+    .onboarding-slide::after {
+      margin-top: calc(var(--spacing-unit) * -2);
+    }
   }
   .onboarding-slide-media:empty {
     display: none;
@@ -7769,6 +7890,22 @@
     left: auto;
     right: 0;
   }
+  /* Modifier: a bubble for a full sentence instead of a short label - why a
+     field is locked, where a number comes from. The base bubble is
+     nowrap on purpose (short labels should never break), so a sentence ran
+     off the screen. This one wraps, left-aligned, up to
+     --tooltip-max-width (default 280px) and never wider than the viewport.
+     width: max-content is required, not just white-space: normal: the
+     bubble is absolutely positioned inside an inline trigger, so without an
+     explicit width it shrinks to the trigger's width and wraps after every
+     word. Composes with -bottom and -end like the other modifiers. */
+  .tooltip-element-wide::after {
+    white-space: normal;
+    width: max-content;
+    max-width: min(var(--tooltip-max-width, 280px), 100vw - 2rem);
+    text-align: left;
+    line-height: 1.4;
+  }
   /* =========================================
      SPOTLIGHT TOUR (Element-highlight coachmark, native <dialog>)
      ========================================= */
@@ -7798,6 +7935,11 @@
   dialog.tour-dialog:modal {
     display: block;
     opacity: 1;
+  }
+  dialog.tour-dialog:not([open]) {
+    /* See the identical rule on dialog.onboarding-dialog: a layered normal
+       display: none loses to any unlayered display rule on dialogs. */
+    display: none !important;
   }
   @starting-style {
     dialog.tour-dialog:modal {
@@ -7840,6 +7982,14 @@
        clamp around it stays, so a wider tooltip still can't overflow a
        narrow screen. */
     width: min(var(--tour-tooltip-width, 320px), 100vw - 2rem);
+    /* The same clamp vertically - without it a long description on a short
+       screen (a phone in landscape) pushed the footer with "Next" off the
+       viewport, and the tooltip, being position: fixed, cannot be scrolled
+       to. A shorter box also gives the position-try fallbacks below more
+       placements that fit. */
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background-color: var(--bg-surface);
     color: var(--text-main);
     border-radius: var(--border-radius-lg);

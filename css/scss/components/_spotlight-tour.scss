@@ -60,6 +60,12 @@ dialog.tour-dialog {
     opacity: 1;
   }
 
+  &:not([open]) {
+    /* See the identical rule on dialog.onboarding-dialog: a layered normal
+       display: none loses to any unlayered display rule on dialogs. */
+    display: none !important;
+  }
+
   @starting-style {
     &:modal {
       opacity: 0;
@@ -103,6 +109,14 @@ dialog.tour-dialog {
      clamp around it stays, so a wider tooltip still can't overflow a
      narrow screen. */
   width: min(var(--tour-tooltip-width, 320px), calc(100vw - 2rem));
+  /* The same clamp vertically - without it a long description on a short
+     screen (a phone in landscape) pushed the footer with "Next" off the
+     viewport, and the tooltip, being position: fixed, cannot be scrolled
+     to. A shorter box also gives the position-try fallbacks below more
+     placements that fit. */
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background-color: var(--bg-surface);
   color: var(--text-main);
   border-radius: var(--border-radius-lg);
