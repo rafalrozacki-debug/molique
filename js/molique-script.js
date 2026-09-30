@@ -93,10 +93,21 @@ document.addEventListener('DOMContentLoaded', () => {
     'bottom-right': 'toast-bottom-right'
   };
 
+  // TREŚĆ KOMUNIKATU TO TEKST, NIE HTML (od 1.7.37). Do 1.7.36 `message`
+  // wklejał się przez `innerHTML` w środek szablonu, więc każdy tekst
+  // pochodzący spoza kodu - z adresu strony, z odpowiedzi serwera, z nazwy
+  // pliku wpisanej przez użytkownika - był parsowany jako HTML. W projekcie
+  // Briko link z `?briko_notice=<img onerror=...>` wykonywał przez to kod
+  // w panelu każdemu, kto go kliknął. Przy okazji zdanie ze znakiem `<`
+  // ("wartość < 100") traciło wszystko od tego znaku. Toast składa się
+  // teraz z elementów, a komunikat wchodzi przez `textContent`. HTML wolno
+  // wyłącznie jawnie: `html: true` - i tylko z treścią, którą w całości
+  // pisze kod strony.
   window.MoliqueToast = {
-    show(options) {
-      const { message = 'Powiadomienie', type = 'info', position = 'top-right', duration = 4000 } = options;
-      
+    show(options = {}) {
+      const { message = 'Powiadomienie', type = 'info', position = 'top-right', duration = 4000, html = false } = options;
+      const ms = Number(duration) > 0 ? Number(duration) : 4000;
+
       const typeClass = TOAST_TYPE[type] || TOAST_TYPE.info;
       const positionClass = TOAST_POSITION[position] || TOAST_POSITION['top-right'];
 
@@ -111,13 +122,28 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const toast = document.createElement('div');
       toast.className = 'toast ' + typeClass;
-      toast.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
-          <span>${message}</span>
-          <button class="toast-close" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; opacity: 0.5; padding: 0; color: inherit;">&times;</button>
-        </div>
-        <div class="toast-progress" style="animation: toastProgressAnim ${duration}ms linear forwards;"></div>
-      `;
+
+      const row = document.createElement('div');
+      row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; gap: 12px;';
+
+      const text = document.createElement('span');
+      if (html === true) {
+        text.innerHTML = String(message);
+      } else {
+        text.textContent = String(message);
+      }
+
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'toast-close';
+      closeBtn.style.cssText = 'background: none; border: none; font-size: 1.2rem; cursor: pointer; opacity: 0.5; padding: 0; color: inherit;';
+      closeBtn.textContent = '×';
+
+      const progress = document.createElement('div');
+      progress.className = 'toast-progress';
+      progress.style.animation = 'toastProgressAnim ' + ms + 'ms linear forwards';
+
+      row.append(text, closeBtn);
+      toast.append(row, progress);
       positionClass.includes('bottom') ? container.appendChild(toast) : container.prepend(toast);
       
       let timeout;
@@ -130,8 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
       };
-      toast.querySelector('.toast-close').addEventListener('click', () => { clearTimeout(timeout); removeToast(); });
-      timeout = setTimeout(removeToast, duration);
+      closeBtn.addEventListener('click', () => { clearTimeout(timeout); removeToast(); });
+      timeout = setTimeout(removeToast, ms);
     }
   };
 

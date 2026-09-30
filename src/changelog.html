@@ -47,6 +47,36 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.37 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.37</div>
+              <div class="text-muted text-4">Wrzesień 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Treść toastu to tekst, nie HTML
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Do v1.7.36 <code>MoliqueToast.show()</code> wklejał <code>message</code> przez <code>innerHTML</code> w środek szablonu. Każdy tekst spoza kodu strony - z adresu, z odpowiedzi serwera, z nazwy pliku wpisanej przez użytkownika - był więc parsowany jako HTML. W panelu zbudowanym na molique link z parametrem wyświetlanym w toaście wykonywał przez to cudzy kod każdemu, kto go kliknął.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Komunikat wchodzi przez <code>textContent</code>.</strong> Toast składa się z elementów, a treść jest zwykłym tekstem: znaczniki widać dosłownie i nic się nie wykonuje. Wygląd bez zmian. Przy okazji zdanie ze znakiem <code>&lt;</code> („wartość &lt; 100”) nie traci już wszystkiego od tego znaku.</li>
+                  <li><strong>HTML tylko jawnie: nowa opcja <code>html: true</code>.</strong> Działa wyłącznie wartość logiczna <code>true</code> i wyłącznie na samej treści. Używaj jej tylko z tekstem, który w całości pisze kod strony - nigdy z danymi od użytkownika albo z serwera. Jeśli do tej pory przekazywałeś do toastu znaczniki, dodaj tę opcję.</li>
+                  <li><strong><code>duration</code> musi być liczbą.</strong> Inna wartość wraca do 4000 ms, zamiast trafiać do stylu animacji. Testy: <code>npm run test:toast</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.36 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

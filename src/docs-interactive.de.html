@@ -523,7 +523,8 @@
   type: 'success',        // success | danger | warning | info
   position: 'top-right',  // top-left | top-center | top-right
                           // bottom-left | bottom-center | bottom-right
-  duration: 4000          // ms
+  duration: 4000,         // ms
+  html: false             // true = Meldung als HTML (siehe Tabelle)
 });</code></pre>
             </div>
 
@@ -540,7 +541,12 @@
                   <tr>
                     <td data-label="Parameter"><code>message</code></td>
                     <td data-label="Standard"><code>'Benachrichtigung'</code></td>
-                    <td data-label="Hinweise">Der Inhalt der Meldung.</td>
+                    <td data-label="Hinweise">
+                      Der Inhalt der Meldung - eingefügt als <strong>Text</strong>
+                      (seit v1.7.37). Markup erscheint wörtlich, daher kann Text
+                      aus der URL, einer Serverantwort oder einem Formular keinen
+                      Code ausführen.
+                    </td>
                   </tr>
                   <tr>
                     <td data-label="Parameter"><code>type</code></td>
@@ -562,6 +568,11 @@
                     <td data-label="Parameter"><code>duration</code></td>
                     <td data-label="Standard"><code>4000</code></td>
                     <td data-label="Hinweise">Zeit in Millisekunden.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Parameter"><code>html</code></td>
+                    <td data-label="Standard"><code>false</code></td>
+                    <td data-label="Hinweise">Nur <code>true</code> schaltet HTML in der Meldung ein. Nur mit Text verwenden, den vollständig der Code der Seite schreibt - nie mit etwas, das von Nutzern oder vom Server kommt.</td>
                   </tr>
                 </tbody>
               </table>

@@ -48,6 +48,36 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.37 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.37</div>
+              <div class="text-muted text-4">September 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-danger"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Toast-Inhalt ist Text, kein HTML
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Bis v1.7.36 fügte <code>MoliqueToast.show()</code> <code>message</code> per <code>innerHTML</code> in eine Vorlage ein. Jeder Text von außerhalb des Seitencodes - ein URL-Parameter, eine Serverantwort, ein vom Nutzer eingegebener Dateiname - wurde daher als HTML geparst. In einem Admin-Panel auf Basis von molique führte ein Link mit einem im Toast angezeigten Parameter so fremden Code bei allen aus, die ihn anklickten.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Die Meldung kommt über <code>textContent</code> hinein.</strong> Der Toast wird aus Elementen gebaut, der Inhalt ist reiner Text: Markup erscheint wörtlich, nichts wird ausgeführt. Das Aussehen bleibt gleich. Nebenbei verliert ein Satz mit einem <code>&lt;</code>-Zeichen („Wert &lt; 100“) nicht mehr alles danach.</li>
+                  <li><strong>HTML nur bewusst: neue Option <code>html: true</code>.</strong> Nur der boolesche Wert <code>true</code> wirkt, und nur auf die Meldung selbst. Nur mit Text verwenden, den vollständig der Seitencode schreibt - nie mit Daten von Nutzern oder vom Server. Wer bisher Markup an Toasts übergeben hat, ergänzt diese Option.</li>
+                  <li><strong><code>duration</code> muss eine Zahl sein.</strong> Alles andere fällt auf 4000 ms zurück, statt im Animationsstil zu landen. Tests: <code>npm run test:toast</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.36 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

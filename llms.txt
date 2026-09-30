@@ -70,7 +70,7 @@ Kontekst: Lekki, rygorystycznie zoptymalizowany framework CSS B2B.
 - **File Upload:** `.file-upload` (wariant: `.file-upload-animated`) > niewidoczny `input[type="file"]` rozciągnięty na całą strefę (klik i drag&drop działają natywnie). Auto-ładowany `js/modules/molique-file-upload.js` nasłuchuje `change` i nadpisuje `.file-upload-name` nazwą pliku - element opcjonalny w markupie, moduł dopisze go sam.
 
 ### Feedback & Statusy
-- **Toasty:** Używają Popover API. Wywoływane przez JS: `MoliqueToast.show({ message: '...', type: 'success' })`.
+- **Toasty:** Używają Popover API. Wywoływane przez JS: `MoliqueToast.show({ message: '...', type: 'success' })`. `message` to TEKST (od v1.7.37 wstawiany przez `textContent`, znaczniki widać dosłownie) - HTML tylko jawnie przez `html: true` i tylko z treścią, którą w całości pisze kod strony, nigdy z danymi od użytkownika ani z serwera.
 - **Status Dots:** `.status-dot` + `.status-draft` / `pending` / `done` / `danger`. Dodaj `.status-ping` dla pulsowania.
 - **Stock Bar (segmentowy poziom zapasu):** `.stock-bar` + wariant `.stock-bar-success` / `-warning` / `-danger` (bez wariantu: kolor secondary). Wypełnienie z backendu przez `style="--stock-filled: 3"` (0-5); segmenty rysuje maska SVG - zero JS i zero dodatkowego markupu. Pasek jest czysto wizualny: wartość podawaj obok jako tekst lub nadaj `role="img"` + `aria-label`.
 - **Interaktywna Ikona:** `.status-icon-toggle` (animacja Plus -> Checkmark). Może być użyta z `<label class="status-checkbox">`.

@@ -509,7 +509,8 @@
   type: 'success',        // success | danger | warning | info
   position: 'top-right',  // top-left | top-center | top-right
                           // bottom-left | bottom-center | bottom-right
-  duration: 4000          // ms
+  duration: 4000,         // ms
+  html: false             // true = message jako HTML (patrz tabela)
 });</code></pre>
             </div>
 
@@ -526,7 +527,12 @@
                   <tr>
                     <td data-label="Parametr"><code>message</code></td>
                     <td data-label="Domyślnie"><code>'Powiadomienie'</code></td>
-                    <td data-label="Uwagi">Treść komunikatu.</td>
+                    <td data-label="Uwagi">
+                      Treść komunikatu - wstawiana jako <strong>tekst</strong>
+                      (od v1.7.37). Znaczniki widać dosłownie, więc tekst
+                      z adresu, odpowiedzi serwera czy formularza nie
+                      wykona kodu.
+                    </td>
                   </tr>
                   <tr>
                     <td data-label="Parametr"><code>type</code></td>
@@ -548,6 +554,11 @@
                     <td data-label="Parametr"><code>duration</code></td>
                     <td data-label="Domyślnie"><code>4000</code></td>
                     <td data-label="Uwagi">Czas w milisekundach.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Parametr"><code>html</code></td>
+                    <td data-label="Domyślnie"><code>false</code></td>
+                    <td data-label="Uwagi">Tylko <code>true</code> włącza HTML w treści. Używaj wyłącznie z tekstem, który w całości pisze kod strony - nigdy z czymś, co przyszło od użytkownika albo z serwera.</td>
                   </tr>
                 </tbody>
               </table>

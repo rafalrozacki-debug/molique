@@ -510,7 +510,8 @@
   type: 'success',        // success | danger | warning | info
   position: 'top-right',  // top-left | top-center | top-right
                           // bottom-left | bottom-center | bottom-right
-  duration: 4000          // ms
+  duration: 4000,         // ms
+  html: false             // true = message as HTML (see the table)
 });</code></pre>
             </div>
 
@@ -527,7 +528,11 @@
                   <tr>
                     <td data-label="Parameter"><code>message</code></td>
                     <td data-label="Default"><code>'Notification'</code></td>
-                    <td data-label="Notes">The message content.</td>
+                    <td data-label="Notes">
+                      The message content - inserted as <strong>text</strong>
+                      (since v1.7.37). Markup shows literally, so text from
+                      the URL, a server response or a form cannot run code.
+                    </td>
                   </tr>
                   <tr>
                     <td data-label="Parameter"><code>type</code></td>
@@ -548,6 +553,11 @@
                     <td data-label="Parameter"><code>duration</code></td>
                     <td data-label="Default"><code>4000</code></td>
                     <td data-label="Notes">Time in milliseconds.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Parameter"><code>html</code></td>
+                    <td data-label="Default"><code>false</code></td>
+                    <td data-label="Notes">Only <code>true</code> turns on HTML in the message. Use it only with text written entirely by the page code - never with anything that came from a user or a server.</td>
                   </tr>
                 </tbody>
               </table>
