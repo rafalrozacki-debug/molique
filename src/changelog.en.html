@@ -48,6 +48,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.39 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.39</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Animated icons: the spinner finally spins, new motion for confetti, heartbeat, the phone and the pencils
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Fixes and suggestions from the first days of the <code>icon-anim</code> module. The main one: in v1.7.38 the <code>spinner</code> preset showed no visible motion at all.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Spinner.</strong> Eight identical ticks 45° apart turned in 45° steps, so every step drew the same picture. Now the ticks fade out and back one after another, and a dimmed tick with a tail runs round the circle. When the JS cannot split the icon into parts (web font, flattened SVG), the spinner turns smoothly.</li>
+                  <li><strong>Confetti fires.</strong> The cone kicks back and four pieces fly out of its mouth into place. <strong>Heartbeat</strong> beats and draws its ECG line. <strong>Phone-call</strong> rings while the signal arcs pulse twice, inner one first.</li>
+                  <li><strong>Pencils write.</strong> In <code>note-pencil</code> only the pencil writes and the sheet stays put. <code>pencil</code>, <code>pencil-simple</code> and <code>pen</code> make a writing stroke to the right instead of a wobble, <code>pencil-line</code> lays its line out from under the tip, and <code>signature</code> signs itself.</li>
+                  <li><strong>Every weight.</strong> Bold orders the elements of some icons differently, so the new presets pick parts by type and shape (the closed path, the <code>polyline</code>, the n-th <code>line</code>) rather than by number. Checked against the Phosphor source files in thin, light, regular, bold and duotone.</li>
+                  <li><strong>PurgeCSS.</strong> The safelist only protected the whole-icon animations. Part animations (<code>iconAnimPart*</code>) are named through <code>--_icon-anim-part-name</code>, so with <code>keyframes: true</code> PurgeCSS removed every one of them and the parts stood still. The safelist now covers all 40 animations of the module, and <code>npm run test:css</code> also checks the part animation names.</li>
+                  <li><strong>Examples.</strong> The status “Final inspection approved” drew its tick once, while you were scrolling, so it looked dead. It now draws when it scrolls into view and repeats every 2.5 s. The module weighs 32 KB minified, about 3.8 KB gzipped.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.38 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

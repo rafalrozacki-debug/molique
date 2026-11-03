@@ -192,16 +192,24 @@
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  /* Spinners: steady and linear; spinner ticks in eight 45deg steps. */
-  .icon-anim:is([data-icon=circle-notch], [data-icon=spinner-gap]):not([data-icon-anim]) {
+  /* Spinners: steady and linear. The eight ticks of spinner are identical and
+     45deg apart, so turning it in 45deg steps drew the same picture on every
+     step and it looked still. It turns smoothly when the JS cannot inline it;
+     with parts, the ticks fade out and back one after another, round the
+     circle (they are all <line>s, in clockwise order from the top). */
+  .icon-anim:is([data-icon=circle-notch], [data-icon=spinner-gap], [data-icon=spinner]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimSpin;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: linear;
   }
-  .icon-anim:is([data-icon=spinner]):not([data-icon-anim]) {
-    --_icon-anim-name: iconAnimSpin;
-    --_icon-anim-duration: 1s;
-    --_icon-anim-easing: steps(8, end);
+  .icon-anim:is([data-icon=spinner]):not([data-icon-anim])[data-icon-parts=stroke] {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=spinner]):not([data-icon-anim])[data-icon-parts=stroke] > line {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.125s);
   }
   .icon-anim:is([data-icon=magnifying-glass]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimSearch;
@@ -213,10 +221,59 @@
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
   }
+  /* Heartbeat: beats and the ECG trace (its only <polyline>) runs across. */
+  .icon-anim:is([data-icon=heartbeat]):not([data-icon-anim])[data-icon-parts=stroke] > polyline {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-fill: backwards;
+  }
   .icon-anim:is([data-icon=star], [data-icon=trophy], [data-icon=medal], [data-icon=confetti]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimTada;
     --_icon-anim-duration: 0.9s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  /* Confetti: the popper fires. The cone - the closed path, with its two
+     stripes (4th and 5th <line>) and the duotone fills - kicks back, and the
+     four pieces fly out of its mouth (about 152, 104 in the 256 grid) to
+     where they belong. Bold lists the streamer last, so the pieces are picked
+     by type: the first three <line>s and the open <path>. The offsets are
+     the way back from each piece to the mouth. */
+  .icon-anim:is([data-icon=confetti]):not([data-icon-anim])[data-icon-parts=stroke] {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=confetti]):not([data-icon-anim])[data-icon-parts=stroke] > :is([d$=Z], line:nth-of-type(n + 4), [data-layer]) {
+    --_icon-anim-part-name: iconAnimPartRecoil;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=confetti]):not([data-icon-anim])[data-icon-parts=stroke] > :is(path[data-part]:not([d$=Z]), line:nth-of-type(-n + 3)) {
+    --_icon-anim-part-name: iconAnimPartBurst;
+    --_icon-anim-part-duration: 0.75s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-fill: backwards;
+  }
+  /* Only offsets and stagger below - the shared rule above outweighs a plain
+     line:nth-of-type(), so it must not set what these do. */
+  .icon-anim:is([data-icon=confetti]):not([data-icon-anim])[data-icon-parts=stroke] > path[data-part]:not([d$=Z]) {
+    --_icon-anim-x: -34px;
+    --_icon-anim-y: 48px;
+    --_icon-anim-part-stagger: 0.06s;
+  }
+  .icon-anim:is([data-icon=confetti]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(1) {
+    --_icon-anim-x: 6px;
+    --_icon-anim-y: 64px;
+    --_icon-anim-part-stagger: 0.12s;
+  }
+  .icon-anim:is([data-icon=confetti]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(2) {
+    --_icon-anim-x: -60px;
+    --_icon-anim-y: -14px;
+    --_icon-anim-part-stagger: 0.14s;
+  }
+  .icon-anim:is([data-icon=confetti]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(3) {
+    --_icon-anim-x: -64px;
+    --_icon-anim-y: 24px;
+    --_icon-anim-part-stagger: 0.09s;
   }
   /* Sparkle: the big star pops, the small ones twinkle in two beats. */
   .icon-anim:is([data-icon=sparkle]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -271,6 +328,19 @@
     --_icon-anim-name: iconAnimRing;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* Phone-call: rings, and the signal pulses out twice, inner arc first.
+     The handset is the closed path; of the two open arcs the outer one is
+     part 1 in every weight, while bold moves the inner one to the end. */
+  .icon-anim:is([data-icon=phone-call]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part]:not([d$=Z]) {
+    transform-origin: 0% 100%;
+    --_icon-anim-part-name: iconAnimPartWave;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon=phone-call]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part="1"] {
+    --_icon-anim-part-stagger: 0.1s;
   }
   /* Padlock: the shackle lifts (3rd element, 2nd in the "simple" ones). */
   .icon-anim:is([data-icon=lock], [data-icon=lock-open], [data-icon=lock-simple], [data-icon=lock-simple-open]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -453,10 +523,56 @@
     --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.1s);
     --_icon-anim-part-fill: backwards;
   }
+  /* Pens and pencils write: short strokes moving right, then back. */
   .icon-anim:is([data-icon=pencil-simple], [data-icon=pencil], [data-icon=pencil-line], [data-icon=note-pencil], [data-icon=pen], [data-icon=signature]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimWrite;
-    --_icon-anim-duration: 0.8s;
+    --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* Note-pencil: only the pencil writes (its <polygon> and <line>, the
+     duotone fill is the other polygon), the sheet - the <path> - stays put. */
+  .icon-anim:is([data-icon=note-pencil]):not([data-icon-anim])[data-icon-parts=stroke] {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=note-pencil]):not([data-icon-anim])[data-icon-parts=stroke] > :is(polygon, line) {
+    --_icon-anim-part-name: iconAnimPartWrite;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* Pencil-line: the line runs out from under the tip while the pencil
+     writes. Thin to duotone draw it in one <polyline> that starts at the far
+     end (216, 216), so it is drawn backwards from its end; bold has it as a
+     <line> of its own, starting at the tip. */
+  .icon-anim:is([data-icon=pencil-line]):not([data-icon-anim])[data-icon-parts=stroke] > polyline {
+    --_icon-anim-dash-from: -1;
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon=pencil-line]):not([data-icon-anim])[data-icon-parts=stroke] > line[y1="216"][y2="216"] {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-part-fill: backwards;
+  }
+  /* Signature: the signature writes itself above the line (the <path> with
+     a stroke); the duotone fills come in once it is written. */
+  .icon-anim:is([data-icon=signature]):not([data-icon-anim])[data-icon-parts=stroke] {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=signature]):not([data-icon-anim])[data-icon-parts=stroke] > path[data-part] {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon=signature]):not([data-icon-anim])[data-icon-parts=stroke] > [data-layer] {
+    --_icon-anim-part-name: iconAnimLayerFade;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: 0.9s;
+    --_icon-anim-part-fill: backwards;
   }
   .icon-anim:is([data-icon=cloud], [data-icon=cloud-arrow-up], [data-icon=cloud-check]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimDrift;
@@ -937,21 +1053,31 @@
       transform: rotate(4deg);
     }
   }
+  /* Writing a word: down-up strokes drifting right, then the hand goes back. */
   @keyframes iconAnimWrite {
     0%, 100% {
       transform: translate(0, 0) rotate(0);
     }
+    10% {
+      transform: translate(-5%, 3%) rotate(-3deg);
+    }
     20% {
-      transform: translate(-6%, 4%) rotate(-8deg);
+      transform: translate(-3%, -2%) rotate(1deg);
+    }
+    30% {
+      transform: translate(-1%, 3%) rotate(-3deg);
     }
     40% {
-      transform: translate(4%, -2%) rotate(4deg);
+      transform: translate(1%, -2%) rotate(1deg);
+    }
+    50% {
+      transform: translate(3%, 3%) rotate(-3deg);
     }
     60% {
-      transform: translate(-4%, 4%) rotate(-6deg);
+      transform: translate(5%, -2%) rotate(1deg);
     }
     80% {
-      transform: translate(2%, 0) rotate(2deg);
+      transform: translate(2%, -1%) rotate(0);
     }
   }
   @keyframes iconAnimDrift {
@@ -1039,11 +1165,12 @@
   /* pathLength="1" (set by the JS) makes "1" the full length of any stroke.
      The dash pattern lives in the keyframes, not in the rule, so the stroke is
      back to a plain line as soon as the animation is over. Opacity hides the
-     round cap dot some engines paint at zero length. */
+     round cap dot some engines paint at zero length. --_icon-anim-dash-from:
+     -1 draws the stroke from its end instead of its start. */
   @keyframes iconAnimPartDraw {
     0% {
       stroke-dasharray: 1 1;
-      stroke-dashoffset: 1;
+      stroke-dashoffset: var(--_icon-anim-dash-from, 1);
       opacity: 0;
     }
     8% {
@@ -1091,6 +1218,97 @@
     from {
       opacity: 0;
       transform: scale(0.4);
+    }
+  }
+  /* Kick back and settle, like a popper firing: fast out, slower home. */
+  @keyframes iconAnimPartRecoil {
+    0%, 70%, 100% {
+      transform: translate(0, 0);
+    }
+    12% {
+      transform: translate(var(--_icon-anim-x, -10px), var(--_icon-anim-y, 10px));
+    }
+    40% {
+      transform: translate(calc(var(--_icon-anim-x, -10px) * -0.3), calc(var(--_icon-anim-y, 10px) * -0.3));
+    }
+  }
+  /* Shot in from --_icon-anim-x/-y, overshoots a little, lands in place. */
+  @keyframes iconAnimPartBurst {
+    0% {
+      opacity: 0;
+      transform: translate(var(--_icon-anim-x, 0px), var(--_icon-anim-y, 0px)) scale(0.3);
+    }
+    20% {
+      opacity: 1;
+    }
+    65% {
+      transform: translate(calc(var(--_icon-anim-x, 0px) * -0.12), calc(var(--_icon-anim-y, 0px) * -0.12)) scale(1.15);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+  }
+  /* A signal going out: grows from its origin and fades, twice. */
+  @keyframes iconAnimPartWave {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    20% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    40% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    41% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    60%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  /* The writing hand of iconAnimWrite, in px of the 256 grid, for a pencil
+     that is only a part of the icon. Translate only: the pencil is made of
+     several parts with their own boxes, a rotation would pull them apart. */
+  @keyframes iconAnimPartWrite {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    10% {
+      transform: translate(-12px, 8px);
+    }
+    20% {
+      transform: translate(-7px, -5px);
+    }
+    30% {
+      transform: translate(-2px, 8px);
+    }
+    40% {
+      transform: translate(3px, -5px);
+    }
+    50% {
+      transform: translate(8px, 8px);
+    }
+    60% {
+      transform: translate(13px, -5px);
+    }
+    80% {
+      transform: translate(5px, -2px);
+    }
+  }
+  /* Goes out fast, comes back slowly: staggered round a circle of ticks, the
+     gap runs round with a fading tail. */
+  @keyframes iconAnimPartBlink {
+    0%, 55%, 100% {
+      opacity: 1;
+    }
+    10% {
+      opacity: 0.12;
     }
   }
   /* No "to": ends at the element's own opacity (0.2 on a duotone layer). */

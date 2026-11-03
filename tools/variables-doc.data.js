@@ -268,10 +268,11 @@ export const COMPONENT = {
   '--_icon-anim-part-easing': ['Animowane ikony', 'internal', 'Krzywa animacji części.'],
   '--_icon-anim-part-stagger': ['Animowane ikony', 'internal', 'Dodatkowe opóźnienie części, np. przy rysowaniu kresek po kolei. Dzielone przez <code>--icon-anim-speed</code>.'],
   '--_icon-anim-part-fill': ['Animowane ikony', 'internal', 'Fill-mode części. Rysowanie ustawia <code>backwards</code>, żeby kreska była ukryta, zanim przyjdzie jej kolej.'],
-  '--_icon-anim-x':         ['Animowane ikony', 'internal', 'Przesunięcie w poziomie dla <code>iconAnimNudge</code> / <code>iconAnimPartShift</code> (procent pudełka ikony albo jednostki siatki 256).'],
+  '--_icon-anim-x':         ['Animowane ikony', 'internal', 'Przesunięcie w poziomie dla <code>iconAnimNudge</code> / <code>iconAnimPartShift</code> / <code>iconAnimPartRecoil</code> oraz punkt startu kawałka w <code>iconAnimPartBurst</code> (confetti) - procent pudełka ikony albo jednostki siatki 256.'],
   '--_icon-anim-y':         ['Animowane ikony', 'internal', 'Przesunięcie w pionie, jak wyżej.'],
   '--_icon-anim-r':         ['Animowane ikony', 'internal', 'Kąt uniesienia części w <code>iconAnimPartLift</code> (pokrywa kosza).'],
   '--_icon-anim-turn':      ['Animowane ikony', 'internal', 'Kąt obrotu w <code>iconAnimTurn</code>, dobrany do symetrii kształtu (90deg dla x i słońca, 180deg dla klepsydry).'],
+  '--_icon-anim-dash-from': ['Animowane ikony', 'internal', 'Początkowy <code>stroke-dashoffset</code> w <code>iconAnimPartDraw</code>, domyślnie <code>1</code> (kreska rysuje się od początku). <code>-1</code> rysuje ją od końca - tak linia <code>pencil-line</code> wychodzi spod grafitu.'],
   '--_icon-anim-opacity':   ['Animowane ikony', 'internal', 'Docelowe krycie w <code>draw-loop</code>: 1 dla kropek, 0.2 dla tła duotone.'],
 };
 

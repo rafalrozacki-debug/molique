@@ -213,12 +213,19 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   @include _root(iconAnimSpinCcw, 1s, $_ease-in-out);
 }
 
-/* Spinners: steady and linear; spinner ticks in eight 45deg steps. */
-#{_preset('circle-notch', 'spinner-gap')} {
+/* Spinners: steady and linear. The eight ticks of spinner are identical and
+   45deg apart, so turning it in 45deg steps drew the same picture on every
+   step and it looked still. It turns smoothly when the JS cannot inline it;
+   with parts, the ticks fade out and back one after another, round the
+   circle (they are all <line>s, in clockwise order from the top). */
+#{_preset('circle-notch', 'spinner-gap', 'spinner')} {
   @include _root(iconAnimSpin, 0.8s, linear);
 }
-#{_preset('spinner')} {
-  @include _root(iconAnimSpin, 1s, steps(8, end));
+#{_parts('spinner')} {
+  --_icon-anim-name: none;
+}
+#{_parts('spinner')} > line {
+  @include _part(iconAnimPartBlink, 1s, linear, calc(var(--icon-part, 0) * 0.125s));
 }
 
 #{_preset('magnifying-glass')} {
@@ -228,9 +235,51 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 #{_preset('heart', 'heartbeat')} {
   @include _root(iconAnimBeat, 0.8s);
 }
+/* Heartbeat: beats and the ECG trace (its only <polyline>) runs across. */
+#{_parts('heartbeat')} > polyline {
+  @include _part(iconAnimPartDraw, 0.8s, linear, null, backwards);
+}
 
 #{_preset('star', 'trophy', 'medal', 'confetti')} {
   @include _root(iconAnimTada, 0.9s);
+}
+
+/* Confetti: the popper fires. The cone - the closed path, with its two
+   stripes (4th and 5th <line>) and the duotone fills - kicks back, and the
+   four pieces fly out of its mouth (about 152, 104 in the 256 grid) to
+   where they belong. Bold lists the streamer last, so the pieces are picked
+   by type: the first three <line>s and the open <path>. The offsets are
+   the way back from each piece to the mouth. */
+#{_parts('confetti')} {
+  --_icon-anim-name: none;
+}
+#{_parts('confetti')} > :is([d$="Z"], line:nth-of-type(n + 4), [data-layer]) {
+  @include _part(iconAnimPartRecoil, 0.7s, $_ease-in-out);
+}
+#{_parts('confetti')} > :is(path[data-part]:not([d$="Z"]), line:nth-of-type(-n + 3)) {
+  @include _part(iconAnimPartBurst, 0.75s, $_ease, null, backwards);
+}
+/* Only offsets and stagger below - the shared rule above outweighs a plain
+   line:nth-of-type(), so it must not set what these do. */
+#{_parts('confetti')} > path[data-part]:not([d$="Z"]) {
+  --_icon-anim-x: -34px;
+  --_icon-anim-y: 48px;
+  --_icon-anim-part-stagger: 0.06s;
+}
+#{_parts('confetti')} > line:nth-of-type(1) {
+  --_icon-anim-x: 6px;
+  --_icon-anim-y: 64px;
+  --_icon-anim-part-stagger: 0.12s;
+}
+#{_parts('confetti')} > line:nth-of-type(2) {
+  --_icon-anim-x: -60px;
+  --_icon-anim-y: -14px;
+  --_icon-anim-part-stagger: 0.14s;
+}
+#{_parts('confetti')} > line:nth-of-type(3) {
+  --_icon-anim-x: -64px;
+  --_icon-anim-y: 24px;
+  --_icon-anim-part-stagger: 0.09s;
 }
 
 /* Sparkle: the big star pops, the small ones twinkle in two beats. */
@@ -275,6 +324,16 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
 #{_preset('phone', 'phone-call', 'device-mobile')} {
   @include _root(iconAnimRing, 0.8s, $_ease-in-out);
+}
+/* Phone-call: rings, and the signal pulses out twice, inner arc first.
+   The handset is the closed path; of the two open arcs the outer one is
+   part 1 in every weight, while bold moves the inner one to the end. */
+#{_parts('phone-call')} > [data-part]:not([d$="Z"]) {
+  transform-origin: 0% 100%;
+  @include _part(iconAnimPartWave, 0.8s, $_ease, null, backwards);
+}
+#{_parts('phone-call')} > [data-part="1"] {
+  --_icon-anim-part-stagger: 0.1s;
 }
 
 /* Padlock: the shackle lifts (3rd element, 2nd in the "simple" ones). */
@@ -429,8 +488,39 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   @include _part(iconAnimPartDraw, 0.45s, $_ease, calc(var(--icon-part, 0) * 0.1s), backwards);
 }
 
+/* Pens and pencils write: short strokes moving right, then back. */
 #{_preset('pencil-simple', 'pencil', 'pencil-line', 'note-pencil', 'pen', 'signature')} {
-  @include _root(iconAnimWrite, 0.8s, $_ease-in-out);
+  @include _root(iconAnimWrite, 1s, $_ease-in-out);
+}
+/* Note-pencil: only the pencil writes (its <polygon> and <line>, the
+   duotone fill is the other polygon), the sheet - the <path> - stays put. */
+#{_parts('note-pencil')} {
+  --_icon-anim-name: none;
+}
+#{_parts('note-pencil')} > :is(polygon, line) {
+  @include _part(iconAnimPartWrite, 1s, $_ease-in-out);
+}
+/* Pencil-line: the line runs out from under the tip while the pencil
+   writes. Thin to duotone draw it in one <polyline> that starts at the far
+   end (216, 216), so it is drawn backwards from its end; bold has it as a
+   <line> of its own, starting at the tip. */
+#{_parts('pencil-line')} > polyline {
+  --_icon-anim-dash-from: -1;
+  @include _part(iconAnimPartDraw, 1s, $_ease-in-out, null, backwards);
+}
+#{_parts('pencil-line')} > line[y1="216"][y2="216"] {
+  @include _part(iconAnimPartDraw, 1s, $_ease-in-out, null, backwards);
+}
+/* Signature: the signature writes itself above the line (the <path> with
+   a stroke); the duotone fills come in once it is written. */
+#{_parts('signature')} {
+  --_icon-anim-name: none;
+}
+#{_parts('signature')} > path[data-part] {
+  @include _part(iconAnimPartDraw, 1.2s, $_ease-in-out, null, backwards);
+}
+#{_parts('signature')} > [data-layer] {
+  @include _part(iconAnimLayerFade, 0.4s, $_ease, 0.9s, backwards);
 }
 
 #{_preset('cloud', 'cloud-arrow-up', 'cloud-check')} {
@@ -711,12 +801,16 @@ $_kids: ':is([data-part], [data-layer])';
   85% { transform: rotate(4deg); }
 }
 
+/* Writing a word: down-up strokes drifting right, then the hand goes back. */
 @keyframes iconAnimWrite {
   0%, 100% { transform: translate(0, 0) rotate(0); }
-  20% { transform: translate(-6%, 4%) rotate(-8deg); }
-  40% { transform: translate(4%, -2%) rotate(4deg); }
-  60% { transform: translate(-4%, 4%) rotate(-6deg); }
-  80% { transform: translate(2%, 0) rotate(2deg); }
+  10% { transform: translate(-5%, 3%) rotate(-3deg); }
+  20% { transform: translate(-3%, -2%) rotate(1deg); }
+  30% { transform: translate(-1%, 3%) rotate(-3deg); }
+  40% { transform: translate(1%, -2%) rotate(1deg); }
+  50% { transform: translate(3%, 3%) rotate(-3deg); }
+  60% { transform: translate(5%, -2%) rotate(1deg); }
+  80% { transform: translate(2%, -1%) rotate(0); }
 }
 
 @keyframes iconAnimDrift {
@@ -769,9 +863,10 @@ $_kids: ':is([data-part], [data-layer])';
 /* pathLength="1" (set by the JS) makes "1" the full length of any stroke.
    The dash pattern lives in the keyframes, not in the rule, so the stroke is
    back to a plain line as soon as the animation is over. Opacity hides the
-   round cap dot some engines paint at zero length. */
+   round cap dot some engines paint at zero length. --_icon-anim-dash-from:
+   -1 draws the stroke from its end instead of its start. */
 @keyframes iconAnimPartDraw {
-  0% { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
+  0% { stroke-dasharray: 1 1; stroke-dashoffset: var(--_icon-anim-dash-from, 1); opacity: 0; }
   8% { opacity: 1; }
   100% { stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 1; }
 }
@@ -792,6 +887,64 @@ $_kids: ':is([data-part], [data-layer])';
 
 @keyframes iconAnimPartAppear {
   from { opacity: 0; transform: scale(0.4); }
+}
+
+/* Kick back and settle, like a popper firing: fast out, slower home. */
+@keyframes iconAnimPartRecoil {
+  0%, 70%, 100% { transform: translate(0, 0); }
+  12% { transform: translate(var(--_icon-anim-x, -10px), var(--_icon-anim-y, 10px)); }
+  40% {
+    transform: translate(
+      calc(var(--_icon-anim-x, -10px) * -0.3),
+      calc(var(--_icon-anim-y, 10px) * -0.3)
+    );
+  }
+}
+
+/* Shot in from --_icon-anim-x/-y, overshoots a little, lands in place. */
+@keyframes iconAnimPartBurst {
+  0% {
+    opacity: 0;
+    transform: translate(var(--_icon-anim-x, 0px), var(--_icon-anim-y, 0px)) scale(0.3);
+  }
+  20% { opacity: 1; }
+  65% {
+    transform: translate(
+      calc(var(--_icon-anim-x, 0px) * -0.12),
+      calc(var(--_icon-anim-y, 0px) * -0.12)
+    ) scale(1.15);
+  }
+  100% { opacity: 1; transform: translate(0, 0) scale(1); }
+}
+
+/* A signal going out: grows from its origin and fades, twice. */
+@keyframes iconAnimPartWave {
+  0% { opacity: 0; transform: scale(0.5); }
+  20% { opacity: 1; transform: scale(1); }
+  40% { opacity: 0; transform: scale(1.1); }
+  41% { opacity: 0; transform: scale(0.5); }
+  60%, 100% { opacity: 1; transform: scale(1); }
+}
+
+/* The writing hand of iconAnimWrite, in px of the 256 grid, for a pencil
+   that is only a part of the icon. Translate only: the pencil is made of
+   several parts with their own boxes, a rotation would pull them apart. */
+@keyframes iconAnimPartWrite {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-12px, 8px); }
+  20% { transform: translate(-7px, -5px); }
+  30% { transform: translate(-2px, 8px); }
+  40% { transform: translate(3px, -5px); }
+  50% { transform: translate(8px, 8px); }
+  60% { transform: translate(13px, -5px); }
+  80% { transform: translate(5px, -2px); }
+}
+
+/* Goes out fast, comes back slowly: staggered round a circle of ticks, the
+   gap runs round with a fading tail. */
+@keyframes iconAnimPartBlink {
+  0%, 55%, 100% { opacity: 1; }
+  10% { opacity: 0.12; }
 }
 
 /* No "to": ends at the element's own opacity (0.2 on a duotone layer). */

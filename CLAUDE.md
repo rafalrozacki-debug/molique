@@ -213,4 +213,17 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   Sprite generujesz z tego samego `raw/`: `MOLIQUE_PHOSPHOR_DIR=<raw>`
   (wynik jest bajt w bajt zgodny z dotychczasowym). Testy w prawdziwej
   przeglądarce: `npm run test:icon-anim` (Playwright spoza repo, bez niego
-  SKIP). `npm run test:css` łapie też nazwy keyframes w `--*-anim-name`.
+  SKIP). `npm run test:css` łapie też nazwy keyframes w `--*-anim-name`
+  i (od v1.7.39) w `--*-anim-part-name`.
+- **`icon-anim`: części wybieraj po typie i kształcie, gdy kolejność się
+  różni** (v1.7.39): `> polyline`, `> line:nth-of-type(2)`, zamknięta
+  ścieżka `[d$="Z"]`, a w ostateczności atrybut geometrii
+  (`line[y1="216"][y2="216"]`) - JS kopiuje atrybuty bez zmian. Dwie
+  pułapki: wspólna reguła z `:is(a, b)` waży tyle, co jej NAJCIĘŻSZY
+  argument, więc przebija reguły pojedynczych części (`line:nth-of-type(2)`)
+  - wspólna reguła nie może ustawiać tego, co nadpisują one. W teście NIE
+  czytaj `effect.getTiming().easing`: dla animacji CSS zawsze zwraca
+  `linear` (funkcja czasu siedzi w keyframes) - bierz
+  `getComputedStyle(el).animationTimingFunction`. Sprawdzaj wszystko
+  kontrolą ujemną na CSS sprzed zmiany - ten drugi błąd wyszedł tylko
+  dzięki niej.

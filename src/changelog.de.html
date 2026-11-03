@@ -48,6 +48,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.39 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.39</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  Animierte Icons: der Spinner dreht sich endlich, neue Bewegungen für Konfetti, Heartbeat, Telefon und Stifte
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Korrekturen und Vorschläge aus den ersten Tagen des Moduls <code>icon-anim</code>. Die wichtigste: Das Preset <code>spinner</code> zeigte in v1.7.38 keine sichtbare Bewegung.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Spinner.</strong> Acht gleiche Striche im Abstand von 45° drehten sich in 45°-Schritten, jeder Schritt ergab also dasselbe Bild. Jetzt erlöschen die Striche nacheinander und kehren zurück, und ein abgedunkelter Strich mit Schweif läuft im Kreis. Kann das JS das Icon nicht in Teile zerlegen (Webfont, flaches SVG), dreht sich der Spinner gleichmäßig.</li>
+                  <li><strong>Konfetti schießt.</strong> Der Kegel federt zurück, und vier Stücke fliegen aus der Öffnung an ihren Platz. <strong>Heartbeat</strong> schlägt und zeichnet die EKG-Linie. <strong>Phone-call</strong> klingelt, und die Signalbögen pulsieren zweimal, der innere zuerst.</li>
+                  <li><strong>Stifte schreiben.</strong> Bei <code>note-pencil</code> schreibt nur der Stift, das Blatt bleibt stehen. <code>pencil</code>, <code>pencil-simple</code> und <code>pen</code> machen statt des Wackelns eine Schreibbewegung nach rechts, bei <code>pencil-line</code> läuft die Linie unter der Spitze heraus, und <code>signature</code> unterschreibt von selbst.</li>
+                  <li><strong>Jede Strichstärke.</strong> Bold ordnet die Elemente mancher Icons anders an, daher wählen die neuen Presets Teile nach Typ und Form (der geschlossene Pfad, die <code>polyline</code>, die n-te <code>line</code>) statt nach Nummer. Geprüft an den Phosphor-Quelldateien in thin, light, regular, bold und duotone.</li>
+                  <li><strong>PurgeCSS.</strong> Die Safelist schützte nur die Animationen des ganzen Icons. Die Animationen der Teile (<code>iconAnimPart*</code>) werden über <code>--_icon-anim-part-name</code> benannt, mit <code>keyframes: true</code> entfernte PurgeCSS also alle, und die Teile standen still. Jetzt deckt die Safelist alle 40 Animationen des Moduls ab, und <code>npm run test:css</code> prüft auch die Namen der Teil-Animationen.</li>
+                  <li><strong>Beispiele.</strong> Der Status „Bauabnahme bestätigt“ zeichnete sein Häkchen einmal, während des Scrollens, und wirkte dadurch tot. Jetzt zeichnet er es beim Hereinscrollen und wiederholt es alle 2,5 s. Das Modul wiegt 32 KB minifiziert, etwa 3,8 KB gzip.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.38 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

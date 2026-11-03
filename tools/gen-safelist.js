@@ -26,6 +26,12 @@ for (const m of cssText.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)) cssClasses.add(m[1])
 
 const keyframesDefined = [...new Set([...cssText.matchAll(/@keyframes\s+([\w-]+)/g)].map((m) => m[1]))];
 
+// The keyframes checks below look for "animation ... name" with no ; or }
+// in between - a comment saying "...the animation is over. */" right above
+// "@keyframes iconAnimPartDraw" passed for a real reference and dropped that
+// keyframes from the safelist. They run on the code without comments.
+const cssCode = cssText.replace(/\/\*[\s\S]*?\*\//g, '');
+
 /* ---------- 2. JS sources ---------- */
 
 function walkJs(dir) {
@@ -61,17 +67,19 @@ for (const m of jsText.matchAll(/['"]([a-zA-Z][\w]*-[\w-]+)['"]/g)) addIfReal(m[
 
 // e) keyframes used ONLY from JS (no CSS rule references them)
 const keyframesOnlyJs = keyframesDefined.filter(
-  (k) => jsText.includes(k) && !new RegExp(`animation[^;}]*\\b${k}\\b`).test(cssText)
+  (k) => jsText.includes(k) && !new RegExp(`animation[^;}]*\\b${k}\\b`).test(cssCode)
 );
 
-// f) keyframes named only in a custom property (--*-anim-name: x) that a
-//    shared rule reads with animation-name: var(...) - the icon-anim module
-//    works this way. PurgeCSS sees no animation declaration naming them, so
-//    keyframes:true would strip every one of them.
+// f) keyframes named only in a custom property (--*-anim-name: x, and the
+//    per-part --*-anim-part-name: x) that a shared rule reads with
+//    animation-name: var(...) - the icon-anim module works this way.
+//    PurgeCSS sees no animation declaration naming them, so keyframes:true
+//    would strip every one of them. Up to 1.7.38 the pattern missed the
+//    -part- names, so every iconAnimPart* keyframes went unprotected.
 const keyframesViaVar = keyframesDefined.filter(
   (k) =>
-    new RegExp(`--[\\w-]*?anim(?:ation)?-name\\s*:\\s*${k}\\b`).test(cssText) &&
-    !new RegExp(`animation[^;}]*\\b${k}\\b`).test(cssText)
+    new RegExp(`--[\\w-]*?anim(?:ation)?(?:-part)?-name\\s*:\\s*${k}\\b`).test(cssCode) &&
+    !new RegExp(`animation[^;}]*\\b${k}\\b`).test(cssCode)
 );
 const keyframesSafe = [...new Set([...keyframesOnlyJs, ...keyframesViaVar])].sort();
 

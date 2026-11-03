@@ -47,6 +47,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.39 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.39</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Animowane ikony: spinner wreszcie się kręci, nowe ruchy confetti, Heartbeat, telefonu i ołówków
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Poprawki i propozycje z pierwszych dni modułu <code>icon-anim</code>. Najważniejsza: preset <code>spinner</code> w v1.7.38 nie dawał żadnego widocznego ruchu.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Spinner.</strong> Osiem jednakowych kresek co 45° obracało się skokami co 45°, więc każdy krok dawał ten sam obraz. Teraz kreski po kolei gasną i wracają, a po okręgu biegnie przygaszona kreska z ogonem. Gdy JS nie rozwinie części (font, spłaszczony SVG), spinner obraca się płynnie.</li>
+                  <li><strong>Confetti wystrzeliwuje.</strong> Rożek odskakuje do tyłu, a cztery kawałki wylatują z wylotu na swoje miejsca. <strong>Heartbeat</strong> bije i rysuje linię EKG. <strong>Phone-call</strong> dzwoni, a fale zasięgu pulsują dwa razy, od wewnętrznej.</li>
+                  <li><strong>Ołówki piszą.</strong> W <code>note-pencil</code> pisze sam ołówek, a kartka stoi. <code>pencil</code>, <code>pencil-simple</code> i <code>pen</code> zamiast kołysania robią ruch pisania w prawo, z <code>pencil-line</code> wychodzi linia spod grafitu, a <code>signature</code> sam się podpisuje.</li>
+                  <li><strong>Każda grubość.</strong> Bold układa elementy niektórych ikon w innej kolejności, więc nowe presety wybierają części po typie i kształcie (zamknięta ścieżka, <code>polyline</code>, kolejne <code>line</code>), nie po numerze. Sprawdzone na plikach źródłowych Phosphor w grubościach thin, light, regular, bold i duotone.</li>
+                  <li><strong>PurgeCSS.</strong> Safelista chroniła tylko animacje całej ikony. Animacje części (<code>iconAnimPart*</code>) wskazuje zmienna <code>--_icon-anim-part-name</code>, więc przy <code>keyframes: true</code> PurgeCSS usuwał je wszystkie i części stały w miejscu. Teraz safelista obejmuje wszystkie 40 animacji modułu, a <code>npm run test:css</code> sprawdza także nazwy animacji części.</li>
+                  <li><strong>Przykłady.</strong> Status „Odbiór techniczny zatwierdzony” rysował ptaszek raz, w trakcie przewijania, więc wyglądał na martwy. Teraz rysuje go przy wjeździe w widok i powtarza co 2,5 s. Moduł waży 32 KB po minifikacji, około 3,8 KB gzip.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.38 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

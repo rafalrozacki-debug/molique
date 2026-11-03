@@ -607,6 +607,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   się tylko jako całość. Sprite musi być z tej samej domeny. Stany
   `.is-tapped`/`.is-in-view`/`.is-offscreen` nadaje JS. Ikony: Phosphor
   Icons, Helena Zhang i Tobias Fried, MIT - zachowaj informację o autorach.
+  PurgeCSS z `keyframes: true` wymaga 1.7.39+ - safelista 1.7.38 nie
+  chroniła animacji części (`iconAnimPart*`).
 - **Przycisk magnetyczny:** `.btn-magnetic` - zero CSS, cały efekt to
   inline `transform` z JS na `mousemove`. Aktywny tylko przy
   `(pointer: fine)` (nie na dotyku).
