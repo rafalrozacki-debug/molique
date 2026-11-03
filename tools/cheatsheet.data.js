@@ -376,6 +376,54 @@ export const CATEGORIES = [
         tags: ['icon'],
       },
       {
+        id: 'icon-anim',
+        classes: [['.icon-anim']],
+        desc: {
+          pl: 'Animowana ikona Phosphor (moduł opcjonalny: <code>molique-style-icon-anim.css</code>, JS dociąga autoloader). Na <code>&lt;svg&gt;</code> z <code>&lt;use&gt;</code>, na wklejonym SVG albo na <code>&lt;i class="ph ph-…"&gt;</code>. Sama nic nie robi, czeka na wyzwalacz. Ponad sto ikon ma własną animację części (pokrywa kosza, pałąk kłódki), reszta pulsuje. Inną animację wybiera <code>data-icon-anim="wiggle|ring|draw|…"</code>. Ikony: Phosphor Icons, Helena Zhang i Tobias Fried, MIT.',
+          en: 'An animated Phosphor icon (opt-in module: <code>molique-style-icon-anim.css</code>, the autoloader pulls in the JS). On an <code>&lt;svg&gt;</code> with <code>&lt;use&gt;</code>, on a pasted SVG or on <code>&lt;i class="ph ph-…"&gt;</code>. Does nothing by itself, it waits for a trigger. More than a hundred icons move their own parts (the lid of the bin, the shackle of the padlock), the rest pop. <code>data-icon-anim="wiggle|ring|draw|…"</code> picks another animation. Icons: Phosphor Icons by Helena Zhang and Tobias Fried, MIT.',
+          de: 'Ein animiertes Phosphor-Icon (optionales Modul: <code>molique-style-icon-anim.css</code>, das JS lädt der Autoloader). Auf einem <code>&lt;svg&gt;</code> mit <code>&lt;use&gt;</code>, einem eingefügten SVG oder auf <code>&lt;i class="ph ph-…"&gt;</code>. Tut allein nichts, wartet auf einen Auslöser. Über hundert Icons bewegen eigene Teile (Deckel des Mülleimers, Bügel des Schlosses), der Rest pulsiert. <code>data-icon-anim="wiggle|ring|draw|…"</code> wählt eine andere Animation. Icons: Phosphor Icons von Helena Zhang und Tobias Fried, MIT.',
+        },
+        demo: '-',
+        tags: ['icon', 'animation'],
+        source: 'docs-icon-anim',
+      },
+      {
+        id: 'icon-anim-triggers',
+        classes: [['.icon-anim-hover', '.icon-anim-tap', '.icon-anim-view', '.icon-anim-play']],
+        desc: {
+          pl: 'Wyzwalacze animacji ikony: najechanie i fokus z klawiatury / naciśnięcie (gra do końca) / wjazd w widok / od razu, póki klasa jest. Działają na samej <code>.icon-anim</code> albo na dowolnym przodku, więc <code>&lt;button class="btn-primary icon-anim-hover"&gt;</code> rusza ikoną w środku przy najechaniu na cały przycisk. Hover tylko na urządzeniach z kursorem, na telefon dodaj <code>.icon-anim-tap</code>.',
+          en: 'Icon animation triggers: hover and keyboard focus / press (plays to the end) / scrolled into view / right away, while the class is on. They work on the <code>.icon-anim</code> itself or on any ancestor, so <code>&lt;button class="btn-primary icon-anim-hover"&gt;</code> moves the icon inside when the whole button is hovered. Hover only on devices with a pointer - for phones add <code>.icon-anim-tap</code>.',
+          de: 'Auslöser der Icon-Animation: Hover und Tastaturfokus / Drücken (spielt bis zum Ende) / Hereinscrollen / sofort, solange die Klasse da ist. Sie wirken auf dem <code>.icon-anim</code> selbst oder auf jedem Vorfahren, also bewegt <code>&lt;button class="btn-primary icon-anim-hover"&gt;</code> das Icon darin beim Hover über den ganzen Button. Hover nur auf Geräten mit Zeiger - für Smartphones ergänze <code>.icon-anim-tap</code>.',
+        },
+        demo: '-',
+        tags: ['icon', 'animation'],
+        source: 'docs-icon-anim',
+      },
+      {
+        id: 'icon-anim-modifiers',
+        classes: [['.icon-anim-loop', '.icon-anim-persist', '.icon-anim-fast', '.icon-anim-slow']],
+        desc: {
+          pl: 'Modyfikatory animacji ikony: pętla (z <code>data-icon-anim-loop-delay="ms"</code> dostaje przerwę między okrążeniami) / zostaw ostatnią klatkę / dwa razy szybciej / dwa razy wolniej. To zmienne CSS (<code>--icon-anim-iterations</code>, <code>--icon-anim-fill</code>, <code>--icon-anim-speed</code>, obok nich <code>--icon-anim-delay</code>), więc dziedziczą się: klasa na pasku narzędzi działa na każdą ikonę w środku.',
+          en: 'Icon animation modifiers: loop (with <code>data-icon-anim-loop-delay="ms"</code> it pauses between laps) / keep the last frame / twice as fast / twice as slow. They are CSS custom properties (<code>--icon-anim-iterations</code>, <code>--icon-anim-fill</code>, <code>--icon-anim-speed</code>, plus <code>--icon-anim-delay</code>), so they inherit: the class on a toolbar applies to every icon inside.',
+          de: 'Modifikatoren der Icon-Animation: Schleife (mit <code>data-icon-anim-loop-delay="ms"</code> mit Pause zwischen den Runden) / letztes Bild behalten / doppelt so schnell / halb so schnell. Es sind CSS-Variablen (<code>--icon-anim-iterations</code>, <code>--icon-anim-fill</code>, <code>--icon-anim-speed</code>, dazu <code>--icon-anim-delay</code>), sie vererben sich also: die Klasse auf einer Werkzeugleiste gilt für jedes Icon darin.',
+        },
+        demo: '-',
+        tags: ['icon', 'animation'],
+        source: 'docs-icon-anim',
+      },
+      {
+        id: 'icon-anim-states',
+        classes: [['.is-tapped', '.is-in-view', '.is-offscreen']],
+        desc: {
+          pl: 'Stany nadawane przez <code>molique-icon-anim.js</code>, nie wpisujesz ich sam: <code>.is-tapped</code> na <code>.icon-anim-tap</code> do końca animacji, <code>.is-in-view</code> na <code>.icon-anim-view</code> po wjeździe w widok, <code>.is-offscreen</code> na zapętlonej ikonie poza ekranem (pauzuje ją).',
+          en: 'States set by <code>molique-icon-anim.js</code> - you do not write them yourself: <code>.is-tapped</code> on <code>.icon-anim-tap</code> until the animation ends, <code>.is-in-view</code> on <code>.icon-anim-view</code> once it scrolls in, <code>.is-offscreen</code> on a looping icon outside the viewport (pauses it).',
+          de: 'Zustände, die <code>molique-icon-anim.js</code> setzt - du schreibst sie nicht selbst: <code>.is-tapped</code> auf <code>.icon-anim-tap</code> bis zum Ende der Animation, <code>.is-in-view</code> auf <code>.icon-anim-view</code> nach dem Hereinscrollen, <code>.is-offscreen</code> auf einem Icon in Schleife außerhalb des Bildschirms (pausiert es).',
+        },
+        demo: '-',
+        tags: ['icon', 'state'],
+        source: 'docs-icon-anim',
+      },
+      {
         id: 'is-state',
         classes: [['.is-active', '.is-open', '.is-visible', '.is-selected', '.is-completed'], ['.is-animated', '.is-copied', '.is-disabled', '.is-dragging', '.is-featured', '.is-success', '.js-resetting']],
         desc: {

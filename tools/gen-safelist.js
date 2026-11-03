@@ -64,6 +64,17 @@ const keyframesOnlyJs = keyframesDefined.filter(
   (k) => jsText.includes(k) && !new RegExp(`animation[^;}]*\\b${k}\\b`).test(cssText)
 );
 
+// f) keyframes named only in a custom property (--*-anim-name: x) that a
+//    shared rule reads with animation-name: var(...) - the icon-anim module
+//    works this way. PurgeCSS sees no animation declaration naming them, so
+//    keyframes:true would strip every one of them.
+const keyframesViaVar = keyframesDefined.filter(
+  (k) =>
+    new RegExp(`--[\\w-]*?anim(?:ation)?-name\\s*:\\s*${k}\\b`).test(cssText) &&
+    !new RegExp(`animation[^;}]*\\b${k}\\b`).test(cssText)
+);
+const keyframesSafe = [...new Set([...keyframesOnlyJs, ...keyframesViaVar])].sort();
+
 // State classes (.is-*) are covered by the pattern, so we don't duplicate them literally.
 const standard = [...found].filter((c) => !c.startsWith('is-')).sort();
 const isStateCount = [...cssClasses].filter((c) => c.startsWith('is-')).length;
@@ -107,10 +118,11 @@ ${list(standard)}
   // .step.is-completed).
   // Covers ${isStateCount} .is-* classes in the CSS.
   greedy: [/^is-/],
-  // Animation triggered from an inline style in JS - no CSS rule
-  // references it, so the keyframes:true option would remove it.
+  // Animations no CSS animation declaration names directly - triggered from
+  // an inline style in JS, or named through a custom property and read with
+  // animation-name: var(...) - so the keyframes:true option would remove them.
   keyframes: [
-${list(keyframesOnlyJs)}
+${list(keyframesSafe)}
   ],
 };
 
@@ -155,5 +167,5 @@ fs.writeFileSync(path.join(root, 'purgecss.safelist.cjs'), out);
 console.log('purgecss.safelist.cjs written');
 console.log('  Tier 1 standard : ' + standard.length + ' classes');
 console.log('  Tier 1 greedy   : /^is-/ (covers ' + isStateCount + ' classes)');
-console.log('  Tier 1 keyframes: ' + (keyframesOnlyJs.join(', ') || '(none)'));
+console.log('  Tier 1 keyframes: ' + (keyframesSafe.join(', ') || '(none)'));
 console.log('  Tier 2 groups   : 4 (colors, grid, spacing, status)');

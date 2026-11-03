@@ -257,6 +257,22 @@ export const COMPONENT = {
   '--t-bottom':         ['Animacje', 'internal', 'Postęp rysowania dolnej krawędzi.'],
   '--t-left':           ['Animacje', 'internal', 'Postęp rysowania lewej krawędzi - domyka obrys.'],
   '--trace-angle':      ['Animacje', 'internal', 'Kąt gradientu stożkowego w <code>.hover-border-spin</code>. Animowany dzięki rejestracji w <code>@property</code>.'],
+  '--icon-anim-speed':      ['Animowane ikony', 'api', 'Mnożnik tempa animacji ikony, domyślnie <code>1</code> (<code>2</code> = dwa razy szybciej). Dziedziczy się, więc działa na ikonie i na przodku. Skróty: <code>.icon-anim-fast</code>, <code>.icon-anim-slow</code>.'],
+  '--icon-anim-iterations': ['Animowane ikony', 'api', 'Liczba okrążeń animacji ikony, domyślnie <code>1</code>. <code>.icon-anim-loop</code> ustawia <code>infinite</code>.'],
+  '--icon-anim-fill':       ['Animowane ikony', 'api', '<code>animation-fill-mode</code> ikony, domyślnie <code>none</code> (wraca do spoczynku). <code>.icon-anim-persist</code> ustawia <code>forwards</code>.'],
+  '--_icon-anim-name':      ['Animowane ikony', 'internal', 'Keyframes całej ikony. Ustawiają je presety i <code>data-icon-anim</code>; czyta jedna reguła wyzwalaczy. Dzięki temu długa lista wyzwalaczy nie powtarza się w każdym presecie.'],
+  '--_icon-anim-duration':  ['Animowane ikony', 'internal', 'Czas trwania animacji całej ikony przed podzieleniem przez <code>--icon-anim-speed</code>.'],
+  '--_icon-anim-easing':    ['Animowane ikony', 'internal', 'Krzywa animacji całej ikony.'],
+  '--_icon-anim-part-name': ['Animowane ikony', 'internal', 'Keyframes jednej części ikony (<code>[data-part]</code>, <code>[data-layer]</code>). Osobna zmienna od tej dla całej ikony, żeby część nie odziedziczyła animacji rodzica.'],
+  '--_icon-anim-part-duration': ['Animowane ikony', 'internal', 'Czas trwania animacji części.'],
+  '--_icon-anim-part-easing': ['Animowane ikony', 'internal', 'Krzywa animacji części.'],
+  '--_icon-anim-part-stagger': ['Animowane ikony', 'internal', 'Dodatkowe opóźnienie części, np. przy rysowaniu kresek po kolei. Dzielone przez <code>--icon-anim-speed</code>.'],
+  '--_icon-anim-part-fill': ['Animowane ikony', 'internal', 'Fill-mode części. Rysowanie ustawia <code>backwards</code>, żeby kreska była ukryta, zanim przyjdzie jej kolej.'],
+  '--_icon-anim-x':         ['Animowane ikony', 'internal', 'Przesunięcie w poziomie dla <code>iconAnimNudge</code> / <code>iconAnimPartShift</code> (procent pudełka ikony albo jednostki siatki 256).'],
+  '--_icon-anim-y':         ['Animowane ikony', 'internal', 'Przesunięcie w pionie, jak wyżej.'],
+  '--_icon-anim-r':         ['Animowane ikony', 'internal', 'Kąt uniesienia części w <code>iconAnimPartLift</code> (pokrywa kosza).'],
+  '--_icon-anim-turn':      ['Animowane ikony', 'internal', 'Kąt obrotu w <code>iconAnimTurn</code>, dobrany do symetrii kształtu (90deg dla x i słońca, 180deg dla klepsydry).'],
+  '--_icon-anim-opacity':   ['Animowane ikony', 'internal', 'Docelowe krycie w <code>draw-loop</code>: 1 dla kropek, 0.2 dla tła duotone.'],
 };
 
 /* ---------- Pure inputs from markup ----------
@@ -277,5 +293,7 @@ export const INPUT = {
   '--footer-accent':         ['Nawigacja', 'Kolor akcentu w stopce (linki po najechaniu, obwódka focusa, wyróżnienie w logo). Domyślnie <code>#8B84FF</code>. Stopka jest zawsze ciemna, więc dobierz odcień o kontraście min. 4,5:1 na <code>--bg-dark-fixed</code> - kolor marki z trybu jasnego zwykle go nie osiąga.'],
   '--footer-accent-hover':   ['Nawigacja', 'Jaśniejszy wariant <code>--footer-accent</code> dla stanu hover przycisku „więcej” w stopce.'],
   '--tooltip-max-width':     ['Tooltips', 'Szerokość, przy której zawija się tekst dymku <code>.tooltip-element</code> (od 1.7.34 każdego, nie tylko <code>-wide</code>) i <code>.tooltip-popover</code>, domyślnie 280px. Ogranicznik <code>min(…, 100vw - 2rem)</code> zostaje, więc szerszy dymek nie wyjdzie poza wąski ekran. Ustaw na <code>:root</code> albo przez <code>style=""</code>: przy <code>.tooltip-element</code> na wyzwalaczu, przy <code>.tooltip-popover</code> na samym dymku (dziedziczy po swoim miejscu w drzewie, nie po wyzwalaczu).'],
+  '--icon-anim-delay':       ['Animowane ikony', 'Opóźnienie startu animacji ikony, domyślnie <code>0s</code>. Dziedziczy się: ustaw na ikonie albo na przodku.'],
+  '--icon-part':             ['Animowane ikony', 'Numer części ikony od zera. Ustawia go <code>molique-icon-anim.js</code> przy rozwijaniu ikony, CSS używa go do rozłożenia w czasie rysowania kresek.'],
   '--form-check-size':       ['Formularze', 'Bok checkboxa i radia (<code>.form-check-input</code>), domyślnie <code>1.5rem</code> = 24px. Kontrolka jest świadomie wyłączona z reguły 44px, ale 24px to minimum wymagane przez audyt Lighthouse - zmniejszaj tylko świadomie.'],
 };

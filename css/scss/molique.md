@@ -587,6 +587,26 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `--position`) + `.slider-control` (niewidoczny `input[range]`, realny
   sterownik) + `.slider-line`/`.slider-handle` (wizualne). Oba zdjęcia
   powinny mieć te same proporcje, inaczej `.img-before` się rozciąga.
+- **Animowane ikony Phosphor (moduł opcjonalny):** wymaga
+  `css/molique-style-icon-anim.css`; JS (`molique-icon-anim.js`) dociąga
+  autoloader. `.icon-anim` na ikonie: `<svg class="icon icon-anim"><use
+  href="img/icons-sprite.svg#ph-bell"></use></svg>`, wklejony SVG z
+  `data-icon="bell"` albo font `<i class="ph ph-bell icon-anim">`.
+  Wyzwalacz na ikonie LUB na przodku (przycisk, karta, link):
+  `.icon-anim-hover` (hover tylko z kursorem + fokus z klawiatury; na
+  telefon dodaj `.icon-anim-tap`), `.icon-anim-tap` (gra do końca),
+  `.icon-anim-view` (wjazd w widok, `data-icon-anim-once="false"` =
+  za każdym razem), `.icon-anim-play` (póki klasa jest). Modyfikatory
+  dziedziczą się: `.icon-anim-loop` (+ `data-icon-anim-loop-delay="ms"`),
+  `.icon-anim-persist`, `.icon-anim-fast`/`-slow`, `--icon-anim-speed`,
+  `--icon-anim-delay`. Ponad 100 ikon ma własny preset (rusza częściami),
+  inne pulsują; inna animacja: `data-icon-anim="wiggle|ring|shake|bounce|
+  beat|tada|spin|float|flip|blink|flash|drop|nudge-*|draw|draw-loop|pop"`.
+  Części tylko w ikonach kreskowych (sprite molique, `raw/` z
+  phosphor-icons/core); spłaszczone SVG z npm, font i grubość fill ruszają
+  się tylko jako całość. Sprite musi być z tej samej domeny. Stany
+  `.is-tapped`/`.is-in-view`/`.is-offscreen` nadaje JS. Ikony: Phosphor
+  Icons, Helena Zhang i Tobias Fried, MIT - zachowaj informację o autorach.
 - **Przycisk magnetyczny:** `.btn-magnetic` - zero CSS, cały efekt to
   inline `transform` z JS na `mousemove`. Aktywny tylko przy
   `(pointer: fine)` (nie na dotyku).

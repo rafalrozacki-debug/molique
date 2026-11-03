@@ -45,7 +45,8 @@ if (Test-Path $stage) { Remove-Item -Recurse -Force $stage }
 
 $bundles = @(
   'molique-style','molique-style-admin','molique-style-shop','molique-style-blog',
-  'molique-style-docs','molique-style-before-after','molique-style-share','molique-style-speed-dial'
+  'molique-style-docs','molique-style-before-after','molique-style-share','molique-style-speed-dial',
+  'molique-style-icon-anim'
 )
 
 Write-Host "1/4  Minifikacja bundli (sass --style=compressed)..."

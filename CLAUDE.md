@@ -201,3 +201,16 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   gdy tor może zawierać cokolwiek o nieprzewidywalnej szerokości
   wewnętrznej (tabela, długa etykieta, pigułka zakładek). Naprawione w
   `.admin-layout` (v1.7.13) i `.tabs-pill` - sprawdź oba jako wzorzec.
+- **Moduł `icon-anim` (od v1.7.38): presety ustawiają TYLKO zmienne.**
+  `--_icon-anim-name`/`-duration`/`-easing` (cała ikona) i
+  `--_icon-anim-part-*` (części) czytają dwie reguły wyzwalaczy na końcu
+  `_icon-anim.scss`. Nie wpisuj `animation-*` do presetu - wersja z
+  wyzwalaczami w każdej regule ważyła 120 KB po minifikacji. Nowa ikona =
+  jedna krótka reguła; numer części (`data-part`) sprawdź w źródle `raw/`
+  phosphor-icons/core we WSZYSTKICH grubościach thin/light/regular/bold/
+  duotone - jeśli kolejność elementów się różni (info, hammer, chat-dots w
+  bold), wybieraj po typie elementu (`> circle`, `> line`), nie po numerze.
+  Sprite generujesz z tego samego `raw/`: `MOLIQUE_PHOSPHOR_DIR=<raw>`
+  (wynik jest bajt w bajt zgodny z dotychczasowym). Testy w prawdziwej
+  przeglądarce: `npm run test:icon-anim` (Playwright spoza repo, bez niego
+  SKIP). `npm run test:css` łapie też nazwy keyframes w `--*-anim-name`.

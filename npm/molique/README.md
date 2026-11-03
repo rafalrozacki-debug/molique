@@ -43,7 +43,7 @@ supply your own (e.g. via `@fontsource/poppins`) or point the `@font-face`
 | `css/molique-style-shop.css` | E-commerce module. Optional. |
 | `css/molique-style-blog.css` | Blog module. Optional. |
 | `css/molique-style-docs.css` | Docs chrome + theme editor. Optional. |
-| `css/molique-style-admin/-shop/-blog/-docs/-before-after/-share/-speed-dial.css` | Opt-in modules, each its own file - include only what you use. |
+| `css/molique-style-admin/-shop/-blog/-docs/-before-after/-share/-speed-dial/-icon-anim.css` | Opt-in modules, each its own file - include only what you use. |
 | `js/molique-script.js` | JS core + smart module autoloader. **Not an ES module** - load it via a plain `<script defer>` tag, don't `import`/bundle it (it relies on `document.currentScript` to locate `js/modules/`). |
 | `js/modules/*.js` | Micro-modules loaded at runtime (carousel, lightbox, select, theme editor, …). |
 | `img/flags/` | SVG flags for the language-switch component. |
@@ -53,7 +53,7 @@ supply your own (e.g. via `@fontsource/poppins`) or point the `@font-face`
 ## Optional modules (CSS)
 
 Include only the ones you use - each is its own `css/molique-style-*.css`
-file (admin, shop, blog, docs, before-after, share, speed-dial).
+file (admin, shop, blog, docs, before-after, share, speed-dial, icon-anim).
 
 ## molique-jit (optional)
 

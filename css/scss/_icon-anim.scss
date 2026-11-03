@@ -1,0 +1,800 @@
+/**
+ * molique - Animated Phosphor icons (opt-in module)
+ * This file produces molique-style-icon-anim.css (entry point:
+ * molique-style-icon-anim.scss). The JS half is js/modules/molique-icon-anim.js,
+ * pulled in by the autoloader in molique-script.js when the page contains
+ * .icon-anim - never include it by hand.
+ *
+ * Icons: Phosphor Icons by Helena Zhang and Tobias Fried
+ * (https://phosphoricons.com, MIT License, (c) Phosphor Icons). This module
+ * ships no icon geometry of its own - it only moves the parts of the icons
+ * you already have.
+ *
+ * WHY PARTS NEED JS. An icon referenced through the sprite
+ * (<svg class="icon"><use href="img/icons-sprite.svg#ph-bell"></use></svg>)
+ * lives in a closed shadow tree - CSS can turn the whole <svg>, but cannot
+ * reach the clapper of the bell. The JS module replaces <use> with copies of
+ * the symbol's own elements, numbers them (data-part="1", "2"...) and sets
+ * pathLength="1" for drawing. Without JS the icon still animates as a whole
+ * (root animations below), so the page never depends on the script.
+ *
+ * WHY THE STROKE SOURCE. Phosphor publishes each weight twice: the raw
+ * stroke drawings (raw/ in phosphor-icons/core - the sprite of molique.dev is
+ * built from those) and flattened outlines (assets/ on npm, the web font).
+ * Only the raw ones have separate elements to move; a flattened icon is one
+ * <path>, so it gets the root animation and nothing more. Part numbering is
+ * the same in thin, light, regular, bold and duotone (checked against the
+ * source for every icon below; the duotone background layer is excluded from
+ * the count and marked data-layer instead). The fill weight has a different
+ * structure, so the JS marks it data-icon-parts="solid" and part rules skip it.
+ *
+ * API (mirrors the trigger/inheritance model of animated icon libraries):
+ *   .icon-anim               on the icon (<svg>, or Phosphor's <i class="ph ph-bell">)
+ *   .icon-anim-hover         trigger: pointer over (devices with hover) or keyboard focus
+ *   .icon-anim-tap           trigger: press - plays to the end (JS sets .is-tapped)
+ *   .icon-anim-view          trigger: scrolled into view (JS sets .is-in-view)
+ *   .icon-anim-play          trigger: animate now (toggle it yourself)
+ *   .icon-anim-loop          repeat; data-icon-anim-loop-delay="ms" adds a pause (JS)
+ *   .icon-anim-persist       keep the last frame when the animation ends
+ *   .icon-anim-fast / -slow  speed x2 / x0.5 (or set --icon-anim-speed yourself)
+ *   data-icon-anim="name"    pick an animation other than the icon's default
+ * A trigger class works on the icon itself OR on any ancestor (a button, a
+ * card, a menu link), so hovering the whole button animates its icon. The
+ * modifiers are custom properties, so they inherit the same way - put
+ * .icon-anim-loop on a toolbar and every icon in it loops. Tokens:
+ * --icon-anim-speed (1), --icon-anim-delay (0s), --icon-anim-iterations (1),
+ * --icon-anim-fill (none) - never set on .icon-anim itself, so an ancestor's
+ * value always reaches the icon.
+ *
+ * Every rule that moves anything sits inside
+ * @media (prefers-reduced-motion: no-preference): with reduced motion the
+ * icons stay still, nothing to override.
+ *
+ * NOTE: no own "@layer" in this file - the layer comes from the entry point.
+ */
+
+@use 'sass:list';
+
+$_ease: cubic-bezier(0.4, 0, 0.2, 1);
+$_ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+$_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+/* HOW IT IS WIRED. Presets and named animations below do not animate
+   anything - they only set private custom properties (which keyframes, how
+   long, which easing). The motion comes from two rules in section 4, the
+   only ones that carry the long list of triggers. Writing the triggers into
+   every preset made the file 120 KB minified; this way it is a fraction of
+   that, and adding an icon costs one short rule.
+   Root vars (--_icon-anim-*) are read on .icon-anim, part vars
+   (--_icon-anim-part-*) on its direct children - never the other way round,
+   so a root value inherited by a part cannot start the part. */
+
+/* The whole icon: works without JS, with <use> and with the web font. */
+@mixin _root($name, $duration, $easing: $_ease) {
+  --_icon-anim-name: #{$name};
+  --_icon-anim-duration: #{$duration};
+  --_icon-anim-easing: #{$easing};
+}
+
+/* One numbered part, after the JS has inlined the icon. */
+@mixin _part($name, $duration, $easing: $_ease, $stagger: null, $fill: null) {
+  --_icon-anim-part-name: #{$name};
+  --_icon-anim-part-duration: #{$duration};
+  --_icon-anim-part-easing: #{$easing};
+  @if $stagger {
+    --_icon-anim-part-stagger: #{$stagger};
+  }
+  @if $fill {
+    --_icon-anim-part-fill: #{$fill};
+  }
+}
+
+/* The default animation of the named icons (only when no data-icon-anim). */
+@function _preset($names...) {
+  $list: ();
+  @each $n in $names {
+    $list: list.append($list, '[data-icon="#{$n}"]', comma);
+  }
+  @return '.icon-anim:is(#{$list}):not([data-icon-anim])';
+}
+
+/* Same, but only once the JS has turned the icon into numbered parts.
+   A preset that moves only parts switches the root off HERE, so an icon
+   the JS could not inline still falls back to the pop. */
+@function _parts($names...) {
+  @return '#{_preset($names...)}[data-icon-parts="stroke"]';
+}
+
+@function _variant($name) {
+  @return '.icon-anim[data-icon-anim="#{$name}"]';
+}
+
+/* =========================================================================
+   1. BASE (no motion here)
+   ========================================================================= */
+
+/* <i class="ph ph-bell"> is inline - a transform needs an atomic box.
+   An <svg> is a replaced element and transforms as it is. */
+.icon-anim:not(svg) {
+  display: inline-block;
+}
+
+.icon-anim [data-part],
+.icon-anim [data-layer] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.icon-anim-loop {
+  --icon-anim-iterations: infinite;
+}
+
+.icon-anim-persist {
+  --icon-anim-fill: forwards;
+}
+
+.icon-anim-fast {
+  --icon-anim-speed: 2;
+}
+
+.icon-anim-slow {
+  --icon-anim-speed: 0.5;
+}
+
+/* A looping icon outside the viewport waits (set by the JS). */
+.icon-anim.is-offscreen,
+.icon-anim.is-offscreen * {
+  animation-play-state: paused;
+}
+
+/* =========================================================================
+   2. PER-ICON DEFAULTS
+   ========================================================================= */
+
+/* Fallback: an icon with no preset and no data-icon-anim pops. */
+.icon-anim:not([data-icon-anim]) {
+  @include _root(iconAnimPop, 0.5s);
+}
+
+/* Bell: swings from the top, the clapper lags behind. */
+#{_preset('bell', 'bell-simple', 'bell-ringing', 'bell-simple-ringing')} {
+  @include _root(iconAnimRing, 0.9s, $_ease-in-out);
+  transform-origin: 50% 10%;
+}
+#{_parts('bell', 'bell-ringing')} > [data-part="1"] {
+  @include _part(iconAnimPartSway, 0.9s, $_ease-in-out);
+}
+#{_parts('bell-ringing')} > :is([data-part="2"], [data-part="3"]) {
+  @include _part(iconAnimPartTwinkle, 0.9s, $_ease-in-out);
+}
+
+/* Arrows, carets, play: point in their own direction. */
+#{_preset('arrow-right', 'caret-right', 'arrow-circle-right', 'caret-double-right', 'play', 'sign-out')} {
+  --_icon-anim-x: 22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+#{_preset('arrow-left', 'caret-left', 'arrow-circle-left', 'caret-double-left', 'sign-in')} {
+  --_icon-anim-x: -22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+#{_preset('arrow-up', 'caret-up', 'arrow-circle-up', 'caret-double-up')} {
+  --_icon-anim-y: -22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+#{_preset('arrow-down', 'caret-down', 'arrow-circle-down', 'caret-double-down')} {
+  --_icon-anim-y: 22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+#{_preset('arrow-up-right', 'arrow-square-out')} {
+  --_icon-anim-x: 18%;
+  --_icon-anim-y: -18%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+
+/* Check: the tick draws itself; in check-circle the ring stays. */
+#{_parts('check', 'check-circle')} {
+  --_icon-anim-name: none;
+}
+#{_parts('check', 'check-circle')} > [data-part="1"] {
+  @include _part(iconAnimPartDraw, 0.55s, $_ease, null, backwards);
+}
+
+/* X and plus: a quarter turn (they look the same after 90deg). */
+#{_preset('x', 'plus', 'x-circle', 'plus-circle')} {
+  --_icon-anim-turn: 90deg;
+  @include _root(iconAnimTurn, 0.5s, $_ease-in-out);
+}
+
+/* Gears and refresh arrows spin; the counter-clockwise ones backwards. */
+#{_preset('gear', 'gear-six', 'gear-fine', 'arrows-clockwise', 'arrow-clockwise')} {
+  @include _root(iconAnimSpin, 1s, $_ease-in-out);
+}
+#{_preset('arrow-counter-clockwise', 'arrows-counter-clockwise')} {
+  @include _root(iconAnimSpinCcw, 1s, $_ease-in-out);
+}
+
+/* Spinners: steady and linear; spinner ticks in eight 45deg steps. */
+#{_preset('circle-notch', 'spinner-gap')} {
+  @include _root(iconAnimSpin, 0.8s, linear);
+}
+#{_preset('spinner')} {
+  @include _root(iconAnimSpin, 1s, steps(8, end));
+}
+
+#{_preset('magnifying-glass')} {
+  @include _root(iconAnimSearch, 1s, $_ease-in-out);
+}
+
+#{_preset('heart', 'heartbeat')} {
+  @include _root(iconAnimBeat, 0.8s);
+}
+
+#{_preset('star', 'trophy', 'medal', 'confetti')} {
+  @include _root(iconAnimTada, 0.9s);
+}
+
+/* Sparkle: the big star pops, the small ones twinkle in two beats. */
+#{_parts('sparkle')} {
+  --_icon-anim-name: none;
+}
+#{_parts('sparkle')} > [data-part="1"] {
+  @include _part(iconAnimPartPop, 0.8s);
+}
+#{_parts('sparkle')} > :is([data-part="2"], [data-part="4"]) {
+  @include _part(iconAnimPartTwinkle, 0.8s, $_ease-in-out);
+}
+#{_parts('sparkle')} > :is([data-part="3"], [data-part="5"]) {
+  @include _part(iconAnimPartTwinkle, 0.8s, $_ease-in-out, 0.15s);
+}
+
+/* Trash: the rim (1) and the handle (5) lift together as one lid, hinged
+   at the left end of the rim (40, 56 in the 256 grid). */
+#{_parts('trash')} {
+  --_icon-anim-name: none;
+}
+#{_parts('trash')} > :is([data-part="1"], [data-part="5"]) {
+  --_icon-anim-y: -22px;
+  --_icon-anim-r: -14deg;
+  transform-box: view-box;
+  transform-origin: 40px 56px;
+  @include _part(iconAnimPartLift, 0.8s, $_ease-in-out);
+}
+
+/* Envelope: the flap (2) folds up from the top edge. */
+#{_parts('envelope-simple')} {
+  --_icon-anim-name: none;
+}
+#{_parts('envelope-simple')} > [data-part="2"] {
+  transform-origin: 50% 0%;
+  @include _part(iconAnimPartFold, 0.7s, $_ease-in-out);
+}
+
+#{_preset('paper-plane-tilt', 'paper-plane-right', 'paper-plane')} {
+  @include _root(iconAnimFly, 1s, $_ease-in-out);
+}
+
+#{_preset('phone', 'phone-call', 'device-mobile')} {
+  @include _root(iconAnimRing, 0.8s, $_ease-in-out);
+}
+
+/* Padlock: the shackle lifts (3rd element, 2nd in the "simple" ones). */
+#{_parts('lock', 'lock-open', 'lock-simple', 'lock-simple-open')} {
+  --_icon-anim-name: none;
+}
+#{_parts('lock', 'lock-open')} > [data-part="3"],
+#{_parts('lock-simple', 'lock-simple-open')} > [data-part="2"] {
+  --_icon-anim-y: -20px;
+  @include _part(iconAnimPartLift, 0.7s, $_ease-in-out);
+}
+
+#{_preset('eye')} {
+  @include _root(iconAnimBlink, 0.6s, $_ease-in-out);
+}
+
+/* Download / upload: the arrow (shaft 1 + head 3) travels, the tray stays. */
+#{_parts('download-simple', 'upload-simple')} {
+  --_icon-anim-name: none;
+}
+#{_parts('download-simple')} > :is([data-part="1"], [data-part="3"]) {
+  --_icon-anim-y: 28px;
+  @include _part(iconAnimPartShift, 0.7s, $_ease-in-out);
+}
+#{_parts('upload-simple')} > :is([data-part="1"], [data-part="3"]) {
+  --_icon-anim-y: -28px;
+  @include _part(iconAnimPartShift, 0.7s, $_ease-in-out);
+}
+
+#{_preset('shopping-cart', 'shopping-cart-simple', 'basket', 'truck')} {
+  @include _root(iconAnimCart, 0.8s, $_ease-in-out);
+}
+
+#{_preset('house', 'house-line', 'house-simple', 'buildings', 'building', 'building-office', 'info', 'question')} {
+  @include _root(iconAnimBounce, 0.7s);
+}
+
+/* User: the head (1) nods up, the shoulders stay. */
+#{_parts('user')} {
+  --_icon-anim-name: none;
+}
+#{_parts('user')} > [data-part="1"] {
+  --_icon-anim-y: -18px;
+  @include _part(iconAnimPartShift, 0.7s, $_spring);
+}
+
+#{_preset('lightning')} {
+  @include _root(iconAnimFlash, 0.8s);
+}
+
+#{_preset('rocket', 'rocket-launch')} {
+  @include _root(iconAnimLaunch, 1.2s, $_ease-in-out);
+}
+
+#{_preset('warning', 'warning-circle', 'warning-octagon', 'moon', 'wrench')} {
+  @include _root(iconAnimWiggle, 0.7s, $_ease-in-out);
+}
+
+/* Sun: eight rays every 45deg, so a 90deg turn lands on the start pose. */
+#{_preset('sun')} {
+  --_icon-anim-turn: 90deg;
+  @include _root(iconAnimTurn, 1s, $_ease-in-out);
+}
+
+/* Moon with stars: the two stars (1+2, 3+4) twinkle one after another. */
+#{_parts('moon-stars')} {
+  --_icon-anim-name: none;
+}
+#{_parts('moon-stars')} > :is([data-part="1"], [data-part="2"]) {
+  @include _part(iconAnimPartTwinkle, 0.9s, $_ease-in-out);
+}
+#{_parts('moon-stars')} > :is([data-part="3"], [data-part="4"]) {
+  @include _part(iconAnimPartTwinkle, 0.9s, $_ease-in-out, 0.2s);
+}
+
+/* Copy: the back sheet (1) slides onto the front one. */
+#{_parts('copy')} {
+  --_icon-anim-name: none;
+}
+#{_parts('copy')} > [data-part="1"] {
+  --_icon-anim-x: -14px;
+  --_icon-anim-y: 14px;
+  @include _part(iconAnimPartShift, 0.6s, $_ease-in-out);
+}
+
+/* Link: the two halves pull apart and click back. */
+#{_parts('link')} {
+  --_icon-anim-name: none;
+}
+#{_parts('link')} > [data-part="1"] {
+  --_icon-anim-x: 12px;
+  --_icon-anim-y: -12px;
+  @include _part(iconAnimPartShift, 0.6s, $_ease-in-out);
+}
+#{_parts('link')} > [data-part="2"] {
+  --_icon-anim-x: -12px;
+  --_icon-anim-y: 12px;
+  @include _part(iconAnimPartShift, 0.6s, $_ease-in-out);
+}
+
+/* Chat dots: picked by type, not by number - bold has two dots instead of
+   three and two of these icons change the element order between weights.
+   The source order is middle, left, right; the wave goes left to right. */
+#{_parts('chat-dots', 'chat-circle-dots', 'chat-teardrop-dots')} {
+  --_icon-anim-name: none;
+}
+#{_parts('chat-dots', 'chat-circle-dots', 'chat-teardrop-dots')} > circle {
+  --_icon-anim-y: -18px;
+  @include _part(iconAnimPartShift, 0.8s, $_ease-in-out);
+}
+#{_parts('chat-dots', 'chat-circle-dots', 'chat-teardrop-dots')} > circle:nth-of-type(1) {
+  --_icon-anim-part-stagger: 0.12s;
+}
+#{_parts('chat-dots', 'chat-circle-dots', 'chat-teardrop-dots')} > circle:nth-of-type(3) {
+  --_icon-anim-part-stagger: 0.24s;
+}
+
+#{_preset('chat', 'chat-circle', 'chat-centered', 'chat-teardrop', 'chats')} {
+  @include _root(iconAnimBounce, 0.7s);
+}
+
+#{_preset('map-pin', 'map-pin-line', 'map-pin-simple', 'push-pin')} {
+  @include _root(iconAnimDrop, 0.8s);
+}
+
+/* Clock: the hands (2) go round the dial centre. */
+#{_parts('clock')} {
+  --_icon-anim-name: none;
+}
+#{_parts('clock')} > [data-part="2"] {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  @include _part(iconAnimPartTurn, 1.2s, $_ease-in-out);
+}
+
+#{_preset('hourglass', 'hourglass-simple')} {
+  --_icon-anim-turn: 180deg;
+  @include _root(iconAnimTurn, 0.8s, $_ease-in-out);
+}
+
+/* Hammer: strikes from the grip (bottom left). */
+#{_preset('hammer')} {
+  transform-origin: 20% 85%;
+  @include _root(iconAnimHit, 0.8s, $_ease-in-out);
+}
+
+/* Documents: the text lines (by type: <line>) write themselves. */
+#{_parts('file-text', 'note', 'article', 'clipboard-text')} {
+  --_icon-anim-name: none;
+}
+#{_parts('file-text', 'note', 'article', 'clipboard-text')} > line {
+  @include _part(iconAnimPartDraw, 0.45s, $_ease, calc(var(--icon-part, 0) * 0.1s), backwards);
+}
+
+#{_preset('pencil-simple', 'pencil', 'pencil-line', 'note-pencil', 'pen', 'signature')} {
+  @include _root(iconAnimWrite, 0.8s, $_ease-in-out);
+}
+
+#{_preset('cloud', 'cloud-arrow-up', 'cloud-check')} {
+  @include _root(iconAnimDrift, 1.2s, $_ease-in-out);
+}
+
+/* =========================================================================
+   3. NAMED ANIMATIONS - data-icon-anim="..." on any icon
+   Root only (they work with <use>, the web font and every weight),
+   except draw / draw-loop, which need the parts.
+   ========================================================================= */
+
+#{_variant('pop')} { @include _root(iconAnimPop, 0.5s); }
+#{_variant('wiggle')} { @include _root(iconAnimWiggle, 0.7s, $_ease-in-out); }
+#{_variant('ring')} {
+  transform-origin: 50% 10%;
+  @include _root(iconAnimRing, 0.9s, $_ease-in-out);
+}
+#{_variant('shake')} { @include _root(iconAnimShake, 0.5s, $_ease-in-out); }
+#{_variant('bounce')} { @include _root(iconAnimBounce, 0.7s); }
+#{_variant('beat')} { @include _root(iconAnimBeat, 0.8s); }
+#{_variant('tada')} { @include _root(iconAnimTada, 0.9s); }
+#{_variant('spin')} { @include _root(iconAnimSpin, 1s, $_ease-in-out); }
+#{_variant('spin-ccw')} { @include _root(iconAnimSpinCcw, 1s, $_ease-in-out); }
+#{_variant('float')} { @include _root(iconAnimFloat, 1.6s, $_ease-in-out); }
+#{_variant('flip')} { @include _root(iconAnimFlip, 0.8s, $_ease-in-out); }
+#{_variant('blink')} { @include _root(iconAnimBlink, 0.6s, $_ease-in-out); }
+#{_variant('flash')} { @include _root(iconAnimFlash, 0.8s); }
+#{_variant('drop')} { @include _root(iconAnimDrop, 0.8s); }
+#{_variant('nudge-right')} {
+  --_icon-anim-x: 22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+#{_variant('nudge-left')} {
+  --_icon-anim-x: -22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+#{_variant('nudge-up')} {
+  --_icon-anim-y: -22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+#{_variant('nudge-down')} {
+  --_icon-anim-y: 22%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+
+/* Draw: every stroke traces itself, one after another (--icon-part is the
+   0-based index set by the JS); filled details (dots) grow in, the duotone
+   layer fades in last. Without parts (<use>, web font, fill weight) the
+   icon pops instead. */
+.icon-anim:is([data-icon-anim="draw"], [data-icon-anim="draw-loop"]):not([data-icon-parts="stroke"]) {
+  @include _root(iconAnimPop, 0.5s);
+}
+#{_variant('draw')}[data-icon-parts="stroke"] > [data-part][stroke] {
+  @include _part(iconAnimPartDraw, 0.6s, $_ease, calc(var(--icon-part, 0) * 0.12s), backwards);
+}
+#{_variant('draw')}[data-icon-parts="stroke"] > [data-part]:not([stroke]) {
+  @include _part(iconAnimPartAppear, 0.4s, $_spring, calc(var(--icon-part, 0) * 0.12s), backwards);
+}
+#{_variant('draw')}[data-icon-parts="stroke"] > [data-layer] {
+  @include _part(iconAnimLayerFade, 0.6s, $_ease, 0.3s, backwards);
+}
+
+/* Draw-loop: draws in, holds, erases from the start - all strokes
+   together, so a loop never drifts out of step. Dots go to full opacity,
+   a duotone layer back to its own 0.2. */
+#{_variant('draw-loop')}[data-icon-parts="stroke"] > [data-part][stroke] {
+  @include _part(iconAnimPartDrawLoop, 1.6s, $_ease-in-out);
+}
+#{_variant('draw-loop')}[data-icon-parts="stroke"] > [data-part]:not([stroke]) {
+  --_icon-anim-opacity: 1;
+  @include _part(iconAnimPartFadeLoop, 1.6s, $_ease-in-out);
+}
+#{_variant('draw-loop')}[data-icon-parts="stroke"] > [data-layer] {
+  --_icon-anim-opacity: 0.2;
+  @include _part(iconAnimPartFadeLoop, 1.6s, $_ease-in-out);
+}
+
+/* =========================================================================
+   4. THE TRIGGERS - the only rules that move anything
+   Each trigger counts on the icon itself and on any ancestor. Hover only
+   on devices that really hover (a finger cannot leave, so a tap would
+   leave the icon "hovered"); keyboard focus counts everywhere.
+   ========================================================================= */
+
+$_on: '.icon-anim-play, .icon-anim-tap.is-tapped, .icon-anim-view.is-in-view, .icon-anim-hover:focus-visible';
+$_on-hover: '.icon-anim-hover:hover';
+$_kids: ':is([data-part], [data-layer])';
+
+@mixin _animate-root {
+  animation-name: var(--_icon-anim-name, none);
+  animation-duration: calc(var(--_icon-anim-duration, 0.6s) / var(--icon-anim-speed, 1));
+  animation-timing-function: var(--_icon-anim-easing, ease);
+  animation-delay: var(--icon-anim-delay, 0s);
+  animation-iteration-count: var(--icon-anim-iterations, 1);
+  animation-fill-mode: var(--icon-anim-fill, none);
+}
+
+@mixin _animate-part {
+  animation-name: var(--_icon-anim-part-name, none);
+  animation-duration: calc(var(--_icon-anim-part-duration, 0.6s) / var(--icon-anim-speed, 1));
+  animation-timing-function: var(--_icon-anim-part-easing, ease);
+  animation-delay: calc(var(--icon-anim-delay, 0s) + var(--_icon-anim-part-stagger, 0s) / var(--icon-anim-speed, 1));
+  animation-iteration-count: var(--icon-anim-iterations, 1);
+  animation-fill-mode: var(--_icon-anim-part-fill, var(--icon-anim-fill, none));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .icon-anim:is(#{$_on}),
+  :is(#{$_on}) .icon-anim {
+    @include _animate-root;
+  }
+  .icon-anim:is(#{$_on}) > #{$_kids},
+  :is(#{$_on}) .icon-anim > #{$_kids} {
+    @include _animate-part;
+  }
+
+  @media (hover: hover) {
+    .icon-anim:is(#{$_on-hover}),
+    :is(#{$_on-hover}) .icon-anim {
+      @include _animate-root;
+    }
+    .icon-anim:is(#{$_on-hover}) > #{$_kids},
+    :is(#{$_on-hover}) .icon-anim > #{$_kids} {
+      @include _animate-part;
+    }
+  }
+}
+
+/* =========================================================================
+   5. KEYFRAMES - all named iconAnim*, all in this file (npm run test:css)
+   Root keyframes move in % of the icon box; part keyframes move in px,
+   which inside an <svg> are units of the 256 grid - scale-independent.
+   Each one ends where it starts, so fill-mode: none never jumps.
+   ========================================================================= */
+
+@keyframes iconAnimPop {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.25); }
+  65% { transform: scale(0.92); }
+  85% { transform: scale(1.04); }
+}
+
+@keyframes iconAnimWiggle {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-14deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(4deg); }
+}
+
+@keyframes iconAnimRing {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(18deg); }
+  30% { transform: rotate(-14deg); }
+  45% { transform: rotate(10deg); }
+  60% { transform: rotate(-6deg); }
+  75% { transform: rotate(3deg); }
+}
+
+@keyframes iconAnimShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10%); }
+  40% { transform: translateX(8%); }
+  60% { transform: translateX(-6%); }
+  80% { transform: translateX(3%); }
+}
+
+@keyframes iconAnimBounce {
+  0%, 50%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-24%); }
+  70% { transform: translateY(-8%); }
+}
+
+@keyframes iconAnimBeat {
+  0%, 30%, 60%, 100% { transform: scale(1); }
+  15% { transform: scale(1.22); }
+  45% { transform: scale(1.14); }
+}
+
+@keyframes iconAnimTada {
+  0%, 100% { transform: scale(1) rotate(0); }
+  10%, 20% { transform: scale(0.9) rotate(-4deg); }
+  30%, 50%, 70% { transform: scale(1.15) rotate(5deg); }
+  40%, 60% { transform: scale(1.15) rotate(-5deg); }
+  80% { transform: scale(1.05) rotate(0); }
+}
+
+@keyframes iconAnimSpin {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes iconAnimSpinCcw {
+  from { transform: rotate(0); }
+  to { transform: rotate(-360deg); }
+}
+
+/* For shapes symmetric under --_icon-anim-turn (x, plus, sun, hourglass):
+   the end pose looks like the start, so the snap back is invisible. */
+@keyframes iconAnimTurn {
+  from { transform: rotate(0); }
+  to { transform: rotate(var(--_icon-anim-turn, 180deg)); }
+}
+
+@keyframes iconAnimFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14%); }
+}
+
+@keyframes iconAnimNudge {
+  0%, 100% { transform: translate(0, 0); }
+  40% { transform: translate(var(--_icon-anim-x, 0%), var(--_icon-anim-y, 0%)); }
+  70% {
+    transform: translate(
+      calc(var(--_icon-anim-x, 0%) * -0.15),
+      calc(var(--_icon-anim-y, 0%) * -0.15)
+    );
+  }
+}
+
+@keyframes iconAnimFlip {
+  from { transform: perspective(400px) rotateY(0); }
+  to { transform: perspective(400px) rotateY(360deg); }
+}
+
+@keyframes iconAnimBlink {
+  0%, 35%, 55%, 100% { transform: scaleY(1); }
+  45% { transform: scaleY(0.1); }
+}
+
+@keyframes iconAnimFlash {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  20%, 60% { opacity: 0.25; }
+  40% { opacity: 1; transform: scale(1.12); }
+  80% { opacity: 1; }
+}
+
+@keyframes iconAnimDrop {
+  0%, 100% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-30%) scale(1); }
+  55% { transform: translateY(0) scale(1.08, 0.9); }
+  70% { transform: translateY(-8%) scale(1); }
+}
+
+/* Leaves past the top-right corner, comes back in from the bottom-left. */
+@keyframes iconAnimFly {
+  0%, 100% { transform: translate(0, 0); opacity: 1; }
+  45% { transform: translate(70%, -70%); opacity: 0; }
+  50% { transform: translate(-70%, 70%); opacity: 0; }
+}
+
+@keyframes iconAnimLaunch {
+  0%, 100% { transform: translate(0, 0); opacity: 1; }
+  10%, 30% { transform: translate(-3%, 3%); }
+  20% { transform: translate(3%, -3%); }
+  55% { transform: translate(80%, -80%); opacity: 0; }
+  60% { transform: translate(-80%, 80%); opacity: 0; }
+}
+
+@keyframes iconAnimSearch {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-8%, -6%); }
+  50% { transform: translate(6%, -10%); }
+  75% { transform: translate(8%, 4%); }
+}
+
+@keyframes iconAnimCart {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  30% { transform: translateX(16%) rotate(-6deg); }
+  60% { transform: translateX(-6%) rotate(2deg); }
+}
+
+@keyframes iconAnimHit {
+  0%, 70%, 100% { transform: rotate(0); }
+  35% { transform: rotate(-28deg); }
+  55% { transform: rotate(12deg); }
+  85% { transform: rotate(4deg); }
+}
+
+@keyframes iconAnimWrite {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(-6%, 4%) rotate(-8deg); }
+  40% { transform: translate(4%, -2%) rotate(4deg); }
+  60% { transform: translate(-4%, 4%) rotate(-6deg); }
+  80% { transform: translate(2%, 0) rotate(2deg); }
+}
+
+@keyframes iconAnimDrift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10%); }
+}
+
+/* ---------- parts ---------- */
+
+@keyframes iconAnimPartSway {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-14px); }
+  30% { transform: translateX(12px); }
+  45% { transform: translateX(-9px); }
+  60% { transform: translateX(6px); }
+  75% { transform: translateX(-3px); }
+}
+
+@keyframes iconAnimPartShift {
+  0%, 100% { transform: translate(0, 0); }
+  45% { transform: translate(var(--_icon-anim-x, 0px), var(--_icon-anim-y, 0px)); }
+}
+
+@keyframes iconAnimPartLift {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  35%, 65% { transform: translate(0, var(--_icon-anim-y, -24px)) rotate(var(--_icon-anim-r, 0deg)); }
+}
+
+@keyframes iconAnimPartPop {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  70% { transform: scale(0.9); }
+}
+
+@keyframes iconAnimPartTwinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.15; transform: scale(0.6); }
+}
+
+@keyframes iconAnimPartTurn {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes iconAnimPartFold {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(-0.7); }
+}
+
+/* pathLength="1" (set by the JS) makes "1" the full length of any stroke.
+   The dash pattern lives in the keyframes, not in the rule, so the stroke is
+   back to a plain line as soon as the animation is over. Opacity hides the
+   round cap dot some engines paint at zero length. */
+@keyframes iconAnimPartDraw {
+  0% { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
+  8% { opacity: 1; }
+  100% { stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes iconAnimPartDrawLoop {
+  0% { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
+  5% { opacity: 1; }
+  45%, 55% { stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 1; }
+  95% { opacity: 1; }
+  100% { stroke-dasharray: 1 1; stroke-dashoffset: -1; opacity: 0; }
+}
+
+/* Dots go to 1, a duotone layer back to its own 0.2 (--_icon-anim-opacity). */
+@keyframes iconAnimPartFadeLoop {
+  0%, 100% { opacity: 0; }
+  45%, 55% { opacity: var(--_icon-anim-opacity, 1); }
+}
+
+@keyframes iconAnimPartAppear {
+  from { opacity: 0; transform: scale(0.4); }
+}
+
+/* No "to": ends at the element's own opacity (0.2 on a duotone layer). */
+@keyframes iconAnimLayerFade {
+  from { opacity: 0; }
+}

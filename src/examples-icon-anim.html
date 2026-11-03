@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Animowane ikony Phosphor - molique Przykłady","description":"Animowane ikony Phosphor w przyciskach, menu i statusach oraz galeria wszystkich presetów modułu molique-style-icon-anim. Ikony autorstwa Helena Zhang i Tobias Fried, licencja MIT."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-icon-anim.css?v={{ __version }}" />
+  </head>
+  <body>
+<include src="partials/navbar.html"></include>
+    <div class="admin-layout">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/examples-sidebar.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Animowane ikony</h1>
+            <p class="text-6 text-muted">Ikony Phosphor, które reagują na kursor, dotknięcie i przewijanie. Rusza się to, co ikona przedstawia: pokrywa kosza, pałąk kłódki, wskazówki zegara. Moduł opcjonalny, opis klas na stronie <a href="docs-icon-anim">Animowane ikony Phosphor</a>.</p>
+          </div>
+
+          <div class="alert alert-info mb-5">
+            <p class="fw-bold mb-2">Ikony: Phosphor Icons</p>
+            <p class="m-0">Ikony zaprojektowali <a href="https://helenazhang.com" rel="noopener">Helena Zhang</a> i <a href="https://tobiasfried.com" rel="noopener">Tobias Fried</a>. Rodzina <a href="https://phosphoricons.com" rel="noopener">Phosphor Icons</a> jest udostępniona na <a href="https://github.com/phosphor-icons/core/blob/main/LICENSE" rel="noopener">licencji MIT</a> (© Phosphor Icons). Animacje dopisał molique. Moduł nie jest projektem zespołu Phosphor i nie jest przez niego wspierany.</p>
+          </div>
+
+          <!-- W interfejsie -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">W interfejsie</h2>
+            <p class="text-muted mb-4">Wyzwalacz siedzi na przycisku albo na linku, więc ikona rusza się, gdy kursor jest gdziekolwiek na elemencie. <code>.icon-anim-tap</code> obok <code>.icon-anim-hover</code> daje to samo na telefonie.</p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface d-flex flex-wrap gap-3 justify-content-center py-5">
+                <button type="button" class="btn-primary icon-anim-hover icon-anim-tap">
+                  <svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple"></use></svg>
+                  Pobierz PDF
+                </button>
+                <button type="button" class="btn-secondary icon-anim-hover icon-anim-tap">
+                  <svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-paper-plane-tilt"></use></svg>
+                  Wyślij zapytanie
+                </button>
+                <button type="button" class="btn-outline-primary icon-anim-hover icon-anim-tap">
+                  <svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-link"></use></svg>
+                  Kopiuj link
+                </button>
+                <button type="button" class="btn-outline-danger icon-anim-hover icon-anim-tap">
+                  <svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash"></use></svg>
+                  Usuń
+                </button>
+                <button type="button" class="btn-icon btn-secondary icon-anim-hover icon-anim-tap" aria-label="Ustawienia">
+                  <svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear"></use></svg>
+                </button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- Wymaga: molique-style-icon-anim.css --&gt;
+&lt;button class="btn-primary icon-anim-hover icon-anim-tap"&gt;
+  &lt;svg class="icon icon-anim" aria-hidden="true"&gt;
+    &lt;use href="img/icons-sprite.svg#ph-download-simple"&gt;&lt;/use&gt;
+  &lt;/svg&gt;
+  Pobierz PDF
+&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="grid-md-cols-2 gap-4 mb-4">
+              <div class="card p-3">
+                <h3 class="fw-bold text-5 mb-3">Menu</h3>
+                <div class="list-group">
+                  <a href="#" class="list-group-item is-active icon-anim-hover d-flex align-items-center gap-2"><svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-house"></use></svg> Pulpit</a>
+                  <a href="#" class="list-group-item icon-anim-hover d-flex align-items-center gap-2"><svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-buildings"></use></svg> Inwestycje</a>
+                  <a href="#" class="list-group-item icon-anim-hover d-flex align-items-center gap-2"><svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-file-text"></use></svg> Dokumenty</a>
+                  <a href="#" class="list-group-item icon-anim-hover d-flex align-items-center gap-2"><svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-dots"></use></svg> Wiadomości</a>
+                  <a href="#" class="list-group-item icon-anim-hover d-flex align-items-center gap-2"><svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear-six"></use></svg> Ustawienia</a>
+                </div>
+              </div>
+              <div class="card p-3">
+                <h3 class="fw-bold text-5 mb-3">Statusy</h3>
+                <ul class="list-unstyled m-0 d-flex flex-column gap-3">
+                  <li class="d-flex align-items-center gap-3 icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="1500"><svg class="icon icon-lg icon-anim text-primary" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell-ringing"></use></svg> 3 nowe powiadomienia</li>
+                  <li class="d-flex align-items-center gap-3 icon-anim-play icon-anim-loop"><svg class="icon icon-lg icon-anim text-muted" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-circle-notch"></use></svg> Synchronizacja z magazynem</li>
+                  <li class="d-flex align-items-center gap-3 icon-anim-view" data-icon-anim-once="false"><svg class="icon icon-lg icon-anim text-success" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle"></use></svg> Odbiór techniczny zatwierdzony</li>
+                  <li class="d-flex align-items-center gap-3 icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="2000"><svg class="icon icon-lg icon-anim text-warning" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-warning"></use></svg> Termin płatności za 2 dni</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="component-showcase mb-4">
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- W pętli, z przerwą 1,5 s między okrążeniami --&gt;
+&lt;li class="icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="1500"&gt;
+  &lt;svg class="icon icon-anim"&gt;&lt;use href="…#ph-bell-ringing"&gt;&lt;/use&gt;&lt;/svg&gt; …
+&lt;/li&gt;
+
+&lt;!-- Przy każdym wjeździe w widok --&gt;
+&lt;li class="icon-anim-view" data-icon-anim-once="false"&gt;
+  &lt;svg class="icon icon-anim"&gt;&lt;use href="…#ph-check-circle"&gt;&lt;/use&gt;&lt;/svg&gt; …
+&lt;/li&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- Galeria -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Galeria presetów</h2>
+            <p class="text-muted mb-4">Każda z 118 ikon poniżej ma własną animację domyślną (grubość light). Najedź albo dotknij. Ikony spoza tej listy dostają krótki puls, a dowolną animację wybierzesz przez <code>data-icon-anim</code>.</p>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface">
+                <div class="grid-cols-2 grid-md-cols-4 grid-lg-cols-6 gap-2 w-100">
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-circle-down"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-circle-down</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-circle-left"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-circle-left</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-circle-right"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-circle-right</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-circle-up"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-circle-up</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-clockwise"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-clockwise</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-counter-clockwise"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-counter-clockwise</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-down"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-down</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-left"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-left</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-right"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-right</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-square-out"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-square-out</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-up"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-up</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrow-up-right"></use></svg><span class="d-block text-2 text-muted mt-2">arrow-up-right</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrows-clockwise"></use></svg><span class="d-block text-2 text-muted mt-2">arrows-clockwise</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-arrows-counter-clockwise"></use></svg><span class="d-block text-2 text-muted mt-2">arrows-counter-clockwise</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-article"></use></svg><span class="d-block text-2 text-muted mt-2">article</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-basket"></use></svg><span class="d-block text-2 text-muted mt-2">basket</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell"></use></svg><span class="d-block text-2 text-muted mt-2">bell</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell-ringing"></use></svg><span class="d-block text-2 text-muted mt-2">bell-ringing</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell-simple"></use></svg><span class="d-block text-2 text-muted mt-2">bell-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell-simple-ringing"></use></svg><span class="d-block text-2 text-muted mt-2">bell-simple-ringing</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-building"></use></svg><span class="d-block text-2 text-muted mt-2">building</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-building-office"></use></svg><span class="d-block text-2 text-muted mt-2">building-office</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-buildings"></use></svg><span class="d-block text-2 text-muted mt-2">buildings</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-double-down"></use></svg><span class="d-block text-2 text-muted mt-2">caret-double-down</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-double-left"></use></svg><span class="d-block text-2 text-muted mt-2">caret-double-left</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-double-right"></use></svg><span class="d-block text-2 text-muted mt-2">caret-double-right</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-double-up"></use></svg><span class="d-block text-2 text-muted mt-2">caret-double-up</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-down"></use></svg><span class="d-block text-2 text-muted mt-2">caret-down</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-left"></use></svg><span class="d-block text-2 text-muted mt-2">caret-left</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-right"></use></svg><span class="d-block text-2 text-muted mt-2">caret-right</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-caret-up"></use></svg><span class="d-block text-2 text-muted mt-2">caret-up</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat"></use></svg><span class="d-block text-2 text-muted mt-2">chat</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-centered"></use></svg><span class="d-block text-2 text-muted mt-2">chat-centered</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-circle"></use></svg><span class="d-block text-2 text-muted mt-2">chat-circle</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-circle-dots"></use></svg><span class="d-block text-2 text-muted mt-2">chat-circle-dots</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-dots"></use></svg><span class="d-block text-2 text-muted mt-2">chat-dots</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-teardrop"></use></svg><span class="d-block text-2 text-muted mt-2">chat-teardrop</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-teardrop-dots"></use></svg><span class="d-block text-2 text-muted mt-2">chat-teardrop-dots</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chats"></use></svg><span class="d-block text-2 text-muted mt-2">chats</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check"></use></svg><span class="d-block text-2 text-muted mt-2">check</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle"></use></svg><span class="d-block text-2 text-muted mt-2">check-circle</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-circle-notch"></use></svg><span class="d-block text-2 text-muted mt-2">circle-notch</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-clipboard-text"></use></svg><span class="d-block text-2 text-muted mt-2">clipboard-text</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-clock"></use></svg><span class="d-block text-2 text-muted mt-2">clock</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-cloud"></use></svg><span class="d-block text-2 text-muted mt-2">cloud</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-cloud-arrow-up"></use></svg><span class="d-block text-2 text-muted mt-2">cloud-arrow-up</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-cloud-check"></use></svg><span class="d-block text-2 text-muted mt-2">cloud-check</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-confetti"></use></svg><span class="d-block text-2 text-muted mt-2">confetti</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-copy"></use></svg><span class="d-block text-2 text-muted mt-2">copy</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-device-mobile"></use></svg><span class="d-block text-2 text-muted mt-2">device-mobile</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple"></use></svg><span class="d-block text-2 text-muted mt-2">download-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-envelope-simple"></use></svg><span class="d-block text-2 text-muted mt-2">envelope-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-eye"></use></svg><span class="d-block text-2 text-muted mt-2">eye</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-file-text"></use></svg><span class="d-block text-2 text-muted mt-2">file-text</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear"></use></svg><span class="d-block text-2 text-muted mt-2">gear</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear-fine"></use></svg><span class="d-block text-2 text-muted mt-2">gear-fine</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear-six"></use></svg><span class="d-block text-2 text-muted mt-2">gear-six</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-hammer"></use></svg><span class="d-block text-2 text-muted mt-2">hammer</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-heart"></use></svg><span class="d-block text-2 text-muted mt-2">heart</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-heartbeat"></use></svg><span class="d-block text-2 text-muted mt-2">heartbeat</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-hourglass"></use></svg><span class="d-block text-2 text-muted mt-2">hourglass</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-hourglass-simple"></use></svg><span class="d-block text-2 text-muted mt-2">hourglass-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-house"></use></svg><span class="d-block text-2 text-muted mt-2">house</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-house-line"></use></svg><span class="d-block text-2 text-muted mt-2">house-line</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-house-simple"></use></svg><span class="d-block text-2 text-muted mt-2">house-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-info"></use></svg><span class="d-block text-2 text-muted mt-2">info</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lightning"></use></svg><span class="d-block text-2 text-muted mt-2">lightning</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-link"></use></svg><span class="d-block text-2 text-muted mt-2">link</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock"></use></svg><span class="d-block text-2 text-muted mt-2">lock</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock-open"></use></svg><span class="d-block text-2 text-muted mt-2">lock-open</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock-simple"></use></svg><span class="d-block text-2 text-muted mt-2">lock-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock-simple-open"></use></svg><span class="d-block text-2 text-muted mt-2">lock-simple-open</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-magnifying-glass"></use></svg><span class="d-block text-2 text-muted mt-2">magnifying-glass</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-map-pin"></use></svg><span class="d-block text-2 text-muted mt-2">map-pin</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-map-pin-line"></use></svg><span class="d-block text-2 text-muted mt-2">map-pin-line</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-map-pin-simple"></use></svg><span class="d-block text-2 text-muted mt-2">map-pin-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-medal"></use></svg><span class="d-block text-2 text-muted mt-2">medal</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-moon"></use></svg><span class="d-block text-2 text-muted mt-2">moon</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-moon-stars"></use></svg><span class="d-block text-2 text-muted mt-2">moon-stars</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-note"></use></svg><span class="d-block text-2 text-muted mt-2">note</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-note-pencil"></use></svg><span class="d-block text-2 text-muted mt-2">note-pencil</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-paper-plane"></use></svg><span class="d-block text-2 text-muted mt-2">paper-plane</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-paper-plane-right"></use></svg><span class="d-block text-2 text-muted mt-2">paper-plane-right</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-paper-plane-tilt"></use></svg><span class="d-block text-2 text-muted mt-2">paper-plane-tilt</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-pen"></use></svg><span class="d-block text-2 text-muted mt-2">pen</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-pencil"></use></svg><span class="d-block text-2 text-muted mt-2">pencil</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-pencil-line"></use></svg><span class="d-block text-2 text-muted mt-2">pencil-line</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-pencil-simple"></use></svg><span class="d-block text-2 text-muted mt-2">pencil-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-phone"></use></svg><span class="d-block text-2 text-muted mt-2">phone</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-phone-call"></use></svg><span class="d-block text-2 text-muted mt-2">phone-call</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-play"></use></svg><span class="d-block text-2 text-muted mt-2">play</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-plus"></use></svg><span class="d-block text-2 text-muted mt-2">plus</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-plus-circle"></use></svg><span class="d-block text-2 text-muted mt-2">plus-circle</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-push-pin"></use></svg><span class="d-block text-2 text-muted mt-2">push-pin</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-question"></use></svg><span class="d-block text-2 text-muted mt-2">question</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-rocket"></use></svg><span class="d-block text-2 text-muted mt-2">rocket</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-rocket-launch"></use></svg><span class="d-block text-2 text-muted mt-2">rocket-launch</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-shopping-cart"></use></svg><span class="d-block text-2 text-muted mt-2">shopping-cart</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-shopping-cart-simple"></use></svg><span class="d-block text-2 text-muted mt-2">shopping-cart-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-sign-in"></use></svg><span class="d-block text-2 text-muted mt-2">sign-in</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-sign-out"></use></svg><span class="d-block text-2 text-muted mt-2">sign-out</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-signature"></use></svg><span class="d-block text-2 text-muted mt-2">signature</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-sparkle"></use></svg><span class="d-block text-2 text-muted mt-2">sparkle</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-spinner"></use></svg><span class="d-block text-2 text-muted mt-2">spinner</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-spinner-gap"></use></svg><span class="d-block text-2 text-muted mt-2">spinner-gap</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-star"></use></svg><span class="d-block text-2 text-muted mt-2">star</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-sun"></use></svg><span class="d-block text-2 text-muted mt-2">sun</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash"></use></svg><span class="d-block text-2 text-muted mt-2">trash</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trophy"></use></svg><span class="d-block text-2 text-muted mt-2">trophy</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-truck"></use></svg><span class="d-block text-2 text-muted mt-2">truck</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-upload-simple"></use></svg><span class="d-block text-2 text-muted mt-2">upload-simple</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-user"></use></svg><span class="d-block text-2 text-muted mt-2">user</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-warning"></use></svg><span class="d-block text-2 text-muted mt-2">warning</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-warning-circle"></use></svg><span class="d-block text-2 text-muted mt-2">warning-circle</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-warning-octagon"></use></svg><span class="d-block text-2 text-muted mt-2">warning-octagon</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-wrench"></use></svg><span class="d-block text-2 text-muted mt-2">wrench</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-x"></use></svg><span class="d-block text-2 text-muted mt-2">x</span></div>
+                  <div class="card p-2 text-center align-items-center icon-anim-hover icon-anim-tap"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-x-circle"></use></svg><span class="d-block text-2 text-muted mt-2">x-circle</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Grubości -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Ta sama animacja w każdej grubości</h2>
+            <p class="text-muted mb-4">Części ikony mają tę samą numerację w grubościach thin, light, regular, bold i duotone, więc jeden preset obsługuje wszystkie. Grubość fill ma inną budowę, dlatego rusza się w niej cała ikona.</p>
+            <div class="table-wrapper">
+              <table class="table table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Ikona</th>
+                    <th>thin</th>
+                    <th>light</th>
+                    <th>regular</th>
+                    <th>bold</th>
+                    <th>duotone</th>
+                    <th>fill</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Ikona"><code>bell</code></td><td data-label="thin" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell--thin"></use></svg></td><td data-label="light" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell"></use></svg></td><td data-label="regular" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell--regular"></use></svg></td><td data-label="bold" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell--bold"></use></svg></td><td data-label="duotone" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell--duotone"></use></svg></td><td data-label="fill" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell--fill"></use></svg></td></tr>
+                  <tr><td data-label="Ikona"><code>trash</code></td><td data-label="thin" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash--thin"></use></svg></td><td data-label="light" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash"></use></svg></td><td data-label="regular" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash--regular"></use></svg></td><td data-label="bold" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash--bold"></use></svg></td><td data-label="duotone" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash--duotone"></use></svg></td><td data-label="fill" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash--fill"></use></svg></td></tr>
+                  <tr><td data-label="Ikona"><code>lock</code></td><td data-label="thin" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock--thin"></use></svg></td><td data-label="light" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock"></use></svg></td><td data-label="regular" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock--regular"></use></svg></td><td data-label="bold" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock--bold"></use></svg></td><td data-label="duotone" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock--duotone"></use></svg></td><td data-label="fill" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock--fill"></use></svg></td></tr>
+                  <tr><td data-label="Ikona"><code>check-circle</code></td><td data-label="thin" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle--thin"></use></svg></td><td data-label="light" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle"></use></svg></td><td data-label="regular" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle--regular"></use></svg></td><td data-label="bold" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle--bold"></use></svg></td><td data-label="duotone" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle--duotone"></use></svg></td><td data-label="fill" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle--fill"></use></svg></td></tr>
+                  <tr><td data-label="Ikona"><code>download-simple</code></td><td data-label="thin" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple--thin"></use></svg></td><td data-label="light" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple"></use></svg></td><td data-label="regular" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple--regular"></use></svg></td><td data-label="bold" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple--bold"></use></svg></td><td data-label="duotone" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple--duotone"></use></svg></td><td data-label="fill" class="icon-anim-hover icon-anim-tap text-center"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple--fill"></use></svg></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Nawigacja dół -->
+          <div
+            class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top"
+          >
+            <a href="examples-hover-microinteractions" class="btn btn-secondary"
+              ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-left"></use></svg> Wstecz: Mikrointerakcje Hover</a
+            >
+            <a
+              href="examples-text-effects"
+              class="btn btn-primary fw-bold hover-spring"
+              >Następny krok: Efekty Tekstowe <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-right"></use></svg></a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/molique-script.js?v={{ __version }}"></script>
+  </body>
+</html>

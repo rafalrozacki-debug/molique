@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Animated Phosphor Icons (Opt-in) - molique Docs","description":"An opt-in molique module that animates Phosphor icons: whole-icon and per-part animations, hover, tap, in-view and loop triggers, inheritance from a parent, stroke drawing. Phosphor icons by Helena Zhang and Tobias Fried, MIT License."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-icon-anim.css?v={{ __version }}" />
+  </head>
+  <body>
+<include src="partials/navbar.en.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- SIDEBAR -->
+      <include src="partials/docs-sidebar.en.html"></include>
+
+      <!-- MAIN CONTENT -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Animated Phosphor Icons (Opt-in)</h1>
+            <p class="text-6 text-muted">
+              A separate module that brings to life the Phosphor icons molique
+              already uses: the bell swings, the heart beats. It moves the
+              individual parts of an icon, not just the whole. The animation is
+              triggered by hover, a tap, scrolling into view or a class of your
+              own, and the trigger can sit on the button, card or link that
+              holds the icon.
+            </p>
+          </div>
+
+          <!-- CREDITS -->
+          <div class="alert alert-info mb-5">
+            <p class="fw-bold mb-2">Icons: Phosphor Icons</p>
+            <p class="m-0">
+              The icons were designed by
+              <a href="https://helenazhang.com" rel="noopener">Helena Zhang</a> and
+              <a href="https://tobiasfried.com" rel="noopener">Tobias Fried</a>.
+              The <a href="https://phosphoricons.com" rel="noopener">Phosphor Icons</a>
+              family is released under the
+              <a href="https://github.com/phosphor-icons/core/blob/main/LICENSE" rel="noopener">MIT License</a>
+              (© Phosphor Icons). This module contains no icon geometry, it only
+              moves the icons you already have. It is not a Phosphor project
+              and is not endorsed by its team.
+            </p>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- 1. INSTALLATION                                       -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Installation</h2>
+            <p class="text-muted mb-4">
+              You link one CSS file. The JS logic is pulled in by
+              <code>molique-script.js</code> as soon as the page has at least
+              one <code>.icon-anim</code>, just like the other widgets.
+            </p>
+            <div class="component-showcase mb-4">
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;link rel="stylesheet" href="css/molique-style-icon-anim.css"&gt;
+
+&lt;svg class="icon icon-anim icon-anim-hover" aria-hidden="true"&gt;
+  &lt;use href="img/icons-sprite.svg#ph-bell"&gt;&lt;/use&gt;
+&lt;/svg&gt;</code></pre>
+              </div>
+            </div>
+
+            <h3 class="fw-bold text-6 mb-3">Where the icons come from</h3>
+            <p class="text-muted mb-3">
+              Phosphor publishes every weight in two forms, and that decides
+              how much can move.
+            </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Source</th>
+                    <th>What moves</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Source">A sprite <code>&lt;use href="…#ph-bell"&gt;</code> built from the stroke icons (the <code>raw/</code> folder in <a href="https://github.com/phosphor-icons/core" rel="noopener">phosphor-icons/core</a>)</td>
+                    <td data-label="What moves">The whole icon and its parts, stroke drawing</td>
+                    <td data-label="Notes">This is how molique.dev works. The JS copies the symbol’s shapes into the <code>&lt;svg&gt;</code>. The sprite must be on the same domain.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Source">SVG pasted straight into the HTML, from the same source</td>
+                    <td data-label="What moves">The whole icon and its parts, stroke drawing</td>
+                    <td data-label="Notes">Add <code>data-icon="bell"</code> - the name cannot be read from the shapes.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Source">Flattened SVG (<code>assets/</code>, the npm package <code>@phosphor-icons/core</code>)</td>
+                    <td data-label="What moves">The whole icon</td>
+                    <td data-label="Notes">Every icon is a single outline path. There are no separate parts to move.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Source">The web font <code>&lt;i class="ph ph-bell"&gt;</code> (<code>@phosphor-icons/web</code>)</td>
+                    <td data-label="What moves">The whole icon</td>
+                    <td data-label="Notes">The JS reads the name from the <code>ph-bell</code> class. A font glyph is one character.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-muted mb-0">
+              Parts are numbered the same way in thin, light, regular, bold and
+              duotone, so one preset works in all of them. The duotone
+              background is left out of the count. The fill weight is built
+              differently and only gets the whole-icon animation.
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 2. TRIGGERS                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Triggers</h2>
+            <p class="text-muted mb-4">
+              A trigger class works on the icon itself or on any of its
+              ancestors. The second is the usual case: you hover the whole
+              button and the icon inside it moves.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface d-flex flex-wrap gap-3 justify-content-center py-5">
+                <svg class="icon icon-xl icon-anim icon-anim-hover" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell"></use></svg>
+                <button type="button" class="btn-primary icon-anim-hover">
+                  <svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-download-simple"></use></svg>
+                  Download quote
+                </button>
+                <button type="button" class="btn-outline-danger icon-anim-tap">
+                  <svg class="icon icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash"></use></svg>
+                  Delete (tap)
+                </button>
+                <span class="icon-anim-play icon-anim-loop d-inline-flex align-items-center gap-2 text-muted" data-icon-anim-loop-delay="800">
+                  <svg class="icon icon-lg icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-chat-dots"></use></svg>
+                  Loop with a pause
+                </span>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;!-- On the icon itself --&gt;
+&lt;svg class="icon icon-anim icon-anim-hover"&gt;&lt;use href="…#ph-bell"&gt;&lt;/use&gt;&lt;/svg&gt;
+
+&lt;!-- On a parent: hovering the whole button --&gt;
+&lt;button class="btn-primary icon-anim-hover"&gt;
+  &lt;svg class="icon icon-anim"&gt;&lt;use href="…#ph-download-simple"&gt;&lt;/use&gt;&lt;/svg&gt;
+  Download quote
+&lt;/button&gt;
+
+&lt;!-- Tap: plays to the end, even after a quick tap --&gt;
+&lt;button class="btn-outline-danger icon-anim-tap"&gt;…&lt;/button&gt;
+
+&lt;!-- Always, looping, with an 800 ms pause between laps --&gt;
+&lt;span class="icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="800"&gt;…&lt;/span&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class / attribute</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim</code></td>
+                    <td data-label="What it does">The icon that should move. On an <code>&lt;svg&gt;</code> or on <code>&lt;i class="ph ph-…"&gt;</code>. Animates nothing by itself, it waits for a trigger.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim-hover</code></td>
+                    <td data-label="What it does">Animates on pointer hover (only on devices that can hover) and on keyboard focus (<code>:focus-visible</code>). On phones, add <code>.icon-anim-tap</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim-tap</code></td>
+                    <td data-label="What it does">Animates on press (pointer, Enter, Space) and plays to the end. With a loop, it lasts until release. The JS adds <code>.is-tapped</code> for the duration.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim-view</code></td>
+                    <td data-label="What it does">Animates when the element scrolls into view (the JS adds <code>.is-in-view</code>). Once by default. <code>data-icon-anim-once="false"</code> replays on every entry, <code>data-icon-anim-margin</code> is the observer’s <code>rootMargin</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim-play</code></td>
+                    <td data-label="What it does">Animates right away and for as long as the class is on the element. For control from your own JS, e.g. a “saving” status icon.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 3. ANIMATIONS                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Animations</h2>
+            <p class="text-muted mb-4">
+              More than a hundred icons have their own default animation,
+              matched to what they show. The bin lifts its lid on a hinge, the
+              padlock raises its shackle, the download arrow drops into the
+              tray, the tick draws itself. The other icons give a short pop.
+              Hover the tiles:
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface">
+                <div class="grid-cols-3 grid-md-cols-6 gap-3 w-100">
+                  <div class="card p-3 text-center align-items-center icon-anim-hover icon-anim-tap" tabindex="0"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-trash"></use></svg><span class="d-block text-3 text-muted mt-2">trash</span></div>
+                  <div class="card p-3 text-center align-items-center icon-anim-hover icon-anim-tap" tabindex="0"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-lock"></use></svg><span class="d-block text-3 text-muted mt-2">lock</span></div>
+                  <div class="card p-3 text-center align-items-center icon-anim-hover icon-anim-tap" tabindex="0"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-check-circle"></use></svg><span class="d-block text-3 text-muted mt-2">check-circle</span></div>
+                  <div class="card p-3 text-center align-items-center icon-anim-hover icon-anim-tap" tabindex="0"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-clock"></use></svg><span class="d-block text-3 text-muted mt-2">clock</span></div>
+                  <div class="card p-3 text-center align-items-center icon-anim-hover icon-anim-tap" tabindex="0"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-envelope-simple"></use></svg><span class="d-block text-3 text-muted mt-2">envelope-simple</span></div>
+                  <div class="card p-3 text-center align-items-center icon-anim-hover icon-anim-tap" tabindex="0"><svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-hammer"></use></svg><span class="d-block text-3 text-muted mt-2">hammer</span></div>
+                </div>
+              </div>
+            </div>
+            <p class="text-muted mb-4">
+              The full gallery is on
+              <a href="examples-icon-anim.en">Examples: animated icons</a>.
+            </p>
+
+            <h3 class="fw-bold text-6 mb-3">A different animation than the default</h3>
+            <p class="text-muted mb-4">
+              <code>data-icon-anim="name"</code> overrides the icon’s preset.
+              The animations below move the whole icon, so they work with every
+              source and every weight. The exceptions are <code>draw</code> and
+              <code>draw-loop</code>, which draw the strokes and need the parts.
+              Without them the icon just pops.
+            </p>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface d-flex flex-wrap gap-4 justify-content-center py-5">
+                <span class="icon-anim-hover icon-anim-tap d-inline-flex flex-column align-items-center gap-1 text-3 text-muted" tabindex="0"><svg class="icon icon-xl icon-anim" data-icon-anim="draw" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-house"></use></svg>draw</span>
+                <span class="icon-anim-play icon-anim-loop d-inline-flex flex-column align-items-center gap-1 text-3 text-muted"><svg class="icon icon-xl icon-anim" data-icon-anim="draw-loop" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-buildings"></use></svg>draw-loop</span>
+                <span class="icon-anim-hover icon-anim-tap d-inline-flex flex-column align-items-center gap-1 text-3 text-muted" tabindex="0"><svg class="icon icon-xl icon-anim" data-icon-anim="tada" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-bell"></use></svg>tada</span>
+                <span class="icon-anim-hover icon-anim-tap d-inline-flex flex-column align-items-center gap-1 text-3 text-muted" tabindex="0"><svg class="icon icon-xl icon-anim" data-icon-anim="flip" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-star"></use></svg>flip</span>
+                <span class="icon-anim-play icon-anim-loop d-inline-flex flex-column align-items-center gap-1 text-3 text-muted"><svg class="icon icon-xl icon-anim" data-icon-anim="float" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-map-pin"></use></svg>float</span>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;svg class="icon icon-anim icon-anim-hover" data-icon-anim="draw"&gt;
+  &lt;use href="img/icons-sprite.svg#ph-house"&gt;&lt;/use&gt;
+&lt;/svg&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th><code>data-icon-anim</code> value</th>
+                    <th>Motion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td data-label="Value"><code>pop</code></td><td data-label="Motion">A scale pulse. The default for icons without a preset.</td></tr>
+                  <tr><td data-label="Value"><code>wiggle</code>, <code>shake</code></td><td data-label="Motion">Rocking around the centre / a horizontal shake.</td></tr>
+                  <tr><td data-label="Value"><code>ring</code></td><td data-label="Motion">A pendulum hung from the top, like a bell.</td></tr>
+                  <tr><td data-label="Value"><code>bounce</code>, <code>drop</code>, <code>float</code></td><td data-label="Motion">A hop / a fall with a rebound / a calm hover (for loops).</td></tr>
+                  <tr><td data-label="Value"><code>beat</code>, <code>tada</code>, <code>flash</code></td><td data-label="Motion">A heartbeat / a “ta-da” / a flicker.</td></tr>
+                  <tr><td data-label="Value"><code>spin</code>, <code>spin-ccw</code>, <code>flip</code></td><td data-label="Motion">A full turn clockwise / counter-clockwise / around the vertical axis.</td></tr>
+                  <tr><td data-label="Value"><code>blink</code></td><td data-label="Motion">A blink (a vertical squeeze).</td></tr>
+                  <tr><td data-label="Value"><code>nudge-right</code>, <code>nudge-left</code>, <code>nudge-up</code>, <code>nudge-down</code></td><td data-label="Motion">A push in that direction and back.</td></tr>
+                  <tr><td data-label="Value"><code>draw</code>, <code>draw-loop</code></td><td data-label="Motion">The strokes draw one after another / draw, hold and erase (for loops).</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 4. TIMING AND INHERITANCE                             -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Timing, loops and inheritance</h2>
+            <p class="text-muted mb-4">
+              The modifiers are CSS custom properties, so they inherit like the
+              text colour. <code>.icon-anim-loop</code> on a toolbar loops every
+              icon in it, and a single icon can override that with a value of
+              its own.
+            </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class / token</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim-loop</code></td>
+                    <td data-label="What it does">Repeats forever (<code>--icon-anim-iterations: infinite</code>). A looping icon off screen waits (the JS adds <code>.is-offscreen</code>).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code>data-icon-anim-loop-delay="600"</code></td>
+                    <td data-label="What it does">A pause in milliseconds after every lap. On the icon or on an ancestor.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim-persist</code></td>
+                    <td data-label="What it does">Keeps the last frame when the animation ends (<code>--icon-anim-fill: forwards</code>).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.icon-anim-fast</code> / <code class="fw-bold">.icon-anim-slow</code></td>
+                    <td data-label="What it does">Twice as fast / twice as slow.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code>--icon-anim-speed</code></td>
+                    <td data-label="What it does">A tempo multiplier, <code>1</code> by default. <code>2</code> is twice as fast.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code>--icon-anim-delay</code></td>
+                    <td data-label="What it does">A start delay, <code>0s</code> by default.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 bg-surface d-flex flex-wrap gap-4 justify-content-center py-5 icon-anim-hover icon-anim-tap" tabindex="0">
+                <svg class="icon icon-xl icon-anim" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear"></use></svg>
+                <svg class="icon icon-xl icon-anim icon-anim-slow" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear"></use></svg>
+                <svg class="icon icon-xl icon-anim" style="--icon-anim-delay: 0.3s" aria-hidden="true"><use href="img/icons-anim-demo.svg#ph-gear"></use></svg>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;div class="icon-anim-hover"&gt;
+  &lt;svg class="icon icon-anim"&gt;…&lt;/svg&gt;
+  &lt;svg class="icon icon-anim icon-anim-slow"&gt;…&lt;/svg&gt;
+  &lt;svg class="icon icon-anim" style="--icon-anim-delay: 0.3s"&gt;…&lt;/svg&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 5. ACCESSIBILITY AND JS                               -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Accessibility and API</h2>
+            <p class="text-muted mb-3">
+              With <code>prefers-reduced-motion: reduce</code> the icons stay
+              still. Every rule that moves anything sits inside
+              <code>@media (prefers-reduced-motion: no-preference)</code>, so
+              there is nothing to override. Hover also reacts to keyboard
+              focus, and a decorative icon needs
+              <code>aria-hidden="true"</code> like any other.
+            </p>
+            <p class="text-muted mb-4">
+              Icons added later (a toast, a modal filled by
+              <code>fetch</code>) are picked up by the module on its own. From
+              your own JS:
+            </p>
+            <div class="component-showcase mb-4">
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>// one lap of the animation, e.g. after a form has been saved
+window.moliqueIconAnim.play(document.querySelector('#save-icon'));
+
+// preparing a fragment by hand (usually not needed)
+window.moliqueIconAnim.hydrate(container);</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 6. PITFALLS                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Pitfalls</h2>
+            <div class="accordion">
+              <details class="accordion-item" name="icon-anim-pitfalls" open>
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">1</span>
+                  <span>A sprite from another domain or a CDN</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Browsers do not render <code>&lt;use&gt;</code> from another
+                    origin, and the module fetches the sprite from the same
+                    address as the <code>href</code>. Keep the sprite on the
+                    same domain as the page. If the fetch fails, the icon keeps
+                    its <code>&lt;use&gt;</code> and only moves as a whole.
+                  </p>
+                </div>
+              </details>
+              <details class="accordion-item" name="icon-anim-pitfalls">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">2</span>
+                  <span>A pasted SVG from the flattened set has no parts</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    The files in <code>assets/</code> (npm) and the font are a
+                    single outline. The bin or padlock preset finds nothing to
+                    move there, so the icon only gets the whole-icon animation.
+                    For part animations use the stroke files from
+                    <code>raw/</code>: <code>&lt;line&gt;</code>,
+                    <code>&lt;path&gt;</code> and <code>&lt;polyline&gt;</code>
+                    elements with <code>stroke="currentColor"</code>.
+                  </p>
+                </div>
+              </details>
+              <details class="accordion-item" name="icon-anim-pitfalls">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">3</span>
+                  <span><code>.icon-anim-view</code> and hover on the same element</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    After scrolling into view, <code>.is-in-view</code> stays on
+                    the element, so the “animate” state is already on and a
+                    hover will not start the animation a second time. If you
+                    need both, put the view trigger on the container and the
+                    hover on the button inside it.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. RELATED                                            -->
+          <!-- ===================================================== -->
+          <section class="mb-0">
+            <h2 class="text-8 fw-bold mb-3">7. Related pages</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="examples-icon-anim.en" class="card hover-shadow icon-anim-hover">
+                <div class="card-body">
+                  <h3 class="fw-bold text-5 mb-2">Examples: animated icons</h3>
+                  <p class="text-4 text-muted m-0">A gallery of every preset and icons in buttons, menus and tiles.</p>
+                </div>
+              </a>
+              <a href="docs-animations.en" class="card hover-shadow">
+                <div class="card-body">
+                  <h3 class="fw-bold text-5 mb-2">Animations &amp; Micro-interactions</h3>
+                  <p class="text-4 text-muted m-0">The core’s entrance animations and hover effects.</p>
+                </div>
+              </a>
+              <a href="https://phosphoricons.com" class="card hover-shadow" rel="noopener">
+                <div class="card-body">
+                  <h3 class="fw-bold text-5 mb-2">phosphoricons.com</h3>
+                  <p class="text-4 text-muted m-0">Search and the full catalogue of Phosphor icons.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Bottom navigation -->
+          <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+            <a href="docs-widgets.en" class="btn-secondary"
+              ><svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-left"></use></svg> Back: Widgets</a
+            >
+            <a href="docs-onboarding.en" class="btn-primary fw-bold hover-spring"
+              >Next step: Onboarding <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-arrow-right"></use></svg></a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/molique-script.js?v={{ __version }}"></script>
+  </body>
+</html>

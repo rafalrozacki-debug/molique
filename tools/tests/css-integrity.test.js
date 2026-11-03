@@ -65,6 +65,15 @@ function animationNamesIn(css) {
       for (const token of cleaned.trim().split(/\s+/)) addCandidate(names, token);
     }
   }
+  // A custom property named *-anim-name / *-animation-name carries an
+  // animation name that a shared rule later reads with
+  // animation-name: var(...) - molique-style-icon-anim.css works this way, so
+  // one rule holds the long trigger selector instead of every preset. The
+  // var() itself is invisible to the checks above; the value is not.
+  for (const m of css.matchAll(/--[\w-]*?anim(?:ation)?-name\s*:\s*([^;}]+)/g))
+    for (const part of m[1].split(','))
+      addCandidate(names, part.trim());
+
   return names;
 }
 

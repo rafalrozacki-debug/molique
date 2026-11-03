@@ -9,7 +9,7 @@
 
 Lekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na
 natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez
-zależności (zero jQuery). Wersja: **1.7.37**.
+zależności (zero jQuery). Wersja: **1.7.38**.
 
 ## Struktura repozytorium
 
@@ -123,7 +123,7 @@ który nie korzysta z anchor positioning w ogóle.
 ## Moduły opcjonalne (CSS)
 
 Dołączaj tylko te, których używasz - każdy to osobny plik `css/molique-style-*.css`
-(admin, shop, blog, docs, before-after, share, speed-dial).
+(admin, shop, blog, docs, before-after, share, speed-dial, icon-anim).
 
 ## PurgeCSS (opcjonalnie)
 

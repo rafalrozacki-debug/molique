@@ -17,7 +17,8 @@
  *   <svg class="icon"><use href="img/icons-sprite.svg#ph-lightning"></use></svg>
  *
  * Run with:  node tools/gen-icon-sprite.js
- * Output:    img/icons-sprite.svg (repo root - copied into _site/img/ by
+ * Output:    img/icons-sprite.svg, plus one img/icons-<name>.svg per other
+ *            sprite name referenced in src/*.html (repo root - copied into _site/img/ by
  *            the already-existing "img" entry in assetDirs in
  *            vite.config.js, zero extra Vite config needed)
  */
@@ -28,7 +29,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = path.join(root, 'src');
-const outPath = path.join(root, 'img', 'icons-sprite.svg');
+const imgDir = path.join(root, 'img');
 
 // The source Phosphor SVGs are local (not in the repo, ~1500 files per
 // weight) - we let the path be given via an environment variable, with a
@@ -64,51 +65,63 @@ function htmlFiles(dir, out = []) {
   return out;
 }
 
-// #ph-lightning or #ph-lightning--bold (optional weight suffix)
-const ICON_REF = /icons-sprite\.svg#ph-([a-z0-9-]+?)(?:--(thin|light|regular|bold|fill|duotone))?"/g;
+// img/icons-sprite.svg#ph-lightning or ...#ph-lightning--bold (optional
+// weight suffix). Every img/icons-*.svg is its own sprite with only the
+// icons referenced to IT: icons-sprite.svg is the site-wide one (every page
+// loads it), icons-anim-demo.svg holds the gallery of
+// examples-icon-anim.html, so ~120 demo icons do not weigh on every page.
+const ICON_REF = /img\/(icons-[a-z0-9-]+)\.svg#ph-([a-z0-9-]+?)(?:--(thin|light|regular|bold|fill|duotone))?"/g;
 
-const used = new Map(); // "weight/name" -> { name, weight }
+const sprites = new Map(); // "icons-sprite" -> Map("weight/name" -> { name, weight })
 for (const file of htmlFiles(srcDir)) {
   const text = readFileSync(file, 'utf8');
   for (const m of text.matchAll(ICON_REF)) {
-    const name = m[1];
-    const weight = m[2] || DEFAULT_WEIGHT;
-    used.set(`${weight}/${name}`, { name, weight });
+    const [, sprite, name] = m;
+    const weight = m[3] || DEFAULT_WEIGHT;
+    if (!sprites.has(sprite)) sprites.set(sprite, new Map());
+    sprites.get(sprite).set(`${weight}/${name}`, { name, weight });
   }
 }
 
-if (used.size === 0) {
+if (sprites.size === 0) {
   console.log('gen-icon-sprite: no Phosphor icons used in src/*.html - skipping.');
   process.exit(0);
 }
 
 /* ---------- 2. Load and repackage every icon that's used ---------- */
 
-const symbols = [];
 const missing = [];
+const outputs = [];
 
-for (const { name, weight } of [...used.values()].sort((a, b) => a.name.localeCompare(b.name))) {
-  const svgPath = path.join(PHOSPHOR_DIR, weight, `${name}-${weight}.svg`);
-  if (!existsSync(svgPath)) {
-    missing.push(`${name} (weight: ${weight}) - file not found: ${svgPath}`);
-    continue;
+for (const [sprite, used] of [...sprites].sort(([a], [b]) => a.localeCompare(b))) {
+  const symbols = [];
+  for (const { name, weight } of [...used.values()].sort((a, b) => a.name.localeCompare(b.name) || a.weight.localeCompare(b.weight))) {
+    // raw/ in phosphor-icons/core names the regular weight without a
+    // suffix (regular/bell.svg), the other weights with one (light/bell-light.svg).
+    let svgPath = path.join(PHOSPHOR_DIR, weight, `${name}-${weight}.svg`);
+    if (!existsSync(svgPath) && weight === 'regular') svgPath = path.join(PHOSPHOR_DIR, weight, `${name}.svg`);
+    if (!existsSync(svgPath)) {
+      missing.push(`${name} (weight: ${weight}) - file not found: ${svgPath}`);
+      continue;
+    }
+    const raw = readFileSync(svgPath, 'utf8');
+
+    // Extract the original's viewBox and just its content (without the
+    // wrapping <svg> and without the decorative <rect fill="none"/> that
+    // Phosphor appends to every icon as an invisible bounding box - it's
+    // redundant inside a <symbol>).
+    const viewBoxMatch = raw.match(/viewBox="([^"]+)"/);
+    const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 256 256';
+    const inner = raw
+      .replace(/^<svg[^>]*>/, '')
+      .replace(/<\/svg>\s*$/, '')
+      .replace(/<rect[^>]*fill="none"[^>]*\/>/, '')
+      .trim();
+
+    const id = weight === DEFAULT_WEIGHT ? `ph-${name}` : `ph-${name}--${weight}`;
+    symbols.push(`  <symbol id="${id}" viewBox="${viewBox}">${inner}</symbol>`);
   }
-  const raw = readFileSync(svgPath, 'utf8');
-
-  // Extract the original's viewBox and just its content (without the
-  // wrapping <svg> and without the decorative <rect fill="none"/> that
-  // Phosphor appends to every icon as an invisible bounding box - it's
-  // redundant inside a <symbol>).
-  const viewBoxMatch = raw.match(/viewBox="([^"]+)"/);
-  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 256 256';
-  const inner = raw
-    .replace(/^<svg[^>]*>/, '')
-    .replace(/<\/svg>\s*$/, '')
-    .replace(/<rect[^>]*fill="none"[^>]*\/>/, '')
-    .trim();
-
-  const id = weight === DEFAULT_WEIGHT ? `ph-${name}` : `ph-${name}--${weight}`;
-  symbols.push(`  <symbol id="${id}" viewBox="${viewBox}">${inner}</symbol>`);
+  outputs.push({ sprite, symbols });
 }
 
 if (missing.length) {
@@ -118,12 +131,13 @@ if (missing.length) {
   process.exit(1);
 }
 
-/* ---------- 3. Write the sprite ---------- */
+/* ---------- 3. Write the sprites ---------- */
 
-const sprite =
-  '<svg xmlns="http://www.w3.org/2000/svg" style="display:none">\n' +
-  symbols.join('\n') +
-  '\n</svg>\n';
-
-writeFileSync(outPath, sprite, 'utf8');
-console.log(`gen-icon-sprite: ${symbols.length} Phosphor icons -> img/icons-sprite.svg`);
+for (const { sprite, symbols } of outputs) {
+  const svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" style="display:none">\n' +
+    symbols.join('\n') +
+    '\n</svg>\n';
+  writeFileSync(path.join(imgDir, `${sprite}.svg`), svg, 'utf8');
+  console.log(`gen-icon-sprite: ${symbols.length} Phosphor icons -> img/${sprite}.svg`);
+}

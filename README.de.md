@@ -9,7 +9,7 @@
 
 Ein leichtgewichtiges, konsequent optimiertes CSS-Framework für B2B.
 Aufgebaut auf nativen Cascade Layers (`@layer`), ohne Spezifitätskämpfe und
-ohne Abhängigkeiten (kein jQuery). Version: **1.7.37**.
+ohne Abhängigkeiten (kein jQuery). Version: **1.7.38**.
 
 ## Repository-Struktur
 
@@ -129,7 +129,7 @@ Positioning auskommt.
 
 Binden Sie nur die Module ein, die Sie verwenden - jedes ist eine eigene
 Datei `css/molique-style-*.css` (admin, shop, blog, docs, before-after,
-share, speed-dial).
+share, speed-dial, icon-anim).
 
 ## PurgeCSS (optional)
 

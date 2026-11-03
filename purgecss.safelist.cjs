@@ -3,7 +3,7 @@
  *
  * AUTO-GENERATED FILE - do not edit by hand.
  * Source: tools/gen-safelist.js   |   Regenerate with: node tools/gen-safelist.js
- * Generated: 2026-08-25
+ * Generated: 2026-11-03
  *
  * WHY THIS EXISTS: some molique classes never appear in the HTML - they're
  * added by JS at runtime (states, carousel/lightbox/toast markup).
@@ -38,6 +38,8 @@ const runtime = {
     'file-upload-name',
     'fw-bold',
     'icon',
+    'icon-anim',
+    'icon-anim-play',
     'js-resetting',
     'lang-suggest-actions',
     'lang-suggest-bar',
@@ -96,6 +98,7 @@ const runtime = {
     'toast-top-left',
     'toast-top-right',
     'toast-warning',
+    'tooltip-popover-bottom',
     'tour-dialog',
     'tour-dot',
     'tour-dots',
@@ -113,11 +116,35 @@ const runtime = {
   // molique's state-class convention. A pattern instead of a literal list,
   // since it also protects classes toggled by YOUR OWN code (e.g.
   // .step.is-completed).
-  // Covers 17 .is-* classes in the CSS.
+  // Covers 21 .is-* classes in the CSS.
   greedy: [/^is-/],
-  // Animation triggered from an inline style in JS - no CSS rule
-  // references it, so the keyframes:true option would remove it.
+  // Animations no CSS animation declaration names directly - triggered from
+  // an inline style in JS, or named through a custom property and read with
+  // animation-name: var(...) - so the keyframes:true option would remove them.
   keyframes: [
+    'iconAnimBeat',
+    'iconAnimBlink',
+    'iconAnimBounce',
+    'iconAnimCart',
+    'iconAnimDrift',
+    'iconAnimDrop',
+    'iconAnimFlash',
+    'iconAnimFlip',
+    'iconAnimFloat',
+    'iconAnimFly',
+    'iconAnimHit',
+    'iconAnimLaunch',
+    'iconAnimNudge',
+    'iconAnimPop',
+    'iconAnimRing',
+    'iconAnimSearch',
+    'iconAnimShake',
+    'iconAnimSpin',
+    'iconAnimSpinCcw',
+    'iconAnimTada',
+    'iconAnimTurn',
+    'iconAnimWiggle',
+    'iconAnimWrite',
     'toastProgressAnim',
   ],
 };
