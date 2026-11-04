@@ -60,6 +60,9 @@ const PAGE = `<!doctype html><html><head><style>${CSS}</style>
 <button id="hover-parent" class="icon-anim-hover">${icon('ph-bell', '', 'id="bell"')} Bell</button>
 <button id="tap" class="icon-anim-tap">${icon('ph-trash', '', 'id="trash"')}</button>
 <span id="loop" class="icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="400">${icon('ph-check', '', 'id="check"')}</span>
+<span id="loop-gone" class="icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="600">${icon('ph-check', '', 'id="check-gone"')}</span>
+<span id="loop-back" class="icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="600">${icon('ph-check', '', 'id="check-back"')}</span>
+<span id="loop-stagger" class="icon-anim-play icon-anim-loop" data-icon-anim-loop-delay="150">${icon('ph-phone-call--bold', '', 'id="phone-loop"')}</span>
 ${icon('ph-bell--duotone', 'icon-anim-play', 'id="duo" data-icon-anim="draw"')}
 ${icon('ph-bell--fill', 'icon-anim-play', 'id="fill"')}
 ${icon('ph-missing', 'icon-anim-play', 'id="missing"')}
@@ -193,9 +196,62 @@ try {
   await page.waitForTimeout(1000);
   check('tap: .is-tapped removed once the animation has finished', !(await page.evaluate(() => document.querySelector('#tap').classList.contains('is-tapped'))));
 
-  await page.waitForTimeout(250); // check-draw lap is 0.55s, delay 400ms
-  const looping = await names(page, '#check');
-  check('loop delay pauses between laps', looping.join() === 'iconAnimPartDraw@1:paused', looping.join());
+  /* ---------- loop delay ---------- */
+
+  // A timeout must read as FAIL, not as an exception that ends the run early.
+  const reached = (fn, arg) => page.waitForFunction(fn, arg, { timeout: 3000 }).then(() => true, () => false);
+  const inPause = (sel) => reached((s) => document.querySelector(s).getAnimations({ subtree: true }).length === 0, sel);
+  const running = (sel) =>
+    reached((s) => document.querySelector(s).getAnimations({ subtree: true }).some((a) => a.playState === 'running'), sel);
+  const tickOffset = (sel) =>
+    page.evaluate((s) => getComputedStyle(document.querySelector(`${s} [data-part="1"]`)).strokeDashoffset, sel);
+
+  // From a running lap, so the stopwatch below sees a whole pause, not its tail.
+  await running('#check');
+  check('loop delay: a pause follows the lap', await inPause('#check'));
+  const pausedAt = Date.now();
+  check('loop delay: the icon rests during the pause, a drawn tick stays drawn', parseFloat(await tickOffset('#check')) === 0, await tickOffset('#check'));
+  const nextLapRan = await running('#check');
+  const pauseMs = Date.now() - pausedAt;
+  check('loop delay: the next lap starts when the pause is over', nextLapRan && pauseMs >= 250 && pauseMs < 900, `${pauseMs} ms`);
+
+  await inPause('#check-gone');
+  await page.evaluate(() => document.querySelector('#loop-gone').classList.remove('icon-anim-play'));
+  await page.waitForTimeout(800);
+  check('loop delay: trigger removed during the pause, the lap is not revived', (await names(page, '#check-gone')).length === 0, (await names(page, '#check-gone')).join());
+
+  await inPause('#check-back');
+  await page.evaluate(() => {
+    const el = document.querySelector('#loop-back');
+    el.classList.remove('icon-anim-play');
+    el.getBoundingClientRect();
+    el.classList.add('icon-anim-play');
+  });
+  await running('#check-back');
+  const backAnims = await names(page, '#check-back');
+  check('loop delay: trigger back during the pause, exactly one lap runs', backAnims.join() === 'iconAnimPartDraw@1:running', backAnims.join());
+
+  // Part 1 of phone-call starts 100 ms after part 3. Without the stagger being
+  // skipped on restart the gap grows by 100 ms on every lap.
+  await page.waitForTimeout(2200);
+  await reached(() => {
+    const parts = document.querySelector('#phone-loop').getAnimations({ subtree: true }).filter((a) => a.effect.target.dataset.part);
+    return parts.length === 2 && parts.every((a) => a.playState === 'running');
+  });
+  const lapDrift = await page.evaluate(() => {
+    const [a, b] = document.querySelector('#phone-loop').getAnimations({ subtree: true }).filter((x) => x.effect.target.dataset.part);
+    return Math.abs(a.currentTime - b.currentTime);
+  });
+  check('loop delay: parts keep their stagger lap after lap', lapDrift < 120, `${Math.round(lapDrift)} ms`);
+
+  // play() and pause() from the API would detach the lap from
+  // animation-play-state, and .is-offscreen could no longer stop it.
+  const offscreenStates = await page.evaluate(() => {
+    const el = document.querySelector('#phone-loop');
+    el.classList.add('is-offscreen');
+    return el.getAnimations({ subtree: true }).map((a) => a.playState);
+  });
+  check('loop delay: laps after a pause still stop off screen', offscreenStates.length > 0 && offscreenStates.every((s) => s === 'paused'), offscreenStates.join());
 
   check('icon-anim-view waits until scrolled in', (await names(page, '#view')).length === 0);
   await page.evaluate(() => document.querySelector('#view').scrollIntoView());
@@ -223,12 +279,13 @@ try {
   check('prefers-reduced-motion: reduce stops every icon animation', still === 0, String(still));
 
   check('no page errors', errors.length === 0, errors.join(' | '));
+} catch (err) {
+  check('the run reached the end', false, err.message);
 } finally {
-  await browser.close();
+  // close() can hang on this machine after every check has passed: without
+  // the race the exit code, and any exception above, would never come out.
+  await Promise.race([browser.close(), new Promise((resolve) => setTimeout(resolve, 3000))]);
 }
 
-if (failed) {
-  console.log(`\n${failed} check(s) failed`);
-  process.exit(1);
-}
-console.log('\nall checks passed');
+console.log(failed ? `\n${failed} check(s) failed` : '\nall checks passed');
+process.exit(failed ? 1 : 0);

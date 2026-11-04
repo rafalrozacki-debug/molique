@@ -296,23 +296,33 @@
       if (t) tap(t);
     });
 
-    // Pause between laps: hold each animation at the start of its next lap
-    // for the given time. All parts of one preset share a duration, so they
-    // pause and resume together.
+    // Pause between laps. The event lands on frame 0 of the next lap, and
+    // frame 0 is not always the resting icon: a tick that draws itself is not
+    // drawn yet, confetti is still folded up. Holding there would blank the
+    // icon for the whole pause, so the animation is taken off the element
+    // instead, which hands it back to its resting style. Nothing is kept to
+    // revive later: when the pause ends, CSS starts a new animation, or does
+    // not if the trigger is gone, so a stale one can never outlive its trigger.
     document.addEventListener('animationiteration', (e) => {
-      const holder = e.target.closest && e.target.closest('[data-icon-anim-loop-delay]');
-      if (!holder || !e.target.closest('.icon-anim')) return;
+      const target = e.target;
+      const holder = target.closest && target.closest('[data-icon-anim-loop-delay]');
+      if (!holder || !target.closest('.icon-anim')) return;
       const delay = parseInt(holder.dataset.iconAnimLoopDelay, 10);
-      if (!(delay > 0) || !e.target.getAnimations) return;
-      const anim = e.target.getAnimations().find((a) => a.animationName === e.animationName);
+      if (!(delay > 0) || !target.getAnimations) return;
+      const anim = target.getAnimations().find((a) => a.animationName === e.animationName);
       if (!anim) return;
-      anim.pause();
-      setTimeout(() => {
-        // The trigger may be gone (pointer left) - then the animation was
-        // cancelled and must not be revived.
-        if (e.target.getAnimations().includes(anim)) anim.play();
-      }, delay);
+      const lead = anim.effect.getComputedTiming().delay;
+      target.style.animationName = 'none';
+      setTimeout(() => nextLap(target, e.animationName, lead), delay);
     });
+  }
+
+  // `lead` is the stagger, already served before the first lap. Serving it
+  // again on every lap would pull the parts of an icon further apart each time.
+  function nextLap(target, name, lead) {
+    target.style.removeProperty('animation-name');
+    const fresh = target.getAnimations().find((a) => a.animationName === name);
+    if (fresh) fresh.currentTime = lead;
   }
 
   /* ---------- setup ---------- */

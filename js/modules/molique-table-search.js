@@ -9,6 +9,13 @@
  *     <tr><td colspan="3" class="cheat-sheet-category">Section</td></tr>
  *     <tr data-tags="form input validation">…</tr>
  *
+ * NOT ONLY TABLES. data-search-item="<selector>" filters any elements inside
+ * the target instead of rows - cards in a grid, list items:
+ *
+ *   <input data-search-target="#gallery" data-search-item=".card">
+ *   <div id="gallery" class="grid-auto">
+ *     <div class="card" data-tags="alarm notification">…</div>
+ *
  * SEARCHES MORE THAN THE VISIBLE TEXT. A row also matches on its data-tags -
  * the words someone types when they know their problem but not the class name
  * ("centre", "wrap", "scroll"). Tags stay out of the markup's visible output,
@@ -89,28 +96,39 @@ function setupTableSearch(input) {
   const statusTarget = input.getAttribute('data-search-status');
   const status = statusTarget ? document.querySelector(statusTarget) : null;
   const emptyLabel = input.getAttribute('data-search-empty') || texts.empty;
+  const itemSelector = input.getAttribute('data-search-item') || 'tr';
+  const inTable = !!tableBody.closest('table');
 
   let categories = [];
   let entries = [];
 
-  /** the "nothing found" row, created once and only when it is first needed */
+  /** the "nothing found" message, created once and only when it is first needed */
   let emptyRow = null;
+  let emptyText = null;
   function ensureEmptyRow() {
     if (emptyRow) return emptyRow;
-    const firstRow = tableBody.querySelector('tr');
-    const columns = firstRow ? firstRow.children.length : 1;
-    emptyRow = document.createElement('tr');
-    emptyRow.className = 'table-search-empty';
-    const cell = document.createElement('td');
-    cell.colSpan = columns;
-    cell.className = 'text-center text-muted p-4';
-    emptyRow.appendChild(cell);
-    tableBody.appendChild(emptyRow);
+    if (inTable) {
+      const firstRow = tableBody.querySelector('tr');
+      const columns = firstRow ? firstRow.children.length : 1;
+      emptyRow = document.createElement('tr');
+      emptyRow.className = 'table-search-empty';
+      emptyText = document.createElement('td');
+      emptyText.colSpan = columns;
+      emptyText.className = 'text-center text-muted p-4';
+      emptyRow.appendChild(emptyText);
+      tableBody.appendChild(emptyRow);
+    } else {
+      // Beside the container, not in it: inside a grid the message would be
+      // squeezed into a single track.
+      emptyRow = emptyText = document.createElement('p');
+      emptyRow.className = 'table-search-empty text-center text-muted p-4 w-100';
+      tableBody.after(emptyRow);
+    }
     return emptyRow;
   }
 
   function reindex() {
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    const rows = Array.from(tableBody.querySelectorAll(itemSelector));
     categories = rows.filter(isTableSearchCategoryRow);
     entries = rows
       .filter((r) => !isTableSearchCategoryRow(r) && r !== emptyRow)
@@ -145,11 +163,14 @@ function setupTableSearch(input) {
     // Empty state - without it, zero matches just left a blank table.
     if (terms.length && visible === 0) {
       const row = ensureEmptyRow();
-      row.firstChild.textContent = emptyLabel + ' "' + input.value.trim() + '"';
+      emptyText.textContent = emptyLabel + ' "' + input.value.trim() + '"';
       row.hidden = false;
     } else if (emptyRow) {
       emptyRow.hidden = true;
     }
+    // An empty grid still claims its width and, in a flex parent, pushes the
+    // message off centre.
+    if (!inTable) tableBody.hidden = terms.length > 0 && visible === 0;
 
     if (status) status.textContent = terms.length ? texts.count(visible, entries.length) : '';
   }

@@ -597,7 +597,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   telefon dodaj `.icon-anim-tap`), `.icon-anim-tap` (gra do końca),
   `.icon-anim-view` (wjazd w widok, `data-icon-anim-once="false"` =
   za każdym razem), `.icon-anim-play` (póki klasa jest). Modyfikatory
-  dziedziczą się: `.icon-anim-loop` (+ `data-icon-anim-loop-delay="ms"`),
+  dziedziczą się: `.icon-anim-loop` (+ `data-icon-anim-loop-delay="ms"`, na
+  czas przerwy ikona wraca do zwykłego wyglądu; do 1.7.39 rysowany ptaszek
+  znikał na całą przerwę),
   `.icon-anim-persist`, `.icon-anim-fast`/`-slow`, `--icon-anim-speed`,
   `--icon-anim-delay`. Ponad 100 ikon ma własny preset (rusza częściami),
   inne pulsują; inna animacja: `data-icon-anim="wiggle|ring|shake|bounce|
@@ -625,7 +627,10 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   po 400px scrolla, nie osobny moduł).
 - **Wyszukiwarka tabeli:** dowolny `input[data-search-target="#id"]`
   filtruje wiersze `#id` na żywo (`js/modules/molique-table-search.js`,
-  auto-ładowany po `data-search-target`). Wiersz `.cheat-sheet-category`
+  auto-ładowany po `data-search-target`). `data-search-item=".card"` (od
+  1.7.40) filtruje zamiast wierszy dowolne elementy, np. karty w siatce, a
+  pusty stan wstawia tuż za kontenerem. Do 1.7.39 pole bez `<tr>` milczało.
+  Wiersz `.cheat-sheet-category`
   chowa się automatycznie, gdy nic pod nim nie pasuje - reszta tabel
   ignoruje tę klasę bezpiecznie.
 

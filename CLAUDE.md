@@ -215,6 +215,15 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   przeglądarce: `npm run test:icon-anim` (Playwright spoza repo, bez niego
   SKIP). `npm run test:css` łapie też nazwy keyframes w `--*-anim-name`
   i (od v1.7.39) w `--*-anim-part-name`.
+- **`icon-anim`: przerwa w pętli zdejmuje animację, nie pauzuje jej.**
+  `animationiteration` przychodzi na klatce 0 następnego okrążenia, a klatka 0
+  nie musi być spoczynkiem: w 1.7.39 pauza zostawiała ptaszek nienarysowany
+  przez 84% czasu. Moduł ustawia na czas przerwy `animation-name: none` inline,
+  a po niej zdejmuje styl i pomija stagger (`currentTime = lead`). Nie wracaj do
+  `cancel()` + `play()` na zapamiętanym obiekcie: gdy wyzwalacz zniknie i wróci
+  w trakcie przerwy, a świeża animacja akurat też pauzuje, stary obiekt zostaje
+  wskrzeszony jako zombie, którego CSS już nie zgasi (złapał to test
+  `prefers-reduced-motion`).
 - **`icon-anim`: części wybieraj po typie i kształcie, gdy kolejność się
   różni** (v1.7.39): `> polyline`, `> line:nth-of-type(2)`, zamknięta
   ścieżka `[d$="Z"]`, a w ostateczności atrybut geometrii

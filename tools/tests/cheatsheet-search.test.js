@@ -70,8 +70,13 @@ class El {
     this.children.push(c);
     return c;
   }
-  get firstChild() {
-    return this.children[0];
+  after(c) {
+    c.parent = this.parent;
+    this.parent.children.splice(this.parent.children.indexOf(this) + 1, 0, c);
+  }
+  closest(sel) {
+    for (let e = this; e; e = e.parent) if (e.matchesSimple(sel)) return e;
+    return null;
   }
   get textContent() {
     return this.children.length ? this.children.map((c) => c.textContent).join(' ') : this.text;
@@ -208,7 +213,7 @@ console.log('\n--- widget behaviour ---');
 const partial = fs.readFileSync(PARTIAL('pl'), 'utf8');
 const bodyHtml = partial.slice(partial.indexOf('<tbody'), partial.indexOf('</tbody>'));
 
-const tbody = new El('tbody');
+const tbody = new El('table').appendChild(new El('tbody'));
 let dataRows = 0;
 let categories = 0;
 {
@@ -265,7 +270,7 @@ check('counter written', counter.textContent === '5 z ' + dataRows, JSON.stringi
 
 input.value = 'qqqqq';
 input.dispatch('input');
-check('empty state appears', tbody.children.some((r) => r._class.has('table-search-empty') && !r.hidden));
+check('empty state appears', !tbody.hidden && tbody.children.some((r) => r._class.has('table-search-empty') && !r.hidden));
 check('every section hidden on zero hits', visibleCategories() === 0);
 check('counter shows zero', counter.textContent === '0 z ' + dataRows);
 
@@ -277,6 +282,105 @@ check(
 );
 check('Esc hides the empty state', !tbody.children.some((r) => r._class.has('table-search-empty') && !r.hidden));
 check('Esc clears the counter', counter.textContent === '');
+
+/* ============================================================ *
+ * Suite 3 - data-search-item: cards in a grid instead of rows
+ * ============================================================ */
+
+const section = new El('section');
+const grid = section.appendChild(new El('div'));
+const addCard = (label, tags) => {
+  const card = grid.appendChild(new El('div'));
+  card.className = 'card';
+  card.dataset.tags = tags;
+  card.appendChild(new El('span')).textContent = label;
+  return card;
+};
+const bellCard = addCard('bell', 'alarm dzwon');
+const trashCard = addCard('trash', 'garbage kosz');
+
+const cardInput = new El('input');
+cardInput.setAttribute('data-search-target', '#grid');
+cardInput.setAttribute('data-search-item', '.card');
+cardInput.value = '';
+const cardsLive = loadModule({
+  documentElement: { lang: 'pl' },
+  activeElement: null,
+  querySelector: (sel) => (sel === '#grid' ? grid : null),
+  querySelectorAll: (sel) => (sel === 'input[data-search-target]' ? [cardInput] : []),
+  createElement: (t) => new El(t),
+  addEventListener: () => {},
+});
+cardsLive.window.initTableSearch();
+
+const typeInCards = (value) => {
+  cardInput.value = value;
+  cardInput.dispatch('input');
+};
+const emptyMessage = () => section.children.find((c) => c._class.has('table-search-empty'));
+
+typeInCards('dzwonek');
+check('cards: a tag stem finds the card', !bellCard.hidden && trashCard.hidden);
+typeInCards('trash');
+check('cards: the visible label still matches', bellCard.hidden && !trashCard.hidden);
+check('cards: the elements inside a card are not items', bellCard.children.every((c) => !c.hidden));
+typeInCards('qqqqq');
+check('cards: empty state beside the grid, not in it', !!emptyMessage() && !emptyMessage().hidden && !grid.children.some((c) => c._class.has('table-search-empty')));
+check('cards: empty state names the query', !!emptyMessage() && emptyMessage().textContent.includes('qqqqq'), emptyMessage() && emptyMessage().textContent);
+check('cards: the empty grid steps aside for the message', grid.hidden);
+typeInCards('dzwonek');
+check('cards: a hit after an empty search brings the grid back', !grid.hidden && emptyMessage().hidden);
+typeInCards('qqqqq');
+cardInput.dispatch('keydown', { key: 'Escape' });
+check('cards: Esc restores them and hides the message', !grid.hidden && !bellCard.hidden && !trashCard.hidden && emptyMessage().hidden);
+
+/* ============================================================ *
+ * Suite 4 - the real icon gallery, one page per language
+ * ============================================================ */
+
+const GALLERY = (lang) =>
+  path.join(ROOT, 'src', lang === 'pl' ? 'examples-icon-anim.html' : `examples-icon-anim.${lang}.html`);
+
+function loadGallery(lang) {
+  const html = fs.readFileSync(GALLERY(lang), 'utf8');
+  const start = html.indexOf('id="iconGallery"');
+  const body = html.slice(start, html.indexOf('</section>', start));
+  return [...body.matchAll(/<div class="card[^"]*"([^>]*)>.*?<span[^>]*>([^<]*)<\/span>/g)].map((m) => ({
+    name: m[2],
+    text: normalizeTableSearch(m[2]),
+    tags: normalizeTableSearch((/data-tags="([^"]*)"/.exec(m[1]) || [, ''])[1]).split(/\s+/).filter(Boolean),
+  }));
+}
+
+const GALLERY_CASES = [
+  { lang: 'pl', q: 'dzwonek', must: ['bell', 'bell-ringing', 'phone'] },
+  { lang: 'pl', q: 'kosz', must: ['trash', 'basket', 'shopping-cart'] },
+  { lang: 'pl', q: 'usuń', must: ['trash', 'x'] },
+  { lang: 'pl', q: 'usuwanie', must: ['trash'] },
+  { lang: 'pl', q: 'logowanie', must: ['lock', 'sign-in'] },
+  { lang: 'pl', q: 'ladowanie', must: ['spinner', 'circle-notch'] }, // keyboard without Polish characters
+  { lang: 'pl', q: 'alarm', must: ['bell', 'clock'] }, // a Phosphor tag on a Polish page
+  { lang: 'en', q: 'alarm', must: ['bell', 'clock'] },
+  { lang: 'en', q: 'delete', must: ['trash'] },
+  { lang: 'en', q: 'login', must: ['lock', 'sign-in', 'user'] },
+  { lang: 'en', q: 'notifications', must: ['bell'] },
+  { lang: 'de', q: 'papierkorb', must: ['trash'] },
+  { lang: 'de', q: 'löschen', must: ['trash'] },
+  { lang: 'de', q: 'anmelden', must: ['sign-in'] },
+  { lang: 'de', q: 'schließen', must: ['x', 'x-circle'] },
+  { lang: 'de', q: 'alarm', must: ['bell', 'clock'] },
+];
+
+for (const lang of ['pl', 'en', 'de']) {
+  const cards = loadGallery(lang);
+  check(`gallery ${lang}: every card carries tags`, cards.length > 100 && cards.every((c) => c.tags.length > 0), `${cards.length} cards`);
+  check(`gallery ${lang}: Phosphor markers stay out of the tags`, !cards.some((c) => c.tags.some((t) => t.includes('*'))));
+}
+for (const c of GALLERY_CASES) {
+  const found = search(loadGallery(c.lang), c.q).map((r) => r.name);
+  check(`gallery ${c.lang}: "${c.q}"`, c.must.every((n) => found.includes(n)), `${found.length} found`);
+}
+check('gallery: a word nobody tagged finds nothing', search(loadGallery('pl'), 'qqqqq').length === 0);
 
 console.log(failed ? `\n${failed} check(s) failed` : '\nall checks passed');
 process.exit(failed ? 1 : 0);
