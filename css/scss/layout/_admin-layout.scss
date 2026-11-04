@@ -110,8 +110,16 @@
   background-color: var(--main-bg);
   border-radius: var(--main-radius);
   /* FIX: guaranteed padding regardless of mode */
-  padding: calc(var(--spacing-unit) * 4);
+  padding: var(--admin-main-padding, calc(var(--spacing-unit) * 4));
   padding-bottom: calc(var(--spacing-unit) * 12);
+
+  /* 32 px on each side is close to a fifth of a 360 px screen. The bottom
+     padding stays: the mobile nav bar sits over it, and a smaller one would
+     hide the last table row behind the bar. */
+  @media (max-width: 768px) {
+    padding: var(--admin-main-padding-mobile, calc(var(--spacing-unit) * 1.5));
+    padding-bottom: calc(var(--spacing-unit) * 12);
+  }
   overflow-x: hidden;
   display: flex;
   flex-direction: column;

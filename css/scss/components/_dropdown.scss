@@ -103,6 +103,17 @@
   }
 }
 
+/* A label above a group of items. Not an item: it has no hover and takes no
+   clicks, so a plain <div> is the right element. The inline padding matches
+   .dropdown-item, which is what lines the label up with the text below it. */
+.dropdown-header {
+  display: block;
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 0.5);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+}
+
 /* Modifier: the menu opens from the RIGHT edge of the trigger instead of
    the left - needed for dropdowns sitting near the right edge of the
    screen (e.g. in the navbar), so the panel doesn't overflow the viewport. */
@@ -192,6 +203,14 @@
   left: anchor(left);
   margin: 4px 0 0 0;
   color: var(--text-main);
+  /* 45%, not "whatever fits": a fallback from the list below is used only when
+     it removes the overflow completely, so the menu must fit on one side of
+     the button wherever the button is. Above and below always add up to the
+     screen minus the button, so one of them holds at least 45% of it. Without
+     a limit a long menu ran past the screen, and in the top layer nothing
+     scrolls it into view: the last items could not be clicked. */
+  max-height: var(--dropdown-max-height, 45dvh);
+  overflow-y: auto;
   position-try-fallbacks:
     --dropdown-popover-flip-left,
     --dropdown-popover-flip-above,

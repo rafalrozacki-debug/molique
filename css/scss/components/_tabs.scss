@@ -162,6 +162,15 @@ $tab-focus: '';
     max-width: 100%; // a safeguard on mobile with many tabs
   }
 
+  /* A pill with no panels is a switcher: a filter, or navigation between
+     pages. Nothing below it needs the full width, and .tabs { width: 100% }
+     would keep claiming it, so in a row the neighbours were pushed away from
+     a pill that draws far narrower than its box. */
+  &:not(:has(.tabs-content)) {
+    width: fit-content;
+    max-width: 100%;
+  }
+
   .tab-label {
     position: relative;
     z-index: 2;

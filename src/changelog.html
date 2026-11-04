@@ -47,6 +47,49 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.41 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.41</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  Zgłoszenia z panelu B2B: menu, kafelki, tooltip, autoloader
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Każdy punkt podaje objaw sprzed poprawki i obejście, które projekt może zdjąć po aktualizacji do 1.7.41. Wszystkie objawy odtworzono w przeglądarce na wersji 1.7.40.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><code>.with-dividers</code>.</strong> Gdy po ostatnim przycisku stało menu <code>[popover]</code>, przycisk zostawał z kreską po prawej, bo ostatnim dzieckiem grupy było niewidoczne menu. Menu nie dostaje już kreski i nie liczy się jako ostatnia pozycja. Do zdjęcia: własne reguły chowające <code>::after</code> ostatniego przycisku.</li>
+                  <li><strong><code>.dropdown-menu[popover]</code>.</strong> Długie menu wyjeżdżało poza ekran (60 pozycji to 2291 px na ekranie 700 px), a dolnych pozycji nie dało się kliknąć. Teraz wysokość ogranicza <code>--dropdown-max-height</code> (domyślnie <code>45dvh</code>) i lista przewija się w środku. Do zdjęcia: własne <code>max-height</code> i <code>overflow-y</code> menu.</li>
+                  <li><strong><code>.tabs-pill</code> bez <code>.tabs-content</code>.</strong> Pastylka użyta jako filtr albo nawigacja zajmowała całą szerokość (614 px przy rysunku 191 px) i odpychała sąsiadów. Teraz ma szerokość pastylki, bez zmian w markupie. Do zdjęcia: <code>width: max-content</code> na <code>.tabs</code>. Pastylka z panelami działa jak dotąd.</li>
+                  <li><strong><code>.badge</code> i <code>.badge-light</code>.</strong> <code>.badge</code> bez wariantu miał biały tekst bez tła, a <code>.badge-light</code> nie istniał, więc taka etykieta była niewidoczna na jasnej stronie. <code>.badge</code> wygląda teraz jak <code>.badge-secondary</code>, a <code>.badge-light</code> działa w obu motywach. Do zdjęcia: zamienniki <code>badge-secondary</code> użyte tylko po to, żeby etykietę było widać.</li>
+                  <li><strong>Autoloader i komponenty z AJAX-a.</strong> Autoloader sprawdzał stronę raz, przy starcie, więc komponent dosypany później zostawał bez modułu, po cichu. Teraz moduł przychodzi także wtedy. Do zdjęcia: ręczne dociąganie modułów po podmianie fragmentu. Przewodniki <code>[data-tour]</code> i <code>[data-onboarding]</code> nadal działają tylko od startu strony.</li>
+                  <li><strong>Autoloader i moduł już obecny na stronie.</strong> Moduł dołączony ręcznie „na zapas” był ładowany drugi raz i kończył się błędem <code>SyntaxError: Identifier has already been declared</code>. Teraz autoloader go wykrywa i tylko inicjuje. Do zdjęcia: warunki omijające ręczne dołączanie.</li>
+                  <li><strong><code>.admin-main</code> na telefonie.</strong> 32 px marginesu z każdej strony zabierało blisko jedną piątą ekranu 360 px. Do 768 px margines to teraz 12 px, a dolny zostaje duży, bo leży nad nim pasek nawigacji. Tokeny: <code>--admin-main-padding</code> i <code>--admin-main-padding-mobile</code>. Do zdjęcia: własny <code>padding</code> <code>.admin-main</code> w media query.</li>
+                  <li><strong><code>.tooltip-element-start</code>.</strong> Nowy wariant: dymek zaczyna się przy lewej krawędzi wyzwalacza. Wyśrodkowany dymek w pierwszej kolumnie tracił lewą połowę, bez żadnego sygnału. Do zdjęcia: własne <code>left: 0</code> i <code>--tooltip-tx: 0</code>.</li>
+                  <li><strong><code>.selection-tile</code> zablokowany.</strong> Kafelek nie miał stanu wyłączonego. Teraz <code>input:disabled</code> i <code>&lt;fieldset disabled&gt;</code> przygaszają go i ustawiają kursor blokady, a zaznaczony zostaje w pełnym kolorze. Do zdjęcia: reguły <code>fieldset:disabled .selection-tile</code>.</li>
+                  <li><strong><code>.tile-content</code>.</strong> Stan zaznaczenia przemalowuje ramkę, a kafelek nie miał własnej, więc bez <code>.border</code> w markupie niezaznaczona opcja nie miała żadnego obrysu. Ramka jest teraz częścią komponentu. Do zdjęcia: wymóg <code>.border</code>, jeśli pilnuje go test albo szablon. Klasa <code>.border</code> nadal działa.</li>
+                  <li><strong><code>.dropdown-header</code>.</strong> Nowa etykieta nad grupą pozycji menu, z wcięciem takim jak <code>.dropdown-item</code>. Do zdjęcia: zestawy klas w rodzaju <code>px-2 pt-2 pb-1 text-1 text-muted fw-bold</code>.</li>
+                  <li><strong><code>.text-nowrap</code>.</strong> Nowa klasa: tekst bez zawijania. Do zdjęcia: twarde spacje wstawiane tylko po to, żeby waluta nie spadała do nowej linii.</li>
+                  <li><strong><code>.flex-row</code>, <code>.flex-md-row</code>, <code>.flex-md-column</code>.</strong> <code>.flex-row</code> nie istniał, a <code>.d-flex</code> nie zmienia kolumny w <code>.card-body</code>, więc taki układ zostawał pionowy. Klasy wygrywają teraz z kierunkiem komponentu, także <code>class="card-body flex-row"</code>. Do zdjęcia: osobne dziecko <code>.card-body</code> dodawane tylko po to, żeby dostać rząd. <code>.card</code> z <code>.flex-md-row</code> układa się teraz od <code>md</code> w rzędzie, tak jak mówi klasa; wcześniej klasa była ignorowana.</li>
+                  <li><strong><code>.flex-shrink-0</code>.</strong> Klasa nie istniała, a była używana w szablonach i po cichu nic nie robiła, więc przycisk obok długiego tekstu zawijał napis. Teraz działa. Do zdjęcia: nic, istniejące użycia zaczynają działać same.</li>
+                  <li><strong><code>.grid-expand-unchecked</code>.</strong> Nowy wariant, odwrotność <code>.grid-expand</code>: treść widoczna, dopóki <code>.form-switch</code> stojący wcześniej w tym samym rodzicu jest wyłączony. Do zdjęcia: reguły <code>form:has(input:checked) …{ display: none }</code>, jeśli panel jest rodzeństwem przełącznika.</li>
+                  <li><strong>Po aktualizacji sprawdź.</strong> <code>.card</code> z <code>.flex-md-row</code> staje się rzędem, menu dłuższe niż 45% ekranu przewija się w środku, <code>.tile-content</code> bez <code>.border</code> dostaje ramkę, a <code>.badge</code> bez wariantu dostaje szare tło. Dotyczy to też etykiet kolorowanych własnym CSS-em w warstwie niższej niż <code>components</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.40 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

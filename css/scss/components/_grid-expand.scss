@@ -26,4 +26,14 @@
   .form-switch:has(.form-switch-input:checked) + & {
     grid-template-rows: 1fr;
   }
+
+  // The reverse: open until the switch before it is turned on. A general
+  // sibling (~), not (+), so it can follow the panel the switch opens.
+  &.grid-expand-unchecked {
+    grid-template-rows: 1fr;
+  }
+
+  .form-switch:has(.form-switch-input:checked) ~ &.grid-expand-unchecked {
+    grid-template-rows: 0fr;
+  }
 }

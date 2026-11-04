@@ -335,8 +335,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: '.carousel', file: 'modules/molique-carousel.js' },
     { selectors: '[data-lightbox]', file: 'modules/molique-lightbox.js' },
     { selectors: '.modal-dialog', file: 'modules/molique-modal-guard.js', init: 'initModalGuard' },
-    { selectors: '[data-onboarding]', file: 'modules/molique-onboarding.js' },
-    { selectors: '[data-tour]', file: 'modules/molique-tour.js' },
+    { selectors: '[data-onboarding]', file: 'modules/molique-onboarding.js', atStartOnly: true },
+    { selectors: '[data-tour]', file: 'modules/molique-tour.js', atStartOnly: true },
     { selectors: '[data-sortable]', file: 'modules/molique-sortable.js' },
     { selectors: '.select-search', file: 'modules/molique-select.js' },
     { selectors: '.parallax-container', file: 'modules/molique-parallax.js' },
@@ -362,23 +362,58 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: '.icon-anim', file: 'modules/molique-icon-anim.js', init: 'initIconAnim' }
   ];
 
-  dynamicModules.forEach(module => {
-    if (document.querySelector(module.selectors)) {
-      const script = document.createElement('script');
-      // Bezwzględny adres: katalog tego pliku + względna ścieżka modułu.
-      script.src = MOLIQUE_JS_BASE + module.file + MOLIQUE_JS_VERSION_QS;
-      script.defer = true;
-      
-      if (module.init) {
-        script.onload = () => {
-          if (typeof window[module.init] === 'function') {
-            window[module.init]();
-          }
-        };
-      }
-      
-      document.body.appendChild(script);
+  const initModule = (module) => {
+    if (module.init && typeof window[module.init] === 'function') {
+      window[module.init]();
     }
+  };
+
+  // A module the page already carries (enqueued by hand, just in case). A
+  // second copy of a classic script dies on its first top-level const with a
+  // SyntaxError, so it is initialised and not loaded again.
+  const isOnPage = (file) =>
+    [...document.scripts].some((s) => s.src.split('?')[0].endsWith('/' + file));
+
+  function loadModule(module) {
+    module.loaded = true;
+    if (isOnPage(module.file)) {
+      initModule(module);
+      return;
+    }
+    const script = document.createElement('script');
+    // Bezwzględny adres: katalog tego pliku + względna ścieżka modułu.
+    script.src = MOLIQUE_JS_BASE + module.file + MOLIQUE_JS_VERSION_QS;
+    script.defer = true;
+    script.onload = () => initModule(module);
+    document.body.appendChild(script);
+  }
+
+  function scanForModules() {
+    dynamicModules.forEach((module) => {
+      if (!module.loaded && document.querySelector(module.selectors)) loadModule(module);
+    });
+  }
+
+  scanForModules();
+
+  // A guided tour starts by itself, so it answers to the page as it was first
+  // served. A fragment fetched later must not be able to launch one.
+  dynamicModules.forEach((module) => {
+    if (module.atStartOnly) module.loaded = true;
   });
+
+  // A component can first appear in a fragment fetched after the start (a
+  // modal, a table row). Its module then has to arrive too, or the component
+  // silently does nothing. A timer and not requestAnimationFrame: a fetch can
+  // finish in a background tab, where frames do not run.
+  let scanQueued = false;
+  new MutationObserver(() => {
+    if (scanQueued) return;
+    scanQueued = true;
+    setTimeout(() => {
+      scanQueued = false;
+      scanForModules();
+    }, 100);
+  }).observe(document.body, { childList: true, subtree: true });
 
 });

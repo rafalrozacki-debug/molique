@@ -310,8 +310,26 @@
     outline-offset: 2px;
   }
   .selection-tile .tile-content {
+    /* The selected state recolours this border, so the component has to draw
+       it. Without .border in the markup an unselected tile had no outline. */
+    border: 1px solid var(--border-color);
     transition: all var(--transition-speed);
     height: 100%;
+  }
+  .selection-tile {
+    /* input:disabled also matches an input inside <fieldset disabled>, which is
+       the only way to lock a whole radio group. The checked tile keeps full
+       opacity: dimmed with the rest, "you cannot change this choice" would read
+       as "nothing was chosen here". */
+  }
+  .selection-tile:has(input:disabled) {
+    cursor: not-allowed;
+  }
+  .selection-tile:has(input:disabled) .tile-content {
+    opacity: 0.5;
+  }
+  .selection-tile:has(input:disabled:checked) .tile-content {
+    opacity: 1;
   }
   /* Variant with an animated border (works with .hover-border-trace) */
   .selection-tile-animated input[type=radio]:checked + .tile-content,

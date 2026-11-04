@@ -48,6 +48,49 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.41 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.41</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Reports from a B2B panel: menus, tiles, tooltip, autoloader
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Each point gives the symptom before the fix and the workaround a project can remove after updating to 1.7.41. Every symptom was reproduced in a browser on version 1.7.40.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><code>.with-dividers</code>.</strong> With a <code>[popover]</code> menu after the last button, that button kept a divider on its right, because the last child of the group was the invisible menu. The menu now takes no divider and does not count as the last item. To remove: your own rules hiding <code>::after</code> on the last button.</li>
+                  <li><strong><code>.dropdown-menu[popover]</code>.</strong> A long menu ran off the screen (60 items are 2291 px on a 700 px screen) and its last items could not be clicked. Its height is now limited by <code>--dropdown-max-height</code> (<code>45dvh</code> by default) and the list scrolls inside. To remove: your own <code>max-height</code> and <code>overflow-y</code> on the menu.</li>
+                  <li><strong><code>.tabs-pill</code> without <code>.tabs-content</code>.</strong> A pill used as a filter or navigation took the full width (614 px while drawing 191 px) and pushed its neighbours away. It now takes the width of the pill, with no markup change. To remove: <code>width: max-content</code> on <code>.tabs</code>. A pill with panels works as before.</li>
+                  <li><strong><code>.badge</code> and <code>.badge-light</code>.</strong> A <code>.badge</code> with no variant had white text and no background, and <code>.badge-light</code> did not exist, so such a label was invisible on a light page. <code>.badge</code> now looks like <code>.badge-secondary</code>, and <code>.badge-light</code> works in both themes. To remove: <code>badge-secondary</code> stand-ins used only to make a label visible.</li>
+                  <li><strong>The autoloader and AJAX components.</strong> The autoloader checked the page once, at the start, so a component added later silently stayed without its module. The module now arrives then too. To remove: loading modules by hand after replacing a fragment. The <code>[data-tour]</code> and <code>[data-onboarding]</code> guides still work only from the start of the page.</li>
+                  <li><strong>The autoloader and a module already on the page.</strong> A module included by hand “just in case” was loaded a second time and ended in <code>SyntaxError: Identifier has already been declared</code>. The autoloader now detects it and only initialises it. To remove: conditions working around including it by hand.</li>
+                  <li><strong><code>.admin-main</code> on a phone.</strong> 32 px of padding on each side took close to a fifth of a 360 px screen. Up to 768 px the padding is now 12 px, and the bottom one stays large because the navigation bar sits over it. Tokens: <code>--admin-main-padding</code> and <code>--admin-main-padding-mobile</code>. To remove: your own <code>.admin-main</code> <code>padding</code> in a media query.</li>
+                  <li><strong><code>.tooltip-element-start</code>.</strong> A new variant: the bubble starts at the left edge of the trigger. A centred bubble in the first column lost its left half with no sign of it. To remove: your own <code>left: 0</code> and <code>--tooltip-tx: 0</code>.</li>
+                  <li><strong>A locked <code>.selection-tile</code>.</strong> The tile had no disabled state. <code>input:disabled</code> and <code>&lt;fieldset disabled&gt;</code> now dim it and set the not-allowed cursor, while a checked tile keeps its full colour. To remove: <code>fieldset:disabled .selection-tile</code> rules.</li>
+                  <li><strong><code>.tile-content</code>.</strong> The selected state recolours the border, and the tile had none of its own, so without <code>.border</code> in the markup an unselected option had no outline at all. The border is now part of the component. To remove: the <code>.border</code> requirement, if a test or a template enforces it. The <code>.border</code> class still works.</li>
+                  <li><strong><code>.dropdown-header</code>.</strong> A new label above a group of menu items, indented like <code>.dropdown-item</code>. To remove: class sets such as <code>px-2 pt-2 pb-1 text-1 text-muted fw-bold</code>.</li>
+                  <li><strong><code>.text-nowrap</code>.</strong> A new class: text that does not wrap. To remove: non-breaking spaces added only to keep a currency from dropping to a new line.</li>
+                  <li><strong><code>.flex-row</code>, <code>.flex-md-row</code>, <code>.flex-md-column</code>.</strong> <code>.flex-row</code> did not exist, and <code>.d-flex</code> does not change the column in <code>.card-body</code>, so such a layout stayed vertical. These classes now beat the direction of a component, including <code>class="card-body flex-row"</code>. To remove: a separate child of <code>.card-body</code> added only to get a row. A <code>.card</code> with <code>.flex-md-row</code> now lays out in a row from <code>md</code> up, as the class says; the class used to be ignored.</li>
+                  <li><strong><code>.flex-shrink-0</code>.</strong> The class did not exist, yet templates used it and it silently did nothing, so a button next to a long text wrapped its label. It works now. To remove: nothing, existing uses start working by themselves.</li>
+                  <li><strong><code>.grid-expand-unchecked</code>.</strong> A new variant, the reverse of <code>.grid-expand</code>: content visible while a <code>.form-switch</code> standing earlier in the same parent is off. To remove: <code>form:has(input:checked) …{ display: none }</code> rules, if the panel is a sibling of the switch.</li>
+                  <li><strong>Check after updating.</strong> A <code>.card</code> with <code>.flex-md-row</code> becomes a row, a menu taller than 45% of the screen now scrolls inside, a <code>.tile-content</code> without <code>.border</code> gets a border, and a <code>.badge</code> with no variant gets a grey background. That includes labels coloured by your own CSS in a layer below <code>components</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.40 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -9,7 +9,7 @@
 
 Lekki, rygorystycznie zoptymalizowany framework CSS B2B. Zbudowany na
 natywnych warstwach kaskadowych (`@layer`), bez wojen na specyficzność i bez
-zależności (zero jQuery). Wersja: **1.7.40**.
+zależności (zero jQuery). Wersja: **1.7.41**.
 
 ## Struktura repozytorium
 
@@ -165,7 +165,8 @@ przy zachowaniu wszystkiego, co dodaje JS.
 ## Autoloader JS
 
 `molique-script.js` skanuje DOM i **dociąga moduły z `js/modules/` tylko wtedy,
-gdy dany komponent istnieje na stronie** - nie ma potrzeby ręcznego ładowania.
+gdy dany komponent istnieje na stronie**, także gdy pojawi się w niej później (AJAX) -
+nie ma potrzeby ręcznego ładowania.
 Dlatego zostaw folder `js/modules/` w całości obok `molique-script.js`.
 
 ## Motyw (Theme Editor)

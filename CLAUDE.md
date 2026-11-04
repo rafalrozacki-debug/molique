@@ -201,6 +201,16 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   gdy tor może zawierać cokolwiek o nieprzewidywalnej szerokości
   wewnętrznej (tabela, długa etykieta, pigułka zakładek). Naprawione w
   `.admin-layout` (v1.7.13) i `.tabs-pill` - sprawdź oba jako wzorzec.
+- **Klasa, która ma zmienić kierunek flexa, musi leżeć w `utilities`.**
+  Warstwa `layout` przegrywa z `components`, więc `.flex-row` obok
+  `.flex-column` w `_layout.scss` nic by nie zrobił na `.card-body`, po cichu.
+  Stąd `.flex-row`, `.flex-md-row` i `.flex-md-column` w `utilities/_helpers.scss`.
+  Pozostałe `.flex-*` w `_layout.scss` mają to samo ograniczenie.
+- **Autoloader obserwuje DOM (od v1.7.41).** Moduł może przyjść po starcie, więc
+  nie zakładaj w nim, że strona jest kompletna. Nowy moduł, który sam coś
+  uruchamia (jak przewodnik), dostaje `atStartOnly: true`, inaczej odpali go
+  fragment z AJAX-a. Testy z własną makietą przeglądarki (`toast.test.js`) muszą
+  mieć stub `MutationObserver`.
 - **Moduł `icon-anim` (od v1.7.38): presety ustawiają TYLKO zmienne.**
   `--_icon-anim-name`/`-duration`/`-easing` (cała ikona) i
   `--_icon-anim-part-*` (części) czytają dwie reguły wyzwalaczy na końcu

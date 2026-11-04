@@ -392,6 +392,15 @@
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
               </div>
+              <p class="text-4 text-muted mb-3 mt-3">
+                Odwrotny przypadek: treść widoczna, dopóki przełącznik jest wyłączony. <code>.grid-expand-unchecked</code> jest domyślnie otwarty i zwija się po włączeniu przełącznika <code>.form-switch</code> stojącego wcześniej w tym samym rodzicu, także gdy między nimi leży inny panel:
+              </p>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;div class="grid-expand grid-expand-unchecked"&gt;
+  &lt;div class="grid-expand-inner"&gt;Widoczne przy wyłączonym przełączniku&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
             </div>
           </section>
 
@@ -477,6 +486,10 @@
                       Wariant wyglądu: zakładki jako pastylki zamiast
                       podkreślenia.
                     </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.tabs-pill</code> bez <code>.tabs-content</code></td>
+                    <td data-label="Co robi">Sam przełącznik, bez paneli: filtr albo nawigacja między stronami. Szerokość dopasowuje się wtedy do pastylki, więc sąsiedzi w rzędzie nie są odpychani. Z panelami <code>.tabs</code> zajmuje całą szerokość, jak dotąd.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasa"><code class="fw-bold">.tabs-pill-indicator</code></td>
@@ -661,6 +674,17 @@
       data-tooltip="To pole jest zablokowane, bo zamówienie przekazano już do realizacji w magazynie."&gt;Dlaczego nie mogę tego zmienić?&lt;/span&gt;</code></pre>
             </div>
 
+            <p class="text-muted mb-3">
+              Przy krawędzi przycinającego kontenera wyśrodkowany dymek traci część treści bez żadnego sygnału. Wyzwalacz przy lewej krawędzi (pierwsza kolumna formularza albo tabeli) dostaje <code>.tooltip-element-start</code>, a przy prawej <code>.tooltip-element-end</code>. Obie klasy łączą się z <code>.tooltip-element-bottom</code> i <code>.tooltip-element-wide</code>:
+            </p>
+            <p class="mb-3">
+              <span class="tooltip-element tooltip-element-start" data-tooltip="Dymek zaczyna się przy lewej krawędzi wyzwalacza.">Najedź</span>
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;span class="tooltip-element tooltip-element-start" data-tooltip="Dymek zaczyna się przy lewej krawędzi wyzwalacza."&gt;Najedź&lt;/span&gt;</code></pre>
+            </div>
+
             <h3 class="text-6 fw-bold mb-2 mt-4">Tooltip, którego nic nie przytnie</h3>
             <p class="text-muted mb-3">
               <code>.tooltip-element</code> rysuje dymek pseudo-elementem wewnątrz
@@ -710,9 +734,8 @@
               doładowywany automatycznie, gdy na stronie jest
               <code>.tooltip-popover</code>. Moduł działa na delegacji, więc
               wiersze dosypane później (AJAX) nie wymagają ponownej inicjalizacji.
-              Autoloader sprawdza jednak stronę tylko raz, przy starcie: jeśli
-              wtedy nie ma na niej żadnego <code>.tooltip-popover</code>, dołącz
-              moduł sam.
+              Od 1.7.41 autoloader dociąga moduł także wtedy, gdy pierwszy
+              <code>.tooltip-popover</code> trafi na stronę dopiero później.
             </p>
             <p class="text-muted mb-3">
               Dymek staje nad wyzwalaczem, a gdy brakuje miejsca, odbija się pod

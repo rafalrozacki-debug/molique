@@ -9,7 +9,7 @@
 
 Ein leichtgewichtiges, konsequent optimiertes CSS-Framework für B2B.
 Aufgebaut auf nativen Cascade Layers (`@layer`), ohne Spezifitätskämpfe und
-ohne Abhängigkeiten (kein jQuery). Version: **1.7.40**.
+ohne Abhängigkeiten (kein jQuery). Version: **1.7.41**.
 
 ## Repository-Struktur
 
@@ -174,7 +174,8 @@ Verfügbare Gruppen: `colors`, `grid`, `spacing`, `status`.
 
 `molique-script.js` durchsucht das DOM und **lädt Module aus
 `js/modules/` nur dann nach, wenn die passende Komponente auf der Seite
-vorhanden ist** - kein manuelles Laden nötig. Lassen Sie deshalb den
+vorhanden ist**, auch wenn sie erst später dazukommt (AJAX) - kein manuelles
+Laden nötig. Lassen Sie deshalb den
 Ordner `js/modules/` vollständig neben `molique-script.js`.
 
 ## Theme (Theme Editor)

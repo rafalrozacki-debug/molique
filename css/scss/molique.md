@@ -42,6 +42,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 - **Flexbox:** `.d-flex`, `.flex-column`, `.align-items-center`,
   `.justify-content-between`, `.gap-1` do `.gap-5`. Pojedyncze dziecko:
   `.align-self-start/-end/-center/-stretch`.
+  `.flex-shrink-0` (od 1.7.41) blokuje kurczenie. `.flex-row` (od 1.7.41) wygrywa z kierunkiem komponentu, np. `.card-body`,
+  tak samo `.flex-md-row` i `.flex-md-column`; samo `.d-flex` kierunku nie
+  zmienia.
 - **Spacing:** `.m-1` do `.m-5`, `.p-1` do `.p-5` (oraz warianty `-md-`,
   np. `.p-md-4`). Wciąganie w górę (ujemny margines):
   `.overlap-up-50/-100/-150` (np. karta na hero). **Działają dopiero od
@@ -125,6 +128,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   karty, modale) i kotwiczy się automatycznie do swojego przycisku
   (niejawny anchor, bez wrappera `.dropdown`). Wyrównanie do prawej:
   dodatkowo `.dropdown-menu-end`.
+  Limit wysokości: `--dropdown-max-height` (45dvh, od 1.7.41), dłuższa lista
+  przewija się w środku. Powyżej 50% ekranu menu może nie zmieścić się po
+  żadnej stronie przycisku. Etykieta nad grupą pozycji: `.dropdown-header`.
 - **Language Switch (Popover):**
   `<button class="language-switch-trigger" popovertarget="ID">` (z
   `.language-switch-flag` + kodem języka) +
@@ -181,7 +187,11 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `hover-*` mają pierwszeństwo. Do wyboru też w edytorze motywu.
 - **Ghost Buttons (Tabele):** `.btn-action` (np. akcje Edytuj/Usuń).
   Grupowanie z separatorami: `.btn-action-group.with-dividers`.
+  Menu `[popover]` stojące w grupie nie dostaje kreski i nie liczy się jako
+  ostatnia pozycja (od 1.7.41).
 - **Badges:** `.badge` + `.badge-primary` (lub inne kolory).
+  Jasny wariant: `.badge-light`. Sam `.badge` wygląda jak `.badge-secondary`
+  (od 1.7.41; wcześniej biały tekst bez tła).
 - **Modale (Natywne):** `<dialog class="modal-dialog">` (lub
   `.modal-context` dla bocznego/dolnego panelu). Zamykanie:
   `<form method="dialog">`.
@@ -197,6 +207,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.tab-input` ukryty techniką `clip` (jak `.sr-only`, NIE
   `display: none`), więc grupa zostaje obsługiwana strzałkami z
   klawiatury.
+  `.tabs-pill` bez `.tabs-content` (filtr, nawigacja) ma szerokość pastylki i
+  nie odpycha sąsiadów w rzędzie (od 1.7.41).
 - **Akordeony:** `<details class="accordion-item" name="grupa">` >
   `<summary class="accordion-header">` + `<div class="accordion-body">`.
   Nagłówek jest flexem z `gap`, a strzałkę `::after` dosuwa `margin-left: auto`
@@ -298,6 +310,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   280px), krótka etykieta zostaje w jednej linii. Dymek jest pseudo-elementem,
   więc przycina go `overflow` przodka - w tabeli, karcie i modalu użyj
   `.tooltip-popover`.
+  `.tooltip-element-start` (od 1.7.41) zaczyna dymek przy lewej krawędzi
+  wyzwalacza: pierwsza kolumna formularza albo tabeli.
 - **Tooltip w top layer (od 1.7.34):** `.tooltip-popover` - gdy dymek
   siedzi w czymś, co przycina (`.table-wrapper`, `.card`, `.accordion`,
   ciało modala), bo `.tooltip-element` jest pseudo-elementem i nie da się
@@ -306,9 +320,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   Powiązaniem jest WYŁĄCZNIE `aria-describedby` wyzwalacza - bez niego
   dymek się nie otworzy. Obsługę (najechanie 150 ms, fokus z klawiatury,
   dotyk, `Esc`, jeden naraz) robi `js/modules/molique-tooltip-popover.js`,
-  auto-ładowany po `.tooltip-popover`; działa na delegacji, ALE autoloader
-  skanuje stronę tylko przy starcie - gdy `.tooltip-popover` pojawi się
-  dopiero z AJAX-a, dołącz moduł sam (`wp_enqueue_script`).
+  auto-ładowany po `.tooltip-popover`; działa na delegacji, a autoloader
+  dociąga moduł także wtedy, gdy `.tooltip-popover` pojawi się dopiero
+  z AJAX-a (od 1.7.41).
   `popover="hint"` nie zamyka otwartego dropdownu; gdzie `hint` jest
   nieznany, działa jak `manual` (zamyka moduł). Bez strzałki, zawija sam
   do `--tooltip-max-width` (bez wariantu `-wide`),
@@ -319,6 +333,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
 
 - **Admin Layout:** `.admin-layout` > `.admin-sidebar` + `.admin-main`.
   Wariant `.admin-layout-floating` odsuwa treść od krawędzi.
+  Margines `.admin-main`: `--admin-main-padding` (32 px) i do 768 px
+  `--admin-main-padding-mobile` (12 px, od 1.7.41).
 - **Fade Bottom:** `.fade-bottom` - zanikanie treści przy dolnej
   krawędzi (gradient zamiast ostrego ucięcia). Działa na dowolnym
   przewijanym kontenerze: ustaw `--fade-color` na kolor tła kontenera
@@ -424,6 +440,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
     `display:none`) + `.tile-content` jako BEZPOŚREDNI sąsiad (selektor
     `:checked + .tile-content`). Wariant `.selection-tile-animated`
     współpracuje z `.hover-border-trace`/`-2` na `.tile-content`.
+    `.tile-content` ma własną ramkę (od 1.7.41). `input:disabled` i `<fieldset
+    disabled>` przygaszają kafelek, a zaznaczony zostaje w pełnym kolorze.
   - Gwiazdki: `.star-rating` (sterowane przez `style="--rating: 4.5;"`,
     zmienne `--star-size`/`--star-color`/`--star-bg`).
   - Swatche: `.product-swatches` > `.swatch` (kolor przez inline
@@ -452,6 +470,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   to rozmiary hero (do 9rem). Mikrocopy: `.text-sm` (11px) i `.text-xs`
   (10px) - jeszcze mniejsze niż `.text-1` (podpisy, dopiski prawne);
   `.text-base` wraca do bazy.
+  `.text-nowrap` (od 1.7.41) - tekst bez zawijania, np. kwota w wąskiej
+  kolumnie.
 - **Wagi:** `.fw-light`, `.fw-normal`, `.fw-medium`, `.fw-bold`,
   `.fw-black`.
 - **Kolory tekstu/tła:** `.text-primary`, `.bg-surface`, `.bg-body`,
@@ -551,6 +571,8 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   `.form-switch:has(.form-switch-input:checked) + .grid-expand` (switch
   TUŻ PRZED jako rodzeństwo, nie w tym samym `<label>` - inaczej klik
   w odsłoniętej treści dodatkowo przełącza switch). Wszystkie zero-JS.
+  `.grid-expand-unchecked` (od 1.7.41) działa odwrotnie: otwarty, dopóki
+  `.form-switch` stojący wcześniej w tym samym rodzicu jest wyłączony.
 - **Inne Helpery:** `.parallax-container`
   (Scroll-Driven), `.bg-gradient-corners` (łuna), `.stacking-container` >
   `.section-stacked`, `.embed-responsive` (do wideo z YT/Vimeo).
@@ -658,6 +680,11 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   asynchronicznie pobiera mikro-moduły z `js/modules/` (np.
   `molique-carousel.js`, `molique-lightbox.js`) tylko wtedy, gdy komponent
   istnieje na stronie.
+  Od 1.7.41 dociąga moduł także wtedy, gdy komponent pojawi się później
+  (AJAX), i nie ładuje drugi raz modułu, który już jest na stronie. Wyjątek:
+  `[data-tour]` i `[data-onboarding]` tylko przy starcie strony. Kolejny
+  komponent wstawiony po załadowaniu modułu obsługuje delegacja albo API
+  modułu.
 - **Nazwy plików zawsze z prefiksem `molique-`** - dotyczy WSZYSTKIEGO, co
   trafia do cudzego projektu: rdzeń (`molique-script.js`), moduły JS
   (`js/modules/molique-*.js`), bundle CSS (`css/molique-style*.css`) oraz

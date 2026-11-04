@@ -19,6 +19,12 @@
 .d-inline-flex { display: inline-flex !important; }
 .d-grid { display: grid !important; }
 
+/* Here and not next to .flex-column in _layout.scss: the layout layer loses to
+   .card-body, which sets its own direction, so class="card-body flex-row"
+   would do nothing and say nothing. */
+.flex-row { flex-direction: row !important; }
+.flex-shrink-0 { flex-shrink: 0 !important; }
+
 /* Desktop variants (MD) */
 @include mq(md) {
   .d-md-none { display: none !important; }
@@ -28,6 +34,9 @@
   .d-md-flex { display: flex !important; }
   .d-md-inline-flex { display: inline-flex !important; }
   .d-md-grid { display: grid !important; }
+  /* Both directions, or "flex-row flex-md-column" would lose to .flex-row. */
+  .flex-md-row { flex-direction: row !important; }
+  .flex-md-column { flex-direction: column !important; }
 }
 
 /* Large-screen variants (LG) */

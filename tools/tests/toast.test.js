@@ -121,6 +121,7 @@ const context = vm.createContext({
   CSS: window.CSS,
   setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; },
   clearTimeout: () => {},
+  MutationObserver: class { observe() {} },
   console,
 });
 window.document = document;

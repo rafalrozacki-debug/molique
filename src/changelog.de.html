@@ -48,6 +48,49 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.41 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.41</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  Meldungen aus einem B2B-Panel: Menüs, Kacheln, Tooltip, Autoloader
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Jeder Punkt nennt das Symptom vor der Korrektur und den Workaround, den ein Projekt nach dem Update auf 1.7.41 entfernen kann. Alle Symptome wurden im Browser auf Version 1.7.40 nachgestellt.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><code>.with-dividers</code>.</strong> Stand nach dem letzten Button ein <code>[popover]</code>-Menü, behielt dieser Button rechts einen Trennstrich, weil das letzte Kind der Gruppe das unsichtbare Menü war. Das Menü bekommt keinen Strich mehr und zählt nicht als letzter Eintrag. Zu entfernen: eigene Regeln, die <code>::after</code> am letzten Button ausblenden.</li>
+                  <li><strong><code>.dropdown-menu[popover]</code>.</strong> Ein langes Menü lief über den Bildschirm hinaus (60 Einträge sind 2291 px auf einem 700 px hohen Bildschirm), die unteren Einträge ließen sich nicht anklicken. Jetzt begrenzt <code>--dropdown-max-height</code> (standardmäßig <code>45dvh</code>) die Höhe, und die Liste scrollt im Inneren. Zu entfernen: eigenes <code>max-height</code> und <code>overflow-y</code> am Menü.</li>
+                  <li><strong><code>.tabs-pill</code> ohne <code>.tabs-content</code>.</strong> Eine Pille als Filter oder Navigation nahm die volle Breite ein (614 px bei 191 px Zeichnung) und schob ihre Nachbarn weg. Jetzt hat sie die Breite der Pille, ohne Änderung am Markup. Zu entfernen: <code>width: max-content</code> an <code>.tabs</code>. Eine Pille mit Panels funktioniert wie bisher.</li>
+                  <li><strong><code>.badge</code> und <code>.badge-light</code>.</strong> Ein <code>.badge</code> ohne Variante hatte weißen Text ohne Hintergrund, und <code>.badge-light</code> gab es nicht, ein solches Label war auf einer hellen Seite also unsichtbar. <code>.badge</code> sieht jetzt aus wie <code>.badge-secondary</code>, und <code>.badge-light</code> funktioniert in beiden Themes. Zu entfernen: <code>badge-secondary</code>-Ersatz, der nur der Sichtbarkeit diente.</li>
+                  <li><strong>Der Autoloader und AJAX-Komponenten.</strong> Der Autoloader prüfte die Seite einmal beim Start, eine später hinzugefügte Komponente blieb also stillschweigend ohne Modul. Jetzt kommt das Modul auch dann. Zu entfernen: das Nachladen von Modulen von Hand nach dem Austausch eines Fragments. Die Führungen <code>[data-tour]</code> und <code>[data-onboarding]</code> funktionieren weiterhin nur ab dem Seitenstart.</li>
+                  <li><strong>Der Autoloader und ein bereits vorhandenes Modul.</strong> Ein vorsorglich von Hand eingebundenes Modul wurde ein zweites Mal geladen und endete mit <code>SyntaxError: Identifier has already been declared</code>. Der Autoloader erkennt es jetzt und initialisiert es nur. Zu entfernen: Bedingungen, die das Einbinden von Hand umgehen.</li>
+                  <li><strong><code>.admin-main</code> auf dem Handy.</strong> 32 px Innenabstand auf jeder Seite nahmen fast ein Fünftel eines 360 px breiten Bildschirms. Bis 768 px beträgt der Abstand jetzt 12 px, der untere bleibt groß, weil die Navigationsleiste darüber liegt. Tokens: <code>--admin-main-padding</code> und <code>--admin-main-padding-mobile</code>. Zu entfernen: eigenes <code>padding</code> für <code>.admin-main</code> in einer Media Query.</li>
+                  <li><strong><code>.tooltip-element-start</code>.</strong> Eine neue Variante: Die Sprechblase beginnt am linken Rand des Auslösers. Zentriert verlor sie in der ersten Spalte ohne jedes Signal ihre linke Hälfte. Zu entfernen: eigenes <code>left: 0</code> und <code>--tooltip-tx: 0</code>.</li>
+                  <li><strong>Gesperrte <code>.selection-tile</code>.</strong> Die Kachel hatte keinen deaktivierten Zustand. <code>input:disabled</code> und <code>&lt;fieldset disabled&gt;</code> dunkeln sie jetzt ab und setzen den Sperr-Cursor, eine gewählte Kachel behält ihre volle Farbe. Zu entfernen: Regeln wie <code>fieldset:disabled .selection-tile</code>.</li>
+                  <li><strong><code>.tile-content</code>.</strong> Der gewählte Zustand färbt den Rahmen um, und die Kachel hatte keinen eigenen, ohne <code>.border</code> im Markup hatte eine nicht gewählte Option also gar keinen Umriss. Der Rahmen gehört jetzt zur Komponente. Zu entfernen: die <code>.border</code>-Pflicht, falls ein Test oder Template sie erzwingt. Die Klasse <code>.border</code> funktioniert weiterhin.</li>
+                  <li><strong><code>.dropdown-header</code>.</strong> Ein neues Label über einer Gruppe von Menüeinträgen, eingerückt wie <code>.dropdown-item</code>. Zu entfernen: Klassensätze wie <code>px-2 pt-2 pb-1 text-1 text-muted fw-bold</code>.</li>
+                  <li><strong><code>.text-nowrap</code>.</strong> Eine neue Klasse: Text ohne Umbruch. Zu entfernen: geschützte Leerzeichen, die nur verhindern sollten, dass die Währung in eine neue Zeile rutscht.</li>
+                  <li><strong><code>.flex-row</code>, <code>.flex-md-row</code>, <code>.flex-md-column</code>.</strong> <code>.flex-row</code> gab es nicht, und <code>.d-flex</code> ändert die Spalte in <code>.card-body</code> nicht, ein solches Layout blieb also vertikal. Diese Klassen setzen sich jetzt gegen die Richtung einer Komponente durch, auch <code>class="card-body flex-row"</code>. Zu entfernen: ein eigenes Kind von <code>.card-body</code>, das nur für die Zeile da war. Eine <code>.card</code> mit <code>.flex-md-row</code> ordnet sich jetzt ab <code>md</code> in einer Zeile an, wie die Klasse sagt; zuvor wurde die Klasse ignoriert.</li>
+                  <li><strong><code>.flex-shrink-0</code>.</strong> Die Klasse gab es nicht, Templates nutzten sie aber, und sie tat stillschweigend nichts, ein Button neben einem langen Text brach seine Beschriftung also um. Jetzt funktioniert sie. Zu entfernen: nichts, bestehende Verwendungen funktionieren von selbst.</li>
+                  <li><strong><code>.grid-expand-unchecked</code>.</strong> Eine neue Variante, die Umkehrung von <code>.grid-expand</code>: Inhalt sichtbar, solange ein <code>.form-switch</code> weiter vorne im selben Elternelement aus ist. Zu entfernen: Regeln wie <code>form:has(input:checked) …{ display: none }</code>, wenn das Panel ein Geschwister des Schalters ist.</li>
+                  <li><strong>Nach dem Update prüfen.</strong> Eine <code>.card</code> mit <code>.flex-md-row</code> wird zur Zeile, ein Menü, das höher als 45 % des Bildschirms ist, scrollt jetzt im Inneren, ein <code>.tile-content</code> ohne <code>.border</code> bekommt einen Rahmen, und ein <code>.badge</code> ohne Variante bekommt einen grauen Hintergrund. Das gilt auch für Labels, die eigenes CSS in einem Layer unterhalb von <code>components</code> färbt.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.40 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

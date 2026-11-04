@@ -128,6 +128,23 @@
   right: 0;
 }
 
+/* Modifier: the mirror of .tooltip-element-end, for a trigger near the LEFT
+   edge of a clipping ancestor (the first column of a form or a table). There a
+   centred bubble loses its left half with no sign that anything was cut. */
+.tooltip-element-start {
+  --tooltip-tx: 0;
+}
+
+.tooltip-element-start::before {
+  left: 8px;
+  right: auto;
+}
+
+.tooltip-element-start::after {
+  left: 0;
+  right: auto;
+}
+
 /* Modifier: a bubble for a full sentence instead of a short label - why a
    field is locked, where a number comes from. Since 1.7.34 the base bubble
    wraps by itself (see above), so what is left here is the alignment:

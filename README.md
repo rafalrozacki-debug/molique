@@ -9,7 +9,7 @@
 
 A lightweight, rigorously optimized CSS framework for B2B. Built on native
 cascade layers (`@layer`), with zero specificity wars and zero dependencies
-(no jQuery). Version: **1.7.40**.
+(no jQuery). Version: **1.7.41**.
 
 ## Repository structure
 
@@ -165,8 +165,8 @@ while keeping everything JS adds.
 ## JS autoloader
 
 `molique-script.js` scans the DOM and **only pulls in modules from
-`js/modules/` when the matching component exists on the page** - no manual
-loading needed. So leave the `js/modules/` folder intact next to
+`js/modules/` when the matching component exists on the page**, also when it
+arrives later (AJAX) - no manual loading needed. So leave the `js/modules/` folder intact next to
 `molique-script.js`.
 
 ## Theme (Theme Editor)

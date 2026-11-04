@@ -17,6 +17,10 @@
   font-weight: var(--fw-bold);
   line-height: 1;
   border-radius: 50rem; /* Pill shape */
+  /* The same pair as .badge-secondary. With no background of its own, a badge
+     without a variant was light text on a light page: present in the DOM,
+     invisible on screen. */
+  background-color: var(--secondary);
   color: var(--btn-text-light);
 }
 
@@ -30,3 +34,11 @@
 .badge-warning { background-color: var(--warning); color: var(--semantic-fg); }
 .badge-info { background-color: var(--info); color: var(--semantic-fg); }
 .badge-dark { background-color: var(--dark); }
+/* --light and --dark swap places in dark mode, so the pair stays readable. The
+   inset ring keeps the badge visible on a surface of nearly the same colour,
+   without adding height to a line of text. */
+.badge-light {
+  background-color: var(--light);
+  color: var(--dark);
+  box-shadow: inset 0 0 0 1px var(--border-color);
+}

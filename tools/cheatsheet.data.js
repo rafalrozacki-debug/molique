@@ -576,6 +576,30 @@ export const CATEGORIES = [
         tags: ['order', 'responsive'],
       },
       {
+        id: 'flex-shrink-0',
+        classes: [['.flex-shrink-0']],
+        desc: {
+          pl: 'Element nie kurczy się, gdy w rzędzie brakuje miejsca, np. przycisk obok długiego tekstu.',
+          en: 'The element does not shrink when a row runs out of room, e.g. a button next to a long text.',
+          de: 'Das Element schrumpft nicht, wenn in einer Zeile der Platz ausgeht, z. B. ein Button neben einem langen Text.',
+        },
+        demo: '-',
+        tags: ['align', 'width'],
+        source: 'docs-layout',
+      },
+      {
+        id: 'flex-row',
+        classes: [['.flex-row']],
+        desc: {
+          pl: 'Układa dzieci w rzędzie. Wygrywa z kierunkiem komponentu, np. <code>.card-body</code>, którego samo <code>.d-flex</code> nie zmienia.',
+          en: 'Lays children out in a row. Beats the direction of a component such as <code>.card-body</code>, which <code>.d-flex</code> alone does not change.',
+          de: 'Ordnet Kinder in einer Zeile an. Setzt sich gegen die Richtung einer Komponente wie <code>.card-body</code> durch, die <code>.d-flex</code> allein nicht ändert.',
+        },
+        demo: '-',
+        tags: ['align', 'responsive'],
+        source: 'docs-layout',
+      },
+      {
         id: 'flex-wrap',
         classes: [['.flex-wrap']],
         desc: {
@@ -776,6 +800,17 @@ export const CATEGORIES = [
           en: '<span class="text-uppercase">Uppercase</span>',
           de: '<span class="text-uppercase">Großbuchstaben</span>',
         },
+      },
+      {
+        id: 'text-nowrap',
+        classes: [['.text-nowrap']],
+        desc: {
+          pl: 'Tekst nie zawija się do nowej linii, np. kwota z walutą w wąskiej kolumnie.',
+          en: 'Text does not wrap to a new line, e.g. an amount with its currency in a narrow column.',
+          de: 'Der Text bricht nicht in eine neue Zeile um, z. B. ein Betrag mit Währung in einer schmalen Spalte.',
+        },
+        demo: '-',
+        tags: ['wrap', 'table'],
       },
       {
         id: 'text-capitalize',
@@ -2106,6 +2141,17 @@ export const CATEGORIES = [
         tags: ['animation', 'visibility', 'zerojs'],
       },
       {
+        id: 'grid-expand-unchecked',
+        classes: [['.grid-expand-unchecked']],
+        desc: {
+          pl: 'Odwrotność <code>.grid-expand</code>: otwarty, dopóki <code>.form-switch</code> stojący wcześniej w tym samym rodzicu jest wyłączony.',
+          en: 'The reverse of <code>.grid-expand</code>: open while a <code>.form-switch</code> standing earlier in the same parent is off.',
+          de: 'Die Umkehrung von <code>.grid-expand</code>: offen, solange ein <code>.form-switch</code> weiter vorne im selben Elternelement aus ist.',
+        },
+        demo: '-',
+        tags: ['animation', 'visibility', 'zerojs', 'form'],
+      },
+      {
         id: 'timeline',
         classes: [['.timeline', '.timeline-item']],
         desc: {
@@ -2836,6 +2882,17 @@ export const CATEGORIES = [
         },
         demo: '-',
         tags: ['nav', 'menu', 'zerojs'],
+      },
+      {
+        id: 'dropdown-header',
+        classes: [['.dropdown-header']],
+        desc: {
+          pl: 'Etykieta nad grupą pozycji menu. Nie reaguje na najechanie ani kliknięcie, a wcięcie ma takie samo jak <code>.dropdown-item</code>.',
+          en: 'A label above a group of menu items. Reacts to neither hover nor click, and its indent matches <code>.dropdown-item</code>.',
+          de: 'Ein Label über einer Gruppe von Menüeinträgen. Reagiert weder auf Hover noch auf Klick, und sein Einzug entspricht <code>.dropdown-item</code>.',
+        },
+        demo: '-',
+        tags: ['nav', 'menu'],
       },
       {
         id: 'language-switch',
@@ -3822,6 +3879,17 @@ export const CATEGORIES = [
         },
         demo: '-',
         tags: ['feedback'],
+      },
+      {
+        id: 'tooltip-element-start',
+        classes: [['.tooltip-element-start']],
+        desc: {
+          pl: 'Dymek zaczyna się przy lewej krawędzi wyzwalacza, zamiast być wyśrodkowany. Do pierwszej kolumny formularza albo tabeli, gdzie wyśrodkowany dymek traci lewą połowę.',
+          en: 'The bubble starts at the left edge of the trigger instead of being centred. For the first column of a form or a table, where a centred bubble loses its left half.',
+          de: 'Die Sprechblase beginnt am linken Rand des Auslösers, statt zentriert zu sein. Für die erste Spalte eines Formulars oder einer Tabelle, wo eine zentrierte Sprechblase ihre linke Hälfte verliert.',
+        },
+        demo: '-',
+        tags: ['feedback', 'clip'],
       },
       {
         id: 'tooltip-element-wide',

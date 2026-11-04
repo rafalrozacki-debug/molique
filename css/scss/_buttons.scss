@@ -276,7 +276,12 @@ $btn-base-selectors: ".btn";
   &.with-dividers {
     gap: 0;
 
-    > * {
+    /* A [popover] menu stands in the group next to its button, because that
+       is what gives it its implicit anchor. It is not a visible item: it
+       takes no divider, and it must not be counted as the last child, which
+       would leave a stray divider after the last button you can actually
+       see. */
+    > :not([popover]) {
       position: relative;
 
       &::after {
@@ -290,7 +295,7 @@ $btn-base-selectors: ".btn";
         pointer-events: none;
       }
 
-      &:last-child::after {
+      &:not(:has(~ :not([popover])))::after {
         display: none;
       }
     }

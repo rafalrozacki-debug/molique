@@ -2298,11 +2298,16 @@
   }
   .btn-action-group.with-dividers {
     gap: 0;
+    /* A [popover] menu stands in the group next to its button, because that
+       is what gives it its implicit anchor. It is not a visible item: it
+       takes no divider, and it must not be counted as the last child, which
+       would leave a stray divider after the last button you can actually
+       see. */
   }
-  .btn-action-group.with-dividers > * {
+  .btn-action-group.with-dividers > :not([popover]) {
     position: relative;
   }
-  .btn-action-group.with-dividers > *::after {
+  .btn-action-group.with-dividers > :not([popover])::after {
     content: "";
     position: absolute;
     right: 0;
@@ -2312,7 +2317,7 @@
     background-color: var(--border-color);
     pointer-events: none;
   }
-  .btn-action-group.with-dividers > *:last-child::after {
+  .btn-action-group.with-dividers > :not([popover]):not(:has(~ :not([popover])))::after {
     display: none;
   }
   .btn-action-group.with-dividers {
@@ -4493,6 +4498,16 @@
     background-color: var(--card-bg-subtle);
     color: var(--primary);
   }
+  /* A label above a group of items. Not an item: it has no hover and takes no
+     clicks, so a plain <div> is the right element. The inline padding matches
+     .dropdown-item, which is what lines the label up with the text below it. */
+  .dropdown-header {
+    display: block;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 0.5);
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+    font-weight: var(--fw-bold);
+  }
   /* Modifier: the menu opens from the RIGHT edge of the trigger instead of
      the left - needed for dropdowns sitting near the right edge of the
      screen (e.g. in the navbar), so the panel doesn't overflow the viewport. */
@@ -4579,6 +4594,14 @@
     left: anchor(left);
     margin: 4px 0 0 0;
     color: var(--text-main);
+    /* 45%, not "whatever fits": a fallback from the list below is used only when
+       it removes the overflow completely, so the menu must fit on one side of
+       the button wherever the button is. Above and below always add up to the
+       screen minus the button, so one of them holds at least 45% of it. Without
+       a limit a long menu ran past the screen, and in the top layer nothing
+       scrolls it into view: the last items could not be clicked. */
+    max-height: var(--dropdown-max-height, 45dvh);
+    overflow-y: auto;
     position-try-fallbacks: --dropdown-popover-flip-left, --dropdown-popover-flip-above, --dropdown-popover-flip-above-left;
     /* Fallback for browsers without CSS Anchor Positioning (older
        Firefox): the menu opens as a centered panel - still in the top
@@ -6964,6 +6987,16 @@
     width: fit-content;
     max-width: 100%;
   }
+  .tabs-pill {
+    /* A pill with no panels is a switcher: a filter, or navigation between
+       pages. Nothing below it needs the full width, and .tabs { width: 100% }
+       would keep claiming it, so in a row the neighbours were pushed away from
+       a pill that draws far narrower than its box. */
+  }
+  .tabs-pill:not(:has(.tabs-content)) {
+    width: fit-content;
+    max-width: 100%;
+  }
   .tabs-pill .tab-label {
     position: relative;
     z-index: 2;
@@ -7081,6 +7114,12 @@
   }
   .grid-expand.is-open, details[open] .grid-expand, .form-switch:has(.form-switch-input:checked) + .grid-expand {
     grid-template-rows: 1fr;
+  }
+  .grid-expand.grid-expand-unchecked {
+    grid-template-rows: 1fr;
+  }
+  .form-switch:has(.form-switch-input:checked) ~ .grid-expand.grid-expand-unchecked {
+    grid-template-rows: 0fr;
   }
   /* =========================================
      6. CAROUSELS (Sliders)
@@ -7488,6 +7527,10 @@
     font-weight: var(--fw-bold);
     line-height: 1;
     border-radius: 50rem; /* Pill shape */
+    /* The same pair as .badge-secondary. With no background of its own, a badge
+       without a variant was light text on a light page: present in the DOM,
+       invisible on screen. */
+    background-color: var(--secondary);
     color: var(--btn-text-light);
   }
   .badge-primary {
@@ -7517,6 +7560,14 @@
   }
   .badge-dark {
     background-color: var(--dark);
+  }
+  /* --light and --dark swap places in dark mode, so the pair stays readable. The
+     inset ring keeps the badge visible on a surface of nearly the same colour,
+     without adding height to a line of text. */
+  .badge-light {
+    background-color: var(--light);
+    color: var(--dark);
+    box-shadow: inset 0 0 0 1px var(--border-color);
   }
   /* =========================================
      2. ALERTS
@@ -7924,6 +7975,20 @@
   .tooltip-element-end::after {
     left: auto;
     right: 0;
+  }
+  /* Modifier: the mirror of .tooltip-element-end, for a trigger near the LEFT
+     edge of a clipping ancestor (the first column of a form or a table). There a
+     centred bubble loses its left half with no sign that anything was cut. */
+  .tooltip-element-start {
+    --tooltip-tx: 0;
+  }
+  .tooltip-element-start::before {
+    left: 8px;
+    right: auto;
+  }
+  .tooltip-element-start::after {
+    left: 0;
+    right: auto;
   }
   /* Modifier: a bubble for a full sentence instead of a short label - why a
      field is locked, where a number comes from. Since 1.7.34 the base bubble
@@ -10900,6 +10965,9 @@
   .text-justify {
     text-align: justify !important;
   }
+  .text-nowrap {
+    white-space: nowrap !important;
+  }
   @media (min-width: 768px) {
     .text-md-center {
       text-align: center !important;
@@ -12344,6 +12412,15 @@
   .d-grid {
     display: grid !important;
   }
+  /* Here and not next to .flex-column in _layout.scss: the layout layer loses to
+     .card-body, which sets its own direction, so class="card-body flex-row"
+     would do nothing and say nothing. */
+  .flex-row {
+    flex-direction: row !important;
+  }
+  .flex-shrink-0 {
+    flex-shrink: 0 !important;
+  }
   /* Desktop variants (MD) */
   @media (min-width: 768px) {
     .d-md-none {
@@ -12366,6 +12443,13 @@
     }
     .d-md-grid {
       display: grid !important;
+    }
+    /* Both directions, or "flex-row flex-md-column" would lose to .flex-row. */
+    .flex-md-row {
+      flex-direction: row !important;
+    }
+    .flex-md-column {
+      flex-direction: column !important;
     }
   }
   /* Large-screen variants (LG) */

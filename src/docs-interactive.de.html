@@ -401,6 +401,15 @@
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>
               </div>
+              <p class="text-4 text-muted mb-3 mt-3">
+                Der umgekehrte Fall: Inhalt sichtbar, solange der Schalter aus ist. <code>.grid-expand-unchecked</code> ist standardmäßig offen und klappt zu, wenn ein <code>.form-switch</code> weiter vorne im selben Elternelement eingeschaltet wird, auch wenn dazwischen ein anderes Panel liegt:
+              </p>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;div class="grid-expand grid-expand-unchecked"&gt;
+  &lt;div class="grid-expand-inner"&gt;Sichtbar, solange der Schalter aus ist&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
             </div>
           </section>
 
@@ -488,6 +497,10 @@
                     <td data-label="Was sie macht">
                       Eine Erscheinungsvariante: Tabs als Pillen statt Unterstreichung.
                     </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.tabs-pill</code> ohne <code>.tabs-content</code></td>
+                    <td data-label="Was sie macht">Ein Umschalter für sich, ohne Panels: ein Filter oder die Navigation zwischen Seiten. Die Breite richtet sich dann nach der Pille, Nachbarn in einer Zeile werden also nicht weggeschoben. Mit Panels nimmt <code>.tabs</code> wie bisher die volle Breite ein.</td>
                   </tr>
                   <tr>
                     <td data-label="Klasse"><code class="fw-bold">.tabs-pill-indicator</code></td>
@@ -678,6 +691,17 @@
       data-tooltip="Dieses Feld ist gesperrt, weil die Bestellung bereits an das Lager übergeben wurde."&gt;Warum kann ich das nicht ändern?&lt;/span&gt;</code></pre>
             </div>
 
+            <p class="text-muted mb-3">
+              Am Rand eines beschneidenden Containers verliert eine zentrierte Sprechblase ohne jedes Signal einen Teil ihres Inhalts. Ein Auslöser am linken Rand (erste Spalte eines Formulars oder einer Tabelle) bekommt <code>.tooltip-element-start</code>, einer am rechten Rand <code>.tooltip-element-end</code>. Beide lassen sich mit <code>.tooltip-element-bottom</code> und <code>.tooltip-element-wide</code> kombinieren:
+            </p>
+            <p class="mb-3">
+              <span class="tooltip-element tooltip-element-start" data-tooltip="Die Sprechblase beginnt am linken Rand des Auslösers.">Überfahren</span>
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;span class="tooltip-element tooltip-element-start" data-tooltip="Die Sprechblase beginnt am linken Rand des Auslösers."&gt;Überfahren&lt;/span&gt;</code></pre>
+            </div>
+
             <h3 class="text-6 fw-bold mb-2 mt-4">Ein Tooltip, den nichts abschneidet</h3>
             <p class="text-muted mb-3">
               <code>.tooltip-element</code> zeichnet die Sprechblase als
@@ -728,9 +752,9 @@
               <code>js/modules/molique-tooltip-popover.js</code>, das automatisch
               geladen wird, sobald die Seite ein <code>.tooltip-popover</code>
               enthält. Das Modul arbeitet mit Delegation, später nachgeladene
-              Zeilen (AJAX) brauchen also keine neue Initialisierung. Der
-              Autoloader prüft die Seite aber nur einmal beim Start: Gibt es da
-              noch kein <code>.tooltip-popover</code>, binde das Modul selbst ein.
+              Zeilen (AJAX) brauchen also keine neue Initialisierung. Seit 1.7.41 lädt der
+              Autoloader das Modul auch dann nach, wenn das erste
+              <code>.tooltip-popover</code> erst später auf die Seite kommt.
             </p>
             <p class="text-muted mb-3">
               Die Sprechblase steht über dem Auslöser und klappt bei Platzmangel
