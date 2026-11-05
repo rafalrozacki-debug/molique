@@ -116,6 +116,24 @@ const EXPECT = {
   'hourglass-high': 'Turn', 'text-b': 'Pop', 'number-one': 'Pop',
 };
 
+/* ---------- what must stay still ---------- */
+
+// Every one of these was seen moving, or nearly so, on a sheet with the moving
+// parts painted red. A selector can hit something in all five weights and still
+// be wrong: battery-empty once moved nothing but its terminal.
+const MUST_STAY = [
+  ['box-arrow-up', 'line[x1="40"]', 'the lid of the box'],
+  ['monitor-arrow-up', 'line[y1="224"], line[y1="228"]', 'the stand of the monitor'],
+  ['battery-high', 'line[x1="248"], line[x1="244"]', 'the terminal of the battery'],
+  ['speaker-high', 'line[x1="80"]', 'the neck of the speaker'],
+  ['file-csv', 'polyline[points^="152 32"], polyline[points^="148 32"], path[d^="M48,1"]', 'the sheet'],
+  ['file-c-sharp', 'path[d^="M208,2"]', 'the other way of writing the sheet'],
+  ['arrow-circle-up', 'circle[r="96"]', 'the ring'],
+  ['arrow-square-left', 'rect', 'the box, which has a transform attribute'],
+  ['user-circle', 'circle[r="96"]', 'the ring around the person'],
+  ['clock-clockwise', 'path, polyline:not([points^="128 "])', 'the arrow around the clock'],
+];
+
 /* ---------- pattern liveness: read straight from the shipped rules ---------- */
 
 const pattern = (atom) => {
@@ -210,6 +228,23 @@ try {
 
   const lightRows = rest.filter((r) => r.w === 'light');
   const byName = new Map(lightRows.map((r) => [r.name, r]));
+
+  /* ---------- parts that must not move ---------- */
+  const stayed = await page.evaluate((list) => {
+    const out = { moved: [], missing: [] };
+    for (const [name, selector, label] of list) {
+      const icons = [...document.querySelectorAll('svg.icon-anim')].filter((s) => s.dataset.icon === name);
+      if (![...icons].some((s) => s.querySelector(selector))) out.missing.push(`${name}: ${label}`);
+      for (const icon of icons) {
+        for (const el of icon.querySelectorAll(selector)) {
+          if (el.closest('[data-part], [data-layer]') && el.getAnimations().length) out.moved.push(`${name}/${icon.dataset.w}: ${label}`);
+        }
+      }
+    }
+    return out;
+  }, MUST_STAY);
+  check('what has to stay still stays still', stayed.moved.length === 0, stayed.moved.slice(0, 5).join(' | '));
+  check('those shapes still exist, so the check above means something', stayed.missing.length === 0, stayed.missing.join(' | '));
 
   /* ---------- the hard cases ---------- */
   // Read from the fill weight: it has no parts, so the whole-icon family stays

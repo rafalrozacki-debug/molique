@@ -96,7 +96,9 @@
        has a preset of its own or belongs to a narrower family: _except() names
        them. Leaving that out made the rim of the bin move along with the lid.
      Do not use it for parts that may carry a transform attribute with a keyframe
-     that sets transform: see the note in section 1. */
+     that sets transform: see the note in section 1. Alternatives go in :is(): a
+     bare comma in $parts would end the selector and apply the rest to every icon
+     on the page, which is how hammer once took a motion meant for a thermometer. */
   /* The whole drawing traces itself. Capped, or an icon of 15 strokes would take
      two seconds. Drawing and fading touch no transform, so [transform] is fine. */
   /* =========================================================================
@@ -519,6 +521,31 @@
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
     --_icon-anim-origin: 50% 50%;
   }
+  /* ---------- the last ones that do have a motion of their own ---------- */
+  .icon-anim:is([data-icon=copy-simple], [data-icon|=stack], [data-icon|=printer], [data-icon|=puzzle-piece], [data-icon|=film-slate], [data-icon|=link-simple], [data-icon|=link-break], [data-icon|=monitor-play], [data-icon|=presentation], [data-icon|=slideshow], [data-icon|=webcam], [data-icon|=video-conference], [data-icon|=video-camera], [data-icon|=film-strip], [data-icon|=cassette-tape], [data-icon|=calculator]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPress;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon=hand], [data-icon|=hand-palm], [data-icon|=hand-soap], [data-icon|=hand-eye], [data-icon|=hand-deposit], [data-icon|=hand-withdraw], [data-icon|=vault], [data-icon|=paint-bucket], [data-icon|=ticket], [data-icon|=shower], [data-icon|=coffee], [data-icon|=cooking-pot], [data-icon|=bowl-steam], [data-icon|=spray-bottle], [data-icon|=hair-dryer], [data-icon|=scissors]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimWiggle;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=barbell], [data-icon|=lego], [data-icon|=lego-smiley], [data-icon|=notification], [data-icon|=traffic-signal], [data-icon|=traffic-cone], [data-icon=sneaker], [data-icon|=chef-hat], [data-icon|=graphics-card], [data-icon|=cpu]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBounce;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=map-trifold], [data-icon|=panorama]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPageTurn;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
   /* ---------- neutral on purpose ---------- */
   /* Last of all, so no family above can claim them. Other people's marks do not
      get a personality from us; religious and serious symbols do not bounce or
@@ -650,6 +677,444 @@
     --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
     --_icon-anim-part-stagger: 0.3s;
     --_icon-anim-part-fill: backwards;
+  }
+  /* ---------- documents ---------- */
+  /* The lines of the text write themselves, the sheet stays. */
+  .icon-anim:is([data-icon|=list], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon|=queue], [data-icon|=playlist], [data-icon|=subtitles], [data-icon|=article], [data-icon|=newspaper], [data-icon|=note], [data-icon|=notepad], [data-icon|=notebook], [data-icon|=receipt], [data-icon|=invoice], [data-icon|=scroll], [data-icon|=exam], [data-icon|=chat-text], [data-icon|=chat-centered-text], [data-icon|=chat-circle-text], [data-icon|=chat-teardrop-text], [data-icon|=film-script], [data-icon|=chalkboard], [data-icon|=textbox], [data-icon|=files]):not([data-icon-anim]):not([data-icon=article], [data-icon=note], [data-icon=note-pencil], [data-icon$=-slash])[data-icon-parts=stroke]:has(> line) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=list], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon|=queue], [data-icon|=playlist], [data-icon|=subtitles], [data-icon|=article], [data-icon|=newspaper], [data-icon|=note], [data-icon|=notepad], [data-icon|=notebook], [data-icon|=receipt], [data-icon|=invoice], [data-icon|=scroll], [data-icon|=exam], [data-icon|=chat-text], [data-icon|=chat-centered-text], [data-icon|=chat-circle-text], [data-icon|=chat-teardrop-text], [data-icon|=film-script], [data-icon|=chalkboard], [data-icon|=textbox], [data-icon|=files]):not([data-icon-anim]):not([data-icon=article], [data-icon=note], [data-icon=note-pencil], [data-icon$=-slash])[data-icon-parts=stroke] > line {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.45s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.08s);
+    --_icon-anim-part-fill: backwards;
+  }
+  /* What is on the sheet draws itself: letters of a format, a picture, a lock.
+     The sheet and its folded corner stay, whichever way they are written. */
+  .icon-anim:is([data-icon|=file]):not([data-icon-anim]):not([data-icon=file-text], [data-icon|=file-arrow-up], [data-icon|=file-arrow-down])[data-icon-parts=stroke]:has(> [data-part][stroke]:not(polyline[points^="152 32"], polyline[points^="148 32"], path[d^="M48,1"], path[d^="M200,224"], path[d^="M208,2"], path[d*=",224h"])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=file]):not([data-icon-anim]):not([data-icon=file-text], [data-icon|=file-arrow-up], [data-icon|=file-arrow-down])[data-icon-parts=stroke] > [data-part][stroke]:not(polyline[points^="152 32"], polyline[points^="148 32"], path[d^="M48,1"], path[d^="M200,224"], path[d^="M208,2"], path[d*=",224h"]) {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.5s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.08s);
+    --_icon-anim-part-fill: backwards;
+  }
+  /* ---------- lids and shackles ---------- */
+  .icon-anim:is([data-icon|=lock-key], [data-icon|=lock-laminated]):not([data-icon-anim])[data-icon-parts=stroke]:has(> path:not([d$=Z])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=lock-key], [data-icon|=lock-laminated]):not([data-icon-anim])[data-icon-parts=stroke] > path:not([d$=Z]) {
+    --_icon-anim-y: -20px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=trash-simple]):not([data-icon-anim])[data-icon-parts=stroke]:has(> line) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=trash-simple]):not([data-icon-anim])[data-icon-parts=stroke] > line {
+    --_icon-anim-y: -22px;
+    --_icon-anim-r: -14deg;
+    transform-box: view-box;
+    transform-origin: 40px 56px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=envelope]):not([data-icon-anim])[data-icon-parts=stroke]:has(> polyline) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=envelope]):not([data-icon-anim])[data-icon-parts=stroke] > polyline {
+    transform-origin: 50% 0%;
+    --_icon-anim-part-name: iconAnimPartFold;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=folder]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke]:has(> path:not([d$=Z])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=folder]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke] > path:not([d$=Z]) {
+    --_icon-anim-y: -12px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=archive]):not([data-icon-anim])[data-icon-parts=stroke]:has(> rect) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=archive]):not([data-icon-anim])[data-icon-parts=stroke] > rect {
+    --_icon-anim-y: -14px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=gift]):not([data-icon-anim])[data-icon-parts=stroke]:has(> path[d$=Z]) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=gift]):not([data-icon-anim])[data-icon-parts=stroke] > path[d$=Z] {
+    --_icon-anim-y: -14px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=toolbox]):not([data-icon-anim])[data-icon-parts=stroke]:has(> path:not([d$=Z])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=toolbox]):not([data-icon-anim])[data-icon-parts=stroke] > path:not([d$=Z]) {
+    --_icon-anim-y: -12px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* ---------- signals: the arcs go out one after another ---------- */
+  /* wifi lists its arcs from the outside in, the rest from the inside out. */
+  .icon-anim:is([data-icon|=wifi]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke]:has(> path:not([d$=Z])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=wifi]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke] > path:not([d$=Z]) {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc((4 - var(--icon-part, 0)) * 0.12s);
+  }
+  .icon-anim:is([data-icon|=rss], [data-icon|=broadcast], [data-icon|=cell-tower], [data-icon|=contactless-payment], [data-icon|=screencast]):not([data-icon-anim])[data-icon-parts=stroke]:has(> path:not([d$=Z])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=rss], [data-icon|=broadcast], [data-icon|=cell-tower], [data-icon|=contactless-payment], [data-icon|=screencast]):not([data-icon-anim])[data-icon-parts=stroke] > path:not([d$=Z]) {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 5) * 0.12s);
+  }
+  /* An arc of speaker-simple is a <line>; the line at x 80 is the speaker's neck. */
+  .icon-anim:is([data-icon|=speaker]):not([data-icon-anim]):not([data-icon$=-slash], [data-icon$=-x], [data-icon$=-none], [data-icon=speaker-hifi])[data-icon-parts=stroke]:has(> :is(path:not([d$=Z]), line:not([x1="80"]))) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=speaker]):not([data-icon-anim]):not([data-icon$=-slash], [data-icon$=-x], [data-icon$=-none], [data-icon=speaker-hifi])[data-icon-parts=stroke] > :is(path:not([d$=Z]), line:not([x1="80"])) {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.12s);
+  }
+  .icon-anim:is([data-icon|=equalizer], [data-icon|=waveform]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke]:has(> line) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=equalizer], [data-icon|=waveform]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke] > line {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 12) * 0.05s);
+  }
+  /* ---------- bars rise ---------- */
+  /* The source lists the tallest first and draws each one from the top: reversed
+     twice, so the short ones go first and every bar grows from the ground. */
+  .icon-anim:is([data-icon|=cell-signal]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke]:has(> line) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=cell-signal]):not([data-icon-anim]):not([data-icon$=-slash])[data-icon-parts=stroke] > line {
+    --_icon-anim-dash-from: -1;
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.5s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc((5 - var(--icon-part, 0)) * 0.08s);
+    --_icon-anim-part-fill: backwards;
+  }
+  /* The levels of a battery, without its terminal. */
+  .icon-anim:is([data-icon|=battery]):not([data-icon-anim])[data-icon-parts=stroke]:has(> line:not([x1="248"], [x1="244"], [y1="8"], [y1="12"])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=battery]):not([data-icon-anim])[data-icon-parts=stroke] > line:not([x1="248"], [x1="244"], [y1="8"], [y1="12"]) {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.08s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=chart-bar]):not([data-icon-anim])[data-icon-parts=stroke]:has(> polyline) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=chart-bar]):not([data-icon-anim])[data-icon-parts=stroke] > polyline {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.5s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.08s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=steps], [data-icon|=stairs], [data-icon|=ranking], [data-icon|=ladder]):not([data-icon-anim])[data-icon-parts=stroke]:has(> [data-part][stroke]) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=steps], [data-icon|=stairs], [data-icon|=ranking], [data-icon|=ladder]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part][stroke] {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=steps], [data-icon|=stairs], [data-icon|=ranking], [data-icon|=ladder]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part]:not([stroke], [transform]) {
+    --_icon-anim-part-name: iconAnimPartAppear;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=steps], [data-icon|=stairs], [data-icon|=ranking], [data-icon|=ladder]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part][transform]:not([stroke]) {
+    --_icon-anim-part-name: iconAnimLayerFade;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=steps], [data-icon|=stairs], [data-icon|=ranking], [data-icon|=ladder]):not([data-icon-anim])[data-icon-parts=stroke] > [data-layer] {
+    --_icon-anim-part-name: iconAnimLayerFade;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: 0.3s;
+    --_icon-anim-part-fill: backwards;
+  }
+  /* ---------- dots pop in turn ---------- */
+  .icon-anim:is([data-icon|=dots], [data-icon|=circles-four], [data-icon|=circles-three], [data-icon|=squares-four], [data-icon|=password], [data-icon|=chart-scatter], [data-icon|=shower]):not([data-icon-anim])[data-icon-parts=stroke]:has(> [data-part]:not(circle[r="96"], path, [transform])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=dots], [data-icon|=circles-four], [data-icon|=circles-three], [data-icon|=squares-four], [data-icon|=password], [data-icon|=chart-scatter], [data-icon|=shower]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part]:not(circle[r="96"], path, [transform]) {
+    --_icon-anim-part-name: iconAnimPartPop;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.07s);
+  }
+  /* Icons that are nothing but dots count as "solid": the same motion, by hand. */
+  .icon-anim:is([data-icon|=dots]):not([data-icon-anim])[data-icon-parts=solid]:has(> circle) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=dots]):not([data-icon-anim])[data-icon-parts=solid] > circle {
+    --_icon-anim-part-name: iconAnimPartPop;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.07s);
+  }
+  /* ---------- hands, needles, knobs ---------- */
+  /* Only the hands: clock-clockwise also has an arrow, drawn as a polyline too, and
+     its hands are the one that starts on the 12 o'clock line. */
+  .icon-anim:is([data-icon|=clock]):not([data-icon-anim]):not([data-icon=clock], [data-icon=clock-clockwise], [data-icon=clock-counter-clockwise])[data-icon-parts=stroke]:has(> :is(polyline, line)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=clock]):not([data-icon-anim]):not([data-icon=clock], [data-icon=clock-clockwise], [data-icon=clock-counter-clockwise])[data-icon-parts=stroke] > :is(polyline, line) {
+    transform-box: view-box;
+    transform-origin: 128px 128px;
+    --_icon-anim-part-name: iconAnimPartTurn;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=clock-clockwise], [data-icon=clock-counter-clockwise]):not([data-icon-anim])[data-icon-parts=stroke]:has(> polyline[points^="128 "]) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=clock-clockwise], [data-icon=clock-counter-clockwise]):not([data-icon-anim])[data-icon-parts=stroke] > polyline[points^="128 "] {
+    transform-box: view-box;
+    transform-origin: 128px 128px;
+    --_icon-anim-part-name: iconAnimPartTurn;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=timer]):not([data-icon-anim])[data-icon-parts=stroke]:has(> line[x1="128"][y1="136"]) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=timer]):not([data-icon-anim])[data-icon-parts=stroke] > line[x1="128"][y1="136"] {
+    transform-box: view-box;
+    transform-origin: 128px 136px;
+    --_icon-anim-part-name: iconAnimPartTurn;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=watch]):not([data-icon-anim])[data-icon-parts=stroke]:has(> polyline) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=watch]):not([data-icon-anim])[data-icon-parts=stroke] > polyline {
+    transform-box: view-box;
+    transform-origin: 128px 128px;
+    --_icon-anim-part-name: iconAnimPartTurn;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=gauge]):not([data-icon-anim])[data-icon-parts=stroke]:has(> line[x1="104"]) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=gauge]):not([data-icon-anim])[data-icon-parts=stroke] > line[x1="104"] {
+    transform-box: view-box;
+    transform-origin: 104px 184px;
+    --_icon-anim-part-name: iconAnimWiggle;
+    --_icon-anim-part-duration: 0.9s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=speedometer]):not([data-icon-anim])[data-icon-parts=stroke]:has(> line) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=speedometer]):not([data-icon-anim])[data-icon-parts=stroke] > line {
+    transform-box: view-box;
+    transform-origin: 124px 156px;
+    --_icon-anim-part-name: iconAnimWiggle;
+    --_icon-anim-part-duration: 0.9s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=compass]):not([data-icon-anim]):not([data-icon=compass-rose], [data-icon=compass-tool])[data-icon-parts=stroke]:has(> polygon) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=compass]):not([data-icon-anim]):not([data-icon=compass-rose], [data-icon=compass-tool])[data-icon-parts=stroke] > polygon {
+    --_icon-anim-part-name: iconAnimWiggle;
+    --_icon-anim-part-duration: 0.9s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* The mercury rises: it is the only line that starts at the bulb. */
+  .icon-anim:is([data-icon|=thermometer]):not([data-icon-anim])[data-icon-parts=stroke]:has(> :is(line[x1="120"], line[x1="108"])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=thermometer]):not([data-icon-anim])[data-icon-parts=stroke] > :is(line[x1="120"], line[x1="108"]) {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(odd)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(odd) {
+    --_icon-anim-x: 0px;
+    --_icon-anim-y: 24px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(even)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(even) {
+    --_icon-anim-x: 0px;
+    --_icon-anim-y: -24px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(odd)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(odd) {
+    --_icon-anim-x: 24px;
+    --_icon-anim-y: 0px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(even)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(even) {
+    --_icon-anim-x: -24px;
+    --_icon-anim-y: 0px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.8s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* ---------- small things that have a part worth moving ---------- */
+  /* The eyes of a face blink; the face stays. */
+  .icon-anim:is([data-icon|=smiley]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:not([stroke])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=smiley]):not([data-icon-anim])[data-icon-parts=stroke] > circle:not([stroke]) {
+    --_icon-anim-part-name: iconAnimBlink;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* The steam of a hot thing rises and fades. */
+  .icon-anim:is([data-icon|=coffee], [data-icon|=cooking-pot]):not([data-icon-anim])[data-icon-parts=stroke]:has(> :is(line[y1="24"], line[y1="16"])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=coffee], [data-icon|=cooking-pot]):not([data-icon-anim])[data-icon-parts=stroke] > :is(line[y1="24"], line[y1="16"]) {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 6) * 0.1s);
+  }
+  .icon-anim:is([data-icon|=bowl-steam]):not([data-icon-anim])[data-icon-parts=stroke]:has(> path:not([d$=Z])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=bowl-steam]):not([data-icon-anim])[data-icon-parts=stroke] > path:not([d$=Z]) {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.1s);
+  }
+  .icon-anim:is([data-icon|=traffic-signal]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=traffic-signal]):not([data-icon-anim])[data-icon-parts=stroke] > circle {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 1.2s;
+    --_icon-anim-part-easing: linear;
+    --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.2s);
+  }
+  /* The top layer of a stack lifts off. */
+  .icon-anim:is([data-icon|=stack]):not([data-icon-anim])[data-icon-parts=stroke]:has(> polygon) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=stack]):not([data-icon-anim])[data-icon-parts=stroke] > polygon {
+    --_icon-anim-y: -18px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* The sheet comes out of the printer. */
+  .icon-anim:is([data-icon|=printer]):not([data-icon-anim])[data-icon-parts=stroke]:has(> rect) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=printer]):not([data-icon-anim])[data-icon-parts=stroke] > rect {
+    --_icon-anim-x: 0px;
+    --_icon-anim-y: 14px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* The clapper of a film slate claps, hinged at its left end. */
+  .icon-anim:is([data-icon|=film-slate]):not([data-icon-anim])[data-icon-parts=stroke]:has(> :is(path:nth-of-type(2), line)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=film-slate]):not([data-icon-anim])[data-icon-parts=stroke] > :is(path:nth-of-type(2), line) {
+    --_icon-anim-y: 0px;
+    --_icon-anim-r: -12deg;
+    transform-box: view-box;
+    transform-origin: 40px 112px;
+    --_icon-anim-part-name: iconAnimPartLift;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=notification]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=notification]):not([data-icon-anim])[data-icon-parts=stroke] > circle {
+    --_icon-anim-part-name: iconAnimPartPop;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  /* The two halves pull apart, like the preset of link. */
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke]:has(> path:nth-of-type(1)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke] > path:nth-of-type(1) {
+    --_icon-anim-x: 12px;
+    --_icon-anim-y: -12px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke]:has(> path:nth-of-type(2)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke] > path:nth-of-type(2) {
+    --_icon-anim-x: -12px;
+    --_icon-anim-y: 12px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
   /* =========================================================================
      3. PER-ICON PRESETS

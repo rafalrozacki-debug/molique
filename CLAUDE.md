@@ -283,7 +283,9 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   więc tabela „pierwsze dopasowanie wygrywa" nie działa: bez `_except()` `circle` złapał
   `circle-notch`, a kosz ruszał ścianą razem z pokrywą. Selekcję oglądaj na arkuszu
   z zaznaczonymi na czerwono częściami, we wszystkich grubościach: `battery-empty`
-  przechodził spis 5/5 i ruszał tylko końcówką baterii.
+  przechodził spis 5/5 i ruszał tylko końcówką baterii. Alternatywy w `$parts` tylko
+  w `:is()`: goły przecinek kończy selektor i reszta działa na każdą ikonę na stronie,
+  tak `hammer` dostał kiedyś ruch termometru. Takie decyzje zapisuj w `MUST_STAY`.
 - **`icon-anim`: atrybut `transform` to przebrana właściwość CSS** (v1.7.43).
   Phosphor obraca nim 57 ikon (`<rect transform="translate(256 0) rotate(90)">`).
   `transform-box: fill-box` zmienia też jego punkt odniesienia, więc kształt
