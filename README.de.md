@@ -9,7 +9,7 @@
 
 Ein leichtgewichtiges, konsequent optimiertes CSS-Framework für B2B.
 Aufgebaut auf nativen Cascade Layers (`@layer`), ohne Spezifitätskämpfe und
-ohne Abhängigkeiten (kein jQuery). Version: **1.7.43**.
+ohne Abhängigkeiten (kein jQuery). Version: **1.7.44**.
 
 ## Repository-Struktur
 

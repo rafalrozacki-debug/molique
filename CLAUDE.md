@@ -259,6 +259,13 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   `getComputedStyle(el).animationTimingFunction`. Sprawdzaj wszystko
   kontrolą ujemną na CSS sprzed zmiany - ten drugi błąd wyszedł tylko
   dzięki niej.
+- **Galeria ikon jest generowana** (v1.7.44): `src/partials/icon-gallery*.html` są
+  w `.gitignore`, a `tools/gen-icon-gallery.js` musi iść PRZED `gen-icon-sprite.js`,
+  bo sprite `img/icons-anim-all.svg` powstaje z odwołań w tych partialach. Słowa PL/DE
+  dopisuj w `tools/icon-tags.data.js`. Dopasowanie działa w obie strony, więc krótki
+  rdzeń po cichu łapie cudze słowa: `logo` dawało 78 marek na hasło „logowanie”,
+  `kolo` wszystkie koła na „kolor”, `hand` dłonie na „Handy”. Liczby nie pokażą tego
+  same, stąd lista „stays out” w `npm run test:icon-gallery`.
 - **`icon-anim`: atrybut `transform` to przebrana właściwość CSS** (v1.7.43).
   Phosphor obraca nim 57 ikon (`<rect transform="translate(256 0) rotate(90)">`).
   `transform-box: fill-box` zmienia też jego punkt odniesienia, więc kształt

@@ -48,6 +48,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.44 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.44</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  A gallery of the whole Phosphor catalogue
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  The <a href="examples-icon-anim.en">Animated icons</a> page now shows all 1512 icons instead of 118, and the search finds them in Polish, English and German. The animations have not changed: 118 icons have their own motion, the rest get a short pop.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>The whole catalogue in the gallery.</strong> The cards are generated from data at build time (<code>tools/gen-icon-gallery.js</code>), like the class reference. The gallery scrolls in its own window, so the rest of the page stays within reach.</li>
+                  <li><strong>Search in Polish and German.</strong> A dictionary of 1311 words turns Phosphor names and tags into stems: "kosza", "kłódki", "samochodu", "Glocke", "Drucker" find the right icon in any inflected form. The hand-picked stems of the 118 icons stayed.</li>
+                  <li><strong>A separate sprite file.</strong> Only this page fetches <code>img/icons-anim-all.svg</code> (940 KB, 89 KB gzipped). <code>img/icons-anim-demo.svg</code> went down from 74 KB to 23 KB, so the documentation page got lighter too.</li>
+                  <li><strong><code>data-search-target</code>: ß means ss.</strong> The search treated <code>ß</code> as a letter of its own, so "Strasse" did not find "Straße".</li>
+                  <li><strong>Tests.</strong> <code>npm run test:icon-gallery</code> runs the real search on the generated cards, in both directions: that "koszula" finds the shirt, and that it does not bring up the bin.</li>
+                  <li><strong>Safe to remove:</strong> nothing. <strong>Check after updating:</strong> nothing, classes and attributes are unchanged.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.43 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -68,8 +68,10 @@ function htmlFiles(dir, out = []) {
 // img/icons-sprite.svg#ph-lightning or ...#ph-lightning--bold (optional
 // weight suffix). Every img/icons-*.svg is its own sprite with only the
 // icons referenced to IT: icons-sprite.svg is the site-wide one (every page
-// loads it), icons-anim-demo.svg holds the gallery of
-// examples-icon-anim.html, so ~120 demo icons do not weigh on every page.
+// loads it), icons-anim-demo.svg holds the demos of docs-icon-anim.html and
+// examples-icon-anim.html, and icons-anim-all.svg the gallery of every icon,
+// which only that one page fetches (940 KB, 89 KB gzip). The gallery comes from
+// a generated partial, so tools/gen-icon-gallery.js has to run before this.
 const ICON_REF = /img\/(icons-[a-z0-9-]+)\.svg#ph-([a-z0-9-]+?)(?:--(thin|light|regular|bold|fill|duotone))?"/g;
 
 const sprites = new Map(); // "icons-sprite" -> Map("weight/name" -> { name, weight })
@@ -100,6 +102,10 @@ for (const [sprite, used] of [...sprites].sort(([a], [b]) => a.localeCompare(b))
     // suffix (regular/bell.svg), the other weights with one (light/bell-light.svg).
     let svgPath = path.join(PHOSPHOR_DIR, weight, `${name}-${weight}.svg`);
     if (!existsSync(svgPath) && weight === 'regular') svgPath = path.join(PHOSPHOR_DIR, weight, `${name}.svg`);
+    // The local source names this one book-user in thin and regular only.
+    if (!existsSync(svgPath) && name === 'book-open-user') {
+      svgPath = path.join(PHOSPHOR_DIR, weight, weight === 'regular' ? 'book-user.svg' : `book-user-${weight}.svg`);
+    }
     if (!existsSync(svgPath)) {
       missing.push(`${name} (weight: ${weight}) - file not found: ${svgPath}`);
       continue;

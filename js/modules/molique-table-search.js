@@ -46,11 +46,12 @@ const TABLE_SEARCH_TEXT = {
   de: { empty: 'Keine Treffer für', count: (n, total) => `${n} von ${total}` },
 };
 
-/** lowercase, strip diacritics; ł/Ł have no combining form, hence the extra pass */
+/** lowercase, strip diacritics; ł/ß have no combining form, hence the extra passes */
 function normalizeTableSearch(value) {
   return String(value)
     .toLowerCase()
     .replace(/ł/g, 'l')
+    .replace(/ß/g, 'ss')
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '');
 }
