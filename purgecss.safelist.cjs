@@ -169,6 +169,7 @@ const runtime = {
     'iconAnimPartFadeLoop',
     'iconAnimPartFold',
     'iconAnimPartLift',
+    'iconAnimPartNudge',
     'iconAnimPartPop',
     'iconAnimPartRecoil',
     'iconAnimPartShift',
