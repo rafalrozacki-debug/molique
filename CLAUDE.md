@@ -285,7 +285,11 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   z zaznaczonymi na czerwono częściami, we wszystkich grubościach: `battery-empty`
   przechodził spis 5/5 i ruszał tylko końcówką baterii. Alternatywy w `$parts` tylko
   w `:is()`: goły przecinek kończy selektor i reszta działa na każdą ikonę na stronie,
-  tak `hammer` dostał kiedyś ruch termometru. Takie decyzje zapisuj w `MUST_STAY`.
+  tak `hammer` dostał kiedyś ruch termometru. `:nth-of-type` to też numer: warstwa
+  duotone jest kształtem tego samego typu i przesuwa liczenie, więc `film-slate` ruszał
+  w tej jednej grubości czymś innym niż klapą. Wybieraj po geometrii, a `[data-part]`
+  dopisuj, gdy reguła ma ominąć wypełnienie. Takie decyzje zapisuj w `MUST_STAY`
+  i `MUST_MOVE`.
 - **`icon-anim`: atrybut `transform` to przebrana właściwość CSS** (v1.7.43).
   Phosphor obraca nim 57 ikon (`<rect transform="translate(256 0) rotate(90)">`).
   `transform-box: fill-box` zmienia też jego punkt odniesienia, więc kształt

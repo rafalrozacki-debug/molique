@@ -132,6 +132,24 @@ const MUST_STAY = [
   ['arrow-square-left', 'rect', 'the box, which has a transform attribute'],
   ['user-circle', 'circle[r="96"]', 'the ring around the person'],
   ['clock-clockwise', 'path, polyline:not([points^="128 "])', 'the arrow around the clock'],
+  ['smiley', '[data-layer]', 'the face behind the eyes, in duotone'],
+  ['gift', '[data-layer]', 'the fill of the box under the bow, in duotone'],
+  ['film-slate', 'path[d^="M40,112"]', 'the body of the slate'],
+  ['link-simple', '[data-layer]', 'the fill under the two halves, in duotone'],
+];
+
+// The other half of the same bug: :nth-of-type counted a duotone fill, the rule
+// matched something else, and the part it was written for just stood there.
+const MUST_MOVE = [
+  ['film-slate', 'path[d^="M40.43"]', 'the clapper'],
+  ['link-simple', 'path[data-part][d^="M112,"]', 'one half'],
+  ['link-simple', 'path[data-part][d^="M76."]', 'the other half'],
+  ['link-simple-break', 'path[data-part][d^="M76."]', 'the other half'],
+  ['sliders', 'circle[data-part][cx="128"]', 'the middle knob'],
+  ['sliders-horizontal', 'circle[data-part][cy="176"]', 'the lower knob'],
+  ['smiley', 'circle[data-part]:not([stroke])', 'the eyes'],
+  ['box-arrow-up', 'polyline', 'the arrow'],
+  ['trash-simple', 'line', 'the lid'],
 ];
 
 /* ---------- pattern liveness: read straight from the shipped rules ---------- */
@@ -245,6 +263,19 @@ try {
   }, MUST_STAY);
   check('what has to stay still stays still', stayed.moved.length === 0, stayed.moved.slice(0, 5).join(' | '));
   check('those shapes still exist, so the check above means something', stayed.missing.length === 0, stayed.missing.join(' | '));
+
+  const still = await page.evaluate(([list, weights]) => {
+    const out = [];
+    for (const [name, selector, label] of list) {
+      for (const icon of document.querySelectorAll('svg.icon-anim')) {
+        if (icon.dataset.icon !== name || !weights.includes(icon.dataset.w)) continue;
+        const parts = [...icon.querySelectorAll(selector)];
+        if (!parts.some((el) => el.getAnimations().length)) out.push(`${name}/${icon.dataset.w}: ${label}`);
+      }
+    }
+    return out;
+  }, [MUST_MOVE, STROKE_WEIGHTS]);
+  check('what has to move moves, in every stroke weight', still.length === 0, still.slice(0, 5).join(' | '));
 
   /* ---------- the hard cases ---------- */
   // Read from the fill weight: it has no parts, so the whole-icon family stays

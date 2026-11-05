@@ -751,10 +751,10 @@
     --_icon-anim-part-duration: 0.7s;
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .icon-anim:is([data-icon=gift]):not([data-icon-anim])[data-icon-parts=stroke]:has(> path[d$=Z]) {
+  .icon-anim:is([data-icon=gift]):not([data-icon-anim])[data-icon-parts=stroke]:has(> path[data-part][d$=Z]) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon=gift]):not([data-icon-anim])[data-icon-parts=stroke] > path[d$=Z] {
+  .icon-anim:is([data-icon=gift]):not([data-icon-anim])[data-icon-parts=stroke] > path[data-part][d$=Z] {
     --_icon-anim-y: -14px;
     --_icon-anim-part-name: iconAnimPartLift;
     --_icon-anim-part-duration: 0.7s;
@@ -975,40 +975,43 @@
     --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
     --_icon-anim-part-fill: backwards;
   }
-  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(odd)) {
+  /* The knobs go opposite ways, picked by where they stand. Not by :nth-of-type:
+     a duotone fill is a shape of the same type and shifts the count, which is how
+     film-slate and link-simple once moved the wrong part in that weight only. */
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke]:has(> :is(circle[cx="56"], circle[cx="200"])) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(odd) {
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke] > :is(circle[cx="56"], circle[cx="200"]) {
     --_icon-anim-x: 0px;
     --_icon-anim-y: 24px;
     --_icon-anim-part-name: iconAnimPartShift;
     --_icon-anim-part-duration: 0.8s;
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(even)) {
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle[cx="128"]) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(even) {
+  .icon-anim:is([data-icon=sliders]):not([data-icon-anim])[data-icon-parts=stroke] > circle[cx="128"] {
     --_icon-anim-x: 0px;
     --_icon-anim-y: -24px;
     --_icon-anim-part-name: iconAnimPartShift;
     --_icon-anim-part-duration: 0.8s;
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(odd)) {
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle[cy="80"]) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(odd) {
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke] > circle[cy="80"] {
     --_icon-anim-x: 24px;
     --_icon-anim-y: 0px;
     --_icon-anim-part-name: iconAnimPartShift;
     --_icon-anim-part-duration: 0.8s;
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:nth-of-type(even)) {
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle[cy="176"]) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(even) {
+  .icon-anim:is([data-icon=sliders-horizontal]):not([data-icon-anim])[data-icon-parts=stroke] > circle[cy="176"] {
     --_icon-anim-x: -24px;
     --_icon-anim-y: 0px;
     --_icon-anim-part-name: iconAnimPartShift;
@@ -1017,10 +1020,10 @@
   }
   /* ---------- small things that have a part worth moving ---------- */
   /* The eyes of a face blink; the face stays. */
-  .icon-anim:is([data-icon|=smiley]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle:not([stroke])) {
+  .icon-anim:is([data-icon|=smiley]):not([data-icon-anim])[data-icon-parts=stroke]:has(> circle[data-part]:not([stroke])) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon|=smiley]):not([data-icon-anim])[data-icon-parts=stroke] > circle:not([stroke]) {
+  .icon-anim:is([data-icon|=smiley]):not([data-icon-anim])[data-icon-parts=stroke] > circle[data-part]:not([stroke]) {
     --_icon-anim-part-name: iconAnimBlink;
     --_icon-anim-part-duration: 0.6s;
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
@@ -1075,10 +1078,10 @@
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
   /* The clapper of a film slate claps, hinged at its left end. */
-  .icon-anim:is([data-icon|=film-slate]):not([data-icon-anim])[data-icon-parts=stroke]:has(> :is(path:nth-of-type(2), line)) {
+  .icon-anim:is([data-icon|=film-slate]):not([data-icon-anim])[data-icon-parts=stroke]:has(> :is(path[d^="M40.43"], path[data-layer], line)) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon|=film-slate]):not([data-icon-anim])[data-icon-parts=stroke] > :is(path:nth-of-type(2), line) {
+  .icon-anim:is([data-icon|=film-slate]):not([data-icon-anim])[data-icon-parts=stroke] > :is(path[d^="M40.43"], path[data-layer], line) {
     --_icon-anim-y: 0px;
     --_icon-anim-r: -12deg;
     transform-box: view-box;
@@ -1096,20 +1099,20 @@
     --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
   }
   /* The two halves pull apart, like the preset of link. */
-  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke]:has(> path:nth-of-type(1)) {
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke]:has(> :is(path[data-part][d^="M112,"], path[data-part][d^="M192,"])) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke] > path:nth-of-type(1) {
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke] > :is(path[data-part][d^="M112,"], path[data-part][d^="M192,"]) {
     --_icon-anim-x: 12px;
     --_icon-anim-y: -12px;
     --_icon-anim-part-name: iconAnimPartShift;
     --_icon-anim-part-duration: 0.6s;
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke]:has(> path:nth-of-type(2)) {
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke]:has(> :is(path[data-part][d^="M76."], path[data-part][d^="M64,"])) {
     --_icon-anim-name: none;
   }
-  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke] > path:nth-of-type(2) {
+  .icon-anim:is([data-icon|=link-simple], [data-icon|=link-break]):not([data-icon-anim]):not([data-icon$=-horizontal], [data-icon$=-horizontal-break])[data-icon-parts=stroke] > :is(path[data-part][d^="M76."], path[data-part][d^="M64,"]) {
     --_icon-anim-x: -12px;
     --_icon-anim-y: 12px;
     --_icon-anim-part-name: iconAnimPartShift;

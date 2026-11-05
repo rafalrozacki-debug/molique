@@ -607,7 +607,7 @@ $_directions: (
   --_icon-anim-y: -14px;
   @include _part(iconAnimPartLift, 0.7s, $_ease-in-out);
 }
-@include _parts-of(_family('=gift'), 'path[d$="Z"]') {
+@include _parts-of(_family('=gift'), 'path[data-part][d$="Z"]') {
   --_icon-anim-y: -14px;
   @include _part(iconAnimPartLift, 0.7s, $_ease-in-out);
 }
@@ -711,22 +711,25 @@ $_directions: (
 @include _parts-of(_family('thermometer'), ':is(line[x1="120"], line[x1="108"])') {
   @include _part(iconAnimPartDraw, 0.8s, $_ease, null, backwards);
 }
-@include _parts-of(_family('=sliders'), 'circle:nth-of-type(odd)') {
+/* The knobs go opposite ways, picked by where they stand. Not by :nth-of-type:
+   a duotone fill is a shape of the same type and shifts the count, which is how
+   film-slate and link-simple once moved the wrong part in that weight only. */
+@include _parts-of(_family('=sliders'), ':is(circle[cx="56"], circle[cx="200"])') {
   --_icon-anim-x: 0px;
   --_icon-anim-y: 24px;
   @include _part(iconAnimPartShift, 0.8s, $_ease-in-out);
 }
-@include _parts-of(_family('=sliders'), 'circle:nth-of-type(even)') {
+@include _parts-of(_family('=sliders'), 'circle[cx="128"]') {
   --_icon-anim-x: 0px;
   --_icon-anim-y: -24px;
   @include _part(iconAnimPartShift, 0.8s, $_ease-in-out);
 }
-@include _parts-of(_family('=sliders-horizontal'), 'circle:nth-of-type(odd)') {
+@include _parts-of(_family('=sliders-horizontal'), 'circle[cy="80"]') {
   --_icon-anim-x: 24px;
   --_icon-anim-y: 0px;
   @include _part(iconAnimPartShift, 0.8s, $_ease-in-out);
 }
-@include _parts-of(_family('=sliders-horizontal'), 'circle:nth-of-type(even)') {
+@include _parts-of(_family('=sliders-horizontal'), 'circle[cy="176"]') {
   --_icon-anim-x: -24px;
   --_icon-anim-y: 0px;
   @include _part(iconAnimPartShift, 0.8s, $_ease-in-out);
@@ -735,7 +738,7 @@ $_directions: (
 /* ---------- small things that have a part worth moving ---------- */
 
 /* The eyes of a face blink; the face stays. */
-@include _parts-of(_family('smiley'), 'circle:not([stroke])') {
+@include _parts-of(_family('smiley'), 'circle[data-part]:not([stroke])') {
   @include _part(iconAnimBlink, 0.6s, $_ease-in-out);
 }
 /* The steam of a hot thing rises and fades. */
@@ -760,7 +763,7 @@ $_directions: (
   @include _part(iconAnimPartShift, 0.7s, $_ease-in-out);
 }
 /* The clapper of a film slate claps, hinged at its left end. */
-@include _parts-of(_family('film-slate'), ':is(path:nth-of-type(2), line)') {
+@include _parts-of(_family('film-slate'), ':is(path[d^="M40.43"], path[data-layer], line)') {
   --_icon-anim-y: 0px;
   --_icon-anim-r: -12deg;
   transform-box: view-box;
@@ -771,12 +774,12 @@ $_directions: (
   @include _part(iconAnimPartPop, 0.6s);
 }
 /* The two halves pull apart, like the preset of link. */
-@include _parts-of(_family('link-simple', 'link-break') + _except('$-horizontal', '$-horizontal-break'), 'path:nth-of-type(1)') {
+@include _parts-of(_family('link-simple', 'link-break') + _except('$-horizontal', '$-horizontal-break'), ':is(path[data-part][d^="M112,"], path[data-part][d^="M192,"])') {
   --_icon-anim-x: 12px;
   --_icon-anim-y: -12px;
   @include _part(iconAnimPartShift, 0.6s, $_ease-in-out);
 }
-@include _parts-of(_family('link-simple', 'link-break') + _except('$-horizontal', '$-horizontal-break'), 'path:nth-of-type(2)') {
+@include _parts-of(_family('link-simple', 'link-break') + _except('$-horizontal', '$-horizontal-break'), ':is(path[data-part][d^="M76."], path[data-part][d^="M64,"])') {
   --_icon-anim-x: -12px;
   --_icon-anim-y: 12px;
   @include _part(iconAnimPartShift, 0.6s, $_ease-in-out);
