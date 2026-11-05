@@ -47,6 +47,40 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.45 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.45</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Ponad 1000 ikon rusza się zgodnie z tym, co przedstawia
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Zamiast krótkiego pulsu ikona dostaje ruch swojej rodziny, bez żadnej zmiany w kodzie strony. Dotyczy to 1018 z 1512 ikon, także w grubości fill i w foncie.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Rodziny zamiast list.</strong> Auto jedzie, płomień faluje, flaga powiewa, piłka się odbija, zębatka się kręci, strzałka idzie w stronę ze swojej nazwy, a <code>arrow-bend-up-left</code> kończy w lewo, jak jej grot. Reguły łapią nazwy po całym słowie, więc moduł urósł tylko z 3,8 KB do 7,2 KB gzip.</li>
+                  <li><strong>494 ikony celowo zostają przy pulsie.</strong> Marki, symbole religijne i przedmioty bez naturalnego ruchu. 204 z nich to znaki i kształty, które dostaną rysowanie kreską w kolejnym wydaniu.</li>
+                  <li><strong>Osiem nowych wartości <code>data-icon-anim</code>:</strong> <code>press</code>, <code>rock</code>, <code>flap</code>, <code>sway</code>, <code>flicker</code>, <code>page-turn</code>, <code>zoom-in</code>, <code>zoom-out</code>.</li>
+                  <li><strong>Grubość fill i font.</strong> Ikona z presetem częściowym, np. <code>lock</code> albo <code>trash</code>, dotąd w tej grubości tylko pulsowała, bo nie ma części. Teraz rusza się cała, jak jej rodzina. Grubości kreskowe bez zmian: 118 presetów rusza się dokładnie tak jak wcześniej.</li>
+                  <li><strong>Poprawka: PurgeCSS wycinał wszystkie presety.</strong> <code>data-icon</code> nadaje dopiero skrypt, więc PurgeCSS nie widział tego atrybutu w HTML i z dostarczoną safelistą usuwał każdy preset, a ikony tylko pulsowały. Dotyczy wersji od 1.7.38. Safelista dostała <code>greedy: /data-icon/</code>.</li>
+                  <li><strong>Testy.</strong> <code>npm run test:icon-catalog</code> sprawdza w przeglądarce każdą ikonę w każdej grubości: czy się rusza, czy żaden kształt nie wyszedł poza ikonę, czy kierunek zgadza się z nazwą, czy presety się nie zmieniły.</li>
+                  <li><strong>Do zdjęcia:</strong> jeśli dopisywałeś <code>data-icon-anim</code> tylko po to, żeby ikona zrobiła coś innego niż puls, sprawdź, czy ruch rodziny Ci nie wystarcza. <strong>Po aktualizacji sprawdź:</strong> ikony bez presetu ruszają się teraz inaczej niż pulsem, a w <code>purgecss.safelist.cjs</code> weź nową wersję pliku.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.44 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

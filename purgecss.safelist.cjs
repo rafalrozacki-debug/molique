@@ -135,18 +135,24 @@ const runtime = {
   // since it also protects classes toggled by YOUR OWN code (e.g.
   // .step.is-completed).
   // Covers 21 .is-* classes in the CSS.
-  greedy: [/^is-/],
+  // data-icon: the animated icons pick their motion by a name that only the
+  // JS writes onto the icon, so the attribute is in no HTML that PurgeCSS reads.
+  // Without this, every preset of the module is removed and all icons just pop.
+  greedy: [/^is-/, /data-icon/],
   // Animations no CSS animation declaration names directly - triggered from
   // an inline style in JS, or named through a custom property and read with
   // animation-name: var(...) - so the keyframes:true option would remove them.
   keyframes: [
+    'iconAnimAxis',
     'iconAnimBeat',
     'iconAnimBlink',
     'iconAnimBounce',
     'iconAnimCart',
     'iconAnimDrift',
     'iconAnimDrop',
+    'iconAnimFlap',
     'iconAnimFlash',
+    'iconAnimFlicker',
     'iconAnimFlip',
     'iconAnimFloat',
     'iconAnimFly',
@@ -154,6 +160,7 @@ const runtime = {
     'iconAnimLaunch',
     'iconAnimLayerFade',
     'iconAnimNudge',
+    'iconAnimPageTurn',
     'iconAnimPartAppear',
     'iconAnimPartBlink',
     'iconAnimPartBurst',
@@ -171,15 +178,19 @@ const runtime = {
     'iconAnimPartWave',
     'iconAnimPartWrite',
     'iconAnimPop',
+    'iconAnimPress',
     'iconAnimRing',
+    'iconAnimRock',
     'iconAnimSearch',
     'iconAnimShake',
     'iconAnimSpin',
     'iconAnimSpinCcw',
+    'iconAnimSway',
     'iconAnimTada',
     'iconAnimTurn',
     'iconAnimWiggle',
     'iconAnimWrite',
+    'iconAnimZoom',
     'that',
     'toastProgressAnim',
   ],

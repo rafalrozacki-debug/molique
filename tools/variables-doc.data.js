@@ -272,6 +272,8 @@ export const COMPONENT = {
   '--_icon-anim-y':         ['Animowane ikony', 'internal', 'Przesunięcie w pionie, jak wyżej.'],
   '--_icon-anim-r':         ['Animowane ikony', 'internal', 'Kąt uniesienia części w <code>iconAnimPartLift</code> (pokrywa kosza).'],
   '--_icon-anim-turn':      ['Animowane ikony', 'internal', 'Kąt obrotu w <code>iconAnimTurn</code>, dobrany do symetrii kształtu (90deg dla x i słońca, 180deg dla klepsydry).'],
+  '--_icon-anim-origin':    ['Animowane ikony', 'internal', 'Punkt obrotu całej ikony. Zmienna, a nie zwykły <code>transform-origin</code>, bo ustawia ją każda reguła: inaczej węższa rodzina dziedziczyłaby punkt obrotu po szerszej (<code>fire</code> i <code>fire-truck</code>).'],
+  '--_icon-anim-zoom':      ['Animowane ikony', 'internal', 'Skala w <code>iconAnimZoom</code>: powyżej 1 powiększa, poniżej pomniejsza.'],
   '--_icon-anim-dash-from': ['Animowane ikony', 'internal', 'Początkowy <code>stroke-dashoffset</code> w <code>iconAnimPartDraw</code>, domyślnie <code>1</code> (kreska rysuje się od początku). <code>-1</code> rysuje ją od końca - tak linia <code>pencil-line</code> wychodzi spod grafitu.'],
   '--_icon-anim-opacity':   ['Animowane ikony', 'internal', 'Docelowe krycie w <code>draw-loop</code>: 1 dla kropek, 0.2 dla tła duotone.'],
 };

@@ -23,10 +23,13 @@
  * built from those) and flattened outlines (assets/ on npm, the web font).
  * Only the raw ones have separate elements to move; a flattened icon is one
  * <path>, so it gets the root animation and nothing more. Part numbering is
- * the same in thin, light, regular, bold and duotone (checked against the
- * source for every icon below; the duotone background layer is excluded from
- * the count and marked data-layer instead). The fill weight has a different
- * structure, so the JS marks it data-icon-parts="solid" and part rules skip it.
+ * the same in thin, light, regular, bold and duotone for the presets below,
+ * each checked against the source (the duotone background layer is excluded
+ * from the count and marked data-layer instead). It does NOT hold across the
+ * catalogue: 380 of the 1512 icons are built differently from weight to
+ * weight, so anything wider than one icon picks parts by type and shape. The
+ * fill weight has a different structure, so the JS marks it
+ * data-icon-parts="solid" and part rules skip it.
  *
  * API (mirrors the trigger/inheritance model of animated icon libraries):
  *   .icon-anim               on the icon (<svg>, or Phosphor's <i class="ph ph-bell">)
@@ -54,6 +57,8 @@
  */
 
 @use 'sass:list';
+@use 'sass:map';
+@use 'sass:string';
 
 $_ease: cubic-bezier(0.4, 0, 0.2, 1);
 $_ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -61,7 +66,7 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
 /* HOW IT IS WIRED. Presets and named animations below do not animate
    anything - they only set private custom properties (which keyframes, how
-   long, which easing). The motion comes from two rules in section 4, the
+   long, which easing). The motion comes from two rules in section 5, the
    only ones that carry the long list of triggers. Writing the triggers into
    every preset made the file 120 KB minified; this way it is a fraction of
    that, and adding an icon costs one short rule.
@@ -69,11 +74,15 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
    (--_icon-anim-part-*) on its direct children - never the other way round,
    so a root value inherited by a part cannot start the part. */
 
-/* The whole icon: works without JS, with <use> and with the web font. */
-@mixin _root($name, $duration, $easing: $_ease) {
+/* The whole icon: works without JS, with <use> and with the web font. The
+   origin is one of the variables on purpose, and always set: as a plain
+   transform-origin it would outlive its rule, and a wider family would hand
+   its pivot to the narrower one that overrides it (fire to fire-truck). */
+@mixin _root($name, $duration, $easing: $_ease, $origin: 50% 50%) {
   --_icon-anim-name: #{$name};
   --_icon-anim-duration: #{$duration};
   --_icon-anim-easing: #{$easing};
+  --_icon-anim-origin: #{$origin};
 }
 
 /* One numbered part, after the JS has inlined the icon. */
@@ -107,6 +116,34 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
 @function _variant($name) {
   @return '.icon-anim[data-icon-anim="#{$name}"]';
+}
+
+/* A whole family of icons, without listing them. A pattern is:
+     'file'     file and file-* - |= stops at the hyphen, so car misses card
+     '=file'    only file
+     '$-slash'  every name that ends like that
+     '^arrow-'  every name that starts like that, when |= is too wide */
+@function _match($pattern) {
+  $head: string.slice($pattern, 1, 1);
+  $rest: string.slice($pattern, 2);
+  @if $head == '=' {
+    @return '[data-icon="#{$rest}"]';
+  }
+  @if $head == '$' {
+    @return '[data-icon$="#{$rest}"]';
+  }
+  @if $head == '^' {
+    @return '[data-icon^="#{$rest}"]';
+  }
+  @return '[data-icon|="#{$pattern}"]';
+}
+
+@function _family($patterns...) {
+  $list: ();
+  @each $pattern in $patterns {
+    $list: list.append($list, _match($pattern), comma);
+  }
+  @return '.icon-anim:is(#{$list}):not([data-icon-anim])';
 }
 
 /* =========================================================================
@@ -154,18 +191,248 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* =========================================================================
-   2. PER-ICON DEFAULTS
+   2. FAMILIES - the motion of every icon without a preset of its own
+
+   All of these move the whole icon, so they work with every source and
+   weight: the sprite, the web font, fill, flattened SVGs. Every rule weighs
+   the same (.icon-anim + :is() + :not()), so the LAST ONE WINS: a wide family
+   comes first and a narrower one after it (fire, then fire-truck), the
+   neutral icons after all of them, the presets of section 3 after that.
+   npm run test:icon-catalog checks all 1512 icons against this order.
    ========================================================================= */
 
-/* Fallback: an icon with no preset and no data-icon-anim pops. */
+/* Fallback: an icon with no family and no preset pops. */
 .icon-anim:not([data-icon-anim]) {
   @include _root(iconAnimPop, 0.5s);
 }
 
+/* ---------- signs, documents, things that hold something ---------- */
+
+#{_family('check', 'checks', 'x', 'plus', 'minus', 'prohibit', 'shield')} {
+  @include _root(iconAnimPress, 0.5s);
+}
+#{_family('chat', 'chats', 'info')} {
+  @include _root(iconAnimBounce, 0.7s);
+}
+#{_family('lock', 'envelope', 'trash', 'archive', 'treasure-chest', 'gift', 'door', 'folder', 'folders', 'package', 'toolbox', 'wallet')} {
+  @include _root(iconAnimWiggle, 0.7s, $_ease-in-out);
+}
+#{_family('list', 'text-align-center', 'text-align-justify', 'text-align-left', 'text-align-right', 'text-columns', 'text-indent', 'text-outdent', 'queue', 'playlist', 'subtitles')} {
+  @include _root(iconAnimPress, 0.5s);
+}
+#{_family('file', 'files', 'note', 'notebook', 'notepad', 'article', 'newspaper', 'clipboard', 'receipt', 'invoice', 'scroll', 'exam', 'chat-text', 'chat-centered-text', 'chat-circle-text', 'chat-teardrop-text', 'film-script', 'chalkboard', 'textbox', 'book', 'books', 'calendar', 'address-book')} {
+  @include _root(iconAnimPageTurn, 0.7s, $_ease-in-out);
+}
+#{_family('dots', 'circles-four', 'circles-three', 'squares-four', 'grid-four', 'grid-nine', 'password', 'chart-scatter', 'notches', 'checkerboard', 'columns', 'rows', 'kanban', 'table', 'closed-captioning', 'wifi', 'broadcast', 'rss', 'cell-tower', 'contactless-payment', 'speaker', 'radio', 'bluetooth', 'microphone', 'headphones', 'headset', 'ear', 'megaphone', 'screencast', 'voicemail')} {
+  @include _root(iconAnimBeat, 0.8s);
+}
+#{_family('hourglass')} {
+  --_icon-anim-turn: 180deg;
+  @include _root(iconAnimTurn, 0.8s, $_ease-in-out);
+}
+#{_family('clock', 'timer', 'watch', 'gauge', 'speedometer', 'compass', 'thermometer')} {
+  @include _root(iconAnimWiggle, 0.7s, $_ease-in-out);
+}
+#{_family('chart-bar', 'cell-signal', 'battery', 'ranking', 'steps', 'stairs', 'equalizer', 'presentation-chart', 'projector-screen-chart', 'waveform')} {
+  @include _root(iconAnimPress, 0.5s);
+}
+
+/* ---------- people, faces, eyes ---------- */
+
+#{_family('user', 'users', 'person', 'student', 'chalkboard-teacher', 'smiley')} {
+  @include _root(iconAnimBounce, 0.7s);
+}
+#{_family('coin', 'coins', 'money', 'cube', 'cards', 'hand-coins', 'currency-circle-dollar', 'globe', 'sphere', 'poker-chip')} {
+  @include _root(iconAnimFlip, 0.8s, $_ease-in-out);
+}
+#{_family('map-pin', 'push-pin', 'bookmark', 'bookmarks', 'drop', 'funnel', 'mailbox')} {
+  @include _root(iconAnimDrop, 0.8s);
+}
+#{_family('eye')} {
+  @include _root(iconAnimBlink, 0.6s, $_ease-in-out);
+}
+#{_family('magnifying-glass', 'binoculars', 'eyes', 'eyeglasses', 'sunglasses', 'goggles', 'detective')} {
+  @include _root(iconAnimSearch, 1s, $_ease-in-out);
+}
+#{_family('crown', 'trophy', 'star', 'seal', 'certificate', 'champagne', 'cheers', 'beer-stein', 'beer-bottle', 'pint-glass', 'wine', 'martini', 'brandy', 'dice')} {
+  @include _root(iconAnimTada, 0.9s);
+}
+
+/* ---------- things in the hand ---------- */
+
+#{_family('cursor', 'mouse', 'keyboard', 'numpad', 'piano-keys', 'calculator', 'syringe', 'cash-register', 'radio-button', 'toggle-left', 'toggle-right', 'stamp')} {
+  @include _root(iconAnimPress, 0.5s);
+}
+#{_family('warning', 'wrench', 'screwdriver', 'bug', 'guitar', 'joystick', 'engine', 'bomb', 'magnet', 'flask', 'test-tube', 'paperclip', 'robot', 'hand-waving', 'handshake', 'hand-peace', 'hand-pointing', 'hand-tap', 'hand-grabbing', 'steering-wheel')} {
+  @include _root(iconAnimWiggle, 0.7s, $_ease-in-out);
+}
+#{_family('pen', 'pencil', 'highlighter', 'marker-circle', 'paint-brush', 'paint-roller', 'eraser', 'broom', 'needle', 'magic-wand', 'eyedropper', 'compass-tool')} {
+  @include _root(iconAnimWrite, 1s, $_ease-in-out);
+}
+#{_family('hammer', 'axe', 'gavel', 'pipe-wrench', 'golf', 'hockey', 'cricket', 'racquet', 'boxing-glove', 'hand-fist', 'knife', 'sword', 'shovel')} {
+  @include _root(iconAnimHit, 0.8s, $_ease-in-out, 20% 85%);
+}
+
+/* ---------- alive and shining ---------- */
+
+#{_family('heart', 'hand-heart', 'brain', 'head-circuit', 'first-aid', 'bandaids', 'stethoscope', 'pill', 'hands-clapping', 'tooth', 'dna')} {
+  @include _root(iconAnimBeat, 0.8s);
+}
+#{_family('fire', 'flame', 'campfire')} {
+  @include _root(iconAnimFlicker, 0.9s, linear, 50% 100%);
+}
+#{_family('lightning', 'flashlight', 'lightbulb', 'lamp', 'siren', 'headlights', 'charging-station', 'camera', 'power')} {
+  @include _root(iconAnimFlash, 0.8s);
+}
+
+/* ---------- places, balls, animals ---------- */
+
+#{_family('house', 'building', 'buildings', 'bank', 'barn', 'castle-turret', 'city', 'factory', 'farm', 'garage', 'hospital', 'nuclear-plant', 'storefront', 'tent', 'tipi', 'warehouse', 'lighthouse', 'air-traffic-control')} {
+  @include _root(iconAnimBounce, 0.7s);
+}
+#{_family('baseball', 'basketball', 'beach-ball', 'bowling-ball', 'football', 'soccer-ball', 'tennis-ball', 'volleyball', 'ping-pong', 'boules', 'egg', 'cat', 'dog', 'horse', 'rabbit', 'cow', 'baby', 'piggy-bank', 'music-note', 'music-notes', 'exclamation-mark', 'question-mark', 'graduation-cap')} {
+  @include _root(iconAnimBounce, 0.7s);
+}
+
+/* ---------- in the air and on the water ---------- */
+
+#{_family('balloon', 'ghost', 'parachute', 'feather', 'leaf', 'umbrella', 'flying-saucer', 'alien', 'rainbow', 'planet', 'lifebuoy', 'drone', 'sun-horizon')} {
+  @include _root(iconAnimFloat, 1.6s, $_ease-in-out);
+}
+#{_family('cloud', 'wind')} {
+  @include _root(iconAnimDrift, 1.2s, $_ease-in-out);
+}
+#{_family('boat', 'sailboat', 'fish', 'shrimp', 'island')} {
+  @include _root(iconAnimRock, 1.2s, $_ease-in-out);
+}
+#{_family('bird', 'butterfly')} {
+  @include _root(iconAnimFlap, 0.7s, $_ease-in-out);
+}
+#{_family('airplane', 'paper-plane', 'meteor', 'shooting-star')} {
+  @include _root(iconAnimFly, 1s, $_ease-in-out);
+}
+#{_family('rocket')} {
+  @include _root(iconAnimLaunch, 1.2s, $_ease-in-out);
+}
+
+/* ---------- on wheels ---------- */
+
+#{_family('ambulance', 'baby-carriage', 'bicycle', 'bulldozer', 'bus', 'cable-car', '=car', 'car-profile', 'car-simple', 'fire-truck', 'jeep', 'moped', 'motorcycle', 'police-car', 'scooter', 'subway', 'suitcase-rolling', 'taxi', 'tractor', 'train', 'tram', 'trolley', 'truck', 'van', 'shopping-cart', 'basket')} {
+  @include _root(iconAnimCart, 0.8s, $_ease-in-out);
+}
+
+/* ---------- hanging from the top, growing from the bottom ---------- */
+
+#{_family('bag', 'handbag', 'tote', 'shopping-bag', 'briefcase', 'backpack', 'suitcase-simple', '=suitcase')} {
+  @include _root(iconAnimRing, 0.9s, $_ease-in-out, 50% 10%);
+}
+#{_family('flag')} {
+  @include _root(iconAnimSway, 1.2s, $_ease-in-out, 0% 100%);
+}
+#{_family('tree', 'plant', 'potted-plant', 'cactus', 'clover', 'grains', 'flower-tulip', 'flower-lotus', 'cherries', 'windmill', 'tornado')} {
+  @include _root(iconAnimSway, 1.2s, $_ease-in-out, 50% 100%);
+}
+#{_family('bell', 'phone', 'alarm', 'call-bell', 'metronome', 'lamp-pendant', 'coat-hanger', 'medal', 'anchor', '=key', 'tag', 'tea-bag', 'scales', 'security-camera', 'crane', 'signpost', 'traffic-sign', 'disco-ball')} {
+  @include _root(iconAnimRing, 0.9s, $_ease-in-out, 50% 10%);
+}
+#{_family('pause', 'stop', 'record')} {
+  @include _root(iconAnimBeat, 0.8s);
+}
+
+/* ---------- directions ---------- */
+
+/* The icons that go somewhere. The amount comes from the rules below; an icon
+   the name of which says nothing about direction goes right. */
+#{_family('arrow', 'caret', 'thumbs-up', 'thumbs-down', 'backspace', 'key-return', 'hand-swipe-left', 'hand-swipe-right', 'escalator-down', 'escalator-up', 'elevator', 'align-left', 'align-right', 'align-top', 'align-bottom', 'navigation-arrow', 'share', 'plug', 'plugs', 'usb', 'person-simple-run', 'person-simple-walk', 'person-simple-bike', 'person-simple-hike', 'person-simple-ski', 'person-simple-snowboard', 'person-simple-swim', 'sneaker-move', 'footprints', 'paw-print', 'credit-card', 'sidebar', 'ruler', 'play', 'skip-back', 'skip-forward', 'fast-forward', 'rewind', 'eject', 'download', 'upload', 'tray-arrow', 'file-arrow', 'cloud-arrow', 'box-arrow', 'hand-arrow', 'monitor-arrow-up', 'export', '=arrow-square-in')} {
+  --_icon-anim-x: 18%;
+  @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
+}
+
+/* The name says which way, and these rules are not tied to a family: an icon
+   whose animation reads no offset does not care. The two-word ones come last,
+   since -up-right also ends in -right. */
+$_directions: (
+  'right': (22%, 0%),
+  'left': (-22%, 0%),
+  'up': (0%, -22%),
+  'down': (0%, 22%),
+  'up-right': (18%, -18%),
+  'up-left': (-18%, -18%),
+  'down-right': (18%, 18%),
+  'down-left': (-18%, 18%)
+);
+@each $direction, $offset in $_directions {
+  .icon-anim[data-icon$="-#{$direction}"]:not([data-icon-anim]) {
+    --_icon-anim-x: #{list.nth($offset, 1)};
+    --_icon-anim-y: #{list.nth($offset, 2)};
+  }
+}
+/* A bend ends going one way: bend-up-left goes up, then left. */
+@each $direction in ('right', 'left', 'up', 'down') {
+  #{_family('arrow-bend', 'arrow-elbow', 'arrow-u')}[data-icon$="-#{$direction}"] {
+    $offset: map.get($_directions, $direction);
+    --_icon-anim-x: #{list.nth($offset, 1)};
+    --_icon-anim-y: #{list.nth($offset, 2)};
+  }
+}
+/* And these say it in a word of their own. */
+#{_family('backspace', 'key-return', 'skip-back', 'rewind', 'align-left', '=arrow-square-in')} {
+  --_icon-anim-x: -22%;
+}
+#{_family('upload', 'export', 'eject', 'elevator', 'footprints', 'align-top', 'monitor-arrow-up')} {
+  --_icon-anim-x: 0%;
+  --_icon-anim-y: -22%;
+}
+#{_family('download', 'align-bottom')} {
+  --_icon-anim-x: 0%;
+  --_icon-anim-y: 22%;
+}
+#{_family('=arrow-square-in')} {
+  --_icon-anim-y: 22%;
+}
+
+#{_family('arrows-in', 'corners-in')} {
+  --_icon-anim-zoom: 0.82;
+  @include _root(iconAnimZoom, 0.6s, $_ease-in-out);
+}
+#{_family('arrows-out', 'corners-out', 'resize', 'frame-corners', 'crosshair', 'target', 'scan', 'gps', 'crop', 'cube-focus', 'user-focus')} {
+  --_icon-anim-zoom: 1.18;
+  @include _root(iconAnimZoom, 0.6s, $_ease-in-out);
+}
+
+/* Both ways along one axis. */
+#{_family('arrows-left-right', 'arrows-horizontal', 'swap', 'shuffle', 'flip-horizontal', 'split-horizontal', 'square-split-horizontal', 'align-center-horizontal', 'sliders', 'faders', 'washing-machine', 'game-controller', 'vibrate', '$-slash')} {
+  --_icon-anim-x: 10%;
+  --_icon-anim-y: 0%;
+  @include _root(iconAnimAxis, 0.5s, $_ease-in-out);
+}
+#{_family('arrows-down-up', 'arrows-vertical', 'arrows-merge', 'arrows-split', '=caret-up-down', '=caret-circle-up-down', 'flip-vertical', 'split-vertical', 'square-split-vertical', 'sort-ascending', 'sort-descending', 'align-center-vertical')} {
+  --_icon-anim-x: 0%;
+  --_icon-anim-y: 10%;
+  @include _root(iconAnimAxis, 0.5s, $_ease-in-out);
+}
+
+#{_family('=arrow-clockwise', '=arrows-clockwise', 'repeat', 'recycle', 'gear', 'spinner', 'circle-notch', 'fan', 'pinwheel', 'aperture', 'disc', 'vinyl-record', '=film-reel', 'tire', '=sun-dim', 'asterisk', 'snowflake', 'hurricane', 'yin-yang', '=flower', 'atom', 'nut', 'device-rotate', 'camera-rotate', 'virus', '=compass-rose')} {
+  @include _root(iconAnimSpin, 1s, $_ease-in-out);
+}
+
+/* ---------- neutral on purpose ---------- */
+
+/* Last of all, so no family above can claim them. Other people's marks do not
+   get a personality from us; religious and serious symbols do not bounce or
+   celebrate; these objects only share a first word with a family (a baseball
+   cap is not a ball); and a phone that hung up does not ring. */
+#{_family('$-logo', 'church', 'mosque', 'synagogue', 'star-and-crescent', 'star-of-david', 'cross', 'crown-cross', 'hands-praying', 'skull', 'biohazard', 'radioactive', 'fallout-shelter', 'wheelchair', 'baseball-cap', 'baseball-helmet', 'football-helmet', 'fire-extinguisher', '=cigarette', 'keyhole', 'car-battery', '=shield', 'cube-transparent', 'phone-disconnect', 'phone-x', 'phone-pause', 'bell-z', 'bell-simple-z', 'tree-structure', 'tree-view', 'chart-line-up', 'chart-line-down', 'trend-up', 'trend-down', 'share-network')} {
+  @include _root(iconAnimPop, 0.5s);
+}
+
+/* =========================================================================
+   3. PER-ICON PRESETS
+   ========================================================================= */
+
 /* Bell: swings from the top, the clapper lags behind. */
 #{_preset('bell', 'bell-simple', 'bell-ringing', 'bell-simple-ringing')} {
-  @include _root(iconAnimRing, 0.9s, $_ease-in-out);
-  transform-origin: 50% 10%;
+  @include _root(iconAnimRing, 0.9s, $_ease-in-out, 50% 10%);
 }
 #{_parts('bell', 'bell-ringing')} > [data-part="1"] {
   @include _part(iconAnimPartSway, 0.9s, $_ease-in-out);
@@ -482,8 +749,7 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
 /* Hammer: strikes from the grip (bottom left). */
 #{_preset('hammer')} {
-  transform-origin: 20% 85%;
-  @include _root(iconAnimHit, 0.8s, $_ease-in-out);
+  @include _root(iconAnimHit, 0.8s, $_ease-in-out, 20% 85%);
 }
 
 /* Documents: the text lines (by type: <line>) write themselves. */
@@ -534,17 +800,14 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* =========================================================================
-   3. NAMED ANIMATIONS - data-icon-anim="..." on any icon
+   4. NAMED ANIMATIONS - data-icon-anim="..." on any icon
    Root only (they work with <use>, the web font and every weight),
    except draw / draw-loop, which need the parts.
    ========================================================================= */
 
 #{_variant('pop')} { @include _root(iconAnimPop, 0.5s); }
 #{_variant('wiggle')} { @include _root(iconAnimWiggle, 0.7s, $_ease-in-out); }
-#{_variant('ring')} {
-  transform-origin: 50% 10%;
-  @include _root(iconAnimRing, 0.9s, $_ease-in-out);
-}
+#{_variant('ring')} { @include _root(iconAnimRing, 0.9s, $_ease-in-out, 50% 10%); }
 #{_variant('shake')} { @include _root(iconAnimShake, 0.5s, $_ease-in-out); }
 #{_variant('bounce')} { @include _root(iconAnimBounce, 0.7s); }
 #{_variant('beat')} { @include _root(iconAnimBeat, 0.8s); }
@@ -556,6 +819,20 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 #{_variant('blink')} { @include _root(iconAnimBlink, 0.6s, $_ease-in-out); }
 #{_variant('flash')} { @include _root(iconAnimFlash, 0.8s); }
 #{_variant('drop')} { @include _root(iconAnimDrop, 0.8s); }
+#{_variant('press')} { @include _root(iconAnimPress, 0.5s); }
+#{_variant('rock')} { @include _root(iconAnimRock, 1.2s, $_ease-in-out); }
+#{_variant('flap')} { @include _root(iconAnimFlap, 0.7s, $_ease-in-out); }
+#{_variant('page-turn')} { @include _root(iconAnimPageTurn, 0.7s, $_ease-in-out); }
+#{_variant('sway')} { @include _root(iconAnimSway, 1.2s, $_ease-in-out, 50% 100%); }
+#{_variant('flicker')} { @include _root(iconAnimFlicker, 0.9s, linear, 50% 100%); }
+#{_variant('zoom-in')} {
+  --_icon-anim-zoom: 1.18;
+  @include _root(iconAnimZoom, 0.6s, $_ease-in-out);
+}
+#{_variant('zoom-out')} {
+  --_icon-anim-zoom: 0.82;
+  @include _root(iconAnimZoom, 0.6s, $_ease-in-out);
+}
 #{_variant('nudge-right')} {
   --_icon-anim-x: 22%;
   @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
@@ -611,7 +888,7 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* =========================================================================
-   4. THE TRIGGERS - the only rules that move anything
+   5. THE TRIGGERS - the only rules that move anything
    Each trigger counts on the icon itself and on any ancestor. Hover only
    on devices that really hover (a finger cannot leave, so a tap would
    leave the icon "hovered"); keyboard focus counts everywhere.
@@ -628,6 +905,7 @@ $_kids: ':is([data-part], [data-layer])';
   animation-delay: var(--icon-anim-delay, 0s);
   animation-iteration-count: var(--icon-anim-iterations, 1);
   animation-fill-mode: var(--icon-anim-fill, none);
+  transform-origin: var(--_icon-anim-origin, 50% 50%);
 }
 
 @mixin _animate-part {
@@ -662,7 +940,7 @@ $_kids: ':is([data-part], [data-layer])';
 }
 
 /* =========================================================================
-   5. KEYFRAMES - all named iconAnim*, all in this file (npm run test:css)
+   6. KEYFRAMES - all named iconAnim*, all in this file (npm run test:css)
    Root keyframes move in % of the icon box; part keyframes move in px,
    which inside an <svg> are units of the 256 grid - scale-independent.
    Each one ends where it starts, so fill-mode: none never jumps.
@@ -827,6 +1105,62 @@ $_kids: ':is([data-part], [data-layer])';
 @keyframes iconAnimDrift {
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(10%); }
+}
+
+/* Out and back along --_icon-anim-x/-y, then the other way. */
+@keyframes iconAnimAxis {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(var(--_icon-anim-x, 0%), var(--_icon-anim-y, 0%)); }
+  75% {
+    transform: translate(
+      calc(var(--_icon-anim-x, 0%) * -1),
+      calc(var(--_icon-anim-y, 0%) * -1)
+    );
+  }
+}
+
+@keyframes iconAnimZoom {
+  0%, 100% { transform: scale(1); }
+  45% { transform: scale(var(--_icon-anim-zoom, 1.18)); }
+}
+
+/* Gives way under a finger, then springs back. */
+@keyframes iconAnimPress {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(0.86); }
+  70% { transform: scale(1.05); }
+}
+
+/* Leans with the wind, from --_icon-anim-origin at the foot of the icon. */
+@keyframes iconAnimSway {
+  0%, 100% { transform: rotate(0); }
+  30% { transform: rotate(7deg); }
+  70% { transform: rotate(-5deg); }
+}
+
+@keyframes iconAnimRock {
+  0%, 100% { transform: rotate(0) translateY(0); }
+  25% { transform: rotate(-6deg) translateY(-4%); }
+  75% { transform: rotate(6deg) translateY(4%); }
+}
+
+/* Wings: the icon narrows twice around its spine. */
+@keyframes iconAnimFlap {
+  0%, 50%, 100% { transform: scaleX(1); }
+  25%, 75% { transform: scaleX(0.55); }
+}
+
+/* Irregular on purpose: a flame that repeats evenly looks like a pulse. */
+@keyframes iconAnimFlicker {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  20% { transform: scale(1.06, 0.95); opacity: 0.8; }
+  45% { transform: scale(0.96, 1.08); opacity: 1; }
+  70% { transform: scale(1.04, 0.97); opacity: 0.85; }
+}
+
+@keyframes iconAnimPageTurn {
+  0%, 100% { transform: perspective(400px) rotateY(0); }
+  50% { transform: perspective(400px) rotateY(-32deg); }
 }
 
 /* ---------- parts ---------- */

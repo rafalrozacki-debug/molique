@@ -32,10 +32,13 @@
    * built from those) and flattened outlines (assets/ on npm, the web font).
    * Only the raw ones have separate elements to move; a flattened icon is one
    * <path>, so it gets the root animation and nothing more. Part numbering is
-   * the same in thin, light, regular, bold and duotone (checked against the
-   * source for every icon below; the duotone background layer is excluded from
-   * the count and marked data-layer instead). The fill weight has a different
-   * structure, so the JS marks it data-icon-parts="solid" and part rules skip it.
+   * the same in thin, light, regular, bold and duotone for the presets below,
+   * each checked against the source (the duotone background layer is excluded
+   * from the count and marked data-layer instead). It does NOT hold across the
+   * catalogue: 380 of the 1512 icons are built differently from weight to
+   * weight, so anything wider than one icon picks parts by type and shape. The
+   * fill weight has a different structure, so the JS marks it
+   * data-icon-parts="solid" and part rules skip it.
    *
    * API (mirrors the trigger/inheritance model of animated icon libraries):
    *   .icon-anim               on the icon (<svg>, or Phosphor's <i class="ph ph-bell">)
@@ -63,19 +66,27 @@
    */
   /* HOW IT IS WIRED. Presets and named animations below do not animate
      anything - they only set private custom properties (which keyframes, how
-     long, which easing). The motion comes from two rules in section 4, the
+     long, which easing). The motion comes from two rules in section 5, the
      only ones that carry the long list of triggers. Writing the triggers into
      every preset made the file 120 KB minified; this way it is a fraction of
      that, and adding an icon costs one short rule.
      Root vars (--_icon-anim-*) are read on .icon-anim, part vars
      (--_icon-anim-part-*) on its direct children - never the other way round,
      so a root value inherited by a part cannot start the part. */
-  /* The whole icon: works without JS, with <use> and with the web font. */
+  /* The whole icon: works without JS, with <use> and with the web font. The
+     origin is one of the variables on purpose, and always set: as a plain
+     transform-origin it would outlive its rule, and a wider family would hand
+     its pivot to the narrower one that overrides it (fire to fire-truck). */
   /* One numbered part, after the JS has inlined the icon. */
   /* The default animation of the named icons (only when no data-icon-anim). */
   /* Same, but only once the JS has turned the icon into numbered parts.
      A preset that moves only parts switches the root off HERE, so an icon
      the JS could not inline still falls back to the pop. */
+  /* A whole family of icons, without listing them. A pattern is:
+       'file'     file and file-* - |= stops at the hyphen, so car misses card
+       '=file'    only file
+       '$-slash'  every name that ends like that
+       '^arrow-'  every name that starts like that, when |= is too wide */
   /* =========================================================================
      1. BASE (no motion here)
      ========================================================================= */
@@ -113,20 +124,381 @@
     animation-play-state: paused;
   }
   /* =========================================================================
-     2. PER-ICON DEFAULTS
+     2. FAMILIES - the motion of every icon without a preset of its own
+
+     All of these move the whole icon, so they work with every source and
+     weight: the sprite, the web font, fill, flattened SVGs. Every rule weighs
+     the same (.icon-anim + :is() + :not()), so the LAST ONE WINS: a wide family
+     comes first and a narrower one after it (fire, then fire-truck), the
+     neutral icons after all of them, the presets of section 3 after that.
+     npm run test:icon-catalog checks all 1512 icons against this order.
      ========================================================================= */
-  /* Fallback: an icon with no preset and no data-icon-anim pops. */
+  /* Fallback: an icon with no family and no preset pops. */
   .icon-anim:not([data-icon-anim]) {
     --_icon-anim-name: iconAnimPop;
     --_icon-anim-duration: 0.5s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
+  /* ---------- signs, documents, things that hold something ---------- */
+  .icon-anim:is([data-icon|=check], [data-icon|=checks], [data-icon|=x], [data-icon|=plus], [data-icon|=minus], [data-icon|=prohibit], [data-icon|=shield]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPress;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=chat], [data-icon|=chats], [data-icon|=info]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBounce;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=lock], [data-icon|=envelope], [data-icon|=trash], [data-icon|=archive], [data-icon|=treasure-chest], [data-icon|=gift], [data-icon|=door], [data-icon|=folder], [data-icon|=folders], [data-icon|=package], [data-icon|=toolbox], [data-icon|=wallet]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimWiggle;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=list], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon|=queue], [data-icon|=playlist], [data-icon|=subtitles]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPress;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=file], [data-icon|=files], [data-icon|=note], [data-icon|=notebook], [data-icon|=notepad], [data-icon|=article], [data-icon|=newspaper], [data-icon|=clipboard], [data-icon|=receipt], [data-icon|=invoice], [data-icon|=scroll], [data-icon|=exam], [data-icon|=chat-text], [data-icon|=chat-centered-text], [data-icon|=chat-circle-text], [data-icon|=chat-teardrop-text], [data-icon|=film-script], [data-icon|=chalkboard], [data-icon|=textbox], [data-icon|=book], [data-icon|=books], [data-icon|=calendar], [data-icon|=address-book]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPageTurn;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=dots], [data-icon|=circles-four], [data-icon|=circles-three], [data-icon|=squares-four], [data-icon|=grid-four], [data-icon|=grid-nine], [data-icon|=password], [data-icon|=chart-scatter], [data-icon|=notches], [data-icon|=checkerboard], [data-icon|=columns], [data-icon|=rows], [data-icon|=kanban], [data-icon|=table], [data-icon|=closed-captioning], [data-icon|=wifi], [data-icon|=broadcast], [data-icon|=rss], [data-icon|=cell-tower], [data-icon|=contactless-payment], [data-icon|=speaker], [data-icon|=radio], [data-icon|=bluetooth], [data-icon|=microphone], [data-icon|=headphones], [data-icon|=headset], [data-icon|=ear], [data-icon|=megaphone], [data-icon|=screencast], [data-icon|=voicemail]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBeat;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=hourglass]):not([data-icon-anim]) {
+    --_icon-anim-turn: 180deg;
+    --_icon-anim-name: iconAnimTurn;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=clock], [data-icon|=timer], [data-icon|=watch], [data-icon|=gauge], [data-icon|=speedometer], [data-icon|=compass], [data-icon|=thermometer]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimWiggle;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=chart-bar], [data-icon|=cell-signal], [data-icon|=battery], [data-icon|=ranking], [data-icon|=steps], [data-icon|=stairs], [data-icon|=equalizer], [data-icon|=presentation-chart], [data-icon|=projector-screen-chart], [data-icon|=waveform]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPress;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- people, faces, eyes ---------- */
+  .icon-anim:is([data-icon|=user], [data-icon|=users], [data-icon|=person], [data-icon|=student], [data-icon|=chalkboard-teacher], [data-icon|=smiley]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBounce;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=coin], [data-icon|=coins], [data-icon|=money], [data-icon|=cube], [data-icon|=cards], [data-icon|=hand-coins], [data-icon|=currency-circle-dollar], [data-icon|=globe], [data-icon|=sphere], [data-icon|=poker-chip]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimFlip;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=map-pin], [data-icon|=push-pin], [data-icon|=bookmark], [data-icon|=bookmarks], [data-icon|=drop], [data-icon|=funnel], [data-icon|=mailbox]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimDrop;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=eye]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBlink;
+    --_icon-anim-duration: 0.6s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=magnifying-glass], [data-icon|=binoculars], [data-icon|=eyes], [data-icon|=eyeglasses], [data-icon|=sunglasses], [data-icon|=goggles], [data-icon|=detective]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimSearch;
+    --_icon-anim-duration: 1s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=crown], [data-icon|=trophy], [data-icon|=star], [data-icon|=seal], [data-icon|=certificate], [data-icon|=champagne], [data-icon|=cheers], [data-icon|=beer-stein], [data-icon|=beer-bottle], [data-icon|=pint-glass], [data-icon|=wine], [data-icon|=martini], [data-icon|=brandy], [data-icon|=dice]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimTada;
+    --_icon-anim-duration: 0.9s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- things in the hand ---------- */
+  .icon-anim:is([data-icon|=cursor], [data-icon|=mouse], [data-icon|=keyboard], [data-icon|=numpad], [data-icon|=piano-keys], [data-icon|=calculator], [data-icon|=syringe], [data-icon|=cash-register], [data-icon|=radio-button], [data-icon|=toggle-left], [data-icon|=toggle-right], [data-icon|=stamp]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPress;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=warning], [data-icon|=wrench], [data-icon|=screwdriver], [data-icon|=bug], [data-icon|=guitar], [data-icon|=joystick], [data-icon|=engine], [data-icon|=bomb], [data-icon|=magnet], [data-icon|=flask], [data-icon|=test-tube], [data-icon|=paperclip], [data-icon|=robot], [data-icon|=hand-waving], [data-icon|=handshake], [data-icon|=hand-peace], [data-icon|=hand-pointing], [data-icon|=hand-tap], [data-icon|=hand-grabbing], [data-icon|=steering-wheel]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimWiggle;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=pen], [data-icon|=pencil], [data-icon|=highlighter], [data-icon|=marker-circle], [data-icon|=paint-brush], [data-icon|=paint-roller], [data-icon|=eraser], [data-icon|=broom], [data-icon|=needle], [data-icon|=magic-wand], [data-icon|=eyedropper], [data-icon|=compass-tool]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimWrite;
+    --_icon-anim-duration: 1s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=hammer], [data-icon|=axe], [data-icon|=gavel], [data-icon|=pipe-wrench], [data-icon|=golf], [data-icon|=hockey], [data-icon|=cricket], [data-icon|=racquet], [data-icon|=boxing-glove], [data-icon|=hand-fist], [data-icon|=knife], [data-icon|=sword], [data-icon|=shovel]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimHit;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 20% 85%;
+  }
+  /* ---------- alive and shining ---------- */
+  .icon-anim:is([data-icon|=heart], [data-icon|=hand-heart], [data-icon|=brain], [data-icon|=head-circuit], [data-icon|=first-aid], [data-icon|=bandaids], [data-icon|=stethoscope], [data-icon|=pill], [data-icon|=hands-clapping], [data-icon|=tooth], [data-icon|=dna]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBeat;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=fire], [data-icon|=flame], [data-icon|=campfire]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimFlicker;
+    --_icon-anim-duration: 0.9s;
+    --_icon-anim-easing: linear;
+    --_icon-anim-origin: 50% 100%;
+  }
+  .icon-anim:is([data-icon|=lightning], [data-icon|=flashlight], [data-icon|=lightbulb], [data-icon|=lamp], [data-icon|=siren], [data-icon|=headlights], [data-icon|=charging-station], [data-icon|=camera], [data-icon|=power]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimFlash;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- places, balls, animals ---------- */
+  .icon-anim:is([data-icon|=house], [data-icon|=building], [data-icon|=buildings], [data-icon|=bank], [data-icon|=barn], [data-icon|=castle-turret], [data-icon|=city], [data-icon|=factory], [data-icon|=farm], [data-icon|=garage], [data-icon|=hospital], [data-icon|=nuclear-plant], [data-icon|=storefront], [data-icon|=tent], [data-icon|=tipi], [data-icon|=warehouse], [data-icon|=lighthouse], [data-icon|=air-traffic-control]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBounce;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=baseball], [data-icon|=basketball], [data-icon|=beach-ball], [data-icon|=bowling-ball], [data-icon|=football], [data-icon|=soccer-ball], [data-icon|=tennis-ball], [data-icon|=volleyball], [data-icon|=ping-pong], [data-icon|=boules], [data-icon|=egg], [data-icon|=cat], [data-icon|=dog], [data-icon|=horse], [data-icon|=rabbit], [data-icon|=cow], [data-icon|=baby], [data-icon|=piggy-bank], [data-icon|=music-note], [data-icon|=music-notes], [data-icon|=exclamation-mark], [data-icon|=question-mark], [data-icon|=graduation-cap]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBounce;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- in the air and on the water ---------- */
+  .icon-anim:is([data-icon|=balloon], [data-icon|=ghost], [data-icon|=parachute], [data-icon|=feather], [data-icon|=leaf], [data-icon|=umbrella], [data-icon|=flying-saucer], [data-icon|=alien], [data-icon|=rainbow], [data-icon|=planet], [data-icon|=lifebuoy], [data-icon|=drone], [data-icon|=sun-horizon]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimFloat;
+    --_icon-anim-duration: 1.6s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=cloud], [data-icon|=wind]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimDrift;
+    --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=boat], [data-icon|=sailboat], [data-icon|=fish], [data-icon|=shrimp], [data-icon|=island]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimRock;
+    --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=bird], [data-icon|=butterfly]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimFlap;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=airplane], [data-icon|=paper-plane], [data-icon|=meteor], [data-icon|=shooting-star]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimFly;
+    --_icon-anim-duration: 1s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=rocket]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimLaunch;
+    --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- on wheels ---------- */
+  .icon-anim:is([data-icon|=ambulance], [data-icon|=baby-carriage], [data-icon|=bicycle], [data-icon|=bulldozer], [data-icon|=bus], [data-icon|=cable-car], [data-icon=car], [data-icon|=car-profile], [data-icon|=car-simple], [data-icon|=fire-truck], [data-icon|=jeep], [data-icon|=moped], [data-icon|=motorcycle], [data-icon|=police-car], [data-icon|=scooter], [data-icon|=subway], [data-icon|=suitcase-rolling], [data-icon|=taxi], [data-icon|=tractor], [data-icon|=train], [data-icon|=tram], [data-icon|=trolley], [data-icon|=truck], [data-icon|=van], [data-icon|=shopping-cart], [data-icon|=basket]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimCart;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- hanging from the top, growing from the bottom ---------- */
+  .icon-anim:is([data-icon|=bag], [data-icon|=handbag], [data-icon|=tote], [data-icon|=shopping-bag], [data-icon|=briefcase], [data-icon|=backpack], [data-icon|=suitcase-simple], [data-icon=suitcase]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimRing;
+    --_icon-anim-duration: 0.9s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 10%;
+  }
+  .icon-anim:is([data-icon|=flag]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimSway;
+    --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 0% 100%;
+  }
+  .icon-anim:is([data-icon|=tree], [data-icon|=plant], [data-icon|=potted-plant], [data-icon|=cactus], [data-icon|=clover], [data-icon|=grains], [data-icon|=flower-tulip], [data-icon|=flower-lotus], [data-icon|=cherries], [data-icon|=windmill], [data-icon|=tornado]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimSway;
+    --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 100%;
+  }
+  .icon-anim:is([data-icon|=bell], [data-icon|=phone], [data-icon|=alarm], [data-icon|=call-bell], [data-icon|=metronome], [data-icon|=lamp-pendant], [data-icon|=coat-hanger], [data-icon|=medal], [data-icon|=anchor], [data-icon=key], [data-icon|=tag], [data-icon|=tea-bag], [data-icon|=scales], [data-icon|=security-camera], [data-icon|=crane], [data-icon|=signpost], [data-icon|=traffic-sign], [data-icon|=disco-ball]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimRing;
+    --_icon-anim-duration: 0.9s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 10%;
+  }
+  .icon-anim:is([data-icon|=pause], [data-icon|=stop], [data-icon|=record]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimBeat;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- directions ---------- */
+  /* The icons that go somewhere. The amount comes from the rules below; an icon
+     the name of which says nothing about direction goes right. */
+  .icon-anim:is([data-icon|=arrow], [data-icon|=caret], [data-icon|=thumbs-up], [data-icon|=thumbs-down], [data-icon|=backspace], [data-icon|=key-return], [data-icon|=hand-swipe-left], [data-icon|=hand-swipe-right], [data-icon|=escalator-down], [data-icon|=escalator-up], [data-icon|=elevator], [data-icon|=align-left], [data-icon|=align-right], [data-icon|=align-top], [data-icon|=align-bottom], [data-icon|=navigation-arrow], [data-icon|=share], [data-icon|=plug], [data-icon|=plugs], [data-icon|=usb], [data-icon|=person-simple-run], [data-icon|=person-simple-walk], [data-icon|=person-simple-bike], [data-icon|=person-simple-hike], [data-icon|=person-simple-ski], [data-icon|=person-simple-snowboard], [data-icon|=person-simple-swim], [data-icon|=sneaker-move], [data-icon|=footprints], [data-icon|=paw-print], [data-icon|=credit-card], [data-icon|=sidebar], [data-icon|=ruler], [data-icon|=play], [data-icon|=skip-back], [data-icon|=skip-forward], [data-icon|=fast-forward], [data-icon|=rewind], [data-icon|=eject], [data-icon|=download], [data-icon|=upload], [data-icon|=tray-arrow], [data-icon|=file-arrow], [data-icon|=cloud-arrow], [data-icon|=box-arrow], [data-icon|=hand-arrow], [data-icon|=monitor-arrow-up], [data-icon|=export], [data-icon=arrow-square-in]):not([data-icon-anim]) {
+    --_icon-anim-x: 18%;
+    --_icon-anim-name: iconAnimNudge;
+    --_icon-anim-duration: 0.6s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* The name says which way, and these rules are not tied to a family: an icon
+     whose animation reads no offset does not care. The two-word ones come last,
+     since -up-right also ends in -right. */
+  .icon-anim[data-icon$=-right]:not([data-icon-anim]) {
+    --_icon-anim-x: 22%;
+    --_icon-anim-y: 0%;
+  }
+  .icon-anim[data-icon$=-left]:not([data-icon-anim]) {
+    --_icon-anim-x: -22%;
+    --_icon-anim-y: 0%;
+  }
+  .icon-anim[data-icon$=-up]:not([data-icon-anim]) {
+    --_icon-anim-x: 0%;
+    --_icon-anim-y: -22%;
+  }
+  .icon-anim[data-icon$=-down]:not([data-icon-anim]) {
+    --_icon-anim-x: 0%;
+    --_icon-anim-y: 22%;
+  }
+  .icon-anim[data-icon$=-up-right]:not([data-icon-anim]) {
+    --_icon-anim-x: 18%;
+    --_icon-anim-y: -18%;
+  }
+  .icon-anim[data-icon$=-up-left]:not([data-icon-anim]) {
+    --_icon-anim-x: -18%;
+    --_icon-anim-y: -18%;
+  }
+  .icon-anim[data-icon$=-down-right]:not([data-icon-anim]) {
+    --_icon-anim-x: 18%;
+    --_icon-anim-y: 18%;
+  }
+  .icon-anim[data-icon$=-down-left]:not([data-icon-anim]) {
+    --_icon-anim-x: -18%;
+    --_icon-anim-y: 18%;
+  }
+  /* A bend ends going one way: bend-up-left goes up, then left. */
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u]):not([data-icon-anim])[data-icon$=-right] {
+    --_icon-anim-x: 22%;
+    --_icon-anim-y: 0%;
+  }
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u]):not([data-icon-anim])[data-icon$=-left] {
+    --_icon-anim-x: -22%;
+    --_icon-anim-y: 0%;
+  }
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u]):not([data-icon-anim])[data-icon$=-up] {
+    --_icon-anim-x: 0%;
+    --_icon-anim-y: -22%;
+  }
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u]):not([data-icon-anim])[data-icon$=-down] {
+    --_icon-anim-x: 0%;
+    --_icon-anim-y: 22%;
+  }
+  /* And these say it in a word of their own. */
+  .icon-anim:is([data-icon|=backspace], [data-icon|=key-return], [data-icon|=skip-back], [data-icon|=rewind], [data-icon|=align-left], [data-icon=arrow-square-in]):not([data-icon-anim]) {
+    --_icon-anim-x: -22%;
+  }
+  .icon-anim:is([data-icon|=upload], [data-icon|=export], [data-icon|=eject], [data-icon|=elevator], [data-icon|=footprints], [data-icon|=align-top], [data-icon|=monitor-arrow-up]):not([data-icon-anim]) {
+    --_icon-anim-x: 0%;
+    --_icon-anim-y: -22%;
+  }
+  .icon-anim:is([data-icon|=download], [data-icon|=align-bottom]):not([data-icon-anim]) {
+    --_icon-anim-x: 0%;
+    --_icon-anim-y: 22%;
+  }
+  .icon-anim:is([data-icon=arrow-square-in]):not([data-icon-anim]) {
+    --_icon-anim-y: 22%;
+  }
+  .icon-anim:is([data-icon|=arrows-in], [data-icon|=corners-in]):not([data-icon-anim]) {
+    --_icon-anim-zoom: 0.82;
+    --_icon-anim-name: iconAnimZoom;
+    --_icon-anim-duration: 0.6s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=arrows-out], [data-icon|=corners-out], [data-icon|=resize], [data-icon|=frame-corners], [data-icon|=crosshair], [data-icon|=target], [data-icon|=scan], [data-icon|=gps], [data-icon|=crop], [data-icon|=cube-focus], [data-icon|=user-focus]):not([data-icon-anim]) {
+    --_icon-anim-zoom: 1.18;
+    --_icon-anim-name: iconAnimZoom;
+    --_icon-anim-duration: 0.6s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* Both ways along one axis. */
+  .icon-anim:is([data-icon|=arrows-left-right], [data-icon|=arrows-horizontal], [data-icon|=swap], [data-icon|=shuffle], [data-icon|=flip-horizontal], [data-icon|=split-horizontal], [data-icon|=square-split-horizontal], [data-icon|=align-center-horizontal], [data-icon|=sliders], [data-icon|=faders], [data-icon|=washing-machine], [data-icon|=game-controller], [data-icon|=vibrate], [data-icon$=-slash]):not([data-icon-anim]) {
+    --_icon-anim-x: 10%;
+    --_icon-anim-y: 0%;
+    --_icon-anim-name: iconAnimAxis;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon|=arrows-down-up], [data-icon|=arrows-vertical], [data-icon|=arrows-merge], [data-icon|=arrows-split], [data-icon=caret-up-down], [data-icon=caret-circle-up-down], [data-icon|=flip-vertical], [data-icon|=split-vertical], [data-icon|=square-split-vertical], [data-icon|=sort-ascending], [data-icon|=sort-descending], [data-icon|=align-center-vertical]):not([data-icon-anim]) {
+    --_icon-anim-x: 0%;
+    --_icon-anim-y: 10%;
+    --_icon-anim-name: iconAnimAxis;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim:is([data-icon=arrow-clockwise], [data-icon=arrows-clockwise], [data-icon|=repeat], [data-icon|=recycle], [data-icon|=gear], [data-icon|=spinner], [data-icon|=circle-notch], [data-icon|=fan], [data-icon|=pinwheel], [data-icon|=aperture], [data-icon|=disc], [data-icon|=vinyl-record], [data-icon=film-reel], [data-icon|=tire], [data-icon=sun-dim], [data-icon|=asterisk], [data-icon|=snowflake], [data-icon|=hurricane], [data-icon|=yin-yang], [data-icon=flower], [data-icon|=atom], [data-icon|=nut], [data-icon|=device-rotate], [data-icon|=camera-rotate], [data-icon|=virus], [data-icon=compass-rose]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimSpin;
+    --_icon-anim-duration: 1s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* ---------- neutral on purpose ---------- */
+  /* Last of all, so no family above can claim them. Other people's marks do not
+     get a personality from us; religious and serious symbols do not bounce or
+     celebrate; these objects only share a first word with a family (a baseball
+     cap is not a ball); and a phone that hung up does not ring. */
+  .icon-anim:is([data-icon$=-logo], [data-icon|=church], [data-icon|=mosque], [data-icon|=synagogue], [data-icon|=star-and-crescent], [data-icon|=star-of-david], [data-icon|=cross], [data-icon|=crown-cross], [data-icon|=hands-praying], [data-icon|=skull], [data-icon|=biohazard], [data-icon|=radioactive], [data-icon|=fallout-shelter], [data-icon|=wheelchair], [data-icon|=baseball-cap], [data-icon|=baseball-helmet], [data-icon|=football-helmet], [data-icon|=fire-extinguisher], [data-icon=cigarette], [data-icon|=keyhole], [data-icon|=car-battery], [data-icon=shield], [data-icon|=cube-transparent], [data-icon|=phone-disconnect], [data-icon|=phone-x], [data-icon|=phone-pause], [data-icon|=bell-z], [data-icon|=bell-simple-z], [data-icon|=tree-structure], [data-icon|=tree-view], [data-icon|=chart-line-up], [data-icon|=chart-line-down], [data-icon|=trend-up], [data-icon|=trend-down], [data-icon|=share-network]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimPop;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* =========================================================================
+     3. PER-ICON PRESETS
+     ========================================================================= */
   /* Bell: swings from the top, the clapper lags behind. */
   .icon-anim:is([data-icon=bell], [data-icon=bell-simple], [data-icon=bell-ringing], [data-icon=bell-simple-ringing]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimRing;
     --_icon-anim-duration: 0.9s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
-    transform-origin: 50% 10%;
+    --_icon-anim-origin: 50% 10%;
   }
   .icon-anim:is([data-icon=bell], [data-icon=bell-ringing]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part="1"] {
     --_icon-anim-part-name: iconAnimPartSway;
@@ -144,24 +516,28 @@
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=arrow-left], [data-icon=caret-left], [data-icon=arrow-circle-left], [data-icon=caret-double-left], [data-icon=sign-in]):not([data-icon-anim]) {
     --_icon-anim-x: -22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=arrow-up], [data-icon=caret-up], [data-icon=arrow-circle-up], [data-icon=caret-double-up]):not([data-icon-anim]) {
     --_icon-anim-y: -22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=arrow-down], [data-icon=caret-down], [data-icon=arrow-circle-down], [data-icon=caret-double-down]):not([data-icon-anim]) {
     --_icon-anim-y: 22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=arrow-up-right], [data-icon=arrow-square-out]):not([data-icon-anim]) {
     --_icon-anim-x: 18%;
@@ -169,6 +545,7 @@
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Check: the tick draws itself; in check-circle the ring stays. */
   .icon-anim:is([data-icon=check], [data-icon=check-circle]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -186,17 +563,20 @@
     --_icon-anim-name: iconAnimTurn;
     --_icon-anim-duration: 0.5s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Gears and refresh arrows spin; the counter-clockwise ones backwards. */
   .icon-anim:is([data-icon=gear], [data-icon=gear-six], [data-icon=gear-fine], [data-icon=arrows-clockwise], [data-icon=arrow-clockwise]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimSpin;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=arrow-counter-clockwise], [data-icon=arrows-counter-clockwise]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimSpinCcw;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Spinners: steady and linear. The eight ticks of spinner are identical and
      45deg apart, so turning it in 45deg steps drew the same picture on every
@@ -207,6 +587,7 @@
     --_icon-anim-name: iconAnimSpin;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: linear;
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=spinner]):not([data-icon-anim])[data-icon-parts=stroke] {
     --_icon-anim-name: none;
@@ -221,11 +602,13 @@
     --_icon-anim-name: iconAnimSearch;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=heart], [data-icon=heartbeat]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimBeat;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Heartbeat: beats and the ECG trace (its only <polyline>) runs across. */
   .icon-anim:is([data-icon=heartbeat]):not([data-icon-anim])[data-icon-parts=stroke] > polyline {
@@ -238,6 +621,7 @@
     --_icon-anim-name: iconAnimTada;
     --_icon-anim-duration: 0.9s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Confetti: the popper fires. The cone - the closed path, with its two
      stripes (4th and 5th <line>) and the duotone fills - kicks back, and the
@@ -329,11 +713,13 @@
     --_icon-anim-name: iconAnimFly;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=phone], [data-icon=phone-call], [data-icon=device-mobile]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimRing;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Phone-call: rings, and the signal pulses out twice, inner arc first.
      The handset is the closed path; of the two open arcs the outer one is
@@ -363,6 +749,7 @@
     --_icon-anim-name: iconAnimBlink;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Download / upload: the arrow (shaft 1 + head 3) travels, the tray stays. */
   .icon-anim:is([data-icon=download-simple], [data-icon=upload-simple]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -384,11 +771,13 @@
     --_icon-anim-name: iconAnimCart;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=house], [data-icon=house-line], [data-icon=house-simple], [data-icon=buildings], [data-icon=building], [data-icon=building-office], [data-icon=info], [data-icon=question]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimBounce;
     --_icon-anim-duration: 0.7s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* User: the head (1) nods up, the shoulders stay. */
   .icon-anim:is([data-icon=user]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -404,16 +793,19 @@
     --_icon-anim-name: iconAnimFlash;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=rocket], [data-icon=rocket-launch]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimLaunch;
     --_icon-anim-duration: 1.2s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=warning], [data-icon=warning-circle], [data-icon=warning-octagon], [data-icon=moon], [data-icon=wrench]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimWiggle;
     --_icon-anim-duration: 0.7s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Sun: eight rays every 45deg, so a 90deg turn lands on the start pose. */
   .icon-anim:is([data-icon=sun]):not([data-icon-anim]) {
@@ -421,6 +813,7 @@
     --_icon-anim-name: iconAnimTurn;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Moon with stars: the two stars (1+2, 3+4) twinkle one after another. */
   .icon-anim:is([data-icon=moon-stars]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -488,11 +881,13 @@
     --_icon-anim-name: iconAnimBounce;
     --_icon-anim-duration: 0.7s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim:is([data-icon=map-pin], [data-icon=map-pin-line], [data-icon=map-pin-simple], [data-icon=push-pin]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimDrop;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Clock: the hands (2) go round the dial centre. */
   .icon-anim:is([data-icon=clock]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -510,13 +905,14 @@
     --_icon-anim-name: iconAnimTurn;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Hammer: strikes from the grip (bottom left). */
   .icon-anim:is([data-icon=hammer]):not([data-icon-anim]) {
-    transform-origin: 20% 85%;
     --_icon-anim-name: iconAnimHit;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 20% 85%;
   }
   /* Documents: the text lines (by type: <line>) write themselves. */
   .icon-anim:is([data-icon=file-text], [data-icon=note], [data-icon=article], [data-icon=clipboard-text]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -534,6 +930,7 @@
     --_icon-anim-name: iconAnimWrite;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Note-pencil: only the pencil writes (its <polygon> and <line>, the
      duotone fill is the other polygon), the sheet - the <path> - stays put. */
@@ -584,9 +981,10 @@
     --_icon-anim-name: iconAnimDrift;
     --_icon-anim-duration: 1.2s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* =========================================================================
-     3. NAMED ANIMATIONS - data-icon-anim="..." on any icon
+     4. NAMED ANIMATIONS - data-icon-anim="..." on any icon
      Root only (they work with <use>, the web font and every weight),
      except draw / draw-loop, which need the parts.
      ========================================================================= */
@@ -594,96 +992,163 @@
     --_icon-anim-name: iconAnimPop;
     --_icon-anim-duration: 0.5s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=wiggle] {
     --_icon-anim-name: iconAnimWiggle;
     --_icon-anim-duration: 0.7s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=ring] {
-    transform-origin: 50% 10%;
     --_icon-anim-name: iconAnimRing;
     --_icon-anim-duration: 0.9s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 10%;
   }
   .icon-anim[data-icon-anim=shake] {
     --_icon-anim-name: iconAnimShake;
     --_icon-anim-duration: 0.5s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=bounce] {
     --_icon-anim-name: iconAnimBounce;
     --_icon-anim-duration: 0.7s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=beat] {
     --_icon-anim-name: iconAnimBeat;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=tada] {
     --_icon-anim-name: iconAnimTada;
     --_icon-anim-duration: 0.9s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=spin] {
     --_icon-anim-name: iconAnimSpin;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=spin-ccw] {
     --_icon-anim-name: iconAnimSpinCcw;
     --_icon-anim-duration: 1s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=float] {
     --_icon-anim-name: iconAnimFloat;
     --_icon-anim-duration: 1.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=flip] {
     --_icon-anim-name: iconAnimFlip;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=blink] {
     --_icon-anim-name: iconAnimBlink;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=flash] {
     --_icon-anim-name: iconAnimFlash;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=drop] {
     --_icon-anim-name: iconAnimDrop;
     --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim[data-icon-anim=press] {
+    --_icon-anim-name: iconAnimPress;
+    --_icon-anim-duration: 0.5s;
+    --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim[data-icon-anim=rock] {
+    --_icon-anim-name: iconAnimRock;
+    --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim[data-icon-anim=flap] {
+    --_icon-anim-name: iconAnimFlap;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim[data-icon-anim=page-turn] {
+    --_icon-anim-name: iconAnimPageTurn;
+    --_icon-anim-duration: 0.7s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim[data-icon-anim=sway] {
+    --_icon-anim-name: iconAnimSway;
+    --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 100%;
+  }
+  .icon-anim[data-icon-anim=flicker] {
+    --_icon-anim-name: iconAnimFlicker;
+    --_icon-anim-duration: 0.9s;
+    --_icon-anim-easing: linear;
+    --_icon-anim-origin: 50% 100%;
+  }
+  .icon-anim[data-icon-anim=zoom-in] {
+    --_icon-anim-zoom: 1.18;
+    --_icon-anim-name: iconAnimZoom;
+    --_icon-anim-duration: 0.6s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  .icon-anim[data-icon-anim=zoom-out] {
+    --_icon-anim-zoom: 0.82;
+    --_icon-anim-name: iconAnimZoom;
+    --_icon-anim-duration: 0.6s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=nudge-right] {
     --_icon-anim-x: 22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=nudge-left] {
     --_icon-anim-x: -22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=nudge-up] {
     --_icon-anim-y: -22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=nudge-down] {
     --_icon-anim-y: 22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   /* Draw: every stroke traces itself, one after another (--icon-part is the
      0-based index set by the JS); filled details (dots) grow in, the duotone
@@ -693,6 +1158,7 @@
     --_icon-anim-name: iconAnimPop;
     --_icon-anim-duration: 0.5s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-origin: 50% 50%;
   }
   .icon-anim[data-icon-anim=draw][data-icon-parts=stroke] > [data-part][stroke] {
     --_icon-anim-part-name: iconAnimPartDraw;
@@ -745,7 +1211,7 @@
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
   /* =========================================================================
-     4. THE TRIGGERS - the only rules that move anything
+     5. THE TRIGGERS - the only rules that move anything
      Each trigger counts on the icon itself and on any ancestor. Hover only
      on devices that really hover (a finger cannot leave, so a tap would
      leave the icon "hovered"); keyboard focus counts everywhere.
@@ -759,6 +1225,7 @@
       animation-delay: var(--icon-anim-delay, 0s);
       animation-iteration-count: var(--icon-anim-iterations, 1);
       animation-fill-mode: var(--icon-anim-fill, none);
+      transform-origin: var(--_icon-anim-origin, 50% 50%);
     }
     .icon-anim:is(.icon-anim-play, .icon-anim-tap.is-tapped, .icon-anim-view.is-in-view, .icon-anim-hover:focus-visible) > :is([data-part], [data-layer]),
     :is(.icon-anim-play, .icon-anim-tap.is-tapped, .icon-anim-view.is-in-view, .icon-anim-hover:focus-visible) .icon-anim > :is([data-part], [data-layer]) {
@@ -779,6 +1246,7 @@
       animation-delay: var(--icon-anim-delay, 0s);
       animation-iteration-count: var(--icon-anim-iterations, 1);
       animation-fill-mode: var(--icon-anim-fill, none);
+      transform-origin: var(--_icon-anim-origin, 50% 50%);
     }
     .icon-anim:is(.icon-anim-hover:hover) > :is([data-part], [data-layer]),
     :is(.icon-anim-hover:hover) .icon-anim > :is([data-part], [data-layer]) {
@@ -791,7 +1259,7 @@
     }
   }
   /* =========================================================================
-     5. KEYFRAMES - all named iconAnim*, all in this file (npm run test:css)
+     6. KEYFRAMES - all named iconAnim*, all in this file (npm run test:css)
      Root keyframes move in % of the icon box; part keyframes move in px,
      which inside an <svg> are units of the 256 grid - scale-independent.
      Each one ends where it starts, so fill-mode: none never jumps.
@@ -1101,6 +1569,97 @@
     }
     50% {
       transform: translateX(10%);
+    }
+  }
+  /* Out and back along --_icon-anim-x/-y, then the other way. */
+  @keyframes iconAnimAxis {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(var(--_icon-anim-x, 0%), var(--_icon-anim-y, 0%));
+    }
+    75% {
+      transform: translate(calc(var(--_icon-anim-x, 0%) * -1), calc(var(--_icon-anim-y, 0%) * -1));
+    }
+  }
+  @keyframes iconAnimZoom {
+    0%, 100% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(var(--_icon-anim-zoom, 1.18));
+    }
+  }
+  /* Gives way under a finger, then springs back. */
+  @keyframes iconAnimPress {
+    0%, 100% {
+      transform: scale(1);
+    }
+    40% {
+      transform: scale(0.86);
+    }
+    70% {
+      transform: scale(1.05);
+    }
+  }
+  /* Leans with the wind, from --_icon-anim-origin at the foot of the icon. */
+  @keyframes iconAnimSway {
+    0%, 100% {
+      transform: rotate(0);
+    }
+    30% {
+      transform: rotate(7deg);
+    }
+    70% {
+      transform: rotate(-5deg);
+    }
+  }
+  @keyframes iconAnimRock {
+    0%, 100% {
+      transform: rotate(0) translateY(0);
+    }
+    25% {
+      transform: rotate(-6deg) translateY(-4%);
+    }
+    75% {
+      transform: rotate(6deg) translateY(4%);
+    }
+  }
+  /* Wings: the icon narrows twice around its spine. */
+  @keyframes iconAnimFlap {
+    0%, 50%, 100% {
+      transform: scaleX(1);
+    }
+    25%, 75% {
+      transform: scaleX(0.55);
+    }
+  }
+  /* Irregular on purpose: a flame that repeats evenly looks like a pulse. */
+  @keyframes iconAnimFlicker {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    20% {
+      transform: scale(1.06, 0.95);
+      opacity: 0.8;
+    }
+    45% {
+      transform: scale(0.96, 1.08);
+      opacity: 1;
+    }
+    70% {
+      transform: scale(1.04, 0.97);
+      opacity: 0.85;
+    }
+  }
+  @keyframes iconAnimPageTurn {
+    0%, 100% {
+      transform: perspective(400px) rotateY(0);
+    }
+    50% {
+      transform: perspective(400px) rotateY(-32deg);
     }
   }
   /* ---------- parts ---------- */

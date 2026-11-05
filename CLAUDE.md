@@ -266,6 +266,16 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   rdzeń po cichu łapie cudze słowa: `logo` dawało 78 marek na hasło „logowanie”,
   `kolo` wszystkie koła na „kolor”, `hand` dłonie na „Handy”. Liczby nie pokażą tego
   same, stąd lista „stays out” w `npm run test:icon-gallery`.
+- **`icon-anim`: rodziny działają przez kolejność** (v1.7.45). Wszystkie reguły sekcji 2
+  ważą tyle samo, więc wygrywa ostatnia: szersza rodzina przed węższą, neutralne na końcu,
+  presety po nich. `[data-icon|="file"]` zatrzymuje się na myślniku, `^=` nie, więc
+  `car` przez `^=` złapałby `card`. Wzorzec po całym słowie potrafi pochłonąć
+  podrodzinę: `shield` zabrał wszystkie `shield-*`, `cigarette` także
+  `cigarette-slash`. `--_icon-anim-origin` jest zmienną, bo zwykły `transform-origin`
+  przeżywał swoją regułę i `fire-truck` obracał się jak `fire`. `data-icon` nadaje
+  dopiero JS, więc PurgeCSS nie widzi go w HTML: bez `greedy: /data-icon/` wycinał
+  wszystkie presety. `npm run test:icon-catalog` pilnuje 1512 ikon, migawki presetów
+  i listy neutralnych; `--update-*` tylko po świadomej zmianie.
 - **`icon-anim`: atrybut `transform` to przebrana właściwość CSS** (v1.7.43).
   Phosphor obraca nim 57 ikon (`<rect transform="translate(256 0) rotate(90)">`).
   `transform-box: fill-box` zmienia też jego punkt odniesienia, więc kształt

@@ -651,16 +651,21 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   czas przerwy ikona wraca do zwykłego wyglądu; do 1.7.39 rysowany ptaszek
   znikał na całą przerwę),
   `.icon-anim-persist`, `.icon-anim-fast`/`-slow`, `--icon-anim-speed`,
-  `--icon-anim-delay`. Ponad 100 ikon ma własny preset (rusza częściami),
-  inne pulsują; inna animacja: `data-icon-anim="wiggle|ring|shake|bounce|
-  beat|tada|spin|float|flip|blink|flash|drop|nudge-*|draw|draw-loop|pop"`.
+  `--icon-anim-delay`. Ponad 1000 ikon ma ruch dobrany do tego, co
+  przedstawia, 118 ma własny preset (rusza częściami), marki i symbole
+  religijne celowo tylko pulsują; inna animacja:
+  `data-icon-anim="wiggle|ring|shake|bounce|beat|tada|spin|float|flip|blink|
+  flash|drop|press|rock|flap|sway|flicker|page-turn|zoom-in|zoom-out|nudge-*|
+  draw|draw-loop|pop"`.
   Części tylko w ikonach kreskowych (sprite molique, `raw/` z
   phosphor-icons/core); spłaszczone SVG z npm, font i grubość fill ruszają
   się tylko jako całość. Sprite musi być z tej samej domeny. Stany
   `.is-tapped`/`.is-in-view`/`.is-offscreen` nadaje JS. Ikony: Phosphor
   Icons, Helena Zhang i Tobias Fried, MIT - zachowaj informację o autorach.
   PurgeCSS z `keyframes: true` wymaga 1.7.39+ - safelista 1.7.38 nie
-  chroniła animacji części (`iconAnimPart*`).
+  chroniła animacji części (`iconAnimPart*`). Do 1.7.44 safelista wycinała
+  też wszystkie presety, bo `data-icon` nadaje dopiero JS: z purge każda
+  ikona tylko pulsowała. Od 1.7.45 chroni je `greedy: /data-icon/`.
   Do 1.7.42 nie dawaj `.icon-anim` na 57 ikon z atrybutem `transform`
   (`monitor`, `desktop`, `calculator`, `arrow-square-left`, `eject`,
   `diamond`): kształt odlatywał poza ikonę już w spoczynku.
