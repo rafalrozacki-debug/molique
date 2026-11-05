@@ -146,6 +146,56 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   @return '.icon-anim:is(#{$list}):not([data-icon-anim])';
 }
 
+@function _except($patterns...) {
+  $list: ();
+  @each $pattern in $patterns {
+    $list: list.append($list, _match($pattern), comma);
+  }
+  @return ':not(#{$list})';
+}
+
+/* A family that moves a part of the icon, for the weights that have it.
+   Two rules, and both are there because of a measured failure:
+   - :has() switches the whole-icon motion off only where the part exists.
+     wifi-high in duotone is one closed path: without this guard 230 icon and
+     weight combinations stood still, with no error anywhere.
+   - a part rule ADDS to whatever else moves, so it must not touch an icon that
+     has a preset of its own or belongs to a narrower family: _except() names
+     them. Leaving that out made the rim of the bin move along with the lid.
+   Do not use it for parts that may carry a transform attribute with a keyframe
+   that sets transform: see the note in section 1. */
+@mixin _parts-of($family, $parts) {
+  $icon: '#{$family}[data-icon-parts="stroke"]';
+  #{$icon}:has(> #{$parts}) {
+    --_icon-anim-name: none;
+  }
+  #{$icon} > #{$parts} {
+    @content;
+  }
+}
+
+/* The whole drawing traces itself. Capped, or an icon of 15 strokes would take
+   two seconds. Drawing and fading touch no transform, so [transform] is fine. */
+@mixin _draws-itself($family) {
+  $icon: '#{$family}[data-icon-parts="stroke"]';
+  $stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+  #{$icon}:has(> [data-part][stroke]) {
+    --_icon-anim-name: none;
+  }
+  #{$icon} > [data-part][stroke] {
+    @include _part(iconAnimPartDraw, 0.6s, $_ease, $stagger, backwards);
+  }
+  #{$icon} > [data-part]:not([stroke], [transform]) {
+    @include _part(iconAnimPartAppear, 0.4s, $_spring, $stagger, backwards);
+  }
+  #{$icon} > [data-part][transform]:not([stroke]) {
+    @include _part(iconAnimLayerFade, 0.4s, $_ease, $stagger, backwards);
+  }
+  #{$icon} > [data-layer] {
+    @include _part(iconAnimLayerFade, 0.6s, $_ease, 0.3s, backwards);
+  }
+}
+
 /* =========================================================================
    1. BASE (no motion here)
    ========================================================================= */
@@ -343,7 +393,7 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
 /* The icons that go somewhere. The amount comes from the rules below; an icon
    the name of which says nothing about direction goes right. */
-#{_family('arrow', 'caret', 'thumbs-up', 'thumbs-down', 'backspace', 'key-return', 'hand-swipe-left', 'hand-swipe-right', 'escalator-down', 'escalator-up', 'elevator', 'align-left', 'align-right', 'align-top', 'align-bottom', 'navigation-arrow', 'share', 'plug', 'plugs', 'usb', 'person-simple-run', 'person-simple-walk', 'person-simple-bike', 'person-simple-hike', 'person-simple-ski', 'person-simple-snowboard', 'person-simple-swim', 'sneaker-move', 'footprints', 'paw-print', 'credit-card', 'sidebar', 'ruler', 'play', 'skip-back', 'skip-forward', 'fast-forward', 'rewind', 'eject', 'download', 'upload', 'tray-arrow', 'file-arrow', 'cloud-arrow', 'box-arrow', 'hand-arrow', 'monitor-arrow-up', 'export', '=arrow-square-in')} {
+#{_family('arrow', 'caret', 'thumbs-up', 'thumbs-down', 'backspace', 'key-return', 'hand-swipe-left', 'hand-swipe-right', 'escalator-down', 'escalator-up', 'elevator', 'align-left', 'align-right', 'align-top', 'align-bottom', 'navigation-arrow', 'share', 'plug', 'plugs', 'usb', 'person-simple-run', 'person-simple-walk', 'person-simple-bike', 'person-simple-hike', 'person-simple-ski', 'person-simple-snowboard', 'person-simple-swim', 'sneaker-move', 'footprints', 'paw-print', 'credit-card', 'sidebar', 'ruler', 'play', 'skip-back', 'skip-forward', 'fast-forward', 'rewind', 'eject', 'download', 'upload', 'tray-arrow', 'file-arrow', 'cloud-arrow', 'box-arrow', 'hand-arrow', 'monitor-arrow-up', 'export', '=arrow-square-in', '=arrow-square-out')} {
   --_icon-anim-x: 18%;
   @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
 }
@@ -352,19 +402,21 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
    whose animation reads no offset does not care. The two-word ones come last,
    since -up-right also ends in -right. */
 $_directions: (
-  'right': (22%, 0%),
-  'left': (-22%, 0%),
-  'up': (0%, -22%),
-  'down': (0%, 22%),
-  'up-right': (18%, -18%),
-  'up-left': (-18%, -18%),
-  'down-right': (18%, 18%),
-  'down-left': (-18%, 18%)
+  'right': (22%, 0%, 22px, 0px),
+  'left': (-22%, 0%, -22px, 0px),
+  'up': (0%, -22%, 0px, -22px),
+  'down': (0%, 22%, 0px, 22px),
+  'up-right': (18%, -18%, 16px, -16px),
+  'up-left': (-18%, -18%, -16px, -16px),
+  'down-right': (18%, 18%, 16px, 16px),
+  'down-left': (-18%, 18%, -16px, 16px)
 );
 @each $direction, $offset in $_directions {
   .icon-anim[data-icon$="-#{$direction}"]:not([data-icon-anim]) {
     --_icon-anim-x: #{list.nth($offset, 1)};
     --_icon-anim-y: #{list.nth($offset, 2)};
+    --_icon-anim-part-x: #{list.nth($offset, 3)};
+    --_icon-anim-part-y: #{list.nth($offset, 4)};
   }
 }
 /* A bend ends going one way: bend-up-left goes up, then left. */
@@ -382,13 +434,25 @@ $_directions: (
 #{_family('upload', 'export', 'eject', 'elevator', 'footprints', 'align-top', 'monitor-arrow-up')} {
   --_icon-anim-x: 0%;
   --_icon-anim-y: -22%;
+  --_icon-anim-part-x: 0px;
+  --_icon-anim-part-y: -22px;
 }
 #{_family('download', 'align-bottom')} {
   --_icon-anim-x: 0%;
   --_icon-anim-y: 22%;
+  --_icon-anim-part-x: 0px;
+  --_icon-anim-part-y: 22px;
 }
 #{_family('=arrow-square-in')} {
   --_icon-anim-y: 22%;
+  --_icon-anim-part-x: -16px;
+  --_icon-anim-part-y: 16px;
+}
+#{_family('=arrow-square-out')} {
+  --_icon-anim-x: 18%;
+  --_icon-anim-y: -18%;
+  --_icon-anim-part-x: 16px;
+  --_icon-anim-part-y: -16px;
 }
 
 #{_family('arrows-in', 'corners-in')} {
@@ -426,6 +490,62 @@ $_directions: (
   @include _root(iconAnimPop, 0.5s);
 }
 
+/* ---------- families that move a part ---------- */
+
+/* The line of a -slash icon strikes through what stays underneath. Three
+   geometries in the whole catalogue; in calendar-slash the line is melted into
+   the outline, so that one keeps the whole-icon motion. */
+@include _parts-of(_family('$-slash'), ':is(line[x1="48"][y1="40"], line[x1="56"][y1="40"], line[x1="48"][y1="48"])') {
+  @include _part(iconAnimPartDraw, 0.6s, $_ease, null, backwards);
+}
+
+/* An arrow in a ring or a box: the frame stays, the arrow goes. The offset comes
+   from the direction rules above and reaches the parts by inheritance. */
+@include _parts-of(
+  _family('^arrow-circle-', '^caret-circle-', '=arrow-square-down', '=arrow-square-down-left', '=arrow-square-down-right', '=arrow-square-left', '=arrow-square-right', '=arrow-square-up', '=arrow-square-up-left', '=arrow-square-up-right') + _except('=caret-circle-up-down'),
+  '[data-part]:not(circle[r="96"], rect[width="176"], [transform])'
+) {
+  @include _part(iconAnimPartNudge, 0.6s, $_ease-in-out);
+}
+
+/* Something travels into or out of something: only the arrow moves, the tray,
+   the sheet, the cloud and the hand stay. The arrow is a <line> and a <polyline>;
+   what else is drawn that way is left out by shape: the fold of a sheet, the lid
+   of a box (the line from x 40), the stand of a monitor (y 224 or 228). */
+@include _parts-of(
+  _family('download', 'upload', 'tray-arrow', 'file-arrow', 'cloud-arrow', 'box-arrow', 'hand-arrow', 'monitor-arrow-up', 'export', '=arrow-square-in', '=arrow-square-out') + _except('=download-simple', '=upload-simple', '$-slash'),
+  ':is(line:not([x1="40"], [y1="224"], [y1="228"]), polyline:not([points^="152 32"], [points^="148 32"]))'
+) {
+  @include _part(iconAnimPartNudge, 0.7s, $_ease-in-out);
+}
+
+/* The head nods, the shoulders stay. A ring around the person is not a head. */
+@include _parts-of(
+  _family('user', 'users', 'person', 'chalkboard-teacher') + _except('=user', '=user-focus', 'person-simple-run', 'person-simple-walk', 'person-simple-bike', 'person-simple-hike', 'person-simple-ski', 'person-simple-snowboard', 'person-simple-swim'),
+  'circle:not([r="96"])'
+) {
+  --_icon-anim-y: -18px;
+  @include _part(iconAnimPartShift, 0.7s, $_spring);
+}
+
+/* The sign writes itself, the ring or the box around it stays. */
+@include _parts-of(
+  _family('check', 'checks', 'x', 'plus', 'minus', 'prohibit', 'shield') + _except('=check', '=check-circle', '=x', '=x-circle', '=x-logo', '=plus', '=plus-circle', '$-slash'),
+  ':is(line, polyline)'
+) {
+  @include _part(iconAnimPartDraw, 0.55s, $_ease, calc(var(--icon-part, 0) * 0.1s), backwards);
+}
+
+/* Bent arrows trace their way. */
+@include _draws-itself(_family('arrow-bend', 'arrow-elbow', 'arrow-u', 'arrow-arc'));
+
+/* Signs, letters, digits, shapes and diagrams: what the icon is, is the line
+   itself, so drawing it is the motion that means something. */
+@include _draws-itself(
+  _family('number', 'letter-circle', 'text', 'at', 'hash', 'percent', 'copyright', 'copyleft', 'trademark', 'currency', 'equals', 'not-equals', 'divide', 'greater-than', 'less-than', 'approximate-equals', 'sigma', 'pi', 'function', 'radical', 'infinity', 'tilde', 'subset-of', 'subset-proper-of', 'superset-of', 'superset-proper-of', 'member-of', 'not-member-of', 'not-subset-of', 'not-superset-of', 'intersection', 'union', 'math-operations', 'triangle', 'square', 'circle', 'rectangle', 'hexagon', 'pentagon', 'pentagram', 'octagon', 'parallelogram', 'polygon', 'diamond', 'diamonds-four', 'cylinder', 'paragraph', 'quotes', 'binary', 'barcode', 'qr-code', 'gender', 'peace', 'asclepius', 'scribble', 'path', 'line-segment', 'line-segments', 'line-vertical', 'bezier-curve', 'vector-two', 'vector-three', 'wave', 'waves', 'pulse', 'spiral', 'chart-line', 'chart-pie', 'chart-donut', 'chart-polar', 'graph', 'git', 'network', 'flow-arrow', 'bounding-box', 'selection', 'strategy', 'blueprint', 'fingerprint', 'circuitry', 'command', 'control', 'option', 'code', 'brackets', 'angle', 'gif', 'four-k', 'three-d', 'high-definition', 'standard-definition', 'perspective', 'empty', 'placeholder', 'exclude', 'intersect', 'subtract', 'unite', 'lasso', 'terminal', 'prescription', 'translate', 'tree-structure', 'tree-view', 'trend-up', 'trend-down', 'share-network', 'phone-disconnect', 'phone-x', 'phone-pause', 'bell-z', 'bell-simple-z')
+  + _except('=circle-notch', '=square-logo', 'square-split-horizontal', 'square-split-vertical', 'text-align-center', 'text-align-justify', 'text-align-left', 'text-align-right', 'text-columns', 'text-indent', 'text-outdent', '=currency-circle-dollar', '$-slash')
+);
+
 /* =========================================================================
    3. PER-ICON PRESETS
    ========================================================================= */
@@ -442,23 +562,23 @@ $_directions: (
 }
 
 /* Arrows, carets, play: point in their own direction. */
-#{_preset('arrow-right', 'caret-right', 'arrow-circle-right', 'caret-double-right', 'play', 'sign-out')} {
+#{_preset('arrow-right', 'caret-right', 'caret-double-right', 'play', 'sign-out')} {
   --_icon-anim-x: 22%;
   @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
 }
-#{_preset('arrow-left', 'caret-left', 'arrow-circle-left', 'caret-double-left', 'sign-in')} {
+#{_preset('arrow-left', 'caret-left', 'caret-double-left', 'sign-in')} {
   --_icon-anim-x: -22%;
   @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
 }
-#{_preset('arrow-up', 'caret-up', 'arrow-circle-up', 'caret-double-up')} {
+#{_preset('arrow-up', 'caret-up', 'caret-double-up')} {
   --_icon-anim-y: -22%;
   @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
 }
-#{_preset('arrow-down', 'caret-down', 'arrow-circle-down', 'caret-double-down')} {
+#{_preset('arrow-down', 'caret-down', 'caret-double-down')} {
   --_icon-anim-y: 22%;
   @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
 }
-#{_preset('arrow-up-right', 'arrow-square-out')} {
+#{_preset('arrow-up-right')} {
   --_icon-anim-x: 18%;
   --_icon-anim-y: -18%;
   @include _root(iconAnimNudge, 0.6s, $_ease-in-out);
@@ -795,7 +915,7 @@ $_directions: (
   @include _part(iconAnimLayerFade, 0.4s, $_ease, 0.9s, backwards);
 }
 
-#{_preset('cloud', 'cloud-arrow-up', 'cloud-check')} {
+#{_preset('cloud', 'cloud-check')} {
   @include _root(iconAnimDrift, 1.2s, $_ease-in-out);
 }
 
@@ -1177,6 +1297,19 @@ $_kids: ':is([data-part], [data-layer])';
 @keyframes iconAnimPartShift {
   0%, 100% { transform: translate(0, 0); }
   45% { transform: translate(var(--_icon-anim-x, 0px), var(--_icon-anim-y, 0px)); }
+}
+
+/* The moving part of an icon nudged in its direction, with the small recoil of
+   iconAnimNudge. Offsets in px of the 256 grid, from the direction rules. */
+@keyframes iconAnimPartNudge {
+  0%, 100% { transform: translate(0, 0); }
+  40% { transform: translate(var(--_icon-anim-part-x, 0px), var(--_icon-anim-part-y, 0px)); }
+  70% {
+    transform: translate(
+      calc(var(--_icon-anim-part-x, 0px) * -0.15),
+      calc(var(--_icon-anim-part-y, 0px) * -0.15)
+    );
+  }
 }
 
 @keyframes iconAnimPartLift {

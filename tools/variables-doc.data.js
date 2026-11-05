@@ -270,6 +270,8 @@ export const COMPONENT = {
   '--_icon-anim-part-fill': ['Animowane ikony', 'internal', 'Fill-mode części. Rysowanie ustawia <code>backwards</code>, żeby kreska była ukryta, zanim przyjdzie jej kolej.'],
   '--_icon-anim-x':         ['Animowane ikony', 'internal', 'Przesunięcie w poziomie dla <code>iconAnimNudge</code> / <code>iconAnimPartShift</code> / <code>iconAnimPartRecoil</code> oraz punkt startu kawałka w <code>iconAnimPartBurst</code> (confetti) - procent pudełka ikony albo jednostki siatki 256.'],
   '--_icon-anim-y':         ['Animowane ikony', 'internal', 'Przesunięcie w pionie, jak wyżej.'],
+  '--_icon-anim-part-x':    ['Animowane ikony', 'internal', 'Przesunięcie części w <code>iconAnimPartNudge</code>, w jednostkach siatki 256. Reguły kierunków ustawiają je na ikonie, a części dziedziczą.'],
+  '--_icon-anim-part-y':    ['Animowane ikony', 'internal', 'Przesunięcie części w pionie, jak wyżej.'],
   '--_icon-anim-r':         ['Animowane ikony', 'internal', 'Kąt uniesienia części w <code>iconAnimPartLift</code> (pokrywa kosza).'],
   '--_icon-anim-turn':      ['Animowane ikony', 'internal', 'Kąt obrotu w <code>iconAnimTurn</code>, dobrany do symetrii kształtu (90deg dla x i słońca, 180deg dla klepsydry).'],
   '--_icon-anim-origin':    ['Animowane ikony', 'internal', 'Punkt obrotu całej ikony. Zmienna, a nie zwykły <code>transform-origin</code>, bo ustawia ją każda reguła: inaczej węższa rodzina dziedziczyłaby punkt obrotu po szerszej (<code>fire</code> i <code>fire-truck</code>).'],

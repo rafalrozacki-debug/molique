@@ -87,6 +87,18 @@
        '=file'    only file
        '$-slash'  every name that ends like that
        '^arrow-'  every name that starts like that, when |= is too wide */
+  /* A family that moves a part of the icon, for the weights that have it.
+     Two rules, and both are there because of a measured failure:
+     - :has() switches the whole-icon motion off only where the part exists.
+       wifi-high in duotone is one closed path: without this guard 230 icon and
+       weight combinations stood still, with no error anywhere.
+     - a part rule ADDS to whatever else moves, so it must not touch an icon that
+       has a preset of its own or belongs to a narrower family: _except() names
+       them. Leaving that out made the rim of the bin move along with the lid.
+     Do not use it for parts that may carry a transform attribute with a keyframe
+     that sets transform: see the note in section 1. */
+  /* The whole drawing traces itself. Capped, or an icon of 15 strokes would take
+     two seconds. Drawing and fading touch no transform, so [transform] is fine. */
   /* =========================================================================
      1. BASE (no motion here)
      ========================================================================= */
@@ -368,7 +380,7 @@
   /* ---------- directions ---------- */
   /* The icons that go somewhere. The amount comes from the rules below; an icon
      the name of which says nothing about direction goes right. */
-  .icon-anim:is([data-icon|=arrow], [data-icon|=caret], [data-icon|=thumbs-up], [data-icon|=thumbs-down], [data-icon|=backspace], [data-icon|=key-return], [data-icon|=hand-swipe-left], [data-icon|=hand-swipe-right], [data-icon|=escalator-down], [data-icon|=escalator-up], [data-icon|=elevator], [data-icon|=align-left], [data-icon|=align-right], [data-icon|=align-top], [data-icon|=align-bottom], [data-icon|=navigation-arrow], [data-icon|=share], [data-icon|=plug], [data-icon|=plugs], [data-icon|=usb], [data-icon|=person-simple-run], [data-icon|=person-simple-walk], [data-icon|=person-simple-bike], [data-icon|=person-simple-hike], [data-icon|=person-simple-ski], [data-icon|=person-simple-snowboard], [data-icon|=person-simple-swim], [data-icon|=sneaker-move], [data-icon|=footprints], [data-icon|=paw-print], [data-icon|=credit-card], [data-icon|=sidebar], [data-icon|=ruler], [data-icon|=play], [data-icon|=skip-back], [data-icon|=skip-forward], [data-icon|=fast-forward], [data-icon|=rewind], [data-icon|=eject], [data-icon|=download], [data-icon|=upload], [data-icon|=tray-arrow], [data-icon|=file-arrow], [data-icon|=cloud-arrow], [data-icon|=box-arrow], [data-icon|=hand-arrow], [data-icon|=monitor-arrow-up], [data-icon|=export], [data-icon=arrow-square-in]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon|=arrow], [data-icon|=caret], [data-icon|=thumbs-up], [data-icon|=thumbs-down], [data-icon|=backspace], [data-icon|=key-return], [data-icon|=hand-swipe-left], [data-icon|=hand-swipe-right], [data-icon|=escalator-down], [data-icon|=escalator-up], [data-icon|=elevator], [data-icon|=align-left], [data-icon|=align-right], [data-icon|=align-top], [data-icon|=align-bottom], [data-icon|=navigation-arrow], [data-icon|=share], [data-icon|=plug], [data-icon|=plugs], [data-icon|=usb], [data-icon|=person-simple-run], [data-icon|=person-simple-walk], [data-icon|=person-simple-bike], [data-icon|=person-simple-hike], [data-icon|=person-simple-ski], [data-icon|=person-simple-snowboard], [data-icon|=person-simple-swim], [data-icon|=sneaker-move], [data-icon|=footprints], [data-icon|=paw-print], [data-icon|=credit-card], [data-icon|=sidebar], [data-icon|=ruler], [data-icon|=play], [data-icon|=skip-back], [data-icon|=skip-forward], [data-icon|=fast-forward], [data-icon|=rewind], [data-icon|=eject], [data-icon|=download], [data-icon|=upload], [data-icon|=tray-arrow], [data-icon|=file-arrow], [data-icon|=cloud-arrow], [data-icon|=box-arrow], [data-icon|=hand-arrow], [data-icon|=monitor-arrow-up], [data-icon|=export], [data-icon=arrow-square-in], [data-icon=arrow-square-out]):not([data-icon-anim]) {
     --_icon-anim-x: 18%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
@@ -381,34 +393,50 @@
   .icon-anim[data-icon$=-right]:not([data-icon-anim]) {
     --_icon-anim-x: 22%;
     --_icon-anim-y: 0%;
+    --_icon-anim-part-x: 22px;
+    --_icon-anim-part-y: 0px;
   }
   .icon-anim[data-icon$=-left]:not([data-icon-anim]) {
     --_icon-anim-x: -22%;
     --_icon-anim-y: 0%;
+    --_icon-anim-part-x: -22px;
+    --_icon-anim-part-y: 0px;
   }
   .icon-anim[data-icon$=-up]:not([data-icon-anim]) {
     --_icon-anim-x: 0%;
     --_icon-anim-y: -22%;
+    --_icon-anim-part-x: 0px;
+    --_icon-anim-part-y: -22px;
   }
   .icon-anim[data-icon$=-down]:not([data-icon-anim]) {
     --_icon-anim-x: 0%;
     --_icon-anim-y: 22%;
+    --_icon-anim-part-x: 0px;
+    --_icon-anim-part-y: 22px;
   }
   .icon-anim[data-icon$=-up-right]:not([data-icon-anim]) {
     --_icon-anim-x: 18%;
     --_icon-anim-y: -18%;
+    --_icon-anim-part-x: 16px;
+    --_icon-anim-part-y: -16px;
   }
   .icon-anim[data-icon$=-up-left]:not([data-icon-anim]) {
     --_icon-anim-x: -18%;
     --_icon-anim-y: -18%;
+    --_icon-anim-part-x: -16px;
+    --_icon-anim-part-y: -16px;
   }
   .icon-anim[data-icon$=-down-right]:not([data-icon-anim]) {
     --_icon-anim-x: 18%;
     --_icon-anim-y: 18%;
+    --_icon-anim-part-x: 16px;
+    --_icon-anim-part-y: 16px;
   }
   .icon-anim[data-icon$=-down-left]:not([data-icon-anim]) {
     --_icon-anim-x: -18%;
     --_icon-anim-y: 18%;
+    --_icon-anim-part-x: -16px;
+    --_icon-anim-part-y: 16px;
   }
   /* A bend ends going one way: bend-up-left goes up, then left. */
   .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u]):not([data-icon-anim])[data-icon$=-right] {
@@ -434,13 +462,25 @@
   .icon-anim:is([data-icon|=upload], [data-icon|=export], [data-icon|=eject], [data-icon|=elevator], [data-icon|=footprints], [data-icon|=align-top], [data-icon|=monitor-arrow-up]):not([data-icon-anim]) {
     --_icon-anim-x: 0%;
     --_icon-anim-y: -22%;
+    --_icon-anim-part-x: 0px;
+    --_icon-anim-part-y: -22px;
   }
   .icon-anim:is([data-icon|=download], [data-icon|=align-bottom]):not([data-icon-anim]) {
     --_icon-anim-x: 0%;
     --_icon-anim-y: 22%;
+    --_icon-anim-part-x: 0px;
+    --_icon-anim-part-y: 22px;
   }
   .icon-anim:is([data-icon=arrow-square-in]):not([data-icon-anim]) {
     --_icon-anim-y: 22%;
+    --_icon-anim-part-x: -16px;
+    --_icon-anim-part-y: 16px;
+  }
+  .icon-anim:is([data-icon=arrow-square-out]):not([data-icon-anim]) {
+    --_icon-anim-x: 18%;
+    --_icon-anim-y: -18%;
+    --_icon-anim-part-x: 16px;
+    --_icon-anim-part-y: -16px;
   }
   .icon-anim:is([data-icon|=arrows-in], [data-icon|=corners-in]):not([data-icon-anim]) {
     --_icon-anim-zoom: 0.82;
@@ -490,6 +530,127 @@
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
     --_icon-anim-origin: 50% 50%;
   }
+  /* ---------- families that move a part ---------- */
+  /* The line of a -slash icon strikes through what stays underneath. Three
+     geometries in the whole catalogue; in calendar-slash the line is melted into
+     the outline, so that one keeps the whole-icon motion. */
+  .icon-anim:is([data-icon$=-slash]):not([data-icon-anim])[data-icon-parts=stroke]:has(> :is(line[x1="48"][y1="40"], line[x1="56"][y1="40"], line[x1="48"][y1="48"])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon$=-slash]):not([data-icon-anim])[data-icon-parts=stroke] > :is(line[x1="48"][y1="40"], line[x1="56"][y1="40"], line[x1="48"][y1="48"]) {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-fill: backwards;
+  }
+  /* An arrow in a ring or a box: the frame stays, the arrow goes. The offset comes
+     from the direction rules above and reaches the parts by inheritance. */
+  .icon-anim:is([data-icon^=arrow-circle-], [data-icon^=caret-circle-], [data-icon=arrow-square-down], [data-icon=arrow-square-down-left], [data-icon=arrow-square-down-right], [data-icon=arrow-square-left], [data-icon=arrow-square-right], [data-icon=arrow-square-up], [data-icon=arrow-square-up-left], [data-icon=arrow-square-up-right]):not([data-icon-anim]):not([data-icon=caret-circle-up-down])[data-icon-parts=stroke]:has(> [data-part]:not(circle[r="96"], rect[width="176"], [transform])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon^=arrow-circle-], [data-icon^=caret-circle-], [data-icon=arrow-square-down], [data-icon=arrow-square-down-left], [data-icon=arrow-square-down-right], [data-icon=arrow-square-left], [data-icon=arrow-square-right], [data-icon=arrow-square-up], [data-icon=arrow-square-up-left], [data-icon=arrow-square-up-right]):not([data-icon-anim]):not([data-icon=caret-circle-up-down])[data-icon-parts=stroke] > [data-part]:not(circle[r="96"], rect[width="176"], [transform]) {
+    --_icon-anim-part-name: iconAnimPartNudge;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* Something travels into or out of something: only the arrow moves, the tray,
+     the sheet, the cloud and the hand stay. The arrow is a <line> and a <polyline>;
+     what else is drawn that way is left out by shape: the fold of a sheet, the lid
+     of a box (the line from x 40), the stand of a monitor (y 224 or 228). */
+  .icon-anim:is([data-icon|=download], [data-icon|=upload], [data-icon|=tray-arrow], [data-icon|=file-arrow], [data-icon|=cloud-arrow], [data-icon|=box-arrow], [data-icon|=hand-arrow], [data-icon|=monitor-arrow-up], [data-icon|=export], [data-icon=arrow-square-in], [data-icon=arrow-square-out]):not([data-icon-anim]):not([data-icon=download-simple], [data-icon=upload-simple], [data-icon$=-slash])[data-icon-parts=stroke]:has(> :is(line:not([x1="40"], [y1="224"], [y1="228"]), polyline:not([points^="152 32"], [points^="148 32"]))) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=download], [data-icon|=upload], [data-icon|=tray-arrow], [data-icon|=file-arrow], [data-icon|=cloud-arrow], [data-icon|=box-arrow], [data-icon|=hand-arrow], [data-icon|=monitor-arrow-up], [data-icon|=export], [data-icon=arrow-square-in], [data-icon=arrow-square-out]):not([data-icon-anim]):not([data-icon=download-simple], [data-icon=upload-simple], [data-icon$=-slash])[data-icon-parts=stroke] > :is(line:not([x1="40"], [y1="224"], [y1="228"]), polyline:not([points^="152 32"], [points^="148 32"])) {
+    --_icon-anim-part-name: iconAnimPartNudge;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  /* The head nods, the shoulders stay. A ring around the person is not a head. */
+  .icon-anim:is([data-icon|=user], [data-icon|=users], [data-icon|=person], [data-icon|=chalkboard-teacher]):not([data-icon-anim]):not([data-icon=user], [data-icon=user-focus], [data-icon|=person-simple-run], [data-icon|=person-simple-walk], [data-icon|=person-simple-bike], [data-icon|=person-simple-hike], [data-icon|=person-simple-ski], [data-icon|=person-simple-snowboard], [data-icon|=person-simple-swim])[data-icon-parts=stroke]:has(> circle:not([r="96"])) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=user], [data-icon|=users], [data-icon|=person], [data-icon|=chalkboard-teacher]):not([data-icon-anim]):not([data-icon=user], [data-icon=user-focus], [data-icon|=person-simple-run], [data-icon|=person-simple-walk], [data-icon|=person-simple-bike], [data-icon|=person-simple-hike], [data-icon|=person-simple-ski], [data-icon|=person-simple-snowboard], [data-icon|=person-simple-swim])[data-icon-parts=stroke] > circle:not([r="96"]) {
+    --_icon-anim-y: -18px;
+    --_icon-anim-part-name: iconAnimPartShift;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  /* The sign writes itself, the ring or the box around it stays. */
+  .icon-anim:is([data-icon|=check], [data-icon|=checks], [data-icon|=x], [data-icon|=plus], [data-icon|=minus], [data-icon|=prohibit], [data-icon|=shield]):not([data-icon-anim]):not([data-icon=check], [data-icon=check-circle], [data-icon=x], [data-icon=x-circle], [data-icon=x-logo], [data-icon=plus], [data-icon=plus-circle], [data-icon$=-slash])[data-icon-parts=stroke]:has(> :is(line, polyline)) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=check], [data-icon|=checks], [data-icon|=x], [data-icon|=plus], [data-icon|=minus], [data-icon|=prohibit], [data-icon|=shield]):not([data-icon-anim]):not([data-icon=check], [data-icon=check-circle], [data-icon=x], [data-icon=x-circle], [data-icon=x-logo], [data-icon=plus], [data-icon=plus-circle], [data-icon$=-slash])[data-icon-parts=stroke] > :is(line, polyline) {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.55s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(var(--icon-part, 0) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  /* Bent arrows trace their way. */
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u], [data-icon|=arrow-arc]):not([data-icon-anim])[data-icon-parts=stroke]:has(> [data-part][stroke]) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u], [data-icon|=arrow-arc]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part][stroke] {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u], [data-icon|=arrow-arc]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part]:not([stroke], [transform]) {
+    --_icon-anim-part-name: iconAnimPartAppear;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u], [data-icon|=arrow-arc]):not([data-icon-anim])[data-icon-parts=stroke] > [data-part][transform]:not([stroke]) {
+    --_icon-anim-part-name: iconAnimLayerFade;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=arrow-bend], [data-icon|=arrow-elbow], [data-icon|=arrow-u], [data-icon|=arrow-arc]):not([data-icon-anim])[data-icon-parts=stroke] > [data-layer] {
+    --_icon-anim-part-name: iconAnimLayerFade;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: 0.3s;
+    --_icon-anim-part-fill: backwards;
+  }
+  /* Signs, letters, digits, shapes and diagrams: what the icon is, is the line
+     itself, so drawing it is the motion that means something. */
+  .icon-anim:is([data-icon|=number], [data-icon|=letter-circle], [data-icon|=text], [data-icon|=at], [data-icon|=hash], [data-icon|=percent], [data-icon|=copyright], [data-icon|=copyleft], [data-icon|=trademark], [data-icon|=currency], [data-icon|=equals], [data-icon|=not-equals], [data-icon|=divide], [data-icon|=greater-than], [data-icon|=less-than], [data-icon|=approximate-equals], [data-icon|=sigma], [data-icon|=pi], [data-icon|=function], [data-icon|=radical], [data-icon|=infinity], [data-icon|=tilde], [data-icon|=subset-of], [data-icon|=subset-proper-of], [data-icon|=superset-of], [data-icon|=superset-proper-of], [data-icon|=member-of], [data-icon|=not-member-of], [data-icon|=not-subset-of], [data-icon|=not-superset-of], [data-icon|=intersection], [data-icon|=union], [data-icon|=math-operations], [data-icon|=triangle], [data-icon|=square], [data-icon|=circle], [data-icon|=rectangle], [data-icon|=hexagon], [data-icon|=pentagon], [data-icon|=pentagram], [data-icon|=octagon], [data-icon|=parallelogram], [data-icon|=polygon], [data-icon|=diamond], [data-icon|=diamonds-four], [data-icon|=cylinder], [data-icon|=paragraph], [data-icon|=quotes], [data-icon|=binary], [data-icon|=barcode], [data-icon|=qr-code], [data-icon|=gender], [data-icon|=peace], [data-icon|=asclepius], [data-icon|=scribble], [data-icon|=path], [data-icon|=line-segment], [data-icon|=line-segments], [data-icon|=line-vertical], [data-icon|=bezier-curve], [data-icon|=vector-two], [data-icon|=vector-three], [data-icon|=wave], [data-icon|=waves], [data-icon|=pulse], [data-icon|=spiral], [data-icon|=chart-line], [data-icon|=chart-pie], [data-icon|=chart-donut], [data-icon|=chart-polar], [data-icon|=graph], [data-icon|=git], [data-icon|=network], [data-icon|=flow-arrow], [data-icon|=bounding-box], [data-icon|=selection], [data-icon|=strategy], [data-icon|=blueprint], [data-icon|=fingerprint], [data-icon|=circuitry], [data-icon|=command], [data-icon|=control], [data-icon|=option], [data-icon|=code], [data-icon|=brackets], [data-icon|=angle], [data-icon|=gif], [data-icon|=four-k], [data-icon|=three-d], [data-icon|=high-definition], [data-icon|=standard-definition], [data-icon|=perspective], [data-icon|=empty], [data-icon|=placeholder], [data-icon|=exclude], [data-icon|=intersect], [data-icon|=subtract], [data-icon|=unite], [data-icon|=lasso], [data-icon|=terminal], [data-icon|=prescription], [data-icon|=translate], [data-icon|=tree-structure], [data-icon|=tree-view], [data-icon|=trend-up], [data-icon|=trend-down], [data-icon|=share-network], [data-icon|=phone-disconnect], [data-icon|=phone-x], [data-icon|=phone-pause], [data-icon|=bell-z], [data-icon|=bell-simple-z]):not([data-icon-anim]):not([data-icon=circle-notch], [data-icon=square-logo], [data-icon|=square-split-horizontal], [data-icon|=square-split-vertical], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon=currency-circle-dollar], [data-icon$=-slash])[data-icon-parts=stroke]:has(> [data-part][stroke]) {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon|=number], [data-icon|=letter-circle], [data-icon|=text], [data-icon|=at], [data-icon|=hash], [data-icon|=percent], [data-icon|=copyright], [data-icon|=copyleft], [data-icon|=trademark], [data-icon|=currency], [data-icon|=equals], [data-icon|=not-equals], [data-icon|=divide], [data-icon|=greater-than], [data-icon|=less-than], [data-icon|=approximate-equals], [data-icon|=sigma], [data-icon|=pi], [data-icon|=function], [data-icon|=radical], [data-icon|=infinity], [data-icon|=tilde], [data-icon|=subset-of], [data-icon|=subset-proper-of], [data-icon|=superset-of], [data-icon|=superset-proper-of], [data-icon|=member-of], [data-icon|=not-member-of], [data-icon|=not-subset-of], [data-icon|=not-superset-of], [data-icon|=intersection], [data-icon|=union], [data-icon|=math-operations], [data-icon|=triangle], [data-icon|=square], [data-icon|=circle], [data-icon|=rectangle], [data-icon|=hexagon], [data-icon|=pentagon], [data-icon|=pentagram], [data-icon|=octagon], [data-icon|=parallelogram], [data-icon|=polygon], [data-icon|=diamond], [data-icon|=diamonds-four], [data-icon|=cylinder], [data-icon|=paragraph], [data-icon|=quotes], [data-icon|=binary], [data-icon|=barcode], [data-icon|=qr-code], [data-icon|=gender], [data-icon|=peace], [data-icon|=asclepius], [data-icon|=scribble], [data-icon|=path], [data-icon|=line-segment], [data-icon|=line-segments], [data-icon|=line-vertical], [data-icon|=bezier-curve], [data-icon|=vector-two], [data-icon|=vector-three], [data-icon|=wave], [data-icon|=waves], [data-icon|=pulse], [data-icon|=spiral], [data-icon|=chart-line], [data-icon|=chart-pie], [data-icon|=chart-donut], [data-icon|=chart-polar], [data-icon|=graph], [data-icon|=git], [data-icon|=network], [data-icon|=flow-arrow], [data-icon|=bounding-box], [data-icon|=selection], [data-icon|=strategy], [data-icon|=blueprint], [data-icon|=fingerprint], [data-icon|=circuitry], [data-icon|=command], [data-icon|=control], [data-icon|=option], [data-icon|=code], [data-icon|=brackets], [data-icon|=angle], [data-icon|=gif], [data-icon|=four-k], [data-icon|=three-d], [data-icon|=high-definition], [data-icon|=standard-definition], [data-icon|=perspective], [data-icon|=empty], [data-icon|=placeholder], [data-icon|=exclude], [data-icon|=intersect], [data-icon|=subtract], [data-icon|=unite], [data-icon|=lasso], [data-icon|=terminal], [data-icon|=prescription], [data-icon|=translate], [data-icon|=tree-structure], [data-icon|=tree-view], [data-icon|=trend-up], [data-icon|=trend-down], [data-icon|=share-network], [data-icon|=phone-disconnect], [data-icon|=phone-x], [data-icon|=phone-pause], [data-icon|=bell-z], [data-icon|=bell-simple-z]):not([data-icon-anim]):not([data-icon=circle-notch], [data-icon=square-logo], [data-icon|=square-split-horizontal], [data-icon|=square-split-vertical], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon=currency-circle-dollar], [data-icon$=-slash])[data-icon-parts=stroke] > [data-part][stroke] {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=number], [data-icon|=letter-circle], [data-icon|=text], [data-icon|=at], [data-icon|=hash], [data-icon|=percent], [data-icon|=copyright], [data-icon|=copyleft], [data-icon|=trademark], [data-icon|=currency], [data-icon|=equals], [data-icon|=not-equals], [data-icon|=divide], [data-icon|=greater-than], [data-icon|=less-than], [data-icon|=approximate-equals], [data-icon|=sigma], [data-icon|=pi], [data-icon|=function], [data-icon|=radical], [data-icon|=infinity], [data-icon|=tilde], [data-icon|=subset-of], [data-icon|=subset-proper-of], [data-icon|=superset-of], [data-icon|=superset-proper-of], [data-icon|=member-of], [data-icon|=not-member-of], [data-icon|=not-subset-of], [data-icon|=not-superset-of], [data-icon|=intersection], [data-icon|=union], [data-icon|=math-operations], [data-icon|=triangle], [data-icon|=square], [data-icon|=circle], [data-icon|=rectangle], [data-icon|=hexagon], [data-icon|=pentagon], [data-icon|=pentagram], [data-icon|=octagon], [data-icon|=parallelogram], [data-icon|=polygon], [data-icon|=diamond], [data-icon|=diamonds-four], [data-icon|=cylinder], [data-icon|=paragraph], [data-icon|=quotes], [data-icon|=binary], [data-icon|=barcode], [data-icon|=qr-code], [data-icon|=gender], [data-icon|=peace], [data-icon|=asclepius], [data-icon|=scribble], [data-icon|=path], [data-icon|=line-segment], [data-icon|=line-segments], [data-icon|=line-vertical], [data-icon|=bezier-curve], [data-icon|=vector-two], [data-icon|=vector-three], [data-icon|=wave], [data-icon|=waves], [data-icon|=pulse], [data-icon|=spiral], [data-icon|=chart-line], [data-icon|=chart-pie], [data-icon|=chart-donut], [data-icon|=chart-polar], [data-icon|=graph], [data-icon|=git], [data-icon|=network], [data-icon|=flow-arrow], [data-icon|=bounding-box], [data-icon|=selection], [data-icon|=strategy], [data-icon|=blueprint], [data-icon|=fingerprint], [data-icon|=circuitry], [data-icon|=command], [data-icon|=control], [data-icon|=option], [data-icon|=code], [data-icon|=brackets], [data-icon|=angle], [data-icon|=gif], [data-icon|=four-k], [data-icon|=three-d], [data-icon|=high-definition], [data-icon|=standard-definition], [data-icon|=perspective], [data-icon|=empty], [data-icon|=placeholder], [data-icon|=exclude], [data-icon|=intersect], [data-icon|=subtract], [data-icon|=unite], [data-icon|=lasso], [data-icon|=terminal], [data-icon|=prescription], [data-icon|=translate], [data-icon|=tree-structure], [data-icon|=tree-view], [data-icon|=trend-up], [data-icon|=trend-down], [data-icon|=share-network], [data-icon|=phone-disconnect], [data-icon|=phone-x], [data-icon|=phone-pause], [data-icon|=bell-z], [data-icon|=bell-simple-z]):not([data-icon-anim]):not([data-icon=circle-notch], [data-icon=square-logo], [data-icon|=square-split-horizontal], [data-icon|=square-split-vertical], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon=currency-circle-dollar], [data-icon$=-slash])[data-icon-parts=stroke] > [data-part]:not([stroke], [transform]) {
+    --_icon-anim-part-name: iconAnimPartAppear;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=number], [data-icon|=letter-circle], [data-icon|=text], [data-icon|=at], [data-icon|=hash], [data-icon|=percent], [data-icon|=copyright], [data-icon|=copyleft], [data-icon|=trademark], [data-icon|=currency], [data-icon|=equals], [data-icon|=not-equals], [data-icon|=divide], [data-icon|=greater-than], [data-icon|=less-than], [data-icon|=approximate-equals], [data-icon|=sigma], [data-icon|=pi], [data-icon|=function], [data-icon|=radical], [data-icon|=infinity], [data-icon|=tilde], [data-icon|=subset-of], [data-icon|=subset-proper-of], [data-icon|=superset-of], [data-icon|=superset-proper-of], [data-icon|=member-of], [data-icon|=not-member-of], [data-icon|=not-subset-of], [data-icon|=not-superset-of], [data-icon|=intersection], [data-icon|=union], [data-icon|=math-operations], [data-icon|=triangle], [data-icon|=square], [data-icon|=circle], [data-icon|=rectangle], [data-icon|=hexagon], [data-icon|=pentagon], [data-icon|=pentagram], [data-icon|=octagon], [data-icon|=parallelogram], [data-icon|=polygon], [data-icon|=diamond], [data-icon|=diamonds-four], [data-icon|=cylinder], [data-icon|=paragraph], [data-icon|=quotes], [data-icon|=binary], [data-icon|=barcode], [data-icon|=qr-code], [data-icon|=gender], [data-icon|=peace], [data-icon|=asclepius], [data-icon|=scribble], [data-icon|=path], [data-icon|=line-segment], [data-icon|=line-segments], [data-icon|=line-vertical], [data-icon|=bezier-curve], [data-icon|=vector-two], [data-icon|=vector-three], [data-icon|=wave], [data-icon|=waves], [data-icon|=pulse], [data-icon|=spiral], [data-icon|=chart-line], [data-icon|=chart-pie], [data-icon|=chart-donut], [data-icon|=chart-polar], [data-icon|=graph], [data-icon|=git], [data-icon|=network], [data-icon|=flow-arrow], [data-icon|=bounding-box], [data-icon|=selection], [data-icon|=strategy], [data-icon|=blueprint], [data-icon|=fingerprint], [data-icon|=circuitry], [data-icon|=command], [data-icon|=control], [data-icon|=option], [data-icon|=code], [data-icon|=brackets], [data-icon|=angle], [data-icon|=gif], [data-icon|=four-k], [data-icon|=three-d], [data-icon|=high-definition], [data-icon|=standard-definition], [data-icon|=perspective], [data-icon|=empty], [data-icon|=placeholder], [data-icon|=exclude], [data-icon|=intersect], [data-icon|=subtract], [data-icon|=unite], [data-icon|=lasso], [data-icon|=terminal], [data-icon|=prescription], [data-icon|=translate], [data-icon|=tree-structure], [data-icon|=tree-view], [data-icon|=trend-up], [data-icon|=trend-down], [data-icon|=share-network], [data-icon|=phone-disconnect], [data-icon|=phone-x], [data-icon|=phone-pause], [data-icon|=bell-z], [data-icon|=bell-simple-z]):not([data-icon-anim]):not([data-icon=circle-notch], [data-icon=square-logo], [data-icon|=square-split-horizontal], [data-icon|=square-split-vertical], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon=currency-circle-dollar], [data-icon$=-slash])[data-icon-parts=stroke] > [data-part][transform]:not([stroke]) {
+    --_icon-anim-part-name: iconAnimLayerFade;
+    --_icon-anim-part-duration: 0.4s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: calc(min(var(--icon-part, 0), 8) * 0.1s);
+    --_icon-anim-part-fill: backwards;
+  }
+  .icon-anim:is([data-icon|=number], [data-icon|=letter-circle], [data-icon|=text], [data-icon|=at], [data-icon|=hash], [data-icon|=percent], [data-icon|=copyright], [data-icon|=copyleft], [data-icon|=trademark], [data-icon|=currency], [data-icon|=equals], [data-icon|=not-equals], [data-icon|=divide], [data-icon|=greater-than], [data-icon|=less-than], [data-icon|=approximate-equals], [data-icon|=sigma], [data-icon|=pi], [data-icon|=function], [data-icon|=radical], [data-icon|=infinity], [data-icon|=tilde], [data-icon|=subset-of], [data-icon|=subset-proper-of], [data-icon|=superset-of], [data-icon|=superset-proper-of], [data-icon|=member-of], [data-icon|=not-member-of], [data-icon|=not-subset-of], [data-icon|=not-superset-of], [data-icon|=intersection], [data-icon|=union], [data-icon|=math-operations], [data-icon|=triangle], [data-icon|=square], [data-icon|=circle], [data-icon|=rectangle], [data-icon|=hexagon], [data-icon|=pentagon], [data-icon|=pentagram], [data-icon|=octagon], [data-icon|=parallelogram], [data-icon|=polygon], [data-icon|=diamond], [data-icon|=diamonds-four], [data-icon|=cylinder], [data-icon|=paragraph], [data-icon|=quotes], [data-icon|=binary], [data-icon|=barcode], [data-icon|=qr-code], [data-icon|=gender], [data-icon|=peace], [data-icon|=asclepius], [data-icon|=scribble], [data-icon|=path], [data-icon|=line-segment], [data-icon|=line-segments], [data-icon|=line-vertical], [data-icon|=bezier-curve], [data-icon|=vector-two], [data-icon|=vector-three], [data-icon|=wave], [data-icon|=waves], [data-icon|=pulse], [data-icon|=spiral], [data-icon|=chart-line], [data-icon|=chart-pie], [data-icon|=chart-donut], [data-icon|=chart-polar], [data-icon|=graph], [data-icon|=git], [data-icon|=network], [data-icon|=flow-arrow], [data-icon|=bounding-box], [data-icon|=selection], [data-icon|=strategy], [data-icon|=blueprint], [data-icon|=fingerprint], [data-icon|=circuitry], [data-icon|=command], [data-icon|=control], [data-icon|=option], [data-icon|=code], [data-icon|=brackets], [data-icon|=angle], [data-icon|=gif], [data-icon|=four-k], [data-icon|=three-d], [data-icon|=high-definition], [data-icon|=standard-definition], [data-icon|=perspective], [data-icon|=empty], [data-icon|=placeholder], [data-icon|=exclude], [data-icon|=intersect], [data-icon|=subtract], [data-icon|=unite], [data-icon|=lasso], [data-icon|=terminal], [data-icon|=prescription], [data-icon|=translate], [data-icon|=tree-structure], [data-icon|=tree-view], [data-icon|=trend-up], [data-icon|=trend-down], [data-icon|=share-network], [data-icon|=phone-disconnect], [data-icon|=phone-x], [data-icon|=phone-pause], [data-icon|=bell-z], [data-icon|=bell-simple-z]):not([data-icon-anim]):not([data-icon=circle-notch], [data-icon=square-logo], [data-icon|=square-split-horizontal], [data-icon|=square-split-vertical], [data-icon|=text-align-center], [data-icon|=text-align-justify], [data-icon|=text-align-left], [data-icon|=text-align-right], [data-icon|=text-columns], [data-icon|=text-indent], [data-icon|=text-outdent], [data-icon=currency-circle-dollar], [data-icon$=-slash])[data-icon-parts=stroke] > [data-layer] {
+    --_icon-anim-part-name: iconAnimLayerFade;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --_icon-anim-part-stagger: 0.3s;
+    --_icon-anim-part-fill: backwards;
+  }
   /* =========================================================================
      3. PER-ICON PRESETS
      ========================================================================= */
@@ -511,35 +672,35 @@
     --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
   }
   /* Arrows, carets, play: point in their own direction. */
-  .icon-anim:is([data-icon=arrow-right], [data-icon=caret-right], [data-icon=arrow-circle-right], [data-icon=caret-double-right], [data-icon=play], [data-icon=sign-out]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon=arrow-right], [data-icon=caret-right], [data-icon=caret-double-right], [data-icon=play], [data-icon=sign-out]):not([data-icon-anim]) {
     --_icon-anim-x: 22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
     --_icon-anim-origin: 50% 50%;
   }
-  .icon-anim:is([data-icon=arrow-left], [data-icon=caret-left], [data-icon=arrow-circle-left], [data-icon=caret-double-left], [data-icon=sign-in]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon=arrow-left], [data-icon=caret-left], [data-icon=caret-double-left], [data-icon=sign-in]):not([data-icon-anim]) {
     --_icon-anim-x: -22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
     --_icon-anim-origin: 50% 50%;
   }
-  .icon-anim:is([data-icon=arrow-up], [data-icon=caret-up], [data-icon=arrow-circle-up], [data-icon=caret-double-up]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon=arrow-up], [data-icon=caret-up], [data-icon=caret-double-up]):not([data-icon-anim]) {
     --_icon-anim-y: -22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
     --_icon-anim-origin: 50% 50%;
   }
-  .icon-anim:is([data-icon=arrow-down], [data-icon=caret-down], [data-icon=arrow-circle-down], [data-icon=caret-double-down]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon=arrow-down], [data-icon=caret-down], [data-icon=caret-double-down]):not([data-icon-anim]) {
     --_icon-anim-y: 22%;
     --_icon-anim-name: iconAnimNudge;
     --_icon-anim-duration: 0.6s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
     --_icon-anim-origin: 50% 50%;
   }
-  .icon-anim:is([data-icon=arrow-up-right], [data-icon=arrow-square-out]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon=arrow-up-right]):not([data-icon-anim]) {
     --_icon-anim-x: 18%;
     --_icon-anim-y: -18%;
     --_icon-anim-name: iconAnimNudge;
@@ -977,7 +1138,7 @@
     --_icon-anim-part-stagger: 0.9s;
     --_icon-anim-part-fill: backwards;
   }
-  .icon-anim:is([data-icon=cloud], [data-icon=cloud-arrow-up], [data-icon=cloud-check]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon=cloud], [data-icon=cloud-check]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimDrift;
     --_icon-anim-duration: 1.2s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
@@ -1689,6 +1850,19 @@
     }
     45% {
       transform: translate(var(--_icon-anim-x, 0px), var(--_icon-anim-y, 0px));
+    }
+  }
+  /* The moving part of an icon nudged in its direction, with the small recoil of
+     iconAnimNudge. Offsets in px of the 256 grid, from the direction rules. */
+  @keyframes iconAnimPartNudge {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    40% {
+      transform: translate(var(--_icon-anim-part-x, 0px), var(--_icon-anim-part-y, 0px));
+    }
+    70% {
+      transform: translate(calc(var(--_icon-anim-part-x, 0px) * -0.15), calc(var(--_icon-anim-part-y, 0px) * -0.15));
     }
   }
   @keyframes iconAnimPartLift {

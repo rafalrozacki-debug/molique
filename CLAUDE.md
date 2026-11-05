@@ -276,6 +276,14 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   dopiero JS, więc PurgeCSS nie widzi go w HTML: bez `greedy: /data-icon/` wycinał
   wszystkie presety. `npm run test:icon-catalog` pilnuje 1512 ikon, migawki presetów
   i listy neutralnych; `--update-*` tylko po świadomej zmianie.
+- **`icon-anim`: reguła części ma dwa bezpieczniki** (v1.7.46, mixin `_parts-of`). Zwykłe
+  `_parts()` gasi ruch całości zawsze, gdy ikona ma części, nawet jeśli selektor nic nie
+  złapał: `wifi-high` w duotone to jedna ścieżka, bez `:has(> część)` 230 kombinacji
+  stało nieruchomo, bez błędu. Reguła części jest też ADDYTYWNA, inaczej niż ruch całości,
+  więc tabela „pierwsze dopasowanie wygrywa" nie działa: bez `_except()` `circle` złapał
+  `circle-notch`, a kosz ruszał ścianą razem z pokrywą. Selekcję oglądaj na arkuszu
+  z zaznaczonymi na czerwono częściami, we wszystkich grubościach: `battery-empty`
+  przechodził spis 5/5 i ruszał tylko końcówką baterii.
 - **`icon-anim`: atrybut `transform` to przebrana właściwość CSS** (v1.7.43).
   Phosphor obraca nim 57 ikon (`<rect transform="translate(256 0) rotate(90)">`).
   `transform-box: fill-box` zmienia też jego punkt odniesienia, więc kształt

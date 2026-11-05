@@ -168,6 +168,8 @@ try {
         anim: style.getPropertyValue('--_icon-anim-name').trim(),
         x: style.getPropertyValue('--_icon-anim-x').trim(),
         y: style.getPropertyValue('--_icon-anim-y').trim(),
+        px: style.getPropertyValue('--_icon-anim-part-x').trim(),
+        py: style.getPropertyValue('--_icon-anim-part-y').trim(),
         origin: style.getPropertyValue('--_icon-anim-origin').trim(),
         out,
       };
@@ -177,17 +179,21 @@ try {
   /* Triggered: what actually moves. */
   await page.evaluate(() => document.body.classList.add('icon-anim-play', 'icon-anim-loop'));
   await page.waitForTimeout(150);
-  const moving = await page.evaluate(() => {
+  const { moving, overwritten } = await page.evaluate((harmless) => {
     const byIcon = new Map();
+    const overwritten = [];
     for (const a of document.getAnimations()) {
       const target = a.effect && a.effect.target;
       const icon = target && target.closest('.icon-anim');
       if (!icon) continue;
       if (!byIcon.has(icon)) byIcon.set(icon, []);
       byIcon.get(icon).push(`${target === icon ? 'root' : `${target.localName}#${target.dataset.part ?? 'layer'}`}:${a.animationName}`);
+      if (target !== icon && target.hasAttribute('transform') && !harmless.includes(a.animationName)) {
+        overwritten.push(`${icon.dataset.icon}/${icon.dataset.w}:${a.animationName}`);
+      }
     }
-    return [...document.querySelectorAll('svg.icon-anim')].map((svg) => (byIcon.get(svg) || []).sort().join(' '));
-  });
+    return { overwritten, moving: [...document.querySelectorAll('svg.icon-anim')].map((svg) => (byIcon.get(svg) || []).sort().join(' ')) };
+  }, ['iconAnimPartDraw', 'iconAnimPartDrawLoop', 'iconAnimLayerFade', 'iconAnimPartFadeLoop', 'iconAnimPartBlink']);
 
   check('every icon was named and inlined', rest.every((r) => r.name), `${rest.length} icons, weights: ${WEIGHTS.join(' ')}`);
   check('no page errors', errors.length === 0, errors[0] || '');
@@ -198,13 +204,24 @@ try {
   const outside = rest.filter((r) => r.out > 0).map((r) => `${r.name}/${r.w}`);
   check('no shape lies outside its icon at rest', outside.length === 0, `${outside.length}: ${outside.slice(0, 6).join(' ')}`);
 
+  // A keyframe that sets transform replaces the transform attribute of the shape,
+  // and the shape jumps away for as long as the animation runs.
+  check('no keyframe overwrites a transform attribute', overwritten.length === 0, `${overwritten.length}: ${overwritten.slice(0, 5).join(' ')}`);
+
   const lightRows = rest.filter((r) => r.w === 'light');
   const byName = new Map(lightRows.map((r) => [r.name, r]));
 
   /* ---------- the hard cases ---------- */
+  // Read from the fill weight: it has no parts, so the whole-icon family stays
+  // visible there. In a stroke weight many of these now say "none" and move a
+  // part, which is right and tells nothing about the family.
+  const families = new Map(rest.filter((r) => r.w === (WEIGHTS.includes('fill') ? 'fill' : 'light')).map((r) => [r.name, r]));
   const wrong = Object.entries(EXPECT)
-    .filter(([name, anim]) => byName.get(name).anim !== `iconAnim${anim}`)
-    .map(([name, anim]) => `${name}: ${byName.get(name).anim}, expected ${anim}`);
+    .filter(([name, anim]) => {
+      const actual = families.get(name).anim;
+      return actual !== `iconAnim${anim}` && (WEIGHTS.includes('fill') || actual !== 'none');
+    })
+    .map(([name, anim]) => `${name}: ${families.get(name).anim}, expected ${anim}`);
   check('the hard cases land in the right family', wrong.length === 0, wrong.slice(0, 4).join(' | '));
 
   check('a narrower family does not inherit the pivot of a wider one',
@@ -217,7 +234,9 @@ try {
   const LEVEL = { up: -1, down: 1 };
   const badDirection = [];
   for (const row of lightRows) {
-    if (!/^(arrow|caret)-/.test(row.name) || row.anim !== 'iconAnimNudge') continue;
+    if (!/^(arrow|caret)-/.test(row.name)) continue;
+    const inFrame = row.anim === 'none' && /^(arrow|caret)-(circle|square)-/.test(row.name);
+    if (row.anim !== 'iconAnimNudge' && !inFrame) continue;
     if (/square-(in|out)$/.test(row.name)) continue;
     const tokens = row.name.split('-');
     const bent = /^arrow-(bend|elbow|u)-/.test(row.name);
@@ -225,7 +244,8 @@ try {
     const before = tokens.at(-2);
     const x = SIDE[last] ?? 0;
     const y = bent ? (LEVEL[last] ?? 0) : (LEVEL[last] ?? LEVEL[before] ?? 0);
-    if (sign(row.x) !== x || sign(row.y) !== y) badDirection.push(`${row.name} (${row.x}, ${row.y})`);
+    const [actualX, actualY] = inFrame ? [row.px, row.py] : [row.x, row.y];
+    if (sign(actualX) !== x || sign(actualY) !== y) badDirection.push(`${row.name} (${actualX}, ${actualY})`);
   }
   check('arrows and carets move the way their name says', badDirection.length === 0, badDirection.slice(0, 5).join(' '));
 
