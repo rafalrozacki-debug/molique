@@ -661,6 +661,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   Icons, Helena Zhang i Tobias Fried, MIT - zachowaj informację o autorach.
   PurgeCSS z `keyframes: true` wymaga 1.7.39+ - safelista 1.7.38 nie
   chroniła animacji części (`iconAnimPart*`).
+  Do 1.7.42 nie dawaj `.icon-anim` na 57 ikon z atrybutem `transform`
+  (`monitor`, `desktop`, `calculator`, `arrow-square-left`, `eject`,
+  `diamond`): kształt odlatywał poza ikonę już w spoczynku.
 - **Przycisk magnetyczny:** `.btn-magnetic` - zero CSS, cały efekt to
   inline `transform` z JS na `mousemove`. Aktywny tylko przy
   `(pointer: fine)` (nie na dotyku).

@@ -119,8 +119,14 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   display: inline-block;
 }
 
-.icon-anim [data-part],
-.icon-anim [data-layer] {
+/* Not on a shape with a transform attribute: Phosphor rotates some rects with
+   transform="translate(256 0) rotate(90)", and that attribute is a CSS
+   property in disguise - fill-box would make it turn around the shape's own
+   centre, and the shape would leave the icon at rest, with nothing animating
+   (57 icons: monitor, calculator, arrow-square-left...). Keyframes with
+   transform would overwrite the attribute too, so a part rule that moves
+   parts must keep away from [transform]; drawing and fading are safe. */
+.icon-anim :is([data-part], [data-layer]):not([transform]) {
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -577,8 +583,13 @@ $_spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 #{_variant('draw')}[data-icon-parts="stroke"] > [data-part][stroke] {
   @include _part(iconAnimPartDraw, 0.6s, $_ease, calc(var(--icon-part, 0) * 0.12s), backwards);
 }
-#{_variant('draw')}[data-icon-parts="stroke"] > [data-part]:not([stroke]) {
+#{_variant('draw')}[data-icon-parts="stroke"] > [data-part]:not([stroke], [transform]) {
   @include _part(iconAnimPartAppear, 0.4s, $_spring, calc(var(--icon-part, 0) * 0.12s), backwards);
+}
+/* Appear scales, which would overwrite a transform attribute (the eyes of
+   alien in bold): those fade in where they are. */
+#{_variant('draw')}[data-icon-parts="stroke"] > [data-part][transform]:not([stroke]) {
+  @include _part(iconAnimLayerFade, 0.4s, $_ease, calc(var(--icon-part, 0) * 0.12s), backwards);
 }
 #{_variant('draw')}[data-icon-parts="stroke"] > [data-layer] {
   @include _part(iconAnimLayerFade, 0.6s, $_ease, 0.3s, backwards);

@@ -49,6 +49,9 @@ const SPRITE = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
 <symbol id="ph-spinner" viewBox="0 0 256 256"><line x1="128" y1="32" x2="128" y2="64" ${STROKE}/><line x1="195.88" y1="60.12" x2="173.25" y2="82.75" ${STROKE}/><line x1="224" y1="128" x2="192" y2="128" ${STROKE}/><line x1="195.88" y1="195.88" x2="173.25" y2="173.25" ${STROKE}/><line x1="128" y1="224" x2="128" y2="192" ${STROKE}/><line x1="60.12" y1="195.88" x2="82.75" y2="173.25" ${STROKE}/><line x1="32" y1="128" x2="64" y2="128" ${STROKE}/><line x1="60.12" y1="60.12" x2="82.75" y2="82.75" ${STROKE}/></symbol>
 <symbol id="ph-confetti--bold" viewBox="0 0 256 256"><path d="M40.49,205.52,93,61.14a7.79,7.79,0,0,1,12.84-2.85l91.88,91.88A7.79,7.79,0,0,1,194.86,163L50.48,215.51A7.79,7.79,0,0,1,40.49,205.52Z" ${STROKE}/><line x1="140" y1="16" x2="140" y2="40" ${STROKE}/><line x1="220" y1="116" x2="236" y2="132" ${STROKE}/><line x1="216" y1="80" x2="240" y2="72" ${STROKE}/><line x1="78.09" y1="102.09" x2="153.91" y2="177.91" ${STROKE}/><line x1="101.11" y1="197.11" x2="58.89" y2="154.89" ${STROKE}/><path d="M168.42,68c1.19-6.83,5.8-20,23.58-20,24,0,24-24,24-24" ${STROKE}/></symbol>
 <symbol id="ph-phone-call--bold" viewBox="0 0 256 256"><path d="M152,48a78.61,78.61,0,0,1,56,56" ${STROKE}/><path d="M156.39,153.34a8,8,0,0,1,7.59-.69l47.16,21.13a8,8,0,0,1,4.8,8.3A48.33,48.33,0,0,1,168,224,136,136,0,0,1,32,88,48.33,48.33,0,0,1,73.92,40.06a8,8,0,0,1,8.3,4.8l21.13,47.2a8,8,0,0,1-.66,7.53L81.32,125a7.93,7.93,0,0,0-.54,7.81c8.27,16.93,25.77,34.22,42.75,42.41a7.92,7.92,0,0,0,7.83-.59Z" ${STROKE}/><path d="M141.23,86A44.11,44.11,0,0,1,170,114.77" ${STROKE}/></symbol>
+<symbol id="ph-arrow-square-left" viewBox="0 0 256 256"><rect x="40" y="40" width="176" height="176" rx="8" transform="translate(256 0) rotate(90)" ${STROKE}/><line x1="88" y1="128" x2="168" y2="128" ${STROKE}/><polyline points="112 96 80 128 112 160" ${STROKE}/></symbol>
+<symbol id="ph-arrow-square-left--duotone" viewBox="0 0 256 256"><rect x="40" y="40" width="176" height="176" rx="8" transform="translate(256 0) rotate(90)" opacity="0.2"/><rect x="40" y="40" width="176" height="176" rx="8" transform="translate(256 0) rotate(90)" ${STROKE}/><line x1="88" y1="128" x2="168" y2="128" ${STROKE}/></symbol>
+<symbol id="ph-alien--bold" viewBox="0 0 256 256"><path d="M216,112c0,48.6-56,120-88,120S40,160.6,40,112a88,88,0,0,1,176,0Z" ${STROKE}/><ellipse cx="92" cy="124" rx="16.97" ry="29.39" transform="translate(-60.74 101.37) rotate(-45)"/><ellipse cx="164" cy="124" rx="29.39" ry="16.97" transform="translate(-39.65 152.28) rotate(-45)"/><line x1="116" y1="184" x2="140" y2="184" ${STROKE}/></symbol>
 <symbol id="ph-evil" viewBox="0 0 256 256"><script>window.__pwned = 1</script><path d="M0,0H10" ${STROKE} onmouseover="window.__pwned = 2" style="display:none"/><foreignObject><div xmlns="http://www.w3.org/1999/xhtml">x</div></foreignObject><image href="x" onerror="window.__pwned = 3"/></symbol>
 </svg>`;
 
@@ -71,6 +74,9 @@ ${icon('ph-spinner', 'icon-anim-play', 'id="spinner"')}
 ${icon('ph-confetti--bold', 'icon-anim-play', 'id="confetti"')}
 ${icon('ph-phone-call--bold', 'icon-anim-play', 'id="phone"')}
 ${icon('ph-evil', '', 'id="evil"')}
+${icon('ph-arrow-square-left', '', 'id="turned"')}
+${icon('ph-arrow-square-left--duotone', '', 'id="turned-duo"')}
+${icon('ph-alien--bold', 'icon-anim-play', 'id="alien" data-icon-anim="draw"')}
 <i id="font" class="ph-bold ph-bell icon-anim icon-anim-play"></i>
 <svg id="pasted" class="icon icon-anim icon-anim-play" data-icon="check" viewBox="0 0 256 256"><rect width="256" height="256" fill="none"/><polyline points="40 144 96 200 224 72" ${STROKE}/></svg>
 <div style="height:3000px"></div>
@@ -134,6 +140,27 @@ try {
 
   const font = await page.evaluate(() => document.querySelector('#font').dataset.icon);
   check('web font: name read from ph-bell, weight class ignored', font === 'bell', font);
+
+  /* ---------- shapes with a transform attribute ---------- */
+  // Measured at rest, with no trigger on: in the 48px icon the 176 unit square
+  // starts at 40 units, which is 7.5px from the edge. transform-box: fill-box
+  // used to apply to the attribute as well and threw the square 256 units away.
+  const place = (sel) =>
+    page.evaluate((s) => {
+      const el = document.querySelector(s);
+      const box = el.closest('svg').getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      return { x: +(r.left - box.left).toFixed(1), y: +(r.top - box.top).toFixed(1), w: +r.width.toFixed(1) };
+    }, sel);
+  const near = (p) => Math.abs(p.x - 7.5) < 1 && Math.abs(p.y - 7.5) < 1 && Math.abs(p.w - 33) < 1;
+  const turned = await place('#turned rect');
+  check('a shape with a transform attribute stays in place at rest', near(turned), JSON.stringify(turned));
+  const turnedLayer = await place('#turned-duo [data-layer]');
+  check('... the duotone layer too', near(turnedLayer), JSON.stringify(turnedLayer));
+  const eyes = await page.evaluate(() =>
+    [...document.querySelectorAll('#alien ellipse')].flatMap((e) => e.getAnimations().map((a) => a.animationName))
+  );
+  check('draw does not scale a part with a transform attribute', eyes.join() === 'iconAnimLayerFade,iconAnimLayerFade', eyes.join());
 
   /* ---------- sanitising ---------- */
   const evil = await page.evaluate(() => ({

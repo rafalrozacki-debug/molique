@@ -48,6 +48,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.43 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.43</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  57 icons fell apart as soon as they got <code>.icon-anim</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  The bug turned up while checking the whole Phosphor catalogue. None of the 118 icons with their own animation has it, which is why the gallery and the tests never showed it.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Shapes with a <code>transform</code> attribute.</strong> Phosphor rotates some shapes with an attribute, for example <code>&lt;rect transform="translate(256 0) rotate(90)"&gt;</code>. The <code>transform-box: fill-box</code> rule applies to that attribute as well, so the rotation ran around the centre of the shape instead of the corner of the icon, and the shape ended up outside the icon. This happened at rest, with no trigger at all, in the thin, light, regular, bold and duotone weights. It hit <code>monitor</code>, <code>desktop</code>, <code>calculator</code>, <code>device-tablet</code>, <code>arrow-square-left</code>, <code>eject</code>, <code>diamond</code>, <code>alien</code> and others. The fill weight was not affected.</li>
+                  <li><strong><code>data-icon-anim="draw"</code> no longer scales such shapes.</strong> Scaling overwrote the attribute, so the eyes of <code>alien</code> in the bold weight jumped during the animation. They now fade in where they stand.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:icon-anim</code> measures the position of such a shape at rest, including a duotone layer.</li>
+                  <li><strong>Safe to remove:</strong> if you kept these icons out of <code>.icon-anim</code>, you can add them now. <strong>Check after updating:</strong> nothing, the animations of all other icons are unchanged.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.42 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

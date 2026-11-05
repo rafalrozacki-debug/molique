@@ -48,6 +48,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.43 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.43</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  57 Icons fielen mit <code>.icon-anim</code> auseinander
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Der Fehler fiel bei der Prüfung des gesamten Phosphor-Katalogs auf. Keines der 118 Icons mit eigener Animation ist betroffen, deshalb zeigten ihn weder die Galerie noch die Tests.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Formen mit <code>transform</code>-Attribut.</strong> Phosphor dreht manche Formen per Attribut, zum Beispiel <code>&lt;rect transform="translate(256 0) rotate(90)"&gt;</code>. Die Regel <code>transform-box: fill-box</code> gilt auch für dieses Attribut, die Drehung lief also um die Mitte der Form statt um die Ecke des Icons, und die Form landete außerhalb des Icons. Das geschah im Ruhezustand, ganz ohne Auslöser, in den Stärken thin, light, regular, bold und duotone. Betroffen waren unter anderem <code>monitor</code>, <code>desktop</code>, <code>calculator</code>, <code>device-tablet</code>, <code>arrow-square-left</code>, <code>eject</code>, <code>diamond</code>, <code>alien</code>. Die Stärke fill hatte das Problem nicht.</li>
+                  <li><strong><code>data-icon-anim="draw"</code> skaliert solche Formen nicht mehr.</strong> Das Skalieren überschrieb das Attribut, die Augen von <code>alien</code> in der Stärke bold sprangen also während der Animation. Jetzt blenden sie an ihrem Platz ein.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:icon-anim</code> misst die Position einer solchen Form im Ruhezustand, auch die der Duotone-Ebene.</li>
+                  <li><strong>Kann entfernt werden:</strong> Wer diese Icons aus <code>.icon-anim</code> herausgehalten hat, kann sie jetzt ergänzen. <strong>Nach dem Update prüfen:</strong> nichts, die Animationen aller anderen Icons sind unverändert.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.42 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

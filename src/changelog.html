@@ -47,6 +47,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.43 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.43</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  57 ikon rozsypywało się po dodaniu <code>.icon-anim</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Błąd wyszedł przy sprawdzaniu całego katalogu Phosphor. Żadna ze 118 ikon z własną animacją go nie miała, dlatego galeria i testy go nie widziały.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Kształty z atrybutem <code>transform</code>.</strong> Phosphor obraca część kształtów atrybutem, np. <code>&lt;rect transform="translate(256 0) rotate(90)"&gt;</code>. Reguła <code>transform-box: fill-box</code> działa też na ten atrybut, więc obrót liczył się od środka kształtu, a nie od rogu ikony i kształt lądował poza ikoną. Działo się to w spoczynku, bez żadnego wyzwalacza, w grubościach thin, light, regular, bold i duotone. Dotyczyło m.in. <code>monitor</code>, <code>desktop</code>, <code>calculator</code>, <code>device-tablet</code>, <code>arrow-square-left</code>, <code>eject</code>, <code>diamond</code>, <code>alien</code>. Grubość fill nie miała tego problemu.</li>
+                  <li><strong><code>data-icon-anim="draw"</code> nie skaluje takich kształtów.</strong> Skalowanie nadpisywało atrybut, więc oczy <code>alien</code> w grubości bold skakały w trakcie animacji. Teraz pojawiają się przez wygaszenie, tam gdzie stoją.</li>
+                  <li><strong>Testy.</strong> <code>npm run test:icon-anim</code> mierzy położenie takiego kształtu w spoczynku, także warstwy duotone.</li>
+                  <li><strong>Do zdjęcia:</strong> jeśli te ikony trzymasz poza <code>.icon-anim</code>, możesz je już dodać. <strong>Po aktualizacji sprawdź:</strong> nic, animacje pozostałych ikon się nie zmieniły.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.42 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

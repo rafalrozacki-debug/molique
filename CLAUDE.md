@@ -259,3 +259,9 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   `getComputedStyle(el).animationTimingFunction`. Sprawdzaj wszystko
   kontrolą ujemną na CSS sprzed zmiany - ten drugi błąd wyszedł tylko
   dzięki niej.
+- **`icon-anim`: atrybut `transform` to przebrana właściwość CSS** (v1.7.43).
+  Phosphor obraca nim 57 ikon (`<rect transform="translate(256 0) rotate(90)">`).
+  `transform-box: fill-box` zmienia też jego punkt odniesienia, więc kształt
+  odlatywał poza ikonę W SPOCZYNKU, a żadna z testowanych wtedy 118 ikon tego
+  nie miała. Keyframes z `transform` nadpisują ten atrybut, więc reguła ruszająca
+  częścią musi omijać `[transform]`; rysowanie i wygaszanie są bezpieczne.
