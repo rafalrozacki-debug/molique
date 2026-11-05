@@ -48,6 +48,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.48 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.48</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  <code>grid-cols-2 grid-md-cols-4</code> has two columns on a phone
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  A phone layout written next to a responsive class was silently dropped: the grid had one column, with no error.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>What was wrong.</strong> Below their breakpoint, <code>.grid-md-cols-*</code> and <code>.grid-lg-cols-*</code> default to a single-column grid. That rule came after <code>.grid-cols-*</code> in the stylesheet and weighed the same, so it won and <code>grid-cols-2</code> did nothing. The single-column default now applies only when there is no <code>.grid-cols-*</code> next to it.</li>
+                  <li><strong>Unchanged:</strong> <code>grid-md-cols-4</code> alone and <code>grid-cols-1 grid-md-cols-3</code> have one column on a phone, and the same as before from the breakpoint on.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:components</code> counts the columns of six combinations on a phone, a tablet and a desktop.</li>
+                  <li><strong>Safe to remove:</strong> if you forced phone columns with your own CSS or with <code>.grid-auto</code>, you can go back to <code>grid-cols-2</code>. <strong>Check after updating:</strong> a phone, wherever <code>grid-cols-2</code> or more stands next to <code>grid-md-cols-*</code> or <code>grid-lg-cols-*</code>. There was one column there until now; there will be as many as you wrote.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.47 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

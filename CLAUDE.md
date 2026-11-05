@@ -201,6 +201,12 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   gdy tor może zawierać cokolwiek o nieprzewidywalnej szerokości
   wewnętrznej (tabela, długa etykieta, pigułka zakładek). Naprawione w
   `.admin-layout` (v1.7.13) i `.tabs-pill` - sprawdź oba jako wzorzec.
+- **Domyślna jedna kolumna przegrywa z `.grid-cols-*`** (v1.7.48). Reguła
+  `[class*="grid-md-cols-"]` stała po `.grid-cols-N` i ważyła tyle samo, więc
+  `grid-cols-2 grid-md-cols-4` dawało jedną kolumnę na telefonie, bez błędu. Warunek
+  siedzi w `:where(:not(...))`, bo zwykłe `:not()` podnosi wagę i ten domyślny układ
+  pokonałby media query: `grid-md-cols-4` miałby jedną kolumnę także na komputerze.
+  Pilnuje tego `npm run test:components` na trzech szerokościach.
 - **Klasa, która ma zmienić kierunek flexa, musi leżeć w `utilities`.**
   Warstwa `layout` przegrywa z `components`, więc `.flex-row` obok
   `.flex-column` w `_layout.scss` nic by nie zrobił na `.card-body`, po cichu.

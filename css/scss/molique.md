@@ -36,7 +36,9 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   do `12` (patrz Złota Zasada Grida wyżej). Warianty responsywne
   `.grid-md-cols-*` i `.grid-lg-cols-*` są **domyślnie siatką jednokolumnową
   poniżej swojego progu**, więc `class="grid-md-cols-12"` wystarczy -
-  dopisywanie `grid-cols-1` nic nie zmienia.
+  dopisywanie `grid-cols-1` nic nie zmienia. Inna liczba kolumn na telefonie:
+  `grid-cols-2 grid-md-cols-4` (od 1.7.48; wcześniej `grid-md-cols-*` po cichu
+  ją kasował i na telefonie była jedna kolumna).
 - **Offsety (Grid):** `.col-start-1` do `12` LUB klasyczne `.offset-1`
   do `11` (oraz warianty `-md-`, `-lg-`). Przesuwanie elementów w siatce.
 - **Flexbox:** `.d-flex`, `.flex-column`, `.align-items-center`,

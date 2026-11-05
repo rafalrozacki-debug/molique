@@ -459,9 +459,9 @@ export const CATEGORIES = [
         id: 'grid-cols-1',
         classes: [['.grid-cols-1', '..', '-12'], ['.grid-md-cols-1', '..', '-12'], ['.grid-lg-cols-1', '..', '-12']],
         desc: {
-          pl: 'Sztywne siatki. Wymuszają konkretną liczbę kolumn na elemencie nadrzędnym (globalnie lub od breakpointu MD).',
-          en: 'Rigid grids. Force a specific column count on the parent element (globally or from the MD breakpoint on).',
-          de: 'Starre Raster. Erzwingen eine feste Spaltenzahl am Elternelement (global oder ab dem MD-Breakpoint).',
+          pl: 'Sztywne siatki. Wymuszają konkretną liczbę kolumn na elemencie nadrzędnym (globalnie lub od breakpointu MD). Można je łączyć: <code>grid-cols-2 grid-md-cols-4</code> daje dwie kolumny na telefonie i cztery od MD.',
+          en: 'Rigid grids. Force a specific column count on the parent element (globally or from the MD breakpoint on). They combine: <code>grid-cols-2 grid-md-cols-4</code> gives two columns on a phone and four from MD.',
+          de: 'Starre Raster. Erzwingen eine feste Spaltenzahl am Elternelement (global oder ab dem MD-Breakpoint). Sie lassen sich kombinieren: <code>grid-cols-2 grid-md-cols-4</code> ergibt zwei Spalten auf dem Smartphone und vier ab MD.',
         },
         demo: '-',
         tags: ['responsive'],

@@ -67,9 +67,15 @@ $grid-columns: 12;
    win once the breakpoint is reached.
 
    Applies to both breakpoints - including .grid-lg-cols-*, which has
-   its own counterpart here for children (.col-lg-span-*, .offset-lg-*). */
-[class*="grid-md-cols-"],
-[class*="grid-lg-cols-"] {
+   its own counterpart here for children (.col-lg-span-*, .offset-lg-*).
+
+   Only when no .grid-cols-* says otherwise: this rule weighs the same and comes
+   later, so up to 1.7.47 it silently cancelled the phone layout of
+   "grid-cols-2 grid-md-cols-4". The condition sits in :where() on purpose. A
+   plain :not() would add weight, and then this default would beat the media
+   queries below and leave every grid single-column on a desktop too. */
+[class*="grid-md-cols-"]:where(:not([class*="grid-cols-"])),
+[class*="grid-lg-cols-"]:where(:not([class*="grid-cols-"])) {
   display: grid;
   grid-template-columns: 1fr;
 }

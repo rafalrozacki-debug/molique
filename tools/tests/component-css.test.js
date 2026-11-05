@@ -99,6 +99,12 @@ const PAGE = `<!doctype html><html lang="en"><head><style>${CSS}</style></head><
 <label class="form-switch"><input id="sw" type="checkbox" class="form-switch-input"><span class="form-switch-label">Timed</span></label>
 <div id="opens" class="grid-expand"><div class="grid-expand-inner"><p>Hours</p></div></div>
 <div id="closes" class="grid-expand grid-expand-unchecked"><div class="grid-expand-inner"><p>All day</p></div></div>
+<div id="grid-2-4" class="grid-cols-2 grid-md-cols-4 gap-2"><i>a</i><i>b</i></div>
+<div id="grid-reversed" class="grid-md-cols-4 grid-cols-2 gap-2"><i>a</i><i>b</i></div>
+<div id="grid-alone" class="grid-md-cols-4 gap-2"><i>a</i><i>b</i></div>
+<div id="grid-1-3" class="grid-cols-1 grid-md-cols-3 gap-2"><i>a</i><i>b</i></div>
+<div id="grid-2-lg" class="grid-cols-2 grid-lg-cols-4 gap-2"><i>a</i><i>b</i></div>
+<div id="grid-md-lg" class="grid-md-cols-2 grid-lg-cols-4 gap-2"><i>a</i><i>b</i></div>
 <section><div id="no-switch" class="grid-expand grid-expand-unchecked"><div class="grid-expand-inner"><p>Open</p></div></div></section>
 </body></html>`;
 
@@ -117,6 +123,32 @@ const dividerShown = async (sel) =>
 
 try {
   await page.setContent(PAGE);
+
+  /* ---------- fixed grids: how many columns at which width ---------- */
+  // The default of a responsive grid is one column below its breakpoint, and that
+  // rule used to win over .grid-cols-* next to it, so the phone layout someone
+  // asked for was silently dropped. It must lose to it and still lose to the
+  // media queries: both directions are checked, the second is the easy one to break.
+  const columns = (sel) =>
+    page.evaluate((s) => getComputedStyle(document.querySelector(s)).gridTemplateColumns.split(' ').length, sel);
+  const GRIDS = [
+    ['#grid-2-4', 'grid-cols-2 grid-md-cols-4', [2, 4, 4]],
+    ['#grid-reversed', 'the same in the other order', [2, 4, 4]],
+    ['#grid-alone', 'grid-md-cols-4 alone', [1, 4, 4]],
+    ['#grid-1-3', 'grid-cols-1 grid-md-cols-3', [1, 3, 3]],
+    ['#grid-2-lg', 'grid-cols-2 grid-lg-cols-4', [2, 2, 4]],
+    ['#grid-md-lg', 'grid-md-cols-2 grid-lg-cols-4', [1, 2, 4]],
+  ];
+  for (const [width, index, label] of [[390, 0, 'phone'], [800, 1, 'tablet'], [1200, 2, 'desktop']]) {
+    await page.setViewportSize({ width, height: 800 });
+    for (const [sel, name, expected] of GRIDS) {
+      const got = await columns(sel);
+      check(`grid on a ${label}: ${name} has ${expected[index]} column(s)`, got === expected[index], String(got));
+    }
+  }
+  await page.setViewportSize({ width: 390, height: 800 });
+  check('a responsive grid alone is a grid on a phone, so gap works', (await style('#grid-alone', 'display')) === 'grid');
+  await page.setViewportSize({ width: 1200, height: 800 });
 
   /* ---------- tabs ---------- */
   const row = await rect('#switcher');

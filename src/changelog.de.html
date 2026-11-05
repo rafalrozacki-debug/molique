@@ -48,6 +48,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.48 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.48</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  <code>grid-cols-2 grid-md-cols-4</code> hat zwei Spalten auf dem Smartphone
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Ein Smartphone-Layout neben einer responsiven Klasse wurde still verworfen: Das Raster hatte eine Spalte, ohne jeden Fehler.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Was falsch war.</strong> Unterhalb ihres Breakpoints sind <code>.grid-md-cols-*</code> und <code>.grid-lg-cols-*</code> standardmäßig einspaltig. Diese Regel stand im Stylesheet nach <code>.grid-cols-*</code> und wog gleich viel, sie gewann also, und <code>grid-cols-2</code> bewirkte nichts. Der einspaltige Standard gilt jetzt nur noch, wenn daneben kein <code>.grid-cols-*</code> steht.</li>
+                  <li><strong>Unverändert:</strong> <code>grid-md-cols-4</code> allein und <code>grid-cols-1 grid-md-cols-3</code> haben auf dem Smartphone eine Spalte und ab dem Breakpoint so viele wie bisher.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:components</code> zählt die Spalten von sechs Kombinationen auf Smartphone, Tablet und Desktop.</li>
+                  <li><strong>Kann entfernt werden:</strong> Wer Spalten auf dem Smartphone mit eigenem CSS oder <code>.grid-auto</code> erzwungen hat, kann zu <code>grid-cols-2</code> zurückkehren. <strong>Nach dem Update prüfen:</strong> das Smartphone überall dort, wo neben <code>grid-md-cols-*</code> oder <code>grid-lg-cols-*</code> ein <code>grid-cols-2</code> oder mehr steht. Bisher war dort eine Spalte, jetzt so viele wie angegeben.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.47 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

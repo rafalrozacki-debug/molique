@@ -47,6 +47,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.48 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.48</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Poprawka</span>
+                  <code>grid-cols-2 grid-md-cols-4</code> ma dwie kolumny na telefonie
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Układ na telefonie wpisany obok klasy responsywnej był po cichu kasowany: siatka miała jedną kolumnę, bez żadnego błędu.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Co było nie tak.</strong> <code>.grid-md-cols-*</code> i <code>.grid-lg-cols-*</code> są poniżej swojego progu domyślnie siatką jednokolumnową. Ta reguła stała w arkuszu po <code>.grid-cols-*</code> i ważyła tyle samo, więc wygrywała i <code>grid-cols-2</code> nic nie robiło. Teraz domyślna jedna kolumna działa tylko wtedy, gdy obok nie ma <code>.grid-cols-*</code>.</li>
+                  <li><strong>Bez zmian:</strong> samo <code>grid-md-cols-4</code> i <code>grid-cols-1 grid-md-cols-3</code> mają na telefonie jedną kolumnę, a od progu tyle co dotąd.</li>
+                  <li><strong>Testy.</strong> <code>npm run test:components</code> liczy kolumny sześciu kombinacji na telefonie, tablecie i komputerze.</li>
+                  <li><strong>Do zdjęcia:</strong> jeśli wymuszałeś kolumny na telefonie własnym CSS-em albo przez <code>.grid-auto</code>, możesz wrócić do <code>grid-cols-2</code>. <strong>Po aktualizacji sprawdź:</strong> telefon wszędzie tam, gdzie obok klasy <code>grid-md-cols-*</code> albo <code>grid-lg-cols-*</code> stoi <code>grid-cols-2</code> lub więcej. Dotąd była tam jedna kolumna, teraz będzie tyle, ile wpisano.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.47 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
