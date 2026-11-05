@@ -16,18 +16,56 @@
  * the DOM AFTER the page loads (e.g. a calendar streaming in a client
  * list via AJAX) - without this, the module would need to be manually
  * re-initialized after every such change.
+ *
+ * Also filters the search field of .custom-select. Keyboard and ARIA of both live
+ * in molique-combobox.js.
  */
-document.addEventListener('input', (e) => {
-  const searchInput = e.target.closest('.select-search-input');
-  if (!searchInput) return;
 
-  const select = searchInput.closest('.select-search');
-  if (!select) return;
+// Called at event time, so it does not matter which of the two modules loaded first.
+const selectSearchNormalize = (value) =>
+  window.MoliqueCombobox ? window.MoliqueCombobox.normalize(value) : String(value).toLowerCase();
 
-  const term = searchInput.value.toLowerCase();
+function filterSelectSearch(select, value) {
+  const term = selectSearchNormalize(value);
   select.querySelectorAll('.select-search-option').forEach(option => {
-    option.classList.toggle('is-hidden', !option.textContent.toLowerCase().includes(term));
+    option.classList.toggle('is-hidden', !selectSearchNormalize(option.textContent).includes(term));
   });
+}
+
+// Goes through the rows in order, so a category heading stays only while
+// something below it does.
+function filterCustomSelect(select, value) {
+  const term = selectSearchNormalize(value);
+  let heading = null;
+  let headingUsed = false;
+  const closeHeading = () => {
+    if (heading) heading.hidden = !headingUsed;
+  };
+  select.querySelectorAll('.custom-select-category, .custom-select-option').forEach(row => {
+    if (row.classList.contains('custom-select-category')) {
+      closeHeading();
+      heading = row;
+      headingUsed = false;
+      return;
+    }
+    row.hidden = !selectSearchNormalize(row.textContent).includes(term);
+    if (!row.hidden) headingUsed = true;
+  });
+  closeHeading();
+}
+
+document.addEventListener('input', (e) => {
+  if (!e.target.closest) return;
+  const searchInput = e.target.closest('.select-search-input');
+  if (searchInput) {
+    const select = searchInput.closest('.select-search');
+    if (!select) return;
+    filterSelectSearch(select, searchInput.value);
+    if (window.MoliqueCombobox) window.MoliqueCombobox.refresh(searchInput, { restart: true });
+    return;
+  }
+  const customField = e.target.closest('.custom-select-search input');
+  if (customField) filterCustomSelect(customField.closest('.custom-select'), customField.value);
 });
 
 document.addEventListener('click', (e) => {
@@ -71,11 +109,20 @@ document.addEventListener('click', (e) => {
 // toggle event doesn't bubble, so delegation requires the capture phase.
 document.addEventListener('toggle', (e) => {
   const menu = e.target;
-  if (!menu.classList || !menu.classList.contains('select-search-menu')) return;
-  if (e.newState !== 'open') return;
+  if (!menu.classList) return;
+  const isSelect = menu.classList.contains('select-search-menu');
+  if (!isSelect && !menu.classList.contains('custom-select-dropdown')) return;
 
-  const searchInput = menu.querySelector('.select-search-input');
-  if (searchInput) searchInput.focus({ preventScroll: true });
+  const searchInput = menu.querySelector(isSelect ? '.select-search-input' : '.custom-select-search input');
+  if (!searchInput) return;
+  if (e.newState === 'open') {
+    searchInput.focus({ preventScroll: true });
+    return;
+  }
+  // A filter left behind would hide options the next time the menu opens.
+  searchInput.value = '';
+  if (isSelect) filterSelectSearch(menu.closest('.select-search'), '');
+  else filterCustomSelect(menu.closest('.custom-select'), '');
 }, true);
 
 // The old <details> markup (no [popover] attribute on the menu) has no

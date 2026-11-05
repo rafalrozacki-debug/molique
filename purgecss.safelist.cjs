@@ -3,7 +3,7 @@
  *
  * AUTO-GENERATED FILE - do not edit by hand.
  * Source: tools/gen-safelist.js   |   Regenerate with: node tools/gen-safelist.js
- * Generated: 2026-11-03
+ * Generated: 2026-11-05
  *
  * WHY THIS EXISTS: some molique classes never appear in the HTML - they're
  * added by JS at runtime (states, carousel/lightbox/toast markup).
@@ -32,11 +32,27 @@ const runtime = {
     'btn-outline-secondary',
     'btn-primary',
     'btn-sm',
+    'card',
     'carousel-bg-sync',
     'carousel-dot',
     'carousel-dots',
+    'command-palette',
+    'command-palette-close',
+    'command-palette-empty',
+    'command-palette-group',
+    'command-palette-group-label',
+    'command-palette-header',
+    'command-palette-input',
+    'command-palette-item',
+    'command-palette-item-label',
+    'command-palette-item-meta',
+    'command-palette-list',
+    'command-palette-remote',
+    'custom-select-category',
+    'custom-select-dropdown',
     'file-upload-name',
     'fw-bold',
+    'grid-auto',
     'icon',
     'icon-anim',
     'icon-anim-play',
@@ -78,6 +94,7 @@ const runtime = {
     'sidebar-sm',
     'sortable-announcer',
     'sortable-item',
+    'sr-only',
     'status-danger',
     'status-done',
     'status-pending',
@@ -112,6 +129,7 @@ const runtime = {
     'tour-tooltip-desc',
     'tour-tooltip-footer',
     'tour-tooltip-title',
+    'w-100',
   ],
   // molique's state-class convention. A pattern instead of a literal list,
   // since it also protects classes toggled by YOUR OWN code (e.g.

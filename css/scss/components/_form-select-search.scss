@@ -130,6 +130,13 @@
   
   &:hover { background-color: var(--card-bg-subtle); }
   &.is-hidden { display: none !important; }
+  /* The highlight from the keyboard: focus stays in the field, so :focus-visible
+     never lands here and this is the only sign of where you are. */
+  &.is-active {
+    background-color: var(--card-bg-subtle);
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: calc(var(--focus-ring-width) * -1);
+  }
   &.is-selected {
     background-color: rgba(var(--primary-rgb), 0.1);
     color: var(--primary);

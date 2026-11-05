@@ -295,6 +295,7 @@ export const INPUT = {
   '--footer-accent-hover':   ['Nawigacja', 'Jaśniejszy wariant <code>--footer-accent</code> dla stanu hover przycisku „więcej” w stopce.'],
   '--admin-main-padding':    ['Panel admina', 'Margines wewnętrzny <code>.admin-main</code> poza dołem, od 769 px. Ustaw na <code>:root</code>.'],
   '--admin-main-padding-mobile': ['Panel admina', 'To samo do 768 px, domyślnie 12 px. Dolny margines zostaje większy, bo leży nad nim pasek nawigacji.'],
+  '--command-palette-width': ['Nawigacja', 'Szerokość <code>.command-palette</code>, domyślnie 640px. Na telefonie paleta zajmuje cały ekran (od 1.7.42).'],
   '--dropdown-max-height':   ['Nawigacja', 'Limit wysokości <code>.dropdown-menu[popover]</code>, domyślnie <code>45dvh</code>. Dłuższa lista przewija się w środku (od 1.7.41).'],
   '--tooltip-max-width':     ['Tooltips', 'Szerokość, przy której zawija się tekst dymku <code>.tooltip-element</code> (od 1.7.34 każdego, nie tylko <code>-wide</code>) i <code>.tooltip-popover</code>, domyślnie 280px. Ogranicznik <code>min(…, 100vw - 2rem)</code> zostaje, więc szerszy dymek nie wyjdzie poza wąski ekran. Ustaw na <code>:root</code> albo przez <code>style=""</code>: przy <code>.tooltip-element</code> na wyzwalaczu, przy <code>.tooltip-popover</code> na samym dymku (dziedziczy po swoim miejscu w drzewie, nie po wyzwalaczu).'],
   '--icon-anim-delay':       ['Animowane ikony', 'Opóźnienie startu animacji ikony, domyślnie <code>0s</code>. Dziedziczy się: ustaw na ikonie albo na przodku.'],

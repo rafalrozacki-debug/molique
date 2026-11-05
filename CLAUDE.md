@@ -211,6 +211,19 @@ naraz (ten sam katalog roboczy). Konsekwencje:
   uruchamia (jak przewodnik), dostaje `atStartOnly: true`, inaczej odpali go
   fragment z AJAX-a. Testy z własną makietą przeglądarki (`toast.test.js`) muszą
   mieć stub `MutationObserver`.
+- **Moduły ładują się w dowolnej kolejności.** Autoloader wstawia je
+  dynamicznie, więc `molique-select.js` i `molique-combobox.js` mogą przyjść
+  w obu porządkach. Stąd API drugiego modułu wołaj w chwili zdarzenia, z warunkiem
+  (`window.MoliqueCombobox?`), a nie przy ładowaniu. Integrator nie powinien czekać
+  na moduł: dane z serwera idą przez zdarzenie (`command:search`, `sortable:update`),
+  które można podpiąć zawsze.
+- **Klawiatura listy: dwa wzorce, nie jeden** (`molique-combobox.js`). Combobox
+  (`aria-activedescendant`, fokus w polu) dla `.select-search` i `.command-palette`.
+  `.custom-select` ma prawdziwe checkboxy, więc strzałki przenoszą fokus, a rola
+  `option` by je zepsuła. Nowe zapytanie wraca na górę listy (`restart`), ale wyniki
+  dochodzące z serwera nie mogą ruszać podświetlenia. Testując, używaj markupu
+  z dokumentacji: `.select-search-option` to `<div>`, a pomiar na `<button>` pokazał
+  obsługę Tabem, której w prawdziwym markupie nie ma.
 - **Moduł `icon-anim` (od v1.7.38): presety ustawiają TYLKO zmienne.**
   `--_icon-anim-name`/`-duration`/`-easing` (cała ikona) i
   `--_icon-anim-part-*` (części) czytają dwie reguły wyzwalaczy na końcu

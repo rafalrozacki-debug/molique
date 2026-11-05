@@ -2884,6 +2884,18 @@ export const CATEGORIES = [
         tags: ['nav', 'menu', 'zerojs'],
       },
       {
+        id: 'command-palette',
+        classes: [['.command-palette'], ['.command-palette-header', '.command-palette-input'], ['.command-palette-list', '.command-palette-remote'], ['.command-palette-group', '.command-palette-group-label'], ['.command-palette-item', '.command-palette-item-label', '.command-palette-item-meta'], ['.command-palette-empty', '.command-palette-footer', '.command-palette-close']],
+        desc: {
+          pl: 'Paleta poleceń: pole wyszukiwania z listą wyników w natywnym <code>&lt;dialog&gt;</code>. Klawiatura i ARIA działają same, skrót Ctrl/Cmd+K jest opcjonalny, wyniki z serwera przychodzą przez zdarzenie <code>command:search</code>.',
+          en: 'A command palette: a search field with a list of results in a native <code>&lt;dialog&gt;</code>. Keyboard and ARIA work by themselves, the Ctrl/Cmd+K shortcut is optional, and server results come through the <code>command:search</code> event.',
+          de: 'Eine Befehlspalette: ein Suchfeld mit Ergebnisliste in einem nativen <code>&lt;dialog&gt;</code>. Tastatur und ARIA funktionieren von selbst, das Kürzel Strg/Cmd+K ist optional, und Serverergebnisse kommen über das Event <code>command:search</code>.',
+        },
+        demo: '-',
+        tags: ['menu', 'modal', 'form', 'a11y'],
+        source: 'docs-command-palette',
+      },
+      {
         id: 'dropdown-header',
         classes: [['.dropdown-header']],
         desc: {

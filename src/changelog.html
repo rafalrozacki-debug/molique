@@ -47,6 +47,41 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.42 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.42</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Paleta poleceń i klawiatura w selectach
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Pole z listą wyników i pełną obsługą klawiatury. Ta sama warstwa naprawia <code>.select-search</code> i <code>.custom-select</code>, które z klawiatury nie działały.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><a href="docs-command-palette"><code>.command-palette</code></a>.</strong> Pole wyszukiwania z listą wyników w natywnym <code>&lt;dialog&gt;</code>: grupy, puste stany, pełny ekran na telefonie z przyciskiem zamykania, skrót Ctrl/Cmd+K (opcjonalny). Pozycje z HTML filtrują się bez polskich znaków i po rdzeniach z <code>data-tags</code>.</li>
+                  <li><strong>Wyniki z serwera: zdarzenie <code>command:search</code>.</strong> Twój kod odpowiada przez <code>e.detail.respond()</code>, tablicą albo Promise. Nasłuch można podpiąć w dowolnej chwili, także przed załadowaniem modułu. Stare zapytania są przerywane, spóźnione odpowiedzi ignorowane, a wyniki trafiają na stronę jako tekst, więc nazwa rekordu nie wykona kodu. Dla wyszukiwania globalnego w panelu to punkt zaczepienia: endpoint i uprawnienia są po stronie projektu.</li>
+                  <li><strong><code>.select-search</code>: klawiatura i ARIA.</strong> Opcje to zwykłe <code>&lt;div&gt;</code>, więc z klawiatury nie dało się ich wybrać, a mimo nazwy „combobox” komponent nie miał żadnych atrybutów ARIA. Teraz działają strzałki, Home/End, Enter, Esc i Tab, także bez pola szukania. Markup bez zmian.</li>
+                  <li><strong>Enter w polu <code>.select-search-input</code> nie wysyła formularza.</strong> Wcześniej select stojący w <code>&lt;form&gt;</code> wysyłał cały formularz przy Enterze w polu szukania.</li>
+                  <li><strong><code>.custom-select-search</code> filtruje.</strong> Pole było tylko wyglądem: żaden kod go nie czytał, więc wpisywanie nic nie zmieniało. Teraz filtruje opcje i chowa kategorie bez trafień, a strzałki przenoszą fokus między checkboxami, które zostają natywne.</li>
+                  <li><strong>Szukanie bez polskich znaków.</strong> W obu selectach „lodz” znajduje Łódź. Filtr znika po zamknięciu menu, więc kolejne otwarcie pokazuje wszystkie opcje.</li>
+                  <li><strong>Autoloader.</strong> Doszły moduły <code>molique-combobox.js</code> i <code>molique-command-palette.js</code>, a <code>molique-select.js</code> ładuje się też przy samym <code>.custom-select</code>. Skopiuj cały folder <code>js/modules/</code>.</li>
+                  <li><strong>Do zdjęcia:</strong> nic, własnych obejść klawiatury nie było. <strong>Po aktualizacji sprawdź:</strong> formularze, w których ktoś liczył na wysłanie Enterem z pola select-search.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.41 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

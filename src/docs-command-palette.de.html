@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <include src="partials/head.html" locals='{"title":"Befehlspalette - molique Docs","description":"Die molique-Befehlspalette: ein Suchfeld mit Ergebnisliste in einem nativen Dialog, Tastatur und ARIA, Serverergebnisse über ein Event, das Kürzel Strg+K."}'></include>
+    <link rel="stylesheet" href="css/molique-style-admin.css?v={{ __version }}" />
+    <link rel="stylesheet" href="css/molique-style-docs.css?v={{ __version }}" />
+  </head>
+  <body>
+<include src="partials/navbar.de.html"></include>
+    <div class="admin-layout admin-layout-floating">
+      <!-- PASEK BOCZNY -->
+      <include src="partials/docs-sidebar.de.html"></include>
+
+      <!-- GŁÓWNA TREŚĆ -->
+      <main class="admin-main">
+        <div class="docs-content-wrapper">
+          <div class="mb-5 pb-4 border-bottom">
+            <h1 class="text-11 fw-black mb-3">Befehlspalette</h1>
+            <p class="text-6 text-muted">
+              Ein Suchfeld mit Ergebnisliste, geöffnet über einen Button oder ein Kürzel. Zu einer Seite springen, eine Aktion ausführen, einen Datensatz finden, ohne sich durch Menüs zu klicken. Sie steht auf einem nativen <code>&lt;dialog&gt;</code>, die Ebene über der Seite, die Fokusfalle und Esc kommen also vom Browser.
+            </p>
+          </div>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">1. Ausprobieren</h2>
+            <p class="text-muted mb-4">
+              Öffne sie mit dem Button oder <kbd>Strg</kbd> + <kbd>K</kbd>. Tippe „Auftragnehmer”, und ein Tag findet die Seite. Tippe „ko”, und kurz darauf kommen Ergebnisse, die eine Serverantwort spielen.
+            </p>
+            <div class="component-showcase mb-4">
+              <div class="component-preview w-100 justify-content-center py-5">
+                <button type="button" class="btn-primary" data-command-palette-open="#demoPalette">
+                  <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-magnifying-glass"></use></svg>
+                  Palette öffnen
+                </button>
+              </div>
+            </div>
+            <dialog class="command-palette" id="demoPalette" aria-label="Suchen" data-command-palette-hotkey="k">
+              <div class="command-palette-header">
+                <svg class="icon" aria-hidden="true"><use href="img/icons-sprite.svg#ph-magnifying-glass"></use></svg>
+                <input class="command-palette-input" placeholder="Seite, Aktion oder Kunde suchen...">
+              </div>
+              <div class="command-palette-list">
+                <div class="command-palette-group">
+                  <div class="command-palette-group-label">Dokumentation</div>
+                  <a class="command-palette-item" href="docs-buttons.de" data-tags="button label">
+                    <span class="command-palette-item-label">Buttons und Badges</span>
+                    <span class="command-palette-item-meta">Komponenten</span>
+                  </a>
+                  <a class="command-palette-item" href="docs-tables.de" data-tags="zeile liste">
+                    <span class="command-palette-item-label">Tabellen</span>
+                    <span class="command-palette-item-meta">Komponenten</span>
+                  </a>
+                  <a class="command-palette-item" href="docs-select.de" data-tags="auswahl liste formular">
+                    <span class="command-palette-item-label">Searchable Select</span>
+                    <span class="command-palette-item-meta">Formulare</span>
+                  </a>
+                  <a class="command-palette-item" href="docs-admin.de" data-tags="sidebar auftragnehmer kunde">
+                    <span class="command-palette-item-label">Admin-Panel</span>
+                    <span class="command-palette-item-meta">Layout</span>
+                  </a>
+                </div>
+                <div class="command-palette-group">
+                  <div class="command-palette-group-label">Aktionen</div>
+                  <button class="command-palette-item" type="button" data-value="theme" data-tags="dunkel hell">
+                    <span class="command-palette-item-label">Zwischen hellem und dunklem Theme wechseln</span>
+                  </button>
+                </div>
+              </div>
+              <div class="command-palette-footer">
+                <span><kbd>↑</kbd> <kbd>↓</kbd> bewegen</span>
+                <span><kbd>Enter</kbd> wählen</span>
+                <span><kbd>Esc</kbd> schließen</span>
+              </div>
+            </dialog>
+          </section>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">2. Markup</h2>
+            <p class="text-muted mb-4">
+              Einträge im HTML werden direkt gefiltert: ohne Diakritika, nach sichtbarem Text und nach den Wortstämmen in <code>data-tags</code>. Ein Eintrag ist ein Link oder ein Button, beide sehen gleich aus.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;button data-command-palette-open="#palette"&gt;Suchen&lt;/button&gt;
+
+&lt;dialog class="command-palette" id="palette" aria-label="Suchen"
+        data-command-palette-hotkey="k"&gt;
+  &lt;div class="command-palette-header"&gt;
+    &lt;input class="command-palette-input" placeholder="Suchen..."&gt;
+  &lt;/div&gt;
+  &lt;div class="command-palette-list"&gt;
+    &lt;div class="command-palette-group"&gt;
+      &lt;div class="command-palette-group-label"&gt;Seiten&lt;/div&gt;
+      &lt;a class="command-palette-item" href="/clients" data-tags="auftrag firm"&gt;Kunden&lt;/a&gt;
+      &lt;button class="command-palette-item" type="button" data-value="new"&gt;Neuer Auftrag&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;</code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">3. Klassen</h2>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette</code></td>
+                    <td data-label="Was sie macht">An einem <code>&lt;dialog&gt;</code>. Breite: <code>--command-palette-width</code> (640px). Füllt auf dem Handy den ganzen Bildschirm.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-header</code></td>
+                    <td data-label="Was sie macht">Die Zeile mit Icon und Feld.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-input</code></td>
+                    <td data-label="Was sie macht">Das Feld. Die Rolle <code>combobox</code> und die Verbindung zur Liste setzt das Skript.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-list</code></td>
+                    <td data-label="Was sie macht">Die scrollbare Ergebnisliste.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-group</code></td>
+                    <td data-label="Was sie macht">Eine Gruppe von Einträgen. Verschwindet, wenn nichts darin passt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-group-label</code></td>
+                    <td data-label="Was sie macht">Die Gruppenüberschrift.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-item</code></td>
+                    <td data-label="Was sie macht">Ein Eintrag: <code>&lt;a&gt;</code> oder <code>&lt;button&gt;</code>. <code>data-tags</code> enthält Suchstämme, <code>data-value</code> landet im Event.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-item-label</code></td>
+                    <td data-label="Was sie macht">Der Haupttext eines Eintrags, mit Auslassungspunkten gekürzt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-item-meta</code></td>
+                    <td data-label="Was sie macht">Ein Zusatz rechts: Steuernummer, Abteilung, Kürzel.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-footer</code></td>
+                    <td data-label="Was sie macht">Eine optionale Leiste mit Tastenhinweisen. Verschwindet auf Touchscreens.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-close</code></td>
+                    <td data-label="Was sie macht">Der Schließen-Button. Erstellt das Skript, sichtbar nur auf Touchscreens und bis 768 px, wo es weder Esc noch einen Hintergrund zum Antippen gibt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-empty</code></td>
+                    <td data-label="Was sie macht">Die Meldung für den leeren Zustand, das Warten und Fehler. Erstellt das Skript.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.command-palette-remote</code></td>
+                    <td data-label="Was sie macht">Der Container für Serverergebnisse. Erstellt das Skript.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">4. Ergebnisse vom Server</h2>
+            <p class="text-muted mb-4">
+              molique hat kein Backend, die Anfrage sendet also dein Code. Ergebnisse kommen über ein Event, nicht über eine Funktion: Das Modul lädt asynchron, und der Listener kann jederzeit dazukommen, auch bevor das Modul da ist.
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>// ein Ergebnis: { label, href?, meta?, group?, value? }
+document.addEventListener('command:search', (e) =&gt; {
+  const { query, signal, respond } = e.detail;
+  respond(
+    fetch('/api/search?q=' + encodeURIComponent(query), { signal })
+      .then((response) =&gt; response.json())
+  );
+});</code></pre>
+            </div>
+            <ul class="text-muted mb-4">
+              <li><code>respond()</code> nimmt ein Array oder ein Promise. <code>signal</code> bricht die Anfrage ab, wenn jemand weitertippt, und eine verspätete Antwort auf eine ältere Anfrage wird ignoriert.</li>
+              <li>Alles landet als Text auf der Seite, ein Datensatz namens <code>&lt;img onerror=...&gt;</code> bleibt also ein Name. Eine andere Adresse als <code>http(s)</code> wird verworfen, und der Eintrag wird zum Button ohne Link.</li>
+              <li><strong>Berechtigungen prüft der Server.</strong> Die Palette zeigt, was sie bekommt.</li>
+            </ul>
+            <p class="text-muted mb-3">
+              Die Wahl eines Eintrags löst <code>command:select</code> aus. <code>preventDefault()</code> verhindert, dass dem Link gefolgt wird:
+            </p>
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>document.addEventListener('command:select', (e) =&gt; {
+  if (e.detail.value === 'new') {
+    e.preventDefault();
+    openOrderForm();
+  }
+});</code></pre>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">5. Attribute und API</h2>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Attribut</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">data-command-palette-open="#id"</code></td>
+                    <td data-label="Was sie macht">An jedem Button: öffnet diese Palette.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">data-command-palette-hotkey="k"</code></td>
+                    <td data-label="Was sie macht">Am Dialog: Strg/Cmd + Taste öffnet und schließt. Optional, denn ein Framework sollte keine Tasten belegen. Wirkt nicht in einem <code>contenteditable</code>-Editor und nicht über einem anderen offenen Dialog.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">data-command-palette-min="2"</code></td>
+                    <td data-label="Was sie macht">Ab wie vielen Zeichen der Server gefragt wird.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">data-command-palette-debounce="200"</code></td>
+                    <td data-label="Was sie macht">Wie viele Millisekunden nach dem letzten Zeichen gewartet wird.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">data-command-palette-empty="..."</code></td>
+                    <td data-label="Was sie macht">Eigener Text für den leeren Zustand. Die Vorgabe folgt dem <code>lang</code> des Dokuments (PL/EN/DE).</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Attribut"><code class="fw-bold">MoliqueCommandPalette.open(el)</code></td>
+                    <td data-label="Was sie macht">Öffnet aus dem Code. Dazu <code>.close(el)</code>. Das Modul lädt asynchron, rufe das also nach einem Klick auf, nicht beim Seitenstart.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">6. Tastatur</h2>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Taste</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Taste"><code class="fw-bold">↑ ↓</code></td>
+                    <td data-label="Was sie macht">Bewegung durch die Ergebnisse, mit Umlauf.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Taste"><code class="fw-bold">Pos1, Ende</code></td>
+                    <td data-label="Was sie macht">Erstes und letztes Ergebnis, solange das Feld leer ist. Mit Text im Feld gehören sie dem Cursor.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Taste"><code class="fw-bold">Enter</code></td>
+                    <td data-label="Was sie macht">Wählt den hervorgehobenen Eintrag.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Taste"><code class="fw-bold">Esc</code></td>
+                    <td data-label="Was sie macht">Schließt und gibt den Fokus an das zurück, was die Palette geöffnet hat.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-muted mb-4">
+              Der Fokus bleibt im Feld, Tippen funktioniert also jederzeit, und <code>aria-activedescendant</code> sagt dem Screenreader, welcher Eintrag hervorgehoben ist. Dieselbe Bedienung gilt in <a href="docs-select.de">Searchable Select und Multi Select</a>.
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Fallstricke</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Tags sind Wortstämme, keine Wörter.</h3>
+                <p class="text-4 text-muted m-0">Ein Stamm muss die Beugung abdecken: <code>auftrag</code> findet „Auftrags” und „Aufträgen”.</p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Rufe die API nicht beim Seitenstart auf.</h3>
+                <p class="text-4 text-muted m-0"><code>MoliqueCommandPalette</code> gibt es dann vielleicht noch nicht. Nutze für Ergebnisse das Event und zum Öffnen <code>data-command-palette-open</code>.</p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Eine neue Anfrage springt immer an den Anfang der Liste.</h3>
+                <p class="text-4 text-muted m-0">Enter soll den besten Treffer meinen, nicht eine Position aus der vorherigen Suche. Später eintreffende Ergebnisse stören nicht, was die Pfeiltasten schon erreicht haben.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Verwandte Seiten</h2>
+            <div class="grid-md-cols-3 gap-3">
+              <a href="docs-select.de" class="card hover-shadow">
+                <div class="card-body">
+                  <h3 class="fw-bold text-5 mb-2">Searchable Select</h3>
+                  <p class="text-4 text-muted m-0">Dieselbe Tastatur in Selects.</p>
+                </div>
+              </a>
+              <a href="docs-tables.de" class="card hover-shadow">
+                <div class="card-body">
+                  <h3 class="fw-bold text-5 mb-2">Tabellensuche</h3>
+                  <p class="text-4 text-muted m-0">Zeilen und Karten nach Tags filtern.</p>
+                </div>
+              </a>
+              <a href="docs-onboarding.de" class="card hover-shadow">
+                <div class="card-body">
+                  <h3 class="fw-bold text-5 mb-2">Onboarding</h3>
+                  <p class="text-4 text-muted m-0">Willkommensfolien und eine geführte Tour.</p>
+                </div>
+              </a>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Skrypty -->
+    <script src="js/molique-script.js?v={{ __version }}"></script>
+    <script>
+      // Stands in for a server: in a real project this is a fetch().
+      const demoClients = [
+        { label: 'Kowalski Budownictwo', meta: 'NIP 123-456-32-18', group: 'Klienci', href: '#' },
+        { label: 'Koral Instalacje', meta: 'NIP 765-432-10-98', group: 'Klienci', href: '#' },
+        { label: 'FV 12/2026 Kowalski', meta: '4 920,00 zł', group: 'Faktury', href: '#' },
+      ];
+      document.addEventListener('command:search', (e) => {
+        const { query, respond } = e.detail;
+        const term = query.toLowerCase();
+        respond(new Promise((resolve) => {
+          setTimeout(() => resolve(demoClients.filter((c) => c.label.toLowerCase().includes(term))), 350);
+        }));
+      });
+      document.addEventListener('command:select', (e) => {
+        if (e.detail.value === 'theme') document.getElementById('theme-toggle')?.click();
+        if (e.detail.result) e.preventDefault();
+      });
+    </script>
+  </body>
+</html>

@@ -120,6 +120,27 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   to natywny `<details>`, więc działa z klawiatury i bez JS. Na mobile ta sama
   struktura degraduje się do akordeonu w offcanvas. Atrybut `name` wyklucza
   wzajemnie kilka mega menu w jednym pasku.
+- **Paleta poleceń (od 1.7.42):** `<dialog class="command-palette" id="p"
+  data-command-palette-hotkey="k">` > `.command-palette-header` >
+  `input.command-palette-input` + `.command-palette-list` >
+  `.command-palette-group` (`.command-palette-group-label`) >
+  `a|button.command-palette-item` (`data-tags` to RDZENIE, opcjonalnie
+  `.command-palette-item-label`, `-meta`, `data-value`), opcjonalnie
+  `.command-palette-footer`. Otwieranie: `[data-command-palette-open="#p"]`,
+  Ctrl/Cmd+K tylko z `data-command-palette-hotkey`, z kodu
+  `MoliqueCommandPalette.open(el)`, ale dopiero po kliknięciu, bo moduł
+  ładuje się asynchronicznie. Wyniki z serwera idą przez zdarzenie, nie
+  funkcję: `document.addEventListener('command:search', (e) =>
+  e.detail.respond(fetch(url, { signal: e.detail.signal }).then((r) =>
+  r.json())))`. Wynik to `{ label, href?, meta?, group?, value? }`, trafia
+  na stronę przez `textContent`, a adres inny niż http(s) jest odrzucany.
+  Stare zapytania są przerywane, próg to `data-command-palette-min` (2),
+  opóźnienie `data-command-palette-debounce` (200). Wybór ogłasza
+  `command:select` (`preventDefault()` zatrzymuje link). Uprawnienia
+  sprawdza serwer. Szerokość: `--command-palette-width` (640px), na
+  telefonie pełny ekran.
+  Na ekranie dotykowym skrypt dokłada przycisk `.command-palette-close`, bo tam
+  nie ma Esc ani tła do kliknięcia.
 - **Dropdown (navbar):** `<details class="dropdown">` >
   `<summary class="dropdown-toggle">` + `.dropdown-menu`.
 - **Dropdown Popover (poza navbarem - top layer):** dowolny
@@ -276,10 +297,17 @@ użyj jej. Nie twórz nowych, ad-hoc klas CSS ani nie pisz surowego CSS poza
   do DOM PO starcie strony (np. z AJAX). Na wybór opcji ukryty
   `.select-search-hidden` dostaje `change` (bubbling). Ustawienie z JS:
   `MoliqueSelectSearch.setValue(hiddenInput, value)`.
+  Od 1.7.42 działa z klawiatury bez kodu (`molique-combobox.js`): strzałki,
+  Home/End, Enter, Esc, ARIA, także bez `.select-search-input`. Enter w polu
+  nie wysyła formularza, a szukanie pomija polskie znaki. Opcje mogą zostać
+  `<div>`.
 - **Premium Multi Select (Popover API):** `.custom-select` >
   `<button class="custom-select-trigger" popovertarget="ID">` +
   `.custom-select-dropdown` z atrybutem `popover` i unikalnym `id`
   (z `.custom-select-category` i `.custom-select-option`).
+  Od 1.7.42 pole `.custom-select-search input` naprawdę filtruje opcje i chowa
+  kategorie bez trafień (wcześniej nie robiło nic), a strzałki przenoszą fokus
+  między checkboxami, które zostają natywne.
 - **File Upload:** `.file-upload` (wariant: `.file-upload-animated`) >
   niewidoczny `input[type="file"]` rozciągnięty na całą strefę
   (`position: absolute; opacity: 0`) - klik i przeciągnięcie pliku

@@ -193,6 +193,10 @@ export const DESCRIPTIONS = {
     en: 'Specialized inputs: range, date, color, number.',
     de: 'Spezielle Inputs: Range, Date, Color, Number.',
   },
+  'command-palette': {
+    en: 'Command palette: a search field with a list of results in a native dialog.',
+    de: 'Befehlspalette: ein Suchfeld mit Ergebnisliste in einem nativen Dialog.',
+  },
   'form-select-custom': {
     en: 'Premium Multi Select (categories + multiple selection).',
     de: 'Premium Multi Select (Kategorien + Mehrfachauswahl).',

@@ -48,6 +48,41 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.42 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.42</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Befehlspalette und Tastaturbedienung in Selects
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Ein Feld mit Ergebnisliste und voller Tastaturbedienung. Dieselbe Schicht repariert <code>.select-search</code> und <code>.custom-select</code>, die per Tastatur nicht funktionierten.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><a href="docs-command-palette.de"><code>.command-palette</code></a>.</strong> Ein Suchfeld mit Ergebnisliste in einem nativen <code>&lt;dialog&gt;</code>: Gruppen, leere Zustände, Vollbild auf dem Handy mit Schließen-Button, ein optionales Kürzel Strg/Cmd+K. Einträge im HTML werden ohne Diakritika und nach den Wortstämmen in <code>data-tags</code> gefiltert.</li>
+                  <li><strong>Serverergebnisse: das Event <code>command:search</code>.</strong> Dein Code antwortet über <code>e.detail.respond()</code>, mit einem Array oder einem Promise. Der Listener kann jederzeit dazukommen, auch bevor das Modul lädt. Alte Anfragen werden abgebrochen, verspätete Antworten ignoriert, und Ergebnisse landen als Text auf der Seite, ein Datensatzname kann also keinen Code ausführen. Das ist der Ansatzpunkt für eine globale Suche im Panel: Endpoint und Berechtigungen bleiben beim Projekt.</li>
+                  <li><strong><code>.select-search</code>: Tastatur und ARIA.</strong> Optionen sind einfache <code>&lt;div&gt;</code>-Elemente, ließen sich also nicht per Tastatur wählen, und trotz des Namens „Combobox” hatte die Komponente keinerlei ARIA-Attribute. Jetzt funktionieren Pfeiltasten, Pos1/Ende, Enter, Esc und Tab, auch ohne Suchfeld. Das Markup bleibt gleich.</li>
+                  <li><strong>Enter in <code>.select-search-input</code> sendet das Formular nicht ab.</strong> Ein Select in einem <code>&lt;form&gt;</code> sendete bisher bei Enter im Suchfeld das ganze Formular ab.</li>
+                  <li><strong><code>.custom-select-search</code> filtert.</strong> Das Feld war nur Optik: Kein Code las es, Tippen änderte also nichts. Jetzt filtert es Optionen und blendet Kategorien ohne Treffer aus, und die Pfeiltasten bewegen den Fokus zwischen Checkboxen, die nativ bleiben.</li>
+                  <li><strong>Suche ohne Diakritika.</strong> In beiden Selects findet „lodz” Łódź. Der Filter verschwindet beim Schließen des Menüs, das nächste Öffnen zeigt also alle Optionen.</li>
+                  <li><strong>Autoloader.</strong> <code>molique-combobox.js</code> und <code>molique-command-palette.js</code> sind neu, und <code>molique-select.js</code> lädt auch für ein einzelnes <code>.custom-select</code>. Kopiere den ganzen Ordner <code>js/modules/</code>.</li>
+                  <li><strong>Zu entfernen:</strong> nichts, es gab keine Tastatur-Workarounds. <strong>Nach dem Update prüfen:</strong> Formulare, die sich darauf verließen, dass Enter im Select-Search-Feld sie absendet.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.41 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

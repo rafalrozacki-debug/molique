@@ -48,6 +48,41 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.42 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.42</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Command palette and keyboard support in selects
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  A field with a list of results and full keyboard support. The same layer fixes <code>.select-search</code> and <code>.custom-select</code>, which did not work from a keyboard.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><a href="docs-command-palette.en"><code>.command-palette</code></a>.</strong> A search field with a list of results in a native <code>&lt;dialog&gt;</code>: groups, empty states, full screen on a phone with a close button, an optional Ctrl/Cmd+K shortcut. Items in the HTML are filtered without diacritics and by the stems in <code>data-tags</code>.</li>
+                  <li><strong>Server results: the <code>command:search</code> event.</strong> Your code answers through <code>e.detail.respond()</code>, with an array or a Promise. The listener can go in at any time, even before the module loads. Old queries are aborted, late answers are ignored, and results reach the page as text, so a record name cannot run code. This is the hook for global search in a panel: the endpoint and permissions stay with the project.</li>
+                  <li><strong><code>.select-search</code>: keyboard and ARIA.</strong> Options are plain <code>&lt;div&gt;</code> elements, so they could not be chosen from a keyboard, and despite the “combobox” name the component had no ARIA attributes at all. The arrow keys, Home/End, Enter, Esc and Tab now work, also without a search field. The markup is unchanged.</li>
+                  <li><strong>Enter in <code>.select-search-input</code> does not submit the form.</strong> A select inside a <code>&lt;form&gt;</code> used to submit the whole form on Enter in the search field.</li>
+                  <li><strong><code>.custom-select-search</code> filters.</strong> The field was only a look: no code read it, so typing changed nothing. It now filters options and hides categories with no match, and the arrow keys move focus between checkboxes, which stay native.</li>
+                  <li><strong>Search without diacritics.</strong> In both selects “lodz” finds Łódź. The filter goes away when the menu closes, so the next opening shows every option.</li>
+                  <li><strong>Autoloader.</strong> <code>molique-combobox.js</code> and <code>molique-command-palette.js</code> are new, and <code>molique-select.js</code> also loads for a <code>.custom-select</code> on its own. Copy the whole <code>js/modules/</code> folder.</li>
+                  <li><strong>To remove:</strong> nothing, there were no keyboard workarounds. <strong>Check after updating:</strong> forms that relied on Enter in a select-search field submitting them.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.41 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
