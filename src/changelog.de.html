@@ -48,6 +48,42 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.49 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.49</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Eingabemasken: <code>data-mask</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Ein Attribut auf einem gewöhnlichen <code>.input</code> formatiert das Feld während der Eingabe und setzt das, was am leichtesten vergessen wird: den Ziffernblock auf dem Handy, das Autofill und das Validierungsmuster. Keine neuen Klassen und kein CSS.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Acht fertige Formate.</strong> <code>phone-pl</code>, <code>postal-pl</code>, <code>postal-de</code>, <code>nip-pl</code>, <code>card</code>, <code>card-expiry</code>, <code>iban</code>, <code>nrb-pl</code> - dazu eigene Masken: <code>data-mask="### ##-##"</code> (<code>#</code> Ziffer, <code>A</code> Buchstabe, <code>*</code> Ziffer oder Buchstabe).</li>
+                  <li><strong>Die Kartenmaske kennt Amex.</strong> Karten mit 34 und 37 haben 15 Ziffern als 4-6-5, nicht 16 als 4-4-4-4 - die Maske wechselt von selbst. Vier starre Vierergruppen verloren die letzte Ziffer, und das Symptom war eine abgelehnte Zahlung, kein sichtbarer Fehler.</li>
+                  <li><strong>Einfügen mit Ländervorwahl.</strong> <code>+48 601 234 567</code> in <code>phone-pl</code> eingefügt verliert die Vorwahl, nicht das Ende der Nummer. Die Vorwahl fällt NUR dann weg, wenn sie der einzige Grund für den Überlauf ist - eine neunstellige Nummer, die mit 48 beginnt, bleibt unberührt.</li>
+                  <li><strong>Cursor, Löschen und Rückgängig.</strong> Eine Änderung in der Mitte wirft den Cursor nicht mehr ans Ende. Backspace hinter einem Trennzeichen löscht eine Ziffer und nicht das Leerzeichen, das die Maske sofort wieder einsetzen würde (ohne das wirkt die Taste defekt). Der Wert wird über <code>execCommand</code> geschrieben, dem einzigen Weg, der das browsereigene zeichenweise Rückgängig erhält - gemessen, nicht angenommen.</li>
+                  <li><strong>Nicht auf <code>type="number"</code> oder <code>type="email"</code>.</strong> Diese Typen können keinen Cursor tragen: das Auslesen der Position gibt <code>null</code> zurück, das Setzen wirft eine Ausnahme. Das Modul verweigert laut mit einer Konsolenwarnung, statt den Cursor still auf den Anfang fallen zu lassen. Ein Betrag oder eine Kartennummer ist <code>type="text"</code> mit <code>inputmode="numeric"</code>.</li>
+                  <li><strong>Ohne JS funktioniert das Feld weiter.</strong> Es bleibt ein gewöhnliches <code>.input</code> mit <code>inputmode</code>, <code>autocomplete</code> und <code>pattern</code> - es verliert die Trennzeichen, nicht die Validierung. Jedes Preset-Muster akzeptiert den Wert mit UND ohne Trennzeichen, sonst bekäme ein Nutzer ohne JavaScript, der nur Ziffern tippt, einen falschen Fehler.</li>
+                  <li><strong>Was zum Server geht.</strong> Standardmäßig das, was der Nutzer sieht, also der Wert mit Trennzeichen - ein einfaches <code>&lt;form&gt;</code> funktioniert ohne Zusatzcode. Für den reinen Wert ergänzt <code>data-mask-unmasked-name="name"</code> ein verborgenes Feld.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:mask</code> - 42 Prüfungen in einem echten Browser, jede Falle mit einer Negativkontrolle (ein Feld ohne Maske, eine Nummer, die die Regel nicht anfassen darf). Die Suite lief außerdem gegen 12 Quellcode-Mutationen: jede zerstört genau ein Verhalten, und jede wird erkannt.</li>
+                  <li><strong>Kann entfallen:</strong> wenn Ihr Projekt ein eigenes Skript für Telefon, Steuernummer, Karte oder IBAN mitbringt, können Sie es löschen und <code>data-mask</code> behalten. <strong>Prüfen Sie nach dem Update</strong> die Felder mit einer eigenen Maske - zwei Masken auf einem Feld streiten sich um den Cursor.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.48 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

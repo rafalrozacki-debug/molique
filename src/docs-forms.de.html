@@ -485,10 +485,207 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 6. VARIABLEN                                          -->
+          <!-- 6. MASKIERUNG UND TASTATUR                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">6. Variablen</h2>
+            <h2 class="text-8 fw-bold mb-3">6. Maskierung und Tastatur</h2>
+            <p class="text-muted mb-4">
+              Ein einziges Attribut <code>data-mask</code> formatiert das Feld
+              während der Eingabe und setzt gleich das, was am leichtesten
+              vergessen wird: <code>inputmode</code> (Ziffernblock auf dem
+              Handy), <code>autocomplete</code>, <code>pattern</code> und
+              <code>maxlength</code>. Ohne JavaScript bleibt das Feld ein
+              gewöhnliches <code>.input</code> - es verliert nur die
+              automatischen Trennzeichen, nicht die Validierung.
+            </p>
+
+            <p class="text-4 text-muted mb-2">
+              Die Felder unten sind echt - tippen Sie hinein, fügen Sie eine
+              Nummer mit Leerzeichen ein, bearbeiten Sie die Mitte.
+            </p>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="form-floating">
+                  <input type="text" class="input" id="demo-postal" placeholder=" " data-mask="postal-de" aria-describedby="demo-postal-hint">
+                  <label for="demo-postal">Postleitzahl</label>
+                  <div class="text-4 text-muted mt-1" id="demo-postal-hint">Fünf Ziffern</div>
+                </div>
+                <div class="form-floating">
+                  <input type="tel" class="input" id="demo-phone" placeholder=" " data-mask="phone-pl">
+                  <label for="demo-phone">Telefon (PL)</label>
+                </div>
+                <div class="form-floating">
+                  <input type="text" class="input" id="demo-card" placeholder=" " data-mask="card">
+                  <label for="demo-card">Kartennummer</label>
+                </div>
+                <div class="form-floating">
+                  <input type="text" class="input" id="demo-iban" placeholder=" " data-mask="iban">
+                  <label for="demo-iban">IBAN</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;!-- Preset: die übrigen Attribute ergänzt das Modul --&gt;
+&lt;input type="tel" class="input" data-mask="phone-pl"&gt;
+
+&lt;!-- eigene Maske: # Ziffer, A Buchstabe, * Ziffer oder Buchstabe --&gt;
+&lt;input type="text" class="input" data-mask="### ##-##"&gt;
+
+&lt;!-- der reine Wert (ohne Trennzeichen) in einem zusätzlichen, verborgenen Feld --&gt;
+&lt;input type="text" class="input" data-mask="iban" data-mask-unmasked-name="iban_raw"&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Mitgelieferte Formate</h3>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Preset</th>
+                    <th>Format</th>
+                    <th>Hinweise</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">phone-pl</code></td>
+                    <td data-label="Format"><code>123 456 789</code></td>
+                    <td data-label="Hinweise">Beim Einfügen einer Nummer mit <code>+48</code> oder <code>0048</code> fällt die Vorwahl weg, nicht das Ende der Nummer.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">postal-pl</code></td>
+                    <td data-label="Format"><code>00-950</code></td>
+                    <td data-label="Hinweise">-</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">postal-de</code></td>
+                    <td data-label="Format"><code>10115</code></td>
+                    <td data-label="Hinweise">Ohne Trennzeichen - liefert einen Ziffernfilter und eine Längenbegrenzung, mehr nicht.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">nip-pl</code></td>
+                    <td data-label="Format"><code>123-456-78-90</code></td>
+                    <td data-label="Hinweise">Polnische Steuernummer.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">card</code></td>
+                    <td data-label="Format"><code>4111 1111 1111 1111</code></td>
+                    <td data-label="Hinweise">Die Maske <strong>wechselt selbst</strong> für American Express (Karten mit 34 und 37): 15 Ziffern als 4-6-5.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">card-expiry</code></td>
+                    <td data-label="Format"><code>05/27</code></td>
+                    <td data-label="Hinweise">-</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">iban</code></td>
+                    <td data-label="Format"><code>PL61 1090 1014 ...</code></td>
+                    <td data-label="Hinweise">Nimmt Buchstaben an und setzt sie in Großbuchstaben. Bis 34 Zeichen, Gruppen von vier.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">nrb-pl</code></td>
+                    <td data-label="Format"><code>12 1234 5678 ...</code></td>
+                    <td data-label="Hinweise">Polnische Kontonummer: 26 Ziffern als 2 + sechs Gruppen von vier.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Attribute und API</h3>
+            <p class="text-muted mb-3">
+              Die Methoden unten liegen im globalen Objekt <code>MoliqueMask</code>.
+            </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Element</th>
+                    <th>Rolle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-mask</code></td>
+                    <td data-label="Rolle">Ein Preset-Name oder eine eigene Maske. Auflösung: zuerst ein Preset nach Namen, dann eine literale Maske. Ein Tippfehler im Namen (<code>phone-PL</code>) warnt in der Konsole und das Feld bleibt ohne Maske - statt jeden Tastendruck stillschweigend zu verschlucken.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-mask-unmasked-name</code></td>
+                    <td data-label="Rolle">Optional. Ergänzt ein verborgenes Feld dieses Namens mit dem Wert ohne Trennzeichen - das sichtbare Feld sendet weiterhin die maskierte Fassung.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>format()</code></td>
+                    <td data-label="Rolle">Eine reine Funktion, ohne Feld: <code>format(Wert, Maske)</code>. Zum Formatieren von Werten, die vom Server kommen.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>value()</code></td>
+                    <td data-label="Rolle">Der Feldwert ohne Trennzeichen: <code>value(Feld)</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>register()</code></td>
+                    <td data-label="Rolle">Ein eigenes, wiederverwendbares Preset: <code>register(Name, def)</code>, wobei def <code>{ mask, inputmode, autocomplete, pattern, uppercase }</code> ist.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>apply()</code></td>
+                    <td data-label="Rolle">Für Felder, die nach dem Seitenstart hinzukommen. Das Formatieren funktioniert auch ohne (Delegation), aber <code>inputmode</code> muss stehen, <strong>bevor</strong> der Nutzer das Feld fokussiert.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-md-cols-2 gap-3">
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Nicht auf <code>type="number"</code> oder <code>"email"</code></h3>
+                <p class="text-4 text-muted m-0">
+                  Diese zwei Typen können keinen Cursor tragen: das Auslesen der
+                  Position gibt <code>null</code> zurück, das Setzen wirft eine
+                  Ausnahme. Eine Maske hat dort nichts zu verschieben, also
+                  <strong>verweigert das Modul laut</strong> mit einer
+                  Konsolenwarnung, statt den Cursor still auf den Anfang fallen
+                  zu lassen. Ein Betrag oder eine Kartennummer ist
+                  <code>type="text"</code> mit <code>inputmode="numeric"</code>.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Schreiben Sie <code>maxlength</code> nicht selbst</h3>
+                <p class="text-4 text-muted m-0">
+                  Der maskierte Wert ist länger als der reine, eine einzige Zahl
+                  kann also nicht beide Zustände abdecken. Das Modul leitet die
+                  Grenze aus der Maske ab. Ein eigenes, kürzeres
+                  <code>maxlength</code> schneidet den Wert ab - Sie bekommen
+                  eine Konsolenwarnung, denn das Symptom (ein Wert, der ein
+                  Zeichen zu kurz ist) sieht nach einem Backend-Problem aus.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Was zum Server geht</h3>
+                <p class="text-4 text-muted m-0">
+                  Standardmäßig <strong>das, was der Nutzer sieht</strong> - der
+                  Wert mit seinen Trennzeichen. Ein einfaches
+                  <code>&lt;form&gt;</code> funktioniert ohne Zusatzcode, und
+                  hinter dem Rücken des Nutzers wird nichts getauscht. Den reinen
+                  Wert holen Sie über <code>data-mask-unmasked-name</code> oder
+                  normalisieren ihn auf dem Server.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Das Pattern nimmt beide Schreibweisen</h3>
+                <p class="text-4 text-muted m-0">
+                  Jedes <code>pattern</code> eines Presets akzeptiert den Wert
+                  <strong>mit und ohne Trennzeichen</strong>. Würde es die
+                  Leerzeichen verlangen, bekäme ein Nutzer ohne JavaScript, der
+                  nur Ziffern tippt, einen falschen Validierungsfehler -
+                  schlimmer, als gar keine Maske zu haben.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. VARIABLEN                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Variablen</h2>
             <div class="table-wrapper mb-3">
               <table class="table table-sm table-hover table-cards">
                 <thead class="thead-light">
@@ -539,10 +736,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. FALLSTRICKE                                        -->
+          <!-- 8. FALLSTRICKE                                        -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Fallstricke</h2>
+            <h2 class="text-8 fw-bold mb-3">8. Fallstricke</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="form-pulapki" open>
@@ -631,10 +828,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. VERWANDTE SEITEN                                   -->
+          <!-- 9. VERWANDTE SEITEN                                   -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Verwandte Seiten</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Verwandte Seiten</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="docs-select.de" class="card hover-shadow">
                 <div class="card-body">

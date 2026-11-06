@@ -48,6 +48,42 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.49 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.49</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Input masks: <code>data-mask</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  One attribute on an ordinary <code>.input</code> formats the field as it is typed and sets the things that are easiest to forget: the numeric keypad on a phone, autofill and the validation pattern. No new classes and no CSS.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Eight shipped formats.</strong> <code>phone-pl</code>, <code>postal-pl</code>, <code>postal-de</code>, <code>nip-pl</code>, <code>card</code>, <code>card-expiry</code>, <code>iban</code>, <code>nrb-pl</code> - plus masks of your own: <code>data-mask="### ##-##"</code> (<code>#</code> digit, <code>A</code> letter, <code>*</code> digit or letter).</li>
+                  <li><strong>The card mask knows Amex.</strong> Cards starting 34 and 37 are 15 digits as 4-6-5, not 16 as 4-4-4-4 - the mask switches by itself. Four fixed groups of four dropped the last digit, and the symptom was a declined payment rather than a visible bug.</li>
+                  <li><strong>Pasting with a country code.</strong> <code>+48 601 234 567</code> pasted into <code>phone-pl</code> loses the prefix, not the end of the number. The prefix is dropped ONLY when it is the sole reason the value overflows, so a nine-digit number that happens to start with 48 is left alone.</li>
+                  <li><strong>Caret, deletion and undo.</strong> Editing inside the value no longer throws the caret to the end. Backspace past a separator removes a digit, not the space the mask would instantly put back (without this the key looks broken). The value is written through <code>execCommand</code>, the only path that keeps the browser's own character-by-character undo - measured, not assumed.</li>
+                  <li><strong>Not on <code>type="number"</code> or <code>type="email"</code>.</strong> Those types cannot carry a caret: reading its position returns <code>null</code> and setting it throws. The module refuses loudly with a console warning instead of quietly dropping the caret to the start. An amount or a card number is <code>type="text"</code> with <code>inputmode="numeric"</code>.</li>
+                  <li><strong>The field still works without JS.</strong> It stays an ordinary <code>.input</code> with <code>inputmode</code>, <code>autocomplete</code> and <code>pattern</code> - it loses the separators, not the validation. Every preset pattern accepts the value with AND without separators, because otherwise a user without JavaScript typing bare digits would get a false error.</li>
+                  <li><strong>What reaches the server.</strong> By default what the user sees, the value with its separators - a plain <code>&lt;form&gt;</code> works with no extra code. For the clean value, <code>data-mask-unmasked-name="name"</code> adds a hidden field.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:mask</code> - 42 checks in a real browser, every trap paired with a negative control (an unmasked field, a number the rule must not touch). The suite was also put through 12 source mutations: each breaks exactly one behaviour, and each one is caught.</li>
+                  <li><strong>Can be removed:</strong> if your project carries its own script masking a phone number, tax id, card or IBAN, you can delete it and keep <code>data-mask</code>. <strong>After updating, check</strong> the fields where you keep a mask of your own - two masks on one field will fight over the caret.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.48 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

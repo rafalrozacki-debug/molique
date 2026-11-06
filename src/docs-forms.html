@@ -475,10 +475,205 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 6. ZMIENNE                                            -->
+          <!-- 6. MASKOWANIE I KLAWIATURA                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">6. Zmienne</h2>
+            <h2 class="text-8 fw-bold mb-3">6. Maskowanie i klawiatura</h2>
+            <p class="text-muted mb-4">
+              Jeden atrybut <code>data-mask</code> formatuje pole w trakcie
+              pisania i jednocześnie ustawia to, o czym najłatwiej zapomnieć:
+              <code>inputmode</code> (klawiatura numeryczna na telefonie),
+              <code>autocomplete</code>, <code>pattern</code> i
+              <code>maxlength</code>. Bez JavaScriptu pole zostaje zwykłym
+              <code>.input</code> - traci tylko automatyczne odstępy, nie
+              walidację.
+            </p>
+
+            <p class="text-4 text-muted mb-2">
+              Poniższe pola są prawdziwe - wpisz w nie coś, wklej numer ze
+              spacjami, spróbuj edytować w środku.
+            </p>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="form-floating">
+                  <input type="tel" class="input" id="demo-phone" placeholder=" " data-mask="phone-pl" aria-describedby="demo-phone-hint">
+                  <label for="demo-phone">Telefon</label>
+                  <div class="text-4 text-muted mt-1" id="demo-phone-hint">Dziewięć cyfr, format 123 456 789</div>
+                </div>
+                <div class="form-floating">
+                  <input type="text" class="input" id="demo-nip" placeholder=" " data-mask="nip-pl">
+                  <label for="demo-nip">NIP</label>
+                </div>
+                <div class="form-floating">
+                  <input type="text" class="input" id="demo-card" placeholder=" " data-mask="card">
+                  <label for="demo-card">Numer karty</label>
+                </div>
+                <div class="form-floating">
+                  <input type="text" class="input" id="demo-iban" placeholder=" " data-mask="iban">
+                  <label for="demo-iban">IBAN</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;!-- preset: resztę atrybutów dopisze moduł --&gt;
+&lt;input type="tel" class="input" data-mask="phone-pl"&gt;
+
+&lt;!-- maska własna: # cyfra, A litera, * cyfra lub litera --&gt;
+&lt;input type="text" class="input" data-mask="### ##-##"&gt;
+
+&lt;!-- czysta wartość (bez separatorów) w dodatkowym, ukrytym polu --&gt;
+&lt;input type="text" class="input" data-mask="iban" data-mask-unmasked-name="iban_raw"&gt;</code></pre>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Gotowe formaty</h3>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Preset</th>
+                    <th>Format</th>
+                    <th>Uwagi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">phone-pl</code></td>
+                    <td data-label="Format"><code>123 456 789</code></td>
+                    <td data-label="Uwagi">Wklejenie z prefiksem <code>+48</code> lub <code>0048</code> obcina prefiks, nie końcówkę numeru.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">postal-pl</code></td>
+                    <td data-label="Format"><code>00-950</code></td>
+                    <td data-label="Uwagi">-</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">postal-de</code></td>
+                    <td data-label="Format"><code>10115</code></td>
+                    <td data-label="Uwagi">Bez separatora - daje filtr cyfr i limit długości, nic więcej.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">nip-pl</code></td>
+                    <td data-label="Format"><code>123-456-78-90</code></td>
+                    <td data-label="Uwagi">-</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">card</code></td>
+                    <td data-label="Format"><code>4111 1111 1111 1111</code></td>
+                    <td data-label="Uwagi">Maska <strong>zmienia się sama</strong> dla Amexa (karty na 34 i 37): 15 cyfr w układzie 4-6-5.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">card-expiry</code></td>
+                    <td data-label="Format"><code>05/27</code></td>
+                    <td data-label="Uwagi">-</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">iban</code></td>
+                    <td data-label="Format"><code>PL61 1090 1014 ...</code></td>
+                    <td data-label="Uwagi">Przyjmuje litery i podnosi je do wielkich. Do 34 znaków, grupy po cztery.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Preset"><code class="fw-bold">nrb-pl</code></td>
+                    <td data-label="Format"><code>12 1234 5678 ...</code></td>
+                    <td data-label="Uwagi">26 cyfr w układzie 2 + sześć grup po cztery.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="text-6 fw-bold mb-2 mt-4">Atrybuty i API</h3>
+            <p class="text-muted mb-3">
+              Metody poniżej siedzą w globalnym obiekcie <code>MoliqueMask</code>.
+            </p>
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Element</th>
+                    <th>Rola</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-mask</code></td>
+                    <td data-label="Rola">Nazwa presetu albo maska własna. Rozstrzyganie: najpierw preset po nazwie, potem maska literalna. Literówka w nazwie (<code>phone-PL</code>) daje ostrzeżenie w konsoli i pole zostaje bez maski - zamiast cicho połykać każdy znak.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-mask-unmasked-name</code></td>
+                    <td data-label="Rola">Opcjonalne. Dokłada ukryte pole o tej nazwie z wartością bez separatorów - widoczne pole nadal wysyła wersję z maską.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>format()</code></td>
+                    <td data-label="Rola">Czysta funkcja, bez pola: <code>format(wartość, maska)</code>. Do formatowania danych przychodzących z serwera.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>value()</code></td>
+                    <td data-label="Rola">Wartość pola bez separatorów: <code>value(pole)</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>register()</code></td>
+                    <td data-label="Rola">Własny preset wielokrotnego użytku: <code>register(nazwa, def)</code>, gdzie def to <code>{ mask, inputmode, autocomplete, pattern, uppercase }</code>.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>apply()</code></td>
+                    <td data-label="Rola">Dla pól dorzuconych po starcie strony. Samo formatowanie działa bez tego (delegacja), ale <code>inputmode</code> musi być ustawione, <strong>zanim</strong> użytkownik wejdzie w pole.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-md-cols-2 gap-3">
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Nie na <code>type="number"</code> ani <code>"email"</code></h3>
+                <p class="text-4 text-muted m-0">
+                  Te dwa typy nie potrafią obsłużyć kursora: odczyt pozycji
+                  zwraca <code>null</code>, a ustawienie rzuca wyjątkiem. Maska
+                  nie ma tam czego przesuwać, więc moduł <strong>odmawia
+                  głośno</strong> i wypisuje ostrzeżenie, zamiast po cichu
+                  zrzucać kursor na początek. Kwota i numer karty to
+                  <code>type="text"</code> z <code>inputmode="numeric"</code>.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Nie pisz <code>maxlength</code> sam</h3>
+                <p class="text-4 text-muted m-0">
+                  Wartość z maską jest dłuższa niż bez niej, więc jedna liczba
+                  nie obsłuży obu stanów. Moduł wylicza limit z maski. Własny
+                  <code>maxlength</code> krótszy od maski obcina wartość - dostaniesz
+                  ostrzeżenie w konsoli, bo objaw (wartość krótsza o jeden znak)
+                  wygląda na błąd backendu.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Co idzie do serwera</h3>
+                <p class="text-4 text-muted m-0">
+                  Domyślnie <strong>to, co widzi użytkownik</strong> - czyli
+                  wartość z separatorami. Zwykły <code>&lt;form&gt;</code> działa
+                  bez żadnego dodatkowego kodu, a nic nie podmienia się za
+                  plecami. Czystą wartość weź przez
+                  <code>data-mask-unmasked-name</code> albo normalizuj na
+                  serwerze.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Wzorzec przyjmuje oba zapisy</h3>
+                <p class="text-4 text-muted m-0">
+                  Każdy <code>pattern</code> z presetu akceptuje wartość
+                  <strong>z separatorami i bez</strong>. Gdyby wymagał spacji,
+                  użytkownik bez JavaScriptu wpisujący same cyfry dostałby
+                  fałszywy błąd walidacji - gorzej, niż gdyby maski nie było
+                  wcale.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. ZMIENNE                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Zmienne</h2>
             <div class="table-wrapper mb-3">
               <table class="table table-sm table-hover table-cards">
                 <thead class="thead-light">
@@ -529,10 +724,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. PUŁAPKI                                            -->
+          <!-- 8. PUŁAPKI                                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
+            <h2 class="text-8 fw-bold mb-3">8. Pułapki</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="form-pulapki" open>
@@ -619,10 +814,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. POWIĄZANE                                          -->
+          <!-- 9. POWIĄZANE                                          -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Powiązane strony</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="docs-select" class="card hover-shadow">
                 <div class="card-body">

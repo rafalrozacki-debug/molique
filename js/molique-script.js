@@ -352,6 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { selectors: '.before-after-slider', file: 'modules/molique-before-after.js', init: 'initBeforeAfter' },
     { selectors: '.file-upload', file: 'modules/molique-file-upload.js', init: 'initFileUpload' },
     { selectors: 'input[data-search-target]', file: 'modules/molique-table-search.js', init: 'initTableSearch' },
+    { selectors: '[data-mask]', file: 'modules/molique-mask.js', init: 'initMask' },
     { selectors: '.popover-context', file: 'modules/molique-context-menu.js', init: 'initContextMenu' },
     { selectors: '.dropdown-menu[popover], .popover-context, .select-search-menu, .custom-select-dropdown', file: 'modules/molique-popover-anchor.js', init: 'initPopoverAnchor' },
     { selectors: '.tooltip-popover', file: 'modules/molique-tooltip-popover.js', init: 'initTooltipPopover' },

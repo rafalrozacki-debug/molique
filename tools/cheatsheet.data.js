@@ -1587,6 +1587,20 @@ export const CATEGORIES = [
         tags: ['form'],
       },
       {
+        id: 'data-mask',
+        // Attribute-driven, no CSS class of its own - the coverage gate only
+        // looks at tokens starting with a dot, so this row is documentation
+        // and makes the feature findable by problem ("maskowanie", "telefon").
+        classes: [['[data-mask]', '[data-mask-unmasked-name]']],
+        desc: {
+          pl: 'Maskowanie pola w trakcie pisania: telefon, kod pocztowy, NIP, karta płatnicza, data ważności karty, IBAN, numer rachunku (NRB) oraz maski własne (<code>### ##-##</code>). Ustawia też <code>inputmode</code>, <code>autocomplete</code>, <code>pattern</code> i <code>maxlength</code>. Nie działa na <code>type="number"</code> ani <code>"email"</code> - te typy nie obsługują kursora.',
+          en: 'Masks a field as it is typed: phone, postal code, tax id, payment card, card expiry, IBAN, bank account number, plus masks of your own (<code>### ##-##</code>). Also sets <code>inputmode</code>, <code>autocomplete</code>, <code>pattern</code> and <code>maxlength</code>. Not available on <code>type="number"</code> or <code>"email"</code> - those types cannot carry a caret.',
+          de: 'Maskiert ein Feld während der Eingabe: Telefon, Postleitzahl, Steuernummer, Zahlungskarte, Kartenablauf, IBAN, Kontonummer sowie eigene Masken (<code>### ##-##</code>). Setzt außerdem <code>inputmode</code>, <code>autocomplete</code>, <code>pattern</code> und <code>maxlength</code>. Nicht auf <code>type="number"</code> oder <code>"email"</code> - diese Typen können keinen Cursor tragen.',
+        },
+        demo: '-',
+        tags: ['form'],
+      },
+      {
         id: 'input-range',
         classes: [['.input-range', '.input-color']],
         desc: {
