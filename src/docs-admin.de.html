@@ -91,6 +91,10 @@
                     <td data-label="Was sie macht">Der Innenabstand von <code>.admin-main</code>, standardmäßig 32 px. Bis 768 px gilt <code>--admin-main-padding-mobile</code>, standardmäßig 12 px. Setze es auf <code>:root</code>. Der untere Abstand bleibt größer, weil die mobile Navigationsleiste darüber liegt.</td>
                   </tr>
                   <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.admin-main</code></td>
+                    <td data-label="Was sie macht">Die Inhaltsspalte. Sie schneidet ab, was breiter ist als sie selbst (<code>overflow-x: clip</code>), scrollt aber nicht selbst - es scrollt die Seite. Deshalb funktioniert <code>.position-sticky</code> im Panel (seit 1.7.54). Bis 1.7.53 stand hier <code>overflow-x: hidden</code>: Das machte die Spalte zu einem Scroll-Container, und jedes Sticky-Element scrollte mit der Seite weg.</td>
+                  </tr>
+                  <tr>
                     <td data-label="Klasse"><code class="fw-bold">.admin-rail</code></td>
                     <td data-label="Was sie macht">Eine optionale ZWEITE Spalte zwischen Sidebar und Inhalt: Unternavigation, Filter, eine Liste von Datensätzen. <strong>Bewusst ohne Hintergrund</strong> - sie liegt auf <code>--bg-body</code> und liest sich im Floating-Modus als Grund zwischen zwei Karten, nicht als dritte Karte. Die Grid-Spur fügt eine <code>:has()</code>-Regel erst hinzu, wenn das Element existiert: eine leere Spur würde im Floating-Modus einen zweiten <code>gap</code> erzeugen und das Layout jeder Seite ohne Rail verschieben. Sie klebt wie die Sidebar. Breite: <code>--admin-rail-width</code> (240px). Auf dem Handy fällt das Grid ohnehin auf eine Spalte zurück, die Rail stapelt sich also ÜBER dem Inhalt - sie verschwindet nicht, denn stilles Verlieren von Inhalt ist nicht diagnostizierbar.</td>
                   </tr>
@@ -398,6 +402,19 @@
                 Partial ein - die Sidebar ist oft eine einzige Datei für
                 viele Unterseiten.
               </p>
+              <p class="text-4 text-muted mt-3 mb-0">
+                <strong>Eine Seite tiefer als das Menü (seit 1.7.54).</strong>
+                Zeigt kein Link genau auf die aktuelle Adresse, leuchtet der,
+                dessen Pfad der längste Anfang der Adresse ist, gezählt in
+                ganzen Segmenten: <code>/lager/</code> auf der Karte
+                <code>/lager/artikel/5/</code>, aber nicht auf
+                <code>/lagerhalle/</code>. Der Link zur Wurzel der Navigation
+                (<code>/</code>, bei einem Panel im Unterordner z. B.
+                <code>/app/</code>) leuchtet nur auf sich selbst - sonst wäre
+                er auf jeder unbekannten Seite hervorgehoben. Volle Adressen
+                (<code>https://…</code>) derselben Domain zählen wie
+                relative - bis 1.7.53 hat das Modul sie übersprungen.
+              </p>
             </div>
           </section>
 
@@ -517,6 +534,17 @@
                 <kbd>Esc</kbd> und - <strong>nur auf mobilen
                 Geräten</strong> - schließt beim Öffnen eines Untermenüs die
                 übrigen.
+              </p>
+              <p class="text-4 text-muted mt-3 mb-0">
+                Ein Zweig leuchtet auch auf Seiten tiefer in seinem Abschnitt,
+                auf die keiner seiner Links zeigt (seit 1.7.54). Der Abschnitt
+                ist der gemeinsame Anfang der Adressen seiner Links: Für
+                <code>/vermietung/vertraege/</code> und
+                <code>/vermietung/investoren/</code> ist es
+                <code>/vermietung/</code>, also leuchtet auf der Karte
+                <code>/vermietung/vertrag/12/</code> der Name des Zweigs, ohne
+                Eintrag. Ein Zweig, dessen Links keinen gemeinsamen Anfang
+                haben, leuchtet nur über seine Links.
               </p>
             </div>
           </section>

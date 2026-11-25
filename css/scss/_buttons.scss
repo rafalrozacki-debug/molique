@@ -64,6 +64,32 @@ $btn-base-selectors: ".btn";
   }
 }
 
+/* DISABLED. Until 1.7.53 there was no rule for it at all: a button with the
+   disabled attribute looked exactly like an active one, with its full colour
+   and its hover, right next to a message saying the action was impossible.
+
+   :disabled also matches every button inside <fieldset disabled>, so a
+   whole blocked form fades with no class per button. aria-disabled="true"
+   is the only way to switch off a link styled as a button (<a> has no
+   disabled attribute), and pointer-events: none is what stops the mouse
+   click on it - but NOT Enter, so such a link also needs tabindex="-1" or
+   its href removed. On a real <button> the attribute already blocks the
+   click; pointer-events: none here just switches off every hover effect at
+   once (colour variants, .btn-hover-*, .btn-3d) instead of undoing each.
+
+   The cost: hover no longer reaches the button, so a .tooltip-element put
+   ON a disabled button never opens. A hint about why the action is
+   unavailable goes on a wrapping <span class="tooltip-element">.
+
+   A loading button (.is-loading / aria-busy) is skipped on purpose. It
+   SHOULD carry disabled (see the loading block below), and fading it would
+   fade the spinner that is the whole message. :where() keeps that
+   exclusion weightless, so the rule weighs 0-2-0 like a hover. */
+:is(#{$btn-base-selectors}, .btn-action):is(:disabled, [aria-disabled='true']):where(:not(.is-loading, [aria-busy='true'])) {
+  opacity: var(--btn-disabled-opacity, 0.5);
+  pointer-events: none;
+}
+
 /* =========================================
    2. COLOR VARIANTS (SCSS loop)
    ========================================= */

@@ -699,6 +699,51 @@
               <a href="docs-components-extra.de.html">Zusätzliche
               Komponenten</a> im Abschnitt „Lade-Spinner".
             </p>
+
+            <h3 class="text-6 fw-bold mb-2 mt-5">Deaktivierter Button</h3>
+            <p class="text-muted mb-4">
+              Seit 1.7.54 dimmt das Attribut <code>disabled</code> den Button
+              (Deckkraft <code>--btn-disabled-opacity</code>, standardmäßig
+              0.5) und schaltet seinen Hover ab. Vorher sah er genauso aus wie
+              ein aktiver. <code>aria-disabled="true"</code> wirkt ebenfalls -
+              der einzige Weg, einen Link in Button-Optik zu deaktivieren -,
+              ebenso jeder Button in <code>&lt;fieldset disabled&gt;</code>,
+              ohne Klasse. Ein ladender Button (<code>.is-loading</code>,
+              <code>aria-busy</code>) wird NICHT gedimmt, obwohl er
+              <code>disabled</code> trägt: Der Ring soll deutlich bleiben.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview bg-surface gap-2" style="flex-wrap: wrap">
+                <button class="btn-primary">Speichern</button>
+                <button class="btn-primary" disabled>Speichern</button>
+                <button class="btn-outline-danger" disabled>Löschen</button>
+                <a class="btn-secondary" href="#" aria-disabled="true" tabindex="-1">Deaktivierter Link</a>
+                <span class="tooltip-element" data-tooltip="Zuerst einen Zeitraum wählen">
+                  <button class="btn-success" disabled>Rechnung stellen</button>
+                </span>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;button class="btn-primary" disabled&gt;Speichern&lt;/button&gt;
+&lt;a class="btn-secondary" href="/x" aria-disabled="true" tabindex="-1"&gt;Link&lt;/a&gt;
+
+&lt;!-- Hinweis mit dem Grund: am Wrapper, nicht am Button --&gt;
+&lt;span class="tooltip-element" data-tooltip="Zuerst einen Zeitraum wählen"&gt;
+  &lt;button class="btn-success" disabled&gt;Rechnung stellen&lt;/button&gt;
+&lt;/span&gt;</code></pre>
+              </div>
+            </div>
+
+            <p class="text-muted m-0">
+              <strong>Den Hinweis mit dem Grund an einen Wrapper
+              hängen.</strong> Ein deaktivierter Button reagiert nicht auf die
+              Maus (<code>pointer-events: none</code>), daher öffnet sich ein
+              <code>.tooltip-element</code> direkt am Button nie. Ein Link mit
+              <code>aria-disabled</code> blockiert nur die Maus - Enter öffnet
+              ihn weiterhin, also <code>tabindex="-1"</code> ergänzen oder das
+              <code>href</code> entfernen.
+            </p>
           </section>
 
           <!-- ===================================================== -->

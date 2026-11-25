@@ -682,6 +682,50 @@
               <a href="docs-components-extra.html">Komponenty dodatkowe</a>,
               w sekcji „Spinnery ładowania".
             </p>
+
+            <h3 class="text-6 fw-bold mb-2 mt-5">Przycisk wyłączony</h3>
+            <p class="text-muted mb-4">
+              Od 1.7.54 atrybut <code>disabled</code> przygasza przycisk
+              (krycie <code>--btn-disabled-opacity</code>, domyślnie 0.5)
+              i wyłącza mu hover. Wcześniej wyglądał dokładnie jak aktywny.
+              Działa też <code>aria-disabled="true"</code> - jedyny sposób
+              na link w roli przycisku - oraz każdy przycisk w
+              <code>&lt;fieldset disabled&gt;</code>, bez klasy. Przycisk
+              w trakcie ładowania (<code>.is-loading</code>,
+              <code>aria-busy</code>) NIE jest przygaszany, choć ma
+              <code>disabled</code>: pierścień ma być wyraźny.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview bg-surface gap-2" style="flex-wrap: wrap">
+                <button class="btn-primary">Zapisz</button>
+                <button class="btn-primary" disabled>Zapisz</button>
+                <button class="btn-outline-danger" disabled>Usuń</button>
+                <a class="btn-secondary" href="#" aria-disabled="true" tabindex="-1">Link wyłączony</a>
+                <span class="tooltip-element" data-tooltip="Najpierw wybierz okres">
+                  <button class="btn-success" disabled>Wystaw fakturę</button>
+                </span>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;button class="btn-primary" disabled&gt;Zapisz&lt;/button&gt;
+&lt;a class="btn-secondary" href="/x" aria-disabled="true" tabindex="-1"&gt;Link&lt;/a&gt;
+
+&lt;!-- dymek z powodem: na owijce, nie na przycisku --&gt;
+&lt;span class="tooltip-element" data-tooltip="Najpierw wybierz okres"&gt;
+  &lt;button class="btn-success" disabled&gt;Wystaw fakturę&lt;/button&gt;
+&lt;/span&gt;</code></pre>
+              </div>
+            </div>
+
+            <p class="text-muted m-0">
+              <strong>Dymek z powodem kładź na owijce.</strong> Wyłączony
+              przycisk nie reaguje na mysz (<code>pointer-events: none</code>),
+              więc <code>.tooltip-element</code> założony na nim samym nigdy
+              się nie otworzy. Link z <code>aria-disabled</code> blokuje tylko
+              mysz - Enter nadal go otworzy, dlatego dołóż
+              <code>tabindex="-1"</code> albo zdejmij <code>href</code>.
+            </p>
           </section>
 
           <!-- ===================================================== -->

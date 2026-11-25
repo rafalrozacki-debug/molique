@@ -91,6 +91,10 @@
                     <td data-label="What it does">The inner padding of <code>.admin-main</code>, 32 px by default. Up to 768 px <code>--admin-main-padding-mobile</code> applies, 12 px by default. Set it on <code>:root</code>. The bottom padding stays larger because the mobile navigation bar sits over it.</td>
                   </tr>
                   <tr>
+                    <td data-label="Class"><code class="fw-bold">.admin-main</code></td>
+                    <td data-label="What it does">The content column. It cuts off whatever is wider than itself (<code>overflow-x: clip</code>) but does not scroll on its own - the page does. That is what makes <code>.position-sticky</code> work inside the panel (since 1.7.54). Up to 1.7.53 this was <code>overflow-x: hidden</code>, which turned the column into a scroll container, so every sticky element scrolled away with the page.</td>
+                  </tr>
+                  <tr>
                     <td data-label="Class"><code class="fw-bold">.admin-rail</code></td>
                     <td data-label="What it does">An optional SECOND column between the sidebar and the content: sub-navigation, filters, a list of records. <strong>Deliberately without a background</strong> - it sits on <code>--bg-body</code>, so in floating mode it reads as the ground between two cards rather than a third card. The grid track is added by a <code>:has()</code> rule only once the element exists: an empty track would generate a second <code>gap</code> in floating mode and shift the layout of every page without a rail. It sticks like the sidebar. Width: <code>--admin-rail-width</code> (240px). On mobile the grid collapses to one column anyway, so the rail stacks ABOVE the content - it is not hidden, because silently losing content is undiagnosable.</td>
                   </tr>
@@ -393,6 +397,19 @@
                 Don't hard-code the active state into a shared partial -
                 the sidebar is often one file shared by many pages.
               </p>
+              <p class="text-4 text-muted mt-3 mb-0">
+                <strong>A page deeper than the menu (since 1.7.54).</strong>
+                When no link points at the current address exactly, the one
+                whose path is the longest start of the address lights up,
+                counted in whole segments: <code>/stock/</code> on the card
+                <code>/stock/item/5/</code>, but not on
+                <code>/stockroom/</code>. The link to the nav's root
+                (<code>/</code>, or e.g. <code>/app/</code> for a panel in a
+                subfolder) only lights up on itself - otherwise it would be
+                lit on every unknown page. Full addresses
+                (<code>https://…</code>) on the same domain count the same as
+                relative ones - up to 1.7.53 the module skipped them.
+              </p>
             </div>
           </section>
 
@@ -511,6 +528,17 @@
                 once it's finished), it closes on <kbd>Esc</kbd>, and -
                 <strong>on mobile devices only</strong> - opening one
                 submenu closes the others.
+              </p>
+              <p class="text-4 text-muted mt-3 mb-0">
+                A branch also lights up on pages deeper in its section that
+                none of its links point at (since 1.7.54). The section is the
+                common start of the branch's link addresses: for
+                <code>/rentals/contracts/</code> and
+                <code>/rentals/investors/</code> it is
+                <code>/rentals/</code>, so on the card
+                <code>/rentals/contract/12/</code> the branch name lights up,
+                with no item. A branch whose links share no common start
+                lights up only through its links.
               </p>
             </div>
           </section>

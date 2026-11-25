@@ -23,6 +23,33 @@
 .border-end, .border-right { border-right: 1px solid var(--border-color) !important; }
 .border-end-0, .border-right-0 { border-right: 0 !important; }
 
+/* Border COLOUR (since 1.7.54). Until then only .border-hover-<colour>
+   existed, so class="border border-danger" - the natural way to frame an
+   error box - drew the ordinary grey line with no warning at all.
+   Colour only, never width: on its own the class shows nothing, it needs
+   .border or one side (.border-top...). It sets border-color rather than
+   re-pointing --border-color, because that token is inherited, and a table
+   inside a red frame would have turned red with it.
+   These rules MUST come after .border above: both are !important and weigh
+   the same, so the later one wins. .border-hover-<colour> still wins on
+   hover, because :hover adds weight. */
+$border-colors: (
+  "primary": var(--primary),
+  "secondary": var(--secondary),
+  "success": var(--success),
+  "danger": var(--danger),
+  "warning": var(--warning),
+  "info": var(--info),
+  "light": var(--light),
+  "dark": var(--dark),
+  "surface": var(--bg-surface),
+  "body": var(--bg-body)
+);
+
+@each $name, $color in $border-colors {
+  .border-#{$name} { border-color: #{$color} !important; }
+}
+
 /* =========================================
    2. BORDER RADIUS
    ========================================= */

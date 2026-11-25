@@ -48,6 +48,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.54 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.54</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fix</span>
+                  Reports from a B2B panel: sticky, disabled button, border color, active module
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Four defects, each a silent one: valid HTML, clean console, wrong picture. Each point gives the symptom before the fix, the workaround a project can remove after updating to 1.7.54, and what is worth a look because existing pages change how they look. Every symptom was reproduced in a browser on version 1.7.53.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><code>position: sticky</code> inside <code>.admin-main</code>.</strong> The content column had <code>overflow-x: hidden</code>, which also turns <code>overflow-y</code> into <code>auto</code> and makes it a scroll container that never scrolls itself (the page does). Every sticky element in the panel stuck to it, i.e. to nothing: a card with <code>top: 16px</code> stood at −852 px after a 900 px scroll. Now it is <code>overflow-x: clip</code> - it cuts the same way without creating a container. To remove: your own <code>overflow-x: clip</code> on <code>.admin-main</code>, including one narrowed to a single screen with <code>:has()</code>. Check after updating: <code>.position-sticky</code> elements in the panel's content that silently did nothing until now will start to stick.</li>
+                  <li><strong>A button with <code>disabled</code>.</strong> There was no rule for it at all, so it looked active, in full color and with its hover, next to a message saying the action was impossible. Now <code>disabled</code>, <code>aria-disabled="true"</code> and every button inside <code>&lt;fieldset disabled&gt;</code> get the opacity <code>--btn-disabled-opacity</code> (0.5) and <code>pointer-events: none</code>. This covers the color variants, <code>.btn</code> and <code>.btn-action</code>. A loading button (<code>.is-loading</code>, <code>aria-busy</code>) keeps its full color so the ring stays clear. To remove: <code>.opacity-50</code> added to disabled buttons. Check after updating: a <code>.tooltip-element</code> set on the disabled button itself will stop opening - move it to a wrapping <code>&lt;span&gt;</code>.</li>
+                  <li><strong><code>.border-primary</code>, <code>-danger</code> and the rest of the palette.</strong> Only the <code>.border-hover-*</code> variants existed, so <code>class="border border-danger"</code> - the natural way to write an error frame - drew the plain grey frame. There are now ten border colors: primary, secondary, success, danger, warning, info, light, dark, surface, body. Color only, no width: they work with <code>.border</code> or a single edge. Nothing to remove. Check after updating: places that already carry <code>border-danger</code> or <code>border-primary</code> in their markup will start showing the color.</li>
+                  <li><strong>The active sidebar item on a page deeper than the menu.</strong> Only an identical address counted, so on a record's card (<code>/rentals/contract/12/</code> under a menu with <code>/rentals/contracts/</code>) nothing in the sidebar was lit, not even the module's name. Now, when nothing matches exactly, the longest start of the address lights up, counted in whole segments, and a <code>&lt;details&gt;</code> branch also lights up for the common start of its links' addresses. The nav's root (<code>/</code> or the panel's subfolder) only lights up on itself. Along the way the flat-link module stopped skipping full addresses on the same domain, so in a sidebar rendered by WordPress (<code>esc_url(home_url(…))</code>) it used to light nothing at all. To remove: a server-side <code>is-active</code> computed only so that the sidebar would light at all. Check after updating: subpages whose address starts with another link's address will now light that link.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.53 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -1834,6 +1834,31 @@
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: 2px;
   }
+  /* DISABLED. Until 1.7.53 there was no rule for it at all: a button with the
+     disabled attribute looked exactly like an active one, with its full colour
+     and its hover, right next to a message saying the action was impossible.
+
+     :disabled also matches every button inside <fieldset disabled>, so a
+     whole blocked form fades with no class per button. aria-disabled="true"
+     is the only way to switch off a link styled as a button (<a> has no
+     disabled attribute), and pointer-events: none is what stops the mouse
+     click on it - but NOT Enter, so such a link also needs tabindex="-1" or
+     its href removed. On a real <button> the attribute already blocks the
+     click; pointer-events: none here just switches off every hover effect at
+     once (colour variants, .btn-hover-*, .btn-3d) instead of undoing each.
+
+     The cost: hover no longer reaches the button, so a .tooltip-element put
+     ON a disabled button never opens. A hint about why the action is
+     unavailable goes on a wrapping <span class="tooltip-element">.
+
+     A loading button (.is-loading / aria-busy) is skipped on purpose. It
+     SHOULD carry disabled (see the loading block below), and fading it would
+     fade the spinner that is the whole message. :where() keeps that
+     exclusion weightless, so the rule weighs 0-2-0 like a hover. */
+  :is(.btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark, .btn-action):is(:disabled, [aria-disabled=true]):where(:not(.is-loading, [aria-busy=true])) {
+    opacity: var(--btn-disabled-opacity, 0.5);
+    pointer-events: none;
+  }
   /* =========================================
      2. COLOR VARIANTS (SCSS loop)
      ========================================= */
@@ -12021,6 +12046,46 @@
   }
   .border-end-0, .border-right-0 {
     border-right: 0 !important;
+  }
+  /* Border COLOUR (since 1.7.54). Until then only .border-hover-<colour>
+     existed, so class="border border-danger" - the natural way to frame an
+     error box - drew the ordinary grey line with no warning at all.
+     Colour only, never width: on its own the class shows nothing, it needs
+     .border or one side (.border-top...). It sets border-color rather than
+     re-pointing --border-color, because that token is inherited, and a table
+     inside a red frame would have turned red with it.
+     These rules MUST come after .border above: both are !important and weigh
+     the same, so the later one wins. .border-hover-<colour> still wins on
+     hover, because :hover adds weight. */
+  .border-primary {
+    border-color: var(--primary) !important;
+  }
+  .border-secondary {
+    border-color: var(--secondary) !important;
+  }
+  .border-success {
+    border-color: var(--success) !important;
+  }
+  .border-danger {
+    border-color: var(--danger) !important;
+  }
+  .border-warning {
+    border-color: var(--warning) !important;
+  }
+  .border-info {
+    border-color: var(--info) !important;
+  }
+  .border-light {
+    border-color: var(--light) !important;
+  }
+  .border-dark {
+    border-color: var(--dark) !important;
+  }
+  .border-surface {
+    border-color: var(--bg-surface) !important;
+  }
+  .border-body {
+    border-color: var(--bg-body) !important;
   }
   /* =========================================
      2. BORDER RADIUS

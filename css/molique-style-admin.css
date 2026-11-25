@@ -93,7 +93,7 @@
       /* A bare 1fr is, in short, minmax(auto, 1fr) - a track's minimum is
          computed from its descendants' min-content (e.g. a table or a tab
          pill with a longer label), NOT from zero, even when .admin-main
-         already has min-width: 0 + overflow-x: hidden (those two
+         already has min-width: 0 + overflow-x: clip (those two
          properties don't protect against the grid TRACK ITSELF
          overflowing - that's a different mechanism). Effect: the track
          grows past the screen width, and because of overflow-x: clip on
@@ -145,7 +145,13 @@
     }
   }
   .admin-main {
-    overflow-x: hidden;
+    /* clip, not hidden. Both cut off a table wider than the column, but
+       overflow-x: hidden also turns overflow-y into auto, which makes
+       .admin-main a scroll container that never scrolls itself (the page
+       does). Every position: sticky inside the panel then stuck to that box,
+       i.e. to nothing, and scrolled away with the page. clip cuts the same
+       way without creating a scroll container. Until 1.7.53 this was hidden. */
+    overflow-x: clip;
     display: flex;
     flex-direction: column;
     min-width: 0;
@@ -228,11 +234,12 @@
   }
   /* Fading content at the bottom of the main column (opt-in: the
      .fade-bottom class from the layout layer). .admin-main doesn't scroll
-     itself - the page scrolls - and overflow-x:hidden makes it a
-     scrollport for sticky, which means the base variant would never
-     actually "stick". That's why the gradient here is positioned fixed
-     relative to the window, aligned to the content column via layout
-     variables (also works in floating mode). */
+     itself - the page scrolls. Until 1.7.53 its overflow-x: hidden also made
+     it a scrollport for sticky, so the base variant never "stuck"; that is
+     why the gradient here is positioned fixed relative to the window,
+     aligned to the content column via layout variables (also works in
+     floating mode). Left as it was in 1.7.54, when hidden became clip - a
+     change of mechanism here would need its own measurement. */
   .admin-main.fade-bottom {
     --fade-color: var(--main-bg);
   }

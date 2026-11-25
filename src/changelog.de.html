@@ -48,6 +48,37 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.54 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.54</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-danger mx-2 text-3">Fehlerbehebung</span>
+                  Meldungen aus einem B2B-Panel: Sticky, deaktivierter Button, Rahmenfarbe, aktives Modul
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Vier Fehler, jeder davon still: gültiges HTML, saubere Konsole, falsches Bild. Jeder Punkt nennt das Symptom vor der Korrektur, den Workaround, den ein Projekt nach dem Update auf 1.7.54 entfernen kann, und was einen Blick wert ist, weil bestehende Seiten anders aussehen. Alle Symptome wurden im Browser auf Version 1.7.53 nachgestellt.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong><code>position: sticky</code> in <code>.admin-main</code>.</strong> Die Inhaltsspalte hatte <code>overflow-x: hidden</code>. Das setzt auch <code>overflow-y</code> auf <code>auto</code> und macht sie zu einem Scroll-Container, der selbst nie scrollt (es scrollt die Seite). Jedes Sticky-Element im Panel klebte an ihr, also an nichts: Eine Karte mit <code>top: 16px</code> stand nach 900 px Scrollen bei −852 px. Jetzt ist es <code>overflow-x: clip</code> - schneidet genauso ab, ohne Container. Zu entfernen: eigenes <code>overflow-x: clip</code> auf <code>.admin-main</code>, auch per <code>:has()</code> auf einen einzelnen Bildschirm begrenzt. Nach dem Update prüfen: <code>.position-sticky</code>-Elemente im Panel, die bisher still nichts taten, fangen an zu kleben.</li>
+                  <li><strong>Ein Button mit <code>disabled</code>.</strong> Dafür gab es keine einzige Regel, also sah er aktiv aus, in voller Farbe und mit Hover, neben einer Meldung, dass die Aktion nicht möglich ist. Jetzt bekommen <code>disabled</code>, <code>aria-disabled="true"</code> und jeder Button in <code>&lt;fieldset disabled&gt;</code> die Deckkraft <code>--btn-disabled-opacity</code> (0.5) und <code>pointer-events: none</code>. Das gilt für die Farbvarianten, <code>.btn</code> und <code>.btn-action</code>. Ein ladender Button (<code>.is-loading</code>, <code>aria-busy</code>) bleibt in voller Farbe, damit der Ring deutlich bleibt. Zu entfernen: <code>.opacity-50</code> an deaktivierten Buttons. Nach dem Update prüfen: Ein <code>.tooltip-element</code> direkt am deaktivierten Button öffnet sich nicht mehr - an einen umschließenden <code>&lt;span&gt;</code> verschieben.</li>
+                  <li><strong><code>.border-primary</code>, <code>-danger</code> und der Rest der Palette.</strong> Es gab nur die Varianten <code>.border-hover-*</code>, daher zeichnete <code>class="border border-danger"</code> - die naheliegende Schreibweise für einen Fehlerrahmen - den normalen grauen Rahmen. Jetzt gibt es zehn Rahmenfarben: primary, secondary, success, danger, warning, info, light, dark, surface, body. Nur die Farbe, keine Breite: Sie wirken mit <code>.border</code> oder einer einzelnen Kante. Nichts zu entfernen. Nach dem Update prüfen: Stellen, die <code>border-danger</code> oder <code>border-primary</code> schon im Markup haben, werden farbig.</li>
+                  <li><strong>Die aktive Sidebar-Position auf einer Seite tiefer als das Menü.</strong> Es zählte nur eine identische Adresse, also leuchtete auf der Karte eines Datensatzes (<code>/vermietung/vertrag/12/</code> bei einem Menü mit <code>/vermietung/vertraege/</code>) in der Sidebar nichts, nicht einmal der Modulname. Wenn nichts genau passt, leuchtet jetzt der längste Anfang der Adresse, gezählt in ganzen Segmenten, und ein <code>&lt;details&gt;</code>-Zweig leuchtet auch für den gemeinsamen Anfang der Adressen seiner Links. Die Wurzel der Navigation (<code>/</code> oder der Unterordner des Panels) leuchtet nur auf sich selbst. Nebenbei überspringt das Modul für flache Links keine vollen Adressen derselben Domain mehr - in einer von WordPress gerenderten Sidebar (<code>esc_url(home_url(…))</code>) hob es bisher gar nichts hervor. Zu entfernen: ein serverseitiges <code>is-active</code>, das nur berechnet wurde, damit die Sidebar überhaupt leuchtet. Nach dem Update prüfen: Unterseiten, deren Adresse mit der Adresse eines anderen Links beginnt, heben jetzt diesen Link hervor.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.53 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

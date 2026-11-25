@@ -316,4 +316,5 @@ export const INPUT = {
   '--spinner-overlay-z':     ['Spinner', 'Warstwa <code>z-index</code> nakładki ładowania, domyślnie <code>3</code>. Podnieś, gdy w kontenerze stoi coś przyklejonego (nagłówek tabeli, pasek akcji), co ma zostać pod spodem.'],
   '--btn-spinner-size':      ['Spinner', 'Średnica pierścienia w przycisku <code>.is-loading</code>, domyślnie <code>1.15em</code>. Większa wartość nie zmieni szerokości przycisku - pierścień leży poza przepływem - ale może wyjść poza jego wysokość.'],
   '--btn-spinner-thickness': ['Spinner', 'Grubość kreski pierścienia w przycisku, domyślnie <code>0.11em</code> - nieco cieńsza niż w samodzielnym spinnerze, bo pierścień stoi na kolorowym tle, gdzie kontrast jest wyższy.'],
+  '--btn-disabled-opacity':  ['Przyciski', 'Krycie przycisku z <code>disabled</code> albo <code>aria-disabled="true"</code>, domyślnie <code>0.5</code> (od 1.7.54). Nie dotyczy przycisku w trakcie ładowania (<code>.is-loading</code>, <code>aria-busy</code>) - ten zostaje w pełnym kolorze, żeby pierścień był wyraźny.'],
 };

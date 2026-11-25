@@ -1054,6 +1054,21 @@ export const CATEGORIES = [
         demo: '-',
       },
       {
+        id: 'border-primary',
+        classes: [['.border-primary', '.border-secondary', '.border-success', '.border-danger', '.border-warning'], ['.border-info', '.border-light', '.border-dark', '.border-surface', '.border-body']],
+        desc: {
+          pl: 'Kolor ramki (od 1.7.54). Sam kolor, bez grubości - działa razem z <code>.border</code> albo jedną krawędzią (<code>.border-top</code>). Ramka błędu: <code>border border-danger</code>.',
+          en: 'Border color (since 1.7.54). Color only, no width - works together with <code>.border</code> or a single edge (<code>.border-top</code>). An error frame: <code>border border-danger</code>.',
+          de: 'Rahmenfarbe (seit 1.7.54). Nur die Farbe, keine Breite - wirkt zusammen mit <code>.border</code> oder einer einzelnen Kante (<code>.border-top</code>). Fehlerrahmen: <code>border border-danger</code>.',
+        },
+        demo: {
+          pl: '<div class="border border-danger rounded-2 p-1 text-center text-4 text-danger">Błąd</div>',
+          en: '<div class="border border-danger rounded-2 p-1 text-center text-4 text-danger">Error</div>',
+          de: '<div class="border border-danger rounded-2 p-1 text-center text-4 text-danger">Fehler</div>',
+        },
+        tags: ['color'],
+      },
+      {
         id: 'rounded-0',
         classes: [['.rounded-0', '..', '.rounded-5'], ['.border-radius-0', '..', '-5']],
         desc: {
