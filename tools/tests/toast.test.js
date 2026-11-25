@@ -180,8 +180,16 @@ check('bottom position goes to its own container', !!body.querySelector('.toast-
 show({ message: 'x', duration: '<script>' });
 check('a non-number duration falls back to 4000 ms', 4000 === timers.at(-1).ms);
 
+// The default label follows <html lang> (since 1.7.52) and falls back to
+// ENGLISH. This mock has no lang, which is exactly the case that matters for
+// anyone installing molique from npm - it used to hand them Polish.
 show({});
-check('no message -> the default label', messageOf(lastToast()).textContent === 'Powiadomienie');
+check('no message -> the default label, in English when lang is absent', messageOf(lastToast()).textContent === 'Notification');
+
+document.documentElement.lang = 'pl-PL';
+show({});
+check('lang="pl-PL" -> the Polish default (region tag must still match)', messageOf(lastToast()).textContent === 'Powiadomienie');
+document.documentElement.lang = '';
 
 show({ message: 42 });
 check('a number message is shown as text', messageOf(lastToast()).textContent === '42');

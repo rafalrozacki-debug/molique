@@ -48,6 +48,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.52 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.52</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-warning text-dark mx-2 text-3">Fix</span>
+                  Oberflächentexte folgen jetzt <code>&lt;html lang&gt;</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Vier Module hatten ihre Beschriftungen fest auf Polnisch verdrahtet, unabhängig von der Seitensprache. Der schlimmste Fall: Die Lightbox-Galerie gab einem Screenreader auf JEDER englischen und deutschen Seite vier polnische Beschriftungen - und in jedem Projekt, das molique von npm installiert hat. Nichts sah falsch aus, denn dieser Text ist nicht sichtbar; ihn liest ausschließlich assistive Technologie.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Was fest verdrahtet war.</strong> Lightbox: die <code>aria-label</code> der Schaltflächen Schließen, Zurück und Weiter sowie das <code>alt</code> des vergrößerten Bildes. Kern: der Standardtext des Toasts und die Beschriftung, die der „Kopieren"-Button nach dem Kopieren oder nach einem Fehler zeigt. Datei-Upload: „N Dateien ausgewählt". Teilen: die Meldung für Browser ohne System-Teilen-Funktion - und das ist ein <code>alert()</code>, hält die Seite also in einer Sprache an, die der Lesende womöglich nicht beherrscht.</li>
+                  <li><strong>Jetzt entscheidet <code>&lt;html lang&gt;</code></strong> - Polnisch, Deutsch oder Englisch, mit Englisch als Rückfallwert. Ein vollständiger Tag mit Region funktioniert: <code>lang="pl-PL"</code> (das, was WordPress rendert) ergibt Polnisch und fällt nicht stillschweigend auf Englisch zurück. Die Abfrage erfolgt verzögert, eine Änderung des Attributs nach dem Seitenstart wirkt also sofort.</li>
+                  <li><strong>Polnische Pluralformen beim Datei-Upload.</strong> Der alte Text sagte bei jeder Anzahl „plików", womit der häufigste Fall - zwei oder drei Dateien - ausgerechnet in der einzigen Sprache, für die er geschrieben war, grammatisch falsch war. Jetzt heißt es „2 pliki", „5 plików", wobei das Band 12-14 zur zweiten Form zurückkehrt („12 plików", aber „22 pliki").</li>
+                  <li><strong>Was NICHT kaputt war.</strong> Befehlspalette, Karussell, Tour, Onboarding, sortierbare Liste, Tabellensuche und Theme-Editor haben seit Langem Sprachtabellen - geprüft wurden alle Module, nicht nur die gemeldeten.</li>
+                  <li><strong>HINWEIS beim Aktualisieren.</strong> Hat ein polnisches Projekt kein <code>lang="pl"</code> am <code>&lt;html&gt;</code>, werden diese Texte englisch. Das ist die einzige sichtbare Verhaltensänderung dieser Version und zugleich ein Zeichen dafür, dass das Attribut gefehlt hat - Suchmaschinen, Screenreader und Silbentrennung brauchen es ebenfalls.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:i18n-labels</code> - 60 Prüfungen in einem echten Browser über sechs Werte von <code>lang</code>, darunter die beiden, an denen solche Implementierungen scheitern: <code>pl-PL</code> und ein fehlendes Attribut. Die Suite überstand 8 Quellcode-Mutationen, aber erst im zweiten Anlauf: Die ersten beiden (verzögerte Abfrage im Kern, Rückfallwert beim Datei-Upload) blieben unbemerkt und deckten Lücken in den Tests selbst auf.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.51 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

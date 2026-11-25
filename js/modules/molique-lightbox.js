@@ -17,29 +17,41 @@
  * animations only ever touch transform/opacity), with a time-based
  * throttle (always releases itself) instead of a lock tied to any promise.
  *
- * NOTE (pre-existing gap, not touched by this comment-translation pass):
- * the aria-labels/alt text generated below ("Zamknij", "Poprzednie
- * zdjęcie", "Następne zdjęcie", "Powiększenie") are hardcoded Polish even
- * though this module loads on the EN/DE site pages too - a real
- * accessibility gap that would need a language lookup like
- * molique-carousel.js's CAROUSEL_LANG pattern.
+ * The labels below follow <html lang> (since 1.7.52). They used to be
+ * hardcoded Polish, which meant every English or German page - and every
+ * project installing molique from npm - handed a screen reader four Polish
+ * labels on a gallery whose visible UI is just arrows. Nothing was visibly
+ * wrong, which is why it survived so long: the only reader of this text is
+ * assistive technology.
  */
+// Split on '-' and fall back to English - see the note in molique-script.js:
+// a full BCP 47 tag ("pl-PL", which is what WordPress renders) would miss an
+// un-split comparison and quietly give English on a Polish site.
+const LIGHTBOX_TEXT = {
+  pl: { close: 'Zamknij', prev: 'Poprzednie zdjęcie', next: 'Następne zdjęcie', zoom: 'Powiększenie' },
+  de: { close: 'Schließen', prev: 'Vorheriges Bild', next: 'Nächstes Bild', zoom: 'Vergrößerte Ansicht' },
+  en: { close: 'Close', prev: 'Previous image', next: 'Next image', zoom: 'Enlarged view' },
+};
+const lightboxText = () =>
+  LIGHTBOX_TEXT[String(document.documentElement.lang || '').split('-')[0]] || LIGHTBOX_TEXT.en;
+
 const lightboxTriggers = document.querySelectorAll('[data-lightbox]');
 if (lightboxTriggers.length > 0) {
   let lightboxOverlay = document.querySelector('.lightbox-overlay');
   if (!lightboxOverlay) {
     lightboxOverlay = document.createElement('dialog');
     lightboxOverlay.className = 'lightbox-overlay';
+    const t = lightboxText();
     lightboxOverlay.innerHTML = `
       <div class="lightbox-top-bar">
         <span class="lightbox-counter"></span>
-        <button class="lightbox-close" aria-label="Zamknij" autofocus>&times;</button>
+        <button class="lightbox-close" aria-label="${t.close}" autofocus>&times;</button>
       </div>
-      <button class="lightbox-nav lightbox-prev" aria-label="Poprzednie zdjęcie">&#10094;</button>
+      <button class="lightbox-nav lightbox-prev" aria-label="${t.prev}">&#10094;</button>
       <div class="lightbox-content">
-        <img src="" alt="Powiększenie">
+        <img src="" alt="${t.zoom}">
       </div>
-      <button class="lightbox-nav lightbox-next" aria-label="Następne zdjęcie">&#10095;</button>
+      <button class="lightbox-nav lightbox-next" aria-label="${t.next}">&#10095;</button>
     `;
     document.body.appendChild(lightboxOverlay);
   }

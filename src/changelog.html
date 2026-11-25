@@ -47,6 +47,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.52 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.52</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-warning text-dark mx-2 text-3">Poprawka</span>
+                  Teksty interfejsu idą za <code>&lt;html lang&gt;</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Cztery moduły miały napisy zaszyte po polsku, niezależnie od języka strony. Najgorszy przypadek: galeria lightbox podawała czytnikowi ekranu cztery polskie etykiety na KAŻDEJ stronie angielskiej i niemieckiej - i w każdym projekcie, który zainstalował molique z npm. Nic nie wyglądało źle, bo tego tekstu nie widać; czyta go wyłącznie technologia asystująca.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Co było zaszyte.</strong> Lightbox: <code>aria-label</code> przycisków zamknięcia, wstecz i dalej oraz <code>alt</code> powiększanego zdjęcia. Rdzeń: domyślna treść toastu i napis na przycisku „Kopiuj" po skopiowaniu albo po błędzie. Wysyłka plików: „Wybrano N plików". Udostępnianie: komunikat dla przeglądarki bez systemowego udostępniania - a to <code>alert()</code>, więc zatrzymuje stronę w języku, którego czytający może nie znać.</li>
+                  <li><strong>Teraz decyduje <code>&lt;html lang&gt;</code></strong> - polski, niemiecki albo angielski, z angielskim jako wartością domyślną. Pełny tag z regionem działa: <code>lang="pl-PL"</code> (czyli to, co renderuje WordPress) daje polski, a nie ciche zejście na angielski. Odczyt jest leniwy, więc zmiana atrybutu już po starcie strony wchodzi w życie od razu.</li>
+                  <li><strong>Polska liczba mnoga przy plikach.</strong> Stary napis mówił „plików" przy każdej liczbie, więc najczęstszy przypadek - wybranie dwóch albo trzech plików - był niepoprawny gramatycznie w jedynym języku, w jakim był napisany. Teraz „2 pliki", „5 plików", z pasem 12-14 wracającym do drugiej formy („12 plików", ale „22 pliki").</li>
+                  <li><strong>Co NIE było zepsute.</strong> Paleta poleceń, karuzela, przewodnik, onboarding, sortowanie, wyszukiwarka tabeli i edytor motywu mają mapy językowe od dawna - sprawdziłem wszystkie moduły, nie tylko te zgłoszone.</li>
+                  <li><strong>UWAGA przy aktualizacji.</strong> Jeśli polski projekt NIE ma <code>lang="pl"</code> na <code>&lt;html&gt;</code>, te napisy zrobią się angielskie. To jedyna widoczna zmiana zachowania w tym wydaniu i zarazem sygnał, że atrybutu brakowało - potrzebuje go też wyszukiwarka, czytnik ekranu i dzielenie wyrazów.</li>
+                  <li><strong>Testy.</strong> <code>npm run test:i18n-labels</code> - 60 sprawdzeń w prawdziwej przeglądarce dla sześciu wartości <code>lang</code>, w tym dwóch, na których takie implementacje się wykładają: <code>pl-PL</code> i brak atrybutu. Zestaw przeszedł 8 mutacji źródła, ale dopiero za drugim podejściem: pierwsze dwie mutacje (leniwy odczyt w rdzeniu, polski fallback przy wysyłce plików) przeszły niezauważone i pokazały dziury w samych testach.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.51 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

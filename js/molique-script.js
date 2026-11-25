@@ -26,6 +26,27 @@ const MOLIQUE_JS_VERSION_QS = document.currentScript && document.currentScript.s
   ? '?' + document.currentScript.src.split('?')[1]
   : '';
 
+// USER-FACING TEXT FOLLOWS <html lang>, and English is the fallback - this
+// framework ships on npm, so a hardcoded Polish label is simply wrong for
+// most of the people installing it.
+//
+// SPLIT ON '-'. WordPress, and BCP 47 generally, often renders the full tag
+// with a region ("pl-PL"); comparing the whole tag against 'pl' fails on
+// every such site and silently falls back to English. Same reasoning as
+// CAROUSEL_LANG in molique-carousel.js.
+//
+// Read LAZILY, not once at load: the attribute can be set by a script after
+// this file runs (SPA shells, a CMS preview switching locale). The palette
+// module already does it this way; the eager constant in the carousel is the
+// older pattern.
+const MOLIQUE_TEXT = {
+  pl: { copied: 'Skopiowano!', copyError: 'Błąd!', toast: 'Powiadomienie' },
+  de: { copied: 'Kopiert!', copyError: 'Fehler!', toast: 'Benachrichtigung' },
+  en: { copied: 'Copied!', copyError: 'Error!', toast: 'Notification' },
+};
+const moliqueText = () =>
+  MOLIQUE_TEXT[String(document.documentElement.lang || '').split('-')[0]] || MOLIQUE_TEXT.en;
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // =========================================
@@ -105,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // pisze kod strony.
   window.MoliqueToast = {
     show(options = {}) {
-      const { message = 'Powiadomienie', type = 'info', position = 'top-right', duration = 4000, html = false } = options;
+      const { message = moliqueText().toast, type = 'info', position = 'top-right', duration = 4000, html = false } = options;
       const ms = Number(duration) > 0 ? Number(duration) : 4000;
 
       const typeClass = TOAST_TYPE[type] || TOAST_TYPE.info;
@@ -267,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const codeText = preBlock.innerText;
       const showSuccess = () => {
         const originalText = button.innerText;
-        button.innerText = 'Skopiowano!';
+        button.innerText = moliqueText().copied;
         button.classList.add('is-copied');
         setTimeout(() => {
           button.innerText = originalText;
@@ -289,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        try { document.execCommand('copy'); showSuccess(); } catch (err) { button.innerText = 'Błąd!'; }
+        try { document.execCommand('copy'); showSuccess(); } catch (err) { button.innerText = moliqueText().copyError; }
         textArea.remove();
       }
     });

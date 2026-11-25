@@ -310,6 +310,8 @@
 </ul>
 <h2 class="text-8 fw-bold mb-3 mt-5">3. ARCHITEKTURA JAVASCRIPT</h2>
 <ul class="text-secondary mb-4">
+  <li><strong>Język tekstów interfejsu (od 1.7.52):</strong> napisy, które molique generuje sam, idą za <code>&lt;html lang&gt;</code> - polski, niemiecki albo angielski, <strong>z angielskim jako wartością domyślną</strong>. Porównywany jest sam kod języka, więc <code>lang="pl-PL"</code> (to, co renderuje WordPress) daje polski. Odczyt jest leniwy, więc zmiana atrybutu po starcie strony działa od razu. Dotyczy: etykiet lightboksa (<code>aria-label</code> przycisków i <code>alt</code> zdjęcia), domyślnej treści toastu, napisu na przycisku kopiowania, licznika wybranych plików (z polską liczbą mnogą: <code>2 pliki</code>, <code>5 plików</code>), komunikatu modułu udostępniania, a wcześniej już palety poleceń, karuzeli, przewodnika, onboardingu, listy sortowalnej, wyszukiwarki tabeli i edytora motywu. <strong>PUŁAPKA: brak <code>lang</code> na <code>&lt;html&gt;</code> = angielski.</strong> Polski projekt bez tego atrybutu dostanie angielskie napisy - to zarazem sygnał, że atrybutu brakuje, bo potrzebuje go też czytnik ekranu i dzielenie wyrazów.
+    </li>
   <li><strong>Autoloader:</strong> Główny plik <code>molique-script.js</code> skanuje DOM i asynchronicznie pobiera mikro-moduły z <code>js/modules/</code> (np. <code>carousel.js</code>, <code>lightbox.js</code>) tylko wtedy, gdy komponent istnieje na stronie. Moduł przychodzi także wtedy, gdy komponent pojawi się później (AJAX), a moduł już obecny na stronie nie jest ładowany drugi raz. <code>[data-tour]</code> i <code>[data-onboarding]</code> działają tylko od startu strony.
     </li>
   <li><strong>Vanilla JS:</strong> Całkowity zakaz używania jQuery.

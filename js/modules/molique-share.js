@@ -1,6 +1,19 @@
 /**
  * molique - widget udostępniania (social media share buttons)
+ *
+ * The one message this module can show follows <html lang> (since 1.7.52).
+ * It is a blocking alert(), so getting it wrong is not a subtle failure -
+ * it stops the page in a language the reader may not have.
  */
+
+// Split on '-' and fall back to English - see the note in molique-script.js.
+const SHARE_TEXT = {
+  pl: { unsupported: 'Twoja przeglądarka nie wspiera systemowego udostępniania.' },
+  de: { unsupported: 'Ihr Browser unterstützt die System-Teilen-Funktion nicht.' },
+  en: { unsupported: 'Your browser does not support the system share dialog.' },
+};
+const shareText = () =>
+  SHARE_TEXT[String(document.documentElement.lang || '').split('-')[0]] || SHARE_TEXT.en;
 
 function initShare() {
   const shareButtons = document.querySelectorAll('.share-btn');
@@ -15,8 +28,8 @@ function initShare() {
         if (network === 'native') {
           if (navigator.share) {
             try { await navigator.share({ title: document.title, url: window.location.href }); } 
-            catch (err) { console.log('Udostępnianie anulowane.'); }
-          } else { alert('Twoja przeglądarka nie wspiera systemowego udostępniania.'); }
+            catch (err) { console.log('[molique-share] sharing cancelled by the user'); }
+          } else { alert(shareText().unsupported); }
           return;
         }
 

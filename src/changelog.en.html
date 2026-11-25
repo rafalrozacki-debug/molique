@@ -48,6 +48,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.52 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.52</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-warning text-dark mx-2 text-3">Fix</span>
+                  Interface text now follows <code>&lt;html lang&gt;</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Four modules had their wording hardcoded in Polish, whatever the page language. The worst case: the lightbox gallery handed a screen reader four Polish labels on EVERY English and German page - and in every project that installed molique from npm. Nothing looked wrong, because this text is never seen; only assistive technology reads it.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>What was hardcoded.</strong> Lightbox: the <code>aria-label</code> of the close, previous and next buttons, plus the <code>alt</code> of the enlarged image. Core: the default toast message and the label the "Copy" button shows after copying or failing. File upload: "N files selected". Share: the message for a browser without the system share dialog - and that one is an <code>alert()</code>, so it stops the page in a language the reader may not have.</li>
+                  <li><strong>Now <code>&lt;html lang&gt;</code> decides</strong> - Polish, German or English, with English as the fallback. A full tag with a region works: <code>lang="pl-PL"</code> (what WordPress renders) gives Polish rather than quietly falling through to English. The lookup is lazy, so changing the attribute after page start takes effect immediately.</li>
+                  <li><strong>Polish plurals in the file upload.</strong> The old string said "plików" for every count, so the most common case - picking two or three files - was grammatically wrong in the one language it was written for. It now says "2 pliki", "5 plików", with the 12-14 band flipping back to the second form ("12 plików", yet "22 pliki").</li>
+                  <li><strong>What was NOT broken.</strong> The command palette, carousel, tour, onboarding, sortable list, table search and theme editor have had language maps for a long time - every module was checked, not only the reported ones.</li>
+                  <li><strong>NOTE when upgrading.</strong> If a Polish project has no <code>lang="pl"</code> on <code>&lt;html&gt;</code>, these strings turn English. That is the only visible behaviour change in this release, and it is also a sign the attribute was missing - search engines, screen readers and hyphenation all need it.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:i18n-labels</code> - 60 checks in a real browser across six values of <code>lang</code>, including the two that actually break implementations: <code>pl-PL</code> and no attribute at all. The suite survived 8 source mutations, but only on the second attempt: the first two (the lazy lookup in the core, the file upload fallback) passed unnoticed and exposed holes in the tests themselves.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.51 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
