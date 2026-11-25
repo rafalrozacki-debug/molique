@@ -670,10 +670,141 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. VARIABLES                                          -->
+          <!-- 7. CHARACTER COUNT                                    -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Variables</h2>
+            <h2 class="text-8 fw-bold mb-3">7. Character count</h2>
+            <p class="text-muted mb-4">
+              The limit is enforced by the native <code>maxlength</code>, with
+              and without JavaScript. The <code>data-char-count</code>
+              attribute adds only what <code>maxlength</code> does not give on
+              its own: a visible answer to "how much is left".
+            </p>
+
+            <p class="text-4 text-muted mb-2">
+              The field below is real - type into it, paste, try to go over the
+              limit.
+            </p>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="form-floating">
+                  <textarea
+                    class="input"
+                    id="demo-note"
+                    rows="3"
+                    placeholder=" "
+                    maxlength="120"
+                    data-char-count="{remaining} of {max} characters left"
+                  ></textarea>
+                  <label for="demo-note">Notes for this order</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Copy</button>
+              <pre><code>&lt;!-- default format: 18/200 --&gt;
+&lt;textarea class="input" maxlength="200" data-char-count&gt;&lt;/textarea&gt;
+
+&lt;!-- your own wording: {used}, {remaining}, {max} --&gt;
+&lt;textarea class="input" maxlength="200"
+          data-char-count="{remaining} characters left"&gt;&lt;/textarea&gt;
+
+&lt;!-- warning threshold in characters left (default: 10% of the limit) --&gt;
+&lt;input class="input" maxlength="60" data-char-count data-char-count-threshold="5"&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Item</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Item"><code class="fw-bold">maxlength</code></td>
+                    <td data-label="Role">A plain HTML attribute. <strong>It</strong> keeps the limit; the counter only shows it. Without it the module does nothing and warns in the console.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Item"><code class="fw-bold">data-char-count</code></td>
+                    <td data-label="Role">Empty = the <code>used/limit</code> format. With content = your own template using <code>{used}</code>, <code>{remaining}</code>, <code>{max}</code> - which is how the counter gets a language without the module shipping translations.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Item"><code class="fw-bold">data-char-count-threshold</code></td>
+                    <td data-label="Role">How many characters left switch on the warning. Default: 10% of the limit, because a fixed number would mean "half the field" on a short input.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Item"><code class="fw-bold">.char-count</code></td>
+                    <td data-label="Role">The element holding the number. The module creates it right after the field; if you write your own (as the field's next sibling, or inside the same <code>.form-floating</code>), yours is used.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Item"><code>.is-near-limit</code>, <code>.is-at-limit</code></td>
+                    <td data-label="Role">States set by the module - the warning and the alarm colour.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Item"><code>MoliqueCharCount.update(field)</code></td>
+                    <td data-label="Role">After setting <code>.value</code> from code - an assignment fires no <code>input</code> event.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-md-cols-2 gap-3">
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">An emoji costs two</h3>
+                <p class="text-4 text-muted m-0">
+                  <code>maxlength</code> counts <strong>UTF-16 code
+                  units</strong>, not characters: a field limited to 10 takes
+                  exactly five <code>😀</code>. The counter counts the same way,
+                  deliberately. Counting "characters" would show
+                  <code>5/10</code> at the moment the browser has already
+                  stopped accepting input. An accented letter costs one, and so
+                  does a newline in a textarea.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">A server value skips the limit</h3>
+                <p class="text-4 text-muted m-0">
+                  <code>maxlength</code> only constrains what the user types. A
+                  value set from code passes straight through, and the field
+                  <strong>does not become invalid</strong>
+                  (<code>validity.tooLong</code> stays <code>false</code>). The
+                  counter then honestly shows <code>18/10</code> in red instead
+                  of rounding down and hiding the problem - but you still need
+                  validation on the server.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">It does not speak on every keystroke</h3>
+                <p class="text-4 text-muted m-0">
+                  The counter is tied to the field through
+                  <code>aria-describedby</code>, so a screen reader reads it when
+                  the field is focused. It is <strong>deliberately not a live
+                  region</strong>: announcing on every key turns a longer text
+                  into a stream of numbers, and that is the usual reason people
+                  switch counters off.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Together with a mask</h3>
+                <p class="text-4 text-muted m-0">
+                  It can be combined with <code>data-mask</code>, but it rarely
+                  makes sense: a mask sets <code>maxlength</code> to the length
+                  of its pattern, so the counter would measure characters
+                  <strong>including the separators</strong>. The counter is for
+                  free text, the mask for a fixed-length format.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. VARIABLES                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Variables</h2>
             <div class="table-wrapper mb-3">
               <table class="table table-sm table-hover table-cards">
                 <thead class="thead-light">
@@ -724,10 +855,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. PITFALLS                                           -->
+          <!-- 9. PITFALLS                                           -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Pitfalls</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Pitfalls</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="form-pulapki" open>
@@ -813,10 +944,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 9. RELATED                                            -->
+          <!-- 10. RELATED                                           -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">9. Related pages</h2>
+            <h2 class="text-8 fw-bold mb-3">10. Related pages</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="docs-select.en" class="card hover-shadow">
                 <div class="card-body">

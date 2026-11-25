@@ -49,6 +49,14 @@
  * place BEFORE the field is first focused.
  */
 
+/* SCOPE. Modules are classic scripts and share the global scope, so a
+   top-level `const apply` here would collide with the same name in another
+   module and the second script to load would die on a SyntaxError - taking its
+   whole component with it, silently (measured: adding molique-char-count.js,
+   which also declared `ready`, `apply` and `onInput`, killed this file on every
+   page carrying both). Everything lives in a closure; only the two documented
+   globals are published at the end, exactly as molique-combobox.js does. */
+(function () {
 /* ---------- 1. Tokens and presets ---------- */
 
 // A mask is a literal string. These characters are slots; everything else is a
@@ -488,3 +496,4 @@ window.MoliqueMask = {
   },
   presets: PRESETS,
 };
+})();

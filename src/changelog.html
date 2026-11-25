@@ -47,6 +47,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.50 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.50</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Licznik znaków: <code>data-char-count</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Limit trzyma natywny <code>maxlength</code> - z JavaScriptem i bez niego. Nowy atrybut dokłada tylko to, czego sam <code>maxlength</code> nie daje: widoczną informację, ile jeszcze zostało. Domyka punkt roadmapy „Limit znaków i maskowanie danych", którego drugą połowę zamknęło 1.7.49.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Jeden atrybut.</strong> <code>&lt;textarea class="input" maxlength="200" data-char-count&gt;</code>. Pusty atrybut daje format <code>18/200</code>; z treścią jest własnym szablonem z <code>{used}</code>, <code>{remaining}</code> i <code>{max}</code> - tak licznik dostaje język, bez dokładania tłumaczeń do modułu. Próg ostrzeżenia: <code>data-char-count-threshold</code>, domyślnie 10% limitu.</li>
+                  <li><strong>Liczy to, co przeglądarka, a nie to, co wygodne.</strong> <code>maxlength</code> jest wyrażony w jednostkach UTF-16, więc do pola z limitem 10 wejdzie dokładnie pięć <code>😀</code> - i tyle pokaże licznik. Liczenie „znaków" wyglądałoby poprawniej i po cichu kłamało: mówiłoby, że zostało pięć, w chwili gdy przeglądarka już nie przyjmuje tekstu. Polski ogonek kosztuje jeden, nowa linia w obszarze tekstowym też jeden.</li>
+                  <li><strong>Wartość z serwera omija limit.</strong> <code>maxlength</code> ogranicza tylko to, co wpisuje użytkownik; wartość ustawiona z kodu przechodzi bez przeszkód, a pole nawet nie staje się nieprawidłowe (<code>validity.tooLong</code> zostaje <code>false</code>). Licznik pokazuje wtedy <code>18/10</code> na czerwono, zamiast zaokrąglić i ukryć problem.</li>
+                  <li><strong>Nie gada przy każdym znaku.</strong> Powiązanie idzie przez <code>aria-describedby</code>, więc czytnik ekranu odczyta licznik przy wejściu w pole. Obszarem na żywo celowo nie jest - komunikat po każdym klawiszu zamienia dłuższy opis w strumień liczb.</li>
+                  <li><strong>Testy.</strong> <code>npm run test:char-count</code> - 31 sprawdzeń w prawdziwej przeglądarce, każda pułapka z kontrolą ujemną. Zestaw przeszedł 9 mutacji źródła; dwie z nich (zbyt wąski próg i liczenie znaków zamiast jednostek) wykryły luki w samych testach, zanim trafiły do wydania.</li>
+                  <li><strong>Do zdjęcia:</strong> jeśli w projekcie masz własny skrypt liczący znaki pod polem, możesz go usunąć - ale sprawdź, czy liczył tak samo. Skrypt liczący <code>[...value].length</code> pokazywał inną liczbę niż ta, którą egzekwuje przeglądarka, i rozjeżdżał się przy emoji.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.49 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

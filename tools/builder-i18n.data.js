@@ -201,6 +201,10 @@ export const DESCRIPTIONS = {
     en: 'Premium Multi Select (categories + multiple selection).',
     de: 'Premium Multi Select (Kategorien + Mehrfachauswahl).',
   },
+  'form-char-count': {
+    en: 'Character counter for a field with a native maxlength.',
+    de: 'Zeichenzähler für ein Feld mit nativem maxlength.',
+  },
   'form-select-search': {
     en: 'Searchable Select (combobox on the Popover API).',
     de: 'Durchsuchbares Select (Combobox auf Basis der Popover API).',

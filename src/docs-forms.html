@@ -670,10 +670,141 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. ZMIENNE                                            -->
+          <!-- 7. LICZNIK ZNAKÓW                                     -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Zmienne</h2>
+            <h2 class="text-8 fw-bold mb-3">7. Licznik znaków</h2>
+            <p class="text-muted mb-4">
+              Limit egzekwuje natywny <code>maxlength</code> - z JavaScriptem
+              i bez niego. Atrybut <code>data-char-count</code> dokłada tylko
+              to, czego sam <code>maxlength</code> nie daje: widoczną
+              informację, ile jeszcze zostało.
+            </p>
+
+            <p class="text-4 text-muted mb-2">
+              Pole poniżej jest prawdziwe - pisz, wklejaj, spróbuj przekroczyć
+              limit.
+            </p>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="form-floating">
+                  <textarea
+                    class="input"
+                    id="demo-note"
+                    rows="3"
+                    placeholder=" "
+                    maxlength="120"
+                    data-char-count="Pozostało {remaining} ze {max} znaków"
+                  ></textarea>
+                  <label for="demo-note">Uwagi do zamówienia</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopiuj</button>
+              <pre><code>&lt;!-- format domyślny: 18/200 --&gt;
+&lt;textarea class="input" maxlength="200" data-char-count&gt;&lt;/textarea&gt;
+
+&lt;!-- własny tekst: {used}, {remaining}, {max} --&gt;
+&lt;textarea class="input" maxlength="200"
+          data-char-count="Pozostało {remaining} znaków"&gt;&lt;/textarea&gt;
+
+&lt;!-- próg ostrzeżenia liczony w znakach do końca (domyślnie 10% limitu) --&gt;
+&lt;input class="input" maxlength="60" data-char-count data-char-count-threshold="5"&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Element</th>
+                    <th>Rola</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">maxlength</code></td>
+                    <td data-label="Rola">Zwykły atrybut HTML. To <strong>on</strong> pilnuje limitu; licznik tylko go pokazuje. Bez niego moduł nic nie robi i ostrzega w konsoli.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-char-count</code></td>
+                    <td data-label="Rola">Puste = format <code>użyte/limit</code>. Z treścią = własny szablon z <code>{used}</code>, <code>{remaining}</code>, <code>{max}</code> - tak licznik dostaje język, bez dokładania tłumaczeń do modułu.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-char-count-threshold</code></td>
+                    <td data-label="Rola">Ile znaków do końca włącza ostrzeżenie. Domyślnie 10% limitu, bo sztywna liczba na krótkim polu oznaczałaby „połowa pola".</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">.char-count</code></td>
+                    <td data-label="Rola">Element z liczbą. Moduł tworzy go sam zaraz za polem; jeśli napiszesz własny (jako następne rodzeństwo pola albo w tym samym <code>.form-floating</code>), użyje twojego.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>.is-near-limit</code>, <code>.is-at-limit</code></td>
+                    <td data-label="Rola">Stany nadawane przez moduł - kolor ostrzegawczy i alarmowy.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>MoliqueCharCount.update(pole)</code></td>
+                    <td data-label="Rola">Po ustawieniu <code>.value</code> z kodu - przypisanie nie wywołuje zdarzenia <code>input</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-md-cols-2 gap-3">
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Emoji kosztuje dwa znaki</h3>
+                <p class="text-4 text-muted m-0">
+                  <code>maxlength</code> liczy <strong>jednostki UTF-16</strong>,
+                  nie znaki: do pola z limitem 10 wejdzie dokładnie pięć
+                  <code>😀</code>. Licznik liczy tak samo - celowo. Gdyby
+                  liczył „znaki", pokazywałby <code>5/10</code> w momencie, w
+                  którym przeglądarka już przestała przyjmować tekst. Polski
+                  ogonek kosztuje jeden, nowa linia w obszarze tekstowym też
+                  jeden.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Wartość z serwera omija limit</h3>
+                <p class="text-4 text-muted m-0">
+                  <code>maxlength</code> ogranicza tylko to, co wpisuje
+                  użytkownik. Wartość ustawiona z kodu przechodzi bez
+                  przeszkód, a pole <strong>nie staje się nieprawidłowe</strong>
+                  (<code>validity.tooLong</code> zostaje <code>false</code>).
+                  Licznik pokaże wtedy uczciwie <code>18/10</code> na czerwono,
+                  zamiast zaokrąglić w dół i ukryć problem - ale walidację po
+                  stronie serwera i tak musisz mieć.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Nie czyta przy każdym znaku</h3>
+                <p class="text-4 text-muted m-0">
+                  Licznik jest powiązany z polem przez
+                  <code>aria-describedby</code>, więc czytnik ekranu odczyta go
+                  przy wejściu w pole. <strong>Celowo nie jest obszarem na
+                  żywo</strong>: komunikat przy każdym naciśnięciu klawisza
+                  zamienia dłuższy opis w strumień liczb i jest zwykłym powodem,
+                  dla którego ludzie wyłączają liczniki.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Razem z maską</h3>
+                <p class="text-4 text-muted m-0">
+                  Da się połączyć z <code>data-mask</code>, ale rzadko ma to
+                  sens: maska sama ustawia <code>maxlength</code> na długość
+                  wzorca, więc licznik odmierzałby znaki <strong>razem z
+                  separatorami</strong>. Licznik jest do swobodnego tekstu,
+                  maska do formatu o stałej długości.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. ZMIENNE                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Zmienne</h2>
             <div class="table-wrapper mb-3">
               <table class="table table-sm table-hover table-cards">
                 <thead class="thead-light">
@@ -724,10 +855,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. PUŁAPKI                                            -->
+          <!-- 9. PUŁAPKI                                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Pułapki</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Pułapki</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="form-pulapki" open>
@@ -814,10 +945,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 9. POWIĄZANE                                          -->
+          <!-- 10. POWIĄZANE                                         -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">9. Powiązane strony</h2>
+            <h2 class="text-8 fw-bold mb-3">10. Powiązane strony</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="docs-select" class="card hover-shadow">
                 <div class="card-body">

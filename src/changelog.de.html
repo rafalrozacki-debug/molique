@@ -48,6 +48,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.50 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.50</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Neu</span>
+                  Zeichenzähler: <code>data-char-count</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Das Limit hält das native <code>maxlength</code> - mit und ohne JavaScript. Das neue Attribut ergänzt nur das, was <code>maxlength</code> allein nicht liefert: eine sichtbare Antwort auf „wie viel ist noch übrig". Damit ist der Roadmap-Punkt „Zeichenlimit und Datenmasken" geschlossen, dessen andere Hälfte 1.7.49 brachte.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Ein Attribut.</strong> <code>&lt;textarea class="input" maxlength="200" data-char-count&gt;</code>. Leer ergibt es das Format <code>18/200</code>; mit Inhalt ist es Ihre eigene Vorlage mit <code>{used}</code>, <code>{remaining}</code> und <code>{max}</code> - so bekommt der Zähler eine Sprache, ohne dass das Modul Übersetzungen mitbringt. Warnschwelle: <code>data-char-count-threshold</code>, standardmäßig 10% des Limits.</li>
+                  <li><strong>Er zählt, was der Browser zählt, nicht was bequem ist.</strong> <code>maxlength</code> ist in UTF-16-Codeeinheiten angegeben, in ein Feld mit Limit 10 passen also genau fünf <code>😀</code> - und das zeigt der Zähler. „Zeichen" zu zählen sähe korrekter aus und würde still lügen: es hieße, fünf seien übrig, während der Browser längst nichts mehr annimmt. Ein Umlaut kostet eins, ein Zeilenumbruch im Textbereich ebenfalls eins.</li>
+                  <li><strong>Ein Serverwert umgeht das Limit.</strong> <code>maxlength</code> beschränkt nur, was der Nutzer tippt; ein aus dem Code gesetzter Wert geht ungehindert durch, und das Feld wird dadurch nicht einmal ungültig (<code>validity.tooLong</code> bleibt <code>false</code>). Der Zähler zeigt dann <code>18/10</code> in Rot, statt abzurunden und das Problem zu verstecken.</li>
+                  <li><strong>Er spricht nicht bei jedem Tastendruck.</strong> Die Verbindung läuft über <code>aria-describedby</code>, ein Screenreader liest den Zähler also beim Fokussieren. Ein Live-Bereich ist er bewusst nicht - eine Ansage nach jeder Taste macht aus einem längeren Text einen Strom von Zahlen.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:char-count</code> - 31 Prüfungen in einem echten Browser, jede Falle mit einer Negativkontrolle. Die Suite lief gegen 9 Quellcode-Mutationen; zwei davon (eine um eins zu enge Schwelle und das Zählen von Zeichen statt Einheiten) deckten Lücken in den Tests selbst auf, bevor sie in ein Release gelangten.</li>
+                  <li><strong>Kann entfallen:</strong> wenn Ihr Projekt ein eigenes Skript mitbringt, das Zeichen unter einem Feld zählt, können Sie es löschen - prüfen Sie aber, ob es genauso gezählt hat. Ein Skript mit <code>[...value].length</code> zeigte eine andere Zahl als die, die der Browser durchsetzt, und lief bei Emoji auseinander.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.49 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

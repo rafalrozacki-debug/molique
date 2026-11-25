@@ -682,10 +682,139 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. VARIABLEN                                          -->
+          <!-- 7. ZEICHENZÄHLER                                      -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Variablen</h2>
+            <h2 class="text-8 fw-bold mb-3">7. Zeichenzähler</h2>
+            <p class="text-muted mb-4">
+              Das Limit setzt das native <code>maxlength</code> durch - mit und
+              ohne JavaScript. Das Attribut <code>data-char-count</code> ergänzt
+              nur das, was <code>maxlength</code> allein nicht liefert: eine
+              sichtbare Antwort auf „wie viel ist noch übrig".
+            </p>
+
+            <p class="text-4 text-muted mb-2">
+              Das Feld unten ist echt - tippen Sie hinein, fügen Sie ein,
+              versuchen Sie das Limit zu überschreiten.
+            </p>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="form-floating">
+                  <textarea
+                    class="input"
+                    id="demo-note"
+                    rows="3"
+                    placeholder=" "
+                    maxlength="120"
+                    data-char-count="Noch {remaining} von {max} Zeichen"
+                  ></textarea>
+                  <label for="demo-note">Anmerkungen zur Bestellung</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="component-code mb-4">
+              <button class="btn-copy">Kopieren</button>
+              <pre><code>&lt;!-- Standardformat: 18/200 --&gt;
+&lt;textarea class="input" maxlength="200" data-char-count&gt;&lt;/textarea&gt;
+
+&lt;!-- eigener Wortlaut: {used}, {remaining}, {max} --&gt;
+&lt;textarea class="input" maxlength="200"
+          data-char-count="Noch {remaining} Zeichen"&gt;&lt;/textarea&gt;
+
+&lt;!-- Warnschwelle in Restzeichen (Standard: 10% des Limits) --&gt;
+&lt;input class="input" maxlength="60" data-char-count data-char-count-threshold="5"&gt;</code></pre>
+            </div>
+
+            <div class="table-wrapper mb-4">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Element</th>
+                    <th>Rolle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">maxlength</code></td>
+                    <td data-label="Rolle">Ein gewöhnliches HTML-Attribut. <strong>Es</strong> hält das Limit; der Zähler zeigt es nur an. Ohne das Attribut tut das Modul nichts und warnt in der Konsole.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-char-count</code></td>
+                    <td data-label="Rolle">Leer = Format <code>benutzt/Limit</code>. Mit Inhalt = eigene Vorlage mit <code>{used}</code>, <code>{remaining}</code>, <code>{max}</code> - so bekommt der Zähler eine Sprache, ohne dass das Modul Übersetzungen mitbringt.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">data-char-count-threshold</code></td>
+                    <td data-label="Rolle">Wie viele Restzeichen die Warnung auslösen. Standard: 10% des Limits, denn eine feste Zahl hieße auf einem kurzen Feld „das halbe Feld".</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code class="fw-bold">.char-count</code></td>
+                    <td data-label="Rolle">Das Element mit der Zahl. Das Modul legt es direkt hinter dem Feld an; schreiben Sie ein eigenes (als nächstes Geschwister des Feldes oder im selben <code>.form-floating</code>), wird Ihres verwendet.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>.is-near-limit</code>, <code>.is-at-limit</code></td>
+                    <td data-label="Rolle">Zustände, die das Modul setzt - Warn- und Alarmfarbe.</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Element"><code>MoliqueCharCount.update(Feld)</code></td>
+                    <td data-label="Rolle">Nach dem Setzen von <code>.value</code> aus dem Code - eine Zuweisung löst kein <code>input</code>-Ereignis aus.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-md-cols-2 gap-3">
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Ein Emoji kostet zwei</h3>
+                <p class="text-4 text-muted m-0">
+                  <code>maxlength</code> zählt <strong>UTF-16-Codeeinheiten</strong>,
+                  keine Zeichen: in ein Feld mit Limit 10 passen genau fünf
+                  <code>😀</code>. Der Zähler zählt bewusst genauso. Würde er
+                  „Zeichen" zählen, zeigte er <code>5/10</code> in dem Moment,
+                  in dem der Browser längst nichts mehr annimmt. Ein Umlaut
+                  kostet eins, ein Zeilenumbruch im Textbereich ebenfalls eins.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Ein Serverwert umgeht das Limit</h3>
+                <p class="text-4 text-muted m-0">
+                  <code>maxlength</code> beschränkt nur, was der Nutzer tippt.
+                  Ein aus dem Code gesetzter Wert geht ungehindert durch, und
+                  das Feld <strong>wird dadurch nicht ungültig</strong>
+                  (<code>validity.tooLong</code> bleibt <code>false</code>). Der
+                  Zähler zeigt dann ehrlich <code>18/10</code> in Rot, statt
+                  abzurunden und das Problem zu verstecken - eine Validierung
+                  auf dem Server brauchen Sie trotzdem.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Er spricht nicht bei jedem Tastendruck</h3>
+                <p class="text-4 text-muted m-0">
+                  Der Zähler ist über <code>aria-describedby</code> mit dem Feld
+                  verbunden, ein Screenreader liest ihn also beim Fokussieren.
+                  Er ist <strong>bewusst kein Live-Bereich</strong>: eine Ansage
+                  bei jeder Taste macht aus einem längeren Text einen Strom von
+                  Zahlen, und genau deshalb schalten Leute Zähler ab.
+                </p>
+              </div>
+              <div class="p-4 bg-surface border rounded-2">
+                <h3 class="fw-bold text-5 mb-2">Zusammen mit einer Maske</h3>
+                <p class="text-4 text-muted m-0">
+                  Die Kombination mit <code>data-mask</code> ist möglich, ergibt
+                  aber selten Sinn: eine Maske setzt <code>maxlength</code> auf
+                  die Länge ihres Musters, der Zähler würde also Zeichen
+                  <strong>samt Trennzeichen</strong> messen. Der Zähler ist für
+                  freien Text da, die Maske für ein Format fester Länge.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. VARIABLEN                                          -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Variablen</h2>
             <div class="table-wrapper mb-3">
               <table class="table table-sm table-hover table-cards">
                 <thead class="thead-light">
@@ -736,10 +865,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. FALLSTRICKE                                        -->
+          <!-- 9. FALLSTRICKE                                        -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Fallstricke</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Fallstricke</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="form-pulapki" open>
@@ -828,10 +957,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 9. VERWANDTE SEITEN                                   -->
+          <!-- 10. VERWANDTE SEITEN                                  -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">9. Verwandte Seiten</h2>
+            <h2 class="text-8 fw-bold mb-3">10. Verwandte Seiten</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="docs-select.de" class="card hover-shadow">
                 <div class="card-body">

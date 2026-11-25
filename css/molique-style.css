@@ -2929,6 +2929,36 @@
     margin-bottom: 0;
   }
   /* =========================================
+     1.6. CHARACTER COUNT (native maxlength)
+     ========================================= */
+  .char-count {
+    display: block;
+    margin-top: calc(var(--spacing-unit) * 0.5);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--text-muted);
+    text-align: right;
+    /* The digits change on every keystroke, so proportional figures would make
+       the counter jitter sideways and drag the eye away from the field. */
+    font-variant-numeric: tabular-nums;
+    /* Status colours use the -text variants: the plain --warning / --danger are
+       picked to sit under backgrounds, not to carry text contrast. */
+  }
+  .char-count.is-near-limit {
+    color: var(--warning-text);
+  }
+  .char-count.is-at-limit {
+    color: var(--danger-text);
+    font-weight: var(--fw-medium);
+  }
+  /* .card-body is a flex column with its own gap, so the counter's margin would
+     be added on top of that gap and the field would drift away from its counter.
+     Same reasoning as the margin reset on .form-floating. Inside .form-floating
+     the counter is not a direct child here, so it keeps its margin. */
+  .card-body > .char-count {
+    margin-top: 0;
+  }
+  /* =========================================
      1. CHECKBOXES AND RADIO
      ========================================= */
   .form-check {

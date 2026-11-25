@@ -1601,6 +1601,17 @@ export const CATEGORIES = [
         tags: ['form'],
       },
       {
+        id: 'char-count',
+        classes: [['.char-count', '.is-near-limit', '.is-at-limit']],
+        desc: {
+          pl: 'Licznik znaków dla pola z natywnym <code>maxlength</code> - włączany atrybutem <code>data-char-count</code>. Liczy w tych samych jednostkach co przeglądarka (kody UTF-16, więc emoji kosztuje 2). Stany <code>.is-near-limit</code> i <code>.is-at-limit</code> nadaje moduł.',
+          en: 'A character counter for a field with a native <code>maxlength</code>, switched on with <code>data-char-count</code>. It counts in the same units as the browser (UTF-16 code units, so an emoji costs 2). The <code>.is-near-limit</code> and <code>.is-at-limit</code> states are set by the module.',
+          de: 'Ein Zeichenzähler für ein Feld mit nativem <code>maxlength</code>, aktiviert über <code>data-char-count</code>. Er zählt in denselben Einheiten wie der Browser (UTF-16-Codeeinheiten, ein Emoji kostet also 2). Die Zustände <code>.is-near-limit</code> und <code>.is-at-limit</code> setzt das Modul.',
+        },
+        demo: '-',
+        tags: ['form'],
+      },
+      {
         id: 'input-range',
         classes: [['.input-range', '.input-color']],
         desc: {

@@ -48,6 +48,39 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.50 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.50</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Character count: <code>data-char-count</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  The limit is held by the native <code>maxlength</code>, with and without JavaScript. The new attribute adds only what <code>maxlength</code> does not give on its own: a visible answer to "how much is left". It closes the roadmap item "Character limit and data masking", whose other half shipped in 1.7.49.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>One attribute.</strong> <code>&lt;textarea class="input" maxlength="200" data-char-count&gt;</code>. Empty, it gives the <code>18/200</code> format; with content it is your own template using <code>{used}</code>, <code>{remaining}</code> and <code>{max}</code> - which is how the counter gets a language without the module shipping translations. Warning threshold: <code>data-char-count-threshold</code>, 10% of the limit by default.</li>
+                  <li><strong>It counts what the browser counts, not what is convenient.</strong> <code>maxlength</code> is specified in UTF-16 code units, so a field limited to 10 takes exactly five <code>😀</code> - and that is what the counter shows. Counting "characters" would look more correct and quietly lie: it would claim five are left at the moment the browser has already stopped accepting input. An accented letter costs one, and so does a newline in a textarea.</li>
+                  <li><strong>A server value skips the limit.</strong> <code>maxlength</code> only constrains what the user types; a value set from code passes straight through, and the field does not even become invalid (<code>validity.tooLong</code> stays <code>false</code>). The counter then shows <code>18/10</code> in red instead of rounding down and hiding the problem.</li>
+                  <li><strong>It does not speak on every keystroke.</strong> The link is made through <code>aria-describedby</code>, so a screen reader reads the counter when the field is focused. It is deliberately not a live region - announcing after every key turns a longer text into a stream of numbers.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:char-count</code> - 31 checks in a real browser, every trap paired with a negative control. The suite was put through 9 source mutations; two of them (a threshold one short and counting characters instead of units) exposed gaps in the tests themselves before they reached a release.</li>
+                  <li><strong>Can be removed:</strong> if your project carries its own script counting characters under a field, you can delete it - but check whether it counted the same way. A script using <code>[...value].length</code> showed a different number from the one the browser enforces, and drifted apart on emoji.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.49 -->
           <!-- ============================================================ -->
           <li class="timeline-item">
