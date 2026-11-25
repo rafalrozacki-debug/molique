@@ -297,6 +297,10 @@ export const DESCRIPTIONS = {
     en: 'Scroll to top: back-to-top button.',
     de: 'Scroll to Top: Nach-oben-Button.',
   },
+  spinner: {
+    en: 'Loading spinner + a busy-container overlay driven by aria-busy. Zero JS, zero images.',
+    de: 'Lade-Spinner + Overlay fuer beschaeftigte Container, gesteuert per aria-busy. Kein JS, keine Bilder.',
+  },
   'spotlight-tour': {
     en: 'Spotlight Tour: element-highlight coachmark sequence (markup built by JS).',
     de: 'Spotlight Tour: Coachmark-Sequenz mit Element-Hervorhebung (Markup wird per JS erzeugt).',

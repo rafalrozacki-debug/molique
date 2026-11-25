@@ -647,10 +647,48 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 6. PUŁAPKI                                            -->
+          <!-- 6. STAN ŁADOWANIA                                     -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">6. Pułapki</h2>
+            <h2 class="text-8 fw-bold mb-3">6. Stan ładowania</h2>
+            <p class="text-muted mb-4">
+              <code>.is-loading</code> (albo <code>aria-busy="true"</code> -
+              działa tak samo) chowa etykietę i ikony, a na ich miejscu stawia
+              pierścień. <strong>Szerokość przycisku się nie zmienia</strong>,
+              więc rząd przycisków nie podskakuje w chwili kliknięcia. Działa
+              z samą klasą koloru - <code>.btn</code> nie jest potrzebne.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview bg-surface gap-2" style="flex-wrap: wrap">
+                <button class="btn-primary">Zapisz zmiany</button>
+                <button class="btn-primary is-loading" disabled>Zapisz zmiany</button>
+                <button class="btn-outline-danger" aria-busy="true" disabled>Usuń konto</button>
+                <button class="btn-success btn-sm is-loading" disabled>Wyślij</button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;button class="btn-primary is-loading" disabled&gt;Zapisz zmiany&lt;/button&gt;
+&lt;button class="btn-primary" aria-busy="true" disabled&gt;Zapisz zmiany&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+
+            <p class="text-muted m-0">
+              <strong>Atrybut <code>disabled</code> nie jest tu ozdobą.</strong>
+              Sam stan blokuje mysz, ale nie klawiaturę - bez
+              <code>disabled</code> przycisk nadal odpali się Enterem
+              i formularz poleci drugi raz. Pełny opis pierścienia, rozmiarów,
+              tokenów i nakładki na kontener jest na stronie
+              <a href="docs-components-extra.html">Komponenty dodatkowe</a>,
+              w sekcji „Spinnery ładowania".
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PUŁAPKI                                            -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Pułapki</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="btn-pulapki" open>
@@ -758,10 +796,10 @@ BADGE[status] || 'badge-secondary';</code></pre>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. POWIĄZANE                                          -->
+          <!-- 8. POWIĄZANE                                          -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Powiązane strony</h2>
+            <h2 class="text-8 fw-bold mb-3">8. Powiązane strony</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="examples-buttons" class="card hover-shadow">
                 <div class="card-body">

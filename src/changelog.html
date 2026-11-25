@@ -47,6 +47,41 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.51 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.51</div>
+              <div class="text-muted text-4">Listopad 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">Nowość</span>
+                  Spinnery ładowania: <code>.spinner</code>, <code>.is-loading</code>, <code>aria-busy</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  Framework z modalami, tabelami i treścią dociąganą AJAX-em nie miał dotąd ŻADNEGO wskaźnika ładowania - każdy projekt dorabiał własny, zwykle GIF-em. Teraz jest jeden element, czyste CSS: pierścień, stan przycisku i nakładka na kontener.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>Jeden pusty element, zero JS i zero obrazków.</strong> <code>&lt;span class="spinner"&gt;&lt;/span&gt;</code>. Średnica to <code>1.25em</code> otaczającego tekstu, a kolor bierze się z <code>currentColor</code> - spinner w małym przycisku, w komórce tabeli i w nagłówku jest od razu we właściwej skali i we właściwym kolorze, bez wariantu na każdy przypadek. Stałe rozmiary, gdy wielkość tekstu nie jest dobrą miarą: <code>.spinner-sm</code>, <code>.spinner-lg</code>, <code>.spinner-xl</code>.</li>
+                  <li><strong>Przycisk nie zmienia szerokości.</strong> <code>.is-loading</code> (albo <code>aria-busy="true"</code> - działa tak samo) chowa etykietę i ikony, a pierścień staje pośrodku. Rząd przycisków nie podskakuje w chwili kliknięcia, bo etykieta nie jest usuwana, tylko przestaje się malować. Działa z samą klasą koloru - <code>.btn-primary</code> wystarczy, bez <code>.btn</code>.</li>
+                  <li><strong>Nakładka na kontener ma JEDEN przełącznik.</strong> <code>.spinner-overlay</code> w karcie, tabeli czy sekcji pokazuje się wyłącznie wtedy, gdy kontener ma <code>aria-busy="true"</code>. Nie ma osobnej klasy do dołożenia, więc obraz i to, co słyszy czytnik ekranu, nie mogą się rozjechać - a rozjeżdżają się zawsze, gdy stan trzeba ustawić w dwóch miejscach. Kontekst pozycjonowania dostaje tylko kontener, który taką warstwę faktycznie zawiera.</li>
+                  <li><strong>Przy <code>prefers-reduced-motion</code> pierścień nie staje.</strong> Zamyka się w pełne koło i powoli pulsuje kryciem. Samo zatrzymanie zostawiłoby pierścień z ogonem, czyli coś, co wygląda jak błąd renderowania - a wskaźnik ładowania nadal musi mówić „pracuję". Animowany jest wyłącznie <code>transform</code>, a w tym trybie <code>opacity</code>.</li>
+                  <li><strong>Domknięty martwy hak w palecie poleceń.</strong> Od 1.7.42 <code>molique-command-palette.js</code> nadawał klasę <code>.is-loading</code> na czas pobierania wyników z serwera, ale nic w CSS-ie jej nie rysowało - paleta pokazywała stare wyniki bez żadnego znaku, że lecą nowe. Teraz w wierszu wyszukiwania pojawia się pierścień.</li>
+                  <li><strong>Czego to NIE robi.</strong> Sam <code>.spinner</code> jest pustym elementem, więc dla czytnika ekranu NIE ISTNIEJE - zawsze dokładaj tekst (<code>role="status"</code> + podpis w <code>.sr-only</code>). Stan przycisku blokuje mysz, ale nie klawiaturę: bez atrybutu <code>disabled</code> Enter wyśle formularz drugi raz. Nakładka przykrywa treść dla myszy, nie dla fokusu - na to jest <code>inert</code>.</li>
+                  <li><strong>Testy.</strong> <code>npm run test:spinner</code> - 46 sprawdzeń w prawdziwej przeglądarce, każda pułapka z kontrolą ujemną (w tym animacja wskazująca nieistniejące <code>@keyframes</code>, żeby pokazać, że test w ogóle potrafi oblać). Zestaw przeszedł 9 mutacji źródła. Jedną rzecz złapał dopiero zrzut ekranu w powiększeniu, nie asercja: pierwsza wersja nakładki była zbyt przezroczysta i jej podpis zahaczał o tekst spod spodu.</li>
+                  <li><strong>Do zdjęcia:</strong> jeśli w projekcie masz własny spinner na GIF-ie albo na <code>border</code> z <code>@keyframes</code>, możesz go usunąć. Uwaga przy podmianie: wersje oparte na animowanym <code>border-width</code> albo <code>box-shadow</code> wymuszają przeliczanie układu na każdej klatce - ta nie, rusza wyłącznie <code>transform</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.50 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

@@ -74,6 +74,16 @@
                     <td data-label="When">A READING progress bar for the whole page, pinned to the top.</td>
                     <td data-label="What it's built on">The <code>molique-script.js</code> core, listening for scroll</td>
                   </tr>
+                  <tr>
+                    <td data-label="Component"><code>.spinner</code></td>
+                    <td data-label="When">A wait of UNKNOWN length - a save, a server response, a button mid-action.</td>
+                    <td data-label="What it's built on">Pure CSS, size and colour from the surroundings</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Component"><code>.spinner-overlay</code></td>
+                    <td data-label="When">A whole panel reloading its content - a card, a table, a dashboard section.</td>
+                    <td data-label="What it's built on">Pure CSS, switched by <code>aria-busy</code></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -556,10 +566,158 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. READING BAR                                        -->
+          <!-- 7. LOADING SPINNERS                                   -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Reading bar</h2>
+            <h2 class="text-8 fw-bold mb-3">7. Loading spinners</h2>
+            <p class="text-muted mb-4">
+              The progress bar above says <strong>how much is left</strong>.
+              A spinner only says <strong>something is happening</strong> -
+              and where the percentage IS known, a spinner reads as a freeze.
+              Zero JS, zero images: one element that takes its size from the
+              text beside it and its colour from the text colour.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview flex-column align-items-stretch w-100 bg-surface gap-4">
+                <div>
+                  <p class="text-2 text-muted mb-2">The ring alone - size follows the text</p>
+                  <div class="d-flex align-items-center gap-3">
+                    <span class="spinner spinner-sm" aria-hidden="true"></span>
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="spinner spinner-lg" aria-hidden="true"></span>
+                    <span class="spinner spinner-xl text-primary" aria-hidden="true"></span>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-2 text-muted mb-2">Button - the label goes, the width stays</p>
+                  <div class="d-flex align-items-center gap-2" style="flex-wrap: wrap">
+                    <button class="btn-primary">Save changes</button>
+                    <button class="btn-primary is-loading" disabled>Save changes</button>
+                    <button class="btn-outline-danger" aria-busy="true" disabled>Delete account</button>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-2 text-muted mb-2">Overlay - switched by <code>aria-busy</code></p>
+                  <div class="card" style="max-width: 360px" aria-busy="true">
+                    <div class="card-header"><strong>Client invoices</strong></div>
+                    <div class="spinner-overlay">
+                      <span class="spinner spinner-lg" aria-hidden="true"></span>
+                      <span>Loading data…</span>
+                    </div>
+                    <div class="card-body">
+                      <p class="m-0">INV/2026/114 - 3,200</p>
+                      <p class="m-0">INV/2026/113 - 980</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;!-- the spinner alone: text for the screen reader is MANDATORY --&gt;
+&lt;span role="status"&gt;
+  &lt;span class="spinner" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;span class="sr-only"&gt;Loading…&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;!-- button: disabled is part of the state, not decoration --&gt;
+&lt;button class="btn-primary is-loading" disabled&gt;Save changes&lt;/button&gt;
+&lt;button class="btn-primary" aria-busy="true" disabled&gt;Save changes&lt;/button&gt;
+
+&lt;!-- overlay: aria-busy on the container shows and hides it --&gt;
+&lt;div class="card" aria-busy="true"&gt;
+  &lt;div class="spinner-overlay"&gt;
+    &lt;span class="spinner spinner-lg" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;span&gt;Loading data…&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="card-body"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Class</th>
+                    <th>What it does</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.spinner</code></td>
+                    <td data-label="What it does">
+                      The ring. <code>1.25em</code> of the surrounding text,
+                      coloured by <code>currentColor</code> - to recolour it,
+                      change the parent's colour (e.g.
+                      <code>.text-primary</code>), not the spinner.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class">
+                      <code class="fw-bold">.spinner-sm</code>
+                      <code class="fw-bold">.spinner-lg</code>
+                      <code class="fw-bold">.spinner-xl</code>
+                    </td>
+                    <td data-label="What it does">
+                      A fixed size (1em / 2em / 3em) for the places where the
+                      local font-size is not the measure you want.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.is-loading</code></td>
+                    <td data-label="What it does">
+                      On a button: the label and any icons go, the ring sits
+                      in the middle, and <strong>the button keeps its exact
+                      width</strong> - a row of buttons does not jump. Works
+                      with a colour class alone (<code>.btn-primary</code>, no
+                      <code>.btn</code> needed). Equivalent:
+                      <code>aria-busy="true"</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class"><code class="fw-bold">.spinner-overlay</code></td>
+                    <td data-label="What it does">
+                      A layer over a container (card, table, section). Visible
+                      only while that container carries
+                      <code>aria-busy="true"</code>; the positioning context
+                      is given only to a container that actually holds one.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Class">
+                      <code class="fw-bold">--spinner-size</code>
+                      <code class="fw-bold">--spinner-thickness</code>
+                      <code class="fw-bold">--spinner-speed</code>
+                      <code class="fw-bold">--spinner-overlay-bg</code>
+                    </td>
+                    <td data-label="What it does">
+                      Tokens: diameter, stroke width, one turn
+                      (<code>0.7s</code>) and the overlay's background. Set
+                      these instead of overriding rules -
+                      <code>--spinner-speed</code> also drives the button and
+                      command-palette spinners.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-muted mt-4 mb-0">
+              Under <code>prefers-reduced-motion</code> the ring does not
+              rotate: it closes into a full circle and breathes slowly on
+              opacity. It deliberately does not stop dead - a frozen ring
+              with a tail looks like a rendering bug rather than "working".
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. READING BAR                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Reading bar</h2>
             <p class="text-muted mb-4">
               A thin bar pinned to the top of the screen, growing as you
               scroll. The one at the very top of this page is real -
@@ -599,10 +757,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. PITFALLS                                           -->
+          <!-- 9. PITFALLS                                           -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Pitfalls</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Pitfalls</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="extra-pulapki" open>
@@ -682,14 +840,54 @@
                   </p>
                 </div>
               </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>A loading button without <code>disabled</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    The loading state blocks the <strong>mouse</strong>
+                    (<code>pointer-events: none</code>) but not the keyboard -
+                    the button still fires on Enter or Space, so the form goes
+                    twice. CSS cannot fix that: only the
+                    <code>disabled</code> attribute can take a button out of
+                    action, and it is part of the state rather than
+                    decoration. The same goes for the container overlay: it
+                    covers the content for the mouse, but focus still reaches
+                    the fields underneath - the right tool there is
+                    <code>inert</code> on the covered content.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">6</span>
+                  <span>A bare <code>.spinner</code> does not exist for a screen reader</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    It is an empty element with no text, so there is nothing
+                    to read out - the user gets silence and cannot tell
+                    whether the page is working or has hung. A spinner always
+                    travels with text: <code>role="status"</code> on the
+                    wrapper, <code>aria-hidden="true"</code> on the ring
+                    itself, and a label in <code>.sr-only</code> or visible
+                    beside it. In the overlay and on a button that job is done
+                    by <code>aria-busy</code> on the container.
+                  </p>
+                </div>
+              </details>
             </div>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 9. RELATED                                            -->
+          <!-- 10. RELATED                                            -->
           <!-- ===================================================== -->
           <section class="mb-0">
-            <h2 class="text-8 fw-bold mb-3">9. Related pages</h2>
+            <h2 class="text-8 fw-bold mb-3">10. Related pages</h2>
             <div class="grid-md-cols-3 gap-3">
               <a href="examples-carousel.en" class="card hover-shadow">
                 <div class="card-body">

@@ -4,6 +4,7 @@
  */
 
 @use 'variables' as *;
+@use 'mixins' as *;
 
 /* =========================================
    1. BASE BUTTON (.btn)
@@ -619,4 +620,86 @@ $btn-base-selectors: ".btn";
   .btn-hover-lift .btn:not([class*="hover-"]):hover {
     transform: none;
   }
+}
+
+/* =========================================
+   LOADING STATE (.is-loading / aria-busy)
+   =========================================
+   Lives HERE and not in components/_spinner.scss for one reason: the .btn
+   implication. A colour class does not carry .btn, so `.btn.is-loading`
+   would miss <button class="btn-primary is-loading"> entirely. The selector
+   list is the same $btn-base-selectors the base block is built from, so a
+   new colour added to $theme-colors gets the loading state for free.
+
+   Both hooks are supported on purpose. aria-busy is the native, accessible
+   truth and the one molique's golden rule prefers; .is-loading is the
+   framework's .is-* state convention and is ALREADY toggled by
+   js/modules/molique-command-palette.js. Supporting only one would have
+   left the other looking implemented.
+
+   :is() keeps this to two short rules instead of 34 selectors. Every
+   argument here weighs the same (one class or one attribute), so the
+   combined weight is a predictable 0-2-0 - above .btn-primary, which is
+   what lets it take over the text colour. */
+$btn-loading-sel: ":is(#{$btn-base-selectors}):is(.is-loading, [aria-busy='true'])";
+
+#{$btn-loading-sel} {
+  position: relative;
+  /* Blocks the mouse, NOT the keyboard - Enter still fires. The button must
+     also carry `disabled` to be genuinely inert; this is a safety net for
+     the double click, not a substitute for it. Said again in the docs. */
+  pointer-events: none;
+
+  /* THE WHOLE POINT: the label goes invisible while the button keeps its
+     exact width, so a row of buttons does not jump when one starts loading.
+     -webkit-text-fill-color (already relied on by .text-gradient-animated
+     and .text-clip-bg in this framework) hides the glyphs but leaves `color`
+     intact - so currentColor below is still the button's real ink. Plain
+     `color: transparent` would hide the text AND the spinner with it. */
+  -webkit-text-fill-color: transparent;
+
+  /* Icons and badges are elements, so the text-fill trick does not reach
+     them - without this an icon would sit next to the spinner. */
+  > * {
+    opacity: 0;
+  }
+
+  &::after {
+    --_btn-spinner-size: var(--btn-spinner-size, 1.15em);
+
+    content: '';
+    position: absolute;
+    /* inset + auto margins centre it in both axes without touching
+       transform, which the rotation needs for itself. */
+    inset: 0;
+    margin: auto;
+    inline-size: var(--_btn-spinner-size);
+    block-size: var(--_btn-spinner-size);
+
+    @include spinner-ring(var(--btn-spinner-thickness, 0.11em));
+
+    animation: btnLoadingSpin var(--spinner-speed, 0.7s) linear infinite;
+  }
+}
+
+/* Same reasoning as components/_spinner.scss: a stopped ring keeps its tail
+   and reads as a half-drawn circle, so the tail goes and the ring breathes
+   on opacity instead. */
+@media (prefers-reduced-motion: reduce) {
+  #{$btn-loading-sel}::after {
+    background: currentColor;
+    animation: btnLoadingBreathe 1.6s ease-in-out infinite;
+  }
+}
+
+/* Own keyframes, named after this component. Chunks are built per file, so
+   borrowing spinnerRotate from components/_spinner.scss would leave the
+   buttons chunk animating a name it does not contain - silently. */
+@keyframes btnLoadingSpin {
+  to { transform: rotate(1turn); }
+}
+
+@keyframes btnLoadingBreathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }

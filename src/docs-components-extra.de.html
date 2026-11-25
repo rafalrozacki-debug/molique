@@ -74,6 +74,16 @@
                     <td data-label="Wann">Ein LESE-Fortschrittsbalken für die gesamte Seite, oben fixiert.</td>
                     <td data-label="Worauf basiert es">Der Kern <code>molique-script.js</code>, lauscht auf Scroll</td>
                   </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.spinner</code></td>
+                    <td data-label="Wann">Warten von UNBEKANNTER Dauer - Speichern, Serverantwort, Button mitten in der Aktion.</td>
+                    <td data-label="Worauf basiert es">Reines CSS, Größe und Farbe aus der Umgebung</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponente"><code>.spinner-overlay</code></td>
+                    <td data-label="Wann">Ein ganzes Panel lädt seinen Inhalt neu - Karte, Tabelle, Dashboard-Abschnitt.</td>
+                    <td data-label="Worauf basiert es">Reines CSS, geschaltet über <code>aria-busy</code></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -561,10 +571,162 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. LESELEISTE                                         -->
+          <!-- 7. LADE-SPINNER                                       -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Leseleiste</h2>
+            <h2 class="text-8 fw-bold mb-3">7. Lade-Spinner</h2>
+            <p class="text-muted mb-4">
+              Der Fortschrittsbalken oben sagt, <strong>wie viel noch
+              fehlt</strong>. Ein Spinner sagt nur, <strong>dass gerade etwas
+              passiert</strong> - und dort, wo der Prozentsatz bekannt ist,
+              liest sich ein Spinner wie ein Einfrieren. Kein JS, keine
+              Bilder: ein Element, das seine Größe vom umgebenden Text und
+              seine Farbe von der Textfarbe nimmt.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview flex-column align-items-stretch w-100 bg-surface gap-4">
+                <div>
+                  <p class="text-2 text-muted mb-2">Der Ring allein - die Größe folgt dem Text</p>
+                  <div class="d-flex align-items-center gap-3">
+                    <span class="spinner spinner-sm" aria-hidden="true"></span>
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="spinner spinner-lg" aria-hidden="true"></span>
+                    <span class="spinner spinner-xl text-primary" aria-hidden="true"></span>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-2 text-muted mb-2">Button - die Beschriftung verschwindet, die Breite bleibt</p>
+                  <div class="d-flex align-items-center gap-2" style="flex-wrap: wrap">
+                    <button class="btn-primary">Änderungen speichern</button>
+                    <button class="btn-primary is-loading" disabled>Änderungen speichern</button>
+                    <button class="btn-outline-danger" aria-busy="true" disabled>Konto löschen</button>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-2 text-muted mb-2">Overlay - geschaltet über <code>aria-busy</code></p>
+                  <div class="card" style="max-width: 360px" aria-busy="true">
+                    <div class="card-header"><strong>Kundenrechnungen</strong></div>
+                    <div class="spinner-overlay">
+                      <span class="spinner spinner-lg" aria-hidden="true"></span>
+                      <span>Daten werden geladen…</span>
+                    </div>
+                    <div class="card-body">
+                      <p class="m-0">RE/2026/114 - 3.200 €</p>
+                      <p class="m-0">RE/2026/113 - 980 €</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;!-- Spinner allein: Text für den Screenreader ist PFLICHT --&gt;
+&lt;span role="status"&gt;
+  &lt;span class="spinner" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;span class="sr-only"&gt;Wird geladen…&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;!-- Button: disabled gehört zum Zustand, es ist keine Deko --&gt;
+&lt;button class="btn-primary is-loading" disabled&gt;Speichern&lt;/button&gt;
+&lt;button class="btn-primary" aria-busy="true" disabled&gt;Speichern&lt;/button&gt;
+
+&lt;!-- Overlay: aria-busy am Container zeigt und versteckt es --&gt;
+&lt;div class="card" aria-busy="true"&gt;
+  &lt;div class="spinner-overlay"&gt;
+    &lt;span class="spinner spinner-lg" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;span&gt;Daten werden geladen…&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="card-body"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasse</th>
+                    <th>Was sie macht</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.spinner</code></td>
+                    <td data-label="Was sie macht">
+                      Der Ring. <code>1.25em</code> des umgebenden Textes,
+                      Farbe aus <code>currentColor</code> - zum Umfärben die
+                      Farbe des Elternelements ändern (z. B.
+                      <code>.text-primary</code>), nicht den Spinner selbst.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse">
+                      <code class="fw-bold">.spinner-sm</code>
+                      <code class="fw-bold">.spinner-lg</code>
+                      <code class="fw-bold">.spinner-xl</code>
+                    </td>
+                    <td data-label="Was sie macht">
+                      Feste Größe (1em / 2em / 3em) für Stellen, an denen die
+                      lokale Schriftgröße nicht das richtige Maß ist.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.is-loading</code></td>
+                    <td data-label="Was sie macht">
+                      Am Button: Beschriftung und Icons verschwinden, der Ring
+                      steht mittig, und <strong>die Breite bleibt exakt
+                      gleich</strong> - eine Button-Reihe springt nicht.
+                      Funktioniert mit der Farbklasse allein
+                      (<code>.btn-primary</code> genügt, ohne
+                      <code>.btn</code>). Gleichwertig:
+                      <code>aria-busy="true"</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse"><code class="fw-bold">.spinner-overlay</code></td>
+                    <td data-label="Was sie macht">
+                      Eine Schicht über einem Container (Karte, Tabelle,
+                      Abschnitt). Nur sichtbar, solange der Container
+                      <code>aria-busy="true"</code> trägt; den
+                      Positionierungskontext bekommt ausschließlich ein
+                      Container, der tatsächlich eine solche Schicht enthält.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasse">
+                      <code class="fw-bold">--spinner-size</code>
+                      <code class="fw-bold">--spinner-thickness</code>
+                      <code class="fw-bold">--spinner-speed</code>
+                      <code class="fw-bold">--spinner-overlay-bg</code>
+                    </td>
+                    <td data-label="Was sie macht">
+                      Tokens: Durchmesser, Strichstärke, eine Umdrehung
+                      (<code>0.7s</code>) und der Hintergrund des Overlays.
+                      Diese setzen, statt Regeln zu überschreiben -
+                      <code>--spinner-speed</code> steuert auch den Spinner im
+                      Button und in der Befehlspalette.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-muted mt-4 mb-0">
+              Bei <code>prefers-reduced-motion</code> dreht sich der Ring
+              nicht: Er schließt sich zum vollen Kreis und pulsiert langsam
+              über die Deckkraft. Er bleibt bewusst nicht ganz stehen - ein
+              angehaltener Ring mit Schweif sieht nach Renderfehler aus und
+              nicht nach „arbeitet".
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. LESELEISTE                                         -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Leseleiste</h2>
             <p class="text-muted mb-4">
               Eine dünne, am oberen Bildschirmrand fixierte Leiste, die mit
               dem Scrollen wächst. Diejenige ganz oben auf dieser Seite ist
@@ -605,10 +767,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. FALLSTRICKE                                        -->
+          <!-- 9. FALLSTRICKE                                        -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Fallstricke</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Fallstricke</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="extra-pulapki" open>
@@ -692,14 +854,56 @@
                   </p>
                 </div>
               </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>Ladender Button ohne <code>disabled</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Der Ladezustand blockiert die <strong>Maus</strong>
+                    (<code>pointer-events: none</code>), nicht aber die
+                    Tastatur - der Button löst weiterhin mit Enter oder
+                    Leertaste aus, das Formular geht also ein zweites Mal
+                    raus. CSS kann das nicht beheben: Nur das Attribut
+                    <code>disabled</code> setzt einen Button wirklich außer
+                    Kraft, und es gehört zum Zustand, es ist keine Deko.
+                    Dasselbe gilt für das Overlay am Container: Es deckt den
+                    Inhalt für die Maus ab, der Fokus erreicht die Felder
+                    darunter aber weiterhin - dort ist <code>inert</code> auf
+                    dem abgedeckten Inhalt das richtige Mittel.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">6</span>
+                  <span>Ein nackter <code>.spinner</code> existiert für den Screenreader nicht</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Es ist ein leeres Element ohne Text, also gibt es nichts
+                    vorzulesen - die Nutzerin hört Stille und kann nicht
+                    unterscheiden, ob die Seite arbeitet oder hängt. Ein
+                    Spinner kommt immer mit Text:
+                    <code>role="status"</code> am Wrapper,
+                    <code>aria-hidden="true"</code> am Ring selbst und eine
+                    Beschriftung in <code>.sr-only</code> oder sichtbar
+                    daneben. Im Overlay und am Button übernimmt
+                    <code>aria-busy</code> am Container diese Aufgabe.
+                  </p>
+                </div>
+              </details>
             </div>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 9. VERWANDTE SEITEN                                   -->
+          <!-- 10. VERWANDTE SEITEN                                   -->
           <!-- ===================================================== -->
           <section class="mb-0">
-            <h2 class="text-8 fw-bold mb-3">9. Verwandte Seiten</h2>
+            <h2 class="text-8 fw-bold mb-3">10. Verwandte Seiten</h2>
             <div class="grid-md-cols-3 gap-3">
               <a href="examples-carousel.de" class="card hover-shadow">
                 <div class="card-body">

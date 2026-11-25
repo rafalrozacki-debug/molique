@@ -278,6 +278,10 @@ export const COMPONENT = {
   '--_icon-anim-zoom':      ['Animowane ikony', 'internal', 'Skala w <code>iconAnimZoom</code>: powyżej 1 powiększa, poniżej pomniejsza.'],
   '--_icon-anim-dash-from': ['Animowane ikony', 'internal', 'Początkowy <code>stroke-dashoffset</code> w <code>iconAnimPartDraw</code>, domyślnie <code>1</code> (kreska rysuje się od początku). <code>-1</code> rysuje ją od końca - tak linia <code>pencil-line</code> wychodzi spod grafitu.'],
   '--_icon-anim-opacity':   ['Animowane ikony', 'internal', 'Docelowe krycie w <code>draw-loop</code>: 1 dla kropek, 0.2 dla tła duotone.'],
+  '--_spinner-size':        ['Spinner', 'internal', 'Rozstrzygnięta średnica <code>.spinner</code>: <code>--spinner-size</code> albo domyślne <code>1.25em</code>. Osobna zmienna, bo wartość czytają trzy deklaracje (szerokość, wysokość, maska) i jedna domyślna w trzech miejscach rozjechałaby się przy pierwszej zmianie.'],
+  '--_spinner-thickness':   ['Spinner', 'internal', 'Rozstrzygnięta grubość kreski pierścienia, domyślnie <code>0.125em</code>. Liczona od wielkości OTACZAJĄCEGO tekstu, nie od średnicy spinnera - dzięki temu mały spinner dostaje proporcjonalnie grubszą kreskę i zostaje czytelny.'],
+  '--_btn-spinner-size':    ['Spinner', 'internal', 'Średnica pierścienia w przycisku w stanie <code>.is-loading</code>, domyślnie <code>1.15em</code>. Wejście publiczne to <code>--btn-spinner-size</code>.'],
+  '--_cp-spinner-size':     ['Spinner', 'internal', 'Średnica pierścienia w wierszu wyszukiwania palety poleceń podczas pobierania wyników.'],
 };
 
 /* ---------- Pure inputs from markup ----------
@@ -305,4 +309,11 @@ export const INPUT = {
   '--icon-anim-delay':       ['Animowane ikony', 'Opóźnienie startu animacji ikony, domyślnie <code>0s</code>. Dziedziczy się: ustaw na ikonie albo na przodku.'],
   '--icon-part':             ['Animowane ikony', 'Numer części ikony od zera. Ustawia go <code>molique-icon-anim.js</code> przy rozwijaniu ikony, CSS używa go do rozłożenia w czasie rysowania kresek.'],
   '--form-check-size':       ['Formularze', 'Bok checkboxa i radia (<code>.form-check-input</code>), domyślnie <code>1.5rem</code> = 24px. Kontrolka jest świadomie wyłączona z reguły 44px, ale 24px to minimum wymagane przez audyt Lighthouse - zmniejszaj tylko świadomie.'],
+  '--spinner-size':          ['Spinner', 'Średnica <code>.spinner</code>, domyślnie <code>1.25em</code> otaczającego tekstu. Zwykle nie trzeba jej ustawiać - od tego są <code>.spinner-sm</code>, <code>-lg</code> i <code>-xl</code>; sięgnij po zmienną, gdy potrzebujesz wartości spoza tej trójki.'],
+  '--spinner-thickness':     ['Spinner', 'Grubość kreski pierścienia, domyślnie <code>0.125em</code>. Liczy się od wielkości tekstu wokół, a nie od średnicy spinnera, więc przy własnym <code>--spinner-size</code> w pikselach ustaw ją razem z nim - inaczej proporcja kreski do koła przestanie się trzymać.'],
+  '--spinner-speed':         ['Spinner', 'Czas jednego obrotu, domyślnie <code>0.7s</code>. Steruje TRZEMA spinnerami naraz: samodzielnym <code>.spinner</code>, pierścieniem w przycisku i tym w palecie poleceń - ustawiona na <code>:root</code> zmienia tempo w całym projekcie.'],
+  '--spinner-overlay-bg':    ['Spinner', 'Tło warstwy <code>.spinner-overlay</code>, domyślnie powierzchnia karty z kryciem 92%. Celowo prawie nieprzezroczyste: przy niższych wartościach tekst spod spodu przebijał na tyle, że mieszał się z podpisem nakładki. Obniżaj świadomie i sprawdź podpis na tle realnej treści.'],
+  '--spinner-overlay-z':     ['Spinner', 'Warstwa <code>z-index</code> nakładki ładowania, domyślnie <code>3</code>. Podnieś, gdy w kontenerze stoi coś przyklejonego (nagłówek tabeli, pasek akcji), co ma zostać pod spodem.'],
+  '--btn-spinner-size':      ['Spinner', 'Średnica pierścienia w przycisku <code>.is-loading</code>, domyślnie <code>1.15em</code>. Większa wartość nie zmieni szerokości przycisku - pierścień leży poza przepływem - ale może wyjść poza jego wysokość.'],
+  '--btn-spinner-thickness': ['Spinner', 'Grubość kreski pierścienia w przycisku, domyślnie <code>0.11em</code> - nieco cieńsza niż w samodzielnym spinnerze, bo pierścień stoi na kolorowym tle, gdzie kontrast jest wyższy.'],
 };

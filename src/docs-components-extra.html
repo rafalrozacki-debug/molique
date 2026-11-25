@@ -74,6 +74,16 @@
                     <td data-label="Kiedy">Pasek postępu CZYTANIA całej strony, przyklejony u góry.</td>
                     <td data-label="Na czym stoi">Rdzeń <code>molique-script.js</code>, nasłuch scrolla</td>
                   </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.spinner</code></td>
+                    <td data-label="Kiedy">Czekanie o NIEZNANYM czasie - zapis, odpowiedź serwera, przycisk w trakcie.</td>
+                    <td data-label="Na czym stoi">Czysty CSS, rozmiar i kolor z otoczenia</td>
+                  </tr>
+                  <tr>
+                    <td data-label="Komponent"><code>.spinner-overlay</code></td>
+                    <td data-label="Kiedy">Cały panel przeładowuje treść - karta, tabela, sekcja dashboardu.</td>
+                    <td data-label="Na czym stoi">Czysty CSS, przełączany przez <code>aria-busy</code></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -554,10 +564,158 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. PASEK CZYTANIA                                     -->
+          <!-- 7. SPINNERY ŁADOWANIA                                 -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Pasek czytania</h2>
+            <h2 class="text-8 fw-bold mb-3">7. Spinnery ładowania</h2>
+            <p class="text-muted mb-4">
+              Pasek postępu wyżej mówi <strong>ile zostało</strong>. Spinner
+              mówi wyłącznie <strong>że coś trwa</strong> - i tam, gdzie
+              procent jest znany, spinner czyta się jak zawieszenie. Zero JS,
+              zero obrazków: jeden element, rozmiar bierze z wielkości tekstu
+              obok, kolor z koloru tekstu.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview flex-column align-items-stretch w-100 bg-surface gap-4">
+                <div>
+                  <p class="text-2 text-muted mb-2">Sam pierścień - rozmiar idzie za tekstem</p>
+                  <div class="d-flex align-items-center gap-3">
+                    <span class="spinner spinner-sm" aria-hidden="true"></span>
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="spinner spinner-lg" aria-hidden="true"></span>
+                    <span class="spinner spinner-xl text-primary" aria-hidden="true"></span>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-2 text-muted mb-2">Przycisk - etykieta znika, szerokość zostaje</p>
+                  <div class="d-flex align-items-center gap-2" style="flex-wrap: wrap">
+                    <button class="btn-primary">Zapisz zmiany</button>
+                    <button class="btn-primary is-loading" disabled>Zapisz zmiany</button>
+                    <button class="btn-outline-danger" aria-busy="true" disabled>Usuń konto</button>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="text-2 text-muted mb-2">Nakładka - przełącza ją <code>aria-busy</code></p>
+                  <div class="card" style="max-width: 360px" aria-busy="true">
+                    <div class="card-header"><strong>Faktury klienta</strong></div>
+                    <div class="spinner-overlay">
+                      <span class="spinner spinner-lg" aria-hidden="true"></span>
+                      <span>Wczytuję dane…</span>
+                    </div>
+                    <div class="card-body">
+                      <p class="m-0">FV/2026/114 - 3 200 zł</p>
+                      <p class="m-0">FV/2026/113 - 980 zł</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;!-- sam spinner: tekst dla czytnika jest OBOWIĄZKOWY --&gt;
+&lt;span role="status"&gt;
+  &lt;span class="spinner" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;span class="sr-only"&gt;Wczytuję…&lt;/span&gt;
+&lt;/span&gt;
+
+&lt;!-- przycisk: disabled jest częścią stanu, nie ozdobą --&gt;
+&lt;button class="btn-primary is-loading" disabled&gt;Zapisz zmiany&lt;/button&gt;
+&lt;button class="btn-primary" aria-busy="true" disabled&gt;Zapisz zmiany&lt;/button&gt;
+
+&lt;!-- nakładka: aria-busy na kontenerze pokazuje ją i chowa --&gt;
+&lt;div class="card" aria-busy="true"&gt;
+  &lt;div class="spinner-overlay"&gt;
+    &lt;span class="spinner spinner-lg" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;span&gt;Wczytuję dane…&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="card-body"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table table-sm table-hover table-cards">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Klasa</th>
+                    <th>Co robi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.spinner</code></td>
+                    <td data-label="Co robi">
+                      Pierścień. Rozmiar <code>1.25em</code> wielkości tekstu
+                      wokół, kolor z <code>currentColor</code> - żeby zmienić
+                      kolor, zmień kolor rodzica (np. <code>.text-primary</code>),
+                      nie sam spinner.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa">
+                      <code class="fw-bold">.spinner-sm</code>
+                      <code class="fw-bold">.spinner-lg</code>
+                      <code class="fw-bold">.spinner-xl</code>
+                    </td>
+                    <td data-label="Co robi">
+                      Stały rozmiar (1em / 2em / 3em), gdy wielkość tekstu
+                      w danym miejscu nie jest właściwą miarą.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.is-loading</code></td>
+                    <td data-label="Co robi">
+                      Na przycisku: etykieta i ikony znikają, pierścień staje
+                      pośrodku, a <strong>szerokość przycisku się nie
+                      zmienia</strong> - rząd przycisków nie podskakuje.
+                      Działa z klasą koloru bez <code>.btn</code>
+                      (<code>.btn-primary</code> wystarczy). Równoważne:
+                      <code>aria-busy="true"</code>.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa"><code class="fw-bold">.spinner-overlay</code></td>
+                    <td data-label="Co robi">
+                      Warstwa na kontener (karta, tabela, sekcja). Widoczna
+                      tylko wtedy, gdy kontener ma
+                      <code>aria-busy="true"</code>; kontekst pozycjonowania
+                      dostaje wyłącznie kontener, który faktycznie taką
+                      warstwę zawiera.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td data-label="Klasa">
+                      <code class="fw-bold">--spinner-size</code>
+                      <code class="fw-bold">--spinner-thickness</code>
+                      <code class="fw-bold">--spinner-speed</code>
+                      <code class="fw-bold">--spinner-overlay-bg</code>
+                    </td>
+                    <td data-label="Co robi">
+                      Tokeny: średnica, grubość kreski, czas obrotu
+                      (<code>0.7s</code>) i tło nakładki. Ustawiaj je zamiast
+                      nadpisywać reguły - <code>--spinner-speed</code> zmienia
+                      też spinner w przycisku i w palecie poleceń.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-muted mt-4 mb-0">
+              Przy <code>prefers-reduced-motion</code> pierścień nie wiruje:
+              zamyka się w pełne koło i powoli pulsuje. Celowo nie staje
+              całkiem - zatrzymany pierścień z ogonem wygląda jak błąd
+              renderowania, a nie jak „pracuję".
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 8. PASEK CZYTANIA                                     -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">8. Pasek czytania</h2>
             <p class="text-muted mb-4">
               Cienki pasek przyklejony do góry ekranu, rosnący wraz z
               przewijaniem. Ten na samej górze tej strony jest prawdziwy -
@@ -596,10 +754,10 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 8. PUŁAPKI                                            -->
+          <!-- 9. PUŁAPKI                                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">8. Pułapki</h2>
+            <h2 class="text-8 fw-bold mb-3">9. Pułapki</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="extra-pulapki" open>
@@ -676,14 +834,54 @@
                   </p>
                 </div>
               </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-danger">5</span>
+                  <span>Spinner na przycisku bez <code>disabled</code></span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    Stan ładowania blokuje <strong>mysz</strong>
+                    (<code>pointer-events: none</code>), ale nie klawiaturę -
+                    przycisk nadal da się aktywować Enterem albo spacją, więc
+                    formularz poleci drugi raz. CSS tego nie naprawi:
+                    wyłączyć przycisk potrafi wyłącznie atrybut
+                    <code>disabled</code> i on jest częścią stanu, nie
+                    ozdobą. To samo dotyczy nakładki na kontener - przykrywa
+                    treść dla myszy, ale fokus nadal wchodzi w pola pod
+                    spodem; tam właściwym narzędziem jest
+                    <code>inert</code> na przykrywanej treści.
+                  </p>
+                </div>
+              </details>
+
+              <details class="accordion-item" name="extra-pulapki">
+                <summary class="accordion-header">
+                  <span class="badge badge-warning text-dark">6</span>
+                  <span>Sam <code>.spinner</code> nie istnieje dla czytnika ekranu</span>
+                </summary>
+                <div class="accordion-body">
+                  <p class="text-muted m-0">
+                    To pusty element bez tekstu, więc czytnik nie ma czego
+                    przeczytać - użytkownik dostaje ciszę i nie wie, czy
+                    strona pracuje, czy się zawiesiła. Spinner zawsze idzie
+                    z tekstem: <code>role="status"</code> na opakowaniu,
+                    <code>aria-hidden="true"</code> na samym pierścieniu i
+                    podpis w <code>.sr-only</code> albo widoczny obok.
+                    W nakładce i na przycisku tę rolę pełni
+                    <code>aria-busy</code> na kontenerze.
+                  </p>
+                </div>
+              </details>
             </div>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 9. POWIĄZANE                                          -->
+          <!-- 10. POWIĄZANE                                          -->
           <!-- ===================================================== -->
           <section class="mb-0">
-            <h2 class="text-8 fw-bold mb-3">9. Powiązane strony</h2>
+            <h2 class="text-8 fw-bold mb-3">10. Powiązane strony</h2>
             <div class="grid-md-cols-3 gap-3">
               <a href="examples-carousel" class="card hover-shadow">
                 <div class="card-body">

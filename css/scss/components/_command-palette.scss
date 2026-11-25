@@ -3,6 +3,8 @@
 // Independent module: can be omitted from a bundle with no compile errors.
 // A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
 
+@use '../mixins' as *;
+
 /* =========================================
    COMMAND PALETTE
    ========================================= */
@@ -194,4 +196,48 @@
   @media (pointer: coarse) {
     display: none;
   }
+}
+
+/* =========================================
+   SEARCHING (.is-loading)
+   =========================================
+   molique-command-palette.js has toggled .is-loading on the dialog (and
+   aria-busy on the list) since 1.7.42 while a results request is in flight,
+   but NOTHING in the framework drew it - the class was a dead hook, so a
+   palette fed from a server showed the previous results with no sign that
+   newer ones were on the way. Found while building the spinner component.
+
+   The ring rides as the header's last flex item rather than absolutely
+   positioned: the query is left-aligned, so the input losing ~26px off its
+   invisible right edge moves no text and no caret. */
+.command-palette.is-loading .command-palette-header::after {
+  --_cp-spinner-size: 1.15em;
+
+  content: '';
+  flex: none;
+  inline-size: var(--_cp-spinner-size);
+  block-size: var(--_cp-spinner-size);
+
+  @include spinner-ring(0.11em);
+
+  animation: commandPaletteSpin var(--spinner-speed, 0.7s) linear infinite;
+}
+
+/* Same call as the other two: a stopped ring keeps its tail and reads as a
+   half-drawn circle, so the tail goes and it breathes on opacity instead. */
+@media (prefers-reduced-motion: reduce) {
+  .command-palette.is-loading .command-palette-header::after {
+    background: currentColor;
+    animation: commandPaletteBreathe 1.6s ease-in-out infinite;
+  }
+}
+
+/* Own keyframes, named after this component - chunks are built per file. */
+@keyframes commandPaletteSpin {
+  to { transform: rotate(1turn); }
+}
+
+@keyframes commandPaletteBreathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }

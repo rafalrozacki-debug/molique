@@ -1788,6 +1788,10 @@
    * molique - Zmienne SCSS
    */
   /**
+   * molique - Base Styles and Reset
+   * Contains the CSS reset, html/body styles, and the base containers
+   */
+  /**
    * molique - Button Styles
    * Contains every button variant, size, and grouping
    */
@@ -2611,6 +2615,84 @@
     .btn-hover-spring .btn:not([class*=hover-]):hover,
     .btn-hover-lift .btn:not([class*=hover-]):hover {
       transform: none;
+    }
+  }
+  /* =========================================
+     LOADING STATE (.is-loading / aria-busy)
+     =========================================
+     Lives HERE and not in components/_spinner.scss for one reason: the .btn
+     implication. A colour class does not carry .btn, so `.btn.is-loading`
+     would miss <button class="btn-primary is-loading"> entirely. The selector
+     list is the same $btn-base-selectors the base block is built from, so a
+     new colour added to $theme-colors gets the loading state for free.
+
+     Both hooks are supported on purpose. aria-busy is the native, accessible
+     truth and the one molique's golden rule prefers; .is-loading is the
+     framework's .is-* state convention and is ALREADY toggled by
+     js/modules/molique-command-palette.js. Supporting only one would have
+     left the other looking implemented.
+
+     :is() keeps this to two short rules instead of 34 selectors. Every
+     argument here weighs the same (one class or one attribute), so the
+     combined weight is a predictable 0-2-0 - above .btn-primary, which is
+     what lets it take over the text colour. */
+  :is(.btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):is(.is-loading, [aria-busy=true]) {
+    position: relative;
+    /* Blocks the mouse, NOT the keyboard - Enter still fires. The button must
+       also carry `disabled` to be genuinely inert; this is a safety net for
+       the double click, not a substitute for it. Said again in the docs. */
+    pointer-events: none;
+    /* THE WHOLE POINT: the label goes invisible while the button keeps its
+       exact width, so a row of buttons does not jump when one starts loading.
+       -webkit-text-fill-color (already relied on by .text-gradient-animated
+       and .text-clip-bg in this framework) hides the glyphs but leaves `color`
+       intact - so currentColor below is still the button's real ink. Plain
+       `color: transparent` would hide the text AND the spinner with it. */
+    -webkit-text-fill-color: transparent;
+    /* Icons and badges are elements, so the text-fill trick does not reach
+       them - without this an icon would sit next to the spinner. */
+  }
+  :is(.btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):is(.is-loading, [aria-busy=true]) > * {
+    opacity: 0;
+  }
+  :is(.btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):is(.is-loading, [aria-busy=true])::after {
+    --_btn-spinner-size: var(--btn-spinner-size, 1.15em);
+    content: "";
+    position: absolute;
+    /* inset + auto margins centre it in both axes without touching
+       transform, which the rotation needs for itself. */
+    inset: 0;
+    margin: auto;
+    inline-size: var(--_btn-spinner-size);
+    block-size: var(--_btn-spinner-size);
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, color-mix(in srgb, currentColor 8%, transparent), currentColor);
+    mask: radial-gradient(farthest-side, transparent calc(100% - var(--btn-spinner-thickness, 0.11em)), #000 calc(100% - var(--btn-spinner-thickness, 0.11em)));
+    animation: btnLoadingSpin var(--spinner-speed, 0.7s) linear infinite;
+  }
+  /* Same reasoning as components/_spinner.scss: a stopped ring keeps its tail
+     and reads as a half-drawn circle, so the tail goes and the ring breathes
+     on opacity instead. */
+  @media (prefers-reduced-motion: reduce) {
+    :is(.btn, .btn-primary, .btn-outline-primary, .btn-secondary, .btn-outline-secondary, .btn-success, .btn-outline-success, .btn-danger, .btn-outline-danger, .btn-warning, .btn-outline-warning, .btn-info, .btn-outline-info, .btn-light, .btn-outline-light, .btn-dark, .btn-outline-dark):is(.is-loading, [aria-busy=true])::after {
+      background: currentColor;
+      animation: btnLoadingBreathe 1.6s ease-in-out infinite;
+    }
+  }
+  /* Own keyframes, named after this component. Chunks are built per file, so
+     borrowing spinnerRotate from components/_spinner.scss would leave the
+     buttons chunk animating a name it does not contain - silently. */
+  @keyframes btnLoadingSpin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  @keyframes btnLoadingBreathe {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
     }
   }
   /**
@@ -4859,6 +4941,51 @@
   @media (pointer: coarse) {
     .command-palette-footer {
       display: none;
+    }
+  }
+  /* =========================================
+     SEARCHING (.is-loading)
+     =========================================
+     molique-command-palette.js has toggled .is-loading on the dialog (and
+     aria-busy on the list) since 1.7.42 while a results request is in flight,
+     but NOTHING in the framework drew it - the class was a dead hook, so a
+     palette fed from a server showed the previous results with no sign that
+     newer ones were on the way. Found while building the spinner component.
+
+     The ring rides as the header's last flex item rather than absolutely
+     positioned: the query is left-aligned, so the input losing ~26px off its
+     invisible right edge moves no text and no caret. */
+  .command-palette.is-loading .command-palette-header::after {
+    --_cp-spinner-size: 1.15em;
+    content: "";
+    flex: none;
+    inline-size: var(--_cp-spinner-size);
+    block-size: var(--_cp-spinner-size);
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, color-mix(in srgb, currentColor 8%, transparent), currentColor);
+    mask: radial-gradient(farthest-side, transparent calc(100% - 0.11em), #000 calc(100% - 0.11em));
+    animation: commandPaletteSpin var(--spinner-speed, 0.7s) linear infinite;
+  }
+  /* Same call as the other two: a stopped ring keeps its tail and reads as a
+     half-drawn circle, so the tail goes and it breathes on opacity instead. */
+  @media (prefers-reduced-motion: reduce) {
+    .command-palette.is-loading .command-palette-header::after {
+      background: currentColor;
+      animation: commandPaletteBreathe 1.6s ease-in-out infinite;
+    }
+  }
+  /* Own keyframes, named after this component - chunks are built per file. */
+  @keyframes commandPaletteSpin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  @keyframes commandPaletteBreathe {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
     }
   }
   /* =========================================
@@ -8854,6 +8981,99 @@
   .status-checkbox input[type=checkbox]:focus-visible + .status-icon-toggle {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: 2px;
+  }
+  /* =========================================
+     4.5. LOADING SPINNER (.spinner)
+     ========================================= */
+  .spinner {
+    --_spinner-size: var(--spinner-size, 1.25em);
+    --_spinner-thickness: var(--spinner-thickness, 0.125em);
+    display: inline-block;
+    /* A circle next to text: the box's middle against the text's middle.
+       Not a hand-tuned negative offset - that only holds for one font. */
+    vertical-align: middle;
+    /* Survives a flex row (.btn, .data-row-compact) instead of being squeezed
+       into an oval by a long label next to it. */
+    flex-shrink: 0;
+    inline-size: var(--_spinner-size);
+    block-size: var(--_spinner-size);
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, color-mix(in srgb, currentColor 8%, transparent), currentColor);
+    mask: radial-gradient(farthest-side, transparent calc(100% - var(--_spinner-thickness)), #000 calc(100% - var(--_spinner-thickness)));
+    /* transform only - the GPU rule. Animating the gradient's `from` angle
+       through @property would animate `background` instead, which repaints
+       every frame. */
+    animation: spinnerRotate var(--spinner-speed, 0.7s) linear infinite;
+  }
+  .spinner-sm {
+    --spinner-size: 1em;
+  }
+  .spinner-lg {
+    --spinner-size: 2em;
+  }
+  .spinner-xl {
+    --spinner-size: 3em;
+  }
+  /* =========================================
+     4.5.1. BUSY CONTAINER (.spinner-overlay)
+     ========================================= */
+  .spinner-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: var(--spinner-overlay-z, 3);
+    /* Hidden until the container says it is busy - see the rule below. */
+    display: none;
+    align-content: center;
+    justify-items: center;
+    gap: calc(var(--spacing-unit) * 1.5);
+    padding: calc(var(--spacing-unit) * 2);
+    /* NEARLY opaque, and that took two tries to get right. The first value
+       (72%) let the content underneath read through clearly, which looked
+       informative in a list of assertions and was unreadable on screen: the
+       overlay's own label landed on a line of stale text and the two tangled.
+       88% was still not enough. No assertion catches this - it only shows up
+       on a screenshot at 2x.
+       The panel's shape, border and rounding stay visible, which is the
+       context that actually matters ("this card is busy"); reading the stale
+       content underneath is not. Where the heading should stay legible, put
+       aria-busy + the overlay on the REGION that is reloading (.card-body)
+       instead of the whole card - that is the documented way to scope it.
+       Token, so a project that wants a different balance changes a value
+       rather than fighting the cascade. */
+    background: var(--spinner-overlay-bg, color-mix(in srgb, var(--bg-surface) 92%, transparent));
+    color: var(--text-muted);
+    text-align: center;
+  }
+  [aria-busy=true] > .spinner-overlay {
+    display: grid;
+  }
+  [aria-busy=true]:has(> .spinner-overlay) {
+    position: relative;
+  }
+  /* =========================================
+     4.5.2. REDUCED MOTION
+     ========================================= */
+  @media (prefers-reduced-motion: reduce) {
+    .spinner {
+      background: currentColor;
+      animation: spinnerBreathe 1.6s ease-in-out infinite;
+    }
+  }
+  /* Named after the component and defined in THIS file - chunks are built per
+     file, so a keyframe name borrowed from elsewhere belongs to no chunk and
+     the animation silently never runs. Guarded by npm run test:css. */
+  @keyframes spinnerRotate {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  @keyframes spinnerBreathe {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
   }
   /* =========================================
      1. PRICING TABLES

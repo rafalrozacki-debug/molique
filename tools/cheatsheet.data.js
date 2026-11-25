@@ -106,6 +106,15 @@ export const TAGS = {
     en: 'feedback',
     de: 'feedback'
   },
+  /* "ladow" covers ladowanie/ladowac, "lade" covers laden/laedt/Ladezustand
+     (the matcher needs one side to be a PREFIX of the other, so the longer
+     "laden" would miss "Ladezustand"). German "Laden" as in a shop overlaps,
+     but the shop tag's stem is "shop", so nothing is shadowed. */
+  loading: {
+    pl: 'ladow',
+    en: 'load',
+    de: 'lade'
+  },
   card: {
     pl: 'karta',
     en: 'card',
@@ -1434,6 +1443,18 @@ export const CATEGORIES = [
         },
         demo: '-',
         tags: ['icon'],
+      },
+      {
+        id: 'btn-is-loading',
+        classes: [['.is-loading']],
+        desc: {
+          pl: 'Stan ładowania przycisku: etykieta i ikony znikają, pośrodku staje pierścień, a szerokość przycisku się NIE zmienia. Równoważne <code>aria-busy="true"</code>. Blokuje mysz, nie klawiaturę - dołóż <code>disabled</code>.',
+          en: 'A button loading state: the label and icons go, a ring takes the centre, and the button width does NOT change. Equivalent to <code>aria-busy="true"</code>. It blocks the mouse, not the keyboard - add <code>disabled</code>.',
+          de: 'Ladezustand eines Buttons: Beschriftung und Icons verschwinden, in der Mitte steht ein Ring, und die Breite ändert sich NICHT. Gleichwertig zu <code>aria-busy="true"</code>. Blockiert die Maus, nicht die Tastatur - <code>disabled</code> ergänzen.',
+        },
+        demo: '<button class="btn-primary is-loading" disabled>Zapisz</button>',
+        tags: ['loading', 'state'],
+        source: 'docs-buttons',
       },
     ],
   },
@@ -4040,6 +4061,30 @@ export const CATEGORIES = [
         },
         demo: '<span class="status-dot status-success status-ping"></span>',
         tags: ['state', 'color'],
+      },
+      {
+        id: 'spinner',
+        classes: [['.spinner'], ['.spinner-sm', '.spinner-lg', '.spinner-xl']],
+        desc: {
+          pl: 'Pierścień ładowania: czekanie o NIEZNANYM czasie (pasek postępu mówi ile, spinner tylko że trwa). Zero JS i zero obrazków - rozmiar <code>1.25em</code> tekstu wokół, kolor z <code>currentColor</code>. Sam w sobie jest niewidoczny dla czytnika - dołóż tekst w <code>.sr-only</code> i <code>role="status"</code>.',
+          en: 'A loading ring: a wait of UNKNOWN length (a progress bar says how much, a spinner only that something is happening). Zero JS, zero images - <code>1.25em</code> of the surrounding text, coloured by <code>currentColor</code>. On its own it is invisible to a screen reader - add text in <code>.sr-only</code> plus <code>role="status"</code>.',
+          de: 'Ein Lade-Ring: Warten von UNBEKANNTER Dauer (ein Fortschrittsbalken sagt wie viel, ein Spinner nur, dass etwas passiert). Kein JS, keine Bilder - <code>1.25em</code> des umgebenden Textes, Farbe aus <code>currentColor</code>. Allein ist er für den Screenreader unsichtbar - Text in <code>.sr-only</code> und <code>role="status"</code> ergänzen.',
+        },
+        demo: '<span class="spinner"></span>',
+        tags: ['loading', 'feedback', 'zerojs'],
+        source: 'docs-components-extra',
+      },
+      {
+        id: 'spinner-overlay',
+        classes: [['.spinner-overlay']],
+        desc: {
+          pl: 'Warstwa ładowania na kontener (karta, tabela, sekcja). Pokazuje ją i chowa WYŁĄCZNIE <code>aria-busy="true"</code> na kontenerze, więc widok i to, co słyszy czytnik, nie mogą się rozjechać. Kontekst pozycjonowania dostaje tylko kontener, który taką warstwę faktycznie zawiera. Przykrywa treść dla myszy, nie dla klawiatury - użyj <code>inert</code>.',
+          en: 'A loading layer over a container (card, table, section). It is shown and hidden ONLY by <code>aria-busy="true"</code> on that container, so the visual and what a screen reader hears cannot drift apart. Only a container that actually holds one gets a positioning context. It covers the content for the mouse, not the keyboard - use <code>inert</code>.',
+          de: 'Eine Ladeschicht über einem Container (Karte, Tabelle, Abschnitt). Sie wird AUSSCHLIESSLICH über <code>aria-busy="true"</code> am Container ein- und ausgeblendet, Darstellung und Screenreader können also nicht auseinanderlaufen. Nur ein Container, der tatsächlich eine solche Schicht enthält, bekommt einen Positionierungskontext. Deckt den Inhalt für die Maus ab, nicht für die Tastatur - <code>inert</code> verwenden.',
+        },
+        demo: '-',
+        tags: ['loading', 'feedback', 'overlay', 'zerojs'],
+        source: 'docs-components-extra',
       },
       {
         id: 'status-icon-toggle',

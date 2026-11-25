@@ -651,10 +651,49 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 6. PITFALLS                                           -->
+          <!-- 6. LOADING STATE                                      -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">6. Pitfalls</h2>
+            <h2 class="text-8 fw-bold mb-3">6. Loading state</h2>
+            <p class="text-muted mb-4">
+              <code>.is-loading</code> (or <code>aria-busy="true"</code> -
+              they behave identically) hides the label and any icons and puts
+              a ring in their place. <strong>The button keeps its exact
+              width</strong>, so a row of buttons does not jump the moment one
+              is clicked. It works with the colour class alone -
+              <code>.btn</code> is not needed.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview bg-surface gap-2" style="flex-wrap: wrap">
+                <button class="btn-primary">Save changes</button>
+                <button class="btn-primary is-loading" disabled>Save changes</button>
+                <button class="btn-outline-danger" aria-busy="true" disabled>Delete account</button>
+                <button class="btn-success btn-sm is-loading" disabled>Send</button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;button class="btn-primary is-loading" disabled&gt;Save changes&lt;/button&gt;
+&lt;button class="btn-primary" aria-busy="true" disabled&gt;Save changes&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+
+            <p class="text-muted m-0">
+              <strong>The <code>disabled</code> attribute is not decoration
+              here.</strong> The state blocks the mouse but not the keyboard -
+              without <code>disabled</code> the button still fires on Enter and
+              the form goes twice. The full write-up of the ring, its sizes,
+              tokens and the container overlay is on the
+              <a href="docs-components-extra.en.html">Extra components</a>
+              page, under "Loading spinners".
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. PITFALLS                                           -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Pitfalls</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="btn-pulapki" open>
@@ -763,10 +802,10 @@ BADGE[status] || 'badge-secondary';</code></pre>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. RELATED                                            -->
+          <!-- 8. RELATED                                            -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Related pages</h2>
+            <h2 class="text-8 fw-bold mb-3">8. Related pages</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="examples-buttons.en" class="card hover-shadow">
                 <div class="card-body">

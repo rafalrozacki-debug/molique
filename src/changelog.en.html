@@ -48,6 +48,41 @@
           style="--timeline-label-width: 110px"
         >
           <!-- ============================================================ -->
+          <!-- v1.7.51 -->
+          <!-- ============================================================ -->
+          <li class="timeline-item">
+            <div class="timeline-label">
+              <div class="fw-black text-5">v1.7.51</div>
+              <div class="text-muted text-4">November 2026</div>
+            </div>
+            <div class="timeline-separator">
+              <div class="timeline-node node-primary"></div>
+              <div class="timeline-line"></div>
+            </div>
+            <div class="timeline-content">
+              <div class="card p-4">
+                <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
+                  <span class="badge badge-primary mx-2 text-3">New</span>
+                  Loading spinners: <code>.spinner</code>, <code>.is-loading</code>, <code>aria-busy</code>
+                </h2>
+                <p class="text-2 text-muted mb-3">
+                  A framework with modals, tables and AJAX-loaded content had NO loading indicator at all - every project rolled its own, usually a GIF. Now there is one element, in pure CSS: the ring, a button state and a container overlay.
+                </p>
+                <ul class="text-secondary mb-4">
+                  <li><strong>One empty element, zero JS and zero images.</strong> <code>&lt;span class="spinner"&gt;&lt;/span&gt;</code>. Its diameter is <code>1.25em</code> of the surrounding text and its colour comes from <code>currentColor</code> - so a spinner in a small button, in a table cell and in a heading is immediately the right size and the right colour, with no variant per case. Fixed sizes for where the local font-size is not a good measure: <code>.spinner-sm</code>, <code>.spinner-lg</code>, <code>.spinner-xl</code>.</li>
+                  <li><strong>The button keeps its width.</strong> <code>.is-loading</code> (or <code>aria-busy="true"</code> - identical behaviour) hides the label and any icons and puts the ring in the middle. A row of buttons does not jump the moment one is clicked, because the label is not removed, it simply stops being painted. It works with the colour class alone - <code>.btn-primary</code> is enough, no <code>.btn</code>.</li>
+                  <li><strong>The container overlay has ONE switch.</strong> <code>.spinner-overlay</code> inside a card, a table or a section appears only while that container carries <code>aria-busy="true"</code>. There is no extra class to remember, so the visual and what a screen reader hears cannot drift apart - and they always do when the state has to be set in two places. Only a container that actually holds an overlay gets a positioning context.</li>
+                  <li><strong>Under <code>prefers-reduced-motion</code> the ring does not stop.</strong> It closes into a full circle and breathes slowly on opacity. Simply stopping would leave a ring with a tail, which looks like a rendering bug - and a loading indicator still has to say "working". Only <code>transform</code> is animated, and <code>opacity</code> in that mode.</li>
+                  <li><strong>A dead hook in the command palette is now closed.</strong> Since 1.7.42 <code>molique-command-palette.js</code> has set <code>.is-loading</code> while fetching results from a server, but nothing in the CSS drew it - the palette showed the previous results with no sign that newer ones were on the way. A ring now appears in the search row.</li>
+                  <li><strong>What it does NOT do.</strong> A bare <code>.spinner</code> is an empty element, so for a screen reader it DOES NOT EXIST - always add text (<code>role="status"</code> plus a label in <code>.sr-only</code>). The button state blocks the mouse but not the keyboard: without <code>disabled</code>, Enter sends the form a second time. The overlay covers the content for the mouse, not for focus - that is what <code>inert</code> is for.</li>
+                  <li><strong>Tests.</strong> <code>npm run test:spinner</code> - 46 checks in a real browser, every trap with a negative control (including an animation pointing at <code>@keyframes</code> that do not exist, to prove the test can fail at all). The suite survived 9 source mutations. One thing was caught only by a zoomed screenshot rather than an assertion: the first overlay was too transparent and its label tangled with the text underneath.</li>
+                  <li><strong>Safe to remove:</strong> if your project carries its own GIF spinner, or one built from an animated <code>border</code> with <code>@keyframes</code>, you can drop it. One note when swapping: versions driven by animating <code>border-width</code> or <code>box-shadow</code> force layout work on every frame - this one does not, it moves <code>transform</code> only.</li>
+                </ul>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============================================================ -->
           <!-- v1.7.50 -->
           <!-- ============================================================ -->
           <li class="timeline-item">

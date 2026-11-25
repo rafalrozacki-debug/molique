@@ -662,10 +662,50 @@
           </section>
 
           <!-- ===================================================== -->
-          <!-- 6. FALLSTRICKE                                        -->
+          <!-- 6. LADEZUSTAND                                        -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">6. Fallstricke</h2>
+            <h2 class="text-8 fw-bold mb-3">6. Ladezustand</h2>
+            <p class="text-muted mb-4">
+              <code>.is-loading</code> (oder <code>aria-busy="true"</code> -
+              beides verhält sich gleich) blendet Beschriftung und Icons aus
+              und setzt an ihre Stelle einen Ring. <strong>Die Breite des
+              Buttons bleibt exakt gleich</strong>, eine Button-Reihe springt
+              im Moment des Klicks also nicht. Es funktioniert mit der
+              Farbklasse allein - <code>.btn</code> ist nicht nötig.
+            </p>
+
+            <div class="component-showcase mb-4">
+              <div class="component-preview bg-surface gap-2" style="flex-wrap: wrap">
+                <button class="btn-primary">Änderungen speichern</button>
+                <button class="btn-primary is-loading" disabled>Änderungen speichern</button>
+                <button class="btn-outline-danger" aria-busy="true" disabled>Konto löschen</button>
+                <button class="btn-success btn-sm is-loading" disabled>Senden</button>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopieren</button>
+                <pre><code>&lt;button class="btn-primary is-loading" disabled&gt;Speichern&lt;/button&gt;
+&lt;button class="btn-primary" aria-busy="true" disabled&gt;Speichern&lt;/button&gt;</code></pre>
+              </div>
+            </div>
+
+            <p class="text-muted m-0">
+              <strong>Das Attribut <code>disabled</code> ist hier keine
+              Deko.</strong> Der Zustand blockiert die Maus, nicht aber die
+              Tastatur - ohne <code>disabled</code> löst der Button weiterhin
+              mit Enter aus und das Formular geht zweimal raus. Die
+              vollständige Beschreibung von Ring, Größen, Tokens und
+              Container-Overlay steht auf der Seite
+              <a href="docs-components-extra.de.html">Zusätzliche
+              Komponenten</a> im Abschnitt „Lade-Spinner".
+            </p>
+          </section>
+
+          <!-- ===================================================== -->
+          <!-- 7. FALLSTRICKE                                        -->
+          <!-- ===================================================== -->
+          <section>
+            <h2 class="text-8 fw-bold mb-3">7. Fallstricke</h2>
 
             <div class="accordion mb-4">
               <details class="accordion-item" name="btn-pulapki" open>
@@ -781,10 +821,10 @@ BADGE[status] || 'badge-secondary';</code></pre>
           </section>
 
           <!-- ===================================================== -->
-          <!-- 7. VERWANDTE SEITEN                                   -->
+          <!-- 8. VERWANDTE SEITEN                                   -->
           <!-- ===================================================== -->
           <section>
-            <h2 class="text-8 fw-bold mb-3">7. Verwandte Seiten</h2>
+            <h2 class="text-8 fw-bold mb-3">8. Verwandte Seiten</h2>
             <div class="grid-cols-1 grid-md-cols-3 gap-3">
               <a href="examples-buttons.de" class="card hover-shadow">
                 <div class="card-body">

@@ -1,0 +1,141 @@
+// molique - Loading spinner (.spinner) and the busy-container overlay.
+//
+// Independent module: can be omitted from a bundle with no compile errors.
+// A quiet (//) comment, so the file's documentation doesn't end up in the CSS.
+//
+// ZERO JS AND ZERO IMAGES. The ring is one element: a conic gradient masked
+// down to a circle, rotated by transform. No GIF, no SVG file, no wrapper
+// markup, nothing to preload - and it inherits the text colour, so it is
+// correct on a button, in a card and on a dark background without variants.
+//
+// IT ONLY SPINS. The spinner says "working", never "how far along" - that is
+// .progress with a width, and a spinner standing in for a known percentage is
+// the usual reason users think a page has frozen. It also carries no text of
+// its own, so on its own it is invisible to a screen reader; the accessible
+// markup is in the docs and repeated in the rule below.
+
+@use '../variables' as *;
+@use '../mixins' as *;
+
+/* =========================================
+   4.5. LOADING SPINNER (.spinner)
+   ========================================= */
+
+// SIZE IS RELATIVE ON PURPOSE. The ring is sized in em, so dropping a
+// .spinner into a .btn-sm, a table cell or an h1 gives a spinner in
+// proportion to the text already there, with no size class. The variants
+// below exist for the cases where the context's font-size is NOT the
+// measure you want (a page-level loader in a card of normal text).
+//
+// Thickness stays in em of the SURROUNDING font, not of the spinner, so a
+// small spinner gets a relatively thicker stroke - which is what keeps it
+// readable at 16px. Override with --spinner-thickness when a custom
+// --spinner-size makes that trade wrong.
+.spinner {
+  --_spinner-size: var(--spinner-size, 1.25em);
+  --_spinner-thickness: var(--spinner-thickness, 0.125em);
+
+  display: inline-block;
+  /* A circle next to text: the box's middle against the text's middle.
+     Not a hand-tuned negative offset - that only holds for one font. */
+  vertical-align: middle;
+  /* Survives a flex row (.btn, .data-row-compact) instead of being squeezed
+     into an oval by a long label next to it. */
+  flex-shrink: 0;
+  inline-size: var(--_spinner-size);
+  block-size: var(--_spinner-size);
+
+  @include spinner-ring(var(--_spinner-thickness));
+
+  /* transform only - the GPU rule. Animating the gradient's `from` angle
+     through @property would animate `background` instead, which repaints
+     every frame. */
+  animation: spinnerRotate var(--spinner-speed, 0.7s) linear infinite;
+}
+
+.spinner-sm { --spinner-size: 1em; }
+.spinner-lg { --spinner-size: 2em; }
+.spinner-xl { --spinner-size: 3em; }
+
+/* =========================================
+   4.5.1. BUSY CONTAINER (.spinner-overlay)
+   ========================================= */
+
+// THE SWITCH IS aria-busy, NOT A CLASS. One attribute drives the visual AND
+// what assistive tech reads, so the two cannot drift apart - which is exactly
+// what happens with a class: the overlay stays up after a request finishes
+// because somebody removed aria-busy and forgot the class, or the reverse,
+// and a screen reader then announces a card as busy forever.
+//
+// It is the native-first choice of the two, and it is also what the integrator
+// already has to set for correctness.
+.spinner-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: var(--spinner-overlay-z, 3);
+  /* Hidden until the container says it is busy - see the rule below. */
+  display: none;
+  align-content: center;
+  justify-items: center;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 2);
+  /* NEARLY opaque, and that took two tries to get right. The first value
+     (72%) let the content underneath read through clearly, which looked
+     informative in a list of assertions and was unreadable on screen: the
+     overlay's own label landed on a line of stale text and the two tangled.
+     88% was still not enough. No assertion catches this - it only shows up
+     on a screenshot at 2x.
+     The panel's shape, border and rounding stay visible, which is the
+     context that actually matters ("this card is busy"); reading the stale
+     content underneath is not. Where the heading should stay legible, put
+     aria-busy + the overlay on the REGION that is reloading (.card-body)
+     instead of the whole card - that is the documented way to scope it.
+     Token, so a project that wants a different balance changes a value
+     rather than fighting the cascade. */
+  background: var(--spinner-overlay-bg, color-mix(in srgb, var(--bg-surface) 92%, transparent));
+  color: var(--text-muted);
+  text-align: center;
+}
+
+[aria-busy='true'] > .spinner-overlay {
+  display: grid;
+}
+
+// The positioning context is created ONLY where an overlay actually exists.
+// A blanket `position: relative` on every [aria-busy] container would move
+// absolutely positioned children of panels that have nothing to do with
+// loading (a .post-date-badge anchors to its nearest positioned ancestor),
+// and .card does not set position itself. Same reason .admin-rail builds its
+// grid track through :has() rather than unconditionally.
+[aria-busy='true']:has(> .spinner-overlay) {
+  position: relative;
+}
+
+/* =========================================
+   4.5.2. REDUCED MOTION
+   ========================================= */
+
+// NOT simply "animation: none". A stopped ring keeps its fading tail, so it
+// reads as a half-drawn circle - a rendering bug, not a state. And a loading
+// indicator still has to say "working" to somebody who asked for less motion.
+//
+// So the tail goes away (solid ring) and the ring breathes on opacity: a
+// change with no direction of travel, which is what the preference is about.
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    background: currentColor;
+    animation: spinnerBreathe 1.6s ease-in-out infinite;
+  }
+}
+
+/* Named after the component and defined in THIS file - chunks are built per
+   file, so a keyframe name borrowed from elsewhere belongs to no chunk and
+   the animation silently never runs. Guarded by npm run test:css. */
+@keyframes spinnerRotate {
+  to { transform: rotate(1turn); }
+}
+
+@keyframes spinnerBreathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

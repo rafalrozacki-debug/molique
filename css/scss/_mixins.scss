@@ -39,3 +39,33 @@
     margin: 0;
   }
 }
+
+// The loading ring: a conic tail masked down to a circle. Shared by
+// .spinner and the button loading state, because the recipe carries two
+// values that MUST stay in step (the mask inset and the tail's starting
+// alpha) and two hand-kept copies drift the moment one is tuned.
+//
+// The tail starts at a low-alpha currentColor, NOT at `transparent`:
+// interpolating towards `transparent` in sRGB fades through transparent
+// BLACK, which leaves a visible grey fringe on anything but a black
+// spinner. Measured on --primary before this comment was written.
+//
+// Rotation is deliberately NOT here. @keyframes must sit in the same file
+// as the rule that uses them, because tools/gen-chunks.js builds chunks
+// PER FILE - a name defined in another file lands in no chunk at all and
+// the animation silently does nothing (it has happened twice in this
+// repo: fadeInDown, fadeIn). Every caller declares its own, named after
+// itself; npm run test:css enforces it.
+@mixin spinner-ring($thickness) {
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    color-mix(in srgb, currentColor 8%, transparent),
+    currentColor
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - #{$thickness}),
+    #000 calc(100% - #{$thickness})
+  );
+}
