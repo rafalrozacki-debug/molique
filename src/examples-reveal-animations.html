@@ -36,7 +36,7 @@
               >
                 <button
                   class="btn btn-secondary btn-sm mb-4"
-                  onclick="toggleReveals()"
+                  data-demo-replay
                 >
                   Odtwórz ponownie
                 </button>
@@ -84,7 +84,7 @@
               >
                 <button
                   class="btn btn-secondary btn-sm mb-4"
-                  onclick="toggleReveals()"
+                  data-demo-replay
                 >
                   Odtwórz ponownie
                 </button>
@@ -138,5 +138,52 @@
     </div>
 
     <script src="js/molique-script.js?v={{ __version }}"></script>
+    <script>
+      /* "Replay" for the entrance-animation demo. The button used to call
+         toggleReveals(), a function that was never defined anywhere in the
+         project: every click threw a ReferenceError.
+
+         THERE ARE TWO PATHS and they need different handling. molique-script.js
+         tests exactly this @supports pair; where it holds, CSS drives the
+         entrance itself (animation-trigger) and .is-visible is never added -
+         worse, the rule .animate.is-visible carries !important and sits
+         OUTSIDE that @supports, so adding the class there would freeze the
+         element at its end state and kill the animation. */
+      const moliqueCssReveal = !!(window.CSS && CSS.supports &&
+        CSS.supports('timeline-trigger', '--molique-reveal view()') &&
+        CSS.supports('animation-trigger', '--molique-reveal play-once'));
+
+      document.addEventListener('click', (event) => {
+        const btn = event.target.closest('[data-demo-replay]');
+        if (!btn) return;
+        const scope = btn.closest('.component-preview');
+        if (!scope) return;
+        const els = scope.querySelectorAll('.animate, .reveal-blur, .reveal-scale');
+
+        if (moliqueCssReveal) {
+          /* Chrome/Edge 145+. Rewinding the running CSS animation is the only
+             handle here - the class path does not exist. NOT verifiable on
+             this machine: the browser used for the tests predates
+             animation-trigger, so this branch is written from the spec. */
+          els.forEach((el) => el.getAnimations().forEach((a) => { a.cancel(); a.play(); }));
+          return;
+        }
+
+        /* Observer path: the entrance is a TRANSITION, so the element has to
+           be put back at its start WITHOUT animating there - otherwise the
+           replay is a 0.6s fade out followed by a fade in. Hence transition:
+           none, a forced reflow, then the real transition restored. */
+        els.forEach((el) => {
+          el.style.transition = 'none';
+          el.classList.remove('is-visible');
+        });
+        void scope.offsetWidth;
+        els.forEach((el) => {
+          el.style.transition = '';
+        });
+        void scope.offsetWidth;
+        els.forEach((el) => el.classList.add('is-visible'));
+      });
+    </script>
   </body>
 </html>

@@ -46,6 +46,21 @@
   :root.sidebar-md & { --current-sidebar-width: var(--sidebar-width-md); }
   :root.sidebar-sm & { --current-sidebar-width: var(--sidebar-width-sm); }
 
+  /* A LAYOUT WITHOUT THE WIDTH TOGGLE NEVER COLLAPSES.
+     The collapsed state lives in localStorage and the inline script in
+     <head> puts it on EVERY page, so one click on a page that HAS the
+     toggle leaves every page that has not stuck narrow, with nothing on
+     screen to undo it. Measured on molique.dev: the examples sidebar has
+     no toggle and its links carry no icons, so sidebar-sm produced a 72px
+     strip of wrapped, clipped words ("Paginacj", "Typografi & Kolory").
+     Keyed off the toggle's own id, so a page that later gains one starts
+     collapsing again by itself - no second flag to keep in sync.
+     An integrator who collapses a sidebar from their own button, without
+     that id, sets --current-sidebar-width directly instead. */
+  &:not(:has(#molique-sidebar-toggle)) {
+    --current-sidebar-width: var(--sidebar-width-lg);
+  }
+
   /* FLOATING VARIANT (offset from the edge) */
   &.admin-layout-floating {
     --layout-gap: calc(var(--spacing-unit) * 3);
