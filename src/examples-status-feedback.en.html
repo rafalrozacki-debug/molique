@@ -46,7 +46,7 @@
 
                   <div>
                     <p class="text-4 text-muted mb-2">Micro Shake (Error)</p>
-                    <button class="btn btn-danger" onclick="triggerShake(this)">
+                    <button class="btn btn-danger" data-demo-shake>
                       Click to trigger an error
                     </button>
                   </div>
@@ -178,5 +178,31 @@
     </div>
 
     <script src="js/molique-script.js?v={{ __version }}"></script>
+    <script>
+      /* The demo of what the code sample beside it describes: the .shake class
+         does all the work. This only adds it on click and takes it off again,
+         because a class that stays plays the animation exactly once - a second
+         click would do nothing.
+
+         The button used to call triggerShake(), a function that was never
+         defined anywhere in the project: every click threw a ReferenceError
+         and nothing moved. */
+      document.addEventListener('click', (event) => {
+        const btn = event.target.closest('[data-demo-shake]');
+        if (!btn || btn.classList.contains('shake')) return;
+        btn.classList.add('shake');
+
+        const done = () => {
+          clearTimeout(timer);
+          btn.removeEventListener('animationend', done);
+          btn.classList.remove('shake');
+        };
+        /* Safety net: should .shake ever stop animating (a prefers-reduced-motion
+           guard would do it), animationend never fires and the button would keep
+           the class forever, dead to any further click. */
+        const timer = setTimeout(done, 800);
+        btn.addEventListener('animationend', done, { once: true });
+      });
+    </script>
   </body>
 </html>
