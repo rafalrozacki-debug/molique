@@ -928,6 +928,24 @@ $_directions: (
   @include _part(iconAnimPartTwinkle, 0.8s, $_ease-in-out, 0.15s);
 }
 
+/* Palette (since 1.7.55; until then a neutral pop): the board stays, the four
+   paints land one after another along its arc - lower left, upper left, top,
+   right. In source order they would jump (top, upper left, lower left, right).
+   Picked by <circle> order, identical in all five stroke weights: the duotone
+   fill is a <path>, so it does not shift the count. The fill weight is one
+   flat shape and keeps the whole-icon pop. Only stagger in the per-paint
+   rules - the shared one sets the rest. */
+#{_parts('palette')} {
+  --_icon-anim-name: none;
+}
+#{_parts('palette')} > circle {
+  @include _part(iconAnimPartAppear, 0.45s, $_spring, null, backwards);
+}
+#{_parts('palette')} > circle:nth-of-type(3) { --_icon-anim-part-stagger: 0s; }
+#{_parts('palette')} > circle:nth-of-type(2) { --_icon-anim-part-stagger: 0.12s; }
+#{_parts('palette')} > circle:nth-of-type(1) { --_icon-anim-part-stagger: 0.24s; }
+#{_parts('palette')} > circle:nth-of-type(4) { --_icon-anim-part-stagger: 0.36s; }
+
 /* Trash: the rim (1) and the handle (5) lift together as one lid, hinged
    at the left end of the rim (40, 56 in the 256 grid). */
 #{_parts('trash')} {

@@ -136,6 +136,7 @@ const MUST_STAY = [
   ['gift', '[data-layer]', 'the fill of the box under the bow, in duotone'],
   ['film-slate', 'path[d^="M40,112"]', 'the body of the slate'],
   ['link-simple', '[data-layer]', 'the fill under the two halves, in duotone'],
+  ['palette', 'path', 'the board under the paints'],
 ];
 
 // The other half of the same bug: :nth-of-type counted a duotone fill, the rule
@@ -150,6 +151,10 @@ const MUST_MOVE = [
   ['smiley', 'circle[data-part]:not([stroke])', 'the eyes'],
   ['box-arrow-up', 'polyline', 'the arrow'],
   ['trash-simple', 'line', 'the lid'],
+  ['palette', 'circle[cx="84"][cy="156"]', 'the lower left paint'],
+  ['palette', 'circle[cx="84"][cy="100"]', 'the upper left paint'],
+  ['palette', 'circle[cx="128"][cy="76"]', 'the top paint'],
+  ['palette', 'circle[cx="172"][cy="100"]', 'the right paint'],
 ];
 
 /* ---------- pattern liveness: read straight from the shipped rules ---------- */
@@ -276,6 +281,28 @@ try {
     return out;
   }, [MUST_MOVE, STROKE_WEIGHTS]);
   check('what has to move moves, in every stroke weight', still.length === 0, still.slice(0, 5).join(' | '));
+
+  // Moving is not enough for the palette: the paints must land one after
+  // another ALONG THE ARC (lower left, upper left, top, right), which is not
+  // their source order. Read the real animation delays, in every stroke weight.
+  const ARC = ['circle[cx="84"][cy="156"]', 'circle[cx="84"][cy="100"]', 'circle[cx="128"][cy="76"]', 'circle[cx="172"][cy="100"]'];
+  const paints = await page.evaluate(([arc, weights]) => {
+    const out = [];
+    let seen = 0;
+    for (const icon of document.querySelectorAll('svg.icon-anim[data-icon="palette"]')) {
+      if (!weights.includes(icon.dataset.w)) continue;
+      seen++;
+      const delays = arc.map((sel) => {
+        const a = icon.querySelector(sel)?.getAnimations()[0];
+        return a ? a.effect.getTiming().delay : null;
+      });
+      const rising = delays.every((d, i) => d !== null && (i === 0 || d > delays[i - 1]));
+      if (!rising) out.push(`${icon.dataset.w}: ${delays.join('/')}`);
+    }
+    if (seen !== weights.length) out.push(`checked ${seen} weights of ${weights.length}`);
+    return out;
+  }, [ARC, STROKE_WEIGHTS]);
+  check('palette: the paints land one by one along the arc, in every stroke weight', paints.length === 0, paints.join(' | '));
 
   /* ---------- the hard cases ---------- */
   // Read from the fill weight: it has no parts, so the whole-icon family stays
