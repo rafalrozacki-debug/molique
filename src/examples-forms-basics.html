@@ -18,8 +18,9 @@
             <h1 class="text-11 fw-black mb-3">Podstawy Formularzy</h1>
             <p class="text-6 text-muted">
               Gotowe do skopiowania warianty podstawowych pól tekstowych
-              molique - pływające etykiety, natywna walidacja, rozmiary oraz
-              samorozwijająca się textarea.
+              molique - pływające etykiety, natywna walidacja, rozmiary,
+              samorozwijająca się textarea oraz maskowanie danych w realnym
+              formularzu.
             </p>
           </div>
 
@@ -183,6 +184,140 @@
   style="--textarea-rows-expanded: 8;"
 &gt;&lt;/textarea&gt;</code></pre>
               </div>
+            </div>
+          </section>
+
+          <!-- Maskowanie w realnym formularzu -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Maskowanie w realnym formularzu</h2>
+            <p class="text-muted mb-4">
+              Atrybut <code>data-mask</code> formatuje pole w trakcie pisania
+              i przy okazji ustawia <code>inputmode</code>,
+              <code>autocomplete</code>, <code>pattern</code> i
+              <code>maxlength</code> - czyli to, o czym przy ręcznym pisaniu
+              formularza zapomina się najczęściej. Poniżej cały blok „dane do
+              faktury", tak jak wygląda w panelu: maski działają razem z
+              pływającymi etykietami i natywną walidacją, bez linijki
+              własnego JavaScriptu.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="w-100" style="max-width: 520px">
+                  <form>
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="text-5 fw-bold m-0">Dane do faktury</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="form-floating">
+                          <input type="text" class="input" id="exFirma" placeholder=" " required />
+                          <label for="exFirma">Nazwa firmy</label>
+                          <div class="feedback-invalid">Podaj nazwę firmy.</div>
+                        </div>
+
+                        <div class="form-floating">
+                          <input type="text" class="input" id="exNip" placeholder=" " data-mask="nip-pl" required />
+                          <label for="exNip">NIP</label>
+                          <div class="feedback-invalid">NIP ma dziesięć cyfr.</div>
+                        </div>
+
+                        <div class="form-floating">
+                          <input type="tel" class="input" id="exTel" placeholder=" " data-mask="phone-pl" />
+                          <label for="exTel">Telefon</label>
+                        </div>
+
+                        <div class="grid-md-cols-3 gap-3">
+                          <div class="form-floating m-0">
+                            <input type="text" class="input" id="exKod" placeholder=" " data-mask="postal-pl" />
+                            <label for="exKod">Kod pocztowy</label>
+                          </div>
+                          <div class="form-floating m-0 col-md-span-2">
+                            <input type="text" class="input" id="exMiasto" placeholder=" " />
+                            <label for="exMiasto">Miejscowość</label>
+                          </div>
+                        </div>
+
+                        <div class="form-floating">
+                          <input
+                            type="text"
+                            class="input"
+                            id="exRachunek"
+                            placeholder=" "
+                            data-mask="nrb-pl"
+                            data-mask-unmasked-name="rachunek_raw"
+                          />
+                          <label for="exRachunek">Numer rachunku</label>
+                          <div class="text-4 text-muted mt-1">
+                            Do serwera idzie też wersja bez spacji, w ukrytym
+                            polu <code>rachunek_raw</code>.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer d-flex justify-content-end">
+                        <button type="submit" class="btn-primary">Zapisz dane</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Kopiuj</button>
+                <pre><code>&lt;form&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-header"&gt;
+      &lt;h3 class="text-5 fw-bold m-0"&gt;Dane do faktury&lt;/h3&gt;
+    &lt;/div&gt;
+    &lt;div class="card-body"&gt;
+      &lt;div class="form-floating"&gt;
+        &lt;input type="text" class="input" id="nip" placeholder=" " data-mask="nip-pl" required&gt;
+        &lt;label for="nip"&gt;NIP&lt;/label&gt;
+        &lt;div class="feedback-invalid"&gt;NIP ma dziesięć cyfr.&lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class="form-floating"&gt;
+        &lt;input type="tel" class="input" id="tel" placeholder=" " data-mask="phone-pl"&gt;
+        &lt;label for="tel"&gt;Telefon&lt;/label&gt;
+      &lt;/div&gt;
+
+      &lt;!-- m-0 zdejmuje margines pola, odstępy daje gap siatki --&gt;
+      &lt;div class="grid-md-cols-3 gap-3"&gt;
+        &lt;div class="form-floating m-0"&gt;
+          &lt;input type="text" class="input" id="kod" placeholder=" " data-mask="postal-pl"&gt;
+          &lt;label for="kod"&gt;Kod pocztowy&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-floating m-0 col-md-span-2"&gt;
+          &lt;input type="text" class="input" id="miasto" placeholder=" "&gt;
+          &lt;label for="miasto"&gt;Miejscowość&lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- czysta wartość dodatkowo, w ukrytym polu --&gt;
+      &lt;div class="form-floating"&gt;
+        &lt;input type="text" class="input" id="rachunek" placeholder=" "
+               data-mask="nrb-pl" data-mask-unmasked-name="rachunek_raw"&gt;
+        &lt;label for="rachunek"&gt;Numer rachunku&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="card-footer d-flex justify-content-end"&gt;
+      &lt;button type="submit" class="btn-primary"&gt;Zapisz dane&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mt-4">
+              <h3 class="fw-bold text-5 mb-2">Dwie rzeczy, które łatwo przeoczyć</h3>
+              <p class="text-4 text-muted m-0">
+                Maski nie działają na <code>type="number"</code> ani
+                <code>type="email"</code> - te typy nie obsługują kursora, więc
+                moduł odmawia i ostrzega w konsoli. Nie dopisuj też własnego
+                <code>maxlength</code>: wartość z maską jest dłuższa niż bez
+                niej, więc jedna liczba nie obsłuży obu stanów, a moduł i tak
+                wylicza limit sam. Pełna lista presetów i pułapek jest na
+                stronie <a href="docs-forms">Inputy &amp; Walidacja</a>.
+              </p>
             </div>
           </section>
 

@@ -18,8 +18,8 @@
             <h1 class="text-11 fw-black mb-3">Form Basics</h1>
             <p class="text-6 text-muted">
               Ready-to-copy variants of molique's basic text fields -
-              floating labels, native validation, sizes, and a
-              self-expanding textarea.
+              floating labels, native validation, sizes, a self-expanding
+              textarea, and data masking in a real form.
             </p>
           </div>
 
@@ -183,6 +183,145 @@
   style="--textarea-rows-expanded: 8;"
 &gt;&lt;/textarea&gt;</code></pre>
               </div>
+            </div>
+          </section>
+
+          <!-- Masking in a real form -->
+          <section>
+            <h2 class="text-7 fw-bold mb-3">Masking in a real form</h2>
+            <p class="text-muted mb-4">
+              The <code>data-mask</code> attribute formats a field as it is
+              typed, and sets the things most often forgotten when a form is
+              written by hand: <code>inputmode</code>,
+              <code>autocomplete</code>, <code>pattern</code> and
+              <code>maxlength</code>. Below is a whole payment block as it
+              looks in an admin panel: masks work together with floating
+              labels and native validation, without a line of your own
+              JavaScript.
+            </p>
+
+            <div class="component-showcase">
+              <div class="component-preview w-100 bg-surface">
+                <div class="w-100" style="max-width: 520px">
+                  <form>
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="text-5 fw-bold m-0">Payment details</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="form-floating">
+                          <input type="text" class="input" id="exHolder" placeholder=" " required />
+                          <label for="exHolder">Cardholder name</label>
+                          <div class="feedback-invalid">Enter the name on the card.</div>
+                        </div>
+
+                        <div class="grid-md-cols-3 gap-3">
+                          <div class="form-floating m-0 col-md-span-2">
+                            <input type="text" class="input" id="exCard" placeholder=" " data-mask="card" required />
+                            <label for="exCard">Card number</label>
+                            <div class="feedback-invalid">Check the card number.</div>
+                          </div>
+                          <div class="form-floating m-0">
+                            <input type="text" class="input" id="exExp" placeholder=" " data-mask="card-expiry" />
+                            <label for="exExp">Expiry</label>
+                          </div>
+                        </div>
+
+                        <div class="grid-md-cols-3 gap-3">
+                          <div class="form-floating m-0">
+                            <input type="text" class="input" id="exZip" placeholder=" " data-mask="postal-de" />
+                            <label for="exZip">Postal code</label>
+                          </div>
+                          <div class="form-floating m-0 col-md-span-2">
+                            <input type="text" class="input" id="exCity" placeholder=" " />
+                            <label for="exCity">City</label>
+                          </div>
+                        </div>
+
+                        <div class="form-floating">
+                          <input
+                            type="text"
+                            class="input"
+                            id="exIban"
+                            placeholder=" "
+                            data-mask="iban"
+                            data-mask-unmasked-name="iban_raw"
+                          />
+                          <label for="exIban">IBAN</label>
+                          <div class="text-4 text-muted mt-1">
+                            The server also receives the value without spaces,
+                            in a hidden <code>iban_raw</code> field.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer d-flex justify-content-end">
+                        <button type="submit" class="btn-primary">Save details</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="component-code">
+                <button class="btn-copy">Copy</button>
+                <pre><code>&lt;form&gt;
+  &lt;div class="card"&gt;
+    &lt;div class="card-header"&gt;
+      &lt;h3 class="text-5 fw-bold m-0"&gt;Payment details&lt;/h3&gt;
+    &lt;/div&gt;
+    &lt;div class="card-body"&gt;
+      &lt;!-- m-0 drops the field's own margin; the grid gap does the spacing --&gt;
+      &lt;div class="grid-md-cols-3 gap-3"&gt;
+        &lt;div class="form-floating m-0 col-md-span-2"&gt;
+          &lt;input type="text" class="input" id="card" placeholder=" " data-mask="card" required&gt;
+          &lt;label for="card"&gt;Card number&lt;/label&gt;
+          &lt;div class="feedback-invalid"&gt;Check the card number.&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="form-floating m-0"&gt;
+          &lt;input type="text" class="input" id="exp" placeholder=" " data-mask="card-expiry"&gt;
+          &lt;label for="exp"&gt;Expiry&lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class="grid-md-cols-3 gap-3"&gt;
+        &lt;div class="form-floating m-0"&gt;
+          &lt;input type="text" class="input" id="zip" placeholder=" " data-mask="postal-de"&gt;
+          &lt;label for="zip"&gt;Postal code&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div class="form-floating m-0 col-md-span-2"&gt;
+          &lt;input type="text" class="input" id="city" placeholder=" "&gt;
+          &lt;label for="city"&gt;City&lt;/label&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;!-- the clean value as well, in a hidden field --&gt;
+      &lt;div class="form-floating"&gt;
+        &lt;input type="text" class="input" id="iban" placeholder=" "
+               data-mask="iban" data-mask-unmasked-name="iban_raw"&gt;
+        &lt;label for="iban"&gt;IBAN&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="card-footer d-flex justify-content-end"&gt;
+      &lt;button type="submit" class="btn-primary"&gt;Save details&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="p-4 bg-surface border rounded-2 mt-4">
+              <h3 class="fw-bold text-5 mb-2">Two things that are easy to miss</h3>
+              <p class="text-4 text-muted m-0">
+                Masks do not work on <code>type="number"</code> or
+                <code>type="email"</code> - those types cannot carry a caret,
+                so the module refuses and warns in the console. Do not add your
+                own <code>maxlength</code> either: the masked value is longer
+                than the bare one, so a single number cannot serve both states,
+                and the module derives the limit itself. Polish projects also
+                get <code>nip-pl</code>, <code>phone-pl</code>,
+                <code>postal-pl</code> and <code>nrb-pl</code>; the full list of
+                presets and pitfalls is on the
+                <a href="docs-forms">Inputs &amp; Validation</a> page.
+              </p>
             </div>
           </section>
 
