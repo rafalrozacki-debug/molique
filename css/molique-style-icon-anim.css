@@ -522,7 +522,7 @@
     --_icon-anim-origin: 50% 50%;
   }
   /* ---------- the last ones that do have a motion of their own ---------- */
-  .icon-anim:is([data-icon=copy-simple], [data-icon|=stack], [data-icon|=printer], [data-icon|=puzzle-piece], [data-icon|=film-slate], [data-icon|=link-simple], [data-icon|=link-break], [data-icon|=monitor-play], [data-icon|=presentation], [data-icon|=slideshow], [data-icon|=webcam], [data-icon|=video-conference], [data-icon|=video-camera], [data-icon|=film-strip], [data-icon|=cassette-tape], [data-icon|=calculator]):not([data-icon-anim]) {
+  .icon-anim:is([data-icon=copy-simple], [data-icon|=stack], [data-icon|=printer], [data-icon|=film-slate], [data-icon|=link-simple], [data-icon|=link-break], [data-icon|=monitor-play], [data-icon|=presentation], [data-icon|=slideshow], [data-icon|=webcam], [data-icon|=video-conference], [data-icon|=video-camera], [data-icon|=film-strip], [data-icon|=cassette-tape], [data-icon|=calculator]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimPress;
     --_icon-anim-duration: 0.5s;
     --_icon-anim-easing: cubic-bezier(0.4, 0, 0.2, 1);
@@ -1342,6 +1342,57 @@
   .icon-anim:is([data-icon=palette]):not([data-icon-anim])[data-icon-parts=stroke] > circle:nth-of-type(4) {
     --_icon-anim-part-stagger: 0.36s;
   }
+  /* CPU (since 1.7.55; until then the whole chip bounced): the body and the
+     core stay, the eight pins blink one after another clockwise from the top
+     left. In source order they go right, left, bottom, top - so each <line>
+     gets its own delay. The pins are the only <line>s and sit in the same
+     order in all five stroke weights (the duotone fill is a <path>). */
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line {
+    --_icon-anim-part-name: iconAnimPartBlink;
+    --_icon-anim-part-duration: 0.6s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(8) {
+    --_icon-anim-part-stagger: 0s;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(7) {
+    --_icon-anim-part-stagger: 0.06s;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(1) {
+    --_icon-anim-part-stagger: 0.12s;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(2) {
+    --_icon-anim-part-stagger: 0.18s;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(5) {
+    --_icon-anim-part-stagger: 0.24s;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(6) {
+    --_icon-anim-part-stagger: 0.3s;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(4) {
+    --_icon-anim-part-stagger: 0.36s;
+  }
+  .icon-anim:is([data-icon=cpu]):not([data-icon-anim])[data-icon-parts=stroke] > line:nth-of-type(3) {
+    --_icon-anim-part-stagger: 0.42s;
+  }
+  /* Package (since 1.7.55; until then it wiggled): the box stays and the tape
+     across the top and down the side seals it, drawn as a stroke. Phosphor has
+     no separate lid - the top is the outline plus this tape - so the tape is
+     what can move. Picked by its points: regular lists the centre <line>
+     first, the other weights the edge <polyline>, so a number would miss. */
+  .icon-anim:is([data-icon=package]):not([data-icon-anim])[data-icon-parts=stroke] {
+    --_icon-anim-name: none;
+  }
+  .icon-anim:is([data-icon=package]):not([data-icon-anim])[data-icon-parts=stroke] > polyline[points^="81.56"] {
+    --_icon-anim-part-name: iconAnimPartDraw;
+    --_icon-anim-part-duration: 0.7s;
+    --_icon-anim-part-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-part-fill: backwards;
+  }
   /* Trash: the rim (1) and the handle (5) lift together as one lid, hinged
      at the left end of the rim (40, 56 in the 256 grid). */
   .icon-anim:is([data-icon=trash]):not([data-icon-anim])[data-icon-parts=stroke] {
@@ -1455,6 +1506,24 @@
   .icon-anim:is([data-icon=rocket], [data-icon=rocket-launch]):not([data-icon-anim]) {
     --_icon-anim-name: iconAnimLaunch;
     --_icon-anim-duration: 1.2s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* Wheelchair (since 1.7.55; until then the neutral pop): rolls forward and
+     back. Turning only the wheel is not possible - in Phosphor the wheel and
+     the seat are one <path> in every weight, so a turn would spin the seat
+     too. Comes after the neutral family on purpose: same weight, later wins. */
+  .icon-anim:is([data-icon=wheelchair]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimCart;
+    --_icon-anim-duration: 0.8s;
+    --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
+    --_icon-anim-origin: 50% 50%;
+  }
+  /* Puzzle piece (since 1.7.55; until then a press): picked up, swung in and
+     snapped into place. One <path> in every weight, so the whole icon moves. */
+  .icon-anim:is([data-icon=puzzle-piece]):not([data-icon-anim]) {
+    --_icon-anim-name: iconAnimSnap;
+    --_icon-anim-duration: 0.8s;
     --_icon-anim-easing: cubic-bezier(0.65, 0, 0.35, 1);
     --_icon-anim-origin: 50% 50%;
   }
@@ -2258,6 +2327,23 @@
     }
     70% {
       transform: scale(1.05);
+    }
+  }
+  /* Lifted up and to the left, swung back in past its place, pressed down
+     into it - a puzzle piece clicking home. Starts and ends at rest, so a
+     cut-off animation never leaves the icon displaced. */
+  @keyframes iconAnimSnap {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0) scale(1);
+    }
+    30% {
+      transform: translate(-12%, -14%) rotate(-10deg) scale(1);
+    }
+    60% {
+      transform: translate(2%, 2%) rotate(3deg) scale(1);
+    }
+    75% {
+      transform: translate(0, 0) rotate(0) scale(0.9);
     }
   }
   /* Leans with the wind, from --_icon-anim-origin at the foot of the icon. */

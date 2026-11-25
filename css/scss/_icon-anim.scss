@@ -484,7 +484,7 @@ $_directions: (
 
 /* ---------- the last ones that do have a motion of their own ---------- */
 
-#{_family('=copy-simple', 'stack', 'printer', 'puzzle-piece', 'film-slate', 'link-simple', 'link-break', 'monitor-play', 'presentation', 'slideshow', 'webcam', 'video-conference', 'video-camera', 'film-strip', 'cassette-tape', 'calculator')} {
+#{_family('=copy-simple', 'stack', 'printer', 'film-slate', 'link-simple', 'link-break', 'monitor-play', 'presentation', 'slideshow', 'webcam', 'video-conference', 'video-camera', 'film-strip', 'cassette-tape', 'calculator')} {
   @include _root(iconAnimPress, 0.5s);
 }
 #{_family('=hand', 'hand-palm', 'hand-soap', 'hand-eye', 'hand-deposit', 'hand-withdraw', 'vault', 'paint-bucket', 'ticket', 'shower', 'coffee', 'cooking-pot', 'bowl-steam', 'spray-bottle', 'hair-dryer', 'scissors')} {
@@ -946,6 +946,38 @@ $_directions: (
 #{_parts('palette')} > circle:nth-of-type(1) { --_icon-anim-part-stagger: 0.24s; }
 #{_parts('palette')} > circle:nth-of-type(4) { --_icon-anim-part-stagger: 0.36s; }
 
+/* CPU (since 1.7.55; until then the whole chip bounced): the body and the
+   core stay, the eight pins blink one after another clockwise from the top
+   left. In source order they go right, left, bottom, top - so each <line>
+   gets its own delay. The pins are the only <line>s and sit in the same
+   order in all five stroke weights (the duotone fill is a <path>). */
+#{_parts('cpu')} {
+  --_icon-anim-name: none;
+}
+#{_parts('cpu')} > line {
+  @include _part(iconAnimPartBlink, 0.6s, $_ease-in-out);
+}
+#{_parts('cpu')} > line:nth-of-type(8) { --_icon-anim-part-stagger: 0s; }
+#{_parts('cpu')} > line:nth-of-type(7) { --_icon-anim-part-stagger: 0.06s; }
+#{_parts('cpu')} > line:nth-of-type(1) { --_icon-anim-part-stagger: 0.12s; }
+#{_parts('cpu')} > line:nth-of-type(2) { --_icon-anim-part-stagger: 0.18s; }
+#{_parts('cpu')} > line:nth-of-type(5) { --_icon-anim-part-stagger: 0.24s; }
+#{_parts('cpu')} > line:nth-of-type(6) { --_icon-anim-part-stagger: 0.3s; }
+#{_parts('cpu')} > line:nth-of-type(4) { --_icon-anim-part-stagger: 0.36s; }
+#{_parts('cpu')} > line:nth-of-type(3) { --_icon-anim-part-stagger: 0.42s; }
+
+/* Package (since 1.7.55; until then it wiggled): the box stays and the tape
+   across the top and down the side seals it, drawn as a stroke. Phosphor has
+   no separate lid - the top is the outline plus this tape - so the tape is
+   what can move. Picked by its points: regular lists the centre <line>
+   first, the other weights the edge <polyline>, so a number would miss. */
+#{_parts('package')} {
+  --_icon-anim-name: none;
+}
+#{_parts('package')} > polyline[points^="81.56"] {
+  @include _part(iconAnimPartDraw, 0.7s, $_ease-in-out, null, backwards);
+}
+
 /* Trash: the rim (1) and the handle (5) lift together as one lid, hinged
    at the left end of the rim (40, 56 in the 256 grid). */
 #{_parts('trash')} {
@@ -1036,6 +1068,20 @@ $_directions: (
 
 #{_preset('rocket', 'rocket-launch')} {
   @include _root(iconAnimLaunch, 1.2s, $_ease-in-out);
+}
+
+/* Wheelchair (since 1.7.55; until then the neutral pop): rolls forward and
+   back. Turning only the wheel is not possible - in Phosphor the wheel and
+   the seat are one <path> in every weight, so a turn would spin the seat
+   too. Comes after the neutral family on purpose: same weight, later wins. */
+#{_preset('wheelchair')} {
+  @include _root(iconAnimCart, 0.8s, $_ease-in-out);
+}
+
+/* Puzzle piece (since 1.7.55; until then a press): picked up, swung in and
+   snapped into place. One <path> in every weight, so the whole icon moves. */
+#{_preset('puzzle-piece')} {
+  @include _root(iconAnimSnap, 0.8s, $_ease-in-out);
 }
 
 #{_preset('warning', 'warning-circle', 'warning-octagon', 'moon', 'wrench')} {
@@ -1506,6 +1552,16 @@ $_kids: ':is([data-part], [data-layer])';
   0%, 100% { transform: scale(1); }
   40% { transform: scale(0.86); }
   70% { transform: scale(1.05); }
+}
+
+/* Lifted up and to the left, swung back in past its place, pressed down
+   into it - a puzzle piece clicking home. Starts and ends at rest, so a
+   cut-off animation never leaves the icon displaced. */
+@keyframes iconAnimSnap {
+  0%, 100% { transform: translate(0, 0) rotate(0) scale(1); }
+  30% { transform: translate(-12%, -14%) rotate(-10deg) scale(1); }
+  60% { transform: translate(2%, 2%) rotate(3deg) scale(1); }
+  75% { transform: translate(0, 0) rotate(0) scale(0.9); }
 }
 
 /* Leans with the wind, from --_icon-anim-origin at the foot of the icon. */

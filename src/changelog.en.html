@@ -63,15 +63,19 @@
               <div class="card p-4">
                 <h2 class="text-3 text-primary fw-bold d-flex align-items-center mb-2">
                   <span class="badge badge-info mx-2 text-3">Icon animations</span>
-                  Palette: the paints appear one by one
+                  Five icons got a motion that means something
                 </h2>
                 <p class="text-2 text-muted mb-3">
-                  The <code>palette</code> icon in the <code>icon-anim</code> module used to give only a short pop, like icons with no natural motion. Now the board stays still and the four paints appear one after another along its arc: lower left, upper left, top, right.
+                  These icons in the <code>icon-anim</code> module used to move generically (a pop, a bounce, a wiggle). Now the motion follows what they show. Nothing to change in the markup.
                 </p>
                 <ul class="text-secondary mb-4">
-                  <li><strong>In every stroke weight</strong> (thin, light, regular, bold, duotone). The <code>fill</code> weight is one flat shape with no separate paints, so it keeps the whole-icon pop.</li>
-                  <li><strong>Along the arc, not in file order.</strong> In the Phosphor source the paints go top, upper left, lower left, right, which jumped around on screen. The icon catalog test now reads the delay of every paint in every weight and checks that they rise along the arc.</li>
-                  <li>Nothing to change in the markup. Icons that deliberately only pop now number 225.</li>
+                  <li><strong><code>palette</code>:</strong> the board stays and the four paints appear one after another along its arc - lower left, upper left, top, right. The Phosphor file lists them in another order, which jumped around on screen.</li>
+                  <li><strong><code>cpu</code>:</strong> the body and the core stay, the eight pins blink one by one round the chip, clockwise from the top left.</li>
+                  <li><strong><code>package</code>:</strong> the tape across the top and down the side draws itself as a stroke, as if the box were being sealed. Phosphor has no separate lid - the top is the outline plus this tape.</li>
+                  <li><strong><code>wheelchair</code>:</strong> rolls forward and back (it used to only pop). The wheel alone does not turn, because in Phosphor the wheel and the seat are one shape.</li>
+                  <li><strong><code>puzzle-piece</code>:</strong> lifted, swung in and pressed into place (a new animation, <code>iconAnimSnap</code>).</li>
+                  <li><strong>Weights:</strong> the part motions work in thin, light, regular, bold and duotone. In <code>fill</code> the icon is one flat shape, so there the palette pops, the CPU bounces and the package wiggles as before. The wheelchair and the puzzle piece move as a whole in every weight.</li>
+                  <li><strong>The icon catalog test</strong> now reads the delay of every paint and every pin in every weight and checks the order on screen. Icons that deliberately only pop now number 224.</li>
                 </ul>
               </div>
             </div>

@@ -102,7 +102,9 @@ const EXPECT = {
   phone: 'Ring', 'phone-x': 'Pop', 'phone-disconnect': 'Pop', 'phone-pause': 'Pop',
   'bell-z': 'Pop', 'bell-slash': 'Axis',
   star: 'Tada', 'star-of-david': 'Pop', 'star-and-crescent': 'Pop',
-  church: 'Pop', mosque: 'Pop', cross: 'Pop', 'hands-praying': 'Pop', skull: 'Pop', wheelchair: 'Pop',
+  church: 'Pop', mosque: 'Pop', cross: 'Pop', 'hands-praying': 'Pop', skull: 'Pop', wheelchair: 'Cart', 'puzzle-piece': 'Snap',
+  // fill has no parts, so these keep the whole-icon motion there (1.7.55)
+  palette: 'Pop', cpu: 'Bounce', package: 'Wiggle',
   car: 'Cart', 'car-battery': 'Pop', cardholder: 'Pop', cards: 'Flip',
   'github-logo': 'Pop', 'x-logo': 'Pop', 'x-square': 'Press',
   shield: 'Pop', 'shield-check': 'Press',
@@ -137,6 +139,8 @@ const MUST_STAY = [
   ['film-slate', 'path[d^="M40,112"]', 'the body of the slate'],
   ['link-simple', '[data-layer]', 'the fill under the two halves, in duotone'],
   ['palette', 'path', 'the board under the paints'],
+  ['cpu', 'rect', 'the body and the core of the chip'],
+  ['package', 'path, line, polyline:not([points^="81.56"])', 'the box under the tape'],
 ];
 
 // The other half of the same bug: :nth-of-type counted a duotone fill, the rule
@@ -155,6 +159,8 @@ const MUST_MOVE = [
   ['palette', 'circle[cx="84"][cy="100"]', 'the upper left paint'],
   ['palette', 'circle[cx="128"][cy="76"]', 'the top paint'],
   ['palette', 'circle[cx="172"][cy="100"]', 'the right paint'],
+  ['cpu', 'line', 'the pins'],
+  ['package', 'polyline[points^="81.56"]', 'the tape'],
 ];
 
 /* ---------- pattern liveness: read straight from the shipped rules ---------- */
@@ -282,27 +288,35 @@ try {
   }, [MUST_MOVE, STROKE_WEIGHTS]);
   check('what has to move moves, in every stroke weight', still.length === 0, still.slice(0, 5).join(' | '));
 
-  // Moving is not enough for the palette: the paints must land one after
-  // another ALONG THE ARC (lower left, upper left, top, right), which is not
-  // their source order. Read the real animation delays, in every stroke weight.
-  const ARC = ['circle[cx="84"][cy="156"]', 'circle[cx="84"][cy="100"]', 'circle[cx="128"][cy="76"]', 'circle[cx="172"][cy="100"]'];
-  const paints = await page.evaluate(([arc, weights]) => {
-    const out = [];
-    let seen = 0;
-    for (const icon of document.querySelectorAll('svg.icon-anim[data-icon="palette"]')) {
-      if (!weights.includes(icon.dataset.w)) continue;
-      seen++;
-      const delays = arc.map((sel) => {
-        const a = icon.querySelector(sel)?.getAnimations()[0];
-        return a ? a.effect.getTiming().delay : null;
-      });
-      const rising = delays.every((d, i) => d !== null && (i === 0 || d > delays[i - 1]));
-      if (!rising) out.push(`${icon.dataset.w}: ${delays.join('/')}`);
-    }
-    if (seen !== weights.length) out.push(`checked ${seen} weights of ${weights.length}`);
-    return out;
-  }, [ARC, STROKE_WEIGHTS]);
-  check('palette: the paints land one by one along the arc, in every stroke weight', paints.length === 0, paints.join(' | '));
+  // Moving is not enough where parts go one after another: the order on screen
+  // is not the source order. Read the real animation delays, in every stroke
+  // weight, and require them to rise in the listed order.
+  const ORDERED = [
+    ['palette', 'the paints land one by one along the arc',
+      ['circle[cx="84"][cy="156"]', 'circle[cx="84"][cy="100"]', 'circle[cx="128"][cy="76"]', 'circle[cx="172"][cy="100"]']],
+    ['cpu', 'the pins blink one by one, clockwise from the top left',
+      ['line[x1="104"][y1="24"]', 'line[x1="152"][y1="24"]', 'line[x1="208"][y1="104"]', 'line[x1="208"][y1="152"]',
+        'line[x1="152"][y1="208"]', 'line[x1="104"][y1="208"]', 'line[x1="24"][y1="152"]', 'line[x1="24"][y1="104"]']],
+  ];
+  for (const [name, label, order] of ORDERED) {
+    const bad = await page.evaluate(([name, order, weights]) => {
+      const out = [];
+      let seen = 0;
+      for (const icon of document.querySelectorAll(`svg.icon-anim[data-icon="${name}"]`)) {
+        if (!weights.includes(icon.dataset.w)) continue;
+        seen++;
+        const delays = order.map((sel) => {
+          const a = icon.querySelector(sel)?.getAnimations()[0];
+          return a ? a.effect.getTiming().delay : null;
+        });
+        const rising = delays.every((d, i) => d !== null && (i === 0 || d > delays[i - 1]));
+        if (!rising) out.push(`${icon.dataset.w}: ${delays.join('/')}`);
+      }
+      if (seen !== weights.length) out.push(`checked ${seen} weights of ${weights.length}`);
+      return out;
+    }, [name, order, STROKE_WEIGHTS]);
+    check(`${name}: ${label}, in every stroke weight`, bad.length === 0, bad.join(' | '));
+  }
 
   /* ---------- the hard cases ---------- */
   // Read from the fill weight: it has no parts, so the whole-icon family stays
