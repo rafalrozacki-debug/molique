@@ -43,13 +43,13 @@
 
                 <div class="grid-auto w-100 gap-4">
                   <div
-                    class="card p-4 text-center reveal-blur is-visible demo-reveal"
+                    class="card p-4 text-center reveal-blur demo-reveal"
                   >
                     <h3 class="fw-bold m-0">Blur Reveal</h3>
                     <p class="text-muted text-4 m-0">Wjazd z rozmyciem</p>
                   </div>
                   <div
-                    class="card p-4 text-center reveal-scale is-visible demo-reveal"
+                    class="card p-4 text-center reveal-scale demo-reveal"
                   >
                     <h3 class="fw-bold m-0">Scale Fade</h3>
                     <p class="text-muted text-4 m-0">
@@ -60,9 +60,10 @@
               </div>
               <div class="component-code">
                 <button class="btn-copy">Kopiuj</button>
-                <pre><code>&lt;!-- Wymaga dodania klasy .is-visible przez JS --&gt;
-&lt;div class="reveal-blur is-visible"&gt;Płynne wejście z rozmyciem&lt;/div&gt;
-&lt;div class="reveal-scale is-visible"&gt;Wejście ze skali 95%&lt;/div&gt;
+                <pre><code>&lt;!-- .is-visible NIE wpisuj w markup: dokłada je molique-script.js
+     (Firefox, Safari), a w Chrome/Edge 145+ wejście prowadzi sam CSS --&gt;
+&lt;div class="reveal-blur"&gt;Płynne wejście z rozmyciem&lt;/div&gt;
+&lt;div class="reveal-scale"&gt;Wejście ze skali 95%&lt;/div&gt;
 
 &lt;!-- Natywna animacja na scrollu (Zero JS!) --&gt;
 &lt;div class="scroll-reveal"&gt;Pojawiam się podczas scrollowania&lt;/div&gt;</code></pre>
@@ -91,19 +92,19 @@
 
                 <div class="grid-cols-1 grid-md-cols-3 gap-4 w-100">
                   <div
-                    class="card p-4 text-center animate fade-in-up is-visible demo-reveal"
+                    class="card p-4 text-center animate fade-in-up demo-reveal"
                   >
                     <h3 class="fw-bold m-0">Karta 1</h3>
                     <p class="text-muted text-4 m-0">.fade-in-up</p>
                   </div>
                   <div
-                    class="card p-4 text-center animate fade-in-up delay-100 is-visible demo-reveal"
+                    class="card p-4 text-center animate fade-in-up delay-100 demo-reveal"
                   >
                     <h3 class="fw-bold m-0">Karta 2</h3>
                     <p class="text-muted text-4 m-0">.delay-100</p>
                   </div>
                   <div
-                    class="card p-4 text-center animate fade-in-up delay-200 is-visible demo-reveal"
+                    class="card p-4 text-center animate fade-in-up delay-200 demo-reveal"
                   >
                     <h3 class="fw-bold m-0">Karta 3</h3>
                     <p class="text-muted text-4 m-0">.delay-200</p>
@@ -162,9 +163,11 @@
 
         if (moliqueCssReveal) {
           /* Chrome/Edge 145+. Rewinding the running CSS animation is the only
-             handle here - the class path does not exist. NOT verifiable on
-             this machine: the browser used for the tests predates
-             animation-trigger, so this branch is written from the spec. */
+             handle here - the class path does not exist. Measured in
+             Chromium 151 (1.7.54). It only works because the cards do NOT
+             carry is-visible in the markup: until 1.7.53 they did, and its
+             !important rule held opacity at 1 over the animation, so neither
+             the first entrance nor a replay showed anything on this path. */
           els.forEach((el) => el.getAnimations().forEach((a) => { a.cancel(); a.play(); }));
           return;
         }

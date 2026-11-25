@@ -189,7 +189,10 @@
                     <td data-label="Co robi">
                       Nadaje skrypt po wejściu w widok. Ty jej nie wpisujesz.
                       W Chrome/Edge 145+ wejście robi CSS i tej klasy nie ma -
-                      nie opieraj na niej własnych stylów.
+                      nie opieraj na niej własnych stylów. Wpisana w markup
+                      zabiera tam wejście: jej reguła ma
+                      <code>!important</code> i trzyma element w stanie
+                      końcowym ponad animacją.
                     </td>
                   </tr>
                 </tbody>
@@ -310,7 +313,10 @@
                     <td data-label="Klasa"><code class="fw-bold">.shake</code></td>
                     <td data-label="Efekt">
                       Potrząśnięcie - sygnał błędu, np. przy odrzuconym
-                      formularzu. Odtwarza się raz.
+                      formularzu. Odtwarza się raz. Przy
+                      <code>prefers-reduced-motion: reduce</code> (od 1.7.54)
+                      element zamiast drżeć raz krótko przygasa, a
+                      <code>animationend</code> nadal przychodzi.
                     </td>
                     <td data-label="JS"><span class="badge badge-success">nie</span></td>
                   </tr>

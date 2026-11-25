@@ -198,7 +198,10 @@
                       Wird vom Skript gesetzt, sobald das Element sichtbar
                       wird. Sie schreiben sie nicht selbst. In Chrome/Edge 145+
                       übernimmt CSS den Auftritt, und diese Klasse fehlt - bauen
-                      Sie keine eigenen Stile darauf.
+                      Sie keine eigenen Stile darauf. Ins Markup geschrieben,
+                      nimmt sie dort den Auftritt weg: Ihre Regel trägt
+                      <code>!important</code> und hält das Element über der
+                      Animation im Endzustand.
                     </td>
                   </tr>
                 </tbody>
@@ -323,7 +326,10 @@
                     <td data-label="Klasse"><code class="fw-bold">.shake</code></td>
                     <td data-label="Effekt">
                       Ein Wackeln - ein Fehlersignal, z. B. bei einem
-                      abgelehnten Formular. Läuft einmal ab.
+                      abgelehnten Formular. Läuft einmal ab. Bei
+                      <code>prefers-reduced-motion: reduce</code> (seit
+                      1.7.54) wird das Element statt zu wackeln einmal kurz
+                      gedimmt, und <code>animationend</code> kommt weiterhin.
                     </td>
                     <td data-label="JS"><span class="badge badge-success">nein</span></td>
                   </tr>

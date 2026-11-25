@@ -193,7 +193,10 @@
                       Set by the script once the element scrolls into view.
                       You don't write it yourself. In Chrome/Edge 145+ CSS does
                       the entrance and this class is absent - do not build your
-                      own styles on it.
+                      own styles on it. Written into the markup it kills the
+                      entrance there: its rule carries <code>!important</code>
+                      and holds the element at its end state over the
+                      animation.
                     </td>
                   </tr>
                 </tbody>
@@ -315,7 +318,10 @@
                     <td data-label="Class"><code class="fw-bold">.shake</code></td>
                     <td data-label="Effect">
                       A shake - an error signal, e.g. for a rejected form.
-                      Plays once.
+                      Plays once. Under
+                      <code>prefers-reduced-motion: reduce</code> (since
+                      1.7.54) the element dims once briefly instead of
+                      shaking, and <code>animationend</code> still fires.
                     </td>
                     <td data-label="JS"><span class="badge badge-success">no</span></td>
                   </tr>

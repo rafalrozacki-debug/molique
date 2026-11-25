@@ -4400,9 +4400,9 @@ export const CATEGORIES = [
         id: 'shake',
         classes: [['.shake']],
         desc: {
-          pl: 'Potrząśnięcie elementem (np. przy błędzie formularza - używane automatycznie razem z <code>:user-invalid</code>).',
-          en: 'Shakes the element (e.g. on a form error - used automatically together with <code>:user-invalid</code>).',
-          de: 'Lässt das Element wackeln (z. B. bei einem Formularfehler - wird automatisch zusammen mit <code>:user-invalid</code> verwendet).',
+          pl: 'Potrząśnięcie elementem (np. przy błędzie formularza - używane automatycznie razem z <code>:user-invalid</code>). Przy ograniczonym ruchu (od 1.7.54) zamiast drżenia krótkie przygaszenie.',
+          en: 'Shakes the element (e.g. on a form error - used automatically together with <code>:user-invalid</code>). Under reduced motion (since 1.7.54) a brief dim instead of the shake.',
+          de: 'Lässt das Element wackeln (z. B. bei einem Formularfehler - wird automatisch zusammen mit <code>:user-invalid</code> verwendet). Bei reduzierter Bewegung (seit 1.7.54) kurzes Dimmen statt Wackeln.',
         },
         demo: {
           pl: '<span class="badge bg-danger shake">Błąd</span>',

@@ -254,6 +254,53 @@ for (const theme of ['light', 'dark']) {
   await page.close();
 }
 
+/* ================= 4. .shake UNDER REDUCED MOTION ================= */
+const SHAKE = `<!doctype html><html lang="pl"><head><meta charset="utf-8">
+<link rel="stylesheet" href="/css/molique-style.css"></head>
+<body style="padding:24px">
+  <div class="card p-3" id="box">Odrzucone</div>
+  <input class="input" id="mail" type="email" required>
+  <div id="still">kontrola</div>
+</body></html>`;
+
+const animNames = (page, id) =>
+  // CSS animations only: .input also runs transitions, which have no animationName.
+  page.evaluate((i) => document.getElementById(i).getAnimations().filter((a) => a.animationName).map((a) => a.animationName).join(','), id);
+const animProps = (page, id) =>
+  page.evaluate((i) => {
+    const a = document.getElementById(i).getAnimations()[0];
+    if (!a) return '';
+    const props = new Set();
+    for (const f of a.effect.getKeyframes()) for (const k of Object.keys(f)) props.add(k);
+    for (const m of ['offset', 'computedOffset', 'easing', 'composite']) props.delete(m);
+    return [...props].sort().join(',');
+  }, id);
+const invalidate = async (page) => {
+  await page.click('#mail');
+  await page.keyboard.type('nie-mail');
+  await page.click('#still');
+};
+
+for (const motion of ['no-preference', 'reduce']) {
+  const page = await browser.newPage({ viewport: { width: 800, height: 500 } });
+  await page.emulateMedia({ reducedMotion: motion });
+  await serve(page, SHAKE);
+  await page.goto('https://cc.local/');
+  const ended = page.evaluate(() => new Promise((r) => {
+    document.getElementById('box').addEventListener('animationend', () => r(true), { once: true });
+    setTimeout(() => r(false), 2000);
+  }));
+  await page.evaluate(() => document.getElementById('box').classList.add('shake'));
+  const want = motion === 'reduce' ? 'shakeReducedAnim' : 'shakeAnim';
+  eq(`${motion}: .shake gra ${want}`, await animNames(page, 'box'), want);
+  eq(`${motion}: .shake animuje ${motion === 'reduce' ? 'wylacznie opacity' : 'transform'}`, await animProps(page, 'box'), motion === 'reduce' ? 'opacity' : 'transform');
+  await invalidate(page);
+  eq(`${motion}: .input:user-invalid gra ${want}`, await animNames(page, 'mail'), want);
+  eq(`${motion}: kontrola - element bez .shake stoi`, await animNames(page, 'still'), '');
+  check(`${motion}: animationend przychodzi (strona moze zdjac .shake)`, (await ended) === true);
+  await page.close();
+}
+
 console.log(failed ? `\n${failed} nie przeszlo` : '\npanel-states: wszystko przeszlo');
 const done = await Promise.race([browser.close().then(() => 'c'), new Promise((x) => setTimeout(() => x('t'), 3000))]);
 if (done === 't') console.log('(close zawisl)');

@@ -263,6 +263,21 @@
 }
 .input:user-invalid { animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
 
+/* Reduced motion (since 1.7.54; until then both shook regardless). A quick
+   side-to-side shake is exactly the kind of motion that setting asks to
+   drop, but the signal "this was rejected" must stay - so the movement
+   becomes one short dim of the element, same 0.4s. Not animation: none: an
+   animation keeps animationend firing, which is how pages take .shake off
+   again so that the next error can replay it. */
+@media (prefers-reduced-motion: reduce) {
+  .shake,
+  .input:user-invalid { animation: shakeReducedAnim 0.4s ease both; }
+}
+@keyframes shakeReducedAnim {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
 .ken-burns {
   overflow: hidden;
   img, .bg-image { transition: transform 10s ease-out; will-change: transform; }
